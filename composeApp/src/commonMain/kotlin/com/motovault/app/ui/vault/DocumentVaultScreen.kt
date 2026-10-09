@@ -75,7 +75,9 @@ fun DocumentVaultScreen(
         modifier = modifier
             .fillMaxSize()
             .background(canvasBackground)
-            .padding(20.dp),
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .padding(horizontal = 20.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
         // TOP VAULT HEADER

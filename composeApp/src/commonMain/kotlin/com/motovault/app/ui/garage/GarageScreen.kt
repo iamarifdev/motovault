@@ -34,7 +34,13 @@ fun GarageScreen(
 
     val accentColor = Color(vehicle.activeAccentColorHex)
 
-    Box(modifier = modifier.fillMaxSize().background(CanvasTftDark)) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(CanvasTftDark)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
