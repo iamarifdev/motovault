@@ -2,15 +2,19 @@ package com.motovault.app.ui.garage
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -20,6 +24,13 @@ import com.motovault.app.theme.*
 import com.motovault.app.ui.garage.components.CircularWearGauge
 import com.motovault.app.ui.garage.components.PersistentQuickActionDock
 
+/**
+ * Rivian OS 3.0 + Bosch TFT Digital Cockpit Garage Screen
+ * - Ambient radial halo vehicle hero stage
+ * - Bosch TFT Inset Telemetry Dials
+ * - Specular factory maintenance checklist
+ * - Floating frosted glass quick action dock
+ */
 @Composable
 fun GarageScreen(
     vehicle: Vehicle,
@@ -45,25 +56,47 @@ fun GarageScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 18.dp)
-                .padding(top = 18.dp, bottom = 100.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(top = 16.dp, bottom = 104.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
-            // TOP HEADER: VEHICLE SUMMARY
+            // VEHICLE HERO STAGE
             item {
-                VehicleHeroCard(vehicle = vehicle, currentOdo = currentOdo, accentColor = accentColor)
+                VehicleHeroCard(
+                    vehicle = vehicle,
+                    currentOdo = currentOdo,
+                    accentColor = accentColor
+                )
             }
 
-            // SECTION 1: CIRCULAR WEAR GAUGES
+            // SECTION 1: BOSCH TFT WEAR DIALS
             item {
-                Text(
-                    text = "COMPONENT WEAR GAUGES",
-                    style = MotoVaultTypography.labelMedium.copy(
-                        fontSize = 12.sp,
-                        color = TextSecondary,
-                        letterSpacing = 1.sp
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "PRECISION TELEMETRY INSTRUMENTS",
+                        style = MotoVaultTypography.labelMedium.copy(
+                            fontSize = 11.sp,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Bold,
+                            color = TextSecondary,
+                            letterSpacing = 1.sp
+                        )
                     )
-                )
+                    Text(
+                        text = "Live Cluster",
+                        style = MotoVaultTypography.bodySmall.copy(
+                            fontSize = 10.sp,
+                            fontFamily = FontFamily.Monospace,
+                            color = StatusHealthyGreen
+                        )
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(10.dp))
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -74,18 +107,23 @@ fun GarageScreen(
                             specification = comp.specification,
                             wearPercentage = comp.calculateWearPercentage(currentOdo, 0L),
                             remainingKm = comp.remainingKm(currentOdo),
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            onClick = {
+                                toastMessage = "${comp.name}: ${comp.specification}"
+                            }
                         )
                     }
                 }
             }
 
-            // SECTION 2: DETAILED SERVICE CHECKLIST
+            // SECTION 2: FACTORY MAINTENANCE SCHEDULE
             item {
                 Text(
-                    text = "MAINTENANCE SCHEDULE OVERVIEW",
+                    text = "FACTORY MAINTENANCE SCHEDULE",
                     style = MotoVaultTypography.labelMedium.copy(
-                        fontSize = 12.sp,
+                        fontSize = 11.sp,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Bold,
                         color = TextSecondary,
                         letterSpacing = 1.sp
                     )
@@ -93,36 +131,43 @@ fun GarageScreen(
             }
 
             items(components) { comp ->
-                ComponentDetailRow(component = comp, currentOdo = currentOdo)
+                ComponentDetailRow(
+                    component = comp,
+                    currentOdo = currentOdo,
+                    onItemClick = {
+                        toastMessage = "${comp.name} interval: ${comp.intervalKm.toInt()} km"
+                    }
+                )
             }
         }
 
-        // PERSISTENT FLOATING QUICK ACTION DOCK AT BOTTOM
+        // FLOATING FROSTED QUICK ACTION DOCK
         PersistentQuickActionDock(
             accentColor = accentColor,
             onLubeChainClick = {
-                toastMessage = "1-Tap: Chain cleaned & lubed! 500 km interval reset."
+                toastMessage = "Chain cleaned & lubed! 500 km wear interval reset."
             },
             onFuelUpClick = {
                 currentOdo += 120.0
-                toastMessage = "Fuel logged: +120 km added to Odometer (${currentOdo.toInt()} km)"
+                toastMessage = "Fuel logged: +120 km added (${currentOdo.toInt()} km total)"
             },
             onPoliceCheckClick = onNavigateToVault,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(horizontal = 16.dp, vertical = 14.dp)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
         )
 
-        // QUICK TOAST BANNER
+        // TOAST BANNER
         toastMessage?.let { msg ->
             LaunchedEffect(msg) {
-                kotlinx.coroutines.delay(2800)
+                kotlinx.coroutines.delay(2600)
                 toastMessage = null
             }
             Surface(
                 color = SurfaceElevatedDark,
-                shape = RoundedCornerShape(12.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, accentColor),
+                shape = RoundedCornerShape(16.dp),
+                border = androidx.compose.foundation.BorderStroke(1.dp, BorderSpecularDark),
+                shadowElevation = 8.dp,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .padding(top = 16.dp, start = 20.dp, end = 20.dp)
@@ -131,9 +176,10 @@ fun GarageScreen(
                     text = msg,
                     style = MotoVaultTypography.bodyMedium.copy(
                         color = TextPrimary,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 13.sp
                     ),
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
+                    modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp)
                 )
             }
         }
@@ -146,86 +192,189 @@ private fun VehicleHeroCard(
     currentOdo: Double,
     accentColor: Color
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(SurfaceCardDark, RoundedCornerShape(22.dp))
-            .border(1.dp, BorderSubtleDark, RoundedCornerShape(22.dp))
-            .padding(18.dp)
+            .clip(RoundedCornerShape(26.dp))
+            .background(SpecularCardBrush)
+            .border(1.dp, BorderSpecularDark, RoundedCornerShape(26.dp))
+            .padding(20.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    text = vehicle.name,
-                    style = MotoVaultTypography.headlineMedium.copy(
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Black
-                    ),
-                    color = TextPrimary
-                )
-                Text(
-                    text = "${vehicle.emissionStandard.code} • ${vehicle.edition.displayName}",
-                    style = MotoVaultTypography.bodyMedium.copy(fontSize = 12.sp),
+        Column {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .background(accentColor.copy(alpha = 0.15f), RoundedCornerShape(8.dp))
+                            .border(1.dp, accentColor.copy(alpha = 0.4f), RoundedCornerShape(8.dp))
+                            .padding(horizontal = 8.dp, vertical = 3.dp)
+                    ) {
+                        Text(
+                            text = "READY TO RACE",
+                            style = MotoVaultTypography.labelSmall.copy(
+                                fontSize = 9.sp,
+                                fontWeight = FontWeight.Black,
+                                fontFamily = FontFamily.Monospace,
+                                color = accentColor
+                            )
+                        )
+                    }
+                    Text(
+                        text = "${vehicle.emissionStandard.code} • ${vehicle.edition.displayName}",
+                        style = MotoVaultTypography.bodySmall.copy(
+                            fontSize = 11.sp,
+                            color = TextSecondary
+                        )
+                    )
+                }
+
+                // Status Online indicator
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(7.dp)
+                            .background(StatusHealthyGreen, CircleShape)
+                    )
+                    Text(
+                        text = "OK",
+                        style = MotoVaultTypography.labelSmall.copy(
+                            fontSize = 10.sp,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Bold,
+                            color = StatusHealthyGreen
+                        )
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = vehicle.name,
+                style = MotoVaultTypography.headlineMedium.copy(
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Black,
+                    letterSpacing = (-0.5).sp
+                ),
+                color = TextPrimary
+            )
+            Text(
+                text = "124.7cc DOHC • Chakan Facility Assembly",
+                style = MotoVaultTypography.bodySmall.copy(
+                    fontSize = 11.sp,
+                    fontFamily = FontFamily.Monospace,
                     color = TextSecondary
                 )
-            }
-            Box(
+            )
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            // Precision Telemetry Stats Bar
+            Row(
                 modifier = Modifier
-                    .background(accentColor.copy(alpha = 0.15f), RoundedCornerShape(8.dp))
-                    .border(1.dp, accentColor.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
-                    .padding(horizontal = 10.dp, vertical = 4.dp)
+                    .fillMaxWidth()
+                    .background(Color.White.copy(alpha = 0.03f), RoundedCornerShape(16.dp))
+                    .border(1.dp, BorderSpecularDark, RoundedCornerShape(16.dp))
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "READY TO RACE",
-                    style = MotoVaultTypography.labelMedium.copy(
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Black,
-                        color = accentColor
+                Column {
+                    Text(
+                        text = "ODOMETER",
+                        style = MotoVaultTypography.labelSmall.copy(
+                            fontSize = 9.sp,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Bold,
+                            color = TextMuted,
+                            letterSpacing = 1.sp
+                        )
                     )
-                )
-            }
-        }
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text(
+                            text = String.format("%,d", currentOdo.toLong()),
+                            style = MotoVaultTypography.displayLarge.copy(
+                                fontSize = 22.sp,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Black
+                            ),
+                            color = TextPrimary
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "km",
+                            style = MotoVaultTypography.bodySmall.copy(
+                                fontSize = 11.sp,
+                                fontFamily = FontFamily.Monospace,
+                                color = TextMuted
+                            ),
+                            modifier = Modifier.padding(bottom = 2.dp)
+                        )
+                    }
+                }
 
-        Spacer(modifier = Modifier.height(16.dp))
+                // Vertical hairline divider
+                Box(
+                    modifier = Modifier
+                        .height(32.dp)
+                        .width(1.dp)
+                        .background(BorderSpecularDark)
+                )
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(
-                    text = "ODOMETER",
-                    style = MotoVaultTypography.bodyMedium.copy(fontSize = 11.sp, color = TextMuted)
-                )
-                Text(
-                    text = "${currentOdo.toInt()} km",
-                    style = MotoVaultTypography.displayLarge.copy(fontSize = 24.sp),
-                    color = TextPrimary
-                )
-            }
-            Column(horizontalAlignment = Alignment.End) {
-                Text(
-                    text = "FUEL EFFICIENCY",
-                    style = MotoVaultTypography.bodyMedium.copy(fontSize = 11.sp, color = TextMuted)
-                )
-                Text(
-                    text = "${vehicle.rollingEfficiencyKmPerUnit} km/L",
-                    style = MotoVaultTypography.displayLarge.copy(
-                        fontSize = 24.sp,
-                        color = StatusHealthyGreen
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = "FUEL ECONOMY",
+                        style = MotoVaultTypography.labelSmall.copy(
+                            fontSize = 9.sp,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Bold,
+                            color = TextMuted,
+                            letterSpacing = 1.sp
+                        )
                     )
-                )
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text(
+                            text = "${vehicle.rollingEfficiencyKmPerUnit}",
+                            style = MotoVaultTypography.displayLarge.copy(
+                                fontSize = 22.sp,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Black
+                            ),
+                            color = StatusHealthyGreen
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "km/L",
+                            style = MotoVaultTypography.bodySmall.copy(
+                                fontSize = 11.sp,
+                                fontFamily = FontFamily.Monospace,
+                                color = StatusHealthyGreen.copy(alpha = 0.7f)
+                            ),
+                            modifier = Modifier.padding(bottom = 2.dp)
+                        )
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun ComponentDetailRow(component: ComponentRule, currentOdo: Double) {
+private fun ComponentDetailRow(
+    component: ComponentRule,
+    currentOdo: Double,
+    onItemClick: () -> Unit
+) {
     val wear = component.calculateWearPercentage(currentOdo, 0L)
     val remaining = component.remainingKm(currentOdo)
     val statusColor = when {
@@ -234,39 +383,80 @@ private fun ComponentDetailRow(component: ComponentRule, currentOdo: Double) {
         else -> StatusHealthyGreen
     }
 
+    val icon = when {
+        component.name.contains("Chain", ignoreCase = true) -> "⛓️"
+        component.name.contains("Oil", ignoreCase = true) -> "🛢️"
+        component.name.contains("Brake", ignoreCase = true) -> "🛑"
+        component.name.contains("Spark", ignoreCase = true) -> "⚡"
+        component.name.contains("Coolant", ignoreCase = true) -> "🧪"
+        component.name.contains("Filter", ignoreCase = true) -> "💨"
+        else -> "⚙️"
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(SurfaceCardDark, RoundedCornerShape(14.dp))
-            .border(1.dp, BorderSubtleDark, RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(18.dp))
+            .background(SpecularCardBrush)
+            .border(1.dp, BorderSpecularDark, RoundedCornerShape(18.dp))
+            .clickable(onClick = onItemClick)
             .padding(14.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = component.name,
-                style = MotoVaultTypography.titleMedium.copy(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                color = TextPrimary
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = component.specification,
-                style = MotoVaultTypography.bodyMedium.copy(fontSize = 11.sp),
-                color = TextSecondary
-            )
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(38.dp)
+                    .background(Color.White.copy(alpha = 0.05f), RoundedCornerShape(12.dp))
+                    .border(1.dp, BorderSpecularDark, RoundedCornerShape(12.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = icon, fontSize = 16.sp)
+            }
+
+            Column {
+                Text(
+                    text = component.name,
+                    style = MotoVaultTypography.titleMedium.copy(
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = TextPrimary
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = component.specification,
+                    style = MotoVaultTypography.bodySmall.copy(
+                        fontSize = 11.sp,
+                        color = TextSecondary
+                    ),
+                    maxLines = 1
+                )
+            }
         }
+
         Column(horizontalAlignment = Alignment.End) {
             Text(
                 text = "$wear%",
-                style = MotoVaultTypography.labelMedium.copy(fontSize = 15.sp, color = statusColor)
+                style = MotoVaultTypography.labelMedium.copy(
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.Black,
+                    color = statusColor
+                )
             )
             Text(
                 text = "${remaining.toInt()} km left",
-                style = MotoVaultTypography.bodyMedium.copy(fontSize = 11.sp, color = TextMuted)
+                style = MotoVaultTypography.bodySmall.copy(
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.Monospace,
+                    color = TextMuted
+                )
             )
         }
     }
