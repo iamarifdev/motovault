@@ -1,6 +1,7 @@
 package com.motovault.app.domain.usecase
 
 import com.motovault.app.domain.model.GovernmentDocument
+import com.motovault.app.domain.model.DOCUMENT_RENEWAL_WARNING_DAYS
 
 enum class DocumentExpiryStatus {
     VALID,
@@ -25,7 +26,7 @@ class DocumentExpiryUseCase {
 
         val status = when {
             daysRemaining <= 0 -> DocumentExpiryStatus.EXPIRED
-            daysRemaining <= 30 -> DocumentExpiryStatus.EXPIRING_SOON
+            daysRemaining <= DOCUMENT_RENEWAL_WARNING_DAYS -> DocumentExpiryStatus.EXPIRING_SOON
             else -> DocumentExpiryStatus.VALID
         }
 

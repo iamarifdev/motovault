@@ -25,7 +25,7 @@ class DocumentExpiryUseCaseTest {
     )
 
     @Test
-    fun testValidDocument_MoreThan30DaysRemaining() {
+    fun testValidDocument_MoreThan60DaysRemaining() {
         // Expiry is 100 days away
         val result = useCase.evaluate(
             document = sampleDoc,
@@ -40,7 +40,7 @@ class DocumentExpiryUseCaseTest {
     }
 
     @Test
-    fun testExpiringSoonDocument_30DaysOrLessTriggersAlert() {
+    fun testExpiringSoonDocument_60DaysOrLessTriggersAlert() {
         // Expiry is 15 days away
         val result = useCase.evaluate(
             document = sampleDoc,
@@ -84,5 +84,14 @@ class DocumentExpiryUseCaseTest {
         assertEquals(-12, result.daysRemaining)
         assertTrue(result.requiresImmediateAttention)
         assertTrue(result.alertNotificationBody!!.contains("Renew immediately"))
+    }
+
+    @Test
+    fun renewalBoundaryMatchesTheModelAt60Days() {
+        assertEquals(DocumentExpiryStatus.VALID, useCase.evaluate(sampleDoc, 1000, 1061).status)
+        assertEquals(DocumentExpiryStatus.EXPIRING_SOON, useCase.evaluate(sampleDoc, 1000, 1060).status)
+        assertTrue(sampleDoc.copy(daysUntilExpiry = 60).isExpiringSoon)
+        assertFalse(sampleDoc.copy(daysUntilExpiry = 61).isExpiringSoon)
+        assertFalse(sampleDoc.copy(daysUntilExpiry = 0).isExpiringSoon)
     }
 }

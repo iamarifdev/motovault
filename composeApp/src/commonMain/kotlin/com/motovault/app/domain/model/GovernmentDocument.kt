@@ -2,6 +2,8 @@ package com.motovault.app.domain.model
 
 import kotlinx.serialization.Serializable
 
+const val DOCUMENT_RENEWAL_WARNING_DAYS = 60
+
 @Serializable
 enum class GovernmentDocumentType(val title: String) {
     BRTA_REGISTRATION("BRTA Vehicle Registration"),
@@ -30,5 +32,5 @@ data class GovernmentDocument(
     val isBiometricLocked: Boolean = true
 ) {
     val isExpired: Boolean get() = daysUntilExpiry <= 0
-    val isExpiringSoon: Boolean get() = daysUntilExpiry in 1..30
+    val isExpiringSoon: Boolean get() = daysUntilExpiry in 1..DOCUMENT_RENEWAL_WARNING_DAYS
 }

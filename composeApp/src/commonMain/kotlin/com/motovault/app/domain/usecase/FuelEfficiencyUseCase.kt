@@ -1,6 +1,7 @@
 package com.motovault.app.domain.usecase
 
 import kotlinx.serialization.Serializable
+import kotlin.math.roundToLong
 
 @Serializable
 data class FuelLogEntry(
@@ -85,8 +86,8 @@ class FuelEfficiencyUseCase {
         val costPerKm = currentEntry.totalCost / deltaDistance
 
         return FuelEfficiencyResult(
-            calculatedEconomyKmPerLiter = Math.round(economy * 100.0) / 100.0,
-            costPerKm = Math.round(costPerKm * 100.0) / 100.0,
+            calculatedEconomyKmPerLiter = (economy * 100.0).roundToLong() / 100.0,
+            costPerKm = (costPerKm * 100.0).roundToLong() / 100.0,
             deltaDistanceKm = deltaDistance,
             fuelConsumedLiters = currentEntry.liters,
             isReliable = true,
