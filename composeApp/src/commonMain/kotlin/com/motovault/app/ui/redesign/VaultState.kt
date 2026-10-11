@@ -43,7 +43,11 @@ data class RideLog(
 data class VaultDocument(
     val title: String, val number: String, val holder: String, val expiry: String,
     val id: String = recordId(), val issued: String = "",
-    val frontPhoto: String? = null, val backPhoto: String? = null
+    val frontPhoto: String? = null, val backPhoto: String? = null,
+    val pages: List<DocumentPage> = emptyList(), val originalPdf: String? = null,
+    val pdfPageCount: Int = 0, val details: Map<String, String> = emptyMap(),
+    val detailsConfirmed: Boolean = false,
+    val extractionCandidates: Map<String, String> = emptyMap(), val capturedAt: String = ""
 ) {
     val daysRemaining: Int? get() = expiry.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it).toEpochDays() - today().toEpochDays() }
     val expiryLabel: String get() = daysRemaining?.let { if (it <= 0) "Expired" else if (it <= RENEWAL_WARNING_DAYS) "$it days" else "Valid" } ?: "No expiry"
@@ -108,6 +112,9 @@ data class VaultState(
     }
 
     fun saveDocument(document: VaultDocument): VaultState {
+        require(document.pages.size <= documentPageLimit(document.title)) { "Too many document pages." }
+        document.pages.forEach { validateDocumentAssetId(it.originalId); validateDocumentAssetId(it.previewId); it.acceptedId?.let(::validateDocumentAssetId); require(it.width > 0 && it.height > 0) }
+        document.originalPdf?.let { validateDocumentAssetId(it) }
         require(document.number.isNotBlank() && document.holder.isNotBlank()) { "Enter a document number and holder name." }
         val issued = document.issued.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) }
         val expiry = document.expiry.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) }

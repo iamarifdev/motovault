@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -83,9 +84,11 @@ fun MotoVault() {
     var editingRide by remember { mutableStateOf(false) }
     var pendingGarage by remember { mutableStateOf<VaultState?>(null) }
     var selectedBrand by remember { mutableStateOf(state.ride?.brandId ?: "ktm") }
-    var dialog by remember { mutableStateOf<String?>(null) }
+    var dialog by rememberSaveable { mutableStateOf<String?>(null) }
     var selectedRule by remember { mutableStateOf<ComponentRule?>(null) }
-    var selectedDocument by remember { mutableStateOf<VaultDocument?>(null) }
+    var selectedDocumentId by rememberSaveable { mutableStateOf<String?>(null) }
+    val selectedDocument = state.documents.firstOrNull { it.id == selectedDocumentId }
+    var manualDocumentType by rememberSaveable { mutableStateOf(documentTypes.first()) }
     var deleteId by remember { mutableStateOf<String?>(null) }
     var deleteKind by remember { mutableStateOf("log") }
     val brand = worlds.firstOrNull { it.id == selectedBrand } ?: worlds.first()
@@ -95,7 +98,9 @@ fun MotoVault() {
         if (restoration.isFailure) { storageError = "Stored records could not be read. Existing storage has been preserved."; return false }
         return try {
             saveVault(VaultState.encode(next))
+            val removedAssets = state.documents.flatMap { it.assetIds() }.toSet() - next.documents.flatMap { it.assetIds() }.toSet()
             state = next
+            removeDocumentAssets(removedAssets)
             storageError = null
             scope.launch { snackbars.showSnackbar("Record saved", duration = SnackbarDuration.Short) }
             true
@@ -129,8 +134,8 @@ fun MotoVault() {
                             Tab.GARAGE -> Garage(state, brand, onAppearance = { dialog = "appearance" }, onOdometer = { dialog = "odometer" }, onFuel = { dialog = "fuel" },
                                 onRule = { selectedRule = it; dialog = "service" }, onComponents = { dialog = "components" },
                                 onChangeBike = { editingRide = true }, onFuelHistory = { history("fuel") }, onVault = { tab = Tab.VAULT })
-                            Tab.VAULT -> Vault(state.documents, onAppearance = { dialog = "appearance" }, onAdd = { selectedDocument = null; dialog = "document" },
-                                onDocument = { selectedDocument = it; dialog = "detail" }, onInspection = { dialog = "inspection" })
+                            Tab.VAULT -> Vault(state.documents, onAppearance = { dialog = "appearance" }, onAdd = { selectedDocumentId = null; dialog = "documentCapture" },
+                                onDocument = { selectedDocumentId = it.id; dialog = "detail" }, onInspection = { selectedDocumentId = state.documents.firstOrNull()?.id; dialog = if (selectedDocumentId == null) "inspection" else "inspectDetail" })
                             Tab.HISTORY -> History(state, historyFilter, onAppearance = { dialog = "appearance" }, onFilter = { historyFilter = it },
                                 onDelete = { deleteId = it.id; deleteKind = "log"; dialog = "delete" },
                                 onFuel = { dialog = "fuel" }, onService = { selectedRule = state.rules.firstOrNull(); dialog = if (selectedRule == null) "components" else "service" })
@@ -159,11 +164,12 @@ fun MotoVault() {
                 "components" -> ComponentsList(state, onDismiss = { dialog = null }, onSelect = { selectedRule = it; dialog = "service" },
                     onAdd = { selectedRule = null; dialog = "schedule" })
                 "schedule" -> ScheduleDialog(state, selectedRule, onDismiss = { dialog = null }, onSave = ::commit)
-                "document" -> DocumentDialog(state, selectedDocument, onDismiss = { dialog = null }, onSave = ::commit)
-                "detail", "inspectDetail" -> selectedDocument?.let { document -> DocumentDetail(document, inspection = dialog == "inspectDetail",
-                    onDismiss = { dialog = null }, onEdit = { dialog = "document" },
-                    onDelete = { deleteId = document.id; deleteKind = "document"; dialog = "delete" }, onInspectionList = { dialog = "inspection" }) }
-                "inspection" -> Inspection(state.documents, onDismiss = { dialog = null }, onDocument = { selectedDocument = it; dialog = "inspectDetail" })
+                "documentCapture" -> DocumentCaptureFlow(state, selectedDocument, onDismiss = { dialog = null }, onManual = { manualDocumentType = it; dialog = "document" }, onSave = ::commit)
+                "document" -> DocumentEditFlow(state, selectedDocument, manualDocumentType, onDismiss = { dialog = null }, onSave = ::commit)
+                "detail", "inspectDetail" -> selectedDocument?.let { document -> VaultTheme(brand.id, if (dialog == "inspectDetail") Appearance.LIGHT else state.appearance, typography) { OriginalDocumentDetail(document, inspection = dialog == "inspectDetail",
+                    onDismiss = { dialog = null }, onEdit = { dialog = "document" }, onScan = { dialog = "documentCapture" },
+                    onDelete = { deleteId = document.id; deleteKind = "document"; dialog = "delete" }, onInspectionList = { dialog = "inspection" }, onInspect = { dialog = "inspectDetail" }) } }
+                "inspection" -> DocumentInspection(state.documents, onDismiss = { dialog = null }, onDocument = { selectedDocumentId = it.id; dialog = "inspectDetail" })
                 "delete" -> {
                     var error by remember { mutableStateOf<String?>(null) }
                     Sheet("Remove this entry?", onDismiss = { dialog = null }) {
@@ -276,41 +282,7 @@ private fun Gauge(label: String, life: Int, modifier: Modifier, onClick: () -> U
 }
 
 @Composable
-private fun ColumnScope.Vault(documents: List<VaultDocument>, onAppearance: () -> Unit, onAdd: () -> Unit, onDocument: (VaultDocument) -> Unit, onInspection: () -> Unit) {
-    val due = documents.count { (it.daysRemaining ?: Int.MAX_VALUE) <= RENEWAL_WARNING_DAYS }
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-        Text("Document vault", fontWeight = FontWeight.SemiBold, fontSize = 16.sp, modifier = Modifier.weight(1f))
-        AppearanceButton(onAppearance)
-        IconButton(onClick = onAdd, modifier = Modifier.border(1.dp, BorderColor, CircleShape).semantics { contentDescription = "Add document" }) { Glyph("add") }
-    }
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Heading("Ready for the road.")
-        Text(if (due > 0) "$due document(s) need attention." else "Your essentials. Always within reach.", color = TextSecondary, fontSize = 13.sp)
-    }
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) { Glyph("vault", HealthyColor, Modifier.size(15.dp)); Text("Local records · Available offline", color = HealthyColor, fontSize = 11.sp) }
-    if (documents.isEmpty()) {
-        Panel { Text("Your papers, together.", fontWeight = FontWeight.Bold, fontSize = 20.sp); Text("Add registration, licence, and tax token details or photos.", color = TextSecondary, lineHeight = 20.sp); Primary("Add first document", "add", onClick = onAdd) }
-    } else {
-        documents.forEach { doc -> Panel(onClick = { onDocument(doc) }) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Glyph("document", TextSecondary)
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(doc.title, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
-                    Text(doc.number, color = TextSecondary, fontSize = 11.sp)
-                    Text(doc.expiry.ifBlank { "No expiry" }, color = TextSecondary, fontSize = 11.sp)
-                }
-                val days = doc.daysRemaining ?: Int.MAX_VALUE
-                Text(doc.expiryLabel, color = if (days <= 0) ErrorColor else if (days <= RENEWAL_WARNING_DAYS) WarningColor else HealthyColor, fontSize = 10.sp)
-            }
-        } }
-    }
-    Panel(tint = MaterialTheme.colorScheme.primary.copy(alpha = .06f)) {
-        Text("Roadside inspection", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-        Text("Show only stored documents and attachments in a clear, easy-to-read view.", color = TextSecondary, fontSize = 12.sp, lineHeight = 19.sp)
-        TextButton(onClick = onInspection, contentPadding = PaddingValues(0.dp)) { Text("Open inspection mode"); Spacer(Modifier.width(8.dp)); Glyph("arrow", MaterialTheme.colorScheme.primary) }
-    }
-    Text("Stored copies · Carry originals where required", color = TextSecondary, fontSize = 10.sp, modifier = Modifier.align(Alignment.CenterHorizontally))
-}
+private fun ColumnScope.Vault(documents: List<VaultDocument>, onAppearance: () -> Unit, onAdd: () -> Unit, onDocument: (VaultDocument) -> Unit, onInspection: () -> Unit) = DocumentWallet(documents, onAppearance, onAdd, onDocument, onInspection)
 
 @Composable
 internal fun Top(title: String, caption: String, onAppearance: () -> Unit) {

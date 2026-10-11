@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import kotlinx.serialization.json.Json
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -167,9 +168,9 @@ internal fun History(state: VaultState, filter: String, onAppearance: () -> Unit
 }
 
 @Composable
-internal fun DocumentDialog(state: VaultState, existing: VaultDocument?, onDismiss: () -> Unit, onSave: (VaultState) -> Boolean) {
+internal fun DocumentDialog(state: VaultState, existing: VaultDocument?, onDismiss: () -> Unit, onSave: (VaultState) -> Boolean, initialType: String = documentTypes.first()) {
     val types = listOf("Registration smart card", "Driving licence", "Tax token", "Insurance", "Fitness certificate")
-    var type by remember { mutableStateOf(existing?.title ?: types.first()) }
+    var type by remember { mutableStateOf(existing?.title ?: initialType) }
     var expanded by remember { mutableStateOf(false) }
     var number by remember { mutableStateOf(existing?.number ?: "") }
     var holder by remember { mutableStateOf(existing?.holder ?: "") }
@@ -178,48 +179,31 @@ internal fun DocumentDialog(state: VaultState, existing: VaultDocument?, onDismi
     var front by remember { mutableStateOf(existing?.frontPhoto) }
     var back by remember { mutableStateOf(existing?.backPhoto) }
     var error by remember { mutableStateOf<String?>(null) }
+    var details by remember { mutableStateOf(existing?.details ?: emptyMap<String, String>()) }
     val id = remember { existing?.id ?: recordId() }
     Sheet(if (existing == null) "Keep the essentials close." else "Edit your document.", onDismiss) {
         Eyebrow("Document vault")
         Text("Add details and optional photos. Files stay on this device.", color = TextSecondary, fontSize = 12.sp)
-        Box { OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth()) { Text(type) }; DropdownMenu(expanded, onDismissRequest = { expanded = false }) { types.forEach { value -> DropdownMenuItem(text = { Text(value) }, onClick = { type = value; expanded = false }) } } }
+        Box { OutlinedButton(onClick = { expanded = true }, enabled = existing?.pages.isNullOrEmpty(), modifier = Modifier.fillMaxWidth()) { Text(type) }; DropdownMenu(expanded, onDismissRequest = { expanded = false }) { types.forEach { value -> DropdownMenuItem(text = { Text(value) }, onClick = { type = value; expanded = false }) } } }
         Field("Document number", number, { number = it.take(80) })
         Field("Holder name", holder, { holder = it.take(80) })
         Field("Issue date (optional, YYYY-MM-DD)", issued, { issued = it })
         Field("Expiry date (optional, YYYY-MM-DD)", expiry, { expiry = it })
+        details.forEach { (key, value) -> Field(when (key) { "registration" -> "Vehicle registration"; "chassis" -> "Chassis number"; "engine" -> "Engine number"; "bloodGroup" -> "Blood group"; "vehicleClass" -> "Vehicle classes"; "birthDate" -> "Date of birth"; else -> key }, value, { details = details + (key to it.take(160)) }) }
+        if (existing?.pages.isNullOrEmpty()) {
         Text("JPEG, PNG, or WebP photos, up to 1 MB each.", color = TextSecondary, fontSize = 11.sp)
         AttachmentPicker(if (front == null) "Add front photo" else "Replace front photo", onSelected = { front = it }, onError = { error = it })
         front?.let { Attachment(it, "Front of $type") }
         AttachmentPicker(if (back == null) "Add back photo" else "Replace back photo", onSelected = { back = it }, onError = { error = it })
         back?.let { Attachment(it, "Back of $type") }
         if (front != null || back != null) TextButton(onClick = { front = null; back = null }) { Text("Remove attached photos") }
+        } else Text("Original scan is preserved. Use Replace scan to capture a new copy.", color = TextSecondary, fontSize = 12.sp)
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
         Primary("Save document", "check", enabled = number.isNotBlank() && holder.isNotBlank()) {
-            runCatching { state.saveDocument(VaultDocument(type, number.trim(), holder.trim(), expiry.trim(), id, issued.trim(), front, back)) }.onSuccess {
+            runCatching { state.saveDocument((existing ?: VaultDocument(type, "", "", "", id)).copy(title = type, number = number.trim(), holder = holder.trim(), expiry = expiry.trim(), issued = issued.trim(), frontPhoto = front, backPhoto = back, details = details.filterValues { it.isNotBlank() }, detailsConfirmed = true)) }.onSuccess {
                 if (onSave(it)) onDismiss() else error = "Could not save. Your previous records are unchanged."
             }.onFailure { error = if (it is IllegalArgumentException) it.message ?: "Enter valid dates as YYYY-MM-DD." else "Enter valid dates as YYYY-MM-DD." }
         }
-    }
-}
-
-@Composable
-internal fun DocumentDetail(document: VaultDocument, inspection: Boolean, onDismiss: () -> Unit, onEdit: () -> Unit, onDelete: () -> Unit, onInspectionList: () -> Unit) {
-    var reverse by remember { mutableStateOf(false) }
-    Sheet(document.title, onDismiss, light = inspection) {
-        val textColor = TextPrimary
-        Text(if (inspection) "Inspection · Stored copy" else "Owner-entered record", color = textColor, fontSize = 12.sp)
-        Column(Modifier.fillMaxWidth().border(1.dp, if (inspection) Color.Gray else BorderColor, RoundedCornerShape(14.dp)).padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(document.holder, color = textColor, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Text(document.number, color = textColor, fontSize = 18.sp)
-            Text("${if (reverse) "BACK" else "FRONT"} · ${document.expiryLabel}", color = textColor, fontSize = 12.sp)
-        }
-        val photo = if (reverse) document.backPhoto else document.frontPhoto
-        if (photo != null) Attachment(photo, "${if (reverse) "Back" else "Front"} of ${document.title}")
-        else Text("No ${if (reverse) "back" else "front"} photo attached.", color = textColor, fontSize = 13.sp)
-        Text("Issued: ${document.issued.ifBlank { "Not set" }}\nExpires: ${document.expiry.ifBlank { "Not set" }}", color = textColor, fontSize = 13.sp)
-        Primary(if (reverse) "Show front" else "Show back", "document") { reverse = !reverse }
-        if (inspection) TextButton(onClick = onInspectionList) { Text("All documents") }
-        else { TextButton(onClick = onEdit) { Text("Edit document") }; TextButton(onClick = onDelete) { Text("Delete document", color = WarningColor) } }
     }
 }
 
