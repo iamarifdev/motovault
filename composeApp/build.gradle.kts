@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -37,6 +39,7 @@ kotlin {
             implementation("androidx.camera:camera-camera2:1.4.2")
             implementation("androidx.camera:camera-lifecycle:1.4.2")
             implementation("androidx.camera:camera-view:1.4.2")
+            implementation("com.google.zxing:core:3.5.3")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -53,12 +56,23 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.coil.compose)
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
         }
     }
 }
+
+dependencies {
+    add("kspAndroid", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+    add("kspIosX64", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
+}
+
+room { schemaDirectory("$projectDir/schemas") }
 
 android {
     namespace = "com.motovault.app"

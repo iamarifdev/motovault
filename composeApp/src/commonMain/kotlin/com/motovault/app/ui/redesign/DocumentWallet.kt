@@ -52,6 +52,7 @@ internal fun ColumnScope.DocumentWallet(documents: List<VaultDocument>, onAppear
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { DocumentNote("${next.title} · ${next.expiry}"); DocumentBadge(next.expiryLabel, warning = next.daysRemaining!! <= RENEWAL_WARNING_DAYS, good = next.daysRemaining!! > RENEWAL_WARNING_DAYS) }
     }
     DocumentPrimary("Scan a document  ＋", onClick = onAdd)
+    RenewalReminderControl()
     DocumentLink("Open inspection mode ↗", onInspection)
     DocumentNote("Original scans and confirmed details stay together.")
 }

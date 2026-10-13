@@ -88,17 +88,20 @@ actual fun DocumentCamera(modifier: Modifier, captureRequest: Int, onQuality: (C
             busy = true
             imageCapture.targetRotation = preview.display?.rotation ?: android.view.Surface.ROTATION_0
             val id = recordId() + ".jpg"
+            val operation = DocumentAssetOperation().also { it.register(id) }
             imageCapture.takePicture(ImageCapture.OutputFileOptions.Builder(assetFile(id)).build(), ContextCompat.getMainExecutor(context), object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(result: ImageCapture.OutputFileResults) {
+                    var delivered = false
                     scope.launch { try {
                         val page = withContext(Dispatchers.IO) {
                             val bitmap = previewBitmap(assetFile(id))
-                            try { DocumentPage(id, saveBitmap(bitmap), "image/jpeg", bitmap.width, bitmap.height, "Front") } finally { bitmap.recycle() }
+                            try { DocumentPage(id, saveBitmap(bitmap, operation), "image/jpeg", bitmap.width, bitmap.height, "Front") } finally { bitmap.recycle() }
                         }
                         captured(page)
-                    } catch (cancelled: CancellationException) { removeDocumentAssets(setOf(id)); throw cancelled } catch (_: Exception) { removeDocumentAssets(setOf(id)); error("Could not save this capture. Try again.") } finally { busy = false } }
+                        delivered = true
+                    } catch (cancelled: CancellationException) { if (!delivered) operation.rollback(); throw cancelled } catch (_: Exception) { if (!delivered) operation.rollback(); error("Could not save this capture. Try again.") } finally { busy = false } }.invokeOnCompletion { failure -> if (failure != null && !delivered) operation.rollback() }
                 }
-                override fun onError(exception: ImageCaptureException) { busy = false; removeDocumentAssets(setOf(id)); error("Could not capture. Check focus and try again.") }
+                override fun onError(exception: ImageCaptureException) { busy = false; operation.rollback(); error("Could not capture. Check focus and try again.") }
             })
         }
     }

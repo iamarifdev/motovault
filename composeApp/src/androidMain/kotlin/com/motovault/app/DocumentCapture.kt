@@ -41,9 +41,9 @@ private suspend fun <T> Task<T>.awaitValue(): T = suspendCancellableCoroutine { 
     addOnCanceledListener { continuation.cancel() }
 }
 
-private fun copyOriginal(uri: Uri, mime: String): String {
+private fun copyOriginal(uri: Uri, mime: String, operation: DocumentAssetOperation): String {
     val extension = when (mime) { "application/pdf" -> "pdf"; "image/png" -> "png"; "image/webp" -> "webp"; else -> "jpg" }
-    val id = recordId() + "." + extension
+    val id = operation.register(recordId() + "." + extension)
     val file = assetFile(id)
     try {
         requireNotNull(vaultContext.contentResolver.openInputStream(uri)).use { input ->
@@ -86,13 +86,14 @@ internal fun previewBitmap(file: File, maximum: Int = 1800): Bitmap {
     return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true).also { if (it !== bitmap) bitmap.recycle() }
 }
 
-internal fun saveBitmap(bitmap: Bitmap): String {
+internal fun saveBitmap(bitmap: Bitmap, operation: DocumentAssetOperation? = null): String {
     val id = recordId() + ".jpg"
+    operation?.register(id)
     assetFile(id).outputStream().use { check(bitmap.compress(Bitmap.CompressFormat.JPEG, 96, it)) { "Could not save the scan." } }
     return id
 }
 
-private suspend fun processImages(uris: List<Uri>, type: String, pdfUri: Uri? = null): CapturedDocument {
+private suspend fun processImages(uris: List<Uri>, type: String, operation: DocumentAssetOperation): CapturedDocument {
     require(uris.isNotEmpty() && uris.size <= documentPageLimit(type)) { "Choose up to ${documentPageLimit(type)} pages." }
     val pages = mutableListOf<DocumentPage>()
     val text = StringBuilder()
@@ -103,10 +104,10 @@ private suspend fun processImages(uris: List<Uri>, type: String, pdfUri: Uri? = 
             currentCoroutineContext().ensureActive()
             val mime = vaultContext.contentResolver.getType(uri) ?: "image/jpeg"
             require(mime in listOf("image/jpeg", "image/png", "image/webp")) { "Choose JPEG, PNG, or WebP images." }
-            val original = withContext(Dispatchers.IO) { copyOriginal(uri, mime) }
+            val original = withContext(Dispatchers.IO) { copyOriginal(uri, mime, operation) }
             val bitmap = withContext(Dispatchers.IO) { previewBitmap(assetFile(original)) }
             try {
-                val preview = withContext(Dispatchers.IO) { saveBitmap(bitmap) }
+                val preview = withContext(Dispatchers.IO) { saveBitmap(bitmap, operation) }
                 pages += DocumentPage(original, preview, mime, bitmap.width, bitmap.height, if (isCardDocument(type)) (if (index == 0) "Front" else "Back") else "Page ${index + 1}")
                 try { text.append(recognizer.process(InputImage.fromBitmap(bitmap, 0)).awaitValue().text).append('\n') }
                 catch (cancelled: CancellationException) { throw cancelled }
@@ -114,12 +115,11 @@ private suspend fun processImages(uris: List<Uri>, type: String, pdfUri: Uri? = 
             } finally { bitmap.recycle() }
         }
     } finally { recognizer.close() }
-    val pdf = pdfUri?.let { withContext(Dispatchers.IO) { copyOriginal(it, "application/pdf") } }
-    return CapturedDocument(pages, pdf, if (pdf != null) pages.size else 0, text.toString().take(30000), failed || text.isBlank())
+    return CapturedDocument(pages, recognizedText = text.toString().take(30000), readingFailed = failed || text.isBlank())
 }
 
-private suspend fun processPdf(uri: Uri, type: String): CapturedDocument {
-    val original = withContext(Dispatchers.IO) { copyOriginal(uri, "application/pdf") }
+private suspend fun processPdf(uri: Uri, type: String, operation: DocumentAssetOperation): CapturedDocument {
+    val original = withContext(Dispatchers.IO) { copyOriginal(uri, "application/pdf", operation) }
     val images = withContext(Dispatchers.IO) {
         val descriptor = ParcelFileDescriptor.open(assetFile(original), ParcelFileDescriptor.MODE_READ_ONLY)
         val pdfRenderer = try { PdfRenderer(descriptor) } catch (failure: Exception) { descriptor.close(); throw failure }
@@ -132,13 +132,13 @@ private suspend fun processPdf(uri: Uri, type: String): CapturedDocument {
                     try {
                         bitmap.eraseColor(AndroidColor.WHITE)
                         page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                        Uri.fromFile(assetFile(saveBitmap(bitmap)))
+                        Uri.fromFile(assetFile(saveBitmap(bitmap, operation)))
                     } finally { bitmap.recycle() }
                 }
             }
         }
     }
-    val captured = try { processImages(images, type) } finally { images.forEach { uri -> uri.path?.let { File(it).delete() } } }
+    val captured = try { processImages(images, type, operation) } finally { images.forEach { uri -> uri.path?.let { File(it).delete() } } }
     return captured.copy(originalPdf = original, pdfPageCount = captured.pages.size)
 }
 
@@ -148,17 +148,17 @@ actual fun DocumentImportActions(type: String, backOnly: Boolean, onResult: (Cap
     var busy by remember { mutableStateOf(false) }
     val result by rememberUpdatedState(onResult)
     val error by rememberUpdatedState(onError)
-    fun import(block: suspend () -> CapturedDocument) {
+    fun import(block: suspend (DocumentAssetOperation) -> CapturedDocument) {
         busy = true
         scope.launch {
-            try { result(block()) }
+            try { documentAssetOperation { operation -> result(block(operation)) } }
             catch (cancelled: CancellationException) { throw cancelled }
             catch (failure: Exception) { error(failure.message ?: "Could not import this copy.") }
             finally { busy = false }
         }
     }
-    val images = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris -> if (uris.isNotEmpty()) import { require(!backOnly || uris.size == 1) { "Choose one back photo." }; processImages(uris, type) } }
-    val pdf = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri -> if (uri != null) import { processPdf(uri, type) } }
+    val images = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris -> if (uris.isNotEmpty()) import { operation -> require(!backOnly || uris.size == 1) { "Choose one back photo." }; processImages(uris, type, operation) } }
+    val pdf = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri -> if (uri != null) import { operation -> processPdf(uri, type, operation) } }
     Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
         DocumentSecondary(if (backOnly && isCardDocument(type)) "Import back photo" else if (backOnly) "Import page photo" else "Import photos", Modifier.weight(1f), enabled = !busy) { images.launch("image/*") }
         if (!backOnly) DocumentSecondary("Import PDF", Modifier.weight(1f), enabled = !busy) { pdf.launch("application/pdf") }
@@ -166,7 +166,7 @@ actual fun DocumentImportActions(type: String, backOnly: Boolean, onResult: (Cap
     if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
 }
 
-actual suspend fun adjustDocumentPage(page: DocumentPage, turns: Int, crop: DocumentCrop): DocumentPage = withContext(Dispatchers.IO) {
+actual suspend fun adjustDocumentPage(page: DocumentPage, turns: Int, crop: DocumentCrop): DocumentPage = documentAssetOperation { operation -> withContext(Dispatchers.IO) {
     crop.checked()
     val source = previewBitmap(assetFile(page.acceptedId ?: page.originalId), 4096)
     val rotated = if (turns % 4 == 0) source else Bitmap.createBitmap(source, 0, 0, source.width, source.height, Matrix().apply { postRotate((turns % 4) * 90f) }, true)
@@ -176,12 +176,12 @@ actual suspend fun adjustDocumentPage(page: DocumentPage, turns: Int, crop: Docu
         val height = ((crop.bottom - crop.top) * rotated.height).toInt().coerceIn(1, rotated.height - y)
         val accepted = Bitmap.createBitmap(rotated, x, y, width, height)
         try {
-            val id = saveBitmap(accepted)
+            val id = saveBitmap(accepted, operation)
             val preview = previewBitmap(assetFile(id))
-            try { page.copy(acceptedId = id, previewId = saveBitmap(preview), width = preview.width, height = preview.height) } finally { preview.recycle() }
+            try { page.copy(acceptedId = id, previewId = saveBitmap(preview, operation), width = preview.width, height = preview.height) } finally { preview.recycle() }
         } finally { if (accepted !== rotated) accepted.recycle() }
     } finally { if (rotated !== source) rotated.recycle(); source.recycle() }
-}
+} }
 
 actual suspend fun recognizeDocument(draft: CapturedDocument): CapturedDocument {
     val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
@@ -204,6 +204,50 @@ actual suspend fun readDocumentAsset(id: String): ByteArray = withContext(Dispat
 }
 
 actual fun removeDocumentAssets(ids: Set<String>) { ids.forEach { id -> runCatching { assetFile(id).delete() } } }
+
+private val orphanRecoveryStarted = java.util.concurrent.atomic.AtomicBoolean(false)
+actual suspend fun recoverOrphanDocumentAssets(referenced: Set<String>) {
+    if (!orphanRecoveryStarted.compareAndSet(false, true)) return
+    withContext(Dispatchers.IO) {
+        val root = vaultContext.filesDir.canonicalFile
+        quarantineDocumentFiles(File(root, "documents"), File(root, "documents-recovery"), referenced, System.currentTimeMillis())
+    }
+}
+
+internal fun quarantineDocumentFiles(directory: File, recovery: File, referenced: Set<String>, nowMillis: Long) {
+    val files = directory.listFiles().orEmpty().map { DocumentAssetFile(it.name, it.lastModified(), it.isFile && it.canonicalPath == it.absolutePath) }
+    val candidates = orphanDocumentAssets(files, referenced, nowMillis)
+    if (candidates.isEmpty()) return
+    if (recovery.exists() && recovery.canonicalPath != recovery.absolutePath) return
+    if (!recovery.isDirectory && !recovery.mkdirs()) return
+    candidates.forEach { id ->
+        val source = File(directory, id)
+        if (!source.isFile || source.canonicalPath != source.absolutePath) return@forEach
+        val existingNames = recovery.list()?.toSet() ?: return@forEach
+        var target = File(recovery, id)
+        while (target.name in existingNames) target = File(recovery, id.substringBeforeLast('.') + "-recovered-" + recordId() + "." + id.substringAfterLast('.'))
+        // Both directories are on private internal storage. Rename retains bytes and timestamps;
+        // a failed move leaves the source intact. Recovery files are never automatically purged.
+        source.renameTo(target)
+    }
+}
+
+actual suspend fun restoreRecoveredDocumentAsset(id: String): String = withContext(Dispatchers.IO) {
+    val root = vaultContext.filesDir.canonicalFile
+    restoreRecoveredDocumentFile(File(root, "documents"), File(root, "documents-recovery"), id)
+}
+
+internal fun restoreRecoveredDocumentFile(directory: File, recovery: File, id: String): String {
+    validateDocumentAssetId(id)
+    require(recovery.canonicalPath == recovery.absolutePath) { "Recovery storage is unavailable." }
+    val source = File(recovery, id)
+    require(source.isFile && source.canonicalPath == source.absolutePath) { "This recovered original is unavailable." }
+    require(directory.isDirectory && directory.canonicalPath == directory.absolutePath) { "Document storage is unavailable." }
+    val target = File(directory, id)
+    require(directory.list()?.contains(id) == false) { "A managed file already uses this name. Both originals are retained." }
+    check(source.renameTo(target)) { "Could not restore this original. It remains in recovery storage." }
+    return id
+}
 
 @Composable
 actual fun OpenOriginalAssetButton(id: String, mimeType: String, label: String) {

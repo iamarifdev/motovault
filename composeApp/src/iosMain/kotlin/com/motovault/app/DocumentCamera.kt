@@ -31,14 +31,15 @@ actual fun DocumentCamera(modifier: Modifier, captureRequest: Int, onQuality: (C
             override fun captureOutput(output: AVCapturePhotoOutput, didFinishProcessingPhoto: AVCapturePhoto, error: NSError?) {
                 if (error != null) { busy = false; onError("Could not capture. Try again."); return }
                 scope.launch {
-                    try {
+                    try { documentAssetOperation { operation ->
                         val data = requireNotNull(didFinishProcessingPhoto.fileDataRepresentation())
                         val page = withContext(Dispatchers.Default) {
-                            val id = saveData(data, "jpg")
+                            val id = saveData(data, "jpg", operation)
                             val image = preview(requireNotNull(UIImage(data = data)))
-                            DocumentPage(id, saveData(requireNotNull(UIImageJPEGRepresentation(image, .96)), "jpg"), "image/jpeg", image.size.useContents { width.toInt() }, image.size.useContents { height.toInt() }, "Front")
+                            DocumentPage(id, saveData(requireNotNull(UIImageJPEGRepresentation(image, .96)), "jpg", operation), "image/jpeg", image.size.useContents { width.toInt() }, image.size.useContents { height.toInt() }, "Front")
                         }
                         captured(page)
+                    }
                     } catch (cancelled: CancellationException) { throw cancelled } catch (_: Exception) { onError("Could not save the capture. Try again.") } finally { busy = false }
                 }
             }

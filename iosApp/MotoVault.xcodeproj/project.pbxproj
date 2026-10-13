@@ -1,0 +1,39 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {};
+ objectVersion = 56;
+ objects = {
+  A10000000000000000000001 = {isa = PBXProject; attributes = {LastUpgradeCheck = 1600;}; buildConfigurationList = A10000000000000000000020; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; knownRegions = (en, Base); mainGroup = A10000000000000000000002; productRefGroup = A10000000000000000000003; projectDirPath = ""; projectRoot = ""; targets = (A10000000000000000000004, B10000000000000000000001);};
+  A10000000000000000000002 = {isa = PBXGroup; children = (A10000000000000000000005, A10000000000000000000006, A10000000000000000000009, B10000000000000000000002, A10000000000000000000003); sourceTree = "<group>";};
+  A10000000000000000000003 = {isa = PBXGroup; name = Products; children = (A10000000000000000000007); sourceTree = "<group>";};
+  A10000000000000000000004 = {isa = PBXNativeTarget; buildConfigurationList = A10000000000000000000021; buildPhases = (A10000000000000000000010, A10000000000000000000011, A10000000000000000000012, A10000000000000000000013); buildRules = (); dependencies = (); name = MotoVault; productName = MotoVault; productReference = A10000000000000000000007; productType = "com.apple.product-type.application";};
+  A10000000000000000000005 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVault/AppDelegate.swift; sourceTree = "<group>";};
+  A10000000000000000000006 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MotoVault/Info.plist; sourceTree = "<group>";};
+  A10000000000000000000007 = {isa = PBXFileReference; explicitFileType = wrapper.application; path = MotoVault.app; sourceTree = BUILT_PRODUCTS_DIR;};
+  A10000000000000000000008 = {isa = PBXBuildFile; fileRef = A10000000000000000000005;};
+  A10000000000000000000009 = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MotoVault/Assets.xcassets; sourceTree = "<group>";};
+  A10000000000000000000014 = {isa = PBXBuildFile; fileRef = A10000000000000000000009;};
+  A10000000000000000000015 = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MotoVault/PrivacyInfo.xcprivacy; sourceTree = "<group>";};
+  A10000000000000000000016 = {isa = PBXBuildFile; fileRef = A10000000000000000000015;};
+  A10000000000000000000013 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (A10000000000000000000014, A10000000000000000000016); runOnlyForDeploymentPostprocessing = 0;};
+  A10000000000000000000010 = {isa = PBXShellScriptBuildPhase; alwaysOutOfDate = 1; buildActionMask = 2147483647; files = (); inputPaths = (); name = "Build Kotlin framework and resources"; outputPaths = (); runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/sh; shellScript = "if [ \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" = \"YES\" ]; then exit 0; fi\ncd \"$SRCROOT/..\"\nexport JAVA_HOME=\"/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home\"\nrtk run ./gradlew :composeApp:embedAndSignAppleFrameworkForXcode --console=plain\n";};
+  A10000000000000000000011 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A10000000000000000000008); runOnlyForDeploymentPostprocessing = 0;};
+  A10000000000000000000012 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;};
+  A10000000000000000000020 = {isa = XCConfigurationList; buildConfigurations = (A10000000000000000000022, A10000000000000000000023); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release;};
+  A10000000000000000000021 = {isa = XCConfigurationList; buildConfigurations = (A10000000000000000000024, A10000000000000000000025); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release;};
+  A10000000000000000000022 = {isa = XCBuildConfiguration; name = Debug; buildSettings = {SDKROOT = iphoneos; IPHONEOS_DEPLOYMENT_TARGET = 15.0; ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; ALWAYS_SEARCH_USER_PATHS = NO;};};
+  A10000000000000000000023 = {isa = XCBuildConfiguration; name = Release; buildSettings = {SDKROOT = iphoneos; IPHONEOS_DEPLOYMENT_TARGET = 15.0; ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; ALWAYS_SEARCH_USER_PATHS = NO;};};
+  A10000000000000000000024 = {isa = XCBuildConfiguration; name = Debug; buildSettings = {PRODUCT_NAME = "$(TARGET_NAME)"; PRODUCT_BUNDLE_IDENTIFIER = com.motovault.app; INFOPLIST_FILE = MotoVault/Info.plist; SWIFT_VERSION = 5.0; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; MARKETING_VERSION = 1.0.0; CURRENT_PROJECT_VERSION = 1; TARGETED_DEVICE_FAMILY = "1,2"; ENABLE_USER_SCRIPT_SANDBOXING = NO; FRAMEWORK_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../composeApp/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)"; OTHER_LDFLAGS = "$(inherited) -framework ComposeApp -lsqlite3"; CODE_SIGN_STYLE = Automatic;};};
+  A10000000000000000000025 = {isa = XCBuildConfiguration; name = Release; buildSettings = {PRODUCT_NAME = "$(TARGET_NAME)"; PRODUCT_BUNDLE_IDENTIFIER = com.motovault.app; INFOPLIST_FILE = MotoVault/Info.plist; SWIFT_VERSION = 5.0; SWIFT_OPTIMIZATION_LEVEL = "-O"; MARKETING_VERSION = 1.0.0; CURRENT_PROJECT_VERSION = 1; TARGETED_DEVICE_FAMILY = "1,2"; ENABLE_USER_SCRIPT_SANDBOXING = NO; FRAMEWORK_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../composeApp/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)"; OTHER_LDFLAGS = "$(inherited) -framework ComposeApp -lsqlite3"; CODE_SIGN_STYLE = Automatic;};};
+  B10000000000000000000001 = {isa = PBXNativeTarget; buildConfigurationList = B10000000000000000000006; buildPhases = (B10000000000000000000005); buildRules = (); dependencies = (); name = MotoVaultUITests; productName = MotoVaultUITests; productReference = B10000000000000000000003; productType = "com.apple.product-type.bundle.ui-testing";};
+  B10000000000000000000002 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVaultUITests/OwnerFlowTests.swift; sourceTree = "<group>";};
+  B10000000000000000000003 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = MotoVaultUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR;};
+  B10000000000000000000004 = {isa = PBXBuildFile; fileRef = B10000000000000000000002;};
+  B10000000000000000000005 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B10000000000000000000004); runOnlyForDeploymentPostprocessing = 0;};
+  B10000000000000000000006 = {isa = XCConfigurationList; buildConfigurations = (B10000000000000000000007, B10000000000000000000008); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release;};
+  B10000000000000000000007 = {isa = XCBuildConfiguration; name = Debug; buildSettings = {PRODUCT_NAME = "$(TARGET_NAME)"; PRODUCT_BUNDLE_IDENTIFIER = com.motovault.app.uitests; GENERATE_INFOPLIST_FILE = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_TARGET_NAME = MotoVault; CODE_SIGN_STYLE = Automatic;};};
+  B10000000000000000000008 = {isa = XCBuildConfiguration; name = Release; buildSettings = {PRODUCT_NAME = "$(TARGET_NAME)"; PRODUCT_BUNDLE_IDENTIFIER = com.motovault.app.uitests; GENERATE_INFOPLIST_FILE = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_TARGET_NAME = MotoVault; CODE_SIGN_STYLE = Automatic;};};
+ };
+ rootObject = A10000000000000000000001;
+}

@@ -48,11 +48,25 @@ internal fun Setup(
     var baseline by rememberSaveable { mutableStateOf(existing?.odometer?.toInt()?.toString() ?: "0") }
     var baselineDate by rememberSaveable { mutableStateOf(today().toString()) }
     var confirmed by rememberSaveable { mutableStateOf(false) }
+    var market by rememberSaveable { mutableStateOf(existing?.market ?: RideMarket.UNKNOWN) }
+    var emission by rememberSaveable { mutableStateOf(existing?.emission ?: RideEmission.UNKNOWN) }
+    var modelCode by rememberSaveable { mutableStateOf(existing?.modelCode ?: "") }
+    var useManual by rememberSaveable { mutableStateOf(existing?.factoryProfileId != null) }
     val chosen = BikeCatalogue.find(modelId)
     val odo = odometer.toDoubleOrNull()?.takeIf { it.isFinite() && it in 0.0..9999999.0 }
     val base = baseline.toDoubleOrNull()?.takeIf { it.isFinite() && it >= 0 && odo != null && it <= odo }
     val date = runCatching { LocalDate.parse(baselineDate) }.getOrNull()?.takeIf { it <= today() }
     val validYear = year.toIntOrNull()?.takeIf { it in 1980..2100 }
+    val emissions = FactoryProfiles.emissions(market)
+    val profile = FactoryProfiles.available(modelId, validYear, market).firstOrNull {
+        modelCode.trim().uppercase() in it.modelCodes
+    }
+    LaunchedEffect(modelId, year, market, modelCode) {
+        if (emission !in emissions) emission = RideEmission.UNKNOWN
+        if (profile == null) useManual = false
+        confirmed = false
+    }
+    LaunchedEffect(baseline, baselineDate, odometer, emission, useManual) { confirmed = false }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).imePadding().padding(22.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) { Glyph("mark", MaterialTheme.colorScheme.primary, Modifier.size(28.dp)); Text("MotoVault", color = TextPrimary, fontSize = 21.sp, fontWeight = FontWeight.Bold) }
@@ -96,16 +110,39 @@ internal fun Setup(
             Field("Variant / edition (optional)", edition, { edition = it.take(60) })
             Field("Release year", year, { year = it }, numeric = true)
             if (validYear == null) Text("Enter a release year between 1980 and 2100.", color = WarningColor, fontSize = 12.sp)
+            Text("Original market", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            RideMarket.entries.forEach { option ->
+                Row(Modifier.fillMaxWidth().clickable { market = option }, verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(market == option, onClick = { market = option }); Text(option.label, fontSize = 12.sp)
+                }
+            }
+            Text("Emission standard on your paperwork", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Text("Copy this from your vehicle paperwork. The app does not verify emission approval from the model or year.", color = TextSecondary, fontSize = 12.sp)
+            emissions.forEach { option ->
+                Row(Modifier.fillMaxWidth().clickable { emission = option }, verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(emission == option, onClick = { emission = option }); Text(option.label, fontSize = 12.sp)
+                }
+            }
+            Field("Manufacturer model code (optional)", modelCode, { modelCode = it.take(30) })
+            if (profile != null) {
+                val uri = androidx.compose.ui.platform.LocalUriHandler.current
+                TextButton(onClick = { uri.openUri(profile.manualUrl) }) { Text("Read the matching KTM manual") }
+                Row(Modifier.fillMaxWidth().clickable { useManual = !useManual; confirmed = false }, verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(useManual, onCheckedChange = { useManual = it; confirmed = false })
+                    Text("Use this manual’s recurring oil schedule", fontSize = 12.sp)
+                }
+            } else Text("No matching factory manual yet. Your schedules remain owner-defined.", color = TextSecondary, fontSize = 12.sp)
             Field("Current odometer (km)", odometer, { odometer = it }, numeric = true)
             Field("Registration (optional)", registration, { registration = it.take(80) })
             Field("Last service odometer (km)", baseline, { baseline = it }, numeric = true)
             Field("Service baseline date (YYYY-MM-DD)", baselineDate, { baselineDate = it })
             if (base == null) Text("Last service mileage must be between zero and your current reading.", color = WarningColor, fontSize = 12.sp)
             if (date == null) Text("Enter a valid baseline date, no later than today.", color = WarningColor, fontSize = 12.sp)
-            Text("Starting schedules: chain 500 km / 30 days, oil 3,000 km / 180 days, air filter 5,000 km / 180 days. These are editable examples, not manufacturer specifications. Enter when these items were last serviced, then adjust each schedule for your bike.", color = TextSecondary, fontSize = 12.sp, lineHeight = 19.sp)
-            Row(Modifier.fillMaxWidth().clickable { confirmed = !confirmed }, verticalAlignment = Alignment.CenterVertically) { Checkbox(confirmed, onCheckedChange = { confirmed = it }); Text("I understand these are example schedules.", fontSize = 12.sp) }
-            Primary(if (existing == null) "Create my garage" else "Review replacement", "arrow", enabled = confirmed && odo != null && base != null && date != null && validYear != null && modelName.isNotBlank()) {
-                onCreate(Ride(brand.id, edition.trim().ifBlank { "Owner-defined setup" }, validYear!!, odo!!, modelId, modelName, registration.trim()), base!!, date!!)
+            Text(if (useManual && profile != null) "Oil, filter and screen: manual interval 7,500 km / 12 months after running-in. The app uses a 365-day reminder for the time interval. First service is due at 1,000 km. Chain care remains an editable owner reminder. Confirm local conditions with your dealer. These reminders do not cover the full workshop checklist." else "Starting schedules: chain 500 km / 30 days, oil 3,000 km / 180 days, air filter 5,000 km / 180 days. These are editable examples, not manufacturer specifications. Enter when these items were last serviced, then adjust each schedule for your bike.", color = TextSecondary, fontSize = 12.sp, lineHeight = 19.sp)
+            Row(Modifier.fillMaxWidth().clickable { confirmed = !confirmed }, verticalAlignment = Alignment.CenterVertically) { Checkbox(confirmed, onCheckedChange = { confirmed = it }); Text("I checked the schedules and service baseline.", fontSize = 12.sp) }
+            if (useManual && (base ?: 0.0) < 1000) Text("The recurring preset needs a baseline after the 1,000 km running-in service. Use owner reminders until then.", color = WarningColor, fontSize = 12.sp)
+            Primary(if (existing == null) "Create my garage" else "Review replacement", "arrow", enabled = confirmed && odo != null && base != null && date != null && validYear != null && modelName.isNotBlank() && (!useManual || base >= 1000)) {
+                onCreate(Ride(brand.id, edition.trim().ifBlank { "Owner-defined setup" }, validYear!!, odo!!, modelId, modelName, registration.trim(), market, emission, modelCode.trim().uppercase(), profile?.id?.takeIf { useManual }), base!!, date!!)
             }
             TextButton(onClick = { step = 1 }) { Text("Back to brands") }
         }

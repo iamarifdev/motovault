@@ -97,7 +97,7 @@ expect fun documentDialogProperties(): DialogProperties
     else DocumentWarning("This stored attachment could not be displayed.")
 }
 
-@Composable internal fun DocumentCaptureFlow(state: VaultState, existing: VaultDocument?, onDismiss: () -> Unit, onManual: (String) -> Unit, onSave: (VaultState) -> Boolean) {
+@Composable internal fun DocumentCaptureFlow(state: VaultState, existing: VaultDocument?, onDismiss: () -> Unit, onManual: (String) -> Unit, onSave: VaultSave) {
     var type by rememberSaveable { mutableStateOf(existing?.title ?: documentTypes.first()) }
     var stage by rememberSaveable { mutableStateOf(if (existing == null) "choose" else "scanFront") }
     var draftJson by rememberSaveable { mutableStateOf<String?>(null) }
@@ -242,7 +242,7 @@ expect fun documentDialogProperties(): DialogProperties
     }
 }
 
-@Composable private fun ColumnScope.DocumentConfirmation(state: VaultState, type: String, existing: VaultDocument?, draft: CapturedDocument, onSave: (VaultState) -> Boolean, onDismiss: () -> Unit, selected: Int, onSelect: (Int) -> Unit, captureChanged: Boolean = true, initialValues: String? = null, onValues: (String) -> Unit = {}) {
+@Composable private fun ColumnScope.DocumentConfirmation(state: VaultState, type: String, existing: VaultDocument?, draft: CapturedDocument, onSave: VaultSave, onDismiss: () -> Unit, selected: Int, onSelect: (Int) -> Unit, captureChanged: Boolean = true, initialValues: String? = null, onValues: (String) -> Unit = {}) {
     val suggestions = remember(draft.recognizedText) { DocumentTextReader.suggestions(type, draft.recognizedText) }
     var valuesJson by rememberSaveable(draft.pages.map { it.previewId }.joinToString()) { mutableStateOf(initialValues ?: Json.encodeToString(kotlinx.serialization.serializer<Map<String, String>>(), (existing?.details ?: suggestions) + mapOf("number" to (existing?.number ?: suggestions["number"].orEmpty()), "holder" to (existing?.holder ?: suggestions["holder"].orEmpty()), "issued" to (existing?.issued ?: suggestions["issued"].orEmpty()), "expiry" to (existing?.expiry ?: suggestions["expiry"].orEmpty())))) }
     SideEffect { onValues(valuesJson) }
@@ -269,11 +269,11 @@ expect fun documentDialogProperties(): DialogProperties
     error?.let { DocumentWarning(it) }
     DocumentPrimary("Save to my vault →", confirmed && !values["number"].isNullOrBlank() && !values["holder"].isNullOrBlank()) {
         val document = (existing ?: VaultDocument(type, "", "", "")).copy(title = type, number = values["number"].orEmpty().trim(), holder = values["holder"].orEmpty().trim(), issued = values["issued"].orEmpty().trim(), expiry = if (type != "Registration smart card" || viewedExtras) values["expiry"].orEmpty().trim() else existing?.expiry.orEmpty(), pages = draft.pages, originalPdf = draft.originalPdf, pdfPageCount = draft.pdfPageCount, details = reviewedDocumentDetails(type, values, existing?.details.orEmpty(), viewedExtras), detailsConfirmed = true, extractionCandidates = if (captureChanged) suggestions else existing?.extractionCandidates.orEmpty(), capturedAt = if (captureChanged) Clock.System.now().toString() else existing?.capturedAt.orEmpty())
-        runCatching { state.saveDocument(document) }.onSuccess { if (onSave(it)) onDismiss() else error = "Could not save on this device." }.onFailure { error = it.message ?: "Enter dates as YYYY-MM-DD." }
+        runCatching { state.saveDocument(document) }.onSuccess { next -> onSave(next) { if (it) onDismiss() else error = "Could not save on this device." } }.onFailure { error = it.message ?: "Enter dates as YYYY-MM-DD." }
     }
 }
 
-@Composable internal fun DocumentEditFlow(state: VaultState, existing: VaultDocument?, initialType: String, onDismiss: () -> Unit, onSave: (VaultState) -> Boolean) {
+@Composable internal fun DocumentEditFlow(state: VaultState, existing: VaultDocument?, initialType: String, onDismiss: () -> Unit, onSave: VaultSave) {
     var type by rememberSaveable { mutableStateOf(existing?.title ?: initialType) }
     var selected by rememberSaveable { mutableStateOf(0) }
     DocumentScreen("Confirm details", onDismiss) {
@@ -290,6 +290,7 @@ expect fun documentDialogProperties(): DialogProperties
     var selected by rememberSaveable { mutableStateOf(if (document.pages.isEmpty() && document.frontPhoto == null && document.backPhoto != null) 1 else 0) }; var zoom by remember { mutableStateOf(false) }
     val legacyPhoto = if (selected == 0) document.frontPhoto else document.backPhoto
     DocumentScreen(if (inspection) "Roadside inspection" else document.title, onDismiss) {
+        if (inspection) InspectionBrightness()
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { Eyebrow(if (inspection) "Stored document copy" else "Your original document"); DocumentBadge(document.expiryLabel, warning = (document.daysRemaining ?: Int.MAX_VALUE) <= RENEWAL_WARNING_DAYS, good = (document.daysRemaining ?: 0) > RENEWAL_WARNING_DAYS) }
         DocumentHeading(document.title); DocumentCopy(if (inspection) "Only this document is shown." else "Open the saved image exactly as it was captured.")
         if (document.pages.isNotEmpty()) {
@@ -316,13 +317,14 @@ expect fun documentDialogProperties(): DialogProperties
             DocumentLink("Open inspection view ↗", onInspect); DocumentLink("Delete document", onDelete)
         } else { DocumentNote("Saved copy · Carry originals where required."); DocumentSecondary("All documents", Modifier.fillMaxWidth(), onClick = onInspectionList); DocumentSecondary("Exit inspection", Modifier.fillMaxWidth(), onClick = onDismiss) }
     }
-    if (zoom && document.pages.isNotEmpty()) DocumentZoom(document.pages[selected.coerceIn(document.pages.indices)]) { zoom = false }
-    else if (zoom && legacyPhoto != null) DocumentZoom(null, legacyPhoto) { zoom = false }
+    if (zoom && document.pages.isNotEmpty()) DocumentZoom(document.pages[selected.coerceIn(document.pages.indices)], inspection = inspection) { zoom = false }
+    else if (zoom && legacyPhoto != null) DocumentZoom(null, legacyPhoto, inspection = inspection) { zoom = false }
 }
 
-@Composable private fun DocumentZoom(page: DocumentPage?, legacy: String? = null, onDismiss: () -> Unit) {
+@Composable private fun DocumentZoom(page: DocumentPage?, legacy: String? = null, inspection: Boolean = false, onDismiss: () -> Unit) {
     Dialog(onDismissRequest = onDismiss, properties = documentDialogProperties()) {
         DocumentWindowAppearance(true)
+        if (inspection) InspectionBrightness()
         var scale by remember { mutableStateOf(1f) }; var offset by remember { mutableStateOf(Offset.Zero) }
         val transform = rememberTransformableState { factor, pan, _ -> scale = (scale * factor).coerceIn(1f, 5f); offset = if (scale == 1f) Offset.Zero else offset + pan }
         Column(Modifier.fillMaxSize().background(Color(0xFF0E151D)).safeDrawingPadding().padding(20.dp)) {

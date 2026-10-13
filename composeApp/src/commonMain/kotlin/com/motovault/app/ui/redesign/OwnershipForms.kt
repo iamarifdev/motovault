@@ -27,7 +27,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 expect fun AttachmentPicker(label: String, onSelected: (String) -> Unit, onError: (String) -> Unit)
 
 @Composable
-internal fun FuelDialog(state: VaultState, onDismiss: () -> Unit, onSave: (VaultState) -> Boolean, onHistory: () -> Unit) {
+internal fun FuelDialog(state: VaultState, onDismiss: () -> Unit, onSave: VaultSave, onHistory: () -> Unit) {
     var odometer by remember { mutableStateOf(state.ride!!.odometer.toInt().toString()) }
     var liters by remember { mutableStateOf("") }
     var cost by remember { mutableStateOf("") }
@@ -49,7 +49,7 @@ internal fun FuelDialog(state: VaultState, onDismiss: () -> Unit, onSave: (Vault
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
         Primary("Save fill-up", "check", enabled = odo != null && fuel != null && amount != null && day != null) {
             runCatching { state.logFuel(odo!!, fuel!!, amount!!, day!!, full) }.onSuccess {
-                if (onSave(it)) onDismiss() else error = "Could not save. Your previous records are unchanged."
+                onSave(it) { saved -> if (saved) onDismiss() else error = "Could not save. Your previous records are unchanged." }
             }.onFailure { error = it.message }
         }
         TextButton(onClick = onHistory) { Text("View fuel history ↗") }
@@ -74,7 +74,7 @@ internal fun ComponentsList(state: VaultState, onDismiss: () -> Unit, onSelect: 
 }
 
 @Composable
-internal fun ServiceDialog(state: VaultState, initial: ComponentRule, onDismiss: () -> Unit, onSave: (VaultState) -> Boolean, onEdit: (ComponentRule) -> Unit, onHistory: () -> Unit) {
+internal fun ServiceDialog(state: VaultState, initial: ComponentRule, onDismiss: () -> Unit, onSave: VaultSave, onEdit: (ComponentRule) -> Unit, onHistory: () -> Unit) {
     var componentId by remember { mutableStateOf(initial.id) }
     var expanded by remember { mutableStateOf(false) }
     val component = state.rules.first { it.id == componentId }
@@ -102,7 +102,7 @@ internal fun ServiceDialog(state: VaultState, initial: ComponentRule, onDismiss:
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
         Primary("Save service", "check", enabled = odo != null && amount != null && day != null) {
             runCatching { state.logService(component, odo!!, day!!, amount!!, workshop, notes) }.onSuccess {
-                if (onSave(it)) onDismiss() else error = "Could not save. Your previous records are unchanged."
+                onSave(it) { saved -> if (saved) onDismiss() else error = "Could not save. Your previous records are unchanged." }
             }.onFailure { error = it.message }
         }
         TextButton(onClick = { onEdit(component) }) { Text("Edit this schedule") }
@@ -111,7 +111,7 @@ internal fun ServiceDialog(state: VaultState, initial: ComponentRule, onDismiss:
 }
 
 @Composable
-internal fun ScheduleDialog(state: VaultState, existing: ComponentRule?, onDismiss: () -> Unit, onSave: (VaultState) -> Boolean) {
+internal fun ScheduleDialog(state: VaultState, existing: ComponentRule?, onDismiss: () -> Unit, onSave: VaultSave) {
     var name by remember { mutableStateOf(existing?.name ?: "") }
     var km by remember { mutableStateOf(existing?.intervalKm?.toInt()?.toString() ?: "0") }
     var days by remember { mutableStateOf(existing?.intervalDays?.toString() ?: "0") }
@@ -133,7 +133,7 @@ internal fun ScheduleDialog(state: VaultState, existing: ComponentRule?, onDismi
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
         Primary("Save schedule", "check", enabled = distance != null && intervalDays != null && odo != null && day != null && name.isNotBlank()) {
             runCatching { state.saveSchedule(ComponentRule(existing?.id ?: recordId(), "primary", name.trim(), "Owner-defined schedule", distance!!, intervalDays!!, odo!!, day!!.toEpochDays().toLong())) }.onSuccess {
-                if (onSave(it)) onDismiss() else error = "Could not save. Your previous records are unchanged."
+                onSave(it) { saved -> if (saved) onDismiss() else error = "Could not save. Your previous records are unchanged." }
             }.onFailure { error = it.message }
         }
     }
@@ -149,6 +149,7 @@ internal fun History(state: VaultState, filter: String, onAppearance: () -> Unit
         totals.forEach { (label, value) -> Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) { Text(value, fontWeight = FontWeight.Bold, fontSize = 18.sp); Text(label, color = TextSecondary, fontSize = 10.sp) } }
     }
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { listOf("all", "service", "fuel").forEach { kind -> FilterChip(filter == kind, onClick = { onFilter(kind) }, label = { Text(kind.replaceFirstChar { it.uppercase() }) }) } }
+    PassportExportButton(state)
     val logs = state.logs.filter { filter == "all" || if (filter == "fuel") it.isFuel else !it.isFuel }.sortedWith(compareByDescending<RideLog> { it.date }.thenByDescending { it.odometer })
     if (logs.isEmpty()) Panel { Glyph("history", TextSecondary, Modifier.size(36.dp)); Text("The story starts here.", fontWeight = FontWeight.Bold); Text("Log a service or fill-up to build your ownership history.", color = TextSecondary, lineHeight = 20.sp) }
     logs.forEach { log -> Panel {
@@ -164,11 +165,10 @@ internal fun History(state: VaultState, filter: String, onAppearance: () -> Unit
         }
     } }
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) { Primary("Log service", "service", Modifier.weight(1f), onClick = onService); Primary("Log fuel", "fuel", Modifier.weight(1f), onClick = onFuel) }
-    Text("Owner-entered records. PDF service-passport export is a later app feature.", color = TextSecondary, fontSize = 11.sp)
 }
 
 @Composable
-internal fun DocumentDialog(state: VaultState, existing: VaultDocument?, onDismiss: () -> Unit, onSave: (VaultState) -> Boolean, initialType: String = documentTypes.first()) {
+internal fun DocumentDialog(state: VaultState, existing: VaultDocument?, onDismiss: () -> Unit, onSave: VaultSave, initialType: String = documentTypes.first()) {
     val types = listOf("Registration smart card", "Driving licence", "Tax token", "Insurance", "Fitness certificate")
     var type by remember { mutableStateOf(existing?.title ?: initialType) }
     var expanded by remember { mutableStateOf(false) }
@@ -201,7 +201,7 @@ internal fun DocumentDialog(state: VaultState, existing: VaultDocument?, onDismi
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
         Primary("Save document", "check", enabled = number.isNotBlank() && holder.isNotBlank()) {
             runCatching { state.saveDocument((existing ?: VaultDocument(type, "", "", "", id)).copy(title = type, number = number.trim(), holder = holder.trim(), expiry = expiry.trim(), issued = issued.trim(), frontPhoto = front, backPhoto = back, details = details.filterValues { it.isNotBlank() }, detailsConfirmed = true)) }.onSuccess {
-                if (onSave(it)) onDismiss() else error = "Could not save. Your previous records are unchanged."
+                onSave(it) { saved -> if (saved) onDismiss() else error = "Could not save. Your previous records are unchanged." }
             }.onFailure { error = if (it is IllegalArgumentException) it.message ?: "Enter valid dates as YYYY-MM-DD." else "Enter valid dates as YYYY-MM-DD." }
         }
     }

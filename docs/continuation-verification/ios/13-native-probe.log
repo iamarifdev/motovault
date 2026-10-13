@@ -1,0 +1,28 @@
+14 October 2026. Existing iPhone17Pro simulator, arm64 Debug host.
+Explicit updated app install followed by launch with --motovault-passport-fixture --motovault-runtime-probe.
+MOTOVAULT_BRIGHTNESS initial=0.5
+MOTOVAULT_PASSPORT_VERIFIER valid=true wrongIndependentDigestRejected=true
+
+Earlier actual owner-saved tax document inspection entry:
+MOTOVAULT_BRIGHTNESS requested=1.0 observed=0.5 leases=1 active=true
+
+Separate isolated notification launch before reminder permission:
+MOTOVAULT_NOTIFICATION probe skipped: owner has not enabled reminders
+
+After enabling reminders through the app and accepting the actual iOS notification prompt:
+MOTOVAULT_NOTIFICATION probe scheduled error=nil
+MOTOVAULT_NOTIFICATION foreground id=motovault.debug.delivery-probe
+Visible banner: MotoVault synthetic delivery check. TEST ONLY. This checks native delivery, not an owner expiry.
+Screenshot: 14-native-test-notification.png
+
+The verifier result proves the native helper, not Files-picker UI.
+Simulator UIScreen observed brightness remained0.5 despite requested1.0; physical brightness is not validated here.
+
+Actual saved-document inspection lifecycle, followed by nested full-size zoom and Exit inspection:
+MOTOVAULT_BRIGHTNESS requested=1.0 observed=0.5 leases=1 active=true
+MOTOVAULT_BRIGHTNESS requested=0.5 observed=0.5 leases=1 active=false
+MOTOVAULT_BRIGHTNESS requested=1.0 observed=0.5 leases=1 active=true
+MOTOVAULT_BRIGHTNESS requested=1.0 observed=0.5 leases=2 active=true
+MOTOVAULT_BRIGHTNESS requested=1.0 observed=0.5 leases=1 active=true
+MOTOVAULT_BRIGHTNESS requested=0.5 observed=0.5 leases=0 active=true
+Screenshot: 15-native-nested-inspection.png

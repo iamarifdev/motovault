@@ -2,8 +2,46 @@ package com.motovault.app.ui.redesign
 
 import kotlin.test.*
 import kotlinx.serialization.json.Json
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.runBlocking
 
 class DocumentCaptureTest {
+    @Test fun recoveryKeepsReferencesRecentFilesUnknownNamesAndNonFiles() {
+        val now = 1800000000000L
+        val old = now - DOCUMENT_ORPHAN_GRACE_MILLIS - 1
+        val saved = "1790000000000--123.jpg"
+        val orphan = "1790000000000-456.pdf"
+        val fresh = "1790000000000-789.png"
+        val link = "1790000000000-987.jpg"
+        val future = "1790000000000-876.jpg"
+        val files = listOf(DocumentAssetFile(saved, old), DocumentAssetFile(orphan, old),
+            DocumentAssetFile(fresh, now), DocumentAssetFile("legacy-original.jpg", old),
+            DocumentAssetFile(link, old, false), DocumentAssetFile(future, now + 1000),
+            DocumentAssetFile("../1790000000000-123.jpg", old), DocumentAssetFile("1790000000000-222.jpg", 0))
+        assertEquals(setOf(orphan), orphanDocumentAssets(files, setOf(saved), now))
+    }
+    @Test fun failedOrCancelledOperationRemovesOnlyItsOwnAllocations() = runBlocking {
+        for (failure in listOf(IllegalStateException("bad second page"), CancellationException("disposed"))) {
+            var removed = emptySet<String>()
+            val operation = DocumentAssetOperation { removed = it }
+            try {
+                documentAssetOperation(operation) {
+                    it.register("new-original.jpg")
+                    it.register("new-preview.jpg")
+                    throw failure
+                }
+                fail("Expected failure")
+            } catch (caught: Exception) { assertSame(failure, caught) }
+            assertEquals(setOf("new-original.jpg", "new-preview.jpg"), removed)
+            assertFalse("saved-original.jpg" in removed)
+        }
+    }
+    @Test fun successfulOperationTransfersAllFilesWithoutCleanup() = runBlocking {
+        var removed = emptySet<String>()
+        val operation = DocumentAssetOperation { removed = it }
+        assertEquals("new.jpg", documentAssetOperation(operation) { it.register("new.jpg") })
+        assertTrue(removed.isEmpty())
+    }
     @Test fun retakingOnePaperPagePreservesOtherPagesAndSourcePdf() {
         val first = DocumentPage("first.jpg", "first-preview.jpg", "image/jpeg", 1000, 1400, "Page 1")
         val second = first.copy(originalId = "second.jpg", side = "Page 2")

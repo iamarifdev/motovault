@@ -39,6 +39,8 @@ import com.motovault.app.domain.model.ComponentRule
 import com.motovault.app.domain.usecase.CalculateWearUseCase
 import kotlinx.datetime.LocalDate
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.isActive
+import com.motovault.app.storage.activeVaultSession
 import androidx.compose.ui.window.DialogProperties
 import motovault.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.DrawableResource
@@ -76,9 +78,13 @@ internal fun BrandWorld.logo(): DrawableResource = when (id) {
 
 @Composable
 fun MotoVault() {
-    val restoration = remember { runCatching { VaultState.restore() } }
-    var state by remember { mutableStateOf(restoration.getOrDefault(VaultState())) }
-    var storageError by remember { mutableStateOf(restoration.exceptionOrNull()?.message) }
+    val session = remember { activeVaultSession }
+    val snapshot by session.snapshots.collectAsState()
+    val state = snapshot.state
+    val revision = snapshot.revision
+    val storageError = snapshot.error
+    val loading = snapshot.loading
+    val saving = snapshot.saving
     var tab by remember { mutableStateOf(Tab.GARAGE) }
     var historyFilter by remember { mutableStateOf("all") }
     var editingRide by remember { mutableStateOf(false) }
@@ -94,19 +100,17 @@ fun MotoVault() {
     val brand = worlds.firstOrNull { it.id == selectedBrand } ?: worlds.first()
     val snackbars = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    fun commit(next: VaultState): Boolean {
-        if (restoration.isFailure) { storageError = "Stored records could not be read. Existing storage has been preserved."; return false }
-        return try {
-            saveVault(VaultState.encode(next))
-            val removedAssets = state.documents.flatMap { it.assetIds() }.toSet() - next.documents.flatMap { it.assetIds() }.toSet()
-            state = next
-            removeDocumentAssets(removedAssets)
-            storageError = null
-            scope.launch { snackbars.showSnackbar("Record saved", duration = SnackbarDuration.Short) }
-            true
-        } catch (failure: Exception) {
-            storageError = "Could not save on this device. Your previous records are unchanged."
-            false
+    val initialRevision = remember { snapshot.revision }
+    LaunchedEffect(loading) { if (!loading) selectedBrand = state.ride?.brandId ?: "ktm" }
+    LaunchedEffect(snapshot.revision) {
+        if (snapshot.revision > initialRevision) dialog = null
+    }
+    fun commit(next: VaultState, completed: (Boolean) -> Unit) {
+        session.commit(next, revision) { saved ->
+            if (scope.isActive) {
+                completed(saved)
+                if (saved) scope.launch { snackbars.showSnackbar("Record saved", duration = SnackbarDuration.Short) }
+            }
         }
     }
     fun history(kind: String) { historyFilter = kind; tab = Tab.HISTORY; dialog = null }
@@ -122,11 +126,13 @@ fun MotoVault() {
         Box(Modifier.fillMaxSize().background(Brush.linearGradient(listOf(SurfaceColor, CanvasColor))).safeDrawingPadding(), contentAlignment = Alignment.TopCenter) {
             Column(Modifier.widthIn(max = 600.dp).fillMaxSize()) {
                 storageError?.let { Text(it, color = WarningColor, modifier = Modifier.fillMaxWidth().padding(16.dp), fontSize = 12.sp) }
-                if (state.ride == null || editingRide) {
+                if (loading) {
+                    CircularProgressIndicator(Modifier.padding(32.dp))
+                } else if (state.ride == null || editingRide) {
                     Setup(brand, existing = state.ride, onAppearance = { dialog = "appearance" }, onBrand = { selectedBrand = it }, onCreate = { ride, baseline, date ->
                         val draft = VaultState.create(ride, baseline, date).copy(documents = state.documents, appearance = state.appearance)
                         if (state.ride != null) { pendingGarage = draft; dialog = "replace" }
-                        else if (commit(draft)) editingRide = false
+                        else commit(draft) { if (it) editingRide = false }
                     }, onCancel = if (state.ride != null) ({ editingRide = false; selectedBrand = state.ride!!.brandId }) else null)
                 } else {
                     Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 22.dp).padding(top = 20.dp, bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
@@ -149,14 +155,14 @@ fun MotoVault() {
                 }
             }
             when (dialog) {
-                "appearance" -> AppearanceDialog(state.appearance, onDismiss = { dialog = null }) { choice -> if (commit(state.copy(appearance = choice))) dialog = null }
+                "appearance" -> AppearanceDialog(state.appearance, onDismiss = { dialog = null }) { choice -> commit(state.copy(appearance = choice)) { if (it) dialog = null } }
                 "replace" -> Sheet("Start a new bike record?", onDismiss = { dialog = null }) {
                     Text("This removes the current bike’s service and fuel records. Documents stay in your vault.", color = TextSecondary)
-                    Primary("Replace garage", "check") { pendingGarage?.let { if (commit(it)) { editingRide = false; dialog = null; tab = Tab.GARAGE } } }
+                    Primary("Replace garage", "check") { pendingGarage?.let { draft -> commit(draft) { if (it) { editingRide = false; dialog = null; tab = Tab.GARAGE } } } }
                     TextButton(onClick = { dialog = null; editingRide = false; selectedBrand = state.ride!!.brandId }) { Text("Keep current garage") }
                 }
                 "odometer" -> NumberDialog("Update odometer", "Current distance (km)", state.ride!!.odometer.toInt().toString(), minimum = state.ride!!.odometer, onDismiss = { dialog = null }) { value ->
-                    if (commit(state.copy(ride = state.ride!!.copy(odometer = value)))) dialog = null
+                    commit(state.copy(ride = state.ride!!.copy(odometer = value))) { if (it) dialog = null }
                 }
                 "fuel" -> FuelDialog(state, onDismiss = { dialog = null }, onSave = ::commit, onHistory = { history("fuel") })
                 "service" -> selectedRule?.let { rule -> ServiceDialog(state, rule, onDismiss = { dialog = null }, onSave = ::commit,
@@ -179,12 +185,15 @@ fun MotoVault() {
                             runCatching {
                                 if (deleteKind == "document") state.copy(documents = state.documents.filterNot { it.id == deleteId })
                                 else state.deleteLog(state.logs.first { it.id == deleteId })
-                            }.onSuccess { if (commit(it)) dialog = null else error = storageError }.onFailure { error = it.message }
+                            }.onSuccess { next -> commit(next) { if (it) dialog = null else error = storageError } }.onFailure { error = it.message }
                         }
                     }
                 }
             }
             SnackbarHost(snackbars, modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 86.dp))
+            if (saving) Dialog(onDismissRequest = {}, properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)) {
+                Surface(shape = RoundedCornerShape(16.dp)) { Row(Modifier.padding(24.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) { CircularProgressIndicator(Modifier.size(24.dp)); Text("Saving records…") } }
+            }
         }
     }
 }

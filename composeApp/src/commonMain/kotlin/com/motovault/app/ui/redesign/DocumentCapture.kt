@@ -62,6 +62,30 @@ expect fun removeDocumentAssets(ids: Set<String>)
 fun CapturedDocument.assetIds(): Set<String> = pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() + listOfNotNull(originalPdf)
 fun VaultDocument.assetIds(): Set<String> = pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() + listOfNotNull(originalPdf)
 
+/** Owns only files allocated by this operation, never existing originals or saved pages. */
+internal class DocumentAssetOperation(private val remove: (Set<String>) -> Unit = ::removeDocumentAssets) {
+    private val created = mutableSetOf<String>()
+    fun register(id: String): String = validateDocumentAssetId(id).also { created += it }
+    fun rollback() { remove(created.toSet()) }
+}
+
+internal suspend fun <T> documentAssetOperation(operation: DocumentAssetOperation = DocumentAssetOperation(), block: suspend (DocumentAssetOperation) -> T): T {
+    return try { block(operation) } catch (failure: Throwable) { operation.rollback(); throw failure }
+}
+
+internal data class DocumentAssetFile(val id: String, val modifiedAtMillis: Long, val regularFile: Boolean = true)
+internal const val DOCUMENT_ORPHAN_GRACE_MILLIS = 24L * 60 * 60 * 1000
+internal fun orphanDocumentAssets(files: List<DocumentAssetFile>, referenced: Set<String>, nowMillis: Long): Set<String> =
+    files.filter { file -> file.regularFile && file.id !in referenced &&
+        Regex("[0-9]{13}-(-?[0-9]{1,19})\\.(jpg|jpeg|png|webp|pdf)").matches(file.id) &&
+        file.modifiedAtMillis > 0 && file.modifiedAtMillis <= nowMillis - DOCUMENT_ORPHAN_GRACE_MILLIS
+    }.map { it.id }.toSet()
+
+/** Run once per process after a successful restore, before enabling capture. */
+expect suspend fun recoverOrphanDocumentAssets(referenced: Set<String>)
+/** Moves an owner-selected recovered file back without overwriting any managed original. */
+expect suspend fun restoreRecoveredDocumentAsset(id: String): String
+
 @Composable
 expect fun OpenOriginalAssetButton(id: String, mimeType: String, label: String)
 

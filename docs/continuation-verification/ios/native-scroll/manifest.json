@@ -1,0 +1,17 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "93CA20AD-7FA0-4564-AC1D-E1CF507C02A2",
+        "deviceName" : "iPhone 17 Pro",
+        "exportedFileName" : "C18E1087-320C-4AD9-AD31-6978BCB28E2D.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "native-swipe-ownership_0_77C731D0-73C4-4E3E-BA63-843EFC6CFC88.png",
+        "timestamp" : 1791874906.971
+      }
+    ],
+    "testIdentifier" : "OwnerFlowTests/testNativeOwnershipScroll()",
+    "testIdentifierURL" : "test://com.apple.xcode/MotoVault/MotoVaultUITests/OwnerFlowTests/testNativeOwnershipScroll"
+  }
+]

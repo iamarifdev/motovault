@@ -1,0 +1,158 @@
+{
+  "captured": "2026-10-13 before Room v2 update",
+  "scope": "Fresh baseline only; prior Oct12 private archive unavailable",
+  "assets": [
+    {
+      "path": "files/documents-recovery/1234567890123-999999.png",
+      "bytes": 54,
+      "sha256": "9ea7993fe968d4f082f18d33a22a1b8412e2c2be2d79ea7b1876f9210516f884"
+    },
+    {
+      "path": "files/documents-recovery/1791724161834-8433322960472843636.pdf",
+      "bytes": 111162,
+      "sha256": "b386e073c880a9c8b0413eb6af6f3fdabe375613929b602799a3846182ded1f2"
+    },
+    {
+      "path": "files/documents-recovery/1791724169215--7946857980687682551.jpg",
+      "bytes": 123234,
+      "sha256": "92e60cec77bcab9e1e75f91fd15c4e94aa6cd194ba2e202c029f21d22a4a1139"
+    },
+    {
+      "path": "files/documents-recovery/1791724181114--6363818014808696516.jpg",
+      "bytes": 33694,
+      "sha256": "e5af207460b75c6166d28de0552ca3e6e4fc7c876c3077bbf08063116619984e"
+    },
+    {
+      "path": "files/documents-recovery/1791724442137--1860127529544260730.jpg",
+      "bytes": 123304,
+      "sha256": "6f6e319ae3f5459ea5bb7546ad3af6ad3d6aae5374826008c493b3cc8b86fc3e"
+    },
+    {
+      "path": "files/documents-recovery/1791724442152--933173164273254292.jpg",
+      "bytes": 123338,
+      "sha256": "1e870fae19258d3f1247349442a4ad4d00fa04bcd7dfb568e4ad8f26e442f4f8"
+    },
+    {
+      "path": "files/documents-recovery/1791724442181--7138216727915727512.jpg",
+      "bytes": 33727,
+      "sha256": "5f2ed9cc5f0501b86fc6d89ba8c9294ab86a378bbf501736205bf154f60d1ca9"
+    },
+    {
+      "path": "files/documents-recovery/1791724442198--8654931214532658275.jpg",
+      "bytes": 33760,
+      "sha256": "c98c803c6e02d74951c95331456d0cd8ff6e47136e9da72e85ceeb36a1f5b69a"
+    },
+    {
+      "path": "files/documents-recovery/1791731738876-2855086290568353599.pdf",
+      "bytes": 111162,
+      "sha256": "b386e073c880a9c8b0413eb6af6f3fdabe375613929b602799a3846182ded1f2"
+    },
+    {
+      "path": "files/documents-recovery/1791731742864-8139222298637573792.jpg",
+      "bytes": 123234,
+      "sha256": "92e60cec77bcab9e1e75f91fd15c4e94aa6cd194ba2e202c029f21d22a4a1139"
+    },
+    {
+      "path": "files/documents-recovery/1791731753287--632710540736857093.jpg",
+      "bytes": 33694,
+      "sha256": "e5af207460b75c6166d28de0552ca3e6e4fc7c876c3077bbf08063116619984e"
+    },
+    {
+      "path": "files/documents-recovery/1791731852061-4787119225455681079.jpg",
+      "bytes": 123304,
+      "sha256": "6f6e319ae3f5459ea5bb7546ad3af6ad3d6aae5374826008c493b3cc8b86fc3e"
+    },
+    {
+      "path": "files/documents-recovery/1791731852076-282277628933799265.jpg",
+      "bytes": 123338,
+      "sha256": "1e870fae19258d3f1247349442a4ad4d00fa04bcd7dfb568e4ad8f26e442f4f8"
+    },
+    {
+      "path": "files/documents-recovery/1791731852106--542148427592494950.jpg",
+      "bytes": 33727,
+      "sha256": "5f2ed9cc5f0501b86fc6d89ba8c9294ab86a378bbf501736205bf154f60d1ca9"
+    },
+    {
+      "path": "files/documents-recovery/1791731852118-6925249196581713314.jpg",
+      "bytes": 33760,
+      "sha256": "c98c803c6e02d74951c95331456d0cd8ff6e47136e9da72e85ceeb36a1f5b69a"
+    },
+    {
+      "path": "files/documents/1791718813091--6653215815506532779.png",
+      "bytes": 58258,
+      "sha256": "6f9e4e5fdb60619f86ff7d22a72a0ce2ed5a6170e01ce675304b38ac921d45b9"
+    },
+    {
+      "path": "files/documents/1791718813525--7812742566281722821.png",
+      "bytes": 54709,
+      "sha256": "14abb932c8319e5dd6d50610c4da0f3be000722c2788839049c94f9028bf62bd"
+    },
+    {
+      "path": "files/documents/1791719123138-5083271575824980580.jpg",
+      "bytes": 113061,
+      "sha256": "4132a36e0366562bc8129319e9b33ba81c6a03771ac032ac4a1330e36acf9eab"
+    },
+    {
+      "path": "files/documents/1791719123151--8603415347115592271.jpg",
+      "bytes": 113128,
+      "sha256": "7ffa37f3a0521fcaa0b1cc4400b61b6405ccd635aa7f123e7ae1f207473142ab"
+    },
+    {
+      "path": "files/documents/1791719127690--6219495176497555945.jpg",
+      "bytes": 115128,
+      "sha256": "5530eab10e00c03303d66a7eac0ff949bb6a3edda9cd8620fb707ab4ab667ff0"
+    },
+    {
+      "path": "files/documents/1791719127702--7875623511319167956.jpg",
+      "bytes": 114744,
+      "sha256": "bd8fee5dfc1f3a8056705973bb234d2773fcfc0d433a5daeb67d98980070edaf"
+    },
+    {
+      "path": "files/documents/1791732233063--3197118983586169399.pdf",
+      "bytes": 111162,
+      "sha256": "b386e073c880a9c8b0413eb6af6f3fdabe375613929b602799a3846182ded1f2"
+    },
+    {
+      "path": "files/documents/1791732234029-7083600508977576232.jpg",
+      "bytes": 123234,
+      "sha256": "92e60cec77bcab9e1e75f91fd15c4e94aa6cd194ba2e202c029f21d22a4a1139"
+    },
+    {
+      "path": "files/documents/1791732235959--4182800076361616428.jpg",
+      "bytes": 33694,
+      "sha256": "e5af207460b75c6166d28de0552ca3e6e4fc7c876c3077bbf08063116619984e"
+    },
+    {
+      "path": "files/documents/1791732290070--4971664437594506115.jpg",
+      "bytes": 123304,
+      "sha256": "6f6e319ae3f5459ea5bb7546ad3af6ad3d6aae5374826008c493b3cc8b86fc3e"
+    },
+    {
+      "path": "files/documents/1791732290086--4754830772805565606.jpg",
+      "bytes": 123338,
+      "sha256": "1e870fae19258d3f1247349442a4ad4d00fa04bcd7dfb568e4ad8f26e442f4f8"
+    },
+    {
+      "path": "files/documents/1791732290127--2541537844565205444.jpg",
+      "bytes": 33727,
+      "sha256": "5f2ed9cc5f0501b86fc6d89ba8c9294ab86a378bbf501736205bf154f60d1ca9"
+    },
+    {
+      "path": "files/documents/1791732290156--5933867409061744256.jpg",
+      "bytes": 33760,
+      "sha256": "c98c803c6e02d74951c95331456d0cd8ff6e47136e9da72e85ceeb36a1f5b69a"
+    }
+  ],
+  "legacyJsonSha256": "225089c877252909a43833e974093b03ce7ba73ae63023dd581ce29c2f285712",
+  "ownerTables": {
+    "vehicle": 1,
+    "schedule": 3,
+    "ledger": 0,
+    "document": 2,
+    "asset_reference": 13,
+    "vault_meta": 1
+  },
+  "beforeDatabaseUserVersion": 1,
+  "afterDatabaseUserVersion": 2,
+  "updateAndRestartAssetsIdentical": 28
+}

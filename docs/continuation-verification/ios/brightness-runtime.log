@@ -1,0 +1,3 @@
+MOTOVAULT_BRIGHTNESS initial=0.5
+2026-10-13 13:29:26.055 MotoVault[76313:1064517] void * _Nullable NSMapGet(NSMapTable * _Nonnull, const void * _Nullable): map table argument is NULL
+com.motovault.app: 76313

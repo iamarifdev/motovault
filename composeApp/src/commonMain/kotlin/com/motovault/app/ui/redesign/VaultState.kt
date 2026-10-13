@@ -11,8 +11,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlin.random.Random
 
-expect fun loadVault(): String?
-expect fun saveVault(value: String)
+expect suspend fun loadVault(): String?
+expect suspend fun saveVault(value: String)
+typealias VaultSave = (VaultState, (Boolean) -> Unit) -> Unit
 
 fun today() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
 fun recordId() = Clock.System.now().toEpochMilliseconds().toString() + "-" + Random.nextLong().toString()
@@ -21,7 +22,9 @@ const val RENEWAL_WARNING_DAYS = DOCUMENT_RENEWAL_WARNING_DAYS
 @Serializable
 data class Ride(
     val brandId: String, val edition: String, val year: Int, val odometer: Double,
-    val modelId: String? = null, val modelName: String = "", val registration: String = ""
+    val modelId: String? = null, val modelName: String = "", val registration: String = "",
+    val market: RideMarket = RideMarket.UNKNOWN, val emission: RideEmission = RideEmission.UNKNOWN,
+    val modelCode: String = "", val factoryProfileId: String? = null
 ) {
     val selectedModel: BikeModel? get() = BikeCatalogue.find(modelId)?.takeIf { it.brandId == brandId }
         ?: if (modelName.isBlank()) BikeCatalogue.legacyModel(brandId) else null
@@ -124,7 +127,7 @@ data class VaultState(
 
     companion object {
         private val json = Json { ignoreUnknownKeys = true }
-        fun restore(): VaultState = loadVault()?.let { requireNotNull(decode(it)) { "Stored records could not be read. Existing storage has been preserved." } } ?: VaultState()
+        suspend fun restore(): VaultState = loadVault()?.let { requireNotNull(decode(it)) { "Stored records could not be read. Existing storage has been preserved." } } ?: VaultState()
         fun decode(value: String): VaultState? = runCatching {
             val state = json.decodeFromString<VaultState>(value)
             state.copy(economy = calculateEconomy(state.logs), lastFuelOdometer = state.logs.filter { it.isFuel }.maxOfOrNull { it.odometer })
@@ -132,12 +135,14 @@ data class VaultState(
         fun encode(state: VaultState) = json.encodeToString(serializer(), state)
 
         fun create(ride: Ride, baseline: Double = ride.odometer, baselineDate: LocalDate = today()): VaultState {
+            FactoryProfiles.validate(ride)
             require(ride.odometer.isFinite() && ride.odometer in 0.0..9999999.0)
             require(baseline.isFinite() && baseline in 0.0..ride.odometer) { "Last service mileage cannot exceed current mileage." }
             require(baselineDate <= today()) { "Baseline date cannot be in the future." }
+            require(ride.factoryProfileId == null || baseline >= 1000) { "Use the recurring manual schedule after the 1,000 km running-in service. Before that, set an owner reminder for the first service." }
             require(ride.modelId == null || BikeCatalogue.find(ride.modelId)?.brandId == ride.brandId) { "Choose a model from the selected brand." }
             val examples = listOf(Triple("Chain", 500.0, 30), Triple("Engine oil", 3000.0, 180), Triple("Air filter", 5000.0, 180))
-            return VaultState(ride = ride, rules = examples.map { (name, km, days) ->
+            return VaultState(ride = ride, rules = FactoryProfiles.find(ride.factoryProfileId)?.rules(baseline, baselineDate) ?: examples.map { (name, km, days) ->
                 ComponentRule(recordId(), "primary", name, "Owner-defined example. Confirm against your manual.", km, days, baseline, baselineDate.toEpochDays().toLong())
             })
         }
