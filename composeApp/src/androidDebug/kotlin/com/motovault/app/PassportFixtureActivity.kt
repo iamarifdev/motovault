@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import com.motovault.app.ui.redesign.*
+import com.motovault.app.ui.*
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 

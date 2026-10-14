@@ -1,6 +1,6 @@
 package com.motovault.app.storage
 
-import com.motovault.app.ui.redesign.*
+import com.motovault.app.ui.*
 import kotlin.test.*
 
 class LocalSyncTest {

@@ -70,16 +70,16 @@ All paths in this section are relative to `/Users/arif/workspace/bbn/motovault` 
 
 | File or directory | Responsibility |
 | --- | --- |
-| `composeApp/src/commonMain/kotlin/com/motovault/app/App.kt` | Actual entry point: calls `ui.redesign.MotoVault()` |
-| `.../ui/redesign/MotoVault.kt` | Navigation, garage, local state, commit/save ordering and document routing |
-| `.../ui/redesign/Onboarding.kt` | Brand/model selection, owner setup and baseline confirmation |
-| `.../ui/redesign/BikeCatalogue.kt` | Bundled 78-model reference catalogue, photographs and source URLs |
-| `.../ui/redesign/Appearance.kt` | System/Light/Dark palettes and brand contrast |
-| `.../ui/redesign/VaultState.kt` | Active serializable Ride, RideLog, VaultDocument and VaultState; validation and fuel cycles |
-| `.../ui/redesign/OwnershipForms.kt` | Service/fuel/schedule/history forms; some older document helpers remain |
-| `.../ui/redesign/DocumentCapture.kt` | Shared capture models, crop bounds, page limits, candidate parsing and platform contracts |
-| `.../ui/redesign/DocumentFlow.kt` | Capture/import, review, confirmation, edit, originals, zoom and inspection UI |
-| `.../ui/redesign/DocumentWallet.kt` | Overlapping wallet cards, renewals and inspection list |
+| `composeApp/src/commonMain/kotlin/com/motovault/app/App.kt` | Actual entry point: calls `ui.MotoVault()` |
+| `.../ui/MotoVault.kt` | Navigation, garage, local state, commit/save ordering and document routing |
+| `.../ui/Onboarding.kt` | Brand/model selection, owner setup and baseline confirmation |
+| `.../ui/BikeCatalogue.kt` | Bundled 78-model reference catalogue, photographs and source URLs |
+| `.../ui/Appearance.kt` | System/Light/Dark palettes and brand contrast |
+| `.../ui/VaultState.kt` | Active serializable Ride, RideLog, VaultDocument and VaultState; validation and fuel cycles |
+| `.../ui/OwnershipForms.kt` | Service/fuel/schedule/history forms; some older document helpers remain |
+| `.../ui/DocumentCapture.kt` | Shared capture models, crop bounds, page limits, candidate parsing and platform contracts |
+| `.../ui/DocumentFlow.kt` | Capture/import, review, confirmation, edit, originals, zoom and inspection UI |
+| `.../ui/DocumentWallet.kt` | Overlapping wallet cards, renewals and inspection list |
 | `composeApp/src/androidMain/kotlin/com/motovault/app/{VaultStorage,DocumentCamera,DocumentCapture,PlatformAppearance}.kt` | Atomic files, CameraX, import/PDF/OCR/crop/viewer and Android window handling |
 | `composeApp/src/iosMain/kotlin/com/motovault/app/{VaultStorage,DocumentCamera,DocumentCapture,PlatformAppearance}.kt` | Atomic files, AVFoundation, picker/Vision/PDF/crop/viewer; status-bar integration belongs to the missing host |
 | `composeApp/src/androidMain/AndroidManifest.xml` and `res/xml/document_paths.xml` | Camera permission, backups disabled and private FileProvider paths |
@@ -181,8 +181,8 @@ Latest implementation verification on 11 October: Android debug assembly and iOS
 - Two-page tax-token PDF imported, reviewed, confirmed, saved, reopened after reinstall, switched to page 2 and opened in the native PDF viewer.
 - Raw photo files and original PDFs compared byte-for-byte with sources. Tax-token original SHA-256: `b386e073c880a9c8b0413eb6af6f3fdabe375613929b602799a3846182ded1f2`.
 - System light/dark switching, brand accents, light inspection, camera clipping and final light-mode system-bar contrast checked.
-- Evidence: `/Users/arif/workspace/bbn/motovault/docs/prototype-verification/`, `/Users/arif/workspace/bbn/motovault/docs/theme-verification/`, `/Users/arif/workspace/bbn/motovault/docs/scanning-verification/` and `/Users/arif/workspace/bbn/motovault/docs/contrast-audit/`.
-- Useful final images: `prototype-verification/50-light.png`, `51-dark.png`, `52-inspection-system-dark.png` and `45-native-pdf.png`. Earlier captures include intermediate failures; a filename alone does not prove a screen passed.
+- Evidence: `/Users/arif/workspace/bbn/motovault/docs/archive/evidence/prototype-verification/`, `/Users/arif/workspace/bbn/motovault/docs/archive/evidence/theme-verification/`, `/Users/arif/workspace/bbn/motovault/docs/archive/evidence/scanning-verification/` and `/Users/arif/workspace/bbn/motovault/docs/archive/evidence/contrast-audit/`.
+- Useful final images: `archive/evidence/prototype-verification/50-light.png`, `51-dark.png`, `52-inspection-system-dark.png` and `45-native-pdf.png`. Earlier captures include intermediate failures; a filename alone does not prove a screen passed.
 - Test credentials are visibly marked SAMPLE/TEST ONLY and are emulator data, not bundled production owner records.
 - Physical Moto Edge 50 Fusion disconnected during earlier work; simulator inspection was explicitly authorised. Recheck `rtk run adb devices` before selecting a target.
 - Software-rendered Pixel_10 emulator was more stable than the earlier graphics session. If needed, launch the existing AVD without snapshots using `rtk run /Users/arif/Library/Android/sdk/emulator/emulator -avd Pixel_10 -no-snapshot-load -gpu software`. Preserve its data; do not wipe it to simplify QA.

@@ -4,15 +4,9 @@ import ComposeApp
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-    var window: UIWindow?
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // The notification center holds its delegate weakly. UIApplication retains this object.
         UNUserNotificationCenter.current().delegate = self
-        let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = VaultHostController()
-        window.makeKeyAndVisible()
-        self.window = window
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("--motovault-passport-fixture") {
             IosRuntimeFixturesKt.generateDebugPassportFixture()
@@ -47,11 +41,29 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         return true
     }
 
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        let configuration = UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+        configuration.delegateClass = SceneDelegate.self
+        return configuration
+    }
+
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         #if DEBUG
         print("MOTOVAULT_NOTIFICATION foreground id=\(notification.request.identifier)")
         #endif
         completionHandler([.banner, .list, .sound])
+    }
+}
+
+final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    var window: UIWindow?
+
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard let windowScene = scene as? UIWindowScene else { return }
+        let window = UIWindow(windowScene: windowScene)
+        window.rootViewController = VaultHostController()
+        window.makeKeyAndVisible()
+        self.window = window
     }
 }
 

@@ -1,147 +1,35 @@
 package com.motovault.app.domain.usecase
 
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class FuelEfficiencyUseCaseTest {
-
     private val useCase = FuelEfficiencyUseCase()
 
-    @Test
-    fun testInitialFillUp_EstablishesBaselineWithoutEfficiency() {
-        val firstFill = FuelLogEntry(
-            id = "fuel_01",
-            vehicleId = "duke_125",
-            odometerKm = 1000.0,
-            liters = 11.0,
-            totalCost = 1430.0,
-            isFullTank = true,
-            epochMillis = 1000000L
-        )
-
-        val result = useCase.calculate(previousEntry = null, currentEntry = firstFill)
-
-        assertNull(result.calculatedEconomyKmPerLiter)
-        assertNull(result.costPerKm)
-        assertFalse(result.isReliable)
-        assertTrue(result.statusMessage.contains("Initial fill-up"))
+    @Test fun firstFullTankOnlyEstablishesTheBaseline() {
+        assertNull(useCase.calculate(listOf(FuelFill(1000.0, 11.0, true))))
     }
 
-    @Test
-    fun testStandardFullToFull_CalculatesAccurateKmPerLiter() {
-        val firstFill = FuelLogEntry(
-            id = "fuel_01",
-            vehicleId = "duke_125",
-            odometerKm = 1000.0,
-            liters = 10.0,
-            totalCost = 1300.0,
-            isFullTank = true,
-            epochMillis = 1000000L
-        )
-
-        // Rode 385 km (1385 - 1000) and put in 10 liters to top up full tank
-        val secondFill = FuelLogEntry(
-            id = "fuel_02",
-            vehicleId = "duke_125",
-            odometerKm = 1385.0,
-            liters = 10.0,
-            totalCost = 1350.0,
-            isFullTank = true,
-            epochMillis = 2000000L
-        )
-
-        val result = useCase.calculate(previousEntry = firstFill, currentEntry = secondFill)
-
-        assertTrue(result.isReliable)
-        assertEquals(38.5, result.calculatedEconomyKmPerLiter)
-        assertEquals(3.51, result.costPerKm) // 1350 / 385 = 3.506... rounded to 3.51
-        assertEquals(385.0, result.deltaDistanceKm)
+    @Test fun fullToFullExcludesTheBaselinePurchase() {
+        assertEquals(38.5, useCase.calculate(listOf(FuelFill(1000.0, 11.0, true), FuelFill(1385.0, 10.0, true))))
     }
 
-    @Test
-    fun testPartialFillUp_DoesNotCalculatePrematureEconomy() {
-        val firstFill = FuelLogEntry(
-            id = "fuel_01",
-            vehicleId = "duke_125",
-            odometerKm = 1000.0,
-            liters = 10.0,
-            totalCost = 1300.0,
-            isFullTank = true,
-            epochMillis = 1000000L
-        )
-
-        // Second fill was only partial (isFullTank = false)
-        val secondFillPartial = FuelLogEntry(
-            id = "fuel_02",
-            vehicleId = "duke_125",
-            odometerKm = 1200.0,
-            liters = 5.0,
-            totalCost = 650.0,
-            isFullTank = false,
-            epochMillis = 2000000L
-        )
-
-        val result = useCase.calculate(previousEntry = firstFill, currentEntry = secondFillPartial)
-
-        assertNull(result.calculatedEconomyKmPerLiter)
-        assertFalse(result.isReliable)
-        assertTrue(result.statusMessage.contains("Partial fill-up"))
+    @Test fun partialFillWaitsForTheNextFullTank() {
+        assertNull(useCase.calculate(listOf(FuelFill(1000.0, 10.0, true), FuelFill(1100.0, 2.0, false))))
+        assertEquals(44.0, useCase.calculate(listOf(FuelFill(1000.0, 10.0, true), FuelFill(1100.0, 2.0, false), FuelFill(1220.0, 3.0, true))))
     }
 
-    @Test
-    fun testEdgeCase_NegativeOrZeroDistanceDelta() {
-        val firstFill = FuelLogEntry(
-            id = "fuel_01",
-            vehicleId = "duke_125",
-            odometerKm = 1000.0,
-            liters = 10.0,
-            totalCost = 1300.0,
-            isFullTank = true,
-            epochMillis = 1000000L
-        )
-
-        val invalidFill = FuelLogEntry(
-            id = "fuel_02",
-            vehicleId = "duke_125",
-            odometerKm = 950.0, // Typo: Odometer rolled backwards!
-            liters = 8.0,
-            totalCost = 1000.0,
-            isFullTank = true,
-            epochMillis = 2000000L
-        )
-
-        val result = useCase.calculate(previousEntry = firstFill, currentEntry = invalidFill)
-
-        assertNull(result.calculatedEconomyKmPerLiter)
-        assertFalse(result.isReliable)
-        assertTrue(result.statusMessage.contains("Invalid odometer delta"))
+    @Test fun partialFillsBeforeTheBaselineDoNotCount() {
+        assertNull(useCase.calculate(listOf(FuelFill(900.0, 4.0, false), FuelFill(1000.0, 10.0, true))))
     }
 
-    @Test
-    fun testEdgeCase_ZeroOrNegativeLiters() {
-        val firstFill = FuelLogEntry(
-            id = "fuel_01",
-            vehicleId = "duke_125",
-            odometerKm = 1000.0,
-            liters = 10.0,
-            totalCost = 1300.0,
-            isFullTank = true,
-            epochMillis = 1000000L
-        )
+    @Test fun averagesCompletedCyclesByDistanceAndLitresDespiteStorageOrder() {
+        val entries = listOf(FuelFill(1550.0, 2.0, false), FuelFill(1500.0, 10.0, true), FuelFill(1000.0, 10.0, true), FuelFill(1200.0, 5.0, true))
+        assertEquals(500.0 / 15.0, useCase.calculate(entries))
+    }
 
-        val zeroLitersFill = FuelLogEntry(
-            id = "fuel_02",
-            vehicleId = "duke_125",
-            odometerKm = 1200.0,
-            liters = 0.0,
-            totalCost = 0.0,
-            isFullTank = true,
-            epochMillis = 2000000L
-        )
-
-        val result = useCase.calculate(previousEntry = firstFill, currentEntry = zeroLitersFill)
-
-        assertNull(result.calculatedEconomyKmPerLiter)
-        assertFalse(result.isReliable)
-        assertTrue(result.statusMessage.contains("Fuel volume must be positive"))
+    @Test fun legacyRecordsWithoutLitresDoNotInventAnEconomy() {
+        assertNull(useCase.calculate(listOf(FuelFill(1000.0, 10.0, true), FuelFill(1200.0, null, true))))
     }
 }

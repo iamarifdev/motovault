@@ -6,7 +6,7 @@ import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.execSQL
 import androidx.room.migration.Migration
 import com.motovault.app.domain.model.ComponentRule
-import com.motovault.app.ui.redesign.*
+import com.motovault.app.ui.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.serialization.encodeToString
@@ -23,7 +23,12 @@ data class DocumentRow(@PrimaryKey val id: String, val position: Int, val payloa
 @Entity(tableName = "asset_reference", primaryKeys = ["documentId", "assetId"])
 data class AssetReferenceRow(val documentId: String, val assetId: String)
 @Entity(tableName = "vault_meta")
-data class VaultMetaRow(@PrimaryKey val id: Int = 1, val appearance: String, val legacyImported: Boolean)
+data class VaultMetaRow(
+    @PrimaryKey val id: Int = 1,
+    val appearance: String,
+    val legacyImported: Boolean,
+    @ColumnInfo(defaultValue = "0") val autoLocation: Boolean = false
+)
 
 @Dao
 abstract class VaultDao {
@@ -56,7 +61,7 @@ abstract class VaultDao {
         return VaultState(
             ride = vehicle()?.let { codec.decodeFromString<Ride>(it.payload) },
             rules = schedules().map { row -> codec.decodeFromString<ComponentRule>(row.payload).also { check(it.id == row.id) { "Schedule does not match its stored ID." } } },
-            logs = logs, documents = docs, appearance = Appearance.valueOf(settings.appearance),
+            logs = logs, documents = docs, appearance = Appearance.valueOf(settings.appearance), autoLocation = settings.autoLocation,
             economy = VaultState.calculateEconomy(logs), lastFuelOdometer = logs.filter { it.isFuel }.maxOfOrNull { it.odometer }
         )
     }
@@ -76,7 +81,7 @@ abstract class VaultDao {
         putLedger(state.logs.mapIndexed { index, entry -> LedgerRow(entry.id, index, codec.encodeToString(entry)) })
         putDocuments(state.documents.mapIndexed { index, document -> DocumentRow(document.id, index, codec.encodeToString(document)) })
         putReferences(refs)
-        putMeta(VaultMetaRow(appearance = state.appearance.name, legacyImported = imported))
+        putMeta(VaultMetaRow(appearance = state.appearance.name, legacyImported = imported, autoLocation = state.autoLocation))
         putPendingSync(LocalSyncProtocol.next(previousSync, previousState, state, recordId()))
     }
 
@@ -113,7 +118,7 @@ abstract class VaultDao {
     }
 }
 
-@Database(entities = [VehicleRow::class, ScheduleRow::class, LedgerRow::class, DocumentRow::class, AssetReferenceRow::class, VaultMetaRow::class, SyncOutboxRow::class], version = 2, exportSchema = true)
+@Database(entities = [VehicleRow::class, ScheduleRow::class, LedgerRow::class, DocumentRow::class, AssetReferenceRow::class, VaultMetaRow::class, SyncOutboxRow::class], version = 3, exportSchema = true)
 @ConstructedBy(VaultDatabaseConstructor::class)
 abstract class VaultDatabase : RoomDatabase() { abstract fun vault(): VaultDao }
 
@@ -123,11 +128,17 @@ expect object VaultDatabaseConstructor : RoomDatabaseConstructor<VaultDatabase> 
 }
 
 fun buildVaultDatabase(builder: RoomDatabase.Builder<VaultDatabase>): VaultDatabase = builder
-    .addMigrations(VaultMigration1To2)
+    .addMigrations(VaultMigration1To2, VaultMigration2To3)
     .setDriver(BundledSQLiteDriver()).setQueryCoroutineContext(Dispatchers.IO).build()
 
 object VaultMigration1To2 : Migration(1, 2) {
     override fun migrate(connection: SQLiteConnection) {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `sync_outbox` (`id` INTEGER NOT NULL, `installationId` TEXT NOT NULL, `revision` INTEGER NOT NULL, `payload` TEXT NOT NULL, `tombstones` TEXT NOT NULL, `attemptCount` INTEGER NOT NULL, `retryAfterEpochMillis` INTEGER NOT NULL, `failureCode` TEXT, PRIMARY KEY(`id`))")
+    }
+}
+
+object VaultMigration2To3 : Migration(2, 3) {
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("ALTER TABLE `vault_meta` ADD COLUMN `autoLocation` INTEGER NOT NULL DEFAULT 0")
     }
 }

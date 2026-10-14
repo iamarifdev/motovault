@@ -7,3 +7,7 @@
 local.properties
 .idea
 *.apk
+
+# Xcode personal workspace state
+xcuserdata/
+*.xcuserstate

@@ -5,7 +5,7 @@ import androidx.room.useWriterConnection
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
 import com.motovault.app.storage.*
-import com.motovault.app.ui.redesign.*
+import com.motovault.app.ui.*
 import kotlinx.coroutines.runBlocking
 import platform.Foundation.NSTemporaryDirectory
 import kotlin.test.*

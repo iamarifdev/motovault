@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>MotoVault · Bangla-first design prototype</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="workbench">
+    <aside class="reference" aria-label="Prototype reference">
+      <a class="identity" href="#garage"><span class="brand-mark" aria-hidden="true">M</span><span>MotoVault<small>Design reference · v1.0</small></span></a>
+      <p class="reference-intro">Bangla first. Care first.<br>A motorcycle ownership companion.</p>
+      <div class="reference-caption">EXPLORE THE JOURNEYS</div>
+      <nav id="screen-index" aria-label="Screen index"></nav>
+      <div class="reference-caption">REVIEW STATES</div>
+      <div class="scenario-controls">
+        <button data-scenario="populated">Populated</button>
+        <button data-scenario="empty">Empty records</button>
+        <button data-route="recovery">Restore error</button>
+        <button data-scenario="loading">Loading</button>
+        <button data-scenario="save-error">Next save fails</button>
+        <button data-scenario="large-text" aria-pressed="false">Large text</button>
+        <button data-scenario="reset">Reset demo</button>
+      </div>
+      <p class="reference-note">Browser-local sample data. No real camera, OCR, encryption, push notifications or cloud backup. Native controls are represented by browser equivalents.</p>
+      <a class="spec-link" href="DESIGN-SPEC.md">Design specification ↗</a>
+      <a class="spec-link" href="CONTINUE-HERE.md">Continue from here ↗</a>
+    </aside>
+    <main class="preview-area">
+      <div class="preview-heading"><span id="route-label">S04 · Garage</span><a href="?mode=app#garage">App-only preview ↗</a></div>
+      <div class="app-shell" id="app-shell">
+        <header class="app-header"><a href="#garage" aria-label="MotoVault"><span class="brand-mark small" aria-hidden="true">M</span><strong>MotoVault</strong></a><button id="language-toggle" class="language-button">English</button></header>
+        <div id="screen" class="screen"></div>
+        <nav id="bottom-nav" class="bottom-nav" aria-label="প্রধান মেনু"></nav>
+        <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+      </div>
+      <p class="preview-note">Review the screens, then follow a complete journey. Changes affect sample data in this browser only.</p>
+    </main>
+    <aside class="annotations" aria-label="Design rationale"><span class="reference-caption">THIS SCREEN</span><h2 id="annotation-title"></h2><p id="annotation-copy"></p><div class="annotation-rule"></div><span class="reference-caption">SYSTEM RULES</span><p>Bangla leads.<br>One clear primary action.<br>Status includes words.<br>Work survives mistakes.<br>Identity supports the task.</p><a href="DESIGN-SPEC.md#screen-contracts">Screen contracts ↗</a></aside>
+  </div>
+  <dialog id="confirm-dialog"><form method="dialog"><h2 id="confirm-title"></h2><p id="confirm-copy"></p><div class="button-row"><button value="cancel" class="button secondary" id="confirm-cancel"></button><button value="confirm" class="button" id="confirm-ok"></button></div></form></dialog>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,68 +1,49 @@
-# MotoVault 🏍️⚡
+# MotoVault
 
-> **Your vehicle's digital passport, maintenance vault, and lifecycle health tracker.**  
-> Built with **Kotlin Multiplatform (KMP)** and **Compose Multiplatform** for **Android & iOS**.
+MotoVault is a Bangla-first motorcycle maintenance and document app for Bangladesh, built with Kotlin Multiplatform and Compose Multiplatform for Android and iOS.
 
----
+## Current app
 
-## 🌟 Key Features
+- Anek Bangla typography, System/Light/Dark appearance and bike-brand accent colors.
+- Nine brands, 78 reference model/trim records with photographs, search and manual model entry.
+- Owner-entered mileage and service baselines, editable reminders and component wear calculations.
+- Itemized service visits with common parts/services, mineral/semi-synthetic/full-synthetic oil details, prices, labour, discounts and optional receipts.
+- Fuel history, partial fills and weighted economy across completed full-to-full cycles.
+- Optional foreground GPS for fuel stations/workshops, with manual location entry and saving without a GPS fix.
+- Document capture/import, review of extracted details, original copies, expiry status and opt-in local renewal notifications.
+- Document-only roadside viewing with a scoped brightness override.
+- Separate document-renewal expense records and owner-reviewed PDF/JSON service passports.
+- Local Room persistence with schema migrations and durable save handling. Sync preparation exists, but a cloud service is not connected.
 
-### 1. Dynamic Powertrain Intelligence
-- **KTM Duke 125 Indian Version Preset:** Pre-loaded factory maintenance schedule (Motul 7100 10W-50 oil, 500 km chain lube, spark plug, ByBre brake pads, coolant).
-- **Emission & Edition Filtering:** Cascading selection tree where choosing **Indian Edition** filters strictly to **BS4** (underbelly exhaust, 10.2L tank) and **BS6** (side-slung exhaust, 13.5L tank).
-- **Extensible to EV Bikes & Cars:** Polymorphic vehicle data model supporting electric charging metrics (kWh, battery SOH %, belt drive) and passenger cars.
+Catalogue records and generic example schedules do not establish compatibility or factory service recommendations. The optional manual-backed factory profile is scoped by model/year/market; see [factory setup](docs/CONTINUATION_PROGRESS.md).
 
-### 2. High-Contrast TFT Cluster Design System
-- **Vehicle-Adaptive Dynamic Accents:** The app's primary accent dynamically transforms to match your ride:
-  - **KTM:** Apex Orange (`#FF6600`)
-  - **Kawasaki:** Lime Green (`#00E676`)
-  - **Yamaha:** Racing Blue (`#0066FF`)
-  - **EVs:** Cyber Teal (`#00F2FE`)
-- **Circular Radial Arc Gauges:** Tachometer/speedometer inspired wear meters with smooth animated sweeps and real-time color shifts ($\text{Green} \rightarrow \text{Yellow} \rightarrow \text{Red}$).
-- **Persistent Floating Quick Action Dock:** 1-tap thumb buttons for `Lube Chain` (500 km reset), `Fuel Up`, and `Police Check`.
+## Source structure
 
-### 3. Bangladeshi Road Legal Suite & Document Vault
-- **Skeuomorphic 3D Flip Smart Cards:** Exact replica of the official Bangladesh Government (BRTA) vehicle registration smart card and driving license with microchip, seal, and realistic 180° 3D flip.
-- **🚨 1-Tap 'Traffic Police Check Mode':** Instantly triggers maximum display brightness and presents essential road papers with zero privacy leak of personal costs or service notes.
-- **Expiry Countdowns:** Real-time day counters and proactive renewal alerts for Tax Token and Driving License.
+Shared production screens and platform contracts live in `composeApp/src/commonMain/kotlin/com/motovault/app/ui/`. Android and iOS implementations mirror that package in their source sets. Shared behavior lives under `domain/`, and persistence coordination lives under `storage/`.
 
----
+The native iOS host is `iosApp/MotoVault.xcodeproj`, with shared scheme `MotoVault`. See [production UI structure](docs/UI-STRUCTURE.md).
 
-## 🏗️ Project Architecture
+## Build and run
 
-```
-motovault/
-├── composeApp/
-│   ├── src/
-│   │   ├── commonMain/
-│   │   │   └── kotlin/com/motovault/app/
-│   │   │       ├── App.kt                          # Root navigation & theme orchestration
-│   │   │       ├── domain/
-│   │   │       │   ├── model/                      # Vehicle, ComponentRule, GovernmentDocument
-│   │   │       │   └── preset/KtmDuke125Preset.kt  # KTM factory service intervals
-│   │   │       ├── theme/                          # Colors, Typography, Dynamic Theme
-│   │   │       └── ui/
-│   │   │           ├── onboarding/                 # Cascading Brand -> KTM -> Edition -> Emission
-│   │   │           ├── garage/                     # Dashboard & Circular Wear Gauges
-│   │   │           └── vault/                      # 3D Flip Smart Card & Police Check Mode
-│   │   ├── androidMain/                            # Android native entry & Activity
-│   │   └── iosMain/                                # iOS native framework bindings
-└── gradle/libs.versions.toml                       # Dependency catalog (KMP 2.0, Compose 1.7)
+Use JDK 17, the Android SDK configured by Gradle, and Xcode for iOS.
+
+```sh
+rtk run ./gradlew :composeApp:assembleDebug :composeApp:testDebugUnitTest
+rtk run ./gradlew :composeApp:linkDebugFrameworkIosSimulatorArm64
 ```
 
----
+On Apple Silicon, use an ARM64 JDK. If needed:
 
-## 🚀 Running the Project
-
-### Prerequisites
-- JDK 17 or higher (Apple Silicon ARM64 recommended)
-- Android SDK (API 35 compileSdk, API 24 minSdk)
-- Xcode (for iOS simulator or device deployment)
-
-### Android
-```bash
-./gradlew :composeApp:assembleDebug
+```sh
+rtk run env JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home ./gradlew :composeApp:assembleDebug
 ```
 
-### iOS
-Open `iosApp` in Xcode or run via Fleet / Android Studio with the KMP plugin.
+Open `iosApp/MotoVault.xcodeproj` in Xcode, select the `MotoVault` scheme and an iPhone simulator, then Run.
+
+## Design and verification
+
+- [Approved app UI v2](design/app-ui-v2/CONTINUE-HERE.md) and [native implementation map](design/app-ui-v2/APPLY-MAP.md).
+- [Current QA record](design/app-ui-v2/QA.md), [native delivery evidence](docs/CONTINUATION_PROGRESS.md) and [iOS host details](docs/IOS_HOST_IMPLEMENTATION.md).
+- [Historical prototype and QA archive](docs/archive/README.md).
+
+Build, test, simulator and physical-device results have different scopes. The linked reports record the observed results and remaining device checks.

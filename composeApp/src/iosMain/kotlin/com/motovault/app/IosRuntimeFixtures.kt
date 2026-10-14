@@ -1,7 +1,7 @@
 @file:OptIn(kotlin.experimental.ExperimentalNativeApi::class)
 package com.motovault.app
 
-import com.motovault.app.ui.redesign.*
+import com.motovault.app.ui.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlin.native.Platform

@@ -6,7 +6,7 @@ import android.content.*
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.*
-import com.motovault.app.ui.redesign.*
+import com.motovault.app.ui.*
 
 /** Debug-only native-delivery fixture. Never opens or changes the owner database or reminder preferences. */
 class RenewalFixtureActivity : Activity() {

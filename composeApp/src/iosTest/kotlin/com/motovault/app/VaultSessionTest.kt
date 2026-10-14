@@ -1,7 +1,7 @@
 package com.motovault.app
 
 import com.motovault.app.storage.VaultSession
-import com.motovault.app.ui.redesign.*
+import com.motovault.app.ui.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
