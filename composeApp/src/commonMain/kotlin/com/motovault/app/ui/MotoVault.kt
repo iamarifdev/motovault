@@ -1,10 +1,19 @@
 package com.motovault.app.ui
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.animateFloatAsState
+import dev.sky.design.*
+import dev.sky.design.tokens.SkyTokens
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -27,11 +36,15 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -39,6 +52,7 @@ import com.motovault.app.domain.model.ComponentRule
 import com.motovault.app.domain.usecase.CalculateWearUseCase
 import kotlinx.datetime.LocalDate
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import com.motovault.app.storage.activeVaultSession
 import androidx.compose.ui.window.DialogProperties
@@ -108,17 +122,17 @@ internal fun componentLabel(rule: ComponentRule): String {
         else -> null
     }
     if (bengaliName == null) return rule.name
-    return "$bengaliName · ${rule.name}"
+    return bengaliName
 }
 
 private fun componentShortLabel(rule: ComponentRule): String = when (componentSuffix(rule)) {
-    "chain" -> "চেইন · Chain"
-    "oil" -> "ইঞ্জিন অয়েল · Engine oil"
-    "air_filter" -> "এয়ার ফিল্টার · Air filter"
-    "spark_plug" -> "স্পার্ক প্লাগ · Spark plug"
-    "brake_pads" -> "ব্রেক প্যাড · Brake pads"
-    "coolant" -> "কুল্যান্ট · Coolant"
-    "brake_fluid" -> "ব্রেক ফ্লুইড · Brake fluid"
+    "chain" -> "চেইন"
+    "oil" -> "ইঞ্জিন অয়েল"
+    "air_filter" -> "এয়ার ফিল্টার"
+    "spark_plug" -> "স্পার্ক প্লাগ"
+    "brake_pads" -> "ব্রেক প্যাড"
+    "coolant" -> "কুল্যান্ট"
+    "brake_fluid" -> "ব্রেক ফ্লুইড"
     else -> rule.name
 }
 
@@ -188,8 +202,8 @@ fun MotoVault() {
     ) }
     VaultTheme(brand.id, state.appearance, typography) {
         PlatformAppearance(LocalVaultPalette.current.dark)
-        Box(Modifier.fillMaxSize().background(Brush.linearGradient(listOf(SurfaceColor, CanvasColor))).safeDrawingPadding(), contentAlignment = Alignment.TopCenter) {
-            Column(Modifier.widthIn(max = 600.dp).fillMaxSize()) {
+        Box(Modifier.fillMaxSize().background(SurfaceColor).safeDrawingPadding(), contentAlignment = Alignment.TopCenter) {
+            Column(Modifier.widthIn(max = 600.dp).fillMaxSize().background(CanvasColor)) {
                 storageError?.let { Text(it, color = WarningColor, modifier = Modifier.fillMaxWidth().padding(16.dp), fontSize = 12.sp) }
                 if (loading) {
                     CircularProgressIndicator(Modifier.padding(32.dp))
@@ -200,8 +214,11 @@ fun MotoVault() {
                         else commit(draft) { if (it) editingRide = false }
                     }, onCancel = if (state.ride != null) ({ editingRide = false; selectedBrand = state.ride!!.brandId }) else null)
                 } else {
-                    Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 22.dp).padding(top = 20.dp, bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-                        when (tab) {
+                    AnimatedContent(tab, modifier = Modifier.weight(1f), transitionSpec = {
+                            fadeIn(tween(SkyTokens.Page.enterMs)) togetherWith fadeOut(tween(SkyTokens.Page.exitMs))
+                        }, label = "Vault destination") { destination ->
+                        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 22.dp).padding(top = 20.dp, bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                        when (destination) {
                             Tab.GARAGE -> Garage(state, brand, onAppearance = { dialog = "appearance" }, onOdometer = { dialog = "odometer" }, onFuel = { dialog = "fuel" },
                                 onRule = { selectedRule = it; dialog = "service" }, onComponents = { dialog = "components" },
                                 onChangeBike = { editingRide = true }, onFuelHistory = { history("fuel") }, onVault = { tab = Tab.VAULT })
@@ -212,22 +229,19 @@ fun MotoVault() {
                                 onEdit = { selectedLogId = it.id; dialog = if (it.isFuel) "editFuel" else "editService" },
                                 onFuel = { dialog = "fuel" }, onService = { selectedRule = state.rules.firstOrNull(); dialog = if (selectedRule == null) "components" else "service" })
                         }
+                        }
                     }
-                    NavigationBar(containerColor = CanvasColor, tonalElevation = 0.dp, modifier = Modifier.border(1.dp, BorderColor)) {
-                        Tab.entries.forEach { item -> NavigationBarItem(selected = tab == item, onClick = { tab = item; historyFilter = "all" },
-                            icon = { Glyph(item.icon, if (tab == item) MaterialTheme.colorScheme.primary else TextSecondary) }, label = { Text(item.title, fontSize = 11.sp) },
-                            colors = NavigationBarItemDefaults.colors(indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = .10f), selectedTextColor = MaterialTheme.colorScheme.primary, unselectedTextColor = TextSecondary)) }
-                    }
+                    VaultBottomNavigation(tab) { tab = it; historyFilter = "all" }
                 }
             }
             when (dialog) {
                 "appearance" -> AppearanceDialog(state.appearance, state.autoLocation, onDismiss = { dialog = null }, onSelect = { choice -> commit(state.copy(appearance = choice)) { if (it) dialog = null } }, onAutoLocationChange = { enabled -> commit(state.copy(autoLocation = enabled)) {} })
-                "replace" -> Sheet("Start a new bike record?", onDismiss = { dialog = null }) {
-                    Text("This removes the current bike’s service and fuel records. Documents stay in your vault.", color = TextSecondary)
-                    Primary("Replace garage", "check") { pendingGarage?.let { draft -> commit(draft) { if (it) { editingRide = false; dialog = null; tab = Tab.GARAGE } } } }
-                    TextButton(onClick = { dialog = null; editingRide = false; selectedBrand = state.ride!!.brandId }) { Text("Keep current garage") }
+                "replace" -> Sheet("নতুন বাইকের রেকর্ড শুরু করবেন?", onDismiss = { dialog = null }) {
+                    Text("বর্তমান বাইকের সার্ভিস ও জ্বালানির রেকর্ড মুছে যাবে। কাগজপত্র রাখা থাকবে।", color = TextSecondary)
+                    Primary("নতুন বাইক রাখুন", "check") { pendingGarage?.let { draft -> commit(draft) { if (it) { editingRide = false; dialog = null; tab = Tab.GARAGE } } } }
+                    TextButton(onClick = { dialog = null; editingRide = false; selectedBrand = state.ride!!.brandId }) { Text("বর্তমান বাইক রাখুন") }
                 }
-                "odometer" -> NumberDialog("Update odometer", "Current distance (km)", state.ride!!.odometer.toInt().toString(), minimum = state.ride!!.odometer, onDismiss = { dialog = null }) { value ->
+                "odometer" -> NumberDialog("ওডোমিটার আপডেট করুন", "বর্তমান দূরত্ব (কিমি)", state.ride!!.odometer.toInt().toString(), minimum = state.ride!!.odometer, onDismiss = { dialog = null }) { value ->
                     commit(state.copy(ride = state.ride!!.copy(odometer = value))) { if (it) dialog = null }
                 }
                 "fuel" -> FuelDialog(state, onDismiss = { dialog = null }, onSave = ::commit, onHistory = { history("fuel") })
@@ -249,10 +263,10 @@ fun MotoVault() {
                 "inspection" -> DocumentInspection(state.documents, onDismiss = { dialog = null }, onDocument = { selectedDocumentId = it.id; dialog = "inspectDetail" })
                 "delete" -> {
                     var error by remember { mutableStateOf<String?>(null) }
-                    Sheet("Remove this entry?", onDismiss = { dialog = null }) {
-                        Text("This cannot be undone.", color = TextSecondary)
+                    Sheet("এই রেকর্ড মুছবেন?", onDismiss = { dialog = null }) {
+                        Text("মুছে ফেললে আর ফেরানো যাবে না।", color = TextSecondary)
                         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
-                        Primary("Delete record", "close") {
+                        Primary("রেকর্ড মুছুন", "close") {
                             runCatching {
                                 if (deleteKind == "document") state.copy(documents = state.documents.filterNot { it.id == deleteId })
                                 else state.deleteLog(state.logs.first { it.id == deleteId })
@@ -263,7 +277,7 @@ fun MotoVault() {
             }
             SnackbarHost(snackbars, modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 86.dp))
             if (saving) Dialog(onDismissRequest = {}, properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)) {
-                Surface(shape = RoundedCornerShape(16.dp)) { Row(Modifier.padding(24.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) { CircularProgressIndicator(Modifier.size(24.dp)); Text("Saving records…") } }
+                Surface(shape = RoundedCornerShape(16.dp)) { Row(Modifier.padding(24.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) { CircularProgressIndicator(Modifier.size(24.dp)); Text("রেকর্ড সেভ হচ্ছে…") } }
             }
         }
     }
@@ -276,7 +290,7 @@ private fun ColumnScope.Garage(state: VaultState, brand: BrandWorld, onAppearanc
     val ride = state.ride!!
     Top("আমার গ্যারেজ", "ডিভাইসে সংরক্ষিত", onAppearance)
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) { Eyebrow("আপনার বাইকের সঙ্গী"); Text(ride.displayName, fontFamily = FontFamily(Font(Res.font.barlow_condensed)), fontSize = if (ride.displayName.length > 14) 29.sp else 38.sp, fontWeight = FontWeight.SemiBold, lineHeight = 42.sp); val edition = if (ride.edition == "Owner-defined setup") "নিজের সেটআপ · Owner-defined" else ride.edition; Text("$edition · ${ride.year}" + if (ride.registration.isBlank()) "" else " · ${ride.registration}", color = TextSecondary, fontSize = 12.sp) }
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) { Eyebrow("আপনার বাইকের সঙ্গী"); Text(ride.displayName, fontFamily = FontFamily(Font(Res.font.barlow_condensed)), fontSize = if (ride.displayName.length > 14) 29.sp else 38.sp, fontWeight = FontWeight.SemiBold, lineHeight = 42.sp); val edition = if (ride.edition in setOf("Owner-defined setup", "নিজের সেটআপ · Owner-defined")) "নিজের সেটআপ" else ride.edition; Text("$edition · ${ride.year}" + if (ride.registration.isBlank()) "" else " · ${ride.registration}", color = TextSecondary, fontSize = 12.sp) }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             IconButton(onClick = onChangeBike, modifier = Modifier.semantics { contentDescription = "বাইক বদলান" }) { Image(painterResource(brand.logo()), brand.name, Modifier.size(44.dp), contentScale = ContentScale.Fit, colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)) }
             Text("বাইক বদলান", color = TextSecondary, fontSize = 10.sp)
@@ -284,9 +298,9 @@ private fun ColumnScope.Garage(state: VaultState, brand: BrandWorld, onAppearanc
     }
     BikePhoto(ride)
     Row(Modifier.fillMaxWidth().border(1.dp, BorderColor, RoundedCornerShape(14.dp)).padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Column(Modifier.weight(1f).clickable(onClick = onOdometer), verticalArrangement = Arrangement.spacedBy(6.dp)) { Eyebrow("ওডোমিটার · Odometer", TextSecondary); Row(verticalAlignment = Alignment.Bottom) { Text(grouped(ride.odometer.toInt()), fontSize = 29.sp, fontWeight = FontWeight.Bold); Text(" km", color = TextSecondary, fontSize = 11.sp) }; Text("ছুঁয়ে আপডেট করুন", color = TextSecondary, fontSize = 10.sp) }
+        Column(Modifier.weight(1f).clickable(onClick = onOdometer), verticalArrangement = Arrangement.spacedBy(6.dp)) { Eyebrow("ওডোমিটার", TextSecondary); Row(verticalAlignment = Alignment.Bottom) { Text(grouped(ride.odometer.toInt()), fontSize = 29.sp, fontWeight = FontWeight.Bold); Text(" km", color = TextSecondary, fontSize = 11.sp) }; Text("ছুঁয়ে আপডেট করুন", color = TextSecondary, fontSize = 10.sp) }
         Box(Modifier.width(1.dp).height(64.dp).background(BorderColor))
-        Column(Modifier.weight(1f).clickable(onClick = onFuelHistory), verticalArrangement = Arrangement.spacedBy(6.dp)) { Eyebrow("জ্বালানি · Fuel economy", TextSecondary); Row(verticalAlignment = Alignment.Bottom) { Text(state.economy?.let { oneDecimal(it) } ?: "--", fontSize = 29.sp, fontWeight = FontWeight.Bold); Text(" km/L", color = TextSecondary, fontSize = 11.sp) }; Text("সম্পূর্ণ ট্যাংক ধরে গড়", color = TextSecondary, fontSize = 10.sp) }
+        Column(Modifier.weight(1f).clickable(onClick = onFuelHistory), verticalArrangement = Arrangement.spacedBy(6.dp)) { Eyebrow("জ্বালানি", TextSecondary); Row(verticalAlignment = Alignment.Bottom) { Text(state.economy?.let { oneDecimal(it) } ?: "--", fontSize = 29.sp, fontWeight = FontWeight.Bold); Text(" km/L", color = TextSecondary, fontSize = 11.sp) }; Text("সম্পূর্ণ ট্যাংক ধরে গড়", color = TextSecondary, fontSize = 10.sp) }
     }
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("যন্ত্রাংশের অবস্থা", fontWeight = FontWeight.SemiBold); TextButton(onClick = onComponents, contentPadding = PaddingValues(0.dp)) { Text("সব যন্ত্রাংশ ↗", color = TextSecondary, fontSize = 11.sp) } }
     if (state.rules.isEmpty()) {
@@ -356,7 +370,7 @@ private fun Gauge(label: String, life: Int, modifier: Modifier, onClick: () -> U
             }
             Row(verticalAlignment = Alignment.Bottom) { Text("$life", fontSize = 25.sp, fontWeight = FontWeight.Bold); Text("%", fontSize = 10.sp, color = TextSecondary) }
         }
-        Text(label, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+        Text(label, modifier = Modifier.fillMaxWidth().heightIn(min = 32.dp), style = MaterialTheme.typography.bodySmall, fontSize = 12.sp, lineHeight = 16.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
         Text(if (life == 0) "সার্ভিস বাকি" else if (life <= 25) "শিগগির সার্ভিস" else "ভালো আছে", color = color, fontSize = 12.sp)
     }
 }
@@ -382,38 +396,107 @@ internal fun Top(title: String, caption: String, onAppearance: () -> Unit) {
 internal fun Eyebrow(text: String, color: Color = MaterialTheme.colorScheme.primary) = Text(text.uppercase(), color = color, fontSize = 9.sp, letterSpacing = 1.6.sp, fontWeight = FontWeight.Bold)
 
 @Composable
-internal fun Heading(text: String) = Text(text, fontSize = 28.sp, fontWeight = FontWeight.Bold, lineHeight = 32.sp, letterSpacing = (-.8).sp)
+internal fun Heading(text: String) = SkyGradientHeading(text)
 
 @Composable
 internal fun Panel(onClick: (() -> Unit)? = null, tint: Color = SurfaceColor, content: @Composable ColumnScope.() -> Unit) {
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(tint).border(1.dp, BorderColor, RoundedCornerShape(14.dp))
+    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(SkyTokens.Radii.menu)).background(tint).border(1.dp, BorderColor, RoundedCornerShape(SkyTokens.Radii.menu))
         .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier).padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp), content = content)
 }
 
 @Composable
 internal fun Primary(text: String, icon: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit) {
-    Button(onClick = onClick, enabled = enabled, modifier = modifier.fillMaxWidth().heightIn(min = 52.dp), shape = RoundedCornerShape(12.dp), contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp)) { Text(text, fontWeight = FontWeight.Bold, fontSize = 13.sp); Spacer(Modifier.width(10.dp)); Glyph(icon, if (enabled) MaterialTheme.colorScheme.onPrimary else TextSecondary) }
+    SkyButton(text, onClick, modifier.fillMaxWidth().heightIn(min = 52.dp), enabled = enabled)
 }
 
 @Composable
 internal fun Field(label: String, value: String, onChange: (String) -> Unit, numeric: Boolean = false) {
-    OutlinedTextField(value, onChange, label = { Text(label, fontSize = 12.sp) }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), keyboardOptions = KeyboardOptions(keyboardType = if (numeric) KeyboardType.Decimal else KeyboardType.Text))
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(9.dp)) {
+        Text(label, style = SkyTheme.typography.label)
+        OutlinedTextField(value, onChange,
+            modifier = Modifier.fillMaxWidth().semantics { contentDescription = label },
+            singleLine = true, textStyle = SkyTheme.typography.body,
+            shape = RoundedCornerShape(SkyTokens.Radii.field),
+            keyboardOptions = KeyboardOptions(keyboardType = if (numeric) KeyboardType.Decimal else KeyboardType.Text),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedBorderColor = SkyTheme.colors.fieldBorder,
+                focusedBorderColor = SkyTheme.colors.accent,
+                unfocusedContainerColor = SkyTheme.colors.input,
+                focusedContainerColor = SkyTheme.colors.input))
+    }
+}
+
+@Composable
+private fun VaultBottomNavigation(selected: Tab, onSelect: (Tab) -> Unit) {
+    val labelHeight = 24.dp * LocalDensity.current.fontScale.coerceAtLeast(1f)
+    Column(Modifier.fillMaxWidth().background(SurfaceColor)) {
+        HorizontalDivider(color = BorderColor, thickness = SkyTokens.Dimensions.navDivider)
+        Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp)) {
+            Tab.entries.forEach { item ->
+                val active = selected == item
+                val color = if (active) MaterialTheme.colorScheme.primary else TextSecondary
+                Column(Modifier.weight(1f).selectable(active, role = Role.Tab, onClick = { onSelect(item) })
+                    .padding(vertical = 7.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    SkySvgIcon("feather_icon/" + when (item) {
+                        Tab.GARAGE -> "fi_home.svg"
+                        Tab.VAULT -> "fi_folder.svg"
+                        Tab.HISTORY -> "fi_clock.svg"
+                    }, null, Modifier.size(SkyTokens.Dimensions.navIcon), color)
+                    Spacer(Modifier.height(SkyTokens.Dimensions.navLabelGap))
+                    Box(Modifier.height(labelHeight), contentAlignment = Alignment.Center) {
+                        Text(item.title, style = SkyTheme.typography["navigation"], fontSize = 12.sp, lineHeight = 16.sp, color = color)
+                    }
+                    Spacer(Modifier.height(5.dp))
+                    Box(Modifier.size(SkyTokens.Dimensions.navMarkerWidth, SkyTokens.Dimensions.navMarkerHeight)
+                        .background(if (active) color else Color.Transparent, RoundedCornerShape(50)))
+                }
+            }
+        }
+    }
 }
 
 @Composable
 internal fun Sheet(title: String, onDismiss: () -> Unit, light: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
     val brandId = LocalVaultBrandId.current
     val parentDark = LocalVaultPalette.current.dark
+    val typography = MaterialTheme.typography
     val appearance = if (light || !parentDark) Appearance.LIGHT else Appearance.DARK
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+    var visible by remember { mutableStateOf(false) }
+    var closing by remember { mutableStateOf(false) }
+    val currentDismiss by rememberUpdatedState(onDismiss)
+    val motion = SkyTheme.motion
+    val progress by animateFloatAsState(if (visible && !closing) 1f else 0f,
+        tween(motion.duration(if (closing) SkyTokens.Sheet.exitMs else SkyTokens.Sheet.enterMs), easing = motion.sheetEasing), label = "Vault sheet")
+    LaunchedEffect(Unit) { visible = true }
+    LaunchedEffect(closing) { if (closing) { delay(motion.duration(SkyTokens.Sheet.exitMs).toLong()); currentDismiss() } }
+    Dialog(onDismissRequest = { closing = true }, properties = sheetDialogProperties()) {
         PlatformAppearance(parentDark)
-        VaultTheme(brandId, appearance) {
-            Column(Modifier.safeDrawingPadding().imePadding().padding(16.dp).widthIn(max = 500.dp).fillMaxWidth().heightIn(max = 650.dp).clip(RoundedCornerShape(22.dp)).background(SurfaceColor).verticalScroll(rememberScrollState()).padding(22.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                    Text(title, color = TextPrimary, fontWeight = FontWeight.Bold, fontSize = 22.sp, modifier = Modifier.weight(1f))
-                    IconButton(onClick = onDismiss, modifier = Modifier.semantics { contentDescription = "বন্ধ করুন" }) { Glyph("close", TextPrimary) }
+        VaultTheme(brandId, appearance, typography) {
+            BoxWithConstraints(Modifier.fillMaxSize().imePadding()) {
+                val density = LocalDensity.current
+                val topInset = with(density) { WindowInsets.safeDrawing.getTop(this).toDp() }
+                val available = (maxHeight - topInset - SkyTokens.Dimensions.toolbar).coerceAtLeast(0.dp)
+                val travel = with(density) { maxHeight.toPx() }
+                Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = .32f * progress))
+                    .clickable { closing = true })
+                Surface(Modifier.align(Alignment.BottomCenter).widthIn(max = 600.dp).fillMaxWidth().heightIn(max = available)
+                    .graphicsLayer { translationY = travel * (1f - progress) }, color = SurfaceColor,
+                    shape = RoundedCornerShape(topStart = SkyTokens.Radii.sheet, topEnd = SkyTokens.Radii.sheet)) {
+                    Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal))) {
+                        Box(Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 4.dp), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(SkyTokens.Dimensions.handleWidth, SkyTokens.Dimensions.handleHeight)
+                                .background(BorderColor, RoundedCornerShape(50)))
+                        }
+                        Row(Modifier.fillMaxWidth().padding(start = 20.dp, end = 8.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Text(title, Modifier.weight(1f), style = SkyTheme.typography.pageTitle.copy(brush = SkyTheme.headingGradient),
+                                fontSize = 22.sp, lineHeight = 28.sp)
+                            IconButton(onClick = { closing = true }, modifier = Modifier.semantics { contentDescription = "বন্ধ করুন" }) { Glyph("close", TextPrimary) }
+                        }
+                        HorizontalDivider(color = BorderColor)
+                        Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState())
+                            .padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
+                    }
                 }
-                content()
             }
         }
     }
@@ -423,7 +506,7 @@ internal fun Sheet(title: String, onDismiss: () -> Unit, light: Boolean = false,
 private fun NumberDialog(title: String, label: String, initial: String, minimum: Double, onDismiss: () -> Unit, onSave: (Double) -> Unit) {
     var text by remember { mutableStateOf(initial) }
     val value = text.toDoubleOrNull()?.takeIf { it.isFinite() && it in minimum..9999999.0 }
-    Sheet(title, onDismiss) { Field(label, text, { text = it }, true); Text("Reading must be at least ${minimum.toInt()} km.", color = TextSecondary, fontSize = 12.sp); Primary("Save reading", "check", enabled = value != null) { onSave(value!!) } }
+    Sheet(title, onDismiss) { Field(label, text, { text = it }, true); Text("ওডোমিটার কমপক্ষে ${minimum.toInt()} কিমি হতে হবে।", color = TextSecondary, fontSize = 12.sp); Primary("রিডিং সেভ করুন", "check", enabled = value != null) { onSave(value!!) } }
 }
 
 

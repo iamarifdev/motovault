@@ -160,8 +160,8 @@ actual fun DocumentImportActions(type: String, backOnly: Boolean, onResult: (Cap
     val images = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris -> if (uris.isNotEmpty()) import { operation -> require(!backOnly || uris.size == 1) { "Choose one back photo." }; processImages(uris, type, operation) } }
     val pdf = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri -> if (uri != null) import { operation -> processPdf(uri, type, operation) } }
     Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
-        DocumentSecondary(if (backOnly && isCardDocument(type)) "Import back photo" else if (backOnly) "Import page photo" else "Import photos", Modifier.weight(1f), enabled = !busy) { images.launch("image/*") }
-        if (!backOnly) DocumentSecondary("Import PDF", Modifier.weight(1f), enabled = !busy) { pdf.launch("application/pdf") }
+        DocumentSecondary(if (backOnly && isCardDocument(type)) "পেছনের ছবি যোগ করুন" else if (backOnly) "পৃষ্ঠার ছবি যোগ করুন" else "ছবি যোগ করুন", Modifier.weight(1f), enabled = !busy) { images.launch("image/*") }
+        if (!backOnly) DocumentSecondary("PDF যোগ করুন", Modifier.weight(1f), enabled = !busy) { pdf.launch("application/pdf") }
     }
     if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
 }

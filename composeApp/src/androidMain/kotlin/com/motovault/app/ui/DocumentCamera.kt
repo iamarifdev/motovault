@@ -106,5 +106,5 @@ actual fun DocumentCamera(modifier: Modifier, captureRequest: Int, onQuality: (C
         }
     }
     if (permitted) AndroidView(factory = { preview }, modifier = modifier)
-    else Box(modifier, contentAlignment = Alignment.Center) { Text(if (denied) "Camera access denied. Use an existing copy, or allow Camera in app settings." else "Allow camera access to scan your document.", color = androidx.compose.ui.graphics.Color.White) }
+    else Box(modifier, contentAlignment = Alignment.Center) { Text(if (denied) "ক্যামেরার অনুমতি নেই। আগে রাখা কপি ব্যবহার করুন অথবা সেটিংসে অনুমতি দিন।" else "কাগজ স্ক্যান করতে ক্যামেরার অনুমতি দিন।", color = androidx.compose.ui.graphics.Color.White) }
 }

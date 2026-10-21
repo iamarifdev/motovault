@@ -122,17 +122,17 @@ class RenewalAlarmReceiver : BroadcastReceiver() {
     }
     val active = remember(refresh) { enabled() && permitted() }
     Panel {
-        DocumentNote("Renewal reminders")
-        DocumentCopy("A warning 60 days before expiry and a reminder on the expiry day, around 9 am. New documents inside the warning window get one warning at the next 9 am.")
-        DocumentSecondary(if (active) "Turn reminders off" else "Enable reminders", onClick = {
+        DocumentNote("নবায়নের রিমাইন্ডার")
+        DocumentCopy("মেয়াদ শেষের ৬০ দিন আগে এবং মেয়াদ শেষের দিন সকাল ৯টার দিকে জানানো হবে। ৬০ দিনের কম মেয়াদ থাকা নতুন কাগজ যোগ করলে পরের সকাল ৯টায় একবার জানানো হবে।")
+        DocumentSecondary(if (active) "রিমাইন্ডার বন্ধ করুন" else "রিমাইন্ডার চালু করুন", onClick = {
             if (active) { preferences.edit().putBoolean("enabled", false).apply(); reconcile() }
             else if (Build.VERSION.SDK_INT >= 33 && context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
             else { preferences.edit().putBoolean("enabled", true).apply(); reconcile() }
         })
         if (!permitted()) {
-            DocumentNote("Notifications are off in device settings. In-app renewal warnings still work.")
-            DocumentLink("Open notification settings") { context.startActivity(Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName)) }
+            DocumentNote("ডিভাইসের সেটিংসে নোটিফিকেশন বন্ধ আছে। অ্যাপের ভেতরে নবায়নের সতর্কতা দেখা যাবে।")
+            DocumentLink("নোটিফিকেশন সেটিংস খুলুন") { context.startActivity(Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName)) }
         }
-        if (failed) DocumentNote("Could not update reminders. Your saved documents are safe. Try again.")
+        if (failed) DocumentNote("রিমাইন্ডার আপডেট করা যায়নি। কাগজপত্র সুরক্ষিত আছে। আবার চেষ্টা করুন।")
     }
 }

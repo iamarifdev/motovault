@@ -1,5 +1,6 @@
 rootProject.name = "MotoVault"
 include(":composeApp")
+include(":skyDesignSystem")
 
 pluginManagement {
     repositories {

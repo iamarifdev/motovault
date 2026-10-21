@@ -108,28 +108,28 @@ internal fun Setup(
             chosen?.let { ModelPhoto(it, Modifier.fillMaxWidth().height(160.dp)) }
             TextButton(onClick = { picker = true }) { Text("মডেল বদলান") }
             Field("ভ্যারিয়েন্ট / সংস্করণ (ঐচ্ছিক)", edition, { edition = it.take(60) })
-            Field("মডেল বছর · Model year", year, { year = it }, numeric = true)
+            Field("মডেল বছর", year, { year = it }, numeric = true)
             if (validYear == null) Text("বছর ১৯৮০ থেকে ২১০০-এর মধ্যে দিন।", color = WarningColor, fontSize = 12.sp)
-            Text("কোন বাজারের মডেল? · Original market", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Text("কোন বাজারের মডেল?", fontWeight = FontWeight.Bold, fontSize = 13.sp)
             RideMarket.entries.forEach { option ->
                 Row(Modifier.fillMaxWidth().clickable { market = option }, verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(market == option, onClick = { market = option }); Text(
                         when (option) {
-                            RideMarket.UNKNOWN -> "নিশ্চিত নই / অন্য বাজার · Not sure / other market"
-                            RideMarket.INDIA -> "ভারত · India"
-                            RideMarket.EUROPE -> "ইউরোপ / যুক্তরাজ্য · Europe / UK"
-                            RideMarket.BANGLADESH -> "বাংলাদেশ · Bangladesh"
+                            RideMarket.UNKNOWN -> "নিশ্চিত নই / অন্য বাজার"
+                            RideMarket.INDIA -> "ভারত"
+                            RideMarket.EUROPE -> "ইউরোপ / যুক্তরাজ্য"
+                            RideMarket.BANGLADESH -> "বাংলাদেশ"
                         }, fontSize = 12.sp
                     )
                 }
             }
-            Text("কাগজে থাকা নির্গমন মান · Emission standard", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Text("কাগজে থাকা নির্গমন মান", fontWeight = FontWeight.Bold, fontSize = 13.sp)
             Text("গাড়ির কাগজ দেখে লিখুন। মডেল বা বছর থেকে অ্যাপ এটি যাচাই করে না।", color = TextSecondary, fontSize = 12.sp)
             emissions.forEach { option ->
                 Row(Modifier.fillMaxWidth().clickable { emission = option }, verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(emission == option, onClick = { emission = option }); Text(
                         when (option) {
-                            RideEmission.UNKNOWN -> "নিশ্চিত নই · Not confirmed"
+                            RideEmission.UNKNOWN -> "নিশ্চিত নই"
                             RideEmission.BS4 -> "BS4"
                             RideEmission.BS6 -> "BS6"
                             RideEmission.EURO4 -> "Euro 4"
@@ -148,17 +148,17 @@ internal fun Setup(
                     Text("ম্যানুয়ালের নিয়মিত অয়েল সার্ভিসের সময়সূচি নিন", fontSize = 12.sp)
                 }
             } else Text("এই মডেলের ম্যানুয়াল নেই। সময়সূচি আপনি ঠিক করবেন।", color = TextSecondary, fontSize = 12.sp)
-            Field("বর্তমান ওডোমিটার · km", odometer, { odometer = it }, numeric = true)
+            Field("বর্তমান ওডোমিটার", odometer, { odometer = it }, numeric = true)
             Field("রেজিস্ট্রেশন (ঐচ্ছিক)", registration, { registration = it.take(80) })
-            Field("শেষ সার্ভিসে ওডোমিটার · km", baseline, { baseline = it }, numeric = true)
-            Field("শেষ সার্ভিসের তারিখ · YYYY-MM-DD", baselineDate, { baselineDate = it })
+            Field("শেষ সার্ভিসে ওডোমিটার", baseline, { baseline = it }, numeric = true)
+            Field("শেষ সার্ভিসের তারিখ", baselineDate, { baselineDate = it })
             if (base == null) Text("শেষ সার্ভিসের কিলোমিটার শূন্য থেকে বর্তমান ওডোমিটারের মধ্যে দিন।", color = WarningColor, fontSize = 12.sp)
             if (date == null) Text("আজকের তারিখের বেশি নয়, এমন সঠিক তারিখ দিন।", color = WarningColor, fontSize = 12.sp)
             Text(if (useManual && profile != null) "ম্যানুয়াল অনুযায়ী: প্রথম সার্ভিস ১,০০০ কিমিতে। এরপর অয়েল, ফিল্টার ও স্ক্রিন ৭,৫০০ কিমি বা ১২ মাস পরপর। সময়ের জন্য অ্যাপে ৩৬৫ দিনের রিমাইন্ডার। চেইনের সময়সূচি আপনি বদলাতে পারবেন। স্থানীয় ব্যবহার নিয়ে ডিলারের সঙ্গে মিলিয়ে নিন। এটি সম্পূর্ণ ওয়ার্কশপ চেকলিস্ট নয়।" else "শুরুর উদাহরণ: চেইন ৫০০ কিমি / ৩০ দিন, অয়েল ৩,০০০ কিমি / ১৮০ দিন, এয়ার ফিল্টার ৫,০০০ কিমি / ১৮০ দিন। এগুলো বদলানো যায়, কোম্পানির নিয়ম নয়। শেষ কবে সার্ভিস করেছেন লিখুন, পরে বাইক অনুযায়ী সময় ঠিক করুন।", color = TextSecondary, fontSize = 12.sp, lineHeight = 19.sp)
             Row(Modifier.fillMaxWidth().clickable { confirmed = !confirmed }, verticalAlignment = Alignment.CenterVertically) { Checkbox(confirmed, onCheckedChange = { confirmed = it }); Text("সময় ও শেষ সার্ভিসের তথ্য মিলিয়ে দেখেছি।", fontSize = 12.sp) }
             if (useManual && (base ?: 0.0) < 1000) Text("১,০০০ কিমির প্রথম সার্ভিসের পরের তথ্য দিয়ে এই সময়সূচি চালু করুন। আপাতত নিজের রিমাইন্ডার ব্যবহার করুন।", color = WarningColor, fontSize = 12.sp)
             Primary(if (existing == null) "গ্যারেজ তৈরি করুন" else "বাইক বদলানো পর্যালোচনা করুন", "arrow", enabled = confirmed && odo != null && base != null && date != null && validYear != null && modelName.isNotBlank() && (!useManual || base >= 1000)) {
-                onCreate(Ride(brand.id, edition.trim().ifBlank { "নিজের সেটআপ · Owner-defined" }, validYear!!, odo!!, modelId, modelName, registration.trim(), market, emission, modelCode.trim().uppercase(), profile?.id?.takeIf { useManual }), base!!, date!!)
+                onCreate(Ride(brand.id, edition.trim().ifBlank { "নিজের সেটআপ" }, validYear!!, odo!!, modelId, modelName, registration.trim(), market, emission, modelCode.trim().uppercase(), profile?.id?.takeIf { useManual }), base!!, date!!)
             }
             TextButton(onClick = { step = 1 }) { Text("ব্র্যান্ডে ফিরে যান") }
         }
@@ -171,7 +171,7 @@ internal fun Setup(
         var name by rememberSaveable { mutableStateOf(if (modelId == null) modelName else "") }
         Sheet("আপনার বাইকও এখানে যোগ করুন", onDismiss = { manual = false }) {
             Text("নিজের মতো মডেলের নাম লিখুন। নিজে যোগ করা মডেলের সঙ্গে রেফারেন্স ছবি থাকবে না।", color = TextSecondary, fontSize = 13.sp)
-            Field("বাইকের মডেল · Model name", name, { name = it.take(60) })
+            Field("বাইকের মডেল", name, { name = it.take(60) })
             Primary("তথ্য দিতে এগিয়ে যান", "arrow", enabled = name.isNotBlank()) { modelName = name.trim(); modelId = null; manual = false; step = 3 }
         }
     }
@@ -191,7 +191,7 @@ internal fun ModelPicker(brand: BrandWorld, selectedId: String?, onDismiss: () -
                 Row(verticalAlignment = Alignment.CenterVertically) { Image(painterResource(brand.logo()), brand.name, Modifier.width(58.dp).height(27.dp), colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)); Spacer(Modifier.width(12.dp)); Text("${brand.name} · ${BikeCatalogue.forBrand(brand.id).size}টি মডেল", color = TextSecondary, fontSize = 12.sp, modifier = Modifier.weight(1f)); IconButton(onClick = onDismiss, modifier = Modifier.semantics { contentDescription = "মডেল বাছাই বন্ধ করুন" }) { Glyph("close") } }
                     Eyebrow("০২ / মডেল বেছে নিন"); Heading("আপনার বাইকটি খুঁজুন")
                     Text("ছবি দেখে বাছুন, পরে সংস্করণ, বছর ও কিলোমিটার মিলিয়ে নিন।", color = TextSecondary, fontSize = 12.sp)
-                    Field("${brand.name} মডেল খুঁজুন · Search", query, { query = it })
+                    Field("${brand.name} মডেল খুঁজুন", query, { query = it })
                 }
                 if (models.isEmpty()) Column(Modifier.weight(1f).padding(22.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { Text("মডেল পাওয়া যায়নি", fontWeight = FontWeight.Bold); Text("ছোট নাম লিখে খুঁজুন, অথবা নিজে মডেল যোগ করুন।", color = TextSecondary) }
                 else BoxWithConstraints(Modifier.weight(1f)) {

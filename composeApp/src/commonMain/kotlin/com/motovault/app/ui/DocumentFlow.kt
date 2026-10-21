@@ -50,29 +50,26 @@ expect fun documentDialogProperties(): DialogProperties
     LaunchedEffect(title) { scroll.scrollTo(0) }
     Dialog(onDismissRequest = onDismiss, properties = documentDialogProperties()) {
         DocumentWindowAppearance(LocalVaultPalette.current.dark)
-        Column(Modifier.fillMaxSize().background(if (title == "Roadside inspection") Color.White else CanvasColor).safeDrawingPadding().imePadding()) {
+        Column(Modifier.fillMaxSize().background(if (title == "রাস্তায় কাগজ দেখান") Color.White else CanvasColor).safeDrawingPadding().imePadding()) {
             Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Box(Modifier.size(44.dp).clip(CircleShape).background(SurfaceColor).border(1.dp, BorderColor, CircleShape)
-                    .clickable(role = Role.Button, onClick = onBack).semantics { contentDescription = "ফিরে যান · Back" },
+                    .clickable(role = Role.Button, onClick = onBack).semantics { contentDescription = "ফিরে যান" },
                     contentAlignment = Alignment.Center) { Text("‹", fontSize = 24.sp) }
-                Text(title, modifier = Modifier.weight(1f), fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
-                DocumentBadge(if (title == "Roadside inspection") "Saved copy" else "On this device")
+                Text(documentDisplayName(title), modifier = Modifier.weight(1f), fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+                DocumentBadge(if (title == "রাস্তায় কাগজ দেখান") "সংরক্ষিত কপি" else "এই ডিভাইসে")
             }
             Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll).padding(horizontal = 20.dp).padding(bottom = 22.dp), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
-            Row(Modifier.fillMaxWidth().border(1.dp, BorderColor).padding(horizontal = 15.dp, vertical = 12.dp), horizontalArrangement = Arrangement.SpaceAround) {
-                listOf("Garage", "Vault", "History").forEach { name -> TextButton(onClick = onDismiss, enabled = name == "Vault") { Text(name, fontSize = 11.sp, color = if (name == "Vault") MaterialTheme.colorScheme.primary else TextSecondary) } }
-            }
         }
     }
 }
-@Composable internal fun DocumentHeading(text: String) { Text(text, fontSize = 28.sp, fontWeight = FontWeight.Bold, lineHeight = 31.sp, letterSpacing = (-1).sp) }
-@Composable internal fun DocumentCopy(text: String) { Text(text, color = TextSecondary, fontSize = 12.sp, lineHeight = 19.sp) }
-@Composable internal fun DocumentNote(text: String) { Text(text, color = TextSecondary, fontSize = 10.sp, lineHeight = 15.sp) }
-@Composable internal fun DocumentPrimary(text: String, enabled: Boolean = true, onClick: () -> Unit) { Button(onClick, enabled = enabled, shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), contentPadding = PaddingValues(14.dp)) { Text(text, fontWeight = FontWeight.Bold, fontSize = 13.sp) } }
-@Composable internal fun DocumentSecondary(text: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit) { OutlinedButton(onClick, enabled = enabled, shape = RoundedCornerShape(11.dp), modifier = modifier.heightIn(min = 44.dp), colors = ButtonDefaults.outlinedButtonColors(containerColor = SurfaceColor, contentColor = TextPrimary)) { Text(text, fontSize = 12.sp) } }
-@Composable internal fun DocumentLink(text: String, onClick: () -> Unit) { TextButton(onClick, contentPadding = PaddingValues(vertical = 8.dp)) { Text(text, fontWeight = FontWeight.SemiBold, fontSize = 12.sp) } }
-@Composable internal fun DocumentBadge(text: String, warning: Boolean = false, good: Boolean = false) { Text(text, fontSize = if (good || warning) 10.sp else 9.sp, color = if (warning) WarningColor else if (good) HealthyColor else TextSecondary, modifier = Modifier.clip(RoundedCornerShape(20.dp)).background(if (warning) WarningColor.copy(alpha = .12f) else LocalVaultPalette.current.raised).padding(horizontal = 8.dp, vertical = 5.dp)) }
-@Composable internal fun DocumentWarning(text: String) { Text(text, fontSize = 12.sp, lineHeight = 18.sp, color = WarningColor, modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(11.dp)).background(WarningColor.copy(alpha = .12f)).padding(12.dp)) }
+@Composable internal fun DocumentHeading(text: String) { Text(documentDisplayName(text), fontSize = 28.sp, fontWeight = FontWeight.Bold, lineHeight = 38.sp, letterSpacing = 0.sp) }
+@Composable internal fun DocumentCopy(text: String) { Text(documentDisplayName(text), color = TextSecondary, fontSize = 12.sp, lineHeight = 19.sp) }
+@Composable internal fun DocumentNote(text: String) { Text(documentDisplayName(text), color = TextSecondary, fontSize = 10.sp, lineHeight = 15.sp) }
+@Composable internal fun DocumentPrimary(text: String, enabled: Boolean = true, onClick: () -> Unit) { Button(onClick, enabled = enabled, shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), contentPadding = PaddingValues(14.dp)) { Text(documentDisplayName(text), fontWeight = FontWeight.Bold, fontSize = 13.sp) } }
+@Composable internal fun DocumentSecondary(text: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit) { OutlinedButton(onClick, enabled = enabled, shape = RoundedCornerShape(11.dp), modifier = modifier.heightIn(min = 44.dp), colors = ButtonDefaults.outlinedButtonColors(containerColor = SurfaceColor, contentColor = TextPrimary)) { Text(documentDisplayName(text), fontSize = 12.sp) } }
+@Composable internal fun DocumentLink(text: String, onClick: () -> Unit) { TextButton(onClick, contentPadding = PaddingValues(vertical = 8.dp)) { Text(documentDisplayName(text), fontWeight = FontWeight.SemiBold, fontSize = 12.sp) } }
+@Composable internal fun DocumentBadge(text: String, warning: Boolean = false, good: Boolean = false) { Text(documentDisplayName(text), fontSize = if (good || warning) 10.sp else 9.sp, color = if (warning) WarningColor else if (good) HealthyColor else TextSecondary, modifier = Modifier.clip(RoundedCornerShape(20.dp)).background(if (warning) WarningColor.copy(alpha = .12f) else LocalVaultPalette.current.raised).padding(horizontal = 8.dp, vertical = 5.dp)) }
+@Composable internal fun DocumentWarning(text: String) { Text(documentDisplayName(text), fontSize = 12.sp, lineHeight = 18.sp, color = WarningColor, modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(11.dp)).background(WarningColor.copy(alpha = .12f)).padding(12.dp)) }
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable internal fun DocumentImage(page: DocumentPage, modifier: Modifier = Modifier, accepted: Boolean = false) {
@@ -80,7 +77,7 @@ expect fun documentDialogProperties(): DialogProperties
     var failed by remember(id) { mutableStateOf(false) }
     val bitmap by produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, id) { val loaded = runCatching { readDocumentAsset(id).decodeToImageBitmap() }; value = loaded.getOrNull(); failed = loaded.isFailure }
     if (bitmap != null) Image(bitmap!!, "${page.side} stored document", modifier.fillMaxWidth(), contentScale = ContentScale.Fit)
-    else Box(modifier.fillMaxWidth().height(85.dp), contentAlignment = Alignment.Center) { DocumentNote(if (failed) "Preview unavailable. Open the original file." else "Loading document…") }
+    else Box(modifier.fillMaxWidth().height(85.dp), contentAlignment = Alignment.Center) { DocumentNote(if (failed) "প্রিভিউ দেখা যাচ্ছে না। আসল ফাইল খুলুন।" else "কাগজ খোলা হচ্ছে…") }
 }
 
 @Composable private fun DocumentThumbnails(type: String, pages: List<DocumentPage>, selected: Int, onSelect: (Int) -> Unit) {
@@ -88,8 +85,8 @@ expect fun documentDialogProperties(): DialogProperties
     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) { repeat(count) { index ->
         val page = pages.getOrNull(index)
         Column(Modifier.width(if (count <= 2) 164.dp else 110.dp).clip(RoundedCornerShape(9.dp)).background(SurfaceColor).border(1.dp, if (index == selected) MaterialTheme.colorScheme.primary else BorderColor, RoundedCornerShape(9.dp)).then(if (page != null) Modifier.clickable { onSelect(index) } else Modifier).padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            if (page != null) DocumentImage(page, Modifier.height(85.dp)) else Box(Modifier.height(85.dp), contentAlignment = Alignment.Center) { DocumentNote("Back not added") }
-            DocumentNote(page?.side ?: "Back")
+            if (page != null) DocumentImage(page, Modifier.height(85.dp)) else Box(Modifier.height(85.dp), contentAlignment = Alignment.Center) { DocumentNote("পেছনের ছবি যোগ করা হয়নি") }
+            DocumentNote(documentSideName(page?.side ?: "Back"))
         }
     } }
 }
@@ -98,7 +95,7 @@ expect fun documentDialogProperties(): DialogProperties
 @Composable private fun LegacyDocumentImage(value: String, modifier: Modifier = Modifier) {
     val bitmap = remember(value) { runCatching { Base64.decode(value).decodeToImageBitmap() }.getOrNull() }
     if (bitmap != null) Image(bitmap, "Stored original attachment", modifier.fillMaxWidth(), contentScale = ContentScale.Fit)
-    else DocumentWarning("This stored attachment could not be displayed.")
+    else DocumentWarning("সংরক্ষিত ফাইলটি দেখানো যায়নি।")
 }
 
 @Composable internal fun DocumentCaptureFlow(state: VaultState, existing: VaultDocument?, onDismiss: () -> Unit, onManual: (String) -> Unit, onSave: VaultSave) {
@@ -137,30 +134,30 @@ expect fun documentDialogProperties(): DialogProperties
             setDraft(next); removeDocumentAssets(captures.assetIds() - next.assetIds() - protected); done()
         } catch (cancelled: CancellationException) { throw cancelled } catch (failure: Exception) { error = failure.message } finally { busy = false } }
     }
-    val title = when (stage) { "choose" -> "Add a document"; "scanFront", "scanBack" -> "Scan document"; "crop" -> "Review capture"; else -> "Confirm details" }
+    val title = when (stage) { "choose" -> "কাগজ যোগ করুন"; "scanFront", "scanBack" -> "কাগজ স্ক্যান করুন"; "crop" -> "স্ক্যান দেখুন"; else -> "তথ্য নিশ্চিত করুন" }
     DocumentScreen(title, ::leave, onBack = { if (!busy) { when (stage) { "review" -> stage = "crop"; "crop" -> scan(false); "scanBack" -> scan(false); "scanFront" -> stage = "choose"; else -> leave() }; error = null } }) {
         when (stage) {
             "choose" -> {
-                Eyebrow("Start with your original"); DocumentHeading("What are we saving?"); DocumentCopy("Cards, paper certificates, or an existing digital copy.")
+                Eyebrow("আসল কাগজ দিয়ে শুরু করুন"); DocumentHeading("কোন কাগজ রাখবেন?"); DocumentCopy("কার্ড, কাগজের সনদ বা আগে রাখা ডিজিটাল কপি।")
                 Spacer(Modifier.height(4.dp))
                 var moreTypes by remember { mutableStateOf(false) }
                 (if (moreTypes) documentTypes else documentTypes.take(3)).forEach { kind -> Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(13.dp)).background(SurfaceColor).border(1.dp, BorderColor, RoundedCornerShape(13.dp)).clickable { type = kind; discard(); draftJson = null; reviewValues = null; scan(false) }.padding(16.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                    Text(kind, fontSize = 14.sp, fontWeight = FontWeight.SemiBold); DocumentNote(if (isCardDocument(kind)) "Physical card · Capture front and back" else "Paper or e-document · Keep the whole page")
+                    Text(documentDisplayName(kind), fontSize = 14.sp, fontWeight = FontWeight.SemiBold); DocumentNote(if (isCardDocument(kind)) "কার্ডের সামনে ও পেছনের ছবি তুলুন" else "কাগজ বা ডিজিটাল কপি। পুরো পৃষ্ঠা রাখুন")
                 } }
-                DocumentLink(if (moreTypes) "Show essential documents" else "Insurance and fitness certificate") { moreTypes = !moreTypes }
+                DocumentLink(if (moreTypes) "প্রয়োজনীয় কাগজগুলো দেখুন" else "বিমা ও ফিটনেস সনদ") { moreTypes = !moreTypes }
                 Panel {
-                    Text("Already have a copy?", fontSize = 16.sp, fontWeight = FontWeight.Bold); DocumentCopy("Import a photo or PDF, then check the details before saving.")
+                    Text("আগেই কপি রাখা আছে?", fontSize = 16.sp, fontWeight = FontWeight.Bold); DocumentCopy("ছবি বা PDF যোগ করুন। সেভ করার আগে তথ্য মিলিয়ে নিন।")
                     var expanded by remember { mutableStateOf(false) }
-                    Box { DocumentSecondary(type, Modifier.fillMaxWidth()) { expanded = true }; DropdownMenu(expanded, { expanded = false }) { documentTypes.forEach { kind -> DropdownMenuItem(text = { Text(kind) }, onClick = { type = kind; expanded = false }) } } }
+                    Box { DocumentSecondary(documentDisplayName(type), Modifier.fillMaxWidth()) { expanded = true }; DropdownMenu(expanded, { expanded = false }) { documentTypes.forEach { kind -> DropdownMenuItem(text = { Text(documentDisplayName(kind)) }, onClick = { type = kind; expanded = false }) } } }
                     DocumentImportActions(type, false, ::acceptImport, { error = it })
                 }
-                DocumentLink("Enter details manually") { discard(); onManual(type) }
+                DocumentLink("তথ্য নিজে লিখুন") { discard(); onManual(type) }
             }
             "scanFront", "scanBack" -> {
                 val back = stage == "scanBack"
-                Eyebrow(if (back) "02 / Back side" else "01 / ${if (isCardDocument(type)) "Front side" else "Whole page"}")
-                DocumentHeading(if (back) "Now the other side." else "Keep every edge in view.")
-                DocumentCopy(if (back) "Turn the card over. Keep the chip and barcode clear." else "Place the document on a flat surface, away from glare.")
+                Eyebrow(if (back) "০২ / পেছনের দিক" else "০১ / ${if (isCardDocument(type)) "সামনের দিক" else "পুরো পৃষ্ঠা"}")
+                DocumentHeading(if (back) "এবার পেছনের দিক।" else "কাগজের সব প্রান্ত ছবিতে রাখুন।")
+                DocumentCopy(if (back) "কার্ড উল্টে দিন। চিপ ও বারকোড পরিষ্কার রাখুন।" else "সমতল জায়গায় কাগজ রাখুন। আলোর ঝলক এড়িয়ে চলুন।")
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) { repeat(if (isCardDocument(type)) 2 else 1) { index -> Box(Modifier.weight(1f).height(3.dp).background(if (index == 0 || back) MaterialTheme.colorScheme.primary else BorderColor, RoundedCornerShape(4.dp))) } }
                 Box(Modifier.fillMaxWidth().layout { measurable, constraints ->
                     val width = constraints.maxWidth + 40.dp.roundToPx()
@@ -176,31 +173,31 @@ expect fun documentDialogProperties(): DialogProperties
                     CameraGuide(isCardDocument(type), quality)
                     Text(quality.guidance, fontSize = 11.sp, color = Color.White, modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 22.dp).clip(RoundedCornerShape(20.dp)).background(Color(0xEB14261C)).padding(horizontal = 12.dp, vertical = 8.dp))
                 }
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { DocumentNote("Align all edges"); Text(if (quality.glare) "! Glare detected" else if (quality.blurred) "Check focus" else "Original colour", fontSize = 10.sp, color = if (quality.glare || quality.blurred) WarningColor else TextSecondary) }
-                DocumentPrimary(if (busy) "Capturing…" else if (back) "Capture back  ◉" else "Capture ${if (isCardDocument(type)) "front" else "page"}  ◉", quality.canCapture && !busy) { busy = true; error = null; request++ }
-                if (back) DocumentLink("Save front only for now") { selected = 0; stage = "crop" }
-                DocumentLink("Use an existing copy") { importVisible = !importVisible }
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { DocumentNote("সব প্রান্ত মিলিয়ে নিন"); Text(if (quality.glare) "আলোর ঝলক পড়ছে" else if (quality.blurred) "ছবি পরিষ্কার আছে কি দেখুন" else "আসল রং", fontSize = 10.sp, color = if (quality.glare || quality.blurred) WarningColor else TextSecondary) }
+                DocumentPrimary(if (busy) "ছবি তোলা হচ্ছে…" else if (back) "পেছনের ছবি তুলুন  ◉" else "${if (isCardDocument(type)) "সামনের" else "পুরো পৃষ্ঠার"} ছবি তুলুন  ◉", quality.canCapture && !busy) { busy = true; error = null; request++ }
+                if (back) DocumentLink("আপাতত সামনের ছবিই রাখুন") { selected = 0; stage = "crop" }
+                DocumentLink("আগে রাখা কপি ব্যবহার করুন") { importVisible = !importVisible }
                 if (importVisible) DocumentImportActions(type, back || addingPage || retakeIndex != null, ::acceptImport, { error = it })
             }
             "crop" -> draft?.let { captures ->
-                Eyebrow("Before we read the details"); DocumentHeading("A clear copy matters."); DocumentCopy("Keep the complete document. Retake if any detail is blurred or covered.")
+                Eyebrow("তথ্য পড়ার আগে"); DocumentHeading("পরিষ্কার কপি রাখুন।"); DocumentCopy("পুরো কাগজ রাখুন। লেখা ঝাপসা বা ঢাকা পড়লে আবার ছবি তুলুন।")
                 val page = captures.pages[selected.coerceIn(captures.pages.indices)]
                 var editing by remember { mutableStateOf(false) }; var crop by remember(page.previewId) { mutableStateOf(DocumentCrop()) }
                 if (editing) CropEditor(page, crop) { crop = it } else DocumentImage(page, Modifier.heightIn(max = 410.dp).clip(RoundedCornerShape(if (isCardDocument(type)) 9.dp else 4.dp)))
-                DocumentNote("${page.side} · Original colour · Full document")
+                DocumentNote("${documentSideName(page.side)} · আসল রং · পুরো কাগজ")
                 DocumentThumbnails(type, captures.pages, selected) { selected = it; editing = false }
-                Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) { DocumentSecondary("Retake", Modifier.weight(1f), !busy) { scan(selected == 1 && isCardDocument(type), if (isCardDocument(type)) null else selected) }; DocumentSecondary("Rotate ↻", Modifier.weight(1f), !busy) { changePage(page, 1, DocumentCrop()) } }
-                DocumentSecondary(if (editing) "Apply crop" else "Adjust crop", Modifier.fillMaxWidth(), !busy) { if (!editing) editing = true else changePage(page, 0, crop) { editing = false } }
-                if (isCardDocument(type) && captures.pages.size == 1) DocumentLink("Add the back side") { scan(true) }
-                if (isCardDocument(type) && captures.pages.size == 2) DocumentLink("Swap front and back") { setDraft(captures.copy(pages = captures.pages.reversed().mapIndexed { index, item -> item.copy(side = if (index == 0) "Front" else "Back") }, recognizedText = "")); selected = 0 }
-                if (!isCardDocument(type) && captures.pages.size < documentPageLimit(type)) DocumentLink("Add another page") { scan(false, append = true) }
-                DocumentNote("Colour and detail stay intact. No filters change the document’s content. Raw capture is kept separately.")
-                DocumentPrimary(if (busy) "Reading details…" else "Use these captures →", !busy && !editing) {
+                Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) { DocumentSecondary("আবার তুলুন", Modifier.weight(1f), !busy) { scan(selected == 1 && isCardDocument(type), if (isCardDocument(type)) null else selected) }; DocumentSecondary("ঘোরান ↻", Modifier.weight(1f), !busy) { changePage(page, 1, DocumentCrop()) } }
+                DocumentSecondary(if (editing) "কাটা অংশ রাখুন" else "ছবির সীমানা ঠিক করুন", Modifier.fillMaxWidth(), !busy) { if (!editing) editing = true else changePage(page, 0, crop) { editing = false } }
+                if (isCardDocument(type) && captures.pages.size == 1) DocumentLink("পেছনের ছবি যোগ করুন") { scan(true) }
+                if (isCardDocument(type) && captures.pages.size == 2) DocumentLink("সামনে ও পেছনের ছবি বদলান") { setDraft(captures.copy(pages = captures.pages.reversed().mapIndexed { index, item -> item.copy(side = if (index == 0) "Front" else "Back") }, recognizedText = "")); selected = 0 }
+                if (!isCardDocument(type) && captures.pages.size < documentPageLimit(type)) DocumentLink("আরেকটি পৃষ্ঠা যোগ করুন") { scan(false, append = true) }
+                DocumentNote("রং ও লেখা অপরিবর্তিত থাকবে। আসল ছবিও আলাদা করে রাখা হবে।")
+                DocumentPrimary(if (busy) "তথ্য পড়া হচ্ছে…" else "এই ছবিগুলো ব্যবহার করুন →", !busy && !editing) {
                     busy = true; scope.launch { try {
                         val accepted = captures.copy(pages = captures.pages.map { page -> if (page.acceptedId == null) adjustDocumentPage(page, 0, DocumentCrop()) else page })
                         setDraft(accepted); removeDocumentAssets(captures.assetIds() - accepted.assetIds() - protected)
                         setDraft(recognizeDocument(accepted)); stage = "review"
-                    } catch (cancelled: CancellationException) { throw cancelled } catch (failure: Exception) { error = failure.message ?: "Could not prepare the accepted copy." } finally { busy = false } }
+                    } catch (cancelled: CancellationException) { throw cancelled } catch (failure: Exception) { error = failure.message ?: "নির্বাচিত কপি তৈরি করা যায়নি।" } finally { busy = false } }
                 }
             }
             "review" -> draft?.let { DocumentConfirmation(state, type, existing, it, onSave, onDismiss, selected, { index -> selected = index }, initialValues = reviewValues, onValues = { values -> reviewValues = values }) }
@@ -220,7 +217,7 @@ expect fun documentDialogProperties(): DialogProperties
 }
 
 @Composable private fun CropEditor(page: DocumentPage, crop: DocumentCrop, onCrop: (DocumentCrop) -> Unit) {
-    DocumentNote("Drag a corner to keep the complete document inside the frame.")
+    DocumentNote("কোণ টেনে পুরো কাগজ ফ্রেমের ভেতরে রাখুন।")
     val current by rememberUpdatedState(crop)
     Box(Modifier.fillMaxWidth().aspectRatio(page.width.toFloat() / page.height)) {
         DocumentImage(page, Modifier.fillMaxSize())
@@ -242,7 +239,7 @@ expect fun documentDialogProperties(): DialogProperties
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(label, fontSize = 11.sp, color = TextSecondary)
         BasicTextField(value, onChange, singleLine = true, textStyle = MaterialTheme.typography.bodyMedium.copy(color = TextPrimary, fontSize = 14.sp), cursorBrush = SolidColor(MaterialTheme.colorScheme.primary), modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(SurfaceColor).border(if (attention) 2.dp else 1.dp, if (attention) WarningColor else LocalVaultPalette.current.outline, RoundedCornerShape(10.dp)).padding(horizontal = 12.dp, vertical = 12.dp))
-        if (attention) Text("Check this against your original document.", color = WarningColor, fontSize = 10.sp)
+        if (attention) Text("আসল কাগজের সঙ্গে মিলিয়ে নিন।", color = WarningColor, fontSize = 10.sp)
     }
 }
 
@@ -254,37 +251,37 @@ expect fun documentDialogProperties(): DialogProperties
     val values = Json.decodeFromString<Map<String, String>>(valuesJson)
     var confirmed by rememberSaveable { mutableStateOf(false) }; var expanded by rememberSaveable { mutableStateOf(false) }; var viewedExtras by rememberSaveable { mutableStateOf(false) }; var error by remember { mutableStateOf<String?>(null) }
     fun update(key: String, value: String) { valuesJson = Json.encodeToString(kotlinx.serialization.serializer<Map<String, String>>(), values + (key to value.take(if (key in listOf("holder", "number")) 80 else 160))); confirmed = false }
-    Eyebrow("You make the final check"); DocumentHeading("Does everything match?"); DocumentCopy("Check the details against your original. You can change anything we could not read clearly.")
+    Eyebrow("শেষবার নিজে মিলিয়ে নিন"); DocumentHeading("সব তথ্য মিলেছে?"); DocumentCopy("আসল কাগজ দেখে তথ্য মিলিয়ে নিন। ভুল পড়া তথ্য বদলে দিন।")
     if (draft.pages.isNotEmpty()) DocumentThumbnails(type, draft.pages, selected, onSelect)
-    DocumentWarning(if (draft.readingFailed) "Some text could not be read. Enter it manually and check every detail. Your original scan is kept either way." else if (type == "Registration smart card") "The document number needs your confirmation. Your original scan is kept either way." else "Please confirm the expiry date. Your original scan is kept either way.")
-    if ((existing != null || hadValues) && suggestions.isNotEmpty()) DocumentLink("Use suggestions from this scan") { valuesJson = Json.encodeToString(kotlinx.serialization.serializer<Map<String, String>>(), values + suggestions); confirmed = false }
-    DocumentField("Document number", values["number"].orEmpty(), { update("number", it) }, type == "Registration smart card" || values["number"].isNullOrBlank())
-    DocumentField("Holder name", values["holder"].orEmpty(), { update("holder", it) }, values["holder"].isNullOrBlank())
-    DocumentField("Issue date (YYYY-MM-DD)", values["issued"].orEmpty(), { update("issued", it) }, values["issued"].isNullOrBlank() && draft.recognizedText.contains("Issue", ignoreCase = true))
-    if (type == "Registration smart card") DocumentField("Registration number", values["registration"].orEmpty(), { update("registration", it) }, values["registration"].isNullOrBlank()) else DocumentField("Expiry date (YYYY-MM-DD)", values["expiry"].orEmpty(), { update("expiry", it) }, true)
-    DocumentLink(if (expanded) "Hide additional details" else "Additional document details") { expanded = !expanded; if (expanded) { viewedExtras = true; confirmed = false } }
+    DocumentWarning(if (draft.readingFailed) "কিছু লেখা পড়া যায়নি। নিজে লিখে সব তথ্য মিলিয়ে নিন। আসল স্ক্যান রাখা আছে।" else if (type == "Registration smart card") "কাগজের নম্বর মিলিয়ে নিশ্চিত করুন। আসল স্ক্যান রাখা আছে।" else "মেয়াদ শেষের তারিখ নিশ্চিত করুন। আসল স্ক্যান রাখা আছে।")
+    if ((existing != null || hadValues) && suggestions.isNotEmpty()) DocumentLink("স্ক্যান থেকে পাওয়া তথ্য ব্যবহার করুন") { valuesJson = Json.encodeToString(kotlinx.serialization.serializer<Map<String, String>>(), values + suggestions); confirmed = false }
+    DocumentField("কাগজের নম্বর", values["number"].orEmpty(), { update("number", it) }, type == "Registration smart card" || values["number"].isNullOrBlank())
+    DocumentField("মালিকের নাম", values["holder"].orEmpty(), { update("holder", it) }, values["holder"].isNullOrBlank())
+    DocumentField("ইস্যুর তারিখ (YYYY-MM-DD)", values["issued"].orEmpty(), { update("issued", it) }, values["issued"].isNullOrBlank() && draft.recognizedText.contains("Issue", ignoreCase = true))
+    if (type == "Registration smart card") DocumentField("রেজিস্ট্রেশন নম্বর", values["registration"].orEmpty(), { update("registration", it) }, values["registration"].isNullOrBlank()) else DocumentField("মেয়াদ শেষের তারিখ (YYYY-MM-DD)", values["expiry"].orEmpty(), { update("expiry", it) }, true)
+    DocumentLink(if (expanded) "বাড়তি তথ্য লুকান" else "কাগজের বাড়তি তথ্য") { expanded = !expanded; if (expanded) { viewedExtras = true; confirmed = false } }
     if (expanded) {
-        if (type == "Registration smart card") DocumentField("Expiry date (optional, YYYY-MM-DD)", values["expiry"].orEmpty(), { update("expiry", it) })
-        val extra = if (type == "Driving licence") listOf("bloodGroup" to "Blood group", "vehicleClass" to "Authorised vehicle classes", "birthDate" to "Date of birth") else (if (type == "Registration smart card") emptyList() else listOf("registration" to "Vehicle registration")) + listOf("chassis" to "Chassis number", "engine" to "Engine number")
-        extra.forEach { (key, label) -> DocumentField("$label (optional)", values[key].orEmpty(), { update(key, it) }) }
-        DocumentNote("English text is suggested on this device. Enter Bangla fields manually.")
+        if (type == "Registration smart card") DocumentField("মেয়াদ শেষের তারিখ (ঐচ্ছিক, YYYY-MM-DD)", values["expiry"].orEmpty(), { update("expiry", it) })
+        val extra = if (type == "Driving licence") listOf("bloodGroup" to "রক্তের গ্রুপ", "vehicleClass" to "অনুমোদিত গাড়ির ধরন", "birthDate" to "জন্মতারিখ") else (if (type == "Registration smart card") emptyList() else listOf("registration" to "গাড়ির রেজিস্ট্রেশন")) + listOf("chassis" to "চেসিস নম্বর", "engine" to "ইঞ্জিন নম্বর")
+        extra.forEach { (key, label) -> DocumentField("$label (ঐচ্ছিক)", values[key].orEmpty(), { update(key, it) }) }
+        DocumentNote("এই ডিভাইসে ইংরেজি লেখা পড়া যায়। বাংলা তথ্য নিজে লিখুন।")
     }
-    Row(Modifier.fillMaxWidth().toggleable(confirmed, role = Role.Checkbox, onValueChange = { confirmed = it }), verticalAlignment = Alignment.CenterVertically) { Checkbox(confirmed, null); Text("I checked these details against my document.", fontSize = 12.sp, lineHeight = 18.sp) }
+    Row(Modifier.fillMaxWidth().toggleable(confirmed, role = Role.Checkbox, onValueChange = { confirmed = it }), verticalAlignment = Alignment.CenterVertically) { Checkbox(confirmed, null); Spacer(Modifier.width(8.dp)); Text("আসল কাগজ দেখে তথ্য মিলিয়ে নিয়েছি।", modifier = Modifier.weight(1f), fontSize = 12.sp, lineHeight = 18.sp) }
     error?.let { DocumentWarning(it) }
-    DocumentPrimary("Save to my vault →", confirmed && !values["number"].isNullOrBlank() && !values["holder"].isNullOrBlank()) {
+    DocumentPrimary("কাগজপত্রে সেভ করুন →", confirmed && !values["number"].isNullOrBlank() && !values["holder"].isNullOrBlank()) {
         val document = (existing ?: VaultDocument(type, "", "", "")).copy(title = type, number = values["number"].orEmpty().trim(), holder = values["holder"].orEmpty().trim(), issued = values["issued"].orEmpty().trim(), expiry = if (type != "Registration smart card" || viewedExtras) values["expiry"].orEmpty().trim() else existing?.expiry.orEmpty(), pages = draft.pages, originalPdf = draft.originalPdf, pdfPageCount = draft.pdfPageCount, details = reviewedDocumentDetails(type, values, existing?.details.orEmpty(), viewedExtras), detailsConfirmed = true, extractionCandidates = if (captureChanged) suggestions else existing?.extractionCandidates.orEmpty(), capturedAt = if (captureChanged) Clock.System.now().toString() else existing?.capturedAt.orEmpty())
-        runCatching { state.saveDocument(document) }.onSuccess { next -> onSave(next) { if (it) onDismiss() else error = "Could not save on this device." } }.onFailure { error = it.message ?: "Enter dates as YYYY-MM-DD." }
+        runCatching { state.saveDocument(document) }.onSuccess { next -> onSave(next) { if (it) onDismiss() else error = "এই ডিভাইসে সেভ করা যায়নি।" } }.onFailure { error = it.message ?: "তারিখ YYYY-MM-DD আকারে লিখুন।" }
     }
 }
 
 @Composable internal fun DocumentEditFlow(state: VaultState, existing: VaultDocument?, initialType: String, onDismiss: () -> Unit, onSave: VaultSave) {
     var type by rememberSaveable { mutableStateOf(existing?.title ?: initialType) }
     var selected by rememberSaveable { mutableStateOf(0) }
-    DocumentScreen("Confirm details", onDismiss) {
+    DocumentScreen("তথ্য নিশ্চিত করুন", onDismiss) {
         if (existing == null) {
             var menu by remember { mutableStateOf(false) }
-            Box { DocumentSecondary(type, Modifier.fillMaxWidth()) { menu = true }; DropdownMenu(menu, { menu = false }) { documentTypes.forEach { kind -> DropdownMenuItem(text = { Text(kind) }, onClick = { type = kind; menu = false }) } } }
-            DocumentNote("Details only. You can add an original scan later.")
+            Box { DocumentSecondary(type, Modifier.fillMaxWidth()) { menu = true }; DropdownMenu(menu, { menu = false }) { documentTypes.forEach { kind -> DropdownMenuItem(text = { Text(documentDisplayName(kind)) }, onClick = { type = kind; menu = false }) } } }
+            DocumentNote("শুধু তথ্য রাখা হবে। পরে আসল স্ক্যান যোগ করতে পারবেন।")
         }
         key(type) { DocumentConfirmation(state, type, existing, CapturedDocument(existing?.pages.orEmpty(), existing?.originalPdf, existing?.pdfPageCount ?: 0), onSave, onDismiss, selected, { selected = it }, captureChanged = false) }
     }
@@ -293,17 +290,17 @@ expect fun documentDialogProperties(): DialogProperties
 @Composable internal fun OriginalDocumentDetail(document: VaultDocument, inspection: Boolean, onDismiss: () -> Unit, onEdit: () -> Unit, onScan: () -> Unit, onDelete: () -> Unit, onInspectionList: () -> Unit, onInspect: () -> Unit = onInspectionList, onRecordFee: () -> Unit = {}) {
     var selected by rememberSaveable { mutableStateOf(if (document.pages.isEmpty() && document.frontPhoto == null && document.backPhoto != null) 1 else 0) }; var zoom by remember { mutableStateOf(false) }
     val legacyPhoto = if (selected == 0) document.frontPhoto else document.backPhoto
-    DocumentScreen(if (inspection) "Roadside inspection" else document.title, onDismiss) {
+    DocumentScreen(if (inspection) "রাস্তায় কাগজ দেখান" else document.title, onDismiss) {
         if (inspection) InspectionBrightness()
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { Eyebrow(if (inspection) "Stored document copy" else "Your original document"); DocumentBadge(document.expiryLabel, warning = (document.daysRemaining ?: Int.MAX_VALUE) <= RENEWAL_WARNING_DAYS, good = (document.daysRemaining ?: 0) > RENEWAL_WARNING_DAYS) }
-        DocumentHeading(document.title); DocumentCopy(if (inspection) "Only this document is shown." else "Open the saved image exactly as it was captured.")
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { Eyebrow(if (inspection) "সংরক্ষিত কাগজের কপি" else "আপনার আসল কাগজ"); DocumentBadge(document.expiryLabel, warning = (document.daysRemaining ?: Int.MAX_VALUE) <= RENEWAL_WARNING_DAYS, good = (document.daysRemaining ?: 0) > RENEWAL_WARNING_DAYS) }
+        DocumentHeading(document.title); DocumentCopy(if (inspection) "শুধু এই কাগজটি দেখানো হচ্ছে।" else "তোলা অবস্থায় সংরক্ষিত ছবিটি খুলুন।")
         if (document.pages.isNotEmpty()) {
-            Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).clip(RoundedCornerShape(11.dp)).border(1.dp, BorderColor, RoundedCornerShape(11.dp)).padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) { val count = if (isCardDocument(document.title)) 2 else document.pages.size; repeat(count) { index -> val page = document.pages.getOrNull(index); TextButton(onClick = { selected = index }, enabled = page != null, shape = RoundedCornerShape(7.dp), colors = ButtonDefaults.textButtonColors(containerColor = if (selected == index) MaterialTheme.colorScheme.primary else Color.Transparent, contentColor = if (selected == index) MaterialTheme.colorScheme.onPrimary else TextSecondary), modifier = if (count <= 2) Modifier.weight(1f) else Modifier) { Text(page?.side ?: "Back not added", fontSize = 12.sp) } } }
+            Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).clip(RoundedCornerShape(11.dp)).border(1.dp, BorderColor, RoundedCornerShape(11.dp)).padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) { val count = if (isCardDocument(document.title)) 2 else document.pages.size; repeat(count) { index -> val page = document.pages.getOrNull(index); TextButton(onClick = { selected = index }, enabled = page != null, shape = RoundedCornerShape(7.dp), colors = ButtonDefaults.textButtonColors(containerColor = if (selected == index) MaterialTheme.colorScheme.primary else Color.Transparent, contentColor = if (selected == index) MaterialTheme.colorScheme.onPrimary else TextSecondary), modifier = if (count <= 2) Modifier.weight(1f) else Modifier) { Text(page?.side?.let(::documentSideName) ?: "পেছনের ছবি যোগ করা হয়নি", fontSize = 12.sp) } } }
             val page = document.pages[selected.coerceIn(document.pages.indices)]
             DocumentImage(page, Modifier.clip(RoundedCornerShape(if (isCardDocument(document.title)) 9.dp else 4.dp)))
-            DocumentNote("Original ${page.side.lowercase()} copy · Printed colour preserved")
-            if (inspection) DocumentPrimary("Open full size ⤢") { zoom = true } else DocumentSecondary("Open full size ⤢", Modifier.fillMaxWidth()) { zoom = true }
-            if (!inspection) { OpenOriginalAssetButton(page.acceptedId ?: page.originalId, if (page.acceptedId != null) "image/jpeg" else page.mimeType, "Open accepted copy"); if (page.acceptedId != null) OpenOriginalAssetButton(page.originalId, page.mimeType, "Open raw capture"); document.originalPdf?.let { OpenOriginalAssetButton(it, "application/pdf", "Open original PDF (${document.pdfPageCount} pages)") } }
+            DocumentNote("${documentSideName(page.side)} · আসল রং অপরিবর্তিত")
+            if (inspection) DocumentPrimary("পুরো আকারে খুলুন ⤢") { zoom = true } else DocumentSecondary("পুরো আকারে খুলুন ⤢", Modifier.fillMaxWidth()) { zoom = true }
+            if (!inspection) { OpenOriginalAssetButton(page.acceptedId ?: page.originalId, if (page.acceptedId != null) "image/jpeg" else page.mimeType, "নির্বাচিত কপি খুলুন"); if (page.acceptedId != null) OpenOriginalAssetButton(page.originalId, page.mimeType, "আসল ছবি খুলুন"); document.originalPdf?.let { OpenOriginalAssetButton(it, "application/pdf", "আসল PDF খুলুন (${document.pdfPageCount} পৃষ্ঠা)") } }
         } else if (document.frontPhoto != null || document.backPhoto != null) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf("Front" to document.frontPhoto, "Back" to document.backPhoto).forEachIndexed { index, (label, photo) ->
@@ -311,16 +308,16 @@ expect fun documentDialogProperties(): DialogProperties
                 }
             }
             legacyPhoto?.let { LegacyDocumentImage(it) }
-            DocumentNote("Original ${if (selected == 0) "front" else "back"} copy · Printed colour preserved")
-            DocumentSecondary("Open full size ⤢", Modifier.fillMaxWidth()) { zoom = true }
-        } else Panel { DocumentCopy("Details only. Add your original scan.") }
+            DocumentNote("${if (selected == 0) "সামনের" else "পেছনের"} কপি · আসল রং অপরিবর্তিত")
+            DocumentSecondary("পুরো আকারে খুলুন ⤢", Modifier.fillMaxWidth()) { zoom = true }
+        } else Panel { DocumentCopy("শুধু তথ্য আছে। আসল স্ক্যান যোগ করুন।") }
         if (!inspection) {
-            val fields = listOf("Document number" to document.number, "Holder" to document.holder, "Issue date" to document.issued.ifBlank { "Not stated" }, "Expiry" to document.expiry.ifBlank { "Not stated" }) + document.details.map { (key, value) -> (when (key) { "registration" -> "Registration"; "chassis" -> "Chassis number"; "engine" -> "Engine number"; "bloodGroup" -> "Blood group"; "vehicleClass" -> "Vehicle classes"; "birthDate" -> "Date of birth"; else -> key }) to value }
+            val fields = listOf("কাগজের নম্বর" to document.number, "মালিক" to document.holder, "ইস্যুর তারিখ" to document.issued.ifBlank { "দেওয়া নেই" }, "মেয়াদ শেষ" to document.expiry.ifBlank { "দেওয়া নেই" }) + document.details.map { (key, value) -> (when (key) { "registration" -> "রেজিস্ট্রেশন"; "chassis" -> "চেসিস নম্বর"; "engine" -> "ইঞ্জিন নম্বর"; "bloodGroup" -> "রক্তের গ্রুপ"; "vehicleClass" -> "গাড়ির ধরন"; "birthDate" -> "জন্মতারিখ"; else -> key }) to value }
             fields.chunked(2).forEach { row -> Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) { row.forEach { (label, value) -> Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) { DocumentNote(label); Text(value, fontSize = 13.sp, fontWeight = FontWeight.SemiBold) } }; if (row.size == 1) Spacer(Modifier.weight(1f)) } }
-            DocumentSecondary("নবায়ন ফি যোগ করুন · Record renewal fee", Modifier.fillMaxWidth(), onClick = onRecordFee)
-            Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) { DocumentSecondary("Edit details", Modifier.weight(1f), onClick = onEdit); DocumentSecondary("Replace scan", Modifier.weight(1f), onClick = onScan) }
-            DocumentLink("Open inspection view ↗", onInspect); DocumentLink("Delete document", onDelete)
-        } else { DocumentNote("Saved copy · Carry originals where required."); DocumentSecondary("All documents", Modifier.fillMaxWidth(), onClick = onInspectionList); DocumentSecondary("Exit inspection", Modifier.fillMaxWidth(), onClick = onDismiss) }
+            DocumentSecondary("নবায়ন ফি যোগ করুন", Modifier.fillMaxWidth(), onClick = onRecordFee)
+            Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) { DocumentSecondary("তথ্য বদলান", Modifier.weight(1f), onClick = onEdit); DocumentSecondary("স্ক্যান বদলান", Modifier.weight(1f), onClick = onScan) }
+            DocumentLink("কাগজ দেখানোর মোড খুলুন ↗", onInspect); DocumentLink("কাগজ মুছুন", onDelete)
+        } else { DocumentNote("সংরক্ষিত কপি। যেখানে প্রয়োজন আসল কাগজ সঙ্গে রাখুন।"); DocumentSecondary("সব কাগজ", Modifier.fillMaxWidth(), onClick = onInspectionList); DocumentSecondary("ফিরে যান", Modifier.fillMaxWidth(), onClick = onDismiss) }
     }
     if (zoom && document.pages.isNotEmpty()) DocumentZoom(document.pages[selected.coerceIn(document.pages.indices)], inspection = inspection) { zoom = false }
     else if (zoom && legacyPhoto != null) DocumentZoom(null, legacyPhoto, inspection = inspection) { zoom = false }
@@ -333,12 +330,12 @@ expect fun documentDialogProperties(): DialogProperties
         var scale by remember { mutableStateOf(1f) }; var offset by remember { mutableStateOf(Offset.Zero) }
         val transform = rememberTransformableState { factor, pan, _ -> scale = (scale * factor).coerceIn(1f, 5f); offset = if (scale == 1f) Offset.Zero else offset + pan }
         Column(Modifier.fillMaxSize().background(Color(0xFF0E151D)).safeDrawingPadding().padding(20.dp)) {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) { Text("Saved original", color = Color.White, fontSize = 13.sp, modifier = Modifier.weight(1f)); TextButton(onClick = { scale = if (scale >= 2f) 1f else scale + .5f; offset = Offset.Zero }) { Text("Zoom +", color = Color.White) }; TextButton(onClick = onDismiss) { Text("Done", color = Color.White) } }
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) { Text("সংরক্ষিত আসল কপি", color = Color.White, fontSize = 13.sp, modifier = Modifier.weight(1f)); TextButton(onClick = { scale = if (scale >= 2f) 1f else scale + .5f; offset = Offset.Zero }) { Text("বড় করুন +", color = Color.White) }; TextButton(onClick = onDismiss) { Text("হয়েছে", color = Color.White) } }
             Box(Modifier.weight(1f).fillMaxWidth().clip(RoundedCornerShape(4.dp)).transformable(transform), contentAlignment = Alignment.Center) {
                 val imageModifier = Modifier.graphicsLayer(scaleX = scale, scaleY = scale, translationX = offset.x, translationY = offset.y)
                 if (page != null) DocumentImage(page, imageModifier, accepted = true) else legacy?.let { LegacyDocumentImage(it, imageModifier) }
             }
-            Text("Pinch to zoom · Drag to move", color = Color(0xFFD4D9DF), fontSize = 11.sp)
+            Text("দুই আঙুলে বড় করুন। টেনে সরান", color = Color(0xFFD4D9DF), fontSize = 11.sp)
         }
     }
 }

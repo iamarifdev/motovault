@@ -20,9 +20,9 @@ fun PassportExportButton(state: VaultState) {
     var open by remember { mutableStateOf(false) }
     var verify by remember { mutableStateOf(false) }
     val exportBlock = passportV1BlockReason(state)
-    OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth(), enabled = state.ride != null && exportBlock == null) { Text("সার্ভিস পাসপোর্ট · Service passport") }
+    OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth(), enabled = state.ride != null && exportBlock == null) { Text("সার্ভিস পাসপোর্ট") }
     exportBlock?.let { Text(it, color = TextSecondary, fontSize = 11.sp) }
-    TextButton(onClick = { verify = true }) { Text("পাসপোর্ট যাচাই · Verify passport") }
+    TextButton(onClick = { verify = true }) { Text("পাসপোর্ট যাচাই") }
     Text("রেকর্ডগুলো বাইক-মালিকের দেওয়া। যাচাই শুধু তথ্য ঠিক আছে কি না দেখে, সার্ভিসের সত্যতা নিশ্চিত করে না।", color = TextSecondary, fontSize = 11.sp)
     if (open) PassportReview(state) { open = false }
     if (verify) PassportVerifier { verify = false }
@@ -40,20 +40,20 @@ private fun PassportReview(state: VaultState, dismiss: () -> Unit) {
     val scope = rememberCoroutineScope()
     val latestState by rememberUpdatedState(state)
     fun edit(value: PassportIdentity) { identity = value; confirmed = false; exported = null }
-    Sheet("Review your service passport.", dismiss) {
-        Eyebrow("Owner confirmation")
-        Text("${state.logs.count { !it.isFuel && !it.isDocumentFee }} সার্ভিস, পুরোনো থেকে নতুন। নিশ্চিত করার আগে ইতিহাস দেখে নিন। জ্বালানি, নথির খরচ ও আসল ফাইল বাদ থাকবে · Services, oldest first. Fuel, document fees and originals are excluded.", color = TextSecondary, fontSize = 13.sp)
-        Text("Confirmed registration details supply editable defaults only. Check they belong to this motorcycle.", color = TextSecondary, fontSize = 12.sp)
-        PassportField("Owner name", identity.owner, !busy) { edit(identity.copy(owner = it.take(160))) }
-        PassportField("Vehicle brand", identity.brand, !busy) { edit(identity.copy(brand = it.take(100))) }
-        PassportField("Vehicle model", identity.model, !busy) { edit(identity.copy(model = it.take(160))) }
-        PassportField("Edition", identity.edition, !busy) { edit(identity.copy(edition = it.take(160))) }
-        PassportField("Registration (optional)", identity.registration, !busy) { edit(identity.copy(registration = it.take(160))) }
-        PassportField("Chassis (optional)", identity.chassis, !busy) { edit(identity.copy(chassis = it.take(160))) }
-        PassportField("Engine (optional)", identity.engine, !busy) { edit(identity.copy(engine = it.take(160))) }
-        Text("Year: ${identity.year} / Current mileage: ${passportNumberValue(identity.odometerKmBits)} km", color = TextSecondary, fontSize = 12.sp)
-        Row { Checkbox(confirmed, { confirmed = it }, enabled = !busy); Text("I reviewed this identity and saved service history. These are owner-entered records, not independently certified.", fontSize = 12.sp, modifier = Modifier.weight(1f)) }
-        Primary(if (busy) "Preparing passport..." else "Confirm and export", "check", enabled = confirmed && !busy && identity.owner.isNotBlank()) {
+    Sheet("সার্ভিস পাসপোর্ট মিলিয়ে নিন।", dismiss) {
+        Eyebrow("মালিকের নিশ্চয়তা")
+        Text("${state.logs.count { !it.isFuel && !it.isDocumentFee }} সার্ভিস, পুরোনো থেকে নতুন। নিশ্চিত করার আগে ইতিহাস দেখে নিন। জ্বালানি, নথির খরচ ও আসল ফাইল বাদ থাকবে।", color = TextSecondary, fontSize = 13.sp)
+        Text("নিশ্চিত করা রেজিস্ট্রেশনের তথ্য এখানে বসানো হয়েছে। এগুলো এই বাইকের কি না মিলিয়ে নিন। প্রয়োজনে বদলান।", color = TextSecondary, fontSize = 12.sp)
+        PassportField("মালিকের নাম", identity.owner, !busy) { edit(identity.copy(owner = it.take(160))) }
+        PassportField("বাইকের ব্র্যান্ড", identity.brand, !busy) { edit(identity.copy(brand = it.take(100))) }
+        PassportField("বাইকের মডেল", identity.model, !busy) { edit(identity.copy(model = it.take(160))) }
+        PassportField("সংস্করণ", identity.edition, !busy) { edit(identity.copy(edition = it.take(160))) }
+        PassportField("রেজিস্ট্রেশন (ঐচ্ছিক)", identity.registration, !busy) { edit(identity.copy(registration = it.take(160))) }
+        PassportField("চেসিস (ঐচ্ছিক)", identity.chassis, !busy) { edit(identity.copy(chassis = it.take(160))) }
+        PassportField("ইঞ্জিন (ঐচ্ছিক)", identity.engine, !busy) { edit(identity.copy(engine = it.take(160))) }
+        Text("বছর: ${identity.year} / বর্তমান ওডোমিটার: ${passportNumberValue(identity.odometerKmBits)} কিমি", color = TextSecondary, fontSize = 12.sp)
+        Row { Checkbox(confirmed, { confirmed = it }, enabled = !busy); Text("পরিচয় ও সংরক্ষিত সার্ভিসের ইতিহাস মিলিয়ে নিয়েছি। এই তথ্য মালিকের দেওয়া; আলাদাভাবে প্রত্যয়ন করা হয়নি।", fontSize = 12.sp, modifier = Modifier.weight(1f)) }
+        Primary(if (busy) "পাসপোর্ট তৈরি হচ্ছে…" else "নিশ্চিত করে এক্সপোর্ট করুন", "check", enabled = confirmed && !busy && identity.owner.isNotBlank()) {
             busy = true; error = null
             val snapshot = state
             val reviewed = identity
@@ -63,14 +63,14 @@ private fun PassportReview(state: VaultState, dismiss: () -> Unit) {
                     val bundle = ExportServicePassportUseCase().execute(snapshot, reviewed, approved)
                     val result = renderServicePassport(bundle)
                     if (latestState == snapshot) { exported = result; digest = bundle.sha256 }
-                    else { discardPassportExport(result); error = "Your saved records changed while exporting. Review and confirm again." }
+                    else { discardPassportExport(result); error = "এক্সপোর্টের সময় রেকর্ড বদলেছে। আবার দেখে নিশ্চিত করুন।" }
                 } catch (cancelled: CancellationException) { throw cancelled }
-                catch (failure: Exception) { error = failure.message ?: "Could not export this passport." }
+                catch (failure: Exception) { error = failure.message ?: "পাসপোর্ট এক্সপোর্ট করা যায়নি।" }
                 finally { busy = false }
             }
         }
         if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
-        exported?.let { Text("Created PDF and verification JSON. SHA-256: $digest", fontSize = 11.sp); PassportNativeActions(it) { message -> error = message } }
+        exported?.let { Text("PDF ও যাচাইয়ের JSON তৈরি হয়েছে। SHA-256: $digest", fontSize = 11.sp); PassportNativeActions(it) { message -> error = message } }
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
     }
 }
@@ -86,16 +86,16 @@ private fun PassportVerifier(dismiss: () -> Unit) {
     var json by remember { mutableStateOf<String?>(null) }
     var expected by remember { mutableStateOf("") }
     var message by remember { mutableStateOf<String?>(null) }
-    Sheet("Verify passport data.", dismiss) {
-        Text("Import the paired JSON. This checks covered data, not the PDF pixels or whether a service happened.", color = TextSecondary, fontSize = 13.sp)
-        PassportVerificationImport({ json = it; message = "File loaded. Run the check below." }, { message = it })
-        Field("Expected SHA-256 or QR text (optional)", expected, { expected = it.take(100); message = null })
-        Text("Paste the versioned QR text or a 64-character digest received separately. A digest bundled with changed data is not independent proof.", color = TextSecondary, fontSize = 12.sp)
-        Primary("Check integrity", "check", enabled = json != null) {
+    Sheet("পাসপোর্টের তথ্য যাচাই করুন।", dismiss) {
+        Text("পাসপোর্টের সঙ্গে পাওয়া JSON যোগ করুন। এতে রাখা তথ্যের মিল যাচাই হয়। PDF-এর ছবি বা সার্ভিস সত্যি হয়েছে কি না যাচাই হয় না।", color = TextSecondary, fontSize = 13.sp)
+        PassportVerificationImport({ json = it; message = "ফাইল যোগ হয়েছে। নিচের বাটনে যাচাই করুন।" }, { message = it })
+        Field("আলাদাভাবে পাওয়া SHA-256 বা QR-এর লেখা (ঐচ্ছিক)", expected, { expected = it.take(100); message = null })
+        Text("আলাদাভাবে পাওয়া QR-এর লেখা বা ৬৪ অক্ষরের হ্যাশ দিন। বদলানো তথ্যের সঙ্গে দেওয়া হ্যাশ আলাদা প্রমাণ নয়।", color = TextSecondary, fontSize = 12.sp)
+        Primary("তথ্যের মিল যাচাই করুন", "check", enabled = json != null) {
             message = runCatching { verifyPassportBundle(json!!, expected) }.fold(
-                { if (it.matchesExpected) "Covered data matches the independently supplied digest. Service occurrence is not certified."
-                  else "Covered data matches its bundled digest. No independent expected digest was supplied." },
-                { it.message ?: "Could not verify this file." })
+                { if (it.matchesExpected) "তথ্য আলাদাভাবে পাওয়া হ্যাশের সঙ্গে মিলেছে। সার্ভিস হয়েছে কি না এতে প্রত্যয়ন করা হয় না।"
+                  else "তথ্য সঙ্গে দেওয়া হ্যাশের সঙ্গে মিলেছে। আলাদাভাবে পাওয়া হ্যাশ দেওয়া হয়নি।" },
+                { it.message ?: "ফাইলটি যাচাই করা যায়নি।" })
         }
         message?.let { Text(it, fontSize = 12.sp) }
     }

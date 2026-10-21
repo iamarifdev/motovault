@@ -108,9 +108,9 @@ actual fun PassportNativeActions(export: PassportExport, onError: (String) -> Un
     val saveJson = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { destination ->
         if(destination != null) runCatching { requireNotNull(context.contentResolver.openOutputStream(destination)).use { output -> File(export.jsonPath).inputStream().use { it.copyTo(output) } } }.onFailure { error("Could not save JSON: ${it.message}") }
     }
-    TextButton(onClick = { runCatching { context.startActivity(Intent(Intent.ACTION_VIEW).setDataAndType(uri(export.pdfPath), "application/pdf").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)) }.onFailure { error("No PDF viewer is available. Save or share the PDF to open it elsewhere.") } }) { Text("View PDF") }
-    TextButton(onClick = { savePdf.launch(File(export.pdfPath).name) }) { Text("Save PDF") }
-    TextButton(onClick = { saveJson.launch(File(export.jsonPath).name) }) { Text("Save verification JSON") }
+    TextButton(onClick = { runCatching { context.startActivity(Intent(Intent.ACTION_VIEW).setDataAndType(uri(export.pdfPath), "application/pdf").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)) }.onFailure { error("No PDF viewer is available. Save or share the PDF to open it elsewhere.") } }) { Text("PDF দেখুন") }
+    TextButton(onClick = { savePdf.launch(File(export.pdfPath).name) }) { Text("PDF সেভ করুন") }
+    TextButton(onClick = { saveJson.launch(File(export.jsonPath).name) }) { Text("যাচাইয়ের JSON সেভ করুন") }
     TextButton(onClick = {
         runCatching {
             val pdfUri = uri(export.pdfPath); val jsonUri = uri(export.jsonPath)
@@ -120,7 +120,7 @@ actual fun PassportNativeActions(export: PassportExport, onError: (String) -> Un
             intent.clipData = ClipData.newUri(context.contentResolver, "Service passport", pdfUri).apply { addItem(ClipData.Item(jsonUri)) }
             context.startActivity(Intent.createChooser(intent, "Share PDF and verification JSON"))
         }.onFailure { error("Could not open sharing: ${it.message}") }
-    }) { Text("Share PDF and JSON") }
+    }) { Text("PDF ও JSON শেয়ার করুন") }
 }
 
 @Composable
@@ -144,5 +144,5 @@ actual fun PassportVerificationImport(onRead: (String) -> Unit, onError: (String
             }
         }.onFailure { error(it.message ?: "Could not read verification JSON.") }
     }
-    TextButton(onClick = { picker.launch("application/json") }) { Text("Import verification JSON") }
+    TextButton(onClick = { picker.launch("application/json") }) { Text("যাচাইয়ের JSON যোগ করুন") }
 }

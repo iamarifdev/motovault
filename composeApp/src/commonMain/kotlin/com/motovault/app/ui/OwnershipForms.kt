@@ -43,54 +43,54 @@ internal fun FuelDialog(state: VaultState, onDismiss: () -> Unit, onSave: VaultS
     val amount = cost.toDoubleOrNull()
     val day = runCatching { LocalDate.parse(date) }.getOrNull()
     Sheet(if (existing == null) "জ্বালানির হিসাব রাখুন" else "জ্বালানির রেকর্ড ঠিক করুন", onDismiss) {
-        Eyebrow("জ্বালানি · Fuel log")
+        Eyebrow("জ্বালানি")
         Text("আংশিক জ্বালানিও পরের পূর্ণ ট্যাংকের সঙ্গে হিসাব হবে।", color = TextSecondary, fontSize = 13.sp, lineHeight = 20.sp)
-        Field("ওডোমিটার (কিমি) · Odometer", odometer, { odometer = it }, true)
-        Field("তারিখ (YYYY-MM-DD) · Date", date, { value ->
+        Field("ওডোমিটার (কিমি)", odometer, { odometer = it }, true)
+        Field("তারিখ (YYYY-MM-DD)", date, { value ->
             date = value
-            if (runCatching { LocalDate.parse(value) }.getOrNull() != today()) { location = null; locationStatus = "পুরোনো রেকর্ডে বর্তমান GPS যোগ হবে না · Current GPS is not added to past records" }
+            if (runCatching { LocalDate.parse(value) }.getOrNull() != today()) { location = null; locationStatus = "পুরোনো রেকর্ডে বর্তমান GPS যোগ হবে না" }
         })
-        Field("কত লিটার · Litres", liters, { liters = it }, true)
-        Field("মোট দাম ৳ · Total cost", cost, { cost = it }, true)
-        Row(Modifier.fillMaxWidth().clickable { full = !full }, verticalAlignment = Alignment.CenterVertically) { Checkbox(full, onCheckedChange = { full = it }); Text("ট্যাংক পূর্ণ করেছি · Full tank", fontSize = 13.sp) }
-        Field("পাম্প / এলাকা · Station / area (optional)", locationLabel, { locationLabel = it.take(100) })
+        Field("কত লিটার", liters, { liters = it }, true)
+        Field("মোট দাম ৳", cost, { cost = it }, true)
+        Row(Modifier.fillMaxWidth().clickable { full = !full }, verticalAlignment = Alignment.CenterVertically) { Checkbox(full, onCheckedChange = { full = it }); Text("ট্যাংক পূর্ণ করেছি", fontSize = 13.sp) }
+        Field("পাম্প / এলাকা (ঐচ্ছিক)", locationLabel, { locationLabel = it.take(100) })
         LocationCaptureButton(requestKey = if (state.autoLocation && day == today()) 1 else 0, enabled = day == today()) { captured ->
             if (day != today()) {
                 location = null
-                locationStatus = "পুরোনো রেকর্ডে বর্তমান GPS যোগ হবে না · Current GPS is not added to past records"
+                locationStatus = "পুরোনো রেকর্ডে বর্তমান GPS যোগ হবে না"
             } else if (captured != null) {
                 location = captured
-                locationStatus = "আপনার বর্তমান জিপিএস লোকেশন যোগ হয়েছে · Current GPS location added"
+                locationStatus = "আপনার বর্তমান জিপিএস লোকেশন যোগ হয়েছে"
             }
-            else locationStatus = "লোকেশন পাওয়া যায়নি, জায়গার নাম লিখতে পারেন · No GPS fix. Enter the area above."
+            else locationStatus = "লোকেশন পাওয়া যায়নি, জায়গার নাম লিখতে পারেন"
         }
-        if (location != null) TextButton(onClick = { location = null; locationStatus = "GPS লোকেশন সরানো হয়েছে · GPS location removed" }) { Text("GPS লোকেশন সরান · Remove GPS location") }
+        if (location != null) TextButton(onClick = { location = null; locationStatus = "GPS লোকেশন সরানো হয়েছে" }) { Text("GPS লোকেশন সরান") }
         location?.let { Text("GPS: ±${it.accuracyMeters.toInt()} মিটার · ${it.latitude}, ${it.longitude}", color = TextSecondary, fontSize = 11.sp) }
         locationStatus?.let { Text(it, color = TextSecondary, fontSize = 11.sp) }
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
-        Primary(if (existing == null) "জ্বালানির হিসাব সেভ করুন · Save fuel log" else "পরিবর্তন সেভ করুন · Save changes", "check", enabled = odo != null && fuel != null && amount != null && day != null) {
+        Primary(if (existing == null) "জ্বালানির হিসাব সেভ করুন" else "পরিবর্তন সেভ করুন", "check", enabled = odo != null && fuel != null && amount != null && day != null) {
             runCatching { if (existing == null) state.logFuel(odo!!, fuel!!, amount!!, day!!, full, location, locationLabel) else state.replaceFuelLog(existing.id, odo!!, fuel!!, amount!!, day!!, full, location, locationLabel) }.onSuccess {
-                onSave(it) { saved -> if (saved) onDismiss() else error = "Could not save. Your previous records are unchanged." }
+                onSave(it) { saved -> if (saved) onDismiss() else error = "সেভ করা যায়নি। আগের রেকর্ড অপরিবর্তিত আছে।" }
             }.onFailure { error = it.message }
         }
-        TextButton(onClick = onHistory) { Text("জ্বালানির ইতিহাস দেখুন · Fuel history ↗") }
+        TextButton(onClick = onHistory) { Text("জ্বালানির ইতিহাস দেখুন") }
     }
 }
 
 @Composable
 internal fun ComponentsList(state: VaultState, onDismiss: () -> Unit, onSelect: (ComponentRule) -> Unit, onAdd: () -> Unit) {
-    Sheet("Care, at the right time.", onDismiss) {
-        Text("Owner-defined schedules. Whichever comes first: distance or time.", color = TextSecondary, fontSize = 13.sp)
+    Sheet("সময়মতো যত্ন নিন।", onDismiss) {
+        Text("নিজের সার্ভিস সূচি। দূরত্ব বা সময়, যেটি আগে হয়।", color = TextSecondary, fontSize = 13.sp)
         state.rules.forEach { rule ->
             val health = CalculateWearUseCase().execute(rule, state.ride!!.odometer, today().toEpochDays().toLong())
             Panel(onClick = { onSelect(rule) }) {
                 Text(componentLabel(rule), fontWeight = FontWeight.Bold)
-                Text("${if (rule.intervalKm > 0) "${rule.intervalKm.toInt()} km" else "No distance limit"} / ${if (rule.intervalDays > 0) "${rule.intervalDays} days" else "No time limit"}", color = TextSecondary, fontSize = 12.sp)
-                Text("Last service: ${LocalDate.fromEpochDays(rule.lastServicedEpochDays.toInt())} · ${rule.lastServicedOdometerKm.toInt()} km", color = TextSecondary, fontSize = 11.sp)
-                Text(if (health.wearPercentage >= 100) "Overdue ↗" else if (health.wearPercentage >= 75) "Service soon ↗" else "Healthy ↗", color = if (health.wearPercentage >= 75) WarningColor else HealthyColor, fontSize = 11.sp)
+                Text("${if (rule.intervalKm > 0) "${rule.intervalKm.toInt()} কিমি" else "দূরত্বের সীমা নেই"} / ${if (rule.intervalDays > 0) "${rule.intervalDays} দিন" else "সময়ের সীমা নেই"}", color = TextSecondary, fontSize = 12.sp)
+                Text("শেষ সার্ভিস: ${LocalDate.fromEpochDays(rule.lastServicedEpochDays.toInt())} · ${rule.lastServicedOdometerKm.toInt()} কিমি", color = TextSecondary, fontSize = 11.sp)
+                Text(if (health.wearPercentage >= 100) "সময় পেরিয়েছে ↗" else if (health.wearPercentage >= 75) "শিগগির সার্ভিস করুন ↗" else "ঠিক আছে ↗", color = if (health.wearPercentage >= 75) WarningColor else HealthyColor, fontSize = 11.sp)
             }
         }
-        Primary("Add component", "add", onClick = onAdd)
+        Primary("যন্ত্রাংশ যোগ করুন", "add", onClick = onAdd)
     }
 }
 
@@ -177,12 +177,12 @@ internal fun ServiceDialog(state: VaultState, initial: ComponentRule?, onDismiss
     )
     val computedTotal = serviceTotalPoisha(lines, labourPoisha, miscPoisha, discountPoisha)
     Sheet(if (existing == null) "এক ভিজিটে সব কাজ লিখুন" else "সার্ভিস রেকর্ড ঠিক করুন", onDismiss) {
-        Eyebrow(if (existing == null) "সার্ভিস রেকর্ড · Service record" else "রেকর্ড সংশোধন · Edit service record")
+        Eyebrow(if (existing == null) "সার্ভিস রেকর্ড" else "রেকর্ড সংশোধন")
         Text("একটি ভিজিটে একাধিক কাজ ও পার্টস যোগ করুন। দাম না জানলে ফাঁকা রাখুন, ফ্রি হলে ০ লিখুন।", color = TextSecondary, fontSize = 13.sp, lineHeight = 19.sp)
-        OutlinedTextField(smartText, { smartText = it.take(1000); smartDraft = null }, label = { Text("দ্রুত লিখুন · Quick entry (one item per line)") }, placeholder = { Text("Engine oil 1200 taka\nOil filter 350 taka") }, modifier = Modifier.fillMaxWidth(), minLines = 2, shape = RoundedCornerShape(12.dp))
-        TextButton(onClick = { smartDraft = SmartServiceDraftParser.parse(smartText) }, enabled = smartText.isNotBlank()) { Text("লেখা থেকে খসড়া সাজান · Prepare draft") }
+        OutlinedTextField(smartText, { smartText = it.take(1000); smartDraft = null }, label = { Text("দ্রুত লিখুন") }, placeholder = { Text("Engine oil 1200 taka\nOil filter 350 taka") }, modifier = Modifier.fillMaxWidth(), minLines = 2, shape = RoundedCornerShape(12.dp))
+        TextButton(onClick = { smartDraft = SmartServiceDraftParser.parse(smartText) }, enabled = smartText.isNotBlank()) { Text("লেখা থেকে খসড়া সাজান") }
         smartDraft?.let { draft ->
-            Text("যা বুঝেছি, দেখে তালিকায় যোগ করুন · Review each suggestion before adding", color = TextSecondary, fontSize = 11.sp)
+            Text("যা বুঝেছি, দেখে তালিকায় যোগ করুন", color = TextSecondary, fontSize = 11.sp)
             draft.suggestions.forEach { suggestion ->
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Text("${suggestion.line.displayNameBn} · ${suggestion.line.unitPricePoisha?.let { "৳${formatPoisha(it)}" } ?: "দাম অজানা"}", Modifier.weight(1f), fontSize = 12.sp)
@@ -195,53 +195,53 @@ internal fun ServiceDialog(state: VaultState, initial: ComponentRule?, onDismiss
             } }
         }
         Box {
-            OutlinedButton(onClick = { itemExpanded = true }, modifier = Modifier.fillMaxWidth()) { Text(if (itemId == "custom_item") "নিজের আইটেম · Custom item" else "${selectedItem.labelBn} · ${selectedItem.labelEn}") }
+            OutlinedButton(onClick = { itemExpanded = true }, modifier = Modifier.fillMaxWidth()) { Text(if (itemId == "custom_item") "নিজের আইটেম" else selectedItem.labelBn) }
             DropdownMenu(itemExpanded, onDismissRequest = { itemExpanded = false }) {
-                BangladeshServiceCatalogue.items.forEach { item -> DropdownMenuItem(text = { Text("${item.labelBn} · ${item.labelEn}") }, onClick = { itemId = item.id; customName = ""; action = item.action; scheduleId = ""; itemExpanded = false }) }
-                DropdownMenuItem(text = { Text("নিজের পার্টস / কাজ · Custom item") }, onClick = { itemId = "custom_item"; action = "replace"; scheduleId = ""; itemExpanded = false })
+                BangladeshServiceCatalogue.items.forEach { item -> DropdownMenuItem(text = { Text(item.labelBn) }, onClick = { itemId = item.id; customName = ""; action = item.action; scheduleId = ""; itemExpanded = false }) }
+                DropdownMenuItem(text = { Text("নিজের পার্টস / কাজ") }, onClick = { itemId = "custom_item"; action = "replace"; scheduleId = ""; itemExpanded = false })
             }
         }
-        if (itemId == "custom_item") Field("আইটেমের নাম · Item name", customName, { customName = it.take(60) })
+        if (itemId == "custom_item") Field("আইটেমের নাম", customName, { customName = it.take(60) })
         Box {
-            OutlinedButton(onClick = { actionExpanded = true }, modifier = Modifier.fillMaxWidth()) { Text(when (action) { "replace" -> "বদলানো · Replace"; "service" -> "সার্ভিস করা · Service"; "inspect" -> "পরীক্ষা · Inspect"; "clean" -> "পরিষ্কার · Clean"; else -> "অ্যাডজাস্ট · Adjust" }) }
+            OutlinedButton(onClick = { actionExpanded = true }, modifier = Modifier.fillMaxWidth()) { Text(when (action) { "replace" -> "বদলানো"; "service" -> "সার্ভিস করা"; "inspect" -> "পরীক্ষা"; "clean" -> "পরিষ্কার"; else -> "অ্যাডজাস্ট" }) }
             DropdownMenu(actionExpanded, onDismissRequest = { actionExpanded = false }) {
-                listOf("replace" to "বদলানো · Replace", "service" to "সার্ভিস করা · Service", "inspect" to "পরীক্ষা · Inspect", "clean" to "পরিষ্কার · Clean", "adjust" to "অ্যাডজাস্ট · Adjust").forEach { (key, label) -> DropdownMenuItem(text = { Text(label) }, onClick = { action = key; if (key !in setOf("replace", "service")) scheduleId = ""; actionExpanded = false }) }
+                listOf("replace" to "বদলানো", "service" to "সার্ভিস করা", "inspect" to "পরীক্ষা", "clean" to "পরিষ্কার", "adjust" to "অ্যাডজাস্ট").forEach { (key, label) -> DropdownMenuItem(text = { Text(label) }, onClick = { action = key; if (key !in setOf("replace", "service")) scheduleId = ""; actionExpanded = false }) }
             }
         }
         if (action in setOf("replace", "service")) Box {
-            OutlinedButton(onClick = { scheduleExpanded = true }, enabled = matchingSchedules.isNotEmpty(), modifier = Modifier.fillMaxWidth()) { Text(if (scheduleId.isBlank()) "মিল থাকা রিমাইন্ডার নেই · No matching reminder" else state.rules.firstOrNull { it.id == scheduleId }?.name ?: "রিমাইন্ডার বাছাই করুন · Choose reminder") }
+            OutlinedButton(onClick = { scheduleExpanded = true }, enabled = matchingSchedules.isNotEmpty(), modifier = Modifier.fillMaxWidth()) { Text(if (scheduleId.isBlank()) "মিল থাকা রিমাইন্ডার নেই" else state.rules.firstOrNull { it.id == scheduleId }?.name ?: "রিমাইন্ডার বাছাই করুন") }
             DropdownMenu(scheduleExpanded, onDismissRequest = { scheduleExpanded = false }) {
-                DropdownMenuItem(text = { Text("কোনো রিমাইন্ডার নয় · None") }, onClick = { scheduleId = ""; scheduleExpanded = false })
+                DropdownMenuItem(text = { Text("কোনো রিমাইন্ডার নয়") }, onClick = { scheduleId = ""; scheduleExpanded = false })
                 matchingSchedules.forEach { rule -> DropdownMenuItem(text = { Text(rule.name) }, onClick = { scheduleId = rule.id; scheduleExpanded = false }) }
             }
         }
-        Field("পরিমাণ · Qty", quantity, { quantity = it }, true)
-        Field("একক দাম ৳ · Unit price", unitPrice, { unitPrice = it }, true)
+        Field("পরিমাণ", quantity, { quantity = it }, true)
+        Field("একক দাম ৳", unitPrice, { unitPrice = it }, true)
         if (itemId == "engine_oil") {
-            Text("ইঞ্জিন অয়েলের তথ্য · Engine-oil details", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-            Box { OutlinedButton(onClick = { oilTypeExpanded = true }, modifier = Modifier.fillMaxWidth()) { Text(when (oilType) { "semi_synthetic" -> "সেমি-সিনথেটিক · Semi-synthetic"; "full_synthetic" -> "ফুল সিনথেটিক · Full synthetic"; else -> "মিনারেল · Mineral" }) }; DropdownMenu(oilTypeExpanded, onDismissRequest = { oilTypeExpanded = false }) {
-                listOf("mineral" to "মিনারেল · Mineral", "semi_synthetic" to "সেমি-সিনথেটিক · Semi-synthetic", "full_synthetic" to "ফুল সিনথেটিক · Full synthetic").forEach { (key, label) -> DropdownMenuItem(text = { Text(label) }, onClick = { oilType = key; oilTypeExpanded = false }) }
+            Text("ইঞ্জিন অয়েলের তথ্য", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Box { OutlinedButton(onClick = { oilTypeExpanded = true }, modifier = Modifier.fillMaxWidth()) { Text(when (oilType) { "semi_synthetic" -> "সেমি-সিনথেটিক"; "full_synthetic" -> "ফুল সিনথেটিক"; else -> "মিনারেল" }) }; DropdownMenu(oilTypeExpanded, onDismissRequest = { oilTypeExpanded = false }) {
+                listOf("mineral" to "মিনারেল", "semi_synthetic" to "সেমি-সিনথেটিক", "full_synthetic" to "ফুল সিনথেটিক").forEach { (key, label) -> DropdownMenuItem(text = { Text(label) }, onClick = { oilType = key; oilTypeExpanded = false }) }
             } }
-            Field("SAE grade", oilGrade, { oilGrade = it.take(24) })
+            Field("SAE গ্রেড", oilGrade, { oilGrade = it.take(24) })
             Field("API", api, { api = it.take(24) })
             Field("JASO", jaso, { jaso = it.take(24) })
-            Field("ব্র্যান্ড / পণ্য · Product", product, { product = it.take(60) })
-            Box { OutlinedButton(onClick = { purchaseBasisExpanded = true }, modifier = Modifier.fillMaxWidth()) { Text(if (purchaseBasis == "loose") "খোলা তেল · Loose" else "বোতল · Bottle") }; DropdownMenu(purchaseBasisExpanded, onDismissRequest = { purchaseBasisExpanded = false }) {
-                DropdownMenuItem(text = { Text("বোতল · Bottle") }, onClick = { purchaseBasis = "bottle"; purchaseBasisExpanded = false })
-                DropdownMenuItem(text = { Text("খোলা · Loose") }, onClick = { purchaseBasis = "loose"; purchaseBasisExpanded = false })
+            Field("ব্র্যান্ড / পণ্য", product, { product = it.take(60) })
+            Box { OutlinedButton(onClick = { purchaseBasisExpanded = true }, modifier = Modifier.fillMaxWidth()) { Text(if (purchaseBasis == "loose") "খোলা তেল" else "বোতল") }; DropdownMenu(purchaseBasisExpanded, onDismissRequest = { purchaseBasisExpanded = false }) {
+                DropdownMenuItem(text = { Text("বোতল") }, onClick = { purchaseBasis = "bottle"; purchaseBasisExpanded = false })
+                DropdownMenuItem(text = { Text("খোলা") }, onClick = { purchaseBasis = "loose"; purchaseBasisExpanded = false })
             } }
-            Field("প্যাক মিলি · Pack ml", packMl, { packMl = it }, true)
-            Field("কেনা পরিমাণ · Bought", boughtQuantity, { boughtQuantity = it }, true)
-            Field("ব্যবহৃত মিলি · Used ml", usedMl, { usedMl = it }, true)
-            if (!oilNumbersValid) Text("পরিমাণে শুধু সঠিক সংখ্যা লিখুন · Enter valid positive numbers.", color = WarningColor, fontSize = 12.sp)
+            Field("প্যাক মিলি", packMl, { packMl = it }, true)
+            Field("কেনা পরিমাণ", boughtQuantity, { boughtQuantity = it }, true)
+            Field("ব্যবহৃত মিলি", usedMl, { usedMl = it }, true)
+            if (!oilNumbersValid) Text("পরিমাণে শুধু সঠিক সংখ্যা লিখুন", color = WarningColor, fontSize = 12.sp)
         }
         TextButton(onClick = {
-            if (itemId == "custom_item" && customName.isBlank()) error = "আইটেমের নাম লিখুন · Enter an item name."
-            else if (quantityValue == null || !quantityValue.isFinite() || quantityValue <= 0) error = "পরিমাণ ঠিক করুন · Enter a valid quantity."
-            else if (unitPrice.isNotBlank() && unitPoisha == null) error = "দাম ঠিক করুন · Enter a valid price."
-            else if (itemId == "engine_oil" && !oilNumbersValid) error = "অয়েলের পরিমাণ ঠিক করুন · Check the oil quantities."
+            if (itemId == "custom_item" && customName.isBlank()) error = "আইটেমের নাম লিখুন"
+            else if (quantityValue == null || !quantityValue.isFinite() || quantityValue <= 0) error = "পরিমাণ ঠিক করুন"
+            else if (unitPrice.isNotBlank() && unitPoisha == null) error = "দাম ঠিক করুন"
+            else if (itemId == "engine_oil" && !oilNumbersValid) error = "অয়েলের পরিমাণ ঠিক করুন"
             else { val index = editingLineIndex; lines = if (index == null) lines + currentDraftLine else lines.mapIndexed { i, line -> if (i == index) currentDraftLine else line }; editingLineIndex = null; unitPrice = ""; quantity = "1"; scheduleId = ""; error = null }
-        }) { Text(if (editingLineIndex == null) "＋ তালিকায় যোগ করুন · Add item" else "Փ পরিবর্তন যোগ করুন · Update item") }
+        }) { Text(if (editingLineIndex == null) "＋ তালিকায় যোগ করুন" else "Փ পরিবর্তন যোগ করুন") }
         lines.forEachIndexed { index, line ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text("${line.displayNameBn} · ${line.quantity} ${line.unitBn} · ${line.lineTotalPoisha?.let { "৳${formatPoisha(it)}" } ?: "দাম জানা নেই"}", modifier = Modifier.weight(1f), fontSize = 12.sp)
@@ -249,47 +249,47 @@ internal fun ServiceDialog(state: VaultState, initial: ComponentRule?, onDismiss
                     editingLineIndex = index; itemId = line.catalogueId ?: "custom_item"; customName = line.customName; action = line.action
                     quantity = line.quantity.toString(); unitPrice = line.unitPricePoisha?.let { formatPoisha(it) }.orEmpty(); scheduleId = line.scheduleId.orEmpty()
                     line.oil?.let { oil -> oilType = oil.baseType; oilGrade = oil.saeGrade; api = oil.apiStandard; jaso = oil.jasoStandard; product = oil.productName; purchaseBasis = oil.purchaseBasis; packMl = oil.packVolumeMl?.toString().orEmpty(); boughtQuantity = oil.boughtQuantity?.toString() ?: "1"; usedMl = oil.usedQuantityMl?.toString().orEmpty() }
-                }) { Text("Edit") }
+                }) { Text("বদলান") }
                 TextButton(onClick = { lines = lines.filterIndexed { i, _ -> i != index } }) { Text("বাদ") }
             }
         }
-        Field("Odometer (km)", odometer, { odometer = it }, true)
-    Field("সার্ভিসের তারিখ (YYYY-MM-DD) · Service date", date, { value ->
+        Field("ওডোমিটার (কিমি)", odometer, { odometer = it }, true)
+    Field("সার্ভিসের তারিখ (YYYY-MM-DD)", date, { value ->
         date = value
-        if (runCatching { LocalDate.parse(value) }.getOrNull() != today()) { location = null; locationStatus = "পুরোনো রেকর্ডে বর্তমান GPS যোগ হবে না · Current GPS is not added to past records" }
+        if (runCatching { LocalDate.parse(value) }.getOrNull() != today()) { location = null; locationStatus = "পুরোনো রেকর্ডে বর্তমান GPS যোগ হবে না" }
     })
-        Field("শ্রম ৳ · Labour", labour, { labour = it }, true)
-        Field("অন্যান্য ৳ · Other", miscellaneous, { miscellaneous = it }, true)
-        Field("ছাড় ৳ · Discount", discount, { discount = it }, true)
-        if (!ancillaryAmountsValid) Text("দাম সংখ্যায় লিখুন, অজানা হলে ফাঁকা রাখুন · Use a valid amount or leave it blank if unknown.", color = WarningColor, fontSize = 12.sp)
-        Text("মোট · Total: ${computedTotal?.let { "৳${formatPoisha(it)}" } ?: "দাম সম্পূর্ণ জানা নেই"}", fontWeight = FontWeight.Bold)
-        Field("ওয়ার্কশপ / এলাকা · Workshop / area (optional)", workshop, { workshop = it.take(80) })
+        Field("শ্রম ৳", labour, { labour = it }, true)
+        Field("অন্যান্য ৳", miscellaneous, { miscellaneous = it }, true)
+        Field("ছাড় ৳", discount, { discount = it }, true)
+        if (!ancillaryAmountsValid) Text("দাম সংখ্যায় লিখুন, অজানা হলে ফাঁকা রাখুন", color = WarningColor, fontSize = 12.sp)
+        Text("মোট: ${computedTotal?.let { "৳${formatPoisha(it)}" } ?: "দাম সম্পূর্ণ জানা নেই"}", fontWeight = FontWeight.Bold)
+        Field("ওয়ার্কশপ / এলাকা (ঐচ্ছিক)", workshop, { workshop = it.take(80) })
         LocationCaptureButton(requestKey = if (state.autoLocation && day == today()) 1 else 0, enabled = day == today()) { captured ->
             if (day != today()) {
                 location = null
-                locationStatus = "পুরোনো রেকর্ডে বর্তমান GPS যোগ হবে না · Current GPS is not added to past records"
+                locationStatus = "পুরোনো রেকর্ডে বর্তমান GPS যোগ হবে না"
             } else if (captured != null) {
                 location = captured
-                locationStatus = "আপনার বর্তমান জিপিএস লোকেশন যোগ হয়েছে · Current GPS location added"
+                locationStatus = "আপনার বর্তমান জিপিএস লোকেশন যোগ হয়েছে"
             }
-            else locationStatus = "জিপিএস পাওয়া যায়নি, ওয়ার্কশপ / এলাকা লিখে রেকর্ড সেভ করুন · No GPS fix. Enter the workshop / area and save."
+            else locationStatus = "জিপিএস পাওয়া যায়নি, ওয়ার্কশপ / এলাকা লিখে রেকর্ড সেভ করুন"
         }
-        if (location != null) TextButton(onClick = { location = null; locationStatus = "GPS লোকেশন সরানো হয়েছে · GPS location removed" }) { Text("GPS লোকেশন সরান · Remove GPS location") }
+        if (location != null) TextButton(onClick = { location = null; locationStatus = "GPS লোকেশন সরানো হয়েছে" }) { Text("GPS লোকেশন সরান") }
         location?.let { Text("GPS: ±${it.accuracyMeters.toInt()} মিটার · ${it.latitude}, ${it.longitude}", color = TextSecondary, fontSize = 11.sp) }
         locationStatus?.let { Text(it, color = TextSecondary, fontSize = 11.sp) }
-        OutlinedTextField(notes, { notes = it.take(500) }, label = { Text("Notes") }, modifier = Modifier.fillMaxWidth(), minLines = 2, shape = RoundedCornerShape(12.dp))
-        Text("রসিদ সংযুক্তি ঐচ্ছিক · Optional receipt image (up to 1 MB)", color = TextSecondary, fontSize = 11.sp)
-        AttachmentPicker(if (receipt == null) "রসিদের ছবি যোগ করুন · Add receipt" else "রসিদের ছবি বদলান · Replace receipt", onSelected = { receipt = it }, onError = { error = it })
-        receipt?.let { Attachment(it, "Service receipt") }
-        if (receipt != null) TextButton(onClick = { receipt = null }) { Text("রসিদ সরান · Remove receipt") }
+        OutlinedTextField(notes, { notes = it.take(500) }, label = { Text("নোট") }, modifier = Modifier.fillMaxWidth(), minLines = 2, shape = RoundedCornerShape(12.dp))
+        Text("রসিদ সংযুক্তি ঐচ্ছিক", color = TextSecondary, fontSize = 11.sp)
+        AttachmentPicker(if (receipt == null) "রসিদের ছবি যোগ করুন" else "রসিদের ছবি বদলান", onSelected = { receipt = it }, onError = { error = it })
+        receipt?.let { Attachment(it, "সার্ভিসের রসিদ") }
+        if (receipt != null) TextButton(onClick = { receipt = null }) { Text("রসিদ সরান") }
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
-        Primary(if (existing == null) "সার্ভিস সেভ করুন · Save service" else "পরিবর্তন সেভ করুন · Save changes", "check", enabled = lines.isNotEmpty() && odo != null && day != null && ancillaryAmountsValid) {
+        Primary(if (existing == null) "সার্ভিস সেভ করুন" else "পরিবর্তন সেভ করুন", "check", enabled = lines.isNotEmpty() && odo != null && day != null && ancillaryAmountsValid) {
             runCatching { if (existing == null) state.logServiceVisit(lines, odo!!, day!!, labourPoisha, miscPoisha, discountPoisha, workshop, notes, location, receipt) else state.replaceServiceVisit(existing.id, lines, odo!!, day!!, labourPoisha, miscPoisha, discountPoisha, workshop, notes, location, receipt) }.onSuccess {
-                onSave(it) { saved -> if (saved) onDismiss() else error = "Could not save. Your previous records are unchanged." }
+                onSave(it) { saved -> if (saved) onDismiss() else error = "সেভ করা যায়নি। আগের রেকর্ড অপরিবর্তিত আছে।" }
             }.onFailure { error = it.message }
         }
-        initial?.let { rule -> TextButton(onClick = { onEdit(rule) }) { Text("Edit this schedule") } }
-        TextButton(onClick = onHistory) { Text("Service history") }
+        initial?.let { rule -> TextButton(onClick = { onEdit(rule) }) { Text("এই সূচি বদলান") } }
+        TextButton(onClick = onHistory) { Text("সার্ভিসের ইতিহাস") }
     }
 }
 
@@ -304,18 +304,18 @@ internal fun DocumentFeeDialog(state: VaultState, document: VaultDocument, onDis
     val parsedDate = runCatching { LocalDate.parse(date) }.getOrNull()
     val poisha = amount.trim().replace(",", "").toDoubleOrNull()?.takeIf { it.isFinite() && it >= 0 && it <= Int.MAX_VALUE / 100.0 }?.let { (it * 100).toLong().takeIf { value -> value <= Int.MAX_VALUE }?.toInt() }
     val previous = state.logs.filter { it.isDocumentFee && it.title == "${document.title} renewal" }.sortedByDescending { it.date }
-    Sheet("নবায়ন ফি লিখুন · Renewal fee", onDismiss) {
+    Sheet("নবায়ন ফি লিখুন", onDismiss) {
         Eyebrow(document.title)
         Text("প্রতিটি পেমেন্ট আলাদা রেকর্ড হবে। নথির তথ্য সম্পাদনা করলে আগের খরচ বদলাবে না।", color = TextSecondary, fontSize = 13.sp, lineHeight = 19.sp)
         previous.forEach { Text("${it.date} · ৳${oneDecimal(it.cost)}", color = TextSecondary, fontSize = 12.sp) }
-        Field("পরিমাণ ৳ · Amount paid", amount, { amount = it }, true)
-        Field("পেমেন্টের তারিখ · Date (YYYY-MM-DD)", date, { date = it })
-        Field("নোট · Note (optional)", notes, { notes = it.take(160) })
+        Field("পরিমাণ ৳", amount, { amount = it }, true)
+        Field("পেমেন্টের তারিখ", date, { date = it })
+        Field("নোট (ঐচ্ছিক)", notes, { notes = it.take(160) })
         Text("এই খরচ ব্যক্তিগত। সার্ভিস পাসপোর্টে যাবে না।", color = TextSecondary, fontSize = 11.sp)
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
-        Primary("ফি সেভ করুন · Save fee", "check", enabled = poisha != null && parsedDate != null) {
+        Primary("ফি সেভ করুন", "check", enabled = poisha != null && parsedDate != null) {
             runCatching { state.logDocumentFee(document.title, poisha!!, parsedDate!!, notes) }.onSuccess {
-                onSave(it) { saved -> if (saved) onDismiss() else error = "Could not save. Your previous records are unchanged." }
+                onSave(it) { saved -> if (saved) onDismiss() else error = "সেভ করা যায়নি। আগের রেকর্ড অপরিবর্তিত আছে।" }
             }.onFailure { error = it.message }
         }
     }
@@ -333,18 +333,18 @@ internal fun ScheduleDialog(state: VaultState, existing: ComponentRule?, onDismi
     val intervalDays = days.toIntOrNull()
     val odo = odometer.toDoubleOrNull()
     val day = runCatching { LocalDate.parse(date) }.getOrNull()
-    Sheet(if (existing == null) "Add a component." else "Edit service interval.", onDismiss) {
-        Eyebrow("Owner-defined schedule")
-        Text("Use your manual or workshop advice. At least one interval is required.", color = TextSecondary, fontSize = 13.sp)
-        Field("Component name", name, { name = it.take(40) })
-        Field("Interval (km, 0 to disable)", km, { km = it }, true)
-        Field("Interval (days, 0 to disable)", days, { days = it }, true)
-        Field("Last serviced mileage", odometer, { odometer = it }, true)
-        Field("Last serviced date (YYYY-MM-DD)", date, { date = it })
+    Sheet(if (existing == null) "যন্ত্রাংশ যোগ করুন।" else "সার্ভিসের ব্যবধান বদলান।", onDismiss) {
+        Eyebrow("নিজের সার্ভিস সূচি")
+        Text("ম্যানুয়াল বা মেকানিকের পরামর্শ মেনে চলুন। দূরত্ব বা সময়ের অন্তত একটি সীমা দিন।", color = TextSecondary, fontSize = 13.sp)
+        Field("যন্ত্রাংশের নাম", name, { name = it.take(40) })
+        Field("কত কিমি পরপর (বন্ধ রাখতে 0)", km, { km = it }, true)
+        Field("কত দিন পরপর (বন্ধ রাখতে 0)", days, { days = it }, true)
+        Field("শেষ সার্ভিসের সময় ওডোমিটার", odometer, { odometer = it }, true)
+        Field("শেষ সার্ভিসের তারিখ (YYYY-MM-DD)", date, { date = it })
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
-        Primary("Save schedule", "check", enabled = distance != null && intervalDays != null && odo != null && day != null && name.isNotBlank()) {
-            runCatching { state.saveSchedule(ComponentRule(existing?.id ?: recordId(), "primary", name.trim(), "Owner-defined schedule", distance!!, intervalDays!!, odo!!, day!!.toEpochDays().toLong())) }.onSuccess {
-                onSave(it) { saved -> if (saved) onDismiss() else error = "Could not save. Your previous records are unchanged." }
+        Primary("সূচি সেভ করুন", "check", enabled = distance != null && intervalDays != null && odo != null && day != null && name.isNotBlank()) {
+            runCatching { state.saveSchedule(ComponentRule(existing?.id ?: recordId(), "primary", name.trim(), "নিজের সার্ভিস সূচি", distance!!, intervalDays!!, odo!!, day!!.toEpochDays().toLong())) }.onSuccess {
+                onSave(it) { saved -> if (saved) onDismiss() else error = "সেভ করা যায়নি। আগের রেকর্ড অপরিবর্তিত আছে।" }
             }.onFailure { error = it.message }
         }
     }
@@ -362,12 +362,12 @@ internal fun History(state: VaultState, filter: String, onAppearance: () -> Unit
         }
         val unknownServiceCosts = state.logs.count { !it.isFuel && !it.isDocumentFee && it.serviceLines.isNotEmpty() && it.serviceTotalPoisha == null }
         val serviceLabel = "জানা সার্ভিস খরচ" + (if (unknownServiceCosts > 0) " · ${unknownServiceCosts}টির দাম অজানা" else "")
-        val totals = listOf(serviceLabel to "৳${oneDecimal(knownServiceSpend)}", "জ্বালানি খরচ" to "৳${oneDecimal(state.logs.filter { it.isFuel }.sumOf { it.cost })}", "গড় মাইলেজ · km/L" to (state.economy?.let { oneDecimal(it) } ?: "--"))
+        val totals = listOf(serviceLabel to "৳${oneDecimal(knownServiceSpend)}", "জ্বালানি খরচ" to "৳${oneDecimal(state.logs.filter { it.isFuel }.sumOf { it.cost })}", "গড় মাইলেজ" to (state.economy?.let { oneDecimal(it) } ?: "--"))
         totals.forEach { (label, value) -> Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) { Text(value, fontWeight = FontWeight.Bold, fontSize = 18.sp); Text(label, color = TextSecondary, fontSize = 10.sp) } }
     }
     val documentSpend = state.logs.filter { it.isDocumentFee }.sumOf { it.cost }
-    if (state.logs.any { it.isDocumentFee }) Text("নথি নবায়নের খরচ · Document renewals: ৳${oneDecimal(documentSpend)}", color = TextSecondary, fontSize = 12.sp)
-    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) { listOf("all", "service", "fuel", "documents").forEach { kind -> FilterChip(filter == kind, onClick = { onFilter(kind) }, label = { Text(when (kind) { "all" -> "সব · All"; "service" -> "সার্ভিস · Service"; "fuel" -> "জ্বালানি · Fuel"; else -> "নথি · Documents" }) }) } }
+    if (state.logs.any { it.isDocumentFee }) Text("নথি নবায়নের খরচ: ৳${oneDecimal(documentSpend)}", color = TextSecondary, fontSize = 12.sp)
+    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) { listOf("all", "service", "fuel", "documents").forEach { kind -> FilterChip(filter == kind, onClick = { onFilter(kind) }, label = { Text(when (kind) { "all" -> "সব"; "service" -> "সার্ভিস"; "fuel" -> "জ্বালানি"; else -> "নথি" }) }) } }
     PassportExportButton(state)
     val logs = state.logs.filter { log -> filter == "all" || when (filter) { "fuel" -> log.isFuel; "documents" -> log.isDocumentFee; else -> !log.isFuel && !log.isDocumentFee } }.sortedWith(compareByDescending<RideLog> { it.date }.thenByDescending { it.odometer })
     if (logs.isEmpty()) Panel { Glyph("history", TextSecondary, Modifier.size(36.dp)); Text("এখান থেকেই হিসাব শুরু করুন", fontWeight = FontWeight.Bold); Text("সার্ভিস বা জ্বালানি যোগ করলে আপনার বাইকের ইতিহাস এখানে দেখা যাবে।", color = TextSecondary, lineHeight = 20.sp) }
@@ -375,7 +375,7 @@ internal fun History(state: VaultState, filter: String, onAppearance: () -> Unit
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
             Glyph(if (log.isFuel) "fuel" else "service", MaterialTheme.colorScheme.primary)
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(if (log.isFuel) "${log.fuelLiters ?: "?"} L · ${if (log.fullTank) "ট্যাংক পূর্ণ · Full tank" else "আংশিক জ্বালানি · Partial fill"}" else log.title, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                Text(if (log.isFuel) "${log.fuelLiters ?: "?"} L · ${if (log.fullTank) "ট্যাংক পূর্ণ" else "আংশিক জ্বালানি"}" else log.title, fontWeight = FontWeight.Bold, fontSize = 13.sp)
                 Text("${log.date} · ${grouped(log.odometer.toInt())} km · ${if (log.serviceLines.isNotEmpty()) log.serviceTotalPoisha?.let { "৳${formatPoisha(it)}" } ?: "দাম জানা নেই" else "৳${log.cost}"}", color = TextSecondary, fontSize = 11.sp)
                 log.serviceLines.forEach { line ->
                     val actionBn = when (line.action) { "replace" -> "বদল"; "service" -> "সার্ভিস"; "inspect" -> "পরীক্ষা"; "clean" -> "পরিষ্কার"; else -> "অ্যাডজাস্ট" }
@@ -388,17 +388,17 @@ internal fun History(state: VaultState, filter: String, onAppearance: () -> Unit
                 }
                 if (log.locationLabel.isNotBlank()) Text(log.locationLabel, color = TextSecondary, fontSize = 11.sp)
                 log.location?.let { Text("জিপিএস · GPS ±${it.accuracyMeters.toInt()} মিটার", color = TextSecondary, fontSize = 10.sp) }
-                if (log.receiptBase64 != null) TextButton(onClick = { receiptToView = log }, contentPadding = PaddingValues(0.dp)) { Text("রসিদ দেখুন · View receipt", fontSize = 11.sp) }
+                if (log.receiptBase64 != null) TextButton(onClick = { receiptToView = log }, contentPadding = PaddingValues(0.dp)) { Text("রসিদ দেখুন", fontSize = 11.sp) }
                 if (log.workshop.isNotBlank()) Text(log.workshop, color = TextSecondary, fontSize = 12.sp)
                 if (log.notes.isNotBlank()) Text(log.notes, color = TextSecondary, fontSize = 12.sp)
             }
-            if (log.isFuel || (!log.isDocumentFee && log.serviceLines.isNotEmpty())) TextButton(onClick = { onEdit(log) }, contentPadding = PaddingValues(0.dp)) { Text("সংশোধন · Edit", fontSize = 10.sp) }
-            TextButton(onClick = { onDelete(log) }, contentPadding = PaddingValues(0.dp)) { Text("মুছুন · Delete", color = TextSecondary, fontSize = 10.sp) }
+            if (log.isFuel || (!log.isDocumentFee && log.serviceLines.isNotEmpty())) TextButton(onClick = { onEdit(log) }, contentPadding = PaddingValues(0.dp)) { Text("সংশোধন", fontSize = 10.sp) }
+            TextButton(onClick = { onDelete(log) }, contentPadding = PaddingValues(0.dp)) { Text("মুছুন", color = TextSecondary, fontSize = 10.sp) }
         }
     } }
-    receiptToView?.let { record -> Sheet("রসিদ · Service receipt", onDismiss = { receiptToView = null }) {
+    receiptToView?.let { record -> Sheet("রসিদ", onDismiss = { receiptToView = null }) {
         record.receiptBase64?.let { Attachment(it, "${record.date} service receipt") }
-        Primary("বন্ধ করুন · Close", "close", onClick = { receiptToView = null })
+        Primary("বন্ধ করুন", "close", onClick = { receiptToView = null })
     } }
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) { Primary("সার্ভিস যোগ করুন", "service", Modifier.weight(1f), onClick = onService); Primary("জ্বালানি যোগ করুন", "fuel", Modifier.weight(1f), onClick = onFuel) }
 }
@@ -408,5 +408,5 @@ internal fun History(state: VaultState, filter: String, onAppearance: () -> Unit
 internal fun Attachment(value: String, description: String) {
     val bitmap = remember(value) { runCatching { Base64.decode(value).decodeToImageBitmap() }.getOrNull() }
     if (bitmap != null) Image(bitmap, description, Modifier.fillMaxWidth().heightIn(max = 280.dp), contentScale = ContentScale.Fit)
-    else Text("Could not display this photo.", color = WarningColor, fontSize = 12.sp)
+    else Text("ছবিটি দেখানো যায়নি।", color = WarningColor, fontSize = 12.sp)
 }

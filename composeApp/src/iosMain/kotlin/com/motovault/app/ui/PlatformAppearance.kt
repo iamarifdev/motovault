@@ -27,4 +27,7 @@ actual fun DocumentWindowAppearance(dark: Boolean) {
     }
 }
 
-actual fun documentDialogProperties() = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)
+@OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+actual fun documentDialogProperties() = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false, usePlatformInsets = false)
+@OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+internal actual fun sheetDialogProperties() = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false, usePlatformInsets = false)

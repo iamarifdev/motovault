@@ -24,6 +24,7 @@ private tailrec fun Context.activity(): Activity? = when (this) {
 }
 
 actual fun documentDialogProperties() = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)
+internal actual fun sheetDialogProperties() = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)
 
 @Suppress("DEPRECATION")
 @Composable

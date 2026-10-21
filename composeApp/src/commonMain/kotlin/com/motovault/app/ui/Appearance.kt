@@ -16,6 +16,12 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.serialization.Serializable
+import dev.sky.design.SkyBrand
+import dev.sky.design.SkyColors
+import dev.sky.design.SkyTheme
+import dev.sky.design.SkyTypography
+import dev.sky.design.defaultSkyTypography
+import dev.sky.design.tokens.SkyTokens
 
 @Serializable
 enum class Appearance(val label: String) { SYSTEM("System"), LIGHT("Light"), DARK("Dark") }
@@ -43,11 +49,11 @@ fun vaultPalette(brandId: String, dark: Boolean): VaultPalette {
         "suzuki" -> 0xFF246294; "bajaj" -> 0xFF355D9E; "tvs" -> 0xFFA52B41
         "hero" -> 0xFFB1362C; "enfield" -> 0xFF805E28; else -> 0xFFAA4700
     }
-    return if (dark) VaultPalette(true, Color(0xFF101215), Color(0xFF171A1E), Color(0xFF22262C),
+    return if (dark) VaultPalette(true, SkyTokens.Palette.darkCanvas, SkyTokens.Palette.darkSurface, SkyTokens.Palette.darkOverlay,
         Color(0xFFF1F2F3), Color(0xFF9DA5AF), Color(0xFF353B44), Color(0xFF78828F),
         Color(0xFF7BD3AB), Color(0xFFEFC277), Color(0xFFFF929A), Color(darkAccent), Color(0xFF101215))
-    else VaultPalette(false, Color(0xFFF5F4EF), Color(0xFFFFFFFF), Color(0xFFE9ECF0),
-        Color(0xFF181C22), Color(0xFF535E6B), Color(0xFFD4D9DF), Color(0xFF737E8B),
+    else VaultPalette(false, SkyTokens.Palette.canvas, SkyTokens.Palette.surface, SkyTokens.Palette.input,
+        SkyTokens.Palette.ink, SkyTokens.Palette.text, SkyTokens.Palette.fieldBorder, Color(0xFF737E8B),
         Color(0xFF236D4F), Color(0xFF805817), Color(0xFFAD2938), Color(lightAccent), Color.White)
 }
 
@@ -64,6 +70,8 @@ internal val ErrorColor: Color @Composable get() = LocalVaultPalette.current.err
 
 @Composable
 expect fun PlatformAppearance(dark: Boolean)
+
+internal expect fun sheetDialogProperties(): androidx.compose.ui.window.DialogProperties
 
 @Composable
 internal fun VaultTheme(brandId: String, appearance: Appearance, typography: Typography = MaterialTheme.typography, content: @Composable () -> Unit) {
@@ -86,8 +94,23 @@ internal fun VaultTheme(brandId: String, appearance: Appearance, typography: Typ
         error = palette.error, onError = palette.onAccent,
         inverseSurface = palette.text, inverseOnSurface = palette.canvas
     )
-    MaterialTheme(colorScheme = scheme, typography = typography) {
-        CompositionLocalProvider(LocalVaultPalette provides palette, LocalVaultBrandId provides brandId, LocalContentColor provides palette.text) { content() }
+    val skyColors = SkyColors(if (dark) SkyTokens.darkSemantic else SkyTokens.lightSemantic).with(
+        "action" to palette.accent, "onAction" to palette.onAccent,
+        "accent" to palette.accent, "textPrimary" to palette.text,
+        "textSecondary" to palette.muted, "textMuted" to palette.muted,
+        "canvas" to palette.canvas, "surface" to palette.surface,
+        "input" to palette.raised, "border" to palette.line, "fieldBorder" to palette.outline
+    )
+    val skyType = defaultSkyTypography().let { baseType ->
+        SkyTypography(baseType.roles.mapValues { (_, style) ->
+            style.copy(fontFamily = typography.bodyLarge.fontFamily)
+        })
+    }
+    SkyTheme(dark = dark, colors = skyColors, typography = skyType,
+        brand = SkyBrand(gradientStart = palette.accent, gradientEnd = palette.healthy)) {
+        MaterialTheme(colorScheme = scheme, typography = typography) {
+            CompositionLocalProvider(LocalVaultPalette provides palette, LocalVaultBrandId provides brandId, LocalContentColor provides palette.text) { content() }
+        }
     }
 }
 
@@ -104,7 +127,7 @@ internal fun AppearanceDialog(current: Appearance, autoLocation: Boolean, onDism
             Row(Modifier.fillMaxWidth().clickable { onSelect(choice) }, verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(current == choice, onClick = { onSelect(choice) })
                 Column {
-                    Text(when (choice) { Appearance.SYSTEM -> "ডিভাইসের মতো · System"; Appearance.LIGHT -> "লাইট · Light"; Appearance.DARK -> "ডার্ক · Dark" })
+                    Text(when (choice) { Appearance.SYSTEM -> "ডিভাইসের মতো"; Appearance.LIGHT -> "লাইট"; Appearance.DARK -> "ডার্ক" })
                 }
             }
         }

@@ -178,7 +178,7 @@ actual fun DocumentImportActions(type: String, backOnly: Boolean, onResult: (Cap
             }
         }
     }
-    DocumentSecondary(if (backOnly && isCardDocument(type)) "Import back photo" else if (backOnly) "Import page photo" else "Import a photo or PDF", Modifier.fillMaxWidth(), !busy) {
+    DocumentSecondary(if (backOnly && isCardDocument(type)) "পেছনের ছবি যোগ করুন" else if (backOnly) "পৃষ্ঠার ছবি যোগ করুন" else "ছবি বা PDF যোগ করুন", Modifier.fillMaxWidth(), !busy) {
         val picker = UIDocumentPickerViewController(documentTypes = if (backOnly) listOf("public.image") else listOf("public.image", "com.adobe.pdf"), inMode = UIDocumentPickerMode.UIDocumentPickerModeImport)
         picker.allowsMultipleSelection = !backOnly; picker.delegate = delegate
         presenter()?.presentViewController(picker, true, null) ?: error("Could not open the file picker.")

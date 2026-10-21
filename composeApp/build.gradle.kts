@@ -42,6 +42,7 @@ kotlin {
             implementation("com.google.zxing:core:3.5.3")
         }
         commonMain.dependencies {
+            implementation(project(":skyDesignSystem"))
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)

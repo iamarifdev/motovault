@@ -33,7 +33,7 @@ internal fun ColumnScope.DocumentWallet(documents: List<VaultDocument>, onAppear
                 Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
                     Box(Modifier.width(4.dp).height(48.dp).background(marker))
                     Row(Modifier.weight(1f).padding(horizontal = 15.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(document.title, fontWeight = FontWeight.SemiBold, fontSize = 12.sp, modifier = Modifier.weight(1f))
+                        Text(documentDisplayName(document.title), fontWeight = FontWeight.SemiBold, fontSize = 12.sp, modifier = Modifier.weight(1f))
                         DocumentBadge(document.expiryLabel, warning = status == DocumentExpiryStatus.EXPIRED || status == DocumentExpiryStatus.EXPIRING_SOON, good = status == DocumentExpiryStatus.VALID)
                     }
                 }
@@ -42,8 +42,8 @@ internal fun ColumnScope.DocumentWallet(documents: List<VaultDocument>, onAppear
                     if (isCardDocument(document.title)) {
                         val page = document.pages.firstOrNull()
                         if (page != null) DocumentImage(page, Modifier.clip(RoundedCornerShape(9.dp)))
-                        else document.frontPhoto?.let { Attachment(it, "Original ${document.title}") } ?: Column(Modifier.fillMaxWidth().aspectRatio(1.586f).background(LocalVaultPalette.current.raised, RoundedCornerShape(9.dp)).padding(16.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) { DocumentNote("Details only · No original stored"); Text(document.holder, fontSize = 14.sp); DocumentNote(document.number) }
-                    } else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { DocumentNote("Original certificate · ${document.pages.size.coerceAtLeast(1)} page(s)"); DocumentNote(document.details["registration"] ?: document.number) }
+                        else document.frontPhoto?.let { Attachment(it, "Original ${document.title}") } ?: Column(Modifier.fillMaxWidth().aspectRatio(1.586f).background(LocalVaultPalette.current.raised, RoundedCornerShape(9.dp)).padding(16.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) { DocumentNote("শুধু তথ্য আছে। আসল কপি নেই"); Text(document.holder, fontSize = 14.sp); DocumentNote(document.number) }
+                    } else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { DocumentNote("আসল সনদ · ${document.pages.size.coerceAtLeast(1)} পৃষ্ঠা"); DocumentNote(document.details["registration"] ?: document.number) }
                 }
             }
         }
@@ -52,7 +52,7 @@ internal fun ColumnScope.DocumentWallet(documents: List<VaultDocument>, onAppear
     if (next != null) Panel {
         val status = next.expiryStatus
         Text("পরের নবায়ন", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { DocumentNote("${next.title} · ${next.expiry}"); DocumentBadge(next.expiryLabel, warning = status == DocumentExpiryStatus.EXPIRED || status == DocumentExpiryStatus.EXPIRING_SOON, good = status == DocumentExpiryStatus.VALID) }
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { DocumentNote("${documentDisplayName(next.title)} · ${next.expiry}"); DocumentBadge(next.expiryLabel, warning = status == DocumentExpiryStatus.EXPIRED || status == DocumentExpiryStatus.EXPIRING_SOON, good = status == DocumentExpiryStatus.VALID) }
     }
     DocumentPrimary("কাগজ স্ক্যান করুন  ＋", onClick = onAdd)
     RenewalReminderControl()
@@ -62,11 +62,11 @@ internal fun ColumnScope.DocumentWallet(documents: List<VaultDocument>, onAppear
 
 @Composable internal fun DocumentInspection(documents: List<VaultDocument>, onDismiss: () -> Unit, onDocument: (VaultDocument) -> Unit) {
     VaultTheme(LocalVaultBrandId.current, Appearance.LIGHT) {
-        DocumentScreen("Roadside inspection", onDismiss) {
-            Eyebrow("Stored document copies"); DocumentHeading("Vehicle documents"); DocumentCopy("Choose the original to show. Only document copies are displayed.")
-            if (documents.isEmpty()) DocumentCopy("No documents stored. Return to the vault and scan your first document.")
-            documents.forEach { document -> Panel(onClick = { onDocument(document) }) { Text(document.title, fontSize = 14.sp, fontWeight = FontWeight.Bold); DocumentNote(document.number); DocumentBadge(document.expiryLabel) } }
-            DocumentSecondary("Exit inspection", Modifier.fillMaxWidth(), onClick = onDismiss)
+        DocumentScreen("রাস্তায় কাগজ দেখান", onDismiss) {
+            Eyebrow("সংরক্ষিত কাগজের কপি"); DocumentHeading("গাড়ির কাগজপত্র"); DocumentCopy("যে কাগজ দেখাবেন তা বেছে নিন। এখানে শুধু কাগজের কপি দেখানো হবে।")
+            if (documents.isEmpty()) DocumentCopy("কোনো কাগজ রাখা নেই। কাগজপত্রে ফিরে প্রথম কাগজ স্ক্যান করুন।")
+            documents.forEach { document -> Panel(onClick = { onDocument(document) }) { Text(documentDisplayName(document.title), fontSize = 14.sp, fontWeight = FontWeight.Bold); DocumentNote(document.number); DocumentBadge(document.expiryLabel) } }
+            DocumentSecondary("ফিরে যান", Modifier.fillMaxWidth(), onClick = onDismiss)
         }
     }
 }

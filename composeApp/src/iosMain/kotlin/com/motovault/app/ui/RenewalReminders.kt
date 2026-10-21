@@ -107,9 +107,9 @@ internal actual suspend fun reconcileRenewalReminders(documents: List<VaultDocum
         onDispose { owner.lifecycle.removeObserver(observer) }
     }
     Panel {
-        DocumentNote("Renewal reminders")
-        DocumentCopy("A warning 60 days before expiry and a reminder on the expiry day, around 9 am. New documents inside the warning window get one warning at the next 9 am.")
-        DocumentSecondary(if (active) "Turn reminders off" else "Enable reminders", onClick = {
+        DocumentNote("নবায়নের রিমাইন্ডার")
+        DocumentCopy("মেয়াদ শেষের ৬০ দিন আগে এবং মেয়াদ শেষের দিন সকাল ৯টার দিকে জানানো হবে। ৬০ দিনের কম মেয়াদ থাকা নতুন কাগজ যোগ করলে পরের সকাল ৯টায় একবার জানানো হবে।")
+        DocumentSecondary(if (active) "রিমাইন্ডার বন্ধ করুন" else "রিমাইন্ডার চালু করুন", onClick = {
             if (active) { defaults.setBool(false, forKey = "renewal.enabled"); refresh() }
             else scope.launch {
                 val granted = suspendCancellableCoroutine<Boolean> { continuation -> center.requestAuthorizationWithOptions(UNAuthorizationOptionAlert or UNAuthorizationOptionSound) { granted, _ -> continuation.resume(granted) } }
@@ -117,9 +117,9 @@ internal actual suspend fun reconcileRenewalReminders(documents: List<VaultDocum
             }
         })
         if (!allowed) {
-            DocumentNote("Notifications are off in device settings. In-app renewal warnings still work.")
-            DocumentLink("Open notification settings") { NSURL.URLWithString(UIApplicationOpenSettingsURLString)?.let { UIApplication.sharedApplication.openURL(it, emptyMap<Any?, Any?>(), null) } }
+            DocumentNote("ডিভাইসের সেটিংসে নোটিফিকেশন বন্ধ আছে। অ্যাপের ভেতরে নবায়নের সতর্কতা দেখা যাবে।")
+            DocumentLink("নোটিফিকেশন সেটিংস খুলুন") { NSURL.URLWithString(UIApplicationOpenSettingsURLString)?.let { UIApplication.sharedApplication.openURL(it, emptyMap<Any?, Any?>(), null) } }
         }
-        if (failed) DocumentNote("Could not update reminders. Your saved documents are safe. Try again.")
+        if (failed) DocumentNote("রিমাইন্ডার আপডেট করা যায়নি। কাগজপত্র সুরক্ষিত আছে। আবার চেষ্টা করুন।")
     }
 }
