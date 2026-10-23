@@ -4,16 +4,14 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.animateFloatAsState
-import dev.sky.design.*
-import dev.sky.design.tokens.SkyTokens
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -34,37 +32,41 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.motovault.app.domain.model.ComponentRule
-import com.motovault.app.domain.usecase.CalculateWearUseCase
-import kotlinx.datetime.LocalDate
-import kotlinx.coroutines.launch
+import com.motovault.app.storage.activeVaultSession
+import dev.sky.design.*
+import dev.sky.design.tokens.SkyTokens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import com.motovault.app.storage.activeVaultSession
-import androidx.compose.ui.window.DialogProperties
+import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
 import motovault.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.Font
+import org.jetbrains.compose.resources.painterResource
 import kotlin.math.roundToLong
 
-internal data class BrandWorld(val id: String, val name: String, val accent: Color, val tone: String)
+data class BrandWorld(val id: String, val name: String, val accent: Color, val tone: String)
 
-internal val worlds = listOf(
+val worlds = listOf(
     BrandWorld("ktm", "KTM", Color(0xFFFF7900), "Racing orange"),
     BrandWorld("cfmoto", "CFMOTO", Color(0xFF69D2DB), "Performance cyan"),
     BrandWorld("yamaha", "Yamaha", Color(0xFF88A8FF), "Performance blue"),
@@ -76,13 +78,23 @@ internal val worlds = listOf(
     BrandWorld("enfield", "Royal Enfield", Color(0xFFDBB77C), "Heritage gold")
 )
 
-private enum class Tab(val title: String, val icon: String) { GARAGE("গ্যারেজ", "garage"), VAULT("কাগজপত্র", "vault"), HISTORY("ইতিহাস", "history") }
+enum class Tab(val id: String, val title: String, val icon: String) {
+    GARAGE("garage", "গ্যারেজ", "fi_home.svg"),
+    VAULT("vault", "কাগজপত্র", "fi_folder.svg"),
+    HISTORY("history", "ইতিহাস", "fi_clock.svg"),
+    ME("me", "আমি", "fi_user.svg")
+}
 
-internal fun bengaliDigits(value: Int): String = value.toString().map { digit ->
+data class ActiveSheet(
+    val name: String,
+    val props: Any? = null
+)
+
+fun bengaliDigits(value: Int): String = value.toString().map { digit ->
     if (digit in '0'..'9') ('০'.code + digit.code - '0'.code).toChar() else digit
 }.joinToString("")
 
-internal fun brandToneName(brandId: String): String = when (brandId) {
+fun brandToneName(brandId: String): String = when (brandId) {
     "cfmoto" -> "নীলাভ সবুজ"
     "yamaha" -> "পারফরম্যান্স নীল"
     "honda" -> "হোন্ডা লাল"
@@ -94,7 +106,7 @@ internal fun brandToneName(brandId: String): String = when (brandId) {
     else -> "রেসিং কমলা"
 }
 
-private fun componentSuffix(rule: ComponentRule): String {
+fun componentSuffix(rule: ComponentRule): String {
     val knownSuffix = listOf("air_filter", "spark_plug", "brake_pads", "brake_fluid", "chain", "oil", "coolant")
         .firstOrNull { rule.id.endsWith("_$it") }
     return knownSuffix ?: when (rule.name.trim().lowercase()) {
@@ -109,7 +121,7 @@ private fun componentSuffix(rule: ComponentRule): String {
     }
 }
 
-internal fun componentLabel(rule: ComponentRule): String {
+fun componentLabel(rule: ComponentRule): String {
     val suffix = componentSuffix(rule)
     val bengaliName = when (suffix) {
         "chain" -> "চেইন পরিষ্কার ও লুব্রিকেন্ট"
@@ -121,22 +133,10 @@ internal fun componentLabel(rule: ComponentRule): String {
         "brake_fluid" -> "ব্রেক ফ্লুইড (DOT 4)"
         else -> null
     }
-    if (bengaliName == null) return rule.name
-    return bengaliName
+    return bengaliName ?: rule.name
 }
 
-private fun componentShortLabel(rule: ComponentRule): String = when (componentSuffix(rule)) {
-    "chain" -> "চেইন"
-    "oil" -> "ইঞ্জিন অয়েল"
-    "air_filter" -> "এয়ার ফিল্টার"
-    "spark_plug" -> "স্পার্ক প্লাগ"
-    "brake_pads" -> "ব্রেক প্যাড"
-    "coolant" -> "কুল্যান্ট"
-    "brake_fluid" -> "ব্রেক ফ্লুইড"
-    else -> rule.name
-}
-
-internal fun BrandWorld.logo(): DrawableResource = when (id) {
+fun BrandWorld.logo(): DrawableResource = when (id) {
     "ktm" -> Res.drawable.logo_ktm
     "cfmoto" -> Res.drawable.logo_cfmoto
     "yamaha" -> Res.drawable.logo_yamaha
@@ -156,236 +156,511 @@ fun MotoVault() {
     val revision = snapshot.revision
     val storageError = snapshot.error
     val loading = snapshot.loading
-    val saving = snapshot.saving
-    var tab by remember { mutableStateOf(Tab.GARAGE) }
-    var historyFilter by remember { mutableStateOf("all") }
-    var editingRide by remember { mutableStateOf(false) }
-    var pendingGarage by remember { mutableStateOf<VaultState?>(null) }
-    var selectedBrand by remember { mutableStateOf(state.ride?.brandId ?: "ktm") }
-    var dialog by rememberSaveable { mutableStateOf<String?>(null) }
-    var selectedRule by remember { mutableStateOf<ComponentRule?>(null) }
-    var selectedLogId by rememberSaveable { mutableStateOf<String?>(null) }
-    val selectedLog = state.logs.firstOrNull { it.id == selectedLogId }
-    var selectedDocumentId by rememberSaveable { mutableStateOf<String?>(null) }
-    val selectedDocument = state.documents.firstOrNull { it.id == selectedDocumentId }
-    var manualDocumentType by rememberSaveable { mutableStateOf(documentTypes.first()) }
-    var deleteId by remember { mutableStateOf<String?>(null) }
-    var deleteKind by remember { mutableStateOf("log") }
-    val brand = worlds.firstOrNull { it.id == selectedBrand } ?: worlds.first()
-    val snackbars = remember { SnackbarHostState() }
+
+    var tab by remember {
+        mutableStateOf(
+            when (LaunchConfig.initialTab?.lowercase()) {
+                "vault" -> Tab.VAULT
+                "history" -> Tab.HISTORY
+                "me" -> Tab.ME
+                else -> Tab.GARAGE
+            }
+        )
+    }
+    var editingRide by remember { mutableStateOf(LaunchConfig.initialOnboarding) }
+    var activeSheet by remember {
+        mutableStateOf(
+            LaunchConfig.initialSheet?.let { ActiveSheet(it) }
+        )
+    }
+    var currentToast by remember { mutableStateOf<ToastData?>(null) }
+
     val scope = rememberCoroutineScope()
-    val initialRevision = remember { snapshot.revision }
-    LaunchedEffect(loading) { if (!loading) selectedBrand = state.ride?.brandId ?: "ktm" }
-    LaunchedEffect(snapshot.revision) {
-        if (snapshot.revision > initialRevision) dialog = null
-    }
-    fun commit(next: VaultState, completed: (Boolean) -> Unit) {
-        session.commit(next, revision) { saved ->
+
+    fun commit(next: VaultState, onDone: ((Boolean) -> Unit)? = null) {
+        session.commit(next, revision) { ok ->
             if (scope.isActive) {
-                completed(saved)
-                if (saved) scope.launch { snackbars.showSnackbar("রেকর্ড সংরক্ষণ হয়েছে", duration = SnackbarDuration.Short) }
+                onDone?.invoke(ok)
             }
         }
     }
-    fun history(kind: String) { historyFilter = kind; tab = Tab.HISTORY; dialog = null }
-    val sans = FontFamily(
-        Font(Res.font.anek_bangla, weight = FontWeight.Normal),
-        Font(Res.font.anek_bangla, weight = FontWeight.Medium),
-        Font(Res.font.anek_bangla, weight = FontWeight.SemiBold),
-        Font(Res.font.anek_bangla, weight = FontWeight.Bold)
-    )
-    val typography = Typography().let { base -> base.copy(
-        bodyLarge = base.bodyLarge.copy(fontFamily = sans), bodyMedium = base.bodyMedium.copy(fontFamily = sans),
-        bodySmall = base.bodySmall.copy(fontFamily = sans), labelLarge = base.labelLarge.copy(fontFamily = sans),
-        labelMedium = base.labelMedium.copy(fontFamily = sans), labelSmall = base.labelSmall.copy(fontFamily = sans),
-        titleLarge = base.titleLarge.copy(fontFamily = sans), titleMedium = base.titleMedium.copy(fontFamily = sans)
-    ) }
-    VaultTheme(brand.id, state.appearance, typography) {
+
+    LaunchedEffect(LaunchConfig.initialSeed, loading) {
+        if (LaunchConfig.initialSeed && !loading) {
+            val seeded = VaultState.seedData(today())
+            commit(seeded)
+        }
+    }
+
+    val activeBrandId = state.brandOverride ?: state.ride?.brandId ?: "yamaha"
+
+    VaultTheme(
+        brandId = activeBrandId,
+        appearance = state.appearance,
+        reduceMotion = state.reduceMotion,
+        textScale = state.textScale,
+        digits = state.digits
+    ) {
         PlatformAppearance(LocalVaultPalette.current.dark)
-        Box(Modifier.fillMaxSize().background(SurfaceColor).safeDrawingPadding(), contentAlignment = Alignment.TopCenter) {
-            Column(Modifier.widthIn(max = 600.dp).fillMaxSize().background(CanvasColor)) {
-                storageError?.let { Text(it, color = WarningColor, modifier = Modifier.fillMaxWidth().padding(16.dp), fontSize = 12.sp) }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(CanvasColor)
+                .safeDrawingPadding(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Column(
+                modifier = Modifier
+                    .widthIn(max = 600.dp)
+                    .fillMaxSize()
+            ) {
+                storageError?.let {
+                    Text(
+                        text = it,
+                        color = ErrorColor,
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        fontSize = 13.sp
+                    )
+                }
+
                 if (loading) {
-                    CircularProgressIndicator(Modifier.padding(32.dp))
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = BrandColor)
+                    }
                 } else if (state.ride == null || editingRide) {
-                    Setup(brand, existing = state.ride, onAppearance = { dialog = "appearance" }, onBrand = { selectedBrand = it }, onCreate = { ride, baseline, date ->
-                        val draft = VaultState.create(ride, baseline, date).copy(documents = state.documents, appearance = state.appearance, autoLocation = state.autoLocation)
-                        if (state.ride != null) { pendingGarage = draft; dialog = "replace" }
-                        else commit(draft) { if (it) editingRide = false }
-                    }, onCancel = if (state.ride != null) ({ editingRide = false; selectedBrand = state.ride!!.brandId }) else null)
+                    OnboardingScreen(
+                        onDismiss = if (state.ride != null) { { editingRide = false } } else null,
+                        onComplete = { brandId, modelId, name, odometer, knowsLastService ->
+                            val today = today()
+                            val seeded = VaultState.seedData(today)
+                            val rules = seeded.rules.map { rule ->
+                                rule.copy(
+                                    lastServicedOdometerKm = if (knowsLastService) (odometer - rule.intervalKm * 0.4).coerceAtLeast(0.0) else odometer,
+                                    lastServicedEpochDays = today.toEpochDays().toLong()
+                                )
+                            }
+                            val ride = Ride(
+                                brandId = brandId,
+                                modelId = modelId,
+                                year = today.year - 2,
+                                odometer = odometer,
+                                edition = name
+                            )
+                            val nextState = state.copy(
+                                ride = ride,
+                                rules = rules,
+                                logs = emptyList(),
+                                documents = seeded.documents
+                            )
+                            commit(nextState) { ok ->
+                                if (ok) {
+                                    editingRide = false
+                                    tab = Tab.GARAGE
+                                }
+                            }
+                        }
+                    )
                 } else {
-                    AnimatedContent(tab, modifier = Modifier.weight(1f), transitionSpec = {
-                            fadeIn(tween(SkyTokens.Page.enterMs)) togetherWith fadeOut(tween(SkyTokens.Page.exitMs))
-                        }, label = "Vault destination") { destination ->
-                        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 22.dp).padding(top = 20.dp, bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-                        when (destination) {
-                            Tab.GARAGE -> Garage(state, brand, onAppearance = { dialog = "appearance" }, onOdometer = { dialog = "odometer" }, onFuel = { dialog = "fuel" },
-                                onRule = { selectedRule = it; dialog = "service" }, onComponents = { dialog = "components" },
-                                onChangeBike = { editingRide = true }, onFuelHistory = { history("fuel") }, onVault = { tab = Tab.VAULT })
-                            Tab.VAULT -> Vault(state.documents, onAppearance = { dialog = "appearance" }, onAdd = { selectedDocumentId = null; dialog = "documentCapture" },
-                                onDocument = { selectedDocumentId = it.id; dialog = "detail" }, onInspection = { selectedDocumentId = state.documents.firstOrNull()?.id; dialog = if (selectedDocumentId == null) "inspection" else "inspectDetail" })
-                            Tab.HISTORY -> History(state, historyFilter, onAppearance = { dialog = "appearance" }, onFilter = { historyFilter = it },
-                                onDelete = { deleteId = it.id; deleteKind = "log"; dialog = "delete" },
-                                onEdit = { selectedLogId = it.id; dialog = if (it.isFuel) "editFuel" else "editService" },
-                                onFuel = { dialog = "fuel" }, onService = { selectedRule = state.rules.firstOrNull(); dialog = if (selectedRule == null) "components" else "service" })
-                        }
+                    // Screen pages
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                    ) {
+                        AnimatedContent(
+                            targetState = tab,
+                            transitionSpec = {
+                                fadeIn(VaultMotion.pageTween()) togetherWith fadeOut(VaultMotion.pageTween())
+                            },
+                            label = "VaultScreenPage",
+                            modifier = Modifier.fillMaxSize()
+                        ) { destination ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState())
+                            ) {
+                                when (destination) {
+                                    Tab.GARAGE -> GarageScreen(
+                                        state = state,
+                                        onOpenSheet = { name, payload -> activeSheet = ActiveSheet(name, payload) },
+                                        onSwitchTab = { nextTab -> tab = nextTab },
+                                        onOpenServiceForItem = { itemKey -> activeSheet = ActiveSheet("service", itemKey) }
+                                    )
+                                    Tab.VAULT -> VaultScreen(
+                                        state = state,
+                                        onOpenAddDoc = { activeSheet = ActiveSheet("docAdd") },
+                                        onOpenDocView = { doc -> activeSheet = ActiveSheet("docView", doc.id) },
+                                        onToggleDocReminders = { enabled -> commit(state.copy(docReminders = enabled)) }
+                                    )
+                                    Tab.HISTORY -> HistoryScreen(
+                                        state = state,
+                                        onDeleteLog = { log ->
+                                            val prev = state
+                                            val next = runCatching { state.deleteLog(log) }.getOrNull()
+                                            if (next != null) {
+                                                commit(next) { ok ->
+                                                    if (ok) {
+                                                        currentToast = ToastData(
+                                                            id = "del_${log.id}",
+                                                            message = "রেকর্ড মোছা হয়েছে",
+                                                            undoAction = {
+                                                                commit(prev)
+                                                                currentToast = null
+                                                            }
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    )
+                                    Tab.ME -> MeScreen(
+                                        state = state,
+                                        onUpdateState = { next -> commit(next) },
+                                        onStartOnboarding = { editingRide = true },
+                                        onResetDemo = {
+                                            val seeded = VaultState.seedData(today())
+                                            commit(seeded)
+                                        },
+                                        onOpenSheet = { name, payload -> activeSheet = ActiveSheet(name, payload) }
+                                    )
+                                }
+                            }
                         }
                     }
-                    VaultBottomNavigation(tab) { tab = it; historyFilter = "all" }
+
+                    // Bottom Navigation Bar with Center "+" Button
+                    VaultBottomNavigation(
+                        selected = tab,
+                        onSelect = { tab = it },
+                        onQuickAdd = { activeSheet = ActiveSheet("quickAdd") }
+                    )
                 }
             }
-            when (dialog) {
-                "appearance" -> AppearanceDialog(state.appearance, state.autoLocation, onDismiss = { dialog = null }, onSelect = { choice -> commit(state.copy(appearance = choice)) { if (it) dialog = null } }, onAutoLocationChange = { enabled -> commit(state.copy(autoLocation = enabled)) {} })
-                "replace" -> Sheet("নতুন বাইকের রেকর্ড শুরু করবেন?", onDismiss = { dialog = null }) {
-                    Text("বর্তমান বাইকের সার্ভিস ও জ্বালানির রেকর্ড মুছে যাবে। কাগজপত্র রাখা থাকবে।", color = TextSecondary)
-                    Primary("নতুন বাইক রাখুন", "check") { pendingGarage?.let { draft -> commit(draft) { if (it) { editingRide = false; dialog = null; tab = Tab.GARAGE } } } }
-                    TextButton(onClick = { dialog = null; editingRide = false; selectedBrand = state.ride!!.brandId }) { Text("বর্তমান বাইক রাখুন") }
-                }
-                "odometer" -> NumberDialog("ওডোমিটার আপডেট করুন", "বর্তমান দূরত্ব (কিমি)", state.ride!!.odometer.toInt().toString(), minimum = state.ride!!.odometer, onDismiss = { dialog = null }) { value ->
-                    commit(state.copy(ride = state.ride!!.copy(odometer = value))) { if (it) dialog = null }
-                }
-                "fuel" -> FuelDialog(state, onDismiss = { dialog = null }, onSave = ::commit, onHistory = { history("fuel") })
-                "editFuel" -> selectedLog?.let { log -> FuelDialog(state, onDismiss = { dialog = null }, onSave = ::commit, onHistory = { history("fuel") }, existing = log) }
-                "service" -> ServiceDialog(state, selectedRule, onDismiss = { dialog = null }, onSave = ::commit,
-                    onEdit = { selectedRule = it; dialog = "schedule" }, onHistory = { history("service") })
-                "editService" -> selectedLog?.let { log -> ServiceDialog(state, null, onDismiss = { dialog = null }, onSave = ::commit,
-                    onEdit = { selectedRule = it; dialog = "schedule" }, onHistory = { history("service") }, existing = log) }
-                "components" -> ComponentsList(state, onDismiss = { dialog = null }, onSelect = { selectedRule = it; dialog = "service" },
-                    onAdd = { selectedRule = null; dialog = "schedule" })
-                "schedule" -> ScheduleDialog(state, selectedRule, onDismiss = { dialog = null }, onSave = ::commit)
-                "documentCapture" -> DocumentCaptureFlow(state, selectedDocument, onDismiss = { dialog = null }, onManual = { manualDocumentType = it; dialog = "document" }, onSave = ::commit)
-                "document" -> DocumentEditFlow(state, selectedDocument, manualDocumentType, onDismiss = { dialog = null }, onSave = ::commit)
-                "detail", "inspectDetail" -> selectedDocument?.let { document -> VaultTheme(brand.id, if (dialog == "inspectDetail") Appearance.LIGHT else state.appearance, typography) { OriginalDocumentDetail(document, inspection = dialog == "inspectDetail",
-                    onDismiss = { dialog = null }, onEdit = { dialog = "document" }, onScan = { dialog = "documentCapture" },
-                    onDelete = { deleteId = document.id; deleteKind = "document"; dialog = "delete" }, onInspectionList = { dialog = "inspection" }, onInspect = { dialog = "inspectDetail" },
-                    onRecordFee = { dialog = "documentFee" }) } }
-                "documentFee" -> selectedDocument?.let { document -> DocumentFeeDialog(state, document, onDismiss = { dialog = "detail" }, onSave = ::commit) }
-                "inspection" -> DocumentInspection(state.documents, onDismiss = { dialog = null }, onDocument = { selectedDocumentId = it.id; dialog = "inspectDetail" })
-                "delete" -> {
-                    var error by remember { mutableStateOf<String?>(null) }
-                    Sheet("এই রেকর্ড মুছবেন?", onDismiss = { dialog = null }) {
-                        Text("মুছে ফেললে আর ফেরানো যাবে না।", color = TextSecondary)
-                        error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
-                        Primary("রেকর্ড মুছুন", "close") {
-                            runCatching {
-                                if (deleteKind == "document") state.copy(documents = state.documents.filterNot { it.id == deleteId })
-                                else state.deleteLog(state.logs.first { it.id == deleteId })
-                            }.onSuccess { next -> commit(next) { if (it) dialog = null else error = storageError } }.onFailure { error = it.message }
+
+            // Floating Toast notification with Undo
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 90.dp)
+            ) {
+                ToastLayer(
+                    toast = currentToast,
+                    onDismiss = { currentToast = null }
+                )
+            }
+
+            // Sheets Orchestration
+            if (!loading && (state.ride != null || activeSheet?.name == "paste" || activeSheet?.name == "quickAdd")) {
+                activeSheet?.let { sheet ->
+                when (sheet.name) {
+                    "quickAdd" -> QuickAddSheet(
+                        onDismiss = { activeSheet = null },
+                        onSelectFlow = { flow -> activeSheet = ActiveSheet(flow) }
+                    )
+                    "fuel" -> FuelSheet(
+                        state = state,
+                        initialAmount = (sheet.props as? Number)?.toDouble(),
+                        onDismiss = { activeSheet = null },
+                        onSave = { nextState, msg, onDone ->
+                            val prev = state
+                            commit(nextState) { ok ->
+                                if (ok) {
+                                    currentToast = ToastData(
+                                        id = "fuel_${Clock.System.now().toEpochMilliseconds()}",
+                                        message = msg,
+                                        undoAction = {
+                                            commit(prev)
+                                            currentToast = null
+                                        }
+                                    )
+                                    onDone()
+                                    activeSheet = null
+                                }
+                            }
+                        }
+                    )
+                    "service" -> {
+                        val itemKey = sheet.props as? String
+                        val parsedRows = (sheet.props as? List<*>)?.filterIsInstance<ParsedLine>()
+                        ServiceSheet(
+                            state = state,
+                            initialItemKey = itemKey,
+                            initialRows = parsedRows,
+                            onDismiss = { activeSheet = null },
+                            onSave = { nextState, msg, onDone ->
+                                val prev = state
+                                commit(nextState) { ok ->
+                                    if (ok) {
+                                        currentToast = ToastData(
+                                            id = "svc_${Clock.System.now().toEpochMilliseconds()}",
+                                            message = msg,
+                                            undoAction = {
+                                                commit(prev)
+                                                currentToast = null
+                                            }
+                                        )
+                                        onDone()
+                                        activeSheet = null
+                                    }
+                                }
+                            }
+                        )
+                    }
+                    "odometer" -> OdometerSheet(
+                        state = state,
+                        onDismiss = { activeSheet = null },
+                        onSave = { nextState, msg, onDone ->
+                            val prev = state
+                            commit(nextState) { ok ->
+                                if (ok) {
+                                    currentToast = ToastData(
+                                        id = "odo_${Clock.System.now().toEpochMilliseconds()}",
+                                        message = msg,
+                                        undoAction = {
+                                            commit(prev)
+                                            currentToast = null
+                                        }
+                                    )
+                                    onDone()
+                                    activeSheet = null
+                                }
+                            }
+                        }
+                    )
+                    "docAdd" -> DocAddSheet(
+                        state = state,
+                        onDismiss = { activeSheet = null },
+                        onSave = { nextState, msg, onDone ->
+                            val prev = state
+                            commit(nextState) { ok ->
+                                if (ok) {
+                                    currentToast = ToastData(
+                                        id = "doc_${Clock.System.now().toEpochMilliseconds()}",
+                                        message = msg,
+                                        undoAction = {
+                                            commit(prev)
+                                            currentToast = null
+                                        }
+                                    )
+                                    onDone()
+                                    activeSheet = null
+                                }
+                            }
+                        }
+                    )
+                    "docView" -> {
+                        val docId = sheet.props as? String
+                        val doc = state.documents.firstOrNull { it.id == docId }
+                        if (doc != null) {
+                            DocViewSheet(
+                                doc = doc,
+                                onDismiss = { activeSheet = null },
+                                onUpdateReminder = { enabled ->
+                                    val updated = state.documents.map { if (it.id == doc.id) it.copy(reminder = enabled) else it }
+                                    commit(state.copy(documents = updated))
+                                }
+                            )
                         }
                     }
+                    "paste" -> PasteSheet(
+                        onDismiss = { activeSheet = null },
+                        onSelectFlow = { flow, payload ->
+                            activeSheet = ActiveSheet(flow, payload)
+                        }
+                    )
                 }
             }
-            SnackbarHost(snackbars, modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 86.dp))
-            if (saving) Dialog(onDismissRequest = {}, properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)) {
-                Surface(shape = RoundedCornerShape(16.dp)) { Row(Modifier.padding(24.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) { CircularProgressIndicator(Modifier.size(24.dp)); Text("রেকর্ড সেভ হচ্ছে…") } }
             }
         }
     }
 }
 
-
-
 @Composable
-private fun ColumnScope.Garage(state: VaultState, brand: BrandWorld, onAppearance: () -> Unit, onOdometer: () -> Unit, onFuel: () -> Unit, onRule: (ComponentRule) -> Unit, onComponents: () -> Unit, onChangeBike: () -> Unit, onFuelHistory: () -> Unit, onVault: () -> Unit) {
-    val ride = state.ride!!
-    Top("আমার গ্যারেজ", "ডিভাইসে সংরক্ষিত", onAppearance)
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) { Eyebrow("আপনার বাইকের সঙ্গী"); Text(ride.displayName, fontFamily = FontFamily(Font(Res.font.barlow_condensed)), fontSize = if (ride.displayName.length > 14) 29.sp else 38.sp, fontWeight = FontWeight.SemiBold, lineHeight = 42.sp); val edition = if (ride.edition in setOf("Owner-defined setup", "নিজের সেটআপ · Owner-defined")) "নিজের সেটআপ" else ride.edition; Text("$edition · ${ride.year}" + if (ride.registration.isBlank()) "" else " · ${ride.registration}", color = TextSecondary, fontSize = 12.sp) }
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            IconButton(onClick = onChangeBike, modifier = Modifier.semantics { contentDescription = "বাইক বদলান" }) { Image(painterResource(brand.logo()), brand.name, Modifier.size(44.dp), contentScale = ContentScale.Fit, colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)) }
-            Text("বাইক বদলান", color = TextSecondary, fontSize = 10.sp)
-        }
-    }
-    BikePhoto(ride)
-    Row(Modifier.fillMaxWidth().border(1.dp, BorderColor, RoundedCornerShape(14.dp)).padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Column(Modifier.weight(1f).clickable(onClick = onOdometer), verticalArrangement = Arrangement.spacedBy(6.dp)) { Eyebrow("ওডোমিটার", TextSecondary); Row(verticalAlignment = Alignment.Bottom) { Text(grouped(ride.odometer.toInt()), fontSize = 29.sp, fontWeight = FontWeight.Bold); Text(" km", color = TextSecondary, fontSize = 11.sp) }; Text("ছুঁয়ে আপডেট করুন", color = TextSecondary, fontSize = 10.sp) }
-        Box(Modifier.width(1.dp).height(64.dp).background(BorderColor))
-        Column(Modifier.weight(1f).clickable(onClick = onFuelHistory), verticalArrangement = Arrangement.spacedBy(6.dp)) { Eyebrow("জ্বালানি", TextSecondary); Row(verticalAlignment = Alignment.Bottom) { Text(state.economy?.let { oneDecimal(it) } ?: "--", fontSize = 29.sp, fontWeight = FontWeight.Bold); Text(" km/L", color = TextSecondary, fontSize = 11.sp) }; Text("সম্পূর্ণ ট্যাংক ধরে গড়", color = TextSecondary, fontSize = 10.sp) }
-    }
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("যন্ত্রাংশের অবস্থা", fontWeight = FontWeight.SemiBold); TextButton(onClick = onComponents, contentPadding = PaddingValues(0.dp)) { Text("সব যন্ত্রাংশ ↗", color = TextSecondary, fontSize = 11.sp) } }
-    if (state.rules.isEmpty()) {
-        Panel { Text("সার্ভিসের সময়সূচি", fontWeight = FontWeight.Bold); Text("ম্যানুয়াল বা ওয়ার্কশপের পরামর্শে সময় ঠিক করুন।", color = TextSecondary, fontSize = 13.sp) }
-    } else {
-        val calculations = CalculateWearUseCase().executeAll(state.rules, ride.odometer, today().toEpochDays().toLong())
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            state.rules.take(3).forEachIndexed { index, rule ->
-                val calc = calculations[index]
-                Gauge(componentShortLabel(rule), (100 - calc.wearPercentage).coerceIn(0, 100), Modifier.weight(1f)) { onRule(rule) }
+private fun VaultBottomNavigation(
+    selected: Tab,
+    onSelect: (Tab) -> Unit,
+    onQuickAdd: () -> Unit
+) {
+    val haptic = currentHaptic
+    val brand = BrandColor
+    val onBrand = OnBrandColor
+    val surface = SurfaceColor
+    val line = BorderColor
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(surface)
+    ) {
+        HorizontalDivider(color = line, thickness = 0.5.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(68.dp)
+                .padding(horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Tab 1: GARAGE
+            BottomNavItem(
+                tab = Tab.GARAGE,
+                isSelected = selected == Tab.GARAGE,
+                onClick = {
+                    haptic.perform(HapticKind.TICK)
+                    onSelect(Tab.GARAGE)
+                },
+                modifier = Modifier.weight(1f)
+            )
+
+            // Tab 2: VAULT
+            BottomNavItem(
+                tab = Tab.VAULT,
+                isSelected = selected == Tab.VAULT,
+                onClick = {
+                    haptic.perform(HapticKind.TICK)
+                    onSelect(Tab.VAULT)
+                },
+                modifier = Modifier.weight(1f)
+            )
+
+            // Center slot: Tab Plus button
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                var pressed by remember { mutableStateOf(false) }
+                val scale by animateFloatAsState(
+                    targetValue = if (pressed) 0.92f else 1f,
+                    animationSpec = VaultMotion.pressSpring(),
+                    label = "plusScale"
+                )
+
+                Box(
+                    modifier = Modifier
+                        .offset(y = (-14).dp)
+                        .size(56.dp)
+                        .graphicsLayer {
+                            scaleX = scale
+                            scaleY = scale
+                        }
+                        .clip(CircleShape)
+                        .background(surface)
+                        .padding(4.dp)
+                        .clip(CircleShape)
+                        .background(brand)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            haptic.perform(HapticKind.SUCCESS)
+                            onQuickAdd()
+                        }
+                        .semantics {
+                            role = Role.Button
+                            contentDescription = "নতুন রেকর্ড যোগ করুন"
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    SkySvgIcon(
+                        path = "feather_icon/fi_plus.svg",
+                        description = null,
+                        modifier = Modifier.size(28.dp),
+                        tint = onBrand
+                    )
+                }
             }
+
+            // Tab 3: HISTORY
+            BottomNavItem(
+                tab = Tab.HISTORY,
+                isSelected = selected == Tab.HISTORY,
+                onClick = {
+                    haptic.perform(HapticKind.TICK)
+                    onSelect(Tab.HISTORY)
+                },
+                modifier = Modifier.weight(1f)
+            )
+
+            // Tab 4: ME
+            BottomNavItem(
+                tab = Tab.ME,
+                isSelected = selected == Tab.ME,
+                onClick = {
+                    haptic.perform(HapticKind.TICK)
+                    onSelect(Tab.ME)
+                },
+                modifier = Modifier.weight(1f)
+            )
         }
-        val priority = calculations.maxBy { it.wearPercentage }
-        val priorityRule = state.rules.first { it.id == priority.componentId }
-        Panel(onClick = { onRule(priorityRule) }, tint = WarningColor.copy(alpha = .06f)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Glyph("service", WarningColor)
-                Column(Modifier.weight(1f)) { Text("${componentShortLabel(priorityRule)} · " + if (priority.wearPercentage >= 100) "সময় পেরিয়েছে" else if (priority.wearPercentage >= 75) "শিগগির সার্ভিস" else "ঠিক আছে", fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                    Text(listOfNotNull(if (priorityRule.intervalKm > 0) "${grouped(priority.remainingDistanceKm.toInt())} km" else null, if (priorityRule.intervalDays > 0) "${bengaliDigits(priority.remainingDays)} দিন" else null).joinToString(" / ") + " বাকি", color = TextSecondary, fontSize = 11.sp) }
-                Glyph("arrow", WarningColor)
-            }
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Primary(if (state.rules.any { it.name.contains("Chain", ignoreCase = true) }) "চেইনের যত্ন লিখুন" else "সার্ভিস যোগ করুন", "service", Modifier.weight(1f)) { onRule(state.rules.firstOrNull { it.name.contains("Chain", ignoreCase = true) } ?: state.rules.first()) }
-            OutlinedButton(onClick = onFuel, modifier = Modifier.weight(1f).heightIn(min = 52.dp), shape = RoundedCornerShape(12.dp)) { Glyph("fuel"); Spacer(Modifier.width(8.dp)); Text("তেল ভরা লিখুন", color = TextPrimary, fontSize = 12.sp) }
-        }
-        if (state.rules.size > 3) Eyebrow("নিজের সময়সূচি", TextSecondary)
-        state.rules.drop(3).forEach { rule -> Panel(onClick = { onRule(rule) }) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) { Text(componentLabel(rule), fontSize = 13.sp, fontWeight = FontWeight.SemiBold); Text("${grouped(rule.intervalKm.toInt())} km · ${bengaliDigits(rule.intervalDays)} দিন", fontSize = 11.sp, color = TextSecondary) }; Glyph("arrow", TextSecondary)
-            }
-        } }
     }
-    if (state.rules.isEmpty()) {
-        Primary("যন্ত্রাংশ যোগ করুন", "add", onClick = onComponents)
-        Primary("তেল ভরা লিখুন", "fuel", onClick = onFuel)
-    }
-    val renewals = state.documents.count { (it.daysRemaining ?: Int.MAX_VALUE) <= RENEWAL_WARNING_DAYS }
-    if (renewals > 0) Panel(onClick = onVault, tint = WarningColor.copy(alpha = .06f)) { Text("${bengaliDigits(renewals)}টি কাগজের মেয়াদ দেখুন", color = WarningColor, fontSize = 13.sp); Text("কাগজপত্র খুলুন ↗", color = TextSecondary, fontSize = 11.sp) }
 }
 
 @Composable
-private fun BikePhoto(ride: Ride) {
-    val uriHandler = LocalUriHandler.current
-    Column {
-        val model = ride.selectedModel
-        if (model != null) ModelPhoto(model, Modifier.fillMaxWidth().height(190.dp))
-        else Box(Modifier.fillMaxWidth().height(190.dp).clip(RoundedCornerShape(16.dp)).background(Color(0xFFEFEFED)), contentAlignment = Alignment.Center) {
-            Text("আপনার মডেল · ছবি যোগ করা হয়নি", color = Color(0xFF535B65), fontSize = 12.sp)
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(ride.displayName + " · নমুনা ছবি", color = TextSecondary, fontSize = 12.sp, modifier = Modifier.weight(1f).padding(top = 6.dp))
-            model?.let { TextButton(onClick = { uriHandler.openUri(it.source) }, contentPadding = PaddingValues(4.dp)) { Text("ছবির সূত্র ↗", color = TextSecondary, fontSize = 12.sp) } }
-        }
+private fun BottomNavItem(
+    tab: Tab,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val color = if (isSelected) BrandColor else TextTertiary
+    Column(
+        modifier = modifier
+            .fillMaxHeight()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            )
+            .semantics {
+                role = Role.Tab
+                this.selected = isSelected
+            },
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        SkySvgIcon(
+            path = "feather_icon/${tab.icon}",
+            description = tab.title,
+            modifier = Modifier.size(24.dp),
+            tint = color
+        )
+        Spacer(Modifier.height(3.dp))
+        Text(
+            text = tab.title,
+            fontSize = 12.sp,
+            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
+            color = color,
+            lineHeight = 14.sp
+        )
+        Spacer(Modifier.height(4.dp))
+        // Marker
+        Box(
+            modifier = Modifier
+                .size(width = 24.dp, height = 3.dp)
+                .background(if (isSelected) BrandColor else Color.Transparent, RoundedCornerShape(2.dp))
+        )
     }
 }
 
-@Composable
-private fun Gauge(label: String, life: Int, modifier: Modifier, onClick: () -> Unit) {
-    val color = if (life == 0) ErrorColor else if (life <= 25) WarningColor else HealthyColor
-    Column(modifier.clip(RoundedCornerShape(12.dp)).clickable(onClick = onClick).padding(vertical = 8.dp).semantics { contentDescription = "$label, ${bengaliDigits(life)} শতাংশ বাকি" }, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(5.dp)) {
-        Box(Modifier.size(86.dp), contentAlignment = Alignment.Center) {
-            val border = BorderColor
-            Canvas(Modifier.fillMaxSize()) {
-                drawCircle(border, style = Stroke(5.dp.toPx()), radius = size.minDimension / 2 - 8.dp.toPx())
-                drawArc(color, -90f, life * 3.6f, false, topLeft = Offset(8.dp.toPx(), 8.dp.toPx()), size = Size(size.width - 16.dp.toPx(), size.height - 16.dp.toPx()), style = Stroke(5.dp.toPx(), cap = StrokeCap.Round))
-            }
-            Row(verticalAlignment = Alignment.Bottom) { Text("$life", fontSize = 25.sp, fontWeight = FontWeight.Bold); Text("%", fontSize = 10.sp, color = TextSecondary) }
-        }
-        Text(label, modifier = Modifier.fillMaxWidth().heightIn(min = 32.dp), style = MaterialTheme.typography.bodySmall, fontSize = 12.sp, lineHeight = 16.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
-        Text(if (life == 0) "সার্ভিস বাকি" else if (life <= 25) "শিগগির সার্ভিস" else "ভালো আছে", color = color, fontSize = 12.sp)
-    }
-}
+// =========================================================================
+// Legacy UI Utilities (Retained for binary and backward compatibility)
+// =========================================================================
+
+fun oneDecimal(value: Double): String = ((value * 10).roundToLong() / 10.0).toString()
+
+fun grouped(value: Int): String = value.toString().reversed().chunked(3).joinToString(",").reversed()
 
 @Composable
-private fun ColumnScope.Vault(documents: List<VaultDocument>, onAppearance: () -> Unit, onAdd: () -> Unit, onDocument: (VaultDocument) -> Unit, onInspection: () -> Unit) = DocumentWallet(documents, onAppearance, onAdd, onDocument, onInspection)
-
-@Composable
-internal fun Top(title: String, caption: String, onAppearance: () -> Unit) {
+fun Top(title: String, caption: String, onAppearance: () -> Unit) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(title, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                 Box(Modifier.size(5.dp).background(HealthyColor, CircleShape))
-                Text(caption, color = TextSecondary, fontSize = 9.sp)
+                Text(caption, color = TextSecondary, fontSize = 12.sp)
             }
         }
         AppearanceButton(onAppearance)
@@ -393,135 +668,66 @@ internal fun Top(title: String, caption: String, onAppearance: () -> Unit) {
 }
 
 @Composable
-internal fun Eyebrow(text: String, color: Color = MaterialTheme.colorScheme.primary) = Text(text.uppercase(), color = color, fontSize = 9.sp, letterSpacing = 1.6.sp, fontWeight = FontWeight.Bold)
+fun Eyebrow(text: String, color: Color = MaterialTheme.colorScheme.primary) =
+    Text(text.uppercase(), color = color, fontSize = 12.sp, letterSpacing = 0.5.sp, fontWeight = FontWeight.Bold)
 
 @Composable
-internal fun Heading(text: String) = SkyGradientHeading(text)
+fun Heading(text: String) = SkyGradientHeading(text)
 
 @Composable
-internal fun Panel(onClick: (() -> Unit)? = null, tint: Color = SurfaceColor, content: @Composable ColumnScope.() -> Unit) {
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(SkyTokens.Radii.menu)).background(tint).border(1.dp, BorderColor, RoundedCornerShape(SkyTokens.Radii.menu))
-        .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier).padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp), content = content)
+fun Panel(onClick: (() -> Unit)? = null, tint: Color = SurfaceColor, content: @Composable ColumnScope.() -> Unit) {
+    Column(
+        Modifier.fillMaxWidth()
+            .clip(RoundedCornerShape(SkyTokens.Radii.menu))
+            .background(tint)
+            .border(1.dp, BorderColor, RoundedCornerShape(SkyTokens.Radii.menu))
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        content = content
+    )
 }
 
 @Composable
-internal fun Primary(text: String, icon: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit) {
+fun Primary(text: String, icon: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit) {
     SkyButton(text, onClick, modifier.fillMaxWidth().heightIn(min = 52.dp), enabled = enabled)
 }
 
 @Composable
-internal fun Field(label: String, value: String, onChange: (String) -> Unit, numeric: Boolean = false) {
+fun Field(label: String, value: String, onChange: (String) -> Unit, numeric: Boolean = false) {
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(9.dp)) {
         Text(label, style = SkyTheme.typography.label)
-        OutlinedTextField(value, onChange,
+        OutlinedTextField(
+            value = value,
+            onValueChange = onChange,
             modifier = Modifier.fillMaxWidth().semantics { contentDescription = label },
-            singleLine = true, textStyle = SkyTheme.typography.body,
+            singleLine = true,
+            textStyle = SkyTheme.typography.body,
             shape = RoundedCornerShape(SkyTokens.Radii.field),
             keyboardOptions = KeyboardOptions(keyboardType = if (numeric) KeyboardType.Decimal else KeyboardType.Text),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = SkyTheme.colors.fieldBorder,
                 focusedBorderColor = SkyTheme.colors.accent,
                 unfocusedContainerColor = SkyTheme.colors.input,
-                focusedContainerColor = SkyTheme.colors.input))
+                focusedContainerColor = SkyTheme.colors.input
+            )
+        )
     }
 }
 
 @Composable
-private fun VaultBottomNavigation(selected: Tab, onSelect: (Tab) -> Unit) {
-    val labelHeight = 24.dp * LocalDensity.current.fontScale.coerceAtLeast(1f)
-    Column(Modifier.fillMaxWidth().background(SurfaceColor)) {
-        HorizontalDivider(color = BorderColor, thickness = SkyTokens.Dimensions.navDivider)
-        Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp)) {
-            Tab.entries.forEach { item ->
-                val active = selected == item
-                val color = if (active) MaterialTheme.colorScheme.primary else TextSecondary
-                Column(Modifier.weight(1f).selectable(active, role = Role.Tab, onClick = { onSelect(item) })
-                    .padding(vertical = 7.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    SkySvgIcon("feather_icon/" + when (item) {
-                        Tab.GARAGE -> "fi_home.svg"
-                        Tab.VAULT -> "fi_folder.svg"
-                        Tab.HISTORY -> "fi_clock.svg"
-                    }, null, Modifier.size(SkyTokens.Dimensions.navIcon), color)
-                    Spacer(Modifier.height(SkyTokens.Dimensions.navLabelGap))
-                    Box(Modifier.height(labelHeight), contentAlignment = Alignment.Center) {
-                        Text(item.title, style = SkyTheme.typography["navigation"], fontSize = 12.sp, lineHeight = 16.sp, color = color)
-                    }
-                    Spacer(Modifier.height(5.dp))
-                    Box(Modifier.size(SkyTokens.Dimensions.navMarkerWidth, SkyTokens.Dimensions.navMarkerHeight)
-                        .background(if (active) color else Color.Transparent, RoundedCornerShape(50)))
-                }
-            }
-        }
-    }
-}
-
-@Composable
-internal fun Sheet(title: String, onDismiss: () -> Unit, light: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
-    val brandId = LocalVaultBrandId.current
-    val parentDark = LocalVaultPalette.current.dark
-    val typography = MaterialTheme.typography
-    val appearance = if (light || !parentDark) Appearance.LIGHT else Appearance.DARK
-    var visible by remember { mutableStateOf(false) }
-    var closing by remember { mutableStateOf(false) }
-    val currentDismiss by rememberUpdatedState(onDismiss)
-    val motion = SkyTheme.motion
-    val progress by animateFloatAsState(if (visible && !closing) 1f else 0f,
-        tween(motion.duration(if (closing) SkyTokens.Sheet.exitMs else SkyTokens.Sheet.enterMs), easing = motion.sheetEasing), label = "Vault sheet")
-    LaunchedEffect(Unit) { visible = true }
-    LaunchedEffect(closing) { if (closing) { delay(motion.duration(SkyTokens.Sheet.exitMs).toLong()); currentDismiss() } }
-    Dialog(onDismissRequest = { closing = true }, properties = sheetDialogProperties()) {
-        PlatformAppearance(parentDark)
-        VaultTheme(brandId, appearance, typography) {
-            BoxWithConstraints(Modifier.fillMaxSize().imePadding()) {
-                val density = LocalDensity.current
-                val topInset = with(density) { WindowInsets.safeDrawing.getTop(this).toDp() }
-                val available = (maxHeight - topInset - SkyTokens.Dimensions.toolbar).coerceAtLeast(0.dp)
-                val travel = with(density) { maxHeight.toPx() }
-                Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = .32f * progress))
-                    .clickable { closing = true })
-                Surface(Modifier.align(Alignment.BottomCenter).widthIn(max = 600.dp).fillMaxWidth().heightIn(max = available)
-                    .graphicsLayer { translationY = travel * (1f - progress) }, color = SurfaceColor,
-                    shape = RoundedCornerShape(topStart = SkyTokens.Radii.sheet, topEnd = SkyTokens.Radii.sheet)) {
-                    Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal))) {
-                        Box(Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 4.dp), contentAlignment = Alignment.Center) {
-                            Box(Modifier.size(SkyTokens.Dimensions.handleWidth, SkyTokens.Dimensions.handleHeight)
-                                .background(BorderColor, RoundedCornerShape(50)))
-                        }
-                        Row(Modifier.fillMaxWidth().padding(start = 20.dp, end = 8.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text(title, Modifier.weight(1f), style = SkyTheme.typography.pageTitle.copy(brush = SkyTheme.headingGradient),
-                                fontSize = 22.sp, lineHeight = 28.sp)
-                            IconButton(onClick = { closing = true }, modifier = Modifier.semantics { contentDescription = "বন্ধ করুন" }) { Glyph("close", TextPrimary) }
-                        }
-                        HorizontalDivider(color = BorderColor)
-                        Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState())
-                            .padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun NumberDialog(title: String, label: String, initial: String, minimum: Double, onDismiss: () -> Unit, onSave: (Double) -> Unit) {
-    var text by remember { mutableStateOf(initial) }
-    val value = text.toDoubleOrNull()?.takeIf { it.isFinite() && it in minimum..9999999.0 }
-    Sheet(title, onDismiss) { Field(label, text, { text = it }, true); Text("ওডোমিটার কমপক্ষে ${minimum.toInt()} কিমি হতে হবে।", color = TextSecondary, fontSize = 12.sp); Primary("রিডিং সেভ করুন", "check", enabled = value != null) { onSave(value!!) } }
-}
-
-
-
-internal fun oneDecimal(value: Double) = ((value * 10).roundToLong() / 10.0).toString()
-
-internal fun grouped(value: Int): String = value.toString().reversed().chunked(3).joinToString(",").reversed()
-
-@Composable
-internal fun Glyph(name: String, color: Color = TextPrimary, modifier: Modifier = Modifier.size(20.dp)) {
+fun Glyph(name: String, color: Color = TextPrimary, modifier: Modifier = Modifier.size(20.dp)) {
     Canvas(modifier) {
         val scale = size.minDimension / 24f
-        fun line(x1: Float, y1: Float, x2: Float, y2: Float) = drawLine(color, Offset(x1 * scale, y1 * scale), Offset(x2 * scale, y2 * scale), 1.6f * scale, StrokeCap.Round)
+        fun line(x1: Float, y1: Float, x2: Float, y2: Float) =
+            drawLine(color, Offset(x1 * scale, y1 * scale), Offset(x2 * scale, y2 * scale), 1.6f * scale, StrokeCap.Round)
         fun path(vararg points: Pair<Float, Float>, closed: Boolean = false) {
-            val p = Path(); points.forEachIndexed { index, (x, y) -> if (index == 0) p.moveTo(x * scale, y * scale) else p.lineTo(x * scale, y * scale) }; if (closed) p.close(); drawPath(p, color, style = Stroke(1.6f * scale, cap = StrokeCap.Round))
+            val p = Path()
+            points.forEachIndexed { index, (x, y) ->
+                if (index == 0) p.moveTo(x * scale, y * scale) else p.lineTo(x * scale, y * scale)
+            }
+            if (closed) p.close()
+            drawPath(p, color, style = Stroke(1.6f * scale, cap = StrokeCap.Round))
         }
         when (name) {
             "arrow" -> { line(4f, 12f, 20f, 12f); path(14f to 6f, 20f to 12f, 14f to 18f) }

@@ -10,14 +10,14 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name=".ui.redesign.RenewalApplication"
+        android:name=".ui.RenewalApplication"
         android:allowBackup="false"
         android:icon="@drawable/motovault_icon"
         android:label="MotoVault"
         android:roundIcon="@drawable/motovault_icon"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.NoActionBar">
-        <receiver android:name=".ui.redesign.RenewalAlarmReceiver" android:exported="false">
+        <receiver android:name=".ui.RenewalAlarmReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.TIME_SET" />

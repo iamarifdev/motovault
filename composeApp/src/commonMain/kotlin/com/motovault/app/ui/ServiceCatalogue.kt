@@ -87,7 +87,8 @@ data class ServiceLineItem(
     val unitPricePoisha: Int? = null,
     val scheduleId: String? = null,
     val resetsScheduleBaseline: Boolean = false,
-    val oil: EngineOilMetadata? = null
+    val oil: EngineOilMetadata? = null,
+    val detail: String? = null
 ) {
     val displayNameBn: String get() = BangladeshServiceCatalogue.find(catalogueId.orEmpty())?.labelBn ?: customName
     val lineTotalPoisha: Int? get() {

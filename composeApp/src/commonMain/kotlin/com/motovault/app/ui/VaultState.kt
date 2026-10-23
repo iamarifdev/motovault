@@ -45,7 +45,9 @@ data class RideLog(
     val serviceLabourPoisha: Int? = null, val serviceMiscellaneousPoisha: Int? = null,
     val serviceDiscountPoisha: Int? = null, val serviceTotalPoisha: Int? = null,
     val scheduleIds: List<String> = emptyList(), val location: GeoCapture? = null,
-    val locationLabel: String = "", val receiptBase64: String? = null
+    val locationLabel: String = "", val receiptBase64: String? = null,
+    val fuelType: String = "octane",
+    val fuelPrice: Double? = null
 ) {
     val isFuel: Boolean get() = kind == "fuel" || title == "Fuel fill-up"
     val isDocumentFee: Boolean get() = kind == "document_fee"
@@ -60,7 +62,9 @@ data class VaultDocument(
     val pages: List<DocumentPage> = emptyList(), val originalPdf: String? = null,
     val pdfPageCount: Int = 0, val details: Map<String, String> = emptyMap(),
     val detailsConfirmed: Boolean = false,
-    val extractionCandidates: Map<String, String> = emptyMap(), val capturedAt: String = ""
+    val extractionCandidates: Map<String, String> = emptyMap(), val capturedAt: String = "",
+    val reminder: Boolean = false,
+    val kind: String = ""
 ) {
     val daysRemaining: Int? get() = expiry.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it).toEpochDays() - today().toEpochDays() }
     val expiryStatus: DocumentExpiryStatus get() = DocumentExpiryUseCase().evaluate(daysRemaining)
@@ -84,7 +88,18 @@ data class VaultState(
     val lastFuelOdometer: Double? = null,
     val economy: Double? = null,
     val appearance: Appearance = Appearance.SYSTEM,
-    val autoLocation: Boolean = false
+    val autoLocation: Boolean = false,
+    val digits: Digits = Digits.BN,
+    val haptics: Boolean = true,
+    val reduceMotion: Boolean = false,
+    val textScale: Float = 1.0f,
+    val brandOverride: String? = null,
+    val serviceReminders: Boolean = true,
+    val docReminders: Boolean = true,
+    val lastPrices: Map<String, Double> = mapOf("octane" to 120.0, "petrol" to 115.0),
+    val lastItemPrices: Map<String, Double> = emptyMap(),
+    val workshops: List<String> = emptyList(),
+    val places: List<String> = emptyList()
 ) {
     fun logFuel(odometer: Double, liters: Double, cost: Double = 0.0, date: LocalDate = today(), fullTank: Boolean = true, location: GeoCapture? = null, locationLabel: String = ""): VaultState {
         val currentRide = requireNotNull(ride)
@@ -270,8 +285,89 @@ data class VaultState(
     }
 
     companion object {
+        fun emptyData(): VaultState = VaultState()
+
+        fun seedData(today: LocalDate = today()): VaultState {
+            val d = { n: Int -> LocalDate.fromEpochDays(today.toEpochDays() + n).toString() }
+            val fuel = { id: String, day: Int, odo: Double, liters: Double, full: Boolean, place: String ->
+                val cost = kotlin.math.round((liters * 120.0) / 10.0) * 10.0
+                RideLog(
+                    id = id,
+                    title = "Fuel fill-up",
+                    detail = "$liters L · ${if (full) "Full tank" else "Partial fill"}",
+                    date = d(day),
+                    odometer = odo,
+                    kind = "fuel",
+                    liters = liters,
+                    fullTank = full,
+                    cost = cost,
+                    fuelType = "octane",
+                    fuelPrice = 120.0,
+                    locationLabel = place
+                )
+            }
+            val logs = listOf(
+                fuel("f7", -11, 12340.0, 4.9, true, "পদ্মা পাম্প, মিরপুর"),
+                fuel("f6", -17, 12120.0, 5.2, true, "পদ্মা পাম্প, মিরপুর"),
+                fuel("f5", -27, 11890.0, 5.0, true, "যমুনা ফিলিং স্টেশন"),
+                fuel("f4", -33, 11700.0, 3.8, false, "যমুনা ফিলিং স্টেশন"),
+                fuel("f3", -41, 11500.0, 4.8, true, "পদ্মা পাম্প, মিরপুর"),
+                fuel("f2", -52, 11290.0, 4.7, true, "পদ্মা পাম্প, মিরপুর"),
+                fuel("f1", -64, 11080.0, 5.0, true, "যমুনা ফিলিং স্টেশন"),
+                RideLog(
+                    id = "s1",
+                    title = "Service",
+                    detail = "ইঞ্জিন অয়েল ও ফিল্টার",
+                    date = d(-45),
+                    odometer = 11350.0,
+                    kind = "service",
+                    workshop = "রহমান মোটরস, মিরপুর ১০",
+                    serviceLabourPoisha = 20000,
+                    serviceMiscellaneousPoisha = 0,
+                    serviceDiscountPoisha = 0,
+                    serviceTotalPoisha = 135000,
+                    cost = 1350.0,
+                    serviceLines = listOf(
+                        ServiceLineItem(catalogueId = "engine_oil", customName = "ইঞ্জিন অয়েল", action = "replace", quantity = 1.0, unitPricePoisha = 90000, detail = "10W-40"),
+                        ServiceLineItem(catalogueId = "oil_filter", customName = "অয়েল ফিল্টার", action = "replace", quantity = 1.0, unitPricePoisha = 25000)
+                    ),
+                    scheduleIds = listOf("r-oil")
+                )
+            )
+            val rules = listOf(
+                ComponentRule("r-oil", "primary", "ইঞ্জিন অয়েল ও ফিল্টার", "ইঞ্জিন অয়েল ও ফিল্টার", 3000.0, 180, 11350.0, today.toEpochDays().toLong() - 45),
+                ComponentRule("r-chain", "primary", "চেইন পরিষ্কার ও লুব্রিকেন্ট", "চেইন পরিষ্কার ও লুব্রিকেন্ট", 500.0, 30, 11520.0, today.toEpochDays().toLong() - 41),
+                ComponentRule("r-air", "primary", "এয়ার ফিল্টার", "এয়ার ফিল্টার", 5000.0, 180, 9900.0, today.toEpochDays().toLong() - 140),
+                ComponentRule("r-spark", "primary", "স্পার্ক প্লাগ", "স্পার্ক প্লাগ", 8000.0, 365, 8000.0, today.toEpochDays().toLong() - 200),
+                ComponentRule("r-brakes", "primary", "ব্রেক প্যাড", "ব্রেক প্যাড", 10000.0, 365, 7200.0, today.toEpochDays().toLong() - 300)
+            )
+            val docs = listOf(
+                VaultDocument("রেজিস্ট্রেশন স্মার্ট কার্ড", "ঢাকা মেট্রো-ল ৬২-৪৫১৮", "মো. রাফিদ হাসান", d(400), "d1", reminder = true, kind = "registration"),
+                VaultDocument("ড্রাইভিং লাইসেন্স", "DL-1987-654321", "মো. রাফিদ হাসান", d(24), "d2", reminder = false, kind = "licence"),
+                VaultDocument("ট্যাক্স টোকেন", "TT-2025-88120", "মো. রাফিদ হাসান", d(-5), "d3", reminder = false, kind = "tax"),
+                VaultDocument("বিমা", "INS-554-2291", "মো. রাফিদ হাসান", d(200), "d4", reminder = true, kind = "insurance")
+            )
+            return VaultState(
+                ride = Ride("yamaha", "Official catalogue", 2023, 12340.0, "yamaha-r15-v4", "R15 V4"),
+                rules = rules,
+                logs = logs,
+                documents = docs,
+                lastPrices = mapOf("octane" to 120.0, "petrol" to 115.0),
+                lastItemPrices = mapOf(
+                    "engine_oil" to 900.0,
+                    "oil_filter" to 250.0,
+                    "chain_sprocket" to 350.0,
+                    "air_filter" to 400.0,
+                    "spark_plug" to 300.0,
+                    "brake_pad" to 650.0
+                ),
+                workshops = listOf("রহমান মোটরস, মিরপুর ১০", "স্টার সার্ভিস সেন্টার"),
+                places = listOf("পদ্মা পাম্প, মিরপুর", "যমুনা ফিলিং স্টেশন")
+            )
+        }
+
         private val json = Json { ignoreUnknownKeys = true }
-        suspend fun restore(): VaultState = loadVault()?.let { requireNotNull(decode(it)) { "Stored records could not be read. Existing storage has been preserved." } } ?: VaultState()
+        suspend fun restore(): VaultState = loadVault()?.let { decode(it) } ?: seedData()
         fun decode(value: String): VaultState? = runCatching {
             val state = json.decodeFromString<VaultState>(value)
             state.copy(economy = calculateEconomy(state.logs), lastFuelOdometer = state.logs.filter { it.isFuel }.maxOfOrNull { it.odometer })
