@@ -1,0 +1,425 @@
+{
+  "scope": "CUA screenshot-sampled transition sequences, not a continuous high-frame-rate screen recording",
+  "events": [
+    {
+      "label": "gauge-and-countup",
+      "atMs": 1498
+    },
+    {
+      "label": "normal-sheet-open",
+      "atMs": 6741
+    },
+    {
+      "label": "save-and-undo-toast",
+      "atMs": 16758
+    },
+    {
+      "label": "save-undo-retry-toast",
+      "atMs": 40954
+    },
+    {
+      "label": "undo-restores-12340",
+      "atMs": 41641
+    },
+    {
+      "label": "reduced-motion-sheet-open",
+      "atMs": 50881
+    },
+    {
+      "label": "reduced-motion-sheet-close",
+      "atMs": 52425
+    }
+  ],
+  "frames": [
+    {
+      "file": "frames/0000.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 1498
+    },
+    {
+      "file": "frames/0001.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 1579
+    },
+    {
+      "file": "frames/0002.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 1668
+    },
+    {
+      "file": "frames/0003.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 1776
+    },
+    {
+      "file": "frames/0004.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 1822
+    },
+    {
+      "file": "frames/0005.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 1879
+    },
+    {
+      "file": "frames/0006.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 1980
+    },
+    {
+      "file": "frames/0007.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 2077
+    },
+    {
+      "file": "frames/0008.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 2183
+    },
+    {
+      "file": "frames/0009.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 2286
+    },
+    {
+      "file": "frames/0010.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 2328
+    },
+    {
+      "file": "frames/0011.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 2390
+    },
+    {
+      "file": "frames/0012.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 2495
+    },
+    {
+      "file": "frames/0013.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 2584
+    },
+    {
+      "file": "frames/0014.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 2605
+    },
+    {
+      "file": "frames/0015.jpg",
+      "label": "gauge-and-countup",
+      "atMs": 2701
+    },
+    {
+      "file": "frames/0016.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 6741
+    },
+    {
+      "file": "frames/0017.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 6758
+    },
+    {
+      "file": "frames/0018.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 6829
+    },
+    {
+      "file": "frames/0019.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 6893
+    },
+    {
+      "file": "frames/0020.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 6933
+    },
+    {
+      "file": "frames/0021.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 7035
+    },
+    {
+      "file": "frames/0022.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 7107
+    },
+    {
+      "file": "frames/0023.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 7136
+    },
+    {
+      "file": "frames/0024.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 7162
+    },
+    {
+      "file": "frames/0025.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 7239
+    },
+    {
+      "file": "frames/0026.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 7344
+    },
+    {
+      "file": "frames/0027.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 7397
+    },
+    {
+      "file": "frames/0028.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 7444
+    },
+    {
+      "file": "frames/0029.jpg",
+      "label": "normal-sheet-open",
+      "atMs": 7550
+    },
+    {
+      "file": "frames/0030.jpg",
+      "label": "save-and-undo-toast",
+      "atMs": 16758
+    },
+    {
+      "file": "frames/0031.jpg",
+      "label": "save-and-undo-toast",
+      "atMs": 16840
+    },
+    {
+      "file": "frames/0032.jpg",
+      "label": "save-and-undo-toast",
+      "atMs": 16945
+    },
+    {
+      "file": "frames/0033.jpg",
+      "label": "save-and-undo-toast",
+      "atMs": 16997
+    },
+    {
+      "file": "frames/0034.jpg",
+      "label": "save-and-undo-toast",
+      "atMs": 17050
+    },
+    {
+      "file": "frames/0035.jpg",
+      "label": "save-and-undo-toast",
+      "atMs": 17155
+    },
+    {
+      "file": "frames/0036.jpg",
+      "label": "save-and-undo-toast",
+      "atMs": 17249
+    },
+    {
+      "file": "frames/0037.jpg",
+      "label": "save-and-undo-toast",
+      "atMs": 17286
+    },
+    {
+      "file": "frames/0038.jpg",
+      "label": "save-undo-retry-toast",
+      "atMs": 40954
+    },
+    {
+      "file": "frames/0039.jpg",
+      "label": "save-undo-retry-toast",
+      "atMs": 41032
+    },
+    {
+      "file": "frames/0040.jpg",
+      "label": "save-undo-retry-toast",
+      "atMs": 41142
+    },
+    {
+      "file": "frames/0041.jpg",
+      "label": "save-undo-retry-toast",
+      "atMs": 41156
+    },
+    {
+      "file": "frames/0042.jpg",
+      "label": "undo-restores-12340",
+      "atMs": 41641
+    },
+    {
+      "file": "frames/0043.jpg",
+      "label": "undo-restores-12340",
+      "atMs": 41676
+    },
+    {
+      "file": "frames/0044.jpg",
+      "label": "undo-restores-12340",
+      "atMs": 41782
+    },
+    {
+      "file": "frames/0045.jpg",
+      "label": "undo-restores-12340",
+      "atMs": 41892
+    },
+    {
+      "file": "frames/0046.jpg",
+      "label": "undo-restores-12340",
+      "atMs": 41932
+    },
+    {
+      "file": "frames/0047.jpg",
+      "label": "undo-restores-12340",
+      "atMs": 41998
+    },
+    {
+      "file": "frames/0048.jpg",
+      "label": "undo-restores-12340",
+      "atMs": 42049
+    },
+    {
+      "file": "frames/0049.jpg",
+      "label": "undo-restores-12340",
+      "atMs": 42066
+    },
+    {
+      "file": "frames/0050.jpg",
+      "label": "undo-restores-12340",
+      "atMs": 42079
+    },
+    {
+      "file": "frames/0051.jpg",
+      "label": "undo-restores-12340",
+      "atMs": 42103
+    },
+    {
+      "file": "frames/0052.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 50881
+    },
+    {
+      "file": "frames/0053.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 50945
+    },
+    {
+      "file": "frames/0054.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51050
+    },
+    {
+      "file": "frames/0055.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51134
+    },
+    {
+      "file": "frames/0056.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51149
+    },
+    {
+      "file": "frames/0057.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51250
+    },
+    {
+      "file": "frames/0058.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51353
+    },
+    {
+      "file": "frames/0059.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51395
+    },
+    {
+      "file": "frames/0060.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51460
+    },
+    {
+      "file": "frames/0061.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51571
+    },
+    {
+      "file": "frames/0062.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51655
+    },
+    {
+      "file": "frames/0063.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51782
+    },
+    {
+      "file": "frames/0064.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51893
+    },
+    {
+      "file": "frames/0065.jpg",
+      "label": "reduced-motion-sheet-open",
+      "atMs": 51964
+    },
+    {
+      "file": "frames/0066.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 52425
+    },
+    {
+      "file": "frames/0067.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 52515
+    },
+    {
+      "file": "frames/0068.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 52617
+    },
+    {
+      "file": "frames/0069.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 52667
+    },
+    {
+      "file": "frames/0070.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 52723
+    },
+    {
+      "file": "frames/0071.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 52834
+    },
+    {
+      "file": "frames/0072.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 52922
+    },
+    {
+      "file": "frames/0073.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 52991
+    },
+    {
+      "file": "frames/0074.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 53011
+    },
+    {
+      "file": "frames/0075.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 53036
+    },
+    {
+      "file": "frames/0076.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 53119
+    },
+    {
+      "file": "frames/0077.jpg",
+      "label": "reduced-motion-sheet-close",
+      "atMs": 53140
+    }
+  ]
+}

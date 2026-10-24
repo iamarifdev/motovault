@@ -13,7 +13,7 @@ The app uses `com.motovault.app.ui` as its production UI package. `App.kt` calls
 
 Persistence coordination remains under `com.motovault.app.storage`. Android and iOS host entrypoints remain under `com.motovault.app`. All platform implementations now have directory paths that match their package declarations.
 
-The approved design reference remains in [app UI v2](../design/app-ui-v2/CONTINUE-HERE.md), with its [native implementation map](../design/app-ui-v2/APPLY-MAP.md). Existing source links and the catalogue generator were updated to the production paths.
+The active design reference is [app UI v3](../design/app-ui-v3/README.md), with the [feature design contract](roadmap/DESIGN-CONTRACT.md) defining how new flows extend it. Preserve the existing native brand logos during brand selection. The [v2 native implementation map](../design/app-ui-v2/APPLY-MAP.md) is historical context. See the [tracked feature roadmap](roadmap/README.md) for current scope and progress.
 
 This migration preserved current file contents except package, import and source-path references. It did not change stored JSON fields, the Room schema, app identifiers, assets or screen behavior.
 

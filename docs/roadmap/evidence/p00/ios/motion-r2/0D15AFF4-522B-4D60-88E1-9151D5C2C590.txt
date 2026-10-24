@@ -1,0 +1,81 @@
+Attributes: Application, 0x10605b700, pid: 10149, label: 'MotoVault'
+Element subtree:
+ →Application, 0x10605b700, pid: 10149, label: 'MotoVault'
+    Window (Main), 0x10605bc00, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x106059900, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x106058f00, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x106059180, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x106059a40, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x10605be80, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x106058dc0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x10605b980, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=1)'
+                  Other, 0x1060583c0, {{0.0, 62.0}, {440.0, 791.3}}
+                    Other, 0x1060588c0, {{0.0, 62.0}, {440.0, 791.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=213)'
+                    Button, 0x10605bd40, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=280)', label: 'অ্যানিমেশন কমান
+ফোনের সেটিং চালু থাকলে এটি নিজেই চালু হয়'
+                    Button, 0x10605b840, {{20.0, 576.7}, {400.0, 72.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=288)', label: 'তেল ও সার্ভিসে বর্তমান লোকেশন
+অনুমতি না দিলেও রেকর্ড সেভ হবে'
+                    Other, 0x10605b5c0, {{20.0, 666.7}, {72.7, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=296)', label: 'রিমাইন্ডার'
+                    Button, 0x10605b200, {{20.0, 718.7}, {400.0, 72.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=298)', label: 'সার্ভিসের সময় হলে জানান
+চেইন, অয়েল ও অন্য যন্ত্রাংশ · সকাল ৯টায়'
+                    Button, 0x10605a800, {{20.0, 791.3}, {400.0, 62.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=306)', label: 'কাগজের মেয়াদের আগে জানান
+৩০ দিন আগে এবং মেয়াদের দিন'
+                    Other, 0x10605b0c0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=314)', label: 'নতুন ধারণা (ডেমো)'
+                    Button, 0x10605b340, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=316)', label: 'শেয়ার বা পেস্ট করে যোগ
+বিকাশ, নগদ বা মেকানিকের মেসেজ থেকে খসড়া'
+                    Button, 0x10605b480, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=322)', label: 'হোম স্ক্রিন উইজেট
+অ্যাপ না খুলেই পরের কাজ আর দুটি বোতাম'
+                    Other, 0x106058b40, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=328)', label: 'MotoVault প্রোটোটাইপ · সব তথ্য এই ডিভাইসেই থাকে'
+                    Other, 0x10605ae40, {{0.0, 0.0}, {0.0, 0.0}}
+                      Button, 0x10605ad00, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=329)'
+                      Other, 0x10605af80, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=331)', label: 'ডেমো ডেটা নতুন করে দিন'
+                    Other, 0x10605a940, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=215)', label: 'আমি'
+                    Other, 0x10605abc0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=220)', label: 'Yamaha R15 V4'
+                    Other, 0x10605aa80, {{0.0, 0.0}, {0.0, 0.0}}
+                      Button, 0x10605a6c0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=222)'
+                      Other, 0x10605a300, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=224)', label: 'বাইক বদলান'
+                    Other, 0x10605a1c0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=221)', label: '২০২৩ · ১২,৩৫০ কিমি'
+                    Other, 0x10605a440, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=226)', label: 'চেহারা'
+                    Other, 0x10605a080, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=229)', label: 'থিম'
+                    Button, 0x106059cc0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=231)', label: 'ডিভাইসের মতো'
+                    Button, 0x106059e00, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=233)', label: 'লাইট'
+                    Button, 0x106059b80, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=235)', label: 'ডার্ক'
+                    Other, 0x106059f40, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=239)', label: 'রঙ'
+                    Other, 0x1060592c0, {{34.0, 64.0}, {372.0, 34.0}}
+                      Other, 0x1060597c0, {{34.0, 64.0}, {372.0, 34.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=240)'
+                      Button, 0x106059040, {{34.0, 64.0}, {34.0, 34.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=241)'
+                      Button, 0x102e66940, {{78.0, 64.0}, {34.0, 34.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=242)'
+                      Button, 0x102e67840, {{122.0, 64.0}, {34.0, 34.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=243)'
+                      Button, 0x102e648c0, {{166.0, 64.0}, {34.0, 34.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=244)'
+                      Button, 0x102e67700, {{210.0, 64.0}, {34.0, 34.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=245)'
+                      Button, 0x102e675c0, {{254.0, 64.0}, {34.0, 34.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=246)'
+                      Button, 0x102e67980, {{298.0, 64.0}, {34.0, 34.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=247)'
+                      Button, 0x102e65040, {{342.0, 64.0}, {34.0, 34.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=248)'
+                      Button, 0x102e670c0, {{386.0, 64.0}, {20.0, 34.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=249)'
+                    Other, 0x102e67480, {{34.0, 106.0}, {136.3, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=250)', label: 'আপনার বাইকের ব্র্যান্ডের রঙ'
+                    Other, 0x102e67340, {{34.0, 158.7}, {35.7, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=253)', label: 'সংখ্যা'
+                    Button, 0x106798500, {{38.0, 194.7}, {181.0, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=255)', label: '১২৩ বাংলা'
+                    Button, 0x1067983c0, {{221.0, 194.7}, {181.0, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=257)', label: '123 English'
+                    Other, 0x106798280, {{34.0, 267.3}, {86.3, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=261)', label: 'লেখার আকার'
+                    Button, 0x106798140, {{38.0, 303.3}, {120.0, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=263)', label: 'স্বাভাবিক'
+                    Button, 0x10679bac0, {{160.0, 303.3}, {120.0, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=265)', label: 'বড়'
+                    Button, 0x10679b980, {{282.0, 303.3}, {120.0, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=267)', label: 'অনেক বড়'
+                    Other, 0x10679b840, {{20.0, 379.3}, {55.7, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=270)', label: 'আচরণ'
+                    Button, 0x10679b5c0, {{20.0, 431.3}, {400.0, 72.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=272)', label: 'ভাইব্রেশন ফিডব্যাক
+সেভ, ভুল ও ট্যাপে হালকা কাঁপুনি'
+                  Button, 0x10679b0c0, {{196.3, 844.0}, {48.0, 48.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=111)', label: 'নতুন রেকর্ড যোগ করুন'
+                  Button, 0x106798000, {{8.0, 854.0}, {85.0, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=98)', label: 'গ্যারেজ'
+                  Button, 0x106799a40, {{93.0, 854.0}, {85.0, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=104)', label: 'কাগজপত্র'
+                  Button, 0x106799cc0, {{262.7, 854.0}, {84.7, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=113)', label: 'ইতিহাস'
+                  Button, 0x106799e00, {{347.3, 854.0}, {84.7, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=119)', label: 'আমি'
+              Other, 0x10679a1c0, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x106799f40, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x10679a080, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x10679a300, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x10605b700, pid: 10149, label: 'MotoVault'
+Query chain:
+ →Find: Target Application 'com.motovault.baseline.p00'
+  Output: {
+    Application, 0x10679a440, pid: 10149, label: 'MotoVault'
+  }

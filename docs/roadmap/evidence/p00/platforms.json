@@ -1,0 +1,34 @@
+{
+  "baseCommit": "50eda3a",
+  "nativeBehaviorSourceDelta": "No main-source changes; isolated identities, fixture inputs and test harness only",
+  "android": {
+    "ro.product.model": "sdk_gphone16k_arm64",
+    "ro.build.version.release": "17",
+    "ro.build.version.sdk": "37",
+    "ro.build.fingerprint": "google/sdk_gphone16k_arm64/emu64a16k:17/CP31.260623.012/16064790:user/dev-keys",
+    "serial": "emulator-5554",
+    "avd": "Pixel_10",
+    "applicationId": "com.motovault.baseline.p00",
+    "display": "Physical size: 1080x2424",
+    "clock": "Sat Oct 24 05:13:43 +06 2026"
+  },
+  "ios": {
+    "udid": "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+    "name": "MotoVault-P00-Baseline",
+    "state": "Booted",
+    "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-18-Pro-Max",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-0",
+    "applicationId": "com.motovault.baseline.p00",
+    "bundleVersion": "1",
+    "bundleIdentifier": "com.motovault.baseline.p00",
+    "executableSha256": "14bbe512d9d2a3b1f2fd2d043941fd7f941a072ffae9f97c048afc88372edbf6"
+  },
+  "prototype": {
+    "url": "http://localhost:5273/",
+    "viewport": {
+      "width": 440,
+      "height": 956
+    },
+    "motion": "78 CUA screenshot samples with measured timestamps; not a continuous high-frame-rate recording"
+  }
+}

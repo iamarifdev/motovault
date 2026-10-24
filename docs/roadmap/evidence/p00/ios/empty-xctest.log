@@ -1,0 +1,50 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test-without-building -project build/p00-ios-host/MotoVault.xcodeproj -scheme MotoVault -configuration Debug -destination id=639D8717-57E7-49B8-9DAA-2C365E2F1508 -derivedDataPath build/p00-ios-tests-derived "-only-testing:MotoVaultUITests/P00BaselineTests/testEmpty" -resultBundlePath /Users/arif/workspace/bbn/motovault/build/p00-empty.xcresult CODE_SIGNING_ALLOWED=NO
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+
+Writing result bundle at path:
+	/Users/arif/workspace/bbn/motovault/build/p00-empty.xcresult
+
+2026-10-24 04:30:03.737981+0600 MotoVaultUITests-Runner[98153:1232408] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2026-10-24 04:30:06.547.
+Test Suite 'MotoVaultUITests.xctest' started at 2026-10-24 04:30:06.548.
+Test Suite 'P00BaselineTests' started at 2026-10-24 04:30:06.548.
+Test Case '-[MotoVaultUITests.P00BaselineTests testEmpty]' started.
+    t =     0.00s Start Test at 2026-10-24 04:30:06.551
+    t =     0.03s Set Up
+    t =     0.03s Open com.motovault.baseline.p00
+    t =     0.03s     Launch com.motovault.baseline.p00
+2026-10-24 04:30:06.648 xcodebuild[98058:1232117] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-10-24 04:30:06.648 xcodebuild[98058:1232117] [MT] IDELaunchParametersSnapshot: no debugger version
+objc[98153]: Class UIAccessibilityLoaderWebShared is implemented in both /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.EAXtin/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x1049b4398) and /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.EAXtin/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x105794310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     2.61s         Setting up automation session
+    t =     5.17s         Wait for com.motovault.baseline.p00 to idle
+    t =     7.35s Waiting 20.0s for Button (First Match) to exist
+    t =     8.45s     Checking `Expect predicate `existsNoRetry == 1` for object Button (First Match)`
+    t =     8.45s         Checking existence of `Button (First Match)`
+    t =     9.71s Find the Target Application 'com.motovault.baseline.p00'
+    t =     9.87s Added attachment named 'empty-home'
+    t =     9.87s Requesting snapshot of accessibility hierarchy for app with pid 98596
+    t =     9.94s Requesting snapshot of accessibility hierarchy for app with pid 98596
+    t =     9.95s Added attachment named 'empty-home-tree'
+    t =     9.96s Tear Down
+Test Case '-[MotoVaultUITests.P00BaselineTests testEmpty]' passed (10.203 seconds).
+Test Suite 'P00BaselineTests' passed at 2026-10-24 04:30:16.754.
+	 Executed 1 test, with 0 failures (0 unexpected) in 10.203 (10.206) seconds
+Test Suite 'MotoVaultUITests.xctest' passed at 2026-10-24 04:30:16.754.
+	 Executed 1 test, with 0 failures (0 unexpected) in 10.203 (10.207) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 04:30:16.755.
+	 Executed 1 test, with 0 failures (0 unexpected) in 10.203 (10.208) seconds
+2026-10-24 04:30:17.062 xcodebuild[98058:1232117] [MT] IDETestOperationsObserverDebug: 14.825 elapsed -- Testing started completed.
+2026-10-24 04:30:17.062 xcodebuild[98058:1232117] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-24 04:30:17.062 xcodebuild[98058:1232117] [MT] IDETestOperationsObserverDebug: 14.825 sec, +14.825 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/arif/workspace/bbn/motovault/build/p00-empty.xcresult
+
+** TEST EXECUTE SUCCEEDED **
+
+Testing started

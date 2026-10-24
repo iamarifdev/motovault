@@ -1,0 +1,34 @@
+[
+  {
+    "name": "app-launch-gauge-countup",
+    "seconds": 0.0
+  },
+  {
+    "name": "open-sheet",
+    "seconds": 3.511
+  },
+  {
+    "name": "save-12350",
+    "seconds": 8.445
+  },
+  {
+    "name": "undo-to-12340",
+    "seconds": 11.381
+  },
+  {
+    "name": "undo-observed-NOT-restored",
+    "seconds": 13.476
+  },
+  {
+    "name": "enable-reduced-motion",
+    "seconds": 18.774
+  },
+  {
+    "name": "reduced-motion-open-sheet",
+    "seconds": 23.203
+  },
+  {
+    "name": "reduced-motion-close-sheet",
+    "seconds": 25.574
+  }
+]

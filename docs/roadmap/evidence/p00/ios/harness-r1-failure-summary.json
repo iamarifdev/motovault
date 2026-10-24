@@ -1,0 +1,46 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName": "MotoVault-P00-Baseline",
+        "modelName": "iPhone 18 Pro Max",
+        "osBuildNumber": "24A434",
+        "osVersion": "27.0",
+        "platform": "iOS Simulator"
+      },
+      "expectedFailures": 0,
+      "failedTests": 1,
+      "passedTests": 0,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "MotoVault · Built with macOS 27.0.1",
+  "expectedFailures": 0,
+  "failedTests": 1,
+  "finishTime": 1792795175.42,
+  "passedTests": 0,
+  "result": "Failed",
+  "runtimeWarnings": [],
+  "skippedTests": 0,
+  "startTime": 1792795138.564,
+  "statistics": [],
+  "testFailures": [
+    {
+      "failureText": "XCTAssertTrue failed",
+      "targetName": "MotoVaultUITests",
+      "testIdentifier": 1,
+      "testIdentifierString": "P00BaselineTests/testMotionAndUndo()",
+      "testIdentifierURL": "test://com.apple.xcode/MotoVault/MotoVaultUITests/P00BaselineTests/testMotionAndUndo",
+      "testName": "testMotionAndUndo()"
+    }
+  ],
+  "title": "Test - MotoVault",
+  "topInsights": [],
+  "totalTestCount": 1
+}

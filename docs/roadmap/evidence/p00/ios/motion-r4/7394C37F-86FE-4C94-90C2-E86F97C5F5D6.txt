@@ -1,0 +1,55 @@
+Application, 0x105ff1040, pid: 18889, label: 'MotoVault' <App element pid: 18889>
+  Window (Main), 0x105ff1540, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 18889, elementOrHash.elementID: 4389699584.6>
+    Other, 0x105ff12c0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 18889, elementOrHash.elementID: 4391424512.8>
+      Other, 0x105ff0b40, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 18889, elementOrHash.elementID: 4438635008.10>
+        Other, 0x105ff1180, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 18889, elementOrHash.elementID: 4390568832.12>
+          Other, 0x105ff08c0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 18889, elementOrHash.elementID: 4390569280.13>
+            Other, 0x105ff0c80, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 18889, elementOrHash.elementID: 4390572416.14>
+              Other, 0x105ff0dc0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 18889, elementOrHash.elementID: 4390137536.16>
+                Other, 0x105ff3e80, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=1)' <AX element pid: 18889, elementOrHash.elementID: 4391282288.17>
+                Other, 0x105ff2f80, {{0.0, 62.0}, {440.0, 791.3}} <AX element pid: 18889, elementOrHash.elementID: 4437877248.171>
+                  Other, 0x105ff3200, {{0.0, 62.0}, {440.0, 791.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=333)' <AX element pid: 18889, elementOrHash.elementID: 4781998160.172>
+                  Image, 0x105ff2d00, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=414)', label: 'Yamaha R15 V4' <AX element pid: 18889, elementOrHash.elementID: 4782004080.173>
+                  Other, 0x105ff2bc0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=415)', label: 'নমুনা ছবি · রঙ ও যন্ত্রাংশে পার্থক্য থাকতে পারে' <AX element pid: 18889, elementOrHash.elementID: 4782002240.174>
+                  Other, 0x105ff2a80, {{20.0, 74.0}, {78.0, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=337)', label: 'আমার গ্যারেজ' <AX element pid: 18889, elementOrHash.elementID: 4782002400.175>
+                  Button, 0x105ff2940, {{364.0, 92.0}, {56.0, 56.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=340)', label: 'বাইকের সেটিংস' <AX element pid: 18889, elementOrHash.elementID: 4782002480.176>
+                  Other, 0x105ff2800, {{20.0, 100.0}, {87.3, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=338)', label: 'R15 V4' <AX element pid: 18889, elementOrHash.elementID: 4782004160.177>
+                  Other, 0x105ff26c0, {{20.0, 142.0}, {83.0, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=339)', label: 'Yamaha · ২০২৩' <AX element pid: 18889, elementOrHash.elementID: 4782002080.178>
+                  Other, 0x105ff2580, {{102.0, 202.0}, {74.3, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=347)', label: 'এখনই দরকার' <AX element pid: 18889, elementOrHash.elementID: 4782002880.179>
+                  Other, 0x105ff2440, {{102.0, 228.0}, {46.3, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=348)', label: 'Chain' <AX element pid: 18889, elementOrHash.elementID: 4782002160.180>
+                  Other, 0x105ff2e40, {{102.0, 254.0}, {117.0, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=349)', label: '৩৩০ কিমি পেরিয়েছে' <AX element pid: 18889, elementOrHash.elementID: 4782003600.181>
+                  Other, 0x105ff30c0, {{36.0, 310.0}, {207.0, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=352)', label: 'শেষ সার্ভিস: ১৩ সেপ্টেম্বর · ১১,৫২০ কিমি' <AX element pid: 18889, elementOrHash.elementID: 4781998080.182>
+                  Other, 0x105ff3340, {{36.0, 346.0}, {368.0, 52.0}} <AX element pid: 18889, elementOrHash.elementID: 4437876160.183>
+                    Button, 0x105ff3480, {{36.0, 346.0}, {368.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=353)' <AX element pid: 18889, elementOrHash.elementID: 4782003840.192>
+                    Other, 0x105ff35c0, {{193.3, 360.0}, {81.7, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=356)', label: 'সার্ভিস লিখুন' <AX element pid: 18889, elementOrHash.elementID: 4782003200.193>
+                  Button, 0x105ff3700, {{20.0, 434.0}, {92.3, 108.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=358)', label: 'তেল ভরা' <AX element pid: 18889, elementOrHash.elementID: 4782002320.184>
+                  Button, 0x105ff3840, {{122.3, 434.0}, {92.3, 108.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=362)', label: 'সার্ভিস' <AX element pid: 18889, elementOrHash.elementID: 4782003680.185>
+                  Button, 0x105ff3980, {{224.7, 434.0}, {92.7, 108.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=366)', label: 'কিমি' <AX element pid: 18889, elementOrHash.elementID: 4782003040.186>
+                  Button, 0x105ff3ac0, {{327.3, 434.0}, {92.7, 108.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=370)', label: 'কাগজ' <AX element pid: 18889, elementOrHash.elementID: 4781998320.187>
+                  Button, 0x105ff03c0, {{20.0, 562.0}, {195.0, 116.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=375)', label: 'ওডোমিটার
+১২,৩৫০
+কিমি
+আজ আনুমানিক ১২,৩৫০ · আপডেট' <AX element pid: 18889, elementOrHash.elementID: 4781998240.188>
+                  Button, 0x105ff0000, {{225.0, 562.0}, {195.0, 130.7}}, identifier: 'AccessibilityElement for SemanticsNode(id=382)', label: 'জ্বালানি গড়
+--
+কিমি/লি' <AX element pid: 18889, elementOrHash.elementID: 4782003360.189>
+                  Other, 0x105ff0280, {{20.0, 712.7}, {118.0, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=390)', label: 'যন্ত্রাংশের অবস্থা' <AX element pid: 18889, elementOrHash.elementID: 4782003920.190>
+                  Other, 0x105ff0140, {{20.0, 766.7}, {400.0, 86.7}} <AX element pid: 18889, elementOrHash.elementID: 4437877312.191>
+                    Other, 0x105ff0640, {{20.0, 766.7}, {400.0, 86.7}}, identifier: 'AccessibilityElement for SemanticsNode(id=391)' <AX element pid: 18889, elementOrHash.elementID: 4782004000.194>
+                    Button, 0x105ff0a00, {{20.0, 766.7}, {124.0, 86.7}}, identifier: 'AccessibilityElement for SemanticsNode(id=392)', label: '০
+%
+Chain
+৩৩০ কিমি পেরিয়েছে' <AX element pid: 18889, elementOrHash.elementID: 4782003520.195>
+                    Button, 0x105ff0780, {{154.0, 766.7}, {124.0, 86.7}}, identifier: 'AccessibilityElement for SemanticsNode(id=402)', label: '৬৬
+%
+Engine oil
+ভালো আছে' <AX element pid: 18889, elementOrHash.elementID: 4782004240.196>
+                Button, 0x105ff0500, {{196.3, 844.0}, {48.0, 48.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=111)', label: 'নতুন রেকর্ড যোগ করুন' <AX element pid: 18889, elementOrHash.elementID: 4488256144.19>
+                Button, 0x105ff2080, {{8.0, 854.0}, {85.0, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=98)', label: 'গ্যারেজ' <AX element pid: 18889, elementOrHash.elementID: 4488257024.20>
+                Button, 0x105ff21c0, {{93.0, 854.0}, {85.0, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=104)', label: 'কাগজপত্র' <AX element pid: 18889, elementOrHash.elementID: 4488257104.21>
+                Button, 0x105ff2300, {{262.7, 854.0}, {84.7, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=113)', label: 'ইতিহাস' <AX element pid: 18889, elementOrHash.elementID: 4488257824.22>
+                Button, 0x105ff1f40, {{347.3, 854.0}, {84.7, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=119)', label: 'আমি' <AX element pid: 18889, elementOrHash.elementID: 4488256784.23>
+            Other, 0x105ff1b80, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 18889, elementOrHash.elementID: 4390571072.15>
+  Window, 0x105ff1e00, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 18889, elementOrHash.elementID: 4389816832.7>
+    Other, 0x105ff1cc0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 18889, elementOrHash.elementID: 4391424000.9>
+      Other, 0x105ff17c0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 18889, elementOrHash.elementID: 4390573760.11>

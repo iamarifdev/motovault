@@ -1,0 +1,55 @@
+{
+  "primaryBike": "primary -> one persisted stable bikeId; never regenerate on retry",
+  "ownerDocumentIds": [
+    "p00-doc-licence"
+  ],
+  "bikeDocumentIds": [
+    "p00-doc-tax",
+    "p00-doc-registration"
+  ],
+  "originalAssets": [
+    {
+      "id": "p00-original.png",
+      "bytes": 69,
+      "sha256": "48f536b03a69b8ec492946d9abe4a38b70e4bf39adb6ad5bdcfd208a789f5234",
+      "synthetic": true
+    },
+    {
+      "id": "p00-accepted.png",
+      "bytes": 69,
+      "sha256": "2007db9032701c5eb59165c5360c6c69a13066460899dae70b1875cd07ec65a0",
+      "synthetic": true
+    },
+    {
+      "id": "p00-preview.png",
+      "bytes": 69,
+      "sha256": "ecbbc11d6748d2fe5d8b071a7949d74aca56ed0ac80c74f7a80802df94a7d79e",
+      "synthetic": true
+    }
+  ],
+  "money": [
+    {
+      "taka": "120.00",
+      "poisha": 12000
+    },
+    {
+      "taka": "0.10",
+      "poisha": 10
+    },
+    {
+      "taka": "19.995",
+      "poisha": 2000
+    },
+    {
+      "taka": "0.005",
+      "poisha": 1
+    }
+  ],
+  "serviceTotalPoisha": 160000,
+  "expectedDTOSettings": {
+    "digits": "EN",
+    "reduceMotion": true,
+    "textScale": 1.3
+  },
+  "roomSettingsPersistence": "Current mapper does not round-trip these new UI settings. P01/P02/P06 gate remains open."
+}

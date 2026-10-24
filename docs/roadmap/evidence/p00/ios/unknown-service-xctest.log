@@ -1,0 +1,50 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test-without-building -project build/p00-ios-host/MotoVault.xcodeproj -scheme MotoVault -configuration Debug -destination id=639D8717-57E7-49B8-9DAA-2C365E2F1508 -derivedDataPath build/p00-ios-tests-derived "-only-testing:MotoVaultUITests/P00BaselineTests/testUnknownService" -resultBundlePath /Users/arif/workspace/bbn/motovault/build/p00-unknown-service.xcresult CODE_SIGNING_ALLOWED=NO
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+
+Writing result bundle at path:
+	/Users/arif/workspace/bbn/motovault/build/p00-unknown-service.xcresult
+
+2026-10-24 04:30:50.838555+0600 MotoVaultUITests-Runner[1199:1237340] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2026-10-24 04:30:53.407.
+Test Suite 'MotoVaultUITests.xctest' started at 2026-10-24 04:30:53.407.
+Test Suite 'P00BaselineTests' started at 2026-10-24 04:30:53.407.
+Test Case '-[MotoVaultUITests.P00BaselineTests testUnknownService]' started.
+    t =     0.00s Start Test at 2026-10-24 04:30:53.409
+    t =     0.02s Set Up
+    t =     0.02s Open com.motovault.baseline.p00
+    t =     0.02s     Launch com.motovault.baseline.p00
+2026-10-24 04:30:53.496 xcodebuild[1195:1237229] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-10-24 04:30:53.496 xcodebuild[1195:1237229] [MT] IDELaunchParametersSnapshot: no debugger version
+objc[1199]: Class UIAccessibilityLoaderWebShared is implemented in both /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.EAXtin/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x1033bc398) and /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.EAXtin/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x106878310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     1.92s         Setting up automation session
+    t =     4.53s         Wait for com.motovault.baseline.p00 to idle
+    t =     6.08s Waiting 20.0s for Button (First Match) to exist
+    t =     7.08s     Checking `Expect predicate `existsNoRetry == 1` for object Button (First Match)`
+    t =     7.08s         Checking existence of `Button (First Match)`
+    t =     8.33s Find the Target Application 'com.motovault.baseline.p00'
+    t =     8.50s Added attachment named 'unknown-service-home'
+    t =     8.50s Requesting snapshot of accessibility hierarchy for app with pid 1300
+    t =     8.56s Requesting snapshot of accessibility hierarchy for app with pid 1300
+    t =     8.58s Added attachment named 'unknown-service-home-tree'
+    t =     8.58s Tear Down
+Test Case '-[MotoVaultUITests.P00BaselineTests testUnknownService]' passed (8.858 seconds).
+Test Suite 'P00BaselineTests' passed at 2026-10-24 04:31:02.268.
+	 Executed 1 test, with 0 failures (0 unexpected) in 8.858 (8.861) seconds
+Test Suite 'MotoVaultUITests.xctest' passed at 2026-10-24 04:31:02.269.
+	 Executed 1 test, with 0 failures (0 unexpected) in 8.858 (8.862) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 04:31:02.270.
+	 Executed 1 test, with 0 failures (0 unexpected) in 8.858 (8.864) seconds
+2026-10-24 04:31:02.586 xcodebuild[1195:1237229] [MT] IDETestOperationsObserverDebug: 13.044 elapsed -- Testing started completed.
+2026-10-24 04:31:02.586 xcodebuild[1195:1237229] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-24 04:31:02.586 xcodebuild[1195:1237229] [MT] IDETestOperationsObserverDebug: 13.044 sec, +13.044 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/arif/workspace/bbn/motovault/build/p00-unknown-service.xcresult
+
+** TEST EXECUTE SUCCEEDED **
+
+Testing started

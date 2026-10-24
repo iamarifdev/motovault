@@ -1,0 +1,40 @@
+{
+  "android": {
+    "expectedAfterUndo": 12340,
+    "actualDurableOdometer": 12350.0,
+    "undoRestored": false,
+    "vaultMetaColumns": [
+      "id",
+      "appearance",
+      "legacyImported",
+      "autoLocation"
+    ],
+    "outboxPayloadFields": [
+      "ride",
+      "rules",
+      "appearance",
+      "reduceMotion"
+    ],
+    "outboxReduceMotion": true,
+    "scope": "Synthetic baseline only; Room read mapper and durable state inspected, no production owner data"
+  },
+  "ios": {
+    "expectedAfterUndo": 12340,
+    "actualDurableOdometer": 12350.0,
+    "undoRestored": false,
+    "vaultMetaColumns": [
+      "id",
+      "appearance",
+      "legacyImported",
+      "autoLocation"
+    ],
+    "outboxPayloadFields": [
+      "ride",
+      "rules",
+      "appearance",
+      "reduceMotion"
+    ],
+    "outboxReduceMotion": true,
+    "scope": "Synthetic baseline only; Room read mapper and durable state inspected, no production owner data"
+  }
+}

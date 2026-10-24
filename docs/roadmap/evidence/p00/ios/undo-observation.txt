@@ -1,0 +1,4 @@
+Expected restored odometer 12340. Observed label: ওডোমিটার
+১২,৩৫০
+কিমি
+আজ আনুমানিক ১২,৩৫০ · আপডেট. This captures the baseline; a mismatch is a product defect, not a successful Undo check.

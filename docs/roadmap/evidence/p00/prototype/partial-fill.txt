@@ -1,0 +1,63 @@
+Browser tab: 3, Title: "MotoVault prototype v3", URL: "http://localhost:5273/".
+0 AXWebArea MotoVault prototype v3, URL: localhost:5273/
+	1 container
+		40 container
+			41 heading ইতিহাস, Value: 1
+				42 text ইতিহাস
+			43 container গত ৩০ দিন
+				44 text গত ৩০ দিনের খরচ
+				45 text ৳১,৭৮৮
+				46 text চালানো
+				47 text ৪৫০ কিমি
+				48 text জ্বালানি গড়
+				49 text ৪৫.৫ কিমি/লি
+			50 container ফিল্টার
+				51 checkbox সব, Value: 1
+				52 checkbox সার্ভিস, Value: 0
+				53 checkbox জ্বালানি, Value: 0
+				54 text ৪ টি রেকর্ড
+			55 container অক্টোবর ২০২৬
+				56 heading অক্টোবর ২০২৬, Value: 3
+					57 text অক্টোবর ২০২৬
+				58 content list
+					59 container
+						60 button মুছুন
+						61 button (collapsed) তেল ভরা · ৪.৯ লিটার ১৬ অক্টোবর · ১২,৩৪০ কিমি ৳৫৮৮, Secondary Actions: Expand
+							62 text তেল ভরা · ৪.৯ লিটার
+							63 container
+								64 text ১৬ অক্টোবর  ·  ১২,৩৪০ কিমি
+							65 text ৳৫৮৮
+					66 container
+						67 button মুছুন
+						68 button (collapsed) তেল ভরা · ৩ লিটার ৯ অক্টোবর · ১২,১২০ কিমি ৳৩৬০, Secondary Actions: Expand
+							69 text তেল ভরা · ৩ লিটার
+							70 container
+								71 text ৯ অক্টোবর  ·  ১২,১২০ কিমি
+							72 text ৳৩৬০
+					73 container
+						74 button মুছুন
+						75 button (collapsed) তেল ভরা · ২ লিটার ৪ অক্টোবর · ১২,০২০ কিমি ৳২৪০, Secondary Actions: Expand
+							76 text তেল ভরা · ২ লিটার
+							77 container
+								78 text ৪ অক্টোবর  ·  ১২,০২০ কিমি
+							79 text ৳২৪০
+			80 container সেপ্টেম্বর ২০২৬
+				81 heading সেপ্টেম্বর ২০২৬, Value: 3
+					82 text সেপ্টেম্বর ২০২৬
+				83 content list
+					84 container
+						85 button মুছুন
+						86 button (collapsed) তেল ভরা · ৫ লিটার ২৭ সেপ্টেম্বর · ১১,৮৯০ কিমি ৳৬০০, Secondary Actions: Expand
+							87 text তেল ভরা · ৫ লিটার
+							88 container
+								89 text ২৭ সেপ্টেম্বর  ·  ১১,৮৯০ কিমি
+							90 text ৳৬০০
+		34 tab group প্রধান মেনু
+			35 tab (selectable, settable, boolean) গ্যারেজ, Value: 0
+			36 tab (selectable, settable, boolean) কাগজপত্র, Value: 0
+			37 button নতুন রেকর্ড যোগ করুন
+			38 tab (selected, settable, boolean) ইতিহাস, Value: 1
+				91 text ইতিহাস
+			39 tab (selectable, settable, boolean) আমি, Value: 0
+
+The focused UI element is 38 tab (selected, settable, boolean) ইতিহাস, Value: 1

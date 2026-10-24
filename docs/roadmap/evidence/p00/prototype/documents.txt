@@ -1,0 +1,39 @@
+Browser tab: 3, Title: "MotoVault prototype v3", URL: "http://localhost:5273/".
+0 AXWebArea MotoVault prototype v3, URL: localhost:5273/
+	1 container
+		40 container
+			41 heading কাগজপত্র, Value: 1
+				42 text কাগজপত্র
+			43 button কাগজ যোগ করুন
+			44 button পরের নবায়ন ট্যাক্স টোকেন মেয়াদ শেষ: ১৯ অক্টোবর ২০২৬ ৫ দিন আগে শেষ
+				45 text পরের নবায়ন
+				46 heading ট্যাক্স টোকেন, Value: 2
+					47 text ট্যাক্স টোকেন
+				48 text মেয়াদ শেষ: 
+				49 text ১৯ অক্টোবর ২০২৬
+				50 text ৫ দিন আগে শেষ
+			51 container সব কাগজ
+				52 heading সব কাগজ, Value: 2
+					53 text সব কাগজ
+				54 button ট্যাক্স টোকেন ৫ দিন আগে শেষ
+					55 text ট্যাক্স টোকেন
+					56 text ৫ দিন আগে শেষ
+				57 button ড্রাইভিং লাইসেন্স ২৪ দিন বাকি
+					58 text ড্রাইভিং লাইসেন্স
+					59 text ২৪ দিন বাকি
+				60 button রেজিস্ট্রেশন স্মার্ট কার্ড মেয়াদ আছে
+					61 text রেজিস্ট্রেশন স্মার্ট কার্ড
+					62 text মেয়াদ আছে
+			63 switch মেয়াদের আগে জানান ৩০ দিন আগে এবং মেয়াদের দিন, সকাল ৯টায়, Value: 0
+				64 text মেয়াদের আগে জানান
+				65 text ৩০ দিন আগে এবং মেয়াদের দিন, সকাল ৯টায়
+			66 button রাস্তায় দেখানোর মোড
+		34 tab group প্রধান মেনু
+			35 tab (selectable, settable, boolean) গ্যারেজ, Value: 0
+			36 tab (selected, settable, boolean) কাগজপত্র, Value: 1
+				67 text কাগজপত্র
+			37 button নতুন রেকর্ড যোগ করুন
+			38 tab (selectable, settable, boolean) ইতিহাস, Value: 0
+			39 tab (selectable, settable, boolean) আমি, Value: 0
+
+The focused UI element is 36 tab (selected, settable, boolean) কাগজপত্র, Value: 1

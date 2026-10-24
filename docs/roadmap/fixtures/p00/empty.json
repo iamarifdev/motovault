@@ -1,0 +1,72 @@
+{
+  "fixtureVersion": 1,
+  "id": "empty",
+  "referenceDate": "2026-10-24",
+  "synthetic": true,
+  "native": {
+    "ride": {
+      "brandId": "yamaha",
+      "edition": "P00 synthetic",
+      "year": 2023,
+      "odometer": 12340.0,
+      "modelId": "yamaha-r15-v4",
+      "modelName": "R15 V4",
+      "registration": "P00-SYNTHETIC",
+      "market": "BANGLADESH",
+      "emission": "UNKNOWN"
+    },
+    "rules": [],
+    "logs": [],
+    "documents": [],
+    "appearance": "LIGHT",
+    "autoLocation": false,
+    "digits": "BN",
+    "haptics": false,
+    "reduceMotion": false,
+    "textScale": 1.0,
+    "serviceReminders": false,
+    "docReminders": false,
+    "lastPrices": {
+      "octane": 120.0,
+      "petrol": 115.0
+    }
+  },
+  "prototype": {
+    "ride": {
+      "brandId": "yamaha",
+      "modelId": "yamaha-r15-v4",
+      "name": "R15 V4",
+      "year": 2023,
+      "odometer": 12340,
+      "odometerAt": "2026-10-24",
+      "startedAt": "2026-07-16"
+    },
+    "rules": [],
+    "logs": [],
+    "docs": [],
+    "lastPrice": {
+      "octane": 120.0,
+      "petrol": 115.0
+    },
+    "lastItemPrice": {},
+    "workshops": [],
+    "places": [],
+    "settings": {
+      "theme": "light",
+      "digits": "bn",
+      "haptics": false,
+      "reduceMotion": false,
+      "textScale": 1,
+      "gps": false,
+      "brandOverride": null,
+      "serviceReminders": false,
+      "docReminders": false
+    }
+  },
+  "notes": [
+    "All IDs, names, numbers and prices are synthetic.",
+    "Document fixture is metadata-only; no owner images or documents.",
+    "Unknown service uses no rules: current models cannot encode baseline certainty.",
+    "Runtime clocks are observed, not overridden; date differences must be reported."
+  ]
+}

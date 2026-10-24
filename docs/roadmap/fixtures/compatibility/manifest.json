@@ -1,0 +1,42 @@
+{
+  "synthetic": true,
+  "scope": "Compatibility fixtures; no future migration or encryption implementation",
+  "files": [
+    {
+      "path": "docs/roadmap/fixtures/compatibility/assets/p00-accepted.png",
+      "sha256": "2007db9032701c5eb59165c5360c6c69a13066460899dae70b1875cd07ec65a0"
+    },
+    {
+      "path": "docs/roadmap/fixtures/compatibility/assets/p00-original.png",
+      "sha256": "48f536b03a69b8ec492946d9abe4a38b70e4bf39adb6ad5bdcfd208a789f5234"
+    },
+    {
+      "path": "docs/roadmap/fixtures/compatibility/assets/p00-preview.png",
+      "sha256": "ecbbc11d6748d2fe5d8b071a7949d74aca56ed0ac80c74f7a80802df94a7d79e"
+    },
+    {
+      "path": "docs/roadmap/fixtures/compatibility/current-all-fields.json",
+      "sha256": "98bad2d4d6fcc2989ed3a3515119b9fcea2a173365062e80663498f2e1e98aac"
+    },
+    {
+      "path": "docs/roadmap/fixtures/compatibility/expected-mappings.json",
+      "sha256": "ae8074161f6087886168d0e99386d7e10f4a1c095bc8f51d911a88c5e4cdf294"
+    },
+    {
+      "path": "docs/roadmap/fixtures/compatibility/legacy-minimal.json",
+      "sha256": "a06470247f52cc8d94d54a31a944f39f2b9377de075b77ff745fc25d9b346f75"
+    },
+    {
+      "path": "docs/roadmap/fixtures/compatibility/room-schema-1.json",
+      "sha256": "f4683dd38d634314e7ef62511dc83c8188eb3543ecba7b658dd351286d2692a3"
+    },
+    {
+      "path": "docs/roadmap/fixtures/compatibility/room-schema-2.json",
+      "sha256": "23beef3d9a484f99f1bf8cc1c965ac369c0c63828e7862436543bb25d150d8a0"
+    },
+    {
+      "path": "docs/roadmap/fixtures/compatibility/room-schema-3.json",
+      "sha256": "15aa4391e53c157388bdcbc30c55486a474fa5f326a732e8932b040cdb269d24"
+    }
+  ]
+}

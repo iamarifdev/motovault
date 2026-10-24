@@ -1,0 +1,64 @@
+Browser tab: 3, Title: "MotoVault prototype v3", URL: "http://localhost:5273/".
+0 AXWebArea MotoVault prototype v3, URL: localhost:5273/
+	1 container
+		2 container
+			3 text আমার গ্যারেজ
+			4 heading R15 V4, Value: 1
+				5 text R15 V4
+			6 text Yamaha  ·  ২০২৩
+			7 button বাইকের সেটিংস
+			40 container পরের কাজ
+				41 text এখনই দরকার
+				42 heading চেইন, Value: 2
+					43 text চেইন
+				44 text ৩২০ কিমি পেরিয়েছে
+				45 container
+					46 text শেষ সার্ভিস:  ১৩ সেপ্টেম্বর  ·  ১১,৫২০ কিমি
+				47 button চেইন লিখুন
+					48 text চেইন
+					49 text  লিখুন
+			8 container দ্রুত রেকর্ড
+				9 button তেল ভরা
+					10 text তেল ভরা
+				11 button সার্ভিস
+					12 text সার্ভিস
+				13 button কিমি
+					14 text কিমি
+				15 button কাগজ
+					16 text কাগজ
+			17 button ওডোমিটার ১২,৩৪০ কিমি আজ আনুমানিক ১২,৩৪০ · আপডেট
+				18 text ওডোমিটার
+				19 container
+					20 text ১২,৩৪০ কিমি
+				21 text আজ আনুমানিক 
+				22 text ১২,৩৪০
+				23 text  · আপডেট
+			24 button জ্বালানি গড় -- কিমি/লি
+				25 text জ্বালানি গড়
+				26 container
+					27 text -- কিমি/লি
+			28 container যন্ত্রাংশের অবস্থা
+				29 heading যন্ত্রাংশের অবস্থা, Value: 2
+					30 text যন্ত্রাংশের অবস্থা
+				50 button চেইন, ০ শতাংশ বাকি, ৩২০ কিমি পেরিয়েছে
+					51 text ০
+					52 text %
+					53 text চেইন
+					54 text ৩২০ কিমি পেরিয়েছে
+				55 button ইঞ্জিন অয়েল, ৬৭ শতাংশ বাকি, ভালো আছে
+					56 text ৬৭
+					57 text %
+					58 text ইঞ্জিন অয়েল
+					59 text ভালো আছে
+			31 container আপনার বাইক
+				32 image Yamaha R15 V4
+				33 text নমুনা ছবি · রঙ ও যন্ত্রাংশে পার্থক্য থাকতে পারে
+		34 tab group প্রধান মেনু
+			35 tab (selected, settable, boolean) গ্যারেজ, Value: 1
+গ্যারেজ
+			36 tab (selectable, settable, boolean) কাগজপত্র, Value: 0
+			37 button নতুন রেকর্ড যোগ করুন
+			38 tab (selectable, settable, boolean) ইতিহাস, Value: 0
+			39 tab (selectable, settable, boolean) আমি, Value: 0
+
+The focused UI element is 0 AXWebArea MotoVault prototype v3, URL: localhost:5273/

@@ -1,0 +1,9 @@
+// Baseline-only application identity. Apply with -I, never to a release build.
+gradle.beforeProject { project ->
+    project.pluginManager.withPlugin('com.android.application') {
+        project.extensions.getByName('androidComponents').finalizeDsl { android ->
+            android.defaultConfig.applicationId = 'com.motovault.baseline.p00'
+            android.defaultConfig.versionNameSuffix = '-p00-baseline'
+        }
+    }
+}

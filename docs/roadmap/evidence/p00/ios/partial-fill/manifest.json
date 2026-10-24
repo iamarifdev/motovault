@@ -1,0 +1,26 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "38A697D8-6934-433B-BE32-BA178CC30DB7.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "partial-fill-history-tree_0_C018091C-492B-4646-88E8-EA1DF069C50B.txt",
+        "timestamp" : 1792794632.05
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "C3D7E941-BE84-439D-ADA0-B6C485B9194E.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "partial-fill-history_0_1F60B86F-8C73-4CFA-BD73-EDC91F2FF777.png",
+        "timestamp" : 1792794631.936
+      }
+    ],
+    "testIdentifier" : "P00BaselineTests/testPartialFill()",
+    "testIdentifierURL" : "test://com.apple.xcode/MotoVault/MotoVaultUITests/P00BaselineTests/testPartialFill"
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "expectedOdometer": 12340,
+  "restored": false,
+  "observedLabels": "            আমার গ্যারেজ  R15 V4  Yamaha · ২০২৩     বাইকের সেটিংস এখনই দরকার  Chain  ৩৩০ কিমি পেরিয়েছে  শেষ সার্ভিস: ১৩ সেপ্টেম্বর · ১১,৫২০ কিমি    সার্ভিস লিখুন    তেল ভরা    সার্ভিস    কিমি    কাগজ    ওডোমিটার  ১২,৩৫০  কিমি  আজ আনুমানিক ১২,৩৫০ · আপডেট    জ্বালানি গড়  --  কিমি/লি  যন্ত্রাংশের অবস্থা           গ্যারেজ গ্যারেজ       কাগজপত্র কাগজপত্র     নতুন রেকর্ড যোগ করুন    ইতিহাস ইতিহাস       আমি আমি   ",
+  "scope": "Baseline observation; false is a recorded product defect, not a passing Undo verification"
+}

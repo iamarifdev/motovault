@@ -1,0 +1,70 @@
+> Task :skyDesignSystem:prepareComposeResourcesTaskForAndroidMain NO-SOURCE
+> Task :skyDesignSystem:generateResourceAccessorsForAndroidMain NO-SOURCE
+> Task :skyDesignSystem:convertXmlValueResourcesForCommonMain NO-SOURCE
+> Task :skyDesignSystem:copyNonXmlValueResourcesForCommonMain UP-TO-DATE
+> Task :skyDesignSystem:prepareComposeResourcesTaskForCommonMain UP-TO-DATE
+> Task :skyDesignSystem:generateResourceAccessorsForCommonMain UP-TO-DATE
+> Task :skyDesignSystem:generateActualResourceCollectorsForAndroidMain UP-TO-DATE
+> Task :skyDesignSystem:generateComposeResClass UP-TO-DATE
+> Task :skyDesignSystem:generateExpectResourceCollectorsForCommonMain UP-TO-DATE
+> Task :skyDesignSystem:convertXmlValueResourcesForAndroidDebug NO-SOURCE
+> Task :skyDesignSystem:copyNonXmlValueResourcesForAndroidDebug NO-SOURCE
+> Task :skyDesignSystem:prepareComposeResourcesTaskForAndroidDebug NO-SOURCE
+> Task :skyDesignSystem:generateResourceAccessorsForAndroidDebug NO-SOURCE
+> Task :skyDesignSystem:compileDebugKotlinAndroid UP-TO-DATE
+> Task :skyDesignSystem:javaPreCompileDebug UP-TO-DATE
+> Task :skyDesignSystem:compileDebugJavaWithJavac NO-SOURCE
+> Task :skyDesignSystem:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :composeApp:javaPreCompileDebug UP-TO-DATE
+> Task :composeApp:mergeDebugShaders UP-TO-DATE
+> Task :composeApp:compileDebugShaders NO-SOURCE
+> Task :composeApp:copyDebugComposeResourcesToAndroidAssets UP-TO-DATE
+> Task :composeApp:debugAssetsCopyForAGP NO-SOURCE
+> Task :composeApp:generateDebugAssets UP-TO-DATE
+> Task :skyDesignSystem:mergeDebugShaders UP-TO-DATE
+> Task :skyDesignSystem:compileDebugShaders NO-SOURCE
+> Task :skyDesignSystem:copyDebugComposeResourcesToAndroidAssets UP-TO-DATE
+> Task :skyDesignSystem:debugAssetsCopyForAGP NO-SOURCE
+> Task :skyDesignSystem:generateDebugAssets UP-TO-DATE
+> Task :skyDesignSystem:packageDebugAssets UP-TO-DATE
+> Task :composeApp:processDebugManifestForPackage
+> Task :composeApp:mergeDebugAssets UP-TO-DATE
+> Task :composeApp:compressDebugAssets UP-TO-DATE
+> Task :skyDesignSystem:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :composeApp:desugarDebugFileDependencies UP-TO-DATE
+> Task :skyDesignSystem:processDebugJavaRes UP-TO-DATE
+> Task :composeApp:checkDebugDuplicateClasses UP-TO-DATE
+> Task :composeApp:mergeExtDexDebug UP-TO-DATE
+> Task :skyDesignSystem:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :composeApp:mergeDebugJniLibFolders UP-TO-DATE
+> Task :skyDesignSystem:mergeDebugJniLibFolders UP-TO-DATE
+> Task :skyDesignSystem:mergeDebugNativeLibs NO-SOURCE
+> Task :skyDesignSystem:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :composeApp:mergeDebugNativeLibs UP-TO-DATE
+> Task :composeApp:mergeLibDexDebug UP-TO-DATE
+> Task :composeApp:stripDebugDebugSymbols UP-TO-DATE
+> Task :composeApp:validateSigningDebug UP-TO-DATE
+> Task :composeApp:writeDebugAppMetadata UP-TO-DATE
+> Task :composeApp:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :composeApp:processDebugResources
+> Task :composeApp:kspDebugKotlinAndroid UP-TO-DATE
+> Task :composeApp:compileDebugKotlinAndroid UP-TO-DATE
+> Task :composeApp:compileDebugJavaWithJavac NO-SOURCE
+> Task :composeApp:copyRoomSchemas NO-SOURCE
+> Task :composeApp:dexBuilderDebug
+> Task :composeApp:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :composeApp:processDebugJavaRes UP-TO-DATE
+> Task :composeApp:mergeProjectDexDebug
+> Task :composeApp:mergeDebugJavaResource
+> Task :composeApp:packageDebug
+> Task :composeApp:createDebugApkListingFileRedirect
+> Task :composeApp:assembleDebug
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 20s
+69 actionable tasks: 10 executed, 59 up-to-date

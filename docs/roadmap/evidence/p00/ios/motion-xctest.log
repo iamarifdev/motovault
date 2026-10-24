@@ -1,0 +1,194 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test-without-building -project build/p00-ios-host/MotoVault.xcodeproj -scheme MotoVault -configuration Debug -destination id=639D8717-57E7-49B8-9DAA-2C365E2F1508 -derivedDataPath build/p00-ios-tests-derived "-only-testing:MotoVaultUITests/P00BaselineTests/testMotionAndUndo" -resultBundlePath /Users/arif/workspace/bbn/motovault/build/p00-motion-r7.xcresult CODE_SIGNING_ALLOWED=NO
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+
+Writing result bundle at path:
+	/Users/arif/workspace/bbn/motovault/build/p00-motion-r7.xcresult
+
+2026-10-24 05:11:48.733562+0600 MotoVaultUITests-Runner[29550:1331371] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2026-10-24 05:11:51.328.
+Test Suite 'MotoVaultUITests.xctest' started at 2026-10-24 05:11:51.329.
+Test Suite 'P00BaselineTests' started at 2026-10-24 05:11:51.329.
+Test Case '-[MotoVaultUITests.P00BaselineTests testMotionAndUndo]' started.
+    t =     0.00s Start Test at 2026-10-24 05:11:51.332
+    t =     0.02s Set Up
+    t =     0.02s Open com.motovault.baseline.p00
+    t =     0.02s     Launch com.motovault.baseline.p00
+2026-10-24 05:11:51.415 xcodebuild[29504:1331117] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-10-24 05:11:51.415 xcodebuild[29504:1331117] [MT] IDELaunchParametersSnapshot: no debugger version
+objc[29550]: Class UIAccessibilityLoaderWebShared is implemented in both /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.EAXtin/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x103140398) and /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.EAXtin/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x103278310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     2.12s         Setting up automation session
+    t =     4.59s         Wait for com.motovault.baseline.p00 to idle
+    t =     6.31s Waiting 20.0s for Button (First Match) to exist
+    t =     7.33s     Checking `Expect predicate `existsNoRetry == 1` for object Button (First Match)`
+    t =     7.33s         Checking existence of `Button (First Match)`
+    t =     8.58s Find the Target Application 'com.motovault.baseline.p00'
+    t =     8.75s Added attachment named 'motion-home'
+    t =     8.75s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =     8.83s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =     8.85s Added attachment named 'motion-home-tree'
+    t =     8.85s Checking existence of `Button (First Match)`
+    t =     8.87s Tap Button (First Match)
+    t =     8.87s     Wait for com.motovault.baseline.p00 to idle
+    t =     8.87s     Find the Button (First Match)
+    t =     8.89s     Check for interrupting elements affecting "AccessibilityElement for SemanticsNode(id=54)" Button
+    t =     8.91s     Synthesize event
+    t =     9.21s     Wait for com.motovault.baseline.p00 to idle
+    t =     9.73s Find the Target Application 'com.motovault.baseline.p00'
+    t =     9.88s Added attachment named 'odometer-sheet'
+    t =     9.88s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    10.10s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    10.13s Added attachment named 'odometer-sheet-tree'
+    t =    10.13s Waiting 5.0s for Any (First Match) to exist
+    t =    11.16s     Checking `Expect predicate `existsNoRetry == 1` for object Any (First Match)`
+    t =    11.16s         Checking existence of `Any (First Match)`
+    t =    11.24s Tap Any (First Match)[0.50, 0.50]
+    t =    11.24s     Wait for com.motovault.baseline.p00 to idle
+    t =    11.24s     Find the Any (First Match)
+    t =    11.30s     Check for interrupting elements affecting "AccessibilityElement for SemanticsNode(id=152)" Other
+    t =    11.33s     Synthesize event
+    t =    11.34s         Find the "AccessibilityElement for SemanticsNode(id=152)" Other
+    t =    11.40s         Find the "AccessibilityElement for SemanticsNode(id=152)" Other
+    t =    11.46s         Find the "AccessibilityElement for SemanticsNode(id=152)" Other
+    t =    11.80s     Wait for com.motovault.baseline.p00 to idle
+    t =    11.80s Checking existence of `Any (First Match)`
+    t =    11.84s Tap Any (First Match)[0.50, 0.50]
+    t =    11.84s     Wait for com.motovault.baseline.p00 to idle
+    t =    11.84s     Find the Any (First Match)
+    t =    11.89s     Check for interrupting elements affecting "AccessibilityElement for SemanticsNode(id=174)" Other
+    t =    11.93s     Synthesize event
+    t =    11.94s         Find the "AccessibilityElement for SemanticsNode(id=174)" Other
+    t =    11.99s         Find the "AccessibilityElement for SemanticsNode(id=174)" Other
+    t =    12.04s         Find the "AccessibilityElement for SemanticsNode(id=174)" Other
+    t =    12.36s     Wait for com.motovault.baseline.p00 to idle
+    t =    12.62s Find the Target Application 'com.motovault.baseline.p00'
+    t =    12.74s Added attachment named 'after-save-undo'
+    t =    12.75s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    12.83s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    12.85s Added attachment named 'after-save-undo-tree'
+    t =    12.85s Waiting 3.0s for Any (First Match) to exist
+    t =    13.89s     Checking `Expect predicate `existsNoRetry == 1` for object Any (First Match)`
+    t =    13.89s         Checking existence of `Any (First Match)`
+    t =    13.90s Tap Any (First Match)[0.50, 0.50]
+    t =    13.90s     Wait for com.motovault.baseline.p00 to idle
+    t =    13.90s     Find the Any (First Match)
+    t =    13.92s     Check for interrupting elements affecting "AccessibilityElement for SemanticsNode(id=208)" Button
+    t =    13.95s     Synthesize event
+    t =    13.96s         Find the "AccessibilityElement for SemanticsNode(id=208)" Button
+    t =    13.98s         Find the "AccessibilityElement for SemanticsNode(id=208)" Button
+    t =    14.00s         Find the "AccessibilityElement for SemanticsNode(id=208)" Button
+    t =    14.30s     Wait for com.motovault.baseline.p00 to idle
+    t =    14.30s Find the Button (First Match)
+    t =    14.33s Added attachment named 'undo-observation'
+    t =    14.33s Find the Target Application 'com.motovault.baseline.p00'
+    t =    14.45s Added attachment named 'after-undo'
+    t =    14.45s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    14.53s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    14.55s Added attachment named 'after-undo-tree'
+    t =    14.55s Tap Button (First Match)
+    t =    14.55s     Wait for com.motovault.baseline.p00 to idle
+    t =    14.55s     Find the Button (First Match)
+    t =    14.57s     Check for interrupting elements affecting "AccessibilityElement for SemanticsNode(id=119)" Button
+    t =    14.59s     Synthesize event
+    t =    14.89s     Wait for com.motovault.baseline.p00 to idle
+    t =    15.40s Swipe up Target Application 'com.motovault.baseline.p00'
+    t =    15.40s     Wait for com.motovault.baseline.p00 to idle
+    t =    15.40s     Find the Target Application 'com.motovault.baseline.p00'
+    t =    15.42s     Check for interrupting elements affecting "MotoVault" Application
+    t =    15.44s     Synthesize event
+    t =    15.93s     Wait for com.motovault.baseline.p00 to idle
+    t =    17.95s Find the Target Application 'com.motovault.baseline.p00'
+    t =    18.09s Added attachment named 'settings-motion'
+    t =    18.09s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    18.17s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    18.19s Added attachment named 'settings-motion-tree'
+    t =    18.19s Find the Target Application 'com.motovault.baseline.p00'
+    t =    18.37s Find the Window (First Match)
+    t =    18.39s Added attachment named 'reduced-motion-toggle-location'
+    t =    18.39s Find the Target Application 'com.motovault.baseline.p00'
+    t =    18.54s Find the Window (First Match)
+    t =    18.55s Find the Window at {{0.0, 0.0}, {440.0, 956.0}}
+    t =    18.57s Press Window at {{0.0, 0.0}, {440.0, 956.0}}[0.00, 0.00] -> (220.0, 438.7) for 0.1 seconds
+    t =    18.57s     Wait for com.motovault.baseline.p00 to idle
+    t =    18.57s     Find the Window at {{0.0, 0.0}, {440.0, 956.0}}
+    t =    18.58s     Check for interrupting elements affecting Window
+    t =    18.60s     Synthesize event
+    t =    18.60s         Find the Window at {{0.0, 0.0}, {440.0, 956.0}}
+    t =    18.62s         Find the Window at {{0.0, 0.0}, {440.0, 956.0}}
+    t =    18.63s         Find the Window at {{0.0, 0.0}, {440.0, 956.0}}
+    t =    18.99s     Wait for com.motovault.baseline.p00 to idle
+    t =    19.45s Find the Target Application 'com.motovault.baseline.p00'
+    t =    19.61s Find the Window at {{0.0, 0.0}, {440.0, 956.0}}
+    t =    19.62s Find the Window at {{0.0, 0.0}, {440.0, 956.0}}
+    t =    19.64s Press Window at {{0.0, 0.0}, {440.0, 956.0}}[0.00, 0.00] -> (220.0, 438.0) for 0.1 seconds
+    t =    19.64s     Wait for com.motovault.baseline.p00 to idle
+    t =    19.64s     Find the Window at {{0.0, 0.0}, {440.0, 956.0}}
+    t =    19.65s     Check for interrupting elements affecting Window
+    t =    19.67s     Synthesize event
+    t =    19.67s         Find the Window at {{0.0, 0.0}, {440.0, 956.0}}
+    t =    19.68s         Find the Window at {{0.0, 0.0}, {440.0, 956.0}}
+    t =    19.70s         Find the Window at {{0.0, 0.0}, {440.0, 956.0}}
+    t =    20.06s     Wait for com.motovault.baseline.p00 to idle
+    t =    20.52s Find the Target Application 'com.motovault.baseline.p00'
+    t =    20.68s Added attachment named 'reduced-motion-on-confirmed'
+    t =    20.69s Find the Target Application 'com.motovault.baseline.p00'
+    t =    20.81s Added attachment named 'reduced-motion-enabled'
+    t =    20.81s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    20.89s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    20.91s Added attachment named 'reduced-motion-enabled-tree'
+    t =    20.91s Tap Button (First Match)
+    t =    20.91s     Wait for com.motovault.baseline.p00 to idle
+    t =    20.91s     Find the Button (First Match)
+    t =    20.93s     Check for interrupting elements affecting "AccessibilityElement for SemanticsNode(id=98)" Button
+    t =    20.95s     Synthesize event
+    t =    21.24s     Wait for com.motovault.baseline.p00 to idle
+    t =    22.25s Tap Button (First Match)[0.50, 0.50]
+    t =    22.25s     Wait for com.motovault.baseline.p00 to idle
+    t =    22.26s     Find the Button (First Match)
+    t =    22.31s     Check for interrupting elements affecting "AccessibilityElement for SemanticsNode(id=375)" Button
+    t =    22.32s     Synthesize event
+    t =    22.33s         Find the "AccessibilityElement for SemanticsNode(id=375)" Button
+    t =    22.36s         Find the "AccessibilityElement for SemanticsNode(id=375)" Button
+    t =    22.38s         Find the "AccessibilityElement for SemanticsNode(id=375)" Button
+    t =    22.68s     Wait for com.motovault.baseline.p00 to idle
+    t =    22.69s Waiting 5.0s for Button (First Match) to exist
+    t =    23.71s     Checking `Expect predicate `existsNoRetry == 1` for object Button (First Match)`
+    t =    23.72s         Checking existence of `Button (First Match)`
+    t =    23.74s Find the Target Application 'com.motovault.baseline.p00'
+    t =    23.88s Added attachment named 'reduced-motion-sheet'
+    t =    23.88s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    24.08s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    24.11s Added attachment named 'reduced-motion-sheet-tree'
+    t =    24.11s Tap Button (First Match)
+    t =    24.12s     Wait for com.motovault.baseline.p00 to idle
+    t =    24.12s     Find the Button (First Match)
+    t =    24.14s     Check for interrupting elements affecting "AccessibilityElement for SemanticsNode(id=429)" Button
+    t =    24.17s     Synthesize event
+    t =    24.19s         Falling back to element center point: {406, 297.33334350585938}
+    t =    24.48s     Wait for com.motovault.baseline.p00 to idle
+    t =    24.48s Find the Target Application 'com.motovault.baseline.p00'
+    t =    24.60s Added attachment named 'reduced-motion-home'
+    t =    24.61s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    24.69s Requesting snapshot of accessibility hierarchy for app with pid 29623
+    t =    24.70s Added attachment named 'reduced-motion-home-tree'
+    t =    24.70s Tear Down
+Test Case '-[MotoVaultUITests.P00BaselineTests testMotionAndUndo]' passed (24.966 seconds).
+Test Suite 'P00BaselineTests' passed at 2026-10-24 05:12:16.299.
+	 Executed 1 test, with 0 failures (0 unexpected) in 24.966 (24.970) seconds
+Test Suite 'MotoVaultUITests.xctest' passed at 2026-10-24 05:12:16.301.
+	 Executed 1 test, with 0 failures (0 unexpected) in 24.966 (24.972) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 05:12:16.302.
+	 Executed 1 test, with 0 failures (0 unexpected) in 24.966 (24.973) seconds
+2026-10-24 05:12:16.619 xcodebuild[29504:1331117] [MT] IDETestOperationsObserverDebug: 29.143 elapsed -- Testing started completed.
+2026-10-24 05:12:16.619 xcodebuild[29504:1331117] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-24 05:12:16.619 xcodebuild[29504:1331117] [MT] IDETestOperationsObserverDebug: 29.143 sec, +29.143 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/arif/workspace/bbn/motovault/build/p00-motion-r7.xcresult
+
+** TEST EXECUTE SUCCEEDED **
+
+Testing started

@@ -1,0 +1,44 @@
+Browser tab: 3, Title: "MotoVault prototype v3", URL: "http://localhost:5273/".
+0 AXWebArea MotoVault prototype v3, URL: localhost:5273/
+	1 container
+		40 container
+			41 text আমার গ্যারেজ
+			42 heading R15 V4, Value: 1
+				43 text R15 V4
+			44 text Yamaha  ·  ২০২৩
+			45 button বাইকের সেটিংস
+			46 container দ্রুত রেকর্ড
+				47 button তেল ভরা
+					48 text তেল ভরা
+				49 button সার্ভিস
+					50 text সার্ভিস
+				51 button কিমি
+					52 text কিমি
+				53 button কাগজ
+					54 text কাগজ
+			55 button ওডোমিটার ১২,৩৪০ কিমি আজ আনুমানিক ১২,৩৪০ · আপডেট
+				56 text ওডোমিটার
+				57 container
+					58 text ১২,৩৪০ কিমি
+				59 text আজ আনুমানিক 
+				60 text ১২,৩৪০
+				61 text  · আপডেট
+			62 button জ্বালানি গড় -- কিমি/লি
+				63 text জ্বালানি গড়
+				64 container
+					65 text -- কিমি/লি
+			66 container যন্ত্রাংশের অবস্থা
+				67 heading যন্ত্রাংশের অবস্থা, Value: 2
+					68 text যন্ত্রাংশের অবস্থা
+			69 container আপনার বাইক
+				70 image Yamaha R15 V4
+				71 text নমুনা ছবি · রঙ ও যন্ত্রাংশে পার্থক্য থাকতে পারে
+		34 tab group প্রধান মেনু
+			35 tab (selected, settable, boolean) গ্যারেজ, Value: 1
+গ্যারেজ
+			36 tab (selectable, settable, boolean) কাগজপত্র, Value: 0
+			37 button নতুন রেকর্ড যোগ করুন
+			38 tab (selectable, settable, boolean) ইতিহাস, Value: 0
+			39 tab (selectable, settable, boolean) আমি, Value: 0
+
+The focused UI element is 36 tab (selectable, settable, boolean) কাগজপত্র, Value: 0

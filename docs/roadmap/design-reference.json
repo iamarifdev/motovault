@@ -1,0 +1,217 @@
+{
+  "captured_at": "2026-10-23T22:09:45+00:00",
+  "baseline_commit": "50eda3a",
+  "scope": "Prototype source only; no native parity claim",
+  "files": [
+    {
+      "path": "design/app-ui-v3/README.md",
+      "bytes": 5259,
+      "sha256": "2dd386b2afc9a8917ab83159ab1f51ab366facea5e7e31129f8be37a281fbbc5"
+    },
+    {
+      "path": "design/app-ui-v3/index.html",
+      "bytes": 472,
+      "sha256": "646cfab7427e184a227deeed651f8a02a44fcaea744107ae8a10a3a9f258df6a"
+    },
+    {
+      "path": "design/app-ui-v3/package.json",
+      "bytes": 662,
+      "sha256": "d1c756bb07704dac1c05efc081fe49a67753535434fc7654f05663619442cd98"
+    },
+    {
+      "path": "design/app-ui-v3/src/App.tsx",
+      "bytes": 5407,
+      "sha256": "894fbb2c42e6bfff78bac46803dcbe2428cd641bad9402c98178e61d91253d12"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/DevPanel.tsx",
+      "bytes": 5747,
+      "sha256": "026f0eb8b3b6b62668fe9aaa0cfb4abce25bfaa183d951462719a698445d9842"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/DocCard.tsx",
+      "bytes": 1658,
+      "sha256": "5cca0e108c736b6a9dd502418a505eb25fe2a0f19aaf51723a55ee8e4c7b8a0b"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/Gauge.tsx",
+      "bytes": 3345,
+      "sha256": "d93a6a03fc393707cd5b4ae4593148700dd955f43eae77369a9a5327ded9bdcd"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/Sheet.tsx",
+      "bytes": 2126,
+      "sha256": "6ebc9e9c7e02398c312e1e509643338e1e8ff932acd5b2a64af0cbeb36641cd0"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/SmartInput.tsx",
+      "bytes": 3494,
+      "sha256": "2e459618788e1e65946fead6d7e882b70c464e159bce96e892956d5684af4838"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/TabBar.tsx",
+      "bytes": 1985,
+      "sha256": "564544b80b71780670df684a5b340977c3e65039fd7bcd16ca6fbae2fb9f79a2"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/Toast.tsx",
+      "bytes": 1796,
+      "sha256": "725bcdf5fc7807a6c470fee704a284c59cd393d8f040df9c418409df9eb06ac2"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/entry.tsx",
+      "bytes": 3788,
+      "sha256": "c8e7a26259f924f947386fdd3bbe015c4e6c5dbd74d40aab4f296cce6574515c"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/ui.tsx",
+      "bytes": 3819,
+      "sha256": "7425286b08ab5ef19b95a9594a1a80e3e1199dfdffa01021597820be00026beb"
+    },
+    {
+      "path": "design/app-ui-v3/src/data/catalog.ts",
+      "bytes": 4626,
+      "sha256": "9c73f0a5df5202b92c9845675acdbd2a20bba4ed93dbde808afc36192c8aeb4f"
+    },
+    {
+      "path": "design/app-ui-v3/src/data/seed.ts",
+      "bytes": 4050,
+      "sha256": "6a7f3a6088e4026fd317df0980450ea0c6e076eed468887dcb890c5ad7f16135"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/bn.ts",
+      "bytes": 2634,
+      "sha256": "55050cb26935b5994b9c00e9defcb7b2be3b65c291be80a73408e42816e2dcae"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/dates.ts",
+      "bytes": 579,
+      "sha256": "c8cae4af1b4978092af932cabfd7271d62ff65ba6cad8009949b4194bc951f8f"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/haptics.ts",
+      "bytes": 618,
+      "sha256": "9bab6d6c3ae78569510b3c80b303d993fcfd3b1e9b6467f509861f84f6f955fa"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/motion.ts",
+      "bytes": 1119,
+      "sha256": "65eaf01ed12f9107bfe08e20553db5b05b01a32a82fd177a913eb754d118af2a"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/smartParse.ts",
+      "bytes": 2621,
+      "sha256": "bc571faa0383f24ed9d19a77859413fee78bbcb7d361af945a4d7dc8e9a14071"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/wear.ts",
+      "bytes": 4040,
+      "sha256": "556702934ae9ea52ca120db29b1d45b07957a98ee1c7fa5f3bd607b58daffcdf"
+    },
+    {
+      "path": "design/app-ui-v3/src/main.tsx",
+      "bytes": 297,
+      "sha256": "e3320066b4927f97622f70f597d81e02c27011645835b403953357cbf0903c6b"
+    },
+    {
+      "path": "design/app-ui-v3/src/screens/History.tsx",
+      "bytes": 7071,
+      "sha256": "1ba2d09ac95b540bd5b503fc48327cd737487a4297af4a29134943161949d166"
+    },
+    {
+      "path": "design/app-ui-v3/src/screens/Home.tsx",
+      "bytes": 8126,
+      "sha256": "0b8b2f8f43cde9cf0fe8e840581d83cffb554cdc54335c46455add9f5a4212ff"
+    },
+    {
+      "path": "design/app-ui-v3/src/screens/Me.tsx",
+      "bytes": 8061,
+      "sha256": "9873f5e9dc02134165f392225de5b9744fba8cccc80324e38a52881b22f4a48a"
+    },
+    {
+      "path": "design/app-ui-v3/src/screens/Onboarding.tsx",
+      "bytes": 7300,
+      "sha256": "0f75c8eff9e7f2d1cace7a5bf5345bddedb79212611432a160a9da52818734a5"
+    },
+    {
+      "path": "design/app-ui-v3/src/screens/Vault.tsx",
+      "bytes": 3147,
+      "sha256": "51ee4abf93683cf5509b7d26d171f245c43ef34f4af7c5ef39c5d1a2428d2a3c"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/DocAddSheet.tsx",
+      "bytes": 8389,
+      "sha256": "c7382a7b604a2b41f3d9afaa6d89fadf2d13a707fdbf541867913a28d4e1f27c"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/DocViewSheet.tsx",
+      "bytes": 1594,
+      "sha256": "92ef7692665c559042e465ae09c992ba93f3750b053522af2213990f3d007b4a"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/FuelSheet.tsx",
+      "bytes": 8704,
+      "sha256": "fd4b69d8369076d12771b7f23a128f23a55e6fe899075a12892dfcd525f00525"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/OdometerSheet.tsx",
+      "bytes": 5482,
+      "sha256": "f78836e37822319aa29aa20d3c0af8ffe60234018ba6fb31ed85610f4e562cb9"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/PasteSheet.tsx",
+      "bytes": 3231,
+      "sha256": "87a4b55d374130343b41611e106ee5efb009dc6318f8fa137f4f17377a7a59fa"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/QuickAdd.tsx",
+      "bytes": 1983,
+      "sha256": "fb71611a84a2f37f4236cc56c7bbd27aa8d2faec4d284c282b26247bb54892f1"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/ServiceSheet.tsx",
+      "bytes": 12578,
+      "sha256": "bd811240469ae43005bf20ca0ba16caac50611f84a685644bcc36d4448c215c3"
+    },
+    {
+      "path": "design/app-ui-v3/src/store.ts",
+      "bytes": 6634,
+      "sha256": "ad501fe345b87099c80a504f5dec8d294cb601d93ca42260e924f4fe979a02bf"
+    },
+    {
+      "path": "design/app-ui-v3/src/styles/app.css",
+      "bytes": 37499,
+      "sha256": "27fd093bf66a30e40bb08320179c92a0feb69d0cb8a893de04d4ee204b8da065"
+    },
+    {
+      "path": "design/app-ui-v3/src/styles/base.css",
+      "bytes": 3759,
+      "sha256": "d7c31788c4e2a215fc101ca59ef5ec7e155d08ed05b70e8849f9ecb9d83358a6"
+    },
+    {
+      "path": "design/app-ui-v3/src/styles/tokens.generated.css",
+      "bytes": 5230,
+      "sha256": "014d67007ee21a87e5942d127af2f83db5e69a25a98635289de97e6a536a5686"
+    },
+    {
+      "path": "design/app-ui-v3/src/tokens.generated.ts",
+      "bytes": 1477,
+      "sha256": "b0cf0cbced59e58b1a844f73cb9ad1c7fa765dd16e198760691fa86f6befa29a"
+    },
+    {
+      "path": "design/app-ui-v3/src/types.ts",
+      "bytes": 1934,
+      "sha256": "3306382d529cdd1cedb10711dd81832085175093bd7bf44cd9eb5f8c106a73cb"
+    },
+    {
+      "path": "design/app-ui-v3/tokens/sky-tokens.json",
+      "bytes": 3967,
+      "sha256": "0d09d404cfd14bff514b1e6fd76ee8a680740a59d513a56b2e0842731a9db9f8"
+    },
+    {
+      "path": "design/app-ui-v3/tools/build-tokens.mjs",
+      "bytes": 2905,
+      "sha256": "180a63bd40a9e850a1ab97f6a740fc1b13631ba5a474286f5e4b7f6c4ae57795"
+    }
+  ]
+}

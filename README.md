@@ -17,6 +17,10 @@ MotoVault is a Bangla-first motorcycle maintenance and document app for Banglade
 
 Catalogue records and generic example schedules do not establish compatibility or factory service recommendations. The optional manual-backed factory profile is scoped by model/year/market; see [factory setup](docs/CONTINUATION_PROGRESS.md).
 
+## Feature delivery plan
+
+The [tracked feature roadmap](docs/roadmap/README.md) covers the crucial and additional ownership features, their priorities, dependencies, design requirements and acceptance gates. See the [current progress and next tasks](docs/roadmap/PROGRESS.md) and [phase-by-phase implementation plan](docs/roadmap/IMPLEMENTATION-PLAN.md). Task updates regenerate progress through `rtk run python3 tools/roadmap.py`.
+
 ## Source structure
 
 Shared production screens and platform contracts live in `composeApp/src/commonMain/kotlin/com/motovault/app/ui/`. Android and iOS implementations mirror that package in their source sets. Shared behavior lives under `domain/`, and persistence coordination lives under `storage/`.
@@ -42,8 +46,8 @@ Open `iosApp/MotoVault.xcodeproj` in Xcode, select the `MotoVault` scheme and an
 
 ## Design and verification
 
-- [Approved app UI v2](design/app-ui-v2/CONTINUE-HERE.md) and [native implementation map](design/app-ui-v2/APPLY-MAP.md).
-- [Current QA record](design/app-ui-v2/QA.md), [native delivery evidence](docs/CONTINUATION_PROGRESS.md) and [iOS host details](docs/IOS_HOST_IMPLEMENTATION.md).
+- [Active app UI v3](design/app-ui-v3/README.md) and [feature design contract](docs/roadmap/DESIGN-CONTRACT.md).
+- [Historical v2 QA record](design/app-ui-v2/QA.md), [earlier native delivery evidence](docs/CONTINUATION_PROGRESS.md) and [iOS host details](docs/IOS_HOST_IMPLEMENTATION.md).
 - [Historical prototype and QA archive](docs/archive/README.md).
 
 Build, test, simulator and physical-device results have different scopes. The linked reports record the observed results and remaining device checks.

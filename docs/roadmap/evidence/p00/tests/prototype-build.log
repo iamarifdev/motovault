@@ -1,0 +1,18 @@
+
+> motovault-app-ui-v3@0.1.0 build
+> npm run tokens && tsc --noEmit && vite build
+
+
+> motovault-app-ui-v3@0.1.0 tokens
+> node tools/build-tokens.mjs
+
+sky tokens written: 121 custom properties
+vite v6.0.7 building for production...
+transforming...
+✓ 1959 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.57 kB │ gzip:   0.34 kB
+dist/assets/index-DuYkKo3o.css   39.89 kB │ gzip:   8.44 kB
+dist/assets/index-Bu3RQB2C.js   360.43 kB │ gzip: 117.55 kB
+✓ built in 1.41s

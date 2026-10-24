@@ -1,0 +1,1 @@
+Screenshot-driven reduce-motion toggle tap at x=0.90, y=0.5045327754532776. Visible row's accessibility frame was zero; pill located from current image.

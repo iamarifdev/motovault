@@ -1,0 +1,55 @@
+{
+  "fixtureVersion": 1,
+  "referenceDate": "2026-10-24",
+  "synthetic": true,
+  "nativeAppId": "com.motovault.baseline.p00",
+  "scenarios": [
+    "empty",
+    "overdue",
+    "partial-fill",
+    "documents",
+    "unknown-service"
+  ],
+  "files": [
+    {
+      "path": "docs/roadmap/fixtures/p00/documents.json",
+      "sha256": "da4971fca7f17d7d7a9bc64ac145b11c117e223ab811f593bb798d21f43d4185"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p00/empty.json",
+      "sha256": "582941f1a38f80a7db39478093abda4b03228ae61bff7d58c64925bc3320ac38"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p00/native/documents.json",
+      "sha256": "641f1d35b1781963c45e1fad697077648bebf9edbbd45d8d10c8f725de3893df"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p00/native/empty.json",
+      "sha256": "049674497d5e01af4f247152d7ec79bd7285a3caf87240c60a373d74d5913526"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p00/native/overdue.json",
+      "sha256": "85017a1fb62d4236094547d278e904d31593de8aa4bc23b6a615ac23be4f2bf7"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p00/native/partial-fill.json",
+      "sha256": "5003d6c1e38f3301c16198fbdab472076e1386c6305910d84f6975b9a76e3528"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p00/native/unknown-service.json",
+      "sha256": "049674497d5e01af4f247152d7ec79bd7285a3caf87240c60a373d74d5913526"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p00/overdue.json",
+      "sha256": "7f10212b4e01a74c31d2a8fe8626a2f36bdad9c6a046cd8830f3e1116f585a6c"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p00/partial-fill.json",
+      "sha256": "4a089c33efc1a6d9932ee14de0b1ccf7c0712a9a9b890e8e5fcccc6f7ed044e4"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p00/unknown-service.json",
+      "sha256": "27f3fcfdc4ecd054427e8f39293ef5d29df00ad5a828405b147b57b23460b3b3"
+    }
+  ]
+}
