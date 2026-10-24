@@ -1,0 +1,26 @@
+{
+  "name": "motovault-app-ui-v3",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "tokens": "node tools/build-tokens.mjs",
+    "dev": "npm run tokens && vite --host 127.0.0.1 --port 5273",
+    "build": "npm run tokens && tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "motion": "^11.18.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7"
+  }
+}

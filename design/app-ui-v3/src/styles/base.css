@@ -1,0 +1,97 @@
+/* Fonts: Anek Bangla is a variable font, so every weight is a real instance (the Kotlin app registers it four times without variation settings). */
+@font-face {
+  font-family: 'Anek Bangla';
+  src: url('/fonts/anek_bangla.ttf') format('truetype');
+  font-weight: 100 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('/fonts/barlow_condensed.ttf') format('truetype');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body { background: #e8ebea; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+button, input, textarea { font: inherit; color: inherit; letter-spacing: 0; }
+button { cursor: pointer; background: none; border: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+h1, h2, h3, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+img { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+/* ---------- App tokens, built on Sky semantic roles ---------- */
+.mv {
+  --scale: 1;
+  --safe-top: 54px;
+  --safe-bottom: 34px;
+  --tab-h: calc(70px + var(--safe-bottom));
+
+  --font: 'Anek Bangla', 'Hind Siliguri', system-ui, sans-serif;
+  --font-display: 'Barlow Condensed', 'Anek Bangla', system-ui, sans-serif;
+
+  --brand: #315abe;
+  --on-brand: #fff;
+  --brand-tint: color-mix(in srgb, var(--brand) 11%, var(--surface));
+  --brand-line: color-mix(in srgb, var(--brand) 45%, var(--surface));
+
+  font-family: var(--font);
+  font-size: calc(16px * var(--scale));
+  line-height: 1.55;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.mv[data-theme='light'], .mv:not([data-theme]) {
+  --canvas: var(--sky-canvas);
+  --surface: var(--sky-surface);
+  --surface-2: #f3f5f4;
+  --text: var(--sky-text-primary);
+  --text-2: var(--sky-text-secondary);
+  --text-3: #66707c;
+  --line: #e3e6e4;
+  --line-strong: #737e8b;
+  --ok: #236d4f;
+  --warn: #805817;
+  --err: #ad2938;
+  --key: #f3f5f4;
+  --key-down: #dfe4e1;
+  --shadow: 0 8px 28px rgba(16, 20, 17, 0.14);
+  --stage: #e8ebea;
+  --photo-well: radial-gradient(120% 90% at 50% 100%, color-mix(in srgb, var(--brand) 14%, #fff) 0%, #f3f5f4 62%);
+}
+.mv[data-theme='dark'] {
+  --canvas: var(--sky-canvas);
+  --surface: var(--sky-surface);
+  --surface-2: var(--sky-icon-surface);
+  --text: #f1f2f3;
+  --text-2: #c4cad0;
+  --text-3: #9da5af;
+  --line: #2f3833;
+  --line-strong: #78828f;
+  --ok: #7bd3ab;
+  --warn: #efc277;
+  --err: #ff929a;
+  --key: #2a332e;
+  --key-down: #38443d;
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  --stage: #070a08;
+  --photo-well: radial-gradient(120% 90% at 50% 100%, color-mix(in srgb, var(--brand) 22%, #202723) 0%, #181c1a 66%);
+}
+
+/* ---------- Type roles (Sky roles, sized for Bangla: 12 px floor, no tracking) ---------- */
+.t-display { font-size: 2.5em; line-height: 1.15; font-weight: 700; }
+.t-title { font-size: 1.5em; line-height: 1.35; font-weight: 600; }   /* Sky pageTitle 24 */
+.t-head { font-size: 1.25em; line-height: 1.4; font-weight: 600; }
+.t-body { font-size: 1em; line-height: 1.55; }                       /* Sky body 16 */
+.t-label { font-size: .875em; line-height: 1.5; font-weight: 600; }  /* Sky label 14 */
+.cap { font-size: .8125em; line-height: 1.5; color: var(--text-2); font-weight: 400; } /* 13 px, never below 12 */
+
+/* ---------- Motion switches ---------- */
+.mv[data-reduce] *, .mv[data-reduce] *::before, .mv[data-reduce] *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
+@media (prefers-reduced-motion: reduce) {
+  .mv *, .mv *::before, .mv *::after { transition-duration: 0s !important; animation-duration: 0s !important; scroll-behavior: auto !important; }
+}

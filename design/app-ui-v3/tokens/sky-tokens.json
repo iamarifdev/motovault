@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "reference": {"width":375,"height":764,"sizeRounding":"truncate-minimum-scale","mobilePreviewCapIsNotDesignRule":true},
+  "palette": {
+    "yellow":"#FFFFD200","green":"#FF009540","blue":"#FF0091EA",
+    "gradientStart":"#FF3C4D8A","gradientEnd":"#FF2C8535",
+    "ink":"#FF181818","text":"#FF595959","muted":"#FFBDBDBD","subtle":"#FFAEAEAE",
+    "border":"#FFEEEEEE","fieldBorder":"#FFE0E0E0","legacyFieldBorder":"#FFDDE0DE",
+    "canvas":"#FFFFFFFF","surface":"#FFFFFFFF","input":"#FFF8F9F8","disabled":"#FFF5F5F5",
+    "iconSurface":"#FFE9F4FF","shadow":"#19000000","scrim":"#99000000",
+    "darkCanvas":"#FF101411","darkSurface":"#FF202723","darkOverlay":"#FF181C1A",
+    "productBorder":"#FFFCC15F","offerBorder":"#FF0F8DE8","partnerBorder":"#FF5DCC6E","newsSurface":"#FFDCF4FF"
+  },
+  "semantic": {
+    "light":{"action":"yellow","onAction":"ink","accent":"green","icon":"blue","iconSurface":"iconSurface","textPrimary":"ink","textSecondary":"text","textMuted":"muted","canvas":"canvas","surface":"surface","input":"input","border":"border","fieldBorder":"fieldBorder","disabled":"disabled"},
+    "dark":{"action":"yellow","onAction":"ink","accent":"green","icon":"blue","iconSurface":"darkOverlay","textPrimary":"canvas","textSecondary":"muted","textMuted":"subtle","canvas":"darkCanvas","surface":"darkSurface","input":"darkSurface","border":"text","fieldBorder":"text","disabled":"darkOverlay"}
+  },
+  "spacing":{"micro":3,"tight":4,"small":8,"normal":12,"medium":16,"large":20,"section":24,"wide":30,"hero":43},
+  "radii":{"chip":7,"action":12,"field":12,"codeCell":8,"menu":16,"sheet":20,"pocket":22,"circle":50,"intro":50},
+  "dimensions":{"toolbar":60,"avatar":40,"actionHeight":48,"holdHeight":52,"codeCell":48,"navIcon":30,"navLabelGap":3,"navMarkerGap":9,"navMarkerWidth":28,"navMarkerHeight":4,"navHorizontalPadding":20,"navVerticalPadding":10,"tileHeight":160,"tileIconCircle":50,"tileIcon":30,"tilePadding":13.5,"tileGap":16,"handleWidth":40,"introHandleWidth":60,"handleHeight":4,"serviceCircle":60,"serviceIcon":31,"divider":1,"navDivider":0.5,"pocketHeight":133,"pocketOverlapTop":105},
+  "typography": {
+    "greeting":{"family":"Lexend","weight":400,"size":14,"height":1},
+    "customerName":{"family":"Lexend","weight":400,"size":20,"height":1},
+    "pageTitle":{"family":"Outfit","weight":500,"size":24},
+    "navigation":{"family":"Outfit","weight":700,"size":14},
+    "tileTitle":{"family":"Lato","weight":700,"size":16},
+    "tileSubtitle":{"family":"Lato","weight":400,"size":13},
+    "body":{"family":"Lato","weight":400,"size":16},
+    "label":{"family":"Lato","weight":600,"size":14},
+    "caption":{"family":"Lato","weight":400,"size":12},
+    "accountNumber":{"family":"Lato","weight":700,"size":19,"letterSpacing":1},
+    "button":{"family":"Lato","weight":600,"size":16},
+    "amount":{"family":"Outfit","weight":700,"size":24}
+  },
+  "motion": {
+    "page":{"enterMs":300,"exitMs":300,"curve":[0.0,0.0,0.2,1.0],"status":"current-implementation","direction":"fade-upwards"},
+    "sheet":{"enterMs":250,"exitMs":200,"curve":[0.0,0.0,0.2,1.0],"status":"current-implementation"},
+    "transactionSheet":{"enterMs":300,"exitMs":250,"curve":[0.0,0.0,0.2,1.0],"status":"current-implementation"},
+    "topSelector":{"enterMs":250,"exitMs":250,"curve":[0.215,0.61,0.355,1.0],"status":"current-implementation"},
+    "expansion":{"enterMs":200,"exitMs":200,"curve":[0.42,0.0,0.58,1.0],"status":"current-implementation"}
+  },
+  "interaction":{"holdConfirmMs":3000,"demoProcessingDelayIsNotMotion":true,"splashWaitIsNotMotion":true},
+  "sheets":{
+    "contentMenu":{"height":"content","radius":20,"handleWidth":40},
+    "tallMenu":{"availableHeightFraction":0.95,"radius":20,"handleWidth":40},
+    "selection":{"availableHeightFraction":0.9,"radius":20,"handleWidth":40},
+    "introduction":{"height":"content","radius":50,"handleWidth":60},
+    "topSelector":{"origin":"top","status":"current-implementation"}
+  }
+}
