@@ -26,8 +26,10 @@ const CHANGES: { id: string; text: string }[] = [
 export function DevPanel() {
   const [fixtures, setFixtures] = useState<{ id: string; synthetic: boolean; prototype: AppData & { settings: Settings } }[]>([])
   const [fixtureError, setFixtureError] = useState('')
+  const reminderPreview = useUI((u) => u.reminderPreview)
   useEffect(() => {
-    fetch('/p00-fixtures.json').then((r) => r.ok ? r.json() : []).then(setFixtures).catch(() => setFixtures([]))
+    Promise.all(['/p00-fixtures.json', '/p01-fixtures.json'].map((url) => fetch(url).then((r) => r.ok ? r.json() : [])))
+      .then((collections) => setFixtures(collections.flat())).catch(() => setFixtures([]))
   }, [])
   const s = useStore((st) => st.settings)
   const set = useStore((st) => st.setSetting)
@@ -49,6 +51,11 @@ export function DevPanel() {
     <aside className="dev" aria-label="Review panel">
       <h1>MotoVault prototype v3</h1>
       <p className="dev-lead">Web mock-up for review. Nothing here changes the Kotlin app. Demo data only.</p>
+      <section aria-label="P01 reminder review"><h2>P01 reminder states (simulation only)</h2>
+        <select aria-label="Simulated notification state" value={reminderPreview} onChange={(event) => useUI.setState({ reminderPreview: event.target.value as 'off' | 'enabled' | 'denied' | 'failed' })}>
+          <option value="off">Off</option><option value="enabled">Enabled</option><option value="denied">Denied</option><option value="failed">Save failed</option>
+        </select><Button size="sm" kind="secondary" onClick={() => open('reminders')}>Review reminders</Button>
+      </section>
 
       {fixtures.length > 0 && <section aria-label="P00 baseline fixtures">
         <h2>P00 synthetic baseline</h2>

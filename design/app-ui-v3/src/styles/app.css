@@ -122,6 +122,7 @@
 .next-top { display: flex; gap: 14px; align-items: center; }
 .next-icon { flex: none; width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; color: var(--c); background: color-mix(in srgb, var(--c) 16%, transparent); }
 .next.ok { --c: var(--ok); } .next.soon { --c: var(--warn); } .next.overdue { --c: var(--err); }
+.next.unknown, .gauge.unknown { --c: var(--text-2); }
 .next-text { display: flex; flex-direction: column; min-width: 0; }
 .next-text h2 { font-size: 1.375em; line-height: 1.35; font-weight: 600; }
 .next-text p { font-weight: 600; color: var(--c); }

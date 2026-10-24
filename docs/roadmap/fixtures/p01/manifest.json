@@ -1,0 +1,22 @@
+{
+  "synthetic": true,
+  "referenceDate": "2026-10-24",
+  "files": [
+    {
+      "path": "docs/roadmap/fixtures/p01/native/runtime.json",
+      "sha256": "6d6a8ec997324bc60c8ed86ad965f78d4176e5bef42e5b2cced4dad7e3773fd4"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/unknown-large.json",
+      "sha256": "922dfe7c212c93874663b346a3b8f4d29327c5621bc780e6f1531e7b2820d709"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/unknown.json",
+      "sha256": "ec113587a0b0e2149df1e187eddca1a9aa7922d6a131ee3a561aa5312f574ede"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/paired.json",
+      "sha256": "61140e441bdd8f00649d234482009d85fa307f255c636dd2fc4d56f40852cf75"
+    }
+  ]
+}

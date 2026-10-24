@@ -46,6 +46,6 @@ class RenewalFixtureReceiver : BroadcastReceiver() {
         val document = VaultDocument("SAMPLE TEST ONLY tax token", "SYNTHETIC", "Synthetic fixture", date, id = "debug-fixture")
         val plan = RenewalReminder(key, document.id, date, date, "expiry")
         preferences.edit().putBoolean("consumed", true).putLong("deliveryCount", preferences.getLong("deliveryCount", 0) + 1).commit()
-        manager.notify(key, 0, renewalNotification(context, plan, document))
+        manager.notify(key, 0, renewalNotification(context, plan, ReminderTarget("document", document.id, document.title)))
     }
 }

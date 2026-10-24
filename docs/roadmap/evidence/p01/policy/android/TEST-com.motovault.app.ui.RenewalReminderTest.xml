@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.ui.RenewalReminderTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-24T09:54:21" hostname="MacBookPro" time="0.002">
+  <properties/>
+  <testcase name="snoozeDefersWithoutChangingExpiryAndDeduplicatesSameTime" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="recordOptOutAndMissingExpiryNeverSchedule" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="expiredMissingAndInvalidDatesHaveNoNativeReminders" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="consumedReminderNeverReappearsEvenAfterClockMovesBack" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="expiryDayUsesOneExpiryAlertIncludingLateAddition" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="editingExpiryReplacesIdentityAndDeletingCancelsEverything" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="fullIdsAvoidJavaHashCollisionsAndDisplayEditKeepsIdentity" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="migrationReplacesOldSixtyDayDateWithoutReplayingConsumedEvents" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="globalTimeAndPerRecordLeadOverrideUseLocalCalendar" classname="com.motovault.app.ui.RenewalReminderTest" time="0.001"/>
+  <testcase name="insideWindowUsesNextMorningAndDoesNotMoveOnRelaunch" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="beforeNineUsesTodayAndAtNineUsesTomorrow" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="thirtyDayWarningAndExpiryAreAtNine" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

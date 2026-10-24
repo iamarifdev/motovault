@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.ui.ReminderPlanTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-24T10:00:04" hostname="MacBookPro" time="0.005">
+  <properties/>
+  <testcase name="whicheverLimitFirstAndMileageUpdatesBringCalendarRequestForward[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.001"/>
+  <testcase name="consumedServiceCannotReplayButNewBaselineHasANewIdentity[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
+  <testcase name="disabledDeletedAndDistanceOnlyNotYetDueProduceNoRequests[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
+  <testcase name="collisionIdsAndChangedOrMissingNotificationTargetsAreSafe[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.003"/>
+  <testcase name="snoozeCreatesAnExplicitRequestWithoutErasingConsumedHistory[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

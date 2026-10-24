@@ -1,0 +1,7 @@
+{
+  "expected": 12340,
+  "restored": true,
+  "survivedRestart": true,
+  "app": "com.motovault.baseline.p00",
+  "scope": "Synthetic Android emulator UI save/Undo/relaunch"
+}

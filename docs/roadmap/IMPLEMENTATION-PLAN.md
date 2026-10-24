@@ -150,7 +150,7 @@ Required completion evidence: plan, review.
 
 ## P01: Trustworthy reminders and understandable maintenance status
 
-**Priority:** P0 | **Scope:** core | **Current status:** Ready
+**Priority:** P0 | **Scope:** core | **Current status:** In progress
 
 **Outcome:** Every reminder switch controls real behavior; maintenance cards communicate recorded interval status accurately.
 
@@ -172,7 +172,7 @@ Required completion evidence: plan, review.
 
 ### P01-01: Unify reminder policy, settings and migration
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: None.
 
@@ -189,7 +189,7 @@ Required completion evidence: implementation, verification.
 
 ### P01-02: Connect service and document scheduling after durable saves
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P01-01.
 
@@ -206,7 +206,7 @@ Required completion evidence: implementation, verification.
 
 ### P01-03: Implement reminder settings, permission recovery and snooze in v3
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **In review** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P01-02.
 
@@ -223,7 +223,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P01-04: Make gauges, unknown history and stale mileage honest
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: None.
 
@@ -240,7 +240,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P01-05: Verify reminders and status on real devices
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Planned** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P01-03, P01-04.
 

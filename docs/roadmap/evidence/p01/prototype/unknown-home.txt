@@ -1,0 +1,5 @@
+Browser tab: 2, Title: "MotoVault prototype v3", URL: "http://127.0.0.1:5273/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~				255 button ওডোমিটার ১০০ কিমি আজ আনুমানিক ১০০ · আপডেট
+~						258 text ১০০ কিমি
+The focused UI element is 0 AXWebArea MotoVault prototype v3, URL: 127.0.0.1:5273/

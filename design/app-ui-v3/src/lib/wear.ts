@@ -1,8 +1,8 @@
 import type { FuelLog, LogEntry, Ride, Rule } from '../types'
 import type { Fmt } from './bn'
-import { diffDays } from './dates'
+import { diffDays, validISO } from './dates'
 
-export type WearStatus = 'ok' | 'soon' | 'overdue'
+export type WearStatus = 'ok' | 'soon' | 'overdue' | 'unknown'
 
 export interface Wear {
   rule: Rule
@@ -17,6 +17,7 @@ export interface Wear {
 }
 
 export function wearOf(rule: Rule, odometer: number, today: string): Wear {
+  const unknown = rule.baseline !== 'confirmed' || !Number.isFinite(odometer) || !Number.isFinite(rule.lastKm) || rule.lastKm < 0 || rule.lastKm > odometer || rule.lastDate > today || !validISO(rule.lastDate) || !Number.isFinite(rule.intervalKm) || rule.intervalKm < 0 || !Number.isFinite(rule.intervalDays) || rule.intervalDays < 0 || (rule.intervalKm === 0 && rule.intervalDays === 0)
   const usedKm = rule.intervalKm > 0 ? (odometer - rule.lastKm) / rule.intervalKm : 0
   const usedDays = rule.intervalDays > 0 ? diffDays(rule.lastDate, today) / rule.intervalDays : 0
   const used = Math.max(usedKm, usedDays)
@@ -26,18 +27,22 @@ export function wearOf(rule: Rule, odometer: number, today: string): Wear {
     rule,
     used,
     life: Math.max(0, Math.min(100, Math.round((1 - used) * 100))),
-    status: used >= 1 ? 'overdue' : used >= 0.75 ? 'soon' : 'ok',
+    status: unknown ? 'unknown' : used >= 1 ? 'overdue' : used >= 0.75 ? 'soon' : 'ok',
     remainingKm,
     remainingDays,
     limit: usedKm >= usedDays ? 'km' : 'days',
   }
 }
 
-export const byUrgency = (rules: Rule[], odometer: number, today: string) =>
-  rules.map((r) => wearOf(r, odometer, today)).sort((a, b) => b.used - a.used)
+export const byUrgency = (rules: Rule[], odometer: number, today: string) => {
+  const priority: Record<WearStatus, number> = { overdue: 3, unknown: 2, soon: 1, ok: 0 }
+  return rules.map((r) => wearOf(r, odometer, today)).sort((a, b) =>
+    priority[b.status] - priority[a.status] || (a.status === 'unknown' ? 0 : b.used - a.used))
+}
 
 /** Says how far overdue a part is, or how much is left. The old app printed "0 km left" under "overdue". */
 export function describeWear(w: Wear, f: Fmt): string {
+  if (w.status === 'unknown') return 'আগের সার্ভিস নিশ্চিত নয়'
   if (w.status === 'overdue') {
     const km = w.remainingKm !== null && w.remainingKm < 0 ? -w.remainingKm : 0
     const days = w.remainingDays !== null && w.remainingDays < 0 ? -w.remainingDays : 0
@@ -49,7 +54,7 @@ export function describeWear(w: Wear, f: Fmt): string {
   return parts.join(' বা ') + ' বাকি'
 }
 
-export const statusLabel = (s: WearStatus) => (s === 'overdue' ? 'সার্ভিস দরকার' : s === 'soon' ? 'শিগগির' : 'ভালো আছে')
+export const statusLabel = (s: WearStatus) => (s === 'unknown' ? 'তথ্য নিশ্চিত করুন' : s === 'overdue' ? 'সার্ভিস দরকার' : s === 'soon' ? 'শিগগির' : 'সময় বাকি')
 
 export function fuelLogs(logs: LogEntry[]): FuelLog[] {
   return logs.filter((l): l is FuelLog => l.type === 'fuel').sort((a, b) => a.odo - b.odo)

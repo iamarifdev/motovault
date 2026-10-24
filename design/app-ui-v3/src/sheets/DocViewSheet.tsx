@@ -19,10 +19,11 @@ export function DocViewSheet({ id }: { id: string }) {
     <Sheet title={docName(doc.kind)} detent="tall">
       <div className={`doc-view${road ? ' road' : ''}`}>
         <DocArt doc={doc} large />
-        <div className="row-between"><ExpiryChip doc={doc} /><span className="cap">মেয়াদ শেষ: {f.dateFull(doc.expiry)}</span></div>
+        <div className="row-between"><ExpiryChip doc={doc} /><span className="cap">{doc.expiry ? `মেয়াদ শেষ: ${f.dateFull(doc.expiry)}` : 'মেয়াদ নেই'}</span></div>
       </div>
       <Switch checked={road} onChange={setRoad} label="রাস্তায় দেখানোর মোড" sub="সাদা পটভূমি, বড় ছবি, উজ্জ্বলতা বাড়ে (ডেমো)" />
-      <Switch checked={doc.reminder} onChange={(v) => setDocReminder(doc.id, v)} label="মেয়াদের ৩০ দিন আগে জানান" />
+      {doc.expiry && <Switch checked={doc.reminder} onChange={(v) => setDocReminder(doc.id, v)} label="এই কাগজের রিমাইন্ডার" />}
+      <Button full kind="secondary" onClick={() => useUI.getState().open('reminders',{id:doc.id,type:'document'})}>অনুমতি, সময় ও পরে জানান</Button>
       <Button full kind="secondary" icon={Sun} onClick={close}>ফিরে যান</Button>
     </Sheet>
   )

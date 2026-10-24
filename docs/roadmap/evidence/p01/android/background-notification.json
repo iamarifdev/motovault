@@ -1,0 +1,7 @@
+{
+  "app": "com.motovault.baseline.p00",
+  "active": [
+    "NotificationRecord(0x08741daf: pkg=com.motovault.baseline.p00 user=UserHandle{0} id=0 tag=renewal:9:p01-today:2026-10-24:expiry importance=3 key=0|com.motovault.baseline.p00|0|renewal:9:p01-today:2026-10-24:expiry|10235: Notification(channel=document_renewals shortcut=null contentView=null vibrate=null sound=null defaults=0 flags=AUTO_CANCEL color=0x00000000 vis=PRIVATE template=null))"
+  ],
+  "scope": "Android emulator background notification from actual isolated vault plan; delivery is inexact"
+}

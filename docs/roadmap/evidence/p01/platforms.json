@@ -1,0 +1,19 @@
+{
+  "android": {
+    "ro.product.model": "sdk_gphone16k_arm64",
+    "ro.build.version.release": "17",
+    "ro.build.version.sdk": "37",
+    "ro.build.fingerprint": "google/sdk_gphone16k_arm64/emu64a16k:17/CP31.260623.012/16064790:user/dev-keys",
+    "serial": "emulator-5554",
+    "applicationId": "com.motovault.baseline.p00"
+  },
+  "ios": {
+    "udid": "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+    "name": "MotoVault-P00-Baseline",
+    "state": "Booted",
+    "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-18-Pro-Max",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-0",
+    "applicationId": "com.motovault.baseline.p00"
+  },
+  "scope": "Synthetic isolated emulator/simulator only; physical devices, cloud staging and signed release not verified."
+}

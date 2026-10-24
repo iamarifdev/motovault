@@ -1,0 +1,32 @@
+{
+  "platform": "android",
+  "app": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "odometer": 12340.0,
+  "odometerConfirmedDate": "2026-10-16",
+  "preferences": {
+    "haptics": false
+  },
+  "documents": [
+    {
+      "id": "p00-doc-tax",
+      "expiry": "2026-10-19",
+      "snooze": null
+    },
+    {
+      "id": "p00-doc-licence",
+      "expiry": "2026-11-17",
+      "snooze": null
+    },
+    {
+      "id": "p00-doc-registration",
+      "expiry": "",
+      "snooze": null
+    },
+    {
+      "id": "p01-today",
+      "expiry": "2026-10-24",
+      "snooze": null
+    }
+  ]
+}

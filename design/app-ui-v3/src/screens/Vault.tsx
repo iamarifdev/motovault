@@ -15,7 +15,7 @@ export function Vault() {
   const open = useUI((s) => s.open)
   const f = useFmt()
   const sorted = [...docs].sort((a, b) => expiryOf(a).left - expiryOf(b).left)
-  const next = sorted[0]
+  const next = sorted.find((d) => d.expiry)
 
   return (
     <div className="screen-pad">
@@ -31,7 +31,7 @@ export function Vault() {
           <div className="row-between"><span className="cap">মেয়াদ শেষ: {f.dateFull(next.expiry)}</span><ExpiryChip doc={next} /></div>
         </motion.button>
       ) : (
-        <div className="empty"><ScanLine size={36} aria-hidden /><p>প্রথম কাগজটি স্ক্যান করুন। মেয়াদ ফুরানোর আগেই জানানো হবে।</p><Button icon={ScanLine} onClick={() => open('docAdd')}>কাগজ স্ক্যান করুন</Button></div>
+        <div className="empty"><ScanLine size={36} aria-hidden /><p>{docs.length ? 'এই কাগজগুলোর মেয়াদ শেষের তারিখ নেই।' : 'প্রথম কাগজটি যোগ করুন। অনুমতি দিলে মেয়াদের আগে জানানো হবে।'}</p><Button icon={ScanLine} onClick={() => open('docAdd')}>কাগজ স্ক্যান করুন</Button></div>
       )}
 
       <section aria-label="সব কাগজ">
@@ -47,7 +47,8 @@ export function Vault() {
         </div>
       </section>
 
-      <Switch checked={settings.docReminders} onChange={(v) => setSetting('docReminders', v)} label="মেয়াদের আগে জানান" sub="৩০ দিন আগে এবং মেয়াদের দিন, সকাল ৯টায়" />
+      <Switch checked={settings.docReminders} onChange={(v) => setSetting('docReminders', v)} label="মেয়াদের আগে জানান" sub={`${f.n(settings.reminderLeadDays ?? 30)} দিন আগে এবং মেয়াদের দিন। ফোনের অনুমতি প্রয়োজন।`} />
+      <Button full kind="secondary" onClick={() => open('reminders')}>অনুমতি, সময় ও পরে জানান</Button>
       {docs[0] && <Button kind="ghost" full onClick={() => open('docView', { id: sorted[0].id })}>রাস্তায় দেখানোর মোড</Button>}
     </div>
   )

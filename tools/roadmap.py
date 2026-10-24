@@ -183,7 +183,7 @@ def render_board(data: dict) -> str:
     lines += ["", "## Current work and blockers", ""]
     active = [(p, t) for p in phases for t in p["tasks"] if t["status"] in {"in_progress", "in_review", "blocked"}]
     for _, t in active:
-        lines.append(f"- **{t['id']}** {t['title']}: {LABELS[t['status']]}. Owner: {t['owner'] or 'unassigned'}. {t.get('blocker', '')}")
+        lines.append(f"- **{t['id']}** {t['title']}: {LABELS[t['status']]}. Owner: {t['owner'] or 'unassigned'}. {t.get('blocker', '')}".rstrip())
     if not active:
         lines.append("No feature task is currently in progress or blocked.")
     lines += ["", "## Next available tasks", ""]

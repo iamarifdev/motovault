@@ -27,7 +27,8 @@ data class VaultMetaRow(
     @PrimaryKey val id: Int = 1,
     val appearance: String,
     val legacyImported: Boolean,
-    @ColumnInfo(defaultValue = "0") val autoLocation: Boolean = false
+    @ColumnInfo(defaultValue = "0") val autoLocation: Boolean = false,
+    @ColumnInfo(defaultValue = "'{}'") val preferences: String = "{}"
 )
 
 @Dao
@@ -58,12 +59,12 @@ abstract class VaultDao {
         val logs = ledger().map { row -> codec.decodeFromString<RideLog>(row.payload).also { check(it.id == row.id) { "Ledger record does not match its stored ID." } } }
         val docs = documents().map { row -> codec.decodeFromString<VaultDocument>(row.payload).also { check(it.id == row.id) { "Document record does not match its stored ID." } } }
         check(references().toSet() == assetRows(docs).toSet()) { "Document asset references could not be read. Existing storage has been preserved." }
-        return VaultState(
+        return codec.decodeFromString<VaultSettings>(settings.preferences).applyTo(VaultState(
             ride = vehicle()?.let { codec.decodeFromString<Ride>(it.payload) },
             rules = schedules().map { row -> codec.decodeFromString<ComponentRule>(row.payload).also { check(it.id == row.id) { "Schedule does not match its stored ID." } } },
             logs = logs, documents = docs, appearance = Appearance.valueOf(settings.appearance), autoLocation = settings.autoLocation,
             economy = VaultState.calculateEconomy(logs), lastFuelOdometer = logs.filter { it.isFuel }.maxOfOrNull { it.odometer }
-        )
+        ))
     }
 
     @Transaction
@@ -81,7 +82,8 @@ abstract class VaultDao {
         putLedger(state.logs.mapIndexed { index, entry -> LedgerRow(entry.id, index, codec.encodeToString(entry)) })
         putDocuments(state.documents.mapIndexed { index, document -> DocumentRow(document.id, index, codec.encodeToString(document)) })
         putReferences(refs)
-        putMeta(VaultMetaRow(appearance = state.appearance.name, legacyImported = imported, autoLocation = state.autoLocation))
+        putMeta(VaultMetaRow(appearance = state.appearance.name, legacyImported = imported, autoLocation = state.autoLocation,
+            preferences = codec.encodeToString(VaultSettings.from(state))))
         putPendingSync(LocalSyncProtocol.next(previousSync, previousState, state, recordId()))
     }
 
@@ -118,7 +120,7 @@ abstract class VaultDao {
     }
 }
 
-@Database(entities = [VehicleRow::class, ScheduleRow::class, LedgerRow::class, DocumentRow::class, AssetReferenceRow::class, VaultMetaRow::class, SyncOutboxRow::class], version = 3, exportSchema = true)
+@Database(entities = [VehicleRow::class, ScheduleRow::class, LedgerRow::class, DocumentRow::class, AssetReferenceRow::class, VaultMetaRow::class, SyncOutboxRow::class], version = 4, exportSchema = true)
 @ConstructedBy(VaultDatabaseConstructor::class)
 abstract class VaultDatabase : RoomDatabase() { abstract fun vault(): VaultDao }
 
@@ -128,7 +130,7 @@ expect object VaultDatabaseConstructor : RoomDatabaseConstructor<VaultDatabase> 
 }
 
 fun buildVaultDatabase(builder: RoomDatabase.Builder<VaultDatabase>): VaultDatabase = builder
-    .addMigrations(VaultMigration1To2, VaultMigration2To3)
+    .addMigrations(VaultMigration1To2, VaultMigration2To3, VaultMigration3To4)
     .setDriver(BundledSQLiteDriver()).setQueryCoroutineContext(Dispatchers.IO).build()
 
 object VaultMigration1To2 : Migration(1, 2) {
@@ -140,5 +142,21 @@ object VaultMigration1To2 : Migration(1, 2) {
 object VaultMigration2To3 : Migration(2, 3) {
     override fun migrate(connection: SQLiteConnection) {
         connection.execSQL("ALTER TABLE `vault_meta` ADD COLUMN `autoLocation` INTEGER NOT NULL DEFAULT 0")
+    }
+}
+
+object VaultMigration3To4 : Migration(3, 4) {
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("ALTER TABLE `vault_meta` ADD COLUMN `preferences` TEXT NOT NULL DEFAULT '{}'")
+        // The outbox was committed in the same transaction and retains preferences omitted by v3's reader.
+        val prior = connection.prepare("SELECT payload FROM sync_outbox WHERE id = 1").use { query ->
+            if (query.step()) requireNotNull(VaultState.decode(query.getText(0))) {
+                "Stored settings could not be migrated. Existing storage has been preserved."
+            } else null
+        }
+        if (prior != null) connection.prepare("UPDATE vault_meta SET preferences = ? WHERE id = 1").use { update ->
+            update.bindText(1, Json.encodeToString(VaultSettings.from(prior)))
+            update.step()
+        }
     }
 }

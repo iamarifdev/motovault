@@ -21,6 +21,12 @@ private val reminderLock = Mutex()
 private fun enabled() = defaults.boolForKey("renewal.enabled")
 private fun plans() = runCatching { Json.decodeFromString<List<RenewalReminder>>(defaults.stringForKey("renewal.plans") ?: "[]") }.getOrDefault(emptyList())
 private fun consumed() = (defaults.stringArrayForKey("renewal.consumed")?.filterIsInstance<String>() ?: emptyList()).toSet()
+private fun notificationSettingsUrl(): String {
+    val version = UIDevice.currentDevice.systemVersion.split('.').map { it.toIntOrNull() ?: 0 }
+    val major = version.getOrElse(0) { 0 }
+    val minor = version.getOrElse(1) { 0 }
+    return if (major > 15 || major == 15 && minor >= 4) UIApplicationOpenNotificationSettingsURLString else UIApplicationOpenSettingsURLString
+}
 private suspend fun permitted(): Boolean = suspendCancellableCoroutine { continuation ->
     center.getNotificationSettingsWithCompletionHandler { settings -> continuation.resume(settings?.authorizationStatus == UNAuthorizationStatusAuthorized || settings?.authorizationStatus == UNAuthorizationStatusProvisional) }
 }
@@ -29,19 +35,21 @@ private suspend fun pending(): Set<String> = suspendCancellableCoroutine { conti
 }
 private suspend fun delivered(): Set<String> = suspendCancellableCoroutine { continuation ->
     center.getDeliveredNotificationsWithCompletionHandler { notifications ->
-        continuation.resume(notifications?.filterIsInstance<UNNotification>()?.map { it.request.identifier }?.filter { it.startsWith("renewal:") }?.toSet() ?: emptySet())
+        continuation.resume(notifications?.filterIsInstance<UNNotification>()?.map { it.request.identifier }?.filter { it.startsWith("renewal:") || it.startsWith("service:") }?.toSet() ?: emptySet())
     }
 }
-private suspend fun add(plan: RenewalReminder, title: String, now: LocalDateTime) {
+private suspend fun add(plan: RenewalReminder, target: ReminderTarget, now: LocalDateTime) {
     val content = UNMutableNotificationContent().apply {
-        setTitle("Document renewal")
-        setBody(if (plan.kind == "expiry") "$title expires today." else "$title expires on ${plan.expiry}.")
+        setTitle(reminderHeading(plan))
+        setBody(reminderMessage(plan, target))
+        setUserInfo(mapOf("motovault.reminder" to reminderPayload(plan)))
         setSound(UNNotificationSound.defaultSound())
     }
     val date = LocalDate.parse(plan.date)
     val trigger: UNNotificationTrigger = if (plan.localDateTime() <= now) UNTimeIntervalNotificationTrigger.triggerWithTimeInterval(1.0, false)
     else UNCalendarNotificationTrigger.triggerWithDateMatchingComponents(NSDateComponents().apply {
-        year = date.year.toLong(); month = date.monthNumber.toLong(); day = date.dayOfMonth.toLong(); hour = 9; minute = 0; second = 0
+        year = date.year.toLong(); month = date.monthNumber.toLong(); day = date.dayOfMonth.toLong()
+        hour = (plan.minuteOfDay / 60).toLong(); minute = (plan.minuteOfDay % 60).toLong(); second = 0
         // No fixed timezone: calendar notifications follow local device time.
     }, false)
     suspendCancellableCoroutine<Unit> { continuation ->
@@ -53,7 +61,7 @@ private suspend fun add(plan: RenewalReminder, title: String, now: LocalDateTime
 
 internal actual suspend fun reconcileRenewalReminders(documents: List<VaultDocument>) {
     reminderLock.withLock {
-        val currentDocuments = VaultState.restore().documents
+        val state = VaultState.restore()
         val storage = renewalJournalStorage()
         var journal = storage.read() ?: RenewalJournal(plans(), consumed())
         val old = journal.requests
@@ -62,8 +70,8 @@ internal actual suspend fun reconcileRenewalReminders(documents: List<VaultDocum
         // Accepted requests which elapsed and left the OS queue must never be reposted on relaunch.
         journal = journal.recover(now, pending, delivered())
         storage.write(journal)
-        val next = if (enabled() && permitted()) renewalPlan(currentDocuments, now, old, journal.consumed) else emptyList()
-        val obsolete = (pending.filter { it.startsWith("renewal:") } + old.map { it.key }).filter { key -> next.none { it.key == key } }
+        val next = if (enabled() && permitted()) reminderPlan(state, now, old, journal.consumed) else emptyList()
+        val obsolete = (pending.filter { it.startsWith("renewal:") || it.startsWith("service:") } + old.map { it.key }).filter { key -> next.none { it.key == key } }
         center.removePendingNotificationRequestsWithIdentifiers(obsolete)
         center.removeDeliveredNotificationsWithIdentifiers(obsolete)
         journal = journal.retain(next.map { it.key }.toSet())
@@ -76,7 +84,7 @@ internal actual suspend fun reconcileRenewalReminders(documents: List<VaultDocum
                     // The journal commit must finish before the OS can accept an immediate request.
                     journal = journal.reserve(plan)
                     storage.write(journal)
-                    try { add(plan, currentDocuments.first { it.id == plan.documentId }.title, now) }
+                    try { add(plan, requireNotNull(reminderTarget(state, plan)), now) }
                     catch (cancelled: CancellationException) { throw cancelled }
                     catch (error: Exception) {
                         journal = journal.rejected(plan.key)
@@ -91,35 +99,41 @@ internal actual suspend fun reconcileRenewalReminders(documents: List<VaultDocum
     }
 }
 
-@Composable internal actual fun RenewalReminderControl() {
+@Composable internal actual fun rememberReminderAccess(): ReminderAccess {
     val scope = rememberCoroutineScope()
     var active by remember { mutableStateOf(false) }
     var allowed by remember { mutableStateOf(true) }
     var failed by remember { mutableStateOf(false) }
+    var busy by remember { mutableStateOf(true) }
+    var optedIn by remember { mutableStateOf(enabled()) }
+    var scheduled by remember { mutableStateOf<List<RenewalReminder>>(emptyList()) }
     val owner = LocalLifecycleOwner.current
     fun refresh() { scope.launch {
+        busy = true
         allowed = permitted(); active = enabled() && allowed
-        failed = runCatching { reconcileRenewalReminders(VaultState.restore().documents) }.isFailure
+        optedIn = enabled()
+        failed = runCatching {
+            reconcileRenewalReminders(VaultState.restore().documents)
+            val queued = pending()
+            scheduled = renewalJournalStorage().read()?.requests.orEmpty().filter { it.key in queued }
+        }.isFailure
+        busy = false
     } }
     DisposableEffect(owner) {
         val observer = LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_RESUME) refresh() }
         owner.lifecycle.addObserver(observer); refresh()
         onDispose { owner.lifecycle.removeObserver(observer) }
     }
-    Panel {
-        DocumentNote("নবায়নের রিমাইন্ডার")
-        DocumentCopy("মেয়াদ শেষের ৬০ দিন আগে এবং মেয়াদ শেষের দিন সকাল ৯টার দিকে জানানো হবে। ৬০ দিনের কম মেয়াদ থাকা নতুন কাগজ যোগ করলে পরের সকাল ৯টায় একবার জানানো হবে।")
-        DocumentSecondary(if (active) "রিমাইন্ডার বন্ধ করুন" else "রিমাইন্ডার চালু করুন", onClick = {
-            if (active) { defaults.setBool(false, forKey = "renewal.enabled"); refresh() }
-            else scope.launch {
+    return ReminderAccess(optedIn, allowed, busy, failed,
+        request = {
+            scope.launch {
                 val granted = suspendCancellableCoroutine<Boolean> { continuation -> center.requestAuthorizationWithOptions(UNAuthorizationOptionAlert or UNAuthorizationOptionSound) { granted, _ -> continuation.resume(granted) } }
                 defaults.setBool(granted, forKey = "renewal.enabled"); refresh()
             }
-        })
-        if (!allowed) {
-            DocumentNote("ডিভাইসের সেটিংসে নোটিফিকেশন বন্ধ আছে। অ্যাপের ভেতরে নবায়নের সতর্কতা দেখা যাবে।")
-            DocumentLink("নোটিফিকেশন সেটিংস খুলুন") { NSURL.URLWithString(UIApplicationOpenSettingsURLString)?.let { UIApplication.sharedApplication.openURL(it, emptyMap<Any?, Any?>(), null) } }
-        }
-        if (failed) DocumentNote("রিমাইন্ডার আপডেট করা যায়নি। কাগজপত্র সুরক্ষিত আছে। আবার চেষ্টা করুন।")
-    }
+        },
+        disable = { defaults.setBool(false, forKey = "renewal.enabled"); refresh() },
+        refresh = ::refresh,
+        settings = { NSURL.URLWithString(notificationSettingsUrl())?.let { UIApplication.sharedApplication.openURL(it, emptyMap<Any?, Any?>(), null) } },
+        plans = scheduled
+    )
 }

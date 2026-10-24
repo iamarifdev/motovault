@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.FactorySetupTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-24T09:54:21" hostname="MacBookPro" time="0.072">
+  <properties/>
+  <testcase name="unknownManualModelsRemainOwnerDefined" classname="com.motovault.app.FactorySetupTest" time="0.041"/>
+  <testcase name="incompatibleMarketsAreRejectedWithoutInferringEmissionFromYear" classname="com.motovault.app.FactorySetupTest" time="0.016"/>
+  <testcase name="legacyRestorePreservesIdentityAndCustomSchedules" classname="com.motovault.app.FactorySetupTest" time="0.011"/>
+  <testcase name="restoringManualProfileKeepsOwnerAdjustedIntervalsAndBaselines" classname="com.motovault.app.FactorySetupTest" time="0.002"/>
+  <testcase name="manualCannotLeakAcrossModelsYearsMarketsOrCodes" classname="com.motovault.app.FactorySetupTest" time="0.0"/>
+  <testcase name="selectedManualReachesActiveGarageWithoutInventingEconomy" classname="com.motovault.app.FactorySetupTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.domain.usecase.FuelEfficiencyUseCaseTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:51" hostname="MacBookPro" time="0.0">
+  <properties/>
+  <testcase name="firstFullTankOnlyEstablishesTheBaseline[iosSimulatorArm64]" classname="com.motovault.app.domain.usecase.FuelEfficiencyUseCaseTest" time="0.0"/>
+  <testcase name="fullToFullExcludesTheBaselinePurchase[iosSimulatorArm64]" classname="com.motovault.app.domain.usecase.FuelEfficiencyUseCaseTest" time="0.0"/>
+  <testcase name="partialFillWaitsForTheNextFullTank[iosSimulatorArm64]" classname="com.motovault.app.domain.usecase.FuelEfficiencyUseCaseTest" time="0.0"/>
+  <testcase name="partialFillsBeforeTheBaselineDoNotCount[iosSimulatorArm64]" classname="com.motovault.app.domain.usecase.FuelEfficiencyUseCaseTest" time="0.0"/>
+  <testcase name="averagesCompletedCyclesByDistanceAndLitresDespiteStorageOrder[iosSimulatorArm64]" classname="com.motovault.app.domain.usecase.FuelEfficiencyUseCaseTest" time="0.0"/>
+  <testcase name="legacyRecordsWithoutLitresDoNotInventAnEconomy[iosSimulatorArm64]" classname="com.motovault.app.domain.usecase.FuelEfficiencyUseCaseTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

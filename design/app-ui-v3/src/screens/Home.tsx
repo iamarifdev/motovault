@@ -11,7 +11,7 @@ import { Button, IconButton, SectionTitle } from '../components/ui'
 import { CountUp, Gauge, Spark } from '../components/Gauge'
 import { haptic } from '../lib/haptics'
 
-const STATUS_ICON = { ok: CircleCheck, soon: Timer, overdue: TriangleAlert } as const
+const STATUS_ICON = { ok: CircleCheck, soon: Timer, overdue: TriangleAlert, unknown: TriangleAlert } as const
 
 const enter = (i: number) => ({
   initial: { opacity: 0, y: 14 },
@@ -24,6 +24,7 @@ export function Home() {
   const rules = useStore((s) => s.rules)
   const logs = useStore((s) => s.logs)
   const docs = useStore((s) => s.docs)
+  const reminderLead = useStore((s) => s.settings.reminderLeadDays ?? 30)
   const f = useFmt()
   const open = useUI((s) => s.open)
   const setTab = useUI((s) => s.setTab)
@@ -42,7 +43,7 @@ export function Home() {
   const sinceFuel = lastFuel ? diffDays(lastFuel.date, today) : null
   const renewals = docs
     .map((d) => ({ d, left: diffDays(today, d.expiry) }))
-    .filter((x) => x.left <= 30)
+    .filter((x) => x.d.expiry && x.left <= (x.d.warningDays ?? reminderLead))
     .sort((a, b) => a.left - b.left)
 
   const TopIcon = top ? STATUS_ICON[top.status] : CircleCheck
@@ -67,15 +68,15 @@ export function Home() {
           <div className="next-top">
             <span className="next-icon"><TopIcon size={26} strokeWidth={2.2} aria-hidden /></span>
             <div className="next-text">
-              <span className="cap">{top.status === 'ok' ? 'সব ঠিক আছে · পরের কাজ' : top.status === 'soon' ? 'শিগগির দরকার' : 'এখনই দরকার'}</span>
+              <span className="cap">{top.status === 'unknown' ? 'সার্ভিসের তথ্য নিশ্চিত করুন' : top.status === 'ok' ? 'ব্যবধান বাকি · পরের কাজ' : top.status === 'soon' ? 'শিগগির দরকার' : 'এখনই দরকার'}</span>
               <h2>{top.rule.name.split(' ও ')[0].split(' পরিষ্কার')[0]}</h2>
               <p>{describeWear(top, f)}</p>
             </div>
           </div>
-          <div className="meter" aria-hidden>
+          {top.status !== 'unknown' && <div className="meter" aria-hidden>
             <motion.i initial={{ scaleX: 0 }} animate={{ scaleX: progress }} transition={{ duration: dur.sweep, ease: ease.sky, delay: 0.25 }} />
-          </div>
-          <p className="next-sub">শেষ সার্ভিস: {f.date(top.rule.lastDate)} · {f.km(top.rule.lastKm)}</p>
+          </div>}
+          <p className="next-sub">{top.status === 'unknown' ? 'অজানা তথ্য থেকে শতাংশ দেখানো হয় না' : `শেষ নিশ্চিত সার্ভিস: ${f.date(top.rule.lastDate)} · ${f.km(top.rule.lastKm)}`}</p>
           <Button full icon={Wrench} onClick={() => open('service', { item: top.rule.item })}>{topItem?.short ?? 'সার্ভিস'} লিখুন</Button>
         </motion.section>
       )}
@@ -108,6 +109,7 @@ export function Home() {
           <span className="cap">ওডোমিটার</span>
           <strong><CountUp value={ride.odometer} format={(n) => f.n(n)} /><small>{f.digits === 'bn' ? 'কিমি' : 'km'}</small></strong>
           <span className="stat-hint">আজ আনুমানিক {f.n(estimate)} · আপডেট</span>
+          <span className="stat-hint">শেষ নিশ্চিত: {f.date(ride.odometerAt)}</span>
         </button>
         <button type="button" className="stat" onClick={() => { haptic('tick'); setTab('history') }}>
           <span className="cap">জ্বালানি গড়</span>
@@ -117,9 +119,9 @@ export function Home() {
       </motion.section>
 
       <motion.section {...enter(5)} aria-label="যন্ত্রাংশের অবস্থা">
-        <SectionTitle>যন্ত্রাংশের অবস্থা</SectionTitle>
+        <SectionTitle>সার্ভিসের ব্যবধান বাকি</SectionTitle>
         <div className="gauges">
-          {wears.map((w, i) => <Gauge key={w.rule.id} wear={w} index={i} onClick={() => open('service', { item: w.rule.item })} />)}
+          {wears.map((w, i) => <Gauge key={w.rule.id} wear={w} index={i} onClick={() => open('gaugeDetail', { id: w.rule.id })} />)}
         </div>
       </motion.section>
 

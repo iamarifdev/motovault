@@ -1,6 +1,7 @@
 package com.motovault.app.domain.usecase
 
 import com.motovault.app.domain.model.ComponentRule
+import com.motovault.app.domain.model.BaselineCertainty
 
 data class MaintenanceLogResult(
     val updatedRules: List<ComponentRule>,
@@ -23,7 +24,9 @@ class LogMaintenanceUseCase {
             if (rule.id in servicedComponentIds) {
                 rule.copy(
                     lastServicedOdometerKm = serviceOdometerKm,
-                    lastServicedEpochDays = serviceEpochDays
+                    lastServicedEpochDays = serviceEpochDays,
+                    baselineCertainty = BaselineCertainty.CONFIRMED,
+                    reminderSnoozedUntil = null
                 )
             } else {
                 rule

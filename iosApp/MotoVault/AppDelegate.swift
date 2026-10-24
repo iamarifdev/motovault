@@ -53,6 +53,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         #endif
         completionHandler([.banner, .list, .sound])
     }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if let payload = response.notification.request.content.userInfo["motovault.reminder"] as? String {
+            DispatchQueue.main.async { ReminderNavigation.shared.open(payload: payload) }
+        }
+        completionHandler()
+    }
 }
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -64,6 +71,10 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = VaultHostController()
         window.makeKeyAndVisible()
         self.window = window
+        if let response = connectionOptions.notificationResponse,
+           let payload = response.notification.request.content.userInfo["motovault.reminder"] as? String {
+            ReminderNavigation.shared.open(payload: payload)
+        }
     }
 }
 

@@ -2,6 +2,9 @@ package com.motovault.app.domain.model
 
 import kotlinx.serialization.Serializable
 
+@Serializable
+enum class BaselineCertainty { UNKNOWN, OWNER_ESTIMATE, CONFIRMED }
+
 enum class WearHealthStatus {
     HEALTHY,      // 0 - 74%
     SERVICE_SOON, // 75 - 99%
@@ -18,7 +21,10 @@ data class ComponentRule(
     val intervalDays: Int,
     val lastServicedOdometerKm: Double = 0.0,
     val lastServicedEpochDays: Long = 0L,
-    val isCritical: Boolean = true
+    val isCritical: Boolean = true,
+    val reminder: Boolean = true,
+    val reminderSnoozedUntil: String? = null,
+    val baselineCertainty: BaselineCertainty = BaselineCertainty.UNKNOWN
 ) {
     fun calculateWearPercentage(currentOdometerKm: Double, currentEpochDays: Long): Int {
         val deltaDistance = (currentOdometerKm - lastServicedOdometerKm).coerceAtLeast(0.0)

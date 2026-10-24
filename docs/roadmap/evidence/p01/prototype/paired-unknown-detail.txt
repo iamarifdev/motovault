@@ -1,0 +1,48 @@
+Browser tab: 3, Title: "MotoVault prototype v3", URL: "http://127.0.0.1:5273/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 206-309
++		330 container Review panel
++			331 heading 1
++			332 container
++				333 heading 2
++				334 pop up button (collapsed) Secondary Actions: Expand
++					335 menu
++						336 (selected)
++				337 button
++			338 container
++				339 heading 2
++				340 pop up button (collapsed) Secondary Actions: Expand
++					341 menu
++			342 container
++				343 heading 2
++				344 button
++				345 button
++				346 button
++				347 button
++				348 button
++				349 button
++				350 button
++			351 container
++				352 heading 2
++				353 radio button 0
++				354 radio button 1
++				355 radio button 0
++				356 radio button 1
++				357 radio button 0
++				358 radio button 1
++				359 radio button 0
++				360 radio button 0
++				361 radio button 1
++				362 radio button 0
++				363 radio button 0
++				364 radio button 0
++				365 radio button 0
++				366 radio button 0
++				367 radio button 0
++				368 radio button 0
++				369 radio button 0
++				370 switch 0
++				371 switch 0
++			372 container
++				373 heading 2
+The focused UI element is 189 button ইঞ্জিন অয়েল, আগের সার্ভিস নিশ্চিত নয়, তথ্য নিশ্চিত করুন

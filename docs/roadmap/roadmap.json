@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-23T23:17:35+00:00",
+  "updated_at": "2026-10-24T16:51:38+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -426,15 +426,23 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-24T09:48:39+00:00",
+          "completed_at": "2026-10-24T09:55:05+00:00",
           "blocker": "",
           "notes": [
             {
               "at": "2026-10-23T23:17:32+00:00",
               "text": "P00-D02: current Room mapping drops v3 settings. P00-D05: no-expiry registration shows zero days remaining. Use the new data contract and preserve real notification consent."
+            },
+            {
+              "at": "2026-10-24T09:48:39+00:00",
+              "text": "Tracing persisted settings and native reminder policy before unifying defaults and migration."
+            },
+            {
+              "at": "2026-10-24T09:55:05+00:00",
+              "text": "Unified 30-day local reminder policy and transactional schema-4 preferences. Focused Android/JVM and native iOS Room migration, rollback, settings and planner tests passed; delivery UI remains P01-02/P01-03."
             }
           ],
           "evidence": [
@@ -444,6 +452,20 @@
               "summary": "P00-D02: current Room mapping drops v3 settings. P00-D05: no-expiry registration shows zero days remaining. Use the new data contract and preserve real notification consent.",
               "at": "2026-10-23T23:17:32+00:00",
               "revision": "50eda3a"
+            },
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/P01-REMINDER-POLICY.md",
+              "summary": "Unified 30-day local reminder policy and transactional schema-4 preferences. Focused Android/JVM and native iOS Room migration, rollback, settings and planner tests passed; delivery UI remains P01-02/P01-03.",
+              "at": "2026-10-24T09:55:05+00:00",
+              "revision": "86c1598"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-01-verification.md",
+              "summary": "Unified 30-day local reminder policy and transactional schema-4 preferences. Focused Android/JVM and native iOS Room migration, rollback, settings and planner tests passed; delivery UI remains P01-02/P01-03.",
+              "at": "2026-10-24T09:55:05+00:00",
+              "revision": "86c1598"
             }
           ]
         },
@@ -465,15 +487,23 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-24T09:55:06+00:00",
+          "completed_at": "2026-10-24T10:08:56+00:00",
           "blocker": "",
           "notes": [
             {
               "at": "2026-10-23T23:17:33+00:00",
               "text": "P00-D01: Android and iOS keep odometer 12350 after Undo intended for 12340. The callback closes over an old revision. Fix inverse command handling without bypassing concurrency checks."
+            },
+            {
+              "at": "2026-10-24T09:55:06+00:00",
+              "text": "Implementing stable service requests, committed-state reconciliation and revision-safe Undo, preserving consumed-event recovery."
+            },
+            {
+              "at": "2026-10-24T10:08:56+00:00",
+              "text": "Stable service/document plans and exact-target payload routing implemented. Shared/native scheduling and concurrency tests passed; Android and iOS save/Undo/restart UI flows restore 12340. OS permission and delivery matrix remains P01-03."
             }
           ],
           "evidence": [
@@ -483,6 +513,20 @@
               "summary": "P00-D01: Android and iOS keep odometer 12350 after Undo intended for 12340. The callback closes over an old revision. Fix inverse command handling without bypassing concurrency checks.",
               "at": "2026-10-23T23:17:33+00:00",
               "revision": "50eda3a"
+            },
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P01-02-verification.md",
+              "summary": "Stable service/document plans and exact-target payload routing implemented. Shared/native scheduling and concurrency tests passed; Android and iOS save/Undo/restart UI flows restore 12340. OS permission and delivery matrix remains P01-03.",
+              "at": "2026-10-24T10:08:56+00:00",
+              "revision": "86c1598"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-02-verification.md",
+              "summary": "Stable service/document plans and exact-target payload routing implemented. Shared/native scheduling and concurrency tests passed; Android and iOS save/Undo/restart UI flows restore 12340. OS permission and delivery matrix remains P01-03.",
+              "at": "2026-10-24T10:08:56+00:00",
+              "revision": "86c1598"
             }
           ]
         },
@@ -505,15 +549,31 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
+          "status": "in_review",
+          "owner": "Codex",
+          "started_at": "2026-10-24T10:08:57+00:00",
           "completed_at": null,
           "blocker": "",
           "notes": [
             {
               "at": "2026-10-23T23:17:33+00:00",
               "text": "P00 baseline confirms no-expiry presentation and native reminder settings need a consistent visible policy. Include these captured states in acceptance."
+            },
+            {
+              "at": "2026-10-24T10:08:57+00:00",
+              "text": "Extending v3 with actual notification access, recovery and per-record snooze states before native UI implementation."
+            },
+            {
+              "at": "2026-10-24T10:24:14+00:00",
+              "text": "User explicitly requested keeping physical Android/iPhone verification pending. Only emulator/simulator devices are available; real-device background delivery remains an unverified phase exit gate."
+            },
+            {
+              "at": "2026-10-24T16:35:27+00:00",
+              "text": "Native settings, snooze and failed-save paths implemented. Android delivery/taps and both-host denial/save-failure evidence retained. iOS Settings recovery, remaining runtime/design checks and owner-deferred physical-device exit gate remain open; see the verification report."
+            },
+            {
+              "at": "2026-10-24T16:50:16+00:00",
+              "text": "Final Android footer fault test passes with unchanged persisted settings and fault removed. Actual iOS permission grant and three OS background notifications observed; whole delivery/tap run and focused native-cell tap run failed to foreground the app. iOS Settings recovery and exact tap destinations remain unverified. Physical checks stay pending by owner request."
             }
           ],
           "evidence": [
@@ -523,6 +583,41 @@
               "summary": "P00 baseline confirms no-expiry presentation and native reminder settings need a consistent visible policy. Include these captured states in acceptance.",
               "at": "2026-10-23T23:17:33+00:00",
               "revision": "50eda3a"
+            },
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ReminderSheets.kt",
+              "summary": "Native settings, snooze and failed-save paths implemented. Android delivery/taps and both-host denial/save-failure evidence retained. iOS Settings recovery, remaining runtime/design checks and owner-deferred physical-device exit gate remain open; see the verification report.",
+              "at": "2026-10-24T16:35:27+00:00",
+              "revision": "86c1598"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-03-verification.md",
+              "summary": "Native settings, snooze and failed-save paths implemented. Android delivery/taps and both-host denial/save-failure evidence retained. iOS Settings recovery, remaining runtime/design checks and owner-deferred physical-device exit gate remain open; see the verification report.",
+              "at": "2026-10-24T16:35:27+00:00",
+              "revision": "86c1598"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P01-design.md",
+              "summary": "Native settings, snooze and failed-save paths implemented. Android delivery/taps and both-host denial/save-failure evidence retained. iOS Settings recovery, remaining runtime/design checks and owner-deferred physical-device exit gate remain open; see the verification report.",
+              "at": "2026-10-24T16:35:27+00:00",
+              "revision": "86c1598"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/p01/ios/background-observation.json",
+              "summary": "Final Android footer fault test passes with unchanged persisted settings and fault removed. Actual iOS permission grant and three OS background notifications observed; whole delivery/tap run and focused native-cell tap run failed to foreground the app. iOS Settings recovery and exact tap destinations remain unverified. Physical checks stay pending by owner request.",
+              "at": "2026-10-24T16:50:16+00:00",
+              "revision": "86c1598"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/p01/ios/notification-taps-r4-summary.json",
+              "summary": "Final Android footer fault test passes with unchanged persisted settings and fault removed. Actual iOS permission grant and three OS background notifications observed; whole delivery/tap run and focused native-cell tap run failed to foreground the app. iOS Settings recovery and exact tap destinations remain unverified. Physical checks stay pending by owner request.",
+              "at": "2026-10-24T16:50:16+00:00",
+              "revision": "86c1598"
             }
           ]
         },
@@ -543,13 +638,55 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-24T10:02:42+00:00",
+          "completed_at": "2026-10-24T16:51:38+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-24T10:02:42+00:00",
+              "text": "Extending v3 gauge details and unknown-baseline states before native implementation; percentages describe recorded interval remaining."
+            },
+            {
+              "at": "2026-10-24T16:35:27+00:00",
+              "text": "Interval and unknown-history behavior implemented; shared edge-case tests pass, with native large-text unknown detail on Android and iOS. Remaining motion, screen-reader and representative design checks are listed explicitly rather than inferred from screenshots."
+            },
+            {
+              "at": "2026-10-24T16:51:38+00:00",
+              "text": "Functional acceptance verified: interval/whichever-limit calculations, unknown and estimated baselines, invalid/future rejection, explicit mileage confirmation, source details, and native reduced-motion unknown rendering. Full shared suites pass; broader physical-device and design-matrix validation remains P01-05."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/GaugeDetailSheet.kt",
+              "summary": "Interval and unknown-history behavior implemented; shared edge-case tests pass, with native large-text unknown detail on Android and iOS. Remaining motion, screen-reader and representative design checks are listed explicitly rather than inferred from screenshots.",
+              "at": "2026-10-24T16:35:27+00:00",
+              "revision": "86c1598"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-04-verification.md",
+              "summary": "Interval and unknown-history behavior implemented; shared edge-case tests pass, with native large-text unknown detail on Android and iOS. Remaining motion, screen-reader and representative design checks are listed explicitly rather than inferred from screenshots.",
+              "at": "2026-10-24T16:35:27+00:00",
+              "revision": "86c1598"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P01-design.md",
+              "summary": "Interval and unknown-history behavior implemented; shared edge-case tests pass, with native large-text unknown detail on Android and iOS. Remaining motion, screen-reader and representative design checks are listed explicitly rather than inferred from screenshots.",
+              "at": "2026-10-24T16:35:27+00:00",
+              "revision": "86c1598"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-04-verification.md",
+              "summary": "Functional acceptance verified: interval/whichever-limit calculations, unknown and estimated baselines, invalid/future rejection, explicit mileage confirmation, source details, and native reduced-motion unknown rendering. Full shared suites pass; broader physical-device and design-matrix validation remains P01-05.",
+              "at": "2026-10-24T16:51:38+00:00",
+              "revision": "86c1598"
+            }
+          ]
         },
         {
           "id": "P01-05",
@@ -573,12 +710,32 @@
             "ios_device"
           ],
           "status": "planned",
-          "owner": null,
+          "owner": "Codex",
           "started_at": null,
           "completed_at": null,
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-24T16:51:38+00:00",
+              "text": "Owner explicitly requested keeping physical Android/iPhone verification pending. Emulator/simulator evidence is retained but does not satisfy this task. P01-03 review, physical notification/settings/restart/deep-link checks, and the complete representative design/motion/accessibility matrix remain required before phase exit."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-03-verification.md",
+              "summary": "Owner explicitly requested keeping physical Android/iPhone verification pending. Emulator/simulator evidence is retained but does not satisfy this task. P01-03 review, physical notification/settings/restart/deep-link checks, and the complete representative design/motion/accessibility matrix remain required before phase exit.",
+              "at": "2026-10-24T16:51:38+00:00",
+              "revision": "86c1598"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P01-design.md",
+              "summary": "Owner explicitly requested keeping physical Android/iPhone verification pending. Emulator/simulator evidence is retained but does not satisfy this task. P01-03 review, physical notification/settings/restart/deep-link checks, and the complete representative design/motion/accessibility matrix remain required before phase exit.",
+              "at": "2026-10-24T16:51:38+00:00",
+              "revision": "86c1598"
+            }
+          ]
         }
       ]
     },
@@ -3096,6 +3253,102 @@
       "to": "done",
       "note": "Clarified preservation of owner-written names and recorded native settings and non-restoring Undo observations. Contract and compatibility gates are complete; product defects remain assigned to later phases.",
       "revision": "50eda3a"
+    },
+    {
+      "at": "2026-10-24T09:48:39+00:00",
+      "task": "P01-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Tracing persisted settings and native reminder policy before unifying defaults and migration.",
+      "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T09:55:05+00:00",
+      "task": "P01-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Unified 30-day local reminder policy and transactional schema-4 preferences. Focused Android/JVM and native iOS Room migration, rollback, settings and planner tests passed; delivery UI remains P01-02/P01-03.",
+      "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T09:55:06+00:00",
+      "task": "P01-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implementing stable service requests, committed-state reconciliation and revision-safe Undo, preserving consumed-event recovery.",
+      "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T10:02:42+00:00",
+      "task": "P01-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Extending v3 gauge details and unknown-baseline states before native implementation; percentages describe recorded interval remaining.",
+      "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T10:08:56+00:00",
+      "task": "P01-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Stable service/document plans and exact-target payload routing implemented. Shared/native scheduling and concurrency tests passed; Android and iOS save/Undo/restart UI flows restore 12340. OS permission and delivery matrix remains P01-03.",
+      "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T10:08:57+00:00",
+      "task": "P01-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Extending v3 with actual notification access, recovery and per-record snooze states before native UI implementation.",
+      "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T10:24:14+00:00",
+      "task": "P01-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "User explicitly requested keeping physical Android/iPhone verification pending. Only emulator/simulator devices are available; real-device background delivery remains an unverified phase exit gate.",
+      "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T16:35:27+00:00",
+      "task": "P01-03",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Native settings, snooze and failed-save paths implemented. Android delivery/taps and both-host denial/save-failure evidence retained. iOS Settings recovery, remaining runtime/design checks and owner-deferred physical-device exit gate remain open; see the verification report.",
+      "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T16:35:27+00:00",
+      "task": "P01-04",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Interval and unknown-history behavior implemented; shared edge-case tests pass, with native large-text unknown detail on Android and iOS. Remaining motion, screen-reader and representative design checks are listed explicitly rather than inferred from screenshots.",
+      "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T16:50:16+00:00",
+      "task": "P01-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Final Android footer fault test passes with unchanged persisted settings and fault removed. Actual iOS permission grant and three OS background notifications observed; whole delivery/tap run and focused native-cell tap run failed to foreground the app. iOS Settings recovery and exact tap destinations remain unverified. Physical checks stay pending by owner request.",
+      "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T16:51:38+00:00",
+      "task": "P01-04",
+      "from": "in_review",
+      "to": "done",
+      "note": "Functional acceptance verified: interval/whichever-limit calculations, unknown and estimated baselines, invalid/future rejection, explicit mileage confirmation, source details, and native reduced-motion unknown rendering. Full shared suites pass; broader physical-device and design-matrix validation remains P01-05.",
+      "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T16:51:38+00:00",
+      "task": "P01-05",
+      "from": "planned",
+      "to": "planned",
+      "note": "Owner explicitly requested keeping physical Android/iPhone verification pending. Emulator/simulator evidence is retained but does not satisfy this task. P01-03 review, physical notification/settings/restart/deep-link checks, and the complete representative design/motion/accessibility matrix remain required before phase exit.",
+      "revision": "86c1598"
     }
   ]
 }

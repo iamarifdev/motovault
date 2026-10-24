@@ -1,0 +1,64 @@
+Attributes: Application, 0x1064f21c0, pid: 6702, label: 'MotoVault'
+Element subtree:
+ →Application, 0x1064f21c0, pid: 6702, label: 'MotoVault'
+    Window (Main), 0x1064f2080, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1064f2440, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1064f26c0, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1064f2300, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1064f2580, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1064f2940, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1064f2bc0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1064f2d00, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=1)'
+                  Other, 0x1064f2a80, {{0.0, 62.0}, {440.0, 791.3}}
+                    Other, 0x1064f2e40, {{0.0, 62.0}, {440.0, 791.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=12)'
+                    Other, 0x1064f3200, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=87)', label: 'কাগজের মেয়াদ'
+                    Button, 0x1064f2f80, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=89)', label: 'Tax token
+5 days আগে মেয়াদ শেষ'
+                    Button, 0x1064f3340, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=96)', label: 'P01 synthetic expiry today
+মেয়াদ শেষ হতে 0 days'
+                    Button, 0x1064f35c0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=103)', label: 'Driving licence
+মেয়াদ শেষ হতে 24 days'
+                    Image, 0x1064f3700, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=112)', label: 'Yamaha R15 V4'
+                    Other, 0x1064f3480, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=113)', label: 'নমুনা ছবি · রঙ ও যন্ত্রাংশে পার্থক্য থাকতে পারে'
+                    Other, 0x1064f3840, {{20.0, 74.0}, {78.0, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=16)', label: 'আমার গ্যারেজ'
+                    Button, 0x1064f3ac0, {{364.0, 99.3}, {56.0, 56.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=19)', label: 'বাইকের সেটিংস'
+                    Other, 0x1064f3c00, {{20.0, 107.3}, {87.3, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=17)', label: 'R15 V4'
+                    Other, 0x1064f3980, {{20.0, 149.3}, {77.0, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=18)', label: 'Yamaha · 2023'
+                    Other, 0x1064f3d40, {{102.0, 216.7}, {143.3, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=26)', label: 'সার্ভিসের তথ্য নিশ্চিত করুন'
+                    Other, 0x1064f3e80, {{102.0, 250.0}, {46.3, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=27)', label: 'Chain'
+                    Other, 0x1064f0640, {{102.0, 283.3}, {143.0, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=28)', label: 'আগের সার্ভিস নিশ্চিত নয়'
+                    Other, 0x1064f0780, {{36.0, 326.7}, {210.3, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=29)', label: 'অজানা তথ্য থেকে শতাংশ দেখানো হয় না'
+                    Button, 0x1036b3200, {{36.0, 370.0}, {368.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=30)', label: 'সার্ভিস লিখুন'
+                    Button, 0x1036b3480, {{20.0, 458.0}, {92.3, 115.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=35)', label: 'তেল ভরা'
+                    Button, 0x1036b30c0, {{122.3, 458.0}, {92.3, 115.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=39)', label: 'সার্ভিস'
+                    Button, 0x1036b35c0, {{224.7, 458.0}, {92.7, 115.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=43)', label: 'কিমি'
+                    Button, 0x1036b3840, {{327.3, 458.0}, {92.7, 115.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=47)', label: 'কাগজ'
+                    Button, 0x1036b3980, {{20.0, 593.3}, {195.0, 161.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=52)', label: 'ওডোমিটার
+12,340
+km
+আজ আনুমানিক 12,540 · আপডেট
+শেষ নিশ্চিত: 2026-10-16'
+                    Button, 0x1036b3c00, {{225.0, 593.3}, {195.0, 122.7}}, identifier: 'AccessibilityElement for SemanticsNode(id=60)', label: 'জ্বালানি গড়
+--
+km/L'
+                    Other, 0x1036b3d40, {{20.0, 774.7}, {160.0, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=68)', label: 'সার্ভিসের ব্যবধান বাকি'
+                    Other, 0x1036b3ac0, {{20.0, 836.0}, {400.0, 17.3}}
+                      Other, 0x1036b1400, {{20.0, 836.0}, {400.0, 17.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=69)'
+                      Button, 0x1036b1540, {{20.0, 836.0}, {124.0, 17.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=70)', label: 'Chain, আগের সার্ভিস নিশ্চিত নয়'
+                      Button, 0x106acc000, {{154.0, 836.0}, {124.0, 17.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=78)', label: 'Engine oil, আগের সার্ভিস নিশ্চিত নয়'
+                  Button, 0x106acc140, {{196.3, 844.0}, {48.0, 48.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=130)', label: 'নতুন রেকর্ড যোগ করুন'
+                  Button, 0x106acc280, {{8.0, 854.0}, {85.0, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=117)', label: 'গ্যারেজ'
+                  Button, 0x106acc3c0, {{93.0, 854.0}, {85.0, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=123)', label: 'কাগজপত্র'
+                  Button, 0x106acc500, {{262.7, 854.0}, {84.7, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=132)', label: 'ইতিহাস'
+                  Button, 0x106acc640, {{347.3, 854.0}, {84.7, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=138)', label: 'আমি'
+              Other, 0x106acc780, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x106acc8c0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x106acca00, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x106accb40, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x1064f21c0, pid: 6702, label: 'MotoVault'
+Query chain:
+ →Find: Target Application 'com.motovault.baseline.p00'
+  Output: {
+    Application, 0x106accc80, pid: 6702, label: 'MotoVault'
+  }

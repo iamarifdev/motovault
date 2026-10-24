@@ -11,12 +11,12 @@ class DocumentExpiryUseCaseTest {
         assertEquals(DocumentExpiryStatus.NO_EXPIRY, useCase.evaluate(null))
     }
 
-    @Test fun moreThanSixtyDaysIsValid() {
-        assertEquals(DocumentExpiryStatus.VALID, useCase.evaluate(61))
+    @Test fun moreThanThirtyDaysIsValid() {
+        assertEquals(DocumentExpiryStatus.VALID, useCase.evaluate(31))
     }
 
-    @Test fun renewalWarningIncludesTheSixtiethAndLastRemainingDay() {
-        assertEquals(DocumentExpiryStatus.EXPIRING_SOON, useCase.evaluate(60))
+    @Test fun renewalWarningIncludesTheThirtiethAndLastRemainingDay() {
+        assertEquals(DocumentExpiryStatus.EXPIRING_SOON, useCase.evaluate(30))
         assertEquals(DocumentExpiryStatus.EXPIRING_SOON, useCase.evaluate(1))
     }
 

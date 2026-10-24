@@ -153,6 +153,8 @@ fun MotoVault() {
     val session = remember { activeVaultSession }
     val snapshot by session.snapshots.collectAsState()
     val state = snapshot.state
+    // Refresh actual OS permission and committed requests when returning from system settings.
+    rememberReminderAccess()
     val revision = snapshot.revision
     val storageError = snapshot.error
     val loading = snapshot.loading
@@ -183,6 +185,33 @@ fun MotoVault() {
                 onDone?.invoke(ok)
             }
         }
+    }
+
+    fun undo(savedRevision: Long) {
+        session.undo(savedRevision) { ok ->
+            val canRetry = session.snapshots.value.revision == savedRevision
+            currentToast = if (ok) null else ToastData(
+                id = "undo_failed_${Clock.System.now().toEpochMilliseconds()}",
+                message = if (canRetry) "ফিরিয়ে আনা যায়নি। আবার চেষ্টা করুন।" else "আরেকটি পরিবর্তন হয়েছে। রেকর্ড দেখে নিন।",
+                undoAction = if (canRetry) { { undo(savedRevision) } } else null
+            )
+        }
+    }
+
+    val reminderRequest by ReminderNavigation.requests.collectAsState()
+    LaunchedEffect(reminderRequest, loading) {
+        val payload = reminderRequest ?: return@LaunchedEffect
+        if (loading) return@LaunchedEffect
+        val target = decodeReminderPayload(payload)?.let { reminderTarget(state, it) }
+        if (target == null) currentToast = ToastData(message = "এই রিমাইন্ডারের রেকর্ড বদলেছে বা মুছে গেছে। তালিকা দেখে নিন।")
+        else if (target.type == "document") {
+            tab = Tab.VAULT
+            activeSheet = ActiveSheet("docView", target.id)
+        } else {
+            tab = Tab.GARAGE
+            activeSheet = ActiveSheet("service", target.id)
+        }
+        ReminderNavigation.handled(payload)
     }
 
     LaunchedEffect(LaunchConfig.initialSeed, loading) {
@@ -236,8 +265,9 @@ fun MotoVault() {
                             val seeded = VaultState.seedData(today)
                             val rules = seeded.rules.map { rule ->
                                 rule.copy(
-                                    lastServicedOdometerKm = if (knowsLastService) (odometer - rule.intervalKm * 0.4).coerceAtLeast(0.0) else odometer,
-                                    lastServicedEpochDays = today.toEpochDays().toLong()
+                                    lastServicedOdometerKm = odometer,
+                                    lastServicedEpochDays = today.toEpochDays().toLong(),
+                                    baselineCertainty = if (knowsLastService) com.motovault.app.domain.model.BaselineCertainty.OWNER_ESTIMATE else com.motovault.app.domain.model.BaselineCertainty.UNKNOWN
                                 )
                             }
                             val ride = Ride(
@@ -245,13 +275,14 @@ fun MotoVault() {
                                 modelId = modelId,
                                 year = today.year - 2,
                                 odometer = odometer,
-                                edition = name
+                                edition = name,
+                                odometerConfirmedDate = today.toString()
                             )
                             val nextState = state.copy(
                                 ride = ride,
                                 rules = rules,
                                 logs = emptyList(),
-                                documents = seeded.documents
+                                documents = state.documents
                             )
                             commit(nextState) { ok ->
                                 if (ok) {
@@ -292,12 +323,12 @@ fun MotoVault() {
                                         state = state,
                                         onOpenAddDoc = { activeSheet = ActiveSheet("docAdd") },
                                         onOpenDocView = { doc -> activeSheet = ActiveSheet("docView", doc.id) },
-                                        onToggleDocReminders = { enabled -> commit(state.copy(docReminders = enabled)) }
+                                        onToggleDocReminders = { enabled -> commit(state.copy(docReminders = enabled)) },
+                                        onReminderSettings = { activeSheet = ActiveSheet("reminders") }
                                     )
                                     Tab.HISTORY -> HistoryScreen(
                                         state = state,
                                         onDeleteLog = { log ->
-                                            val prev = state
                                             val next = runCatching { state.deleteLog(log) }.getOrNull()
                                             if (next != null) {
                                                 commit(next) { ok ->
@@ -306,8 +337,7 @@ fun MotoVault() {
                                                             id = "del_${log.id}",
                                                             message = "রেকর্ড মোছা হয়েছে",
                                                             undoAction = {
-                                                                commit(prev)
-                                                                currentToast = null
+                                                                undo(revision + 1)
                                                             }
                                                         )
                                                     }
@@ -355,6 +385,18 @@ fun MotoVault() {
             if (!loading && (state.ride != null || activeSheet?.name == "paste" || activeSheet?.name == "quickAdd")) {
                 activeSheet?.let { sheet ->
                 when (sheet.name) {
+                    "gaugeDetail" -> GaugeDetailSheet(state, sheet.props as? String,
+                        onDismiss = { activeSheet = null }, onOpen = { name, id ->
+                            activeSheet = if (name == "serviceReminder") ActiveSheet("reminders", "service" to id)
+                                else ActiveSheet(name, id)
+                        })
+                    "reminders" -> {
+                        val target = sheet.props as? Pair<*, *>
+                        ReminderSettingsSheet(state, target?.first as? String, target?.second as? String,
+                            onDismiss = { activeSheet = null },
+                            onOpen = { type, id -> activeSheet = ActiveSheet("reminders", type to id) },
+                            onSave = { next, done -> commit(next, done) })
+                    }
                     "quickAdd" -> QuickAddSheet(
                         onDismiss = { activeSheet = null },
                         onSelectFlow = { flow -> activeSheet = ActiveSheet(flow) }
@@ -364,15 +406,13 @@ fun MotoVault() {
                         initialAmount = (sheet.props as? Number)?.toDouble(),
                         onDismiss = { activeSheet = null },
                         onSave = { nextState, msg, onDone ->
-                            val prev = state
                             commit(nextState) { ok ->
                                 if (ok) {
                                     currentToast = ToastData(
                                         id = "fuel_${Clock.System.now().toEpochMilliseconds()}",
                                         message = msg,
                                         undoAction = {
-                                            commit(prev)
-                                            currentToast = null
+                                            undo(revision + 1)
                                         }
                                     )
                                     onDone()
@@ -390,15 +430,13 @@ fun MotoVault() {
                             initialRows = parsedRows,
                             onDismiss = { activeSheet = null },
                             onSave = { nextState, msg, onDone ->
-                                val prev = state
                                 commit(nextState) { ok ->
                                     if (ok) {
                                         currentToast = ToastData(
                                             id = "svc_${Clock.System.now().toEpochMilliseconds()}",
                                             message = msg,
                                             undoAction = {
-                                                commit(prev)
-                                                currentToast = null
+                                                undo(revision + 1)
                                             }
                                         )
                                         onDone()
@@ -412,15 +450,13 @@ fun MotoVault() {
                         state = state,
                         onDismiss = { activeSheet = null },
                         onSave = { nextState, msg, onDone ->
-                            val prev = state
                             commit(nextState) { ok ->
                                 if (ok) {
                                     currentToast = ToastData(
                                         id = "odo_${Clock.System.now().toEpochMilliseconds()}",
                                         message = msg,
                                         undoAction = {
-                                            commit(prev)
-                                            currentToast = null
+                                            undo(revision + 1)
                                         }
                                     )
                                     onDone()
@@ -433,15 +469,13 @@ fun MotoVault() {
                         state = state,
                         onDismiss = { activeSheet = null },
                         onSave = { nextState, msg, onDone ->
-                            val prev = state
                             commit(nextState) { ok ->
                                 if (ok) {
                                     currentToast = ToastData(
                                         id = "doc_${Clock.System.now().toEpochMilliseconds()}",
                                         message = msg,
                                         undoAction = {
-                                            commit(prev)
-                                            currentToast = null
+                                            undo(revision + 1)
                                         }
                                     )
                                     onDone()
@@ -460,7 +494,9 @@ fun MotoVault() {
                                 onUpdateReminder = { enabled ->
                                     val updated = state.documents.map { if (it.id == doc.id) it.copy(reminder = enabled) else it }
                                     commit(state.copy(documents = updated))
-                                }
+                                },
+                                onReminderSettings = { activeSheet = ActiveSheet("reminders", "document" to doc.id) },
+                                warningDays = doc.reminderWarningDays ?: state.reminderPolicy.warningDays
                             )
                         }
                     }

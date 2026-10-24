@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.VaultSessionTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:51" hostname="MacBookPro" time="0.006">
+  <properties/>
+  <testcase name="reminderFailureCannotInvalidateRestoreOrCommittedSave[iosSimulatorArm64]" classname="com.motovault.app.VaultSessionTest" time="0.001"/>
+  <testcase name="failedWriteNeverSchedulesUncommittedDocument[iosSimulatorArm64]" classname="com.motovault.app.VaultSessionTest" time="0.0"/>
+  <testcase name="recreatedObserverJoinsOutstandingSaveAndCannotReplaceFromOldSnapshot[iosSimulatorArm64]" classname="com.motovault.app.VaultSessionTest" time="0.002"/>
+  <testcase name="failedSaveKeepsStateRevisionAndAssetsForRetry[iosSimulatorArm64]" classname="com.motovault.app.VaultSessionTest" time="0.001"/>
+  <testcase name="recoveryFinishesBeforeWritesAndFailedRestoreNeverSweeps[iosSimulatorArm64]" classname="com.motovault.app.VaultSessionTest" time="0.001"/>
+  <testcase name="inverseSaveRestoresMileageAndRemindersButCannotOverwriteANewerRevision[iosSimulatorArm64]" classname="com.motovault.app.VaultSessionTest" time="0.0"/>
+  <testcase name="undoRetainsOriginalAssetsUntilItIsSuperseded[iosSimulatorArm64]" classname="com.motovault.app.VaultSessionTest" time="0.001"/>
+  <testcase name="failedInverseDoesNotPublishOrScheduleAndCanBeRetried[iosSimulatorArm64]" classname="com.motovault.app.VaultSessionTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

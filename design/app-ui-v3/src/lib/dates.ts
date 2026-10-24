@@ -8,6 +8,8 @@ const parse = (iso: string) => {
   return new Date(y, m - 1, d, 12)
 }
 
+export const validISO = (iso: string) => /^\d{4}-\d{2}-\d{2}$/.test(iso) && toISO(parse(iso)) === iso
+
 export const addDays = (iso: string, days: number) => {
   const d = parse(iso)
   d.setDate(d.getDate() + days)

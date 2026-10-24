@@ -1,0 +1,44 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "7CAC89C3-DBFB-461C-99E3-4F1824F7DAC7.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "undo-after-restart-12340-tree_0_87054695-E9B7-4CFE-8D4F-5F8A8FB9BCDF.txt",
+        "timestamp" : 1792836446.104
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "6438A1F5-6102-4AFE-9996-4376426FEA5A.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "undo-after-restart-12340_0_F363E329-4AF7-4319-B966-CDBF450196EC.png",
+        "timestamp" : 1792836446
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "5BBD6370-0FBF-40EE-8A9E-827BA38E9492.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "undo-restored-12340-tree_0_4E76D80A-0B87-4DC6-9741-30C83FE03426.txt",
+        "timestamp" : 1792836439.403
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "B170F353-B20A-45CD-8074-5EFF6DF1D5E9.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "undo-restored-12340_0_198DFACC-C4D2-4E34-BD77-6F55446354C3.png",
+        "timestamp" : 1792836439.307
+      }
+    ],
+    "testIdentifier" : "P01DeliveryTests/testUndoSurvivesRestart()",
+    "testIdentifierURL" : "test://com.apple.xcode/MotoVault/MotoVaultUITests/P01DeliveryTests/testUndoSurvivesRestart"
+  }
+]

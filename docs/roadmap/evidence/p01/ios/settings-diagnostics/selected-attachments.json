@@ -1,0 +1,24 @@
+{
+  "sourceRun": "p01-settings-r5.xcresult",
+  "accepted": false,
+  "attachments": [
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+      "deviceName": "MotoVault-P00-Baseline",
+      "exportedFileName": "C96B83AE-99F8-4A4C-A1D9-BE8649F8DCED.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "native-app-notification-settings-tree_0_B6AFB7FE-AAF3-4710-AF3D-7A526AC66290.txt",
+      "timestamp": 1792859666.645
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+      "deviceName": "MotoVault-P00-Baseline",
+      "exportedFileName": "DAD926AF-133C-4E5D-9802-E715233F9E6C.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "native-app-notification-settings_0_891EB52A-718C-4A1D-B5CF-F4D1AF7DF5EB.png",
+      "timestamp": 1792859666.29
+    }
+  ]
+}

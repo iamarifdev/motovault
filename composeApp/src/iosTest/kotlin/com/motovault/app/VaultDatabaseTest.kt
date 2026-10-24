@@ -72,13 +72,18 @@ class VaultDatabaseTest {
     @Test fun outboxAndOwnerWriteRollBackTogetherAndSurviveReopen() = runBlocking {
         val location = path()
         val db = open(location)
-        val original = fixture()
+        val original = fixture().copy(digits = Digits.EN, haptics = false, reduceMotion = true,
+            textScale = 1.3f, brandOverride = "honda", serviceReminders = false, docReminders = false,
+            lastPrices = mapOf("octane" to 123.45), lastItemPrices = mapOf("engine_oil" to 777.0),
+            workshops = listOf("Synthetic workshop"), places = listOf("Synthetic pump"),
+            reminderPolicy = ReminderPolicy(14, 600))
         db.vault().replace(original)
         val first = db.vault().pendingSync()!!
         db.useWriterConnection { connection ->
             connection.usePrepared("CREATE TRIGGER reject_sync BEFORE INSERT ON sync_outbox BEGIN SELECT RAISE(ABORT, 'simulated queue failure'); END") { it.step() }
         }
-        assertFails { db.vault().replace(original.copy(documents = emptyList())) }
+        assertFails { db.vault().replace(original.copy(documents = emptyList(), docReminders = true,
+            reminderPolicy = ReminderPolicy())) }
         assertEquals(original, db.vault().read())
         assertEquals(first, db.vault().pendingSync())
         db.close()
@@ -86,6 +91,64 @@ class VaultDatabaseTest {
         assertEquals(original, reopened.vault().read())
         assertEquals(first, reopened.vault().pendingSync())
         reopened.close()
+    }
+
+    @Test fun versionThreeRestoresPreferencesFromItsAtomicOutboxWithoutChangingOwnerRows() = runBlocking {
+        val location = path()
+        val original = fixture().copy(digits = Digits.EN, haptics = false, reduceMotion = true,
+            textScale = 1.3f, serviceReminders = false, docReminders = false,
+            workshops = listOf("Owner spelling kept"), reminderPolicy = ReminderPolicy(7, 615))
+        val seeded = open(location)
+        seeded.vault().replace(original)
+        val prior = seeded.vault().pendingSync()!!
+        seeded.close()
+        BundledSQLiteDriver().open(location).use { connection ->
+            connection.execSQL("ALTER TABLE vault_meta DROP COLUMN preferences")
+            connection.execSQL("UPDATE room_master_table SET identity_hash = 'bebecf50ab9f7b3c1ae463e6c3f06007' WHERE id = 42")
+            connection.execSQL("PRAGMA user_version = 3")
+        }
+        val upgraded = open(location)
+        assertEquals(original, upgraded.vault().read())
+        assertEquals(prior, upgraded.vault().pendingSync())
+        upgraded.close()
+        val reopened = open(location)
+        assertEquals(original, reopened.vault().read())
+        reopened.close()
+    }
+
+    @Test fun failedPreferenceMigrationPreservesSchemaAndOwnerRowsForRepairAndRetry() = runBlocking {
+        val location = path()
+        val original = fixture().copy(digits = Digits.EN, docReminders = false)
+        val seeded = open(location)
+        seeded.vault().replace(original)
+        val previous = seeded.vault().pendingSync()!!
+        seeded.close()
+        BundledSQLiteDriver().open(location).use { connection ->
+            connection.execSQL("ALTER TABLE vault_meta DROP COLUMN preferences")
+            connection.execSQL("UPDATE room_master_table SET identity_hash = 'bebecf50ab9f7b3c1ae463e6c3f06007' WHERE id = 42")
+            connection.execSQL("UPDATE sync_outbox SET payload = '{broken' WHERE id = 1")
+            connection.execSQL("PRAGMA user_version = 3")
+        }
+        val broken = open(location)
+        assertFails { broken.vault().read() }
+        broken.close()
+        BundledSQLiteDriver().open(location).use { connection ->
+            connection.prepare("PRAGMA user_version").use { query -> query.step(); assertEquals(3L, query.getLong(0)) }
+            val columns = mutableListOf<String>()
+            connection.prepare("PRAGMA table_info(vault_meta)").use { query -> while (query.step()) columns += query.getText(1) }
+            assertFalse("preferences" in columns)
+            connection.prepare("SELECT payload FROM vehicle WHERE id = 'primary'").use { query ->
+                query.step()
+                assertEquals(original.ride, kotlinx.serialization.json.Json.decodeFromString<Ride>(query.getText(0)))
+            }
+            connection.prepare("UPDATE sync_outbox SET payload = ? WHERE id = 1").use { repair ->
+                repair.bindText(1, previous.payload); repair.step()
+            }
+        }
+        val recovered = open(location)
+        assertEquals(original, recovered.vault().read())
+        assertEquals(previous, recovered.vault().pendingSync())
+        recovered.close()
     }
 
     @Test fun coalescedQueueRejectsStaleFailureAndPreservesIdentity() = runBlocking {

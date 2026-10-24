@@ -65,7 +65,7 @@ export const useStore = create<Store>()(
         set((s) => {
           const rules = s.rules.map((r) => {
             const hit = keys.some((k) => itemOf(k)?.ruleName === itemOf(r.item)?.ruleName && itemOf(k)?.ruleName)
-            if (hit) { resets.push(r.id); return { ...r, lastKm: v.odo, lastDate: v.date } }
+            if (hit) { resets.push(r.id); return { ...r, lastKm: v.odo, lastDate: v.date, baseline: 'confirmed' as const } }
             return r
           })
           const prices = { ...s.lastItemPrice }
@@ -96,8 +96,8 @@ export const useStore = create<Store>()(
       completeOnboarding: ({ brandId, modelId, name, odometer, lastServiceKnown }) => {
         const today = todayISO()
         const base = emptyData()
-        // "Last service unknown" starts every reminder from today instead of blocking setup.
-        const rules = seedData(today).rules.map((r) => ({ ...r, lastKm: lastServiceKnown ? Math.max(0, odometer - r.intervalKm * 0.4) : odometer, lastDate: today }))
+        // Setup cannot invent an observed service visit or measured component condition.
+        const rules = seedData(today).rules.map((r) => ({ ...r, lastKm: odometer, lastDate: today, baseline: lastServiceKnown ? 'estimate' as const : 'unknown' as const }))
         set({
           ...base, rules,
           ride: { brandId, modelId, name: name || modelOf(modelId)?.name || '', year: new Date().getFullYear() - 2, odometer, odometerAt: today, startedAt: today },
@@ -110,11 +110,12 @@ export const useStore = create<Store>()(
   ),
 )
 
-export type SheetName = 'quickAdd' | 'fuel' | 'service' | 'odometer' | 'docAdd' | 'docView' | 'paste' | 'rule'
+export type SheetName = 'quickAdd' | 'fuel' | 'service' | 'odometer' | 'docAdd' | 'docView' | 'paste' | 'rule' | 'gaugeDetail' | 'reminders'
 export interface SheetState { name: SheetName; props?: Record<string, unknown> }
 export interface Toast { id: number; text: string; undo?: () => void; tone?: 'ok' | 'warn' }
 
 interface UI {
+  reminderPreview: 'off' | 'enabled' | 'denied' | 'failed'
   previewBrand: string | null
   setPreviewBrand: (id: string | null) => void
   tab: Tab
@@ -129,6 +130,7 @@ interface UI {
 
 let toastId = 0
 export const useUI = create<UI>((set) => ({
+  reminderPreview: 'off',
   previewBrand: null, setPreviewBrand: (previewBrand) => set({ previewBrand }),
   tab: 'home', sheet: null, toast: null,
   setTab: (tab) => set({ tab }),

@@ -17,6 +17,8 @@ export interface Settings {
   brandOverride: string | null
   serviceReminders: boolean
   docReminders: boolean
+  reminderLeadDays?: number
+  reminderMinute?: number
 }
 
 export interface Ride {
@@ -37,6 +39,10 @@ export interface Rule {
   intervalDays: number
   lastKm: number
   lastDate: string
+  baseline?: 'confirmed' | 'estimate' | 'unknown'
+  source?: string
+  reminder?: boolean
+  snoozedUntil?: string
 }
 
 export interface FuelLog {
@@ -86,6 +92,8 @@ export interface VaultDoc {
   holder: string
   expiry: string
   reminder: boolean
+  snoozedUntil?: string
+  warningDays?: number
 }
 
 export interface AppData {

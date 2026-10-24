@@ -1,0 +1,44 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "80AC693E-CFF4-44FB-B97F-3A28EF3257C9.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "unknown-large-detail-tree_0_E0C39B3C-912D-4B0E-A37D-03B8417DD193.txt",
+        "timestamp" : 1792842665.491
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "5F711B77-E54F-4CC1-901B-8899FFD57E70.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "unknown-large-detail_0_AC51F32C-6C29-4242-ACFC-446D222AB360.png",
+        "timestamp" : 1792842665.342
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "76464DF9-453D-446B-AC2E-E2050E4DA200.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "unknown-large-home-tree_0_846E1EE6-A940-4BCC-94B0-A5B7323F6E35.txt",
+        "timestamp" : 1792842663.257
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "0C24D29B-FA9C-4828-B48E-8D8E54B6B0F5.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "unknown-large-home_0_383291C3-7BDA-4BF6-B426-16EA649013B0.png",
+        "timestamp" : 1792842663.159
+      }
+    ],
+    "testIdentifier" : "P01DeliveryTests/testUnknownHistoryDetail()",
+    "testIdentifierURL" : "test://com.apple.xcode/MotoVault/MotoVaultUITests/P01DeliveryTests/testUnknownHistoryDetail"
+  }
+]

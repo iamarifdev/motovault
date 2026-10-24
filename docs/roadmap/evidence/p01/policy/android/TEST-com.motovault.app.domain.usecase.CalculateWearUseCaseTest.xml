@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.domain.usecase.CalculateWearUseCaseTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-24T09:54:21" hostname="MacBookPro" time="0.001">
+  <properties/>
+  <testcase name="testEdgeCase_OdometerRollbackOrTypoDoesNotProduceNegativeWear" classname="com.motovault.app.domain.usecase.CalculateWearUseCaseTest" time="0.0"/>
+  <testcase name="testOverdueComponent_At100PercentDistanceThreshold" classname="com.motovault.app.domain.usecase.CalculateWearUseCaseTest" time="0.0"/>
+  <testcase name="testEdgeCase_TimeExceededWhileDistanceIsMinimal" classname="com.motovault.app.domain.usecase.CalculateWearUseCaseTest" time="0.001"/>
+  <testcase name="testHealthyComponent_UnderThreshold" classname="com.motovault.app.domain.usecase.CalculateWearUseCaseTest" time="0.0"/>
+  <testcase name="testOverdueComponent_Beyond100Percent" classname="com.motovault.app.domain.usecase.CalculateWearUseCaseTest" time="0.0"/>
+  <testcase name="testEdgeCase_ZeroIntervalRulesDoNotDivideByZero" classname="com.motovault.app.domain.usecase.CalculateWearUseCaseTest" time="0.0"/>
+  <testcase name="testServiceSoon_At75PercentThreshold" classname="com.motovault.app.domain.usecase.CalculateWearUseCaseTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

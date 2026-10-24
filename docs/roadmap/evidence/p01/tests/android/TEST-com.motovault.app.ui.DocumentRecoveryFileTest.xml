@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.ui.DocumentRecoveryFileTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:52" hostname="MacBookPro" time="0.016">
+  <properties/>
+  <testcase name="collisionsRetainBothOriginalsAndRestoreNeverOverwrites" classname="com.motovault.app.ui.DocumentRecoveryFileTest" time="0.01"/>
+  <testcase name="symlinksAndUnknownFilesRemainInPlace" classname="com.motovault.app.ui.DocumentRecoveryFileTest" time="0.001"/>
+  <testcase name="danglingRecoveryLinkIsNeverOverwritten" classname="com.motovault.app.ui.DocumentRecoveryFileTest" time="0.002"/>
+  <testcase name="quarantineRetainsBytesTimestampReferencesAndCanRestore" classname="com.motovault.app.ui.DocumentRecoveryFileTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

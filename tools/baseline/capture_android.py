@@ -18,8 +18,14 @@ def adb(*args, check=True):
 
 
 def tree(name):
-    adb('shell','uiautomator','dump','/sdcard/p00-window.xml')
-    content=adb('exec-out','cat','/sdcard/p00-window.xml')
+    remote=f'/sdcard/motovault-capture-{time.monotonic_ns()}.xml'
+    result=adb('shell','uiautomator','dump',remote)
+    if 'dumped to:' not in result:
+        raise RuntimeError(f'Android did not produce a fresh hierarchy: {result}')
+    try:
+        content=adb('exec-out','cat',remote)
+    finally:
+        adb('shell','rm','-f',remote,check=False)
     (OUT/f'{name}.xml').write_text(content)
     return ET.fromstring(content)
 

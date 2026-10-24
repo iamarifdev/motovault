@@ -1,4 +1,4 @@
-import type { AppData, FuelLog, ServiceLog } from '../types'
+import type { AppData, FuelLog, ServiceLog, Rule } from '../types'
 import { addDays } from '../lib/dates'
 
 export const emptyData = (): AppData => ({
@@ -31,13 +31,13 @@ export function seedData(today: string): AppData {
   ]
   return {
     ride: { brandId: 'yamaha', modelId: 'yamaha-r15-v4', name: 'R15 V4', year: 2023, odometer: 12340, odometerAt: d(-11), startedAt: d(-90) },
-    rules: [
+    rules: ([
       { id: 'r-oil', item: 'engine_oil', name: 'ইঞ্জিন অয়েল ও ফিল্টার', intervalKm: 3000, intervalDays: 180, lastKm: 11350, lastDate: d(-45) },
       { id: 'r-chain', item: 'chain_sprocket', name: 'চেইন পরিষ্কার ও লুব্রিকেন্ট', intervalKm: 500, intervalDays: 30, lastKm: 11520, lastDate: d(-41) },
       { id: 'r-air', item: 'air_filter', name: 'এয়ার ফিল্টার', intervalKm: 5000, intervalDays: 180, lastKm: 9900, lastDate: d(-140) },
       { id: 'r-spark', item: 'spark_plug', name: 'স্পার্ক প্লাগ', intervalKm: 8000, intervalDays: 365, lastKm: 8000, lastDate: d(-200) },
       { id: 'r-brakes', item: 'brake_pad', name: 'ব্রেক প্যাড', intervalKm: 10000, intervalDays: 365, lastKm: 7200, lastDate: d(-300) },
-    ],
+    ] satisfies Rule[]).map((r) => ({ ...r, baseline: 'confirmed' as const, source: 'নমুনা সময়সূচি। কোম্পানির নিয়ম নয়।' })),
     logs,
     docs: [
       { id: 'd1', kind: 'registration', number: 'ঢাকা মেট্রো-ল ৬২-৪৫১৮', holder: 'মো. রাফিদ হাসান', expiry: d(400), reminder: true },

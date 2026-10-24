@@ -101,7 +101,7 @@ export function Onboarding() {
                 <Chip active={!knows} onClick={() => setKnows(false)}>শেষ সার্ভিস মনে নেই</Chip>
                 <Chip active={knows} onClick={() => setKnows(true)}>মোটামুটি মনে আছে</Chip>
               </div>
-              <p className="cap">{knows ? 'আগের সার্ভিসের মোটামুটি সময় ধরে রিমাইন্ডার চালু হবে। পরে ঠিক করা যাবে।' : 'আজ থেকে গুনতে শুরু করব। পরে সার্ভিস লিখলে সময় ঠিক হয়ে যাবে।'}</p>
+              <p className="cap">{knows ? 'অনুমান থেকে শতাংশ দেখানো হবে না। সার্ভিসের তথ্য দিয়ে নিশ্চিত করুন।' : 'শেষ সার্ভিস অজানা থাকবে। সার্ভিস লিখলে ব্যবধানের হিসাব শুরু হবে।'}</p>
               <Button full disabled={odo <= 0} onClick={finish}>{odo <= 0 ? 'কিমি লিখুন' : 'গ্যারেজ তৈরি করুন'}</Button>
               <Keypad onKey={e.press} decimal={false} />
             </>

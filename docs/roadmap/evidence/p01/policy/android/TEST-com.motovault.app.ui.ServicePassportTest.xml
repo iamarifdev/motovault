@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.ui.ServicePassportTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-24T09:54:21" hostname="MacBookPro" time="0.031">
+  <properties/>
+  <testcase name="defaultsNeverUseUnconfirmedExtractionOrLicenceIdentity" classname="com.motovault.app.ui.ServicePassportTest" time="0.0"/>
+  <testcase name="identityAndConfirmationAreAlsoCovered" classname="com.motovault.app.ui.ServicePassportTest" time="0.01"/>
+  <testcase name="ownerConfirmationAndValidNumericValuesAreRequired" classname="com.motovault.app.ui.ServicePassportTest" time="0.0"/>
+  <testcase name="chronologicalOrderIsStableAndFuelAndOriginalsAreExcluded" classname="com.motovault.app.ui.ServicePassportTest" time="0.002"/>
+  <testcase name="schemaAndUnknownFieldsCannotSilentlyChangeVerificationCoverage" classname="com.motovault.app.ui.ServicePassportTest" time="0.004"/>
+  <testcase name="shaMatchesPublishedVectorsAcrossBlockBoundaries" classname="com.motovault.app.ui.ServicePassportTest" time="0.0"/>
+  <testcase name="legacyV1PassportsRemainVerifiable" classname="com.motovault.app.ui.ServicePassportTest" time="0.004"/>
+  <testcase name="unicodeQuotesNewlinesAndExactNumericBitsRoundTrip" classname="com.motovault.app.ui.ServicePassportTest" time="0.002"/>
+  <testcase name="verificationRejectsTamperingAndDifferentIndependentDigest" classname="com.motovault.app.ui.ServicePassportTest" time="0.005"/>
+  <testcase name="everyCoveredServiceFieldChangesDigest" classname="com.motovault.app.ui.ServicePassportTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

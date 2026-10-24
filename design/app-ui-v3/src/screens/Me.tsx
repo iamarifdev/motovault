@@ -16,7 +16,7 @@ function WidgetPreview() {
   return (
     <div className="widget" aria-label="হোম স্ক্রিন উইজেটের নমুনা">
       <div className="widget-head"><GaugeIcon size={16} aria-hidden /><b>{ride.name}</b><span>{f.km(ride.odometer)}</span></div>
-      <p className={`widget-line ${top?.status}`}>{top?.rule.name.split(' ও ')[0].split(' পরিষ্কার')[0]} · {top?.status === 'overdue' ? 'এখনই' : top?.status === 'soon' ? 'শিগগির' : 'ঠিক আছে'}</p>
+      <p className={`widget-line ${top?.status}`}>{top?.rule.name.split(' ও ')[0].split(' পরিষ্কার')[0]} · {!top || top.status === 'unknown' ? 'তথ্য নিশ্চিত নয়' : top.status === 'overdue' ? 'এখনই' : top.status === 'soon' ? 'শিগগির' : 'ব্যবধান বাকি'}</p>
       <div className="widget-btns"><span>⛽ তেল</span><span>📏 কিমি</span></div>
     </div>
   )
@@ -81,9 +81,10 @@ export function Me() {
       <section aria-label="রিমাইন্ডার">
         <SectionTitle>রিমাইন্ডার</SectionTitle>
         <div className="card-stack">
-          <Switch checked={s.serviceReminders} onChange={(v) => set('serviceReminders', v)} label="সার্ভিসের সময় হলে জানান" sub="চেইন, অয়েল ও অন্য যন্ত্রাংশ · সকাল ৯টায়" />
-          <Switch checked={s.docReminders} onChange={(v) => set('docReminders', v)} label="কাগজের মেয়াদের আগে জানান" sub="৩০ দিন আগে এবং মেয়াদের দিন" />
+          <Switch checked={s.serviceReminders} onChange={(v) => set('serviceReminders', v)} label="সার্ভিসের সময় হলে জানান" sub={`চেইন, অয়েল ও অন্য যন্ত্রাংশ · ${f.d(String(Math.floor((s.reminderMinute ?? 540) / 60)).padStart(2,'0'))}:${f.d(String((s.reminderMinute ?? 540) % 60).padStart(2,'0'))}`} />
+          <Switch checked={s.docReminders} onChange={(v) => set('docReminders', v)} label="কাগজের মেয়াদের আগে জানান" sub={`${f.n(s.reminderLeadDays ?? 30)} দিন আগে এবং মেয়াদের দিন। ফোনের অনুমতি প্রয়োজন।`} />
         </div>
+        <Button full kind="secondary" onClick={() => open('reminders')}>অনুমতি, সময় ও পরে জানান</Button>
       </section>
 
       <section aria-label="নতুন ধারণা">

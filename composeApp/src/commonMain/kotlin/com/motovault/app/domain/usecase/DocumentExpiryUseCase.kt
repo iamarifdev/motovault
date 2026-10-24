@@ -4,10 +4,10 @@ import com.motovault.app.domain.model.DOCUMENT_RENEWAL_WARNING_DAYS
 import com.motovault.app.domain.model.DocumentExpiryStatus
 
 class DocumentExpiryUseCase {
-    fun evaluate(daysRemaining: Int?): DocumentExpiryStatus = when {
+    fun evaluate(daysRemaining: Int?, warningDays: Int = DOCUMENT_RENEWAL_WARNING_DAYS): DocumentExpiryStatus = when {
         daysRemaining == null -> DocumentExpiryStatus.NO_EXPIRY
         daysRemaining <= 0 -> DocumentExpiryStatus.EXPIRED
-        daysRemaining <= DOCUMENT_RENEWAL_WARNING_DAYS -> DocumentExpiryStatus.EXPIRING_SOON
+        daysRemaining <= warningDays -> DocumentExpiryStatus.EXPIRING_SOON
         else -> DocumentExpiryStatus.VALID
     }
 }

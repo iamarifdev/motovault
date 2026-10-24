@@ -1,0 +1,16 @@
+{
+  "applicationId": "com.motovault.baseline.p00",
+  "platform": "iOS 27 ARM64 simulator",
+  "syntheticOnly": true,
+  "fixture": "docs/roadmap/fixtures/p01/native/ios-delivery.json",
+  "fixtureSha256": "0df142902d508f784eec38bfb40958985e733ade59541150fcb8b998f33508d5",
+  "sourceRun": "p01-background-r5.xcresult",
+  "wholeRunResult": "Failed",
+  "scope": "Actual native permission grant and OS background delivery observed. The grouped notification tap check did not foreground the app; exact native tap destinations remain unverified.",
+  "observedNotifications": [
+    "Chain",
+    "P01 synthetic expiry today",
+    "Driving licence"
+  ],
+  "physicalDeviceVerification": "pending by owner request"
+}

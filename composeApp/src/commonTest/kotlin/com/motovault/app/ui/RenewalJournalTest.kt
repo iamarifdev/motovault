@@ -15,7 +15,7 @@ class RenewalJournalTest {
         // OS accepts and delivers; process dies without any post-acceptance journal write.
         val recovered = restart(durableBeforeOsAdd).recover(now, emptySet(), emptySet())
         assertTrue(due.key in recovered.consumed)
-        val document = VaultDocument("Fixture", "SAMPLE", "Synthetic", due.expiry, id = due.documentId)
+        val document = VaultDocument("Fixture", "SAMPLE", "Synthetic", due.expiry, id = due.documentId, reminder = true)
         assertTrue(renewalPlan(listOf(document), now, recovered.requests, recovered.consumed).isEmpty())
     }
 
@@ -25,7 +25,7 @@ class RenewalJournalTest {
 
     @Test fun explicitRejectionRemovesReservationAndRelaunchRetries() {
         val recovered = restart(RenewalJournal().reserve(due).rejected(due.key)).recover(now, emptySet(), emptySet())
-        val document = VaultDocument("Fixture", "SAMPLE", "Synthetic", due.expiry, id = due.documentId)
+        val document = VaultDocument("Fixture", "SAMPLE", "Synthetic", due.expiry, id = due.documentId, reminder = true)
         assertEquals(listOf(due.documentId), renewalPlan(listOf(document), now, recovered.requests, recovered.consumed).map { it.documentId })
     }
 

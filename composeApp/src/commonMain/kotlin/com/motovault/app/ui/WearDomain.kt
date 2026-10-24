@@ -1,12 +1,14 @@
 package com.motovault.app.ui
 
 import com.motovault.app.domain.model.ComponentRule
+import com.motovault.app.domain.model.BaselineCertainty
 import kotlinx.datetime.LocalDate
 
 enum class WearStatus {
     OK,
     SOON,
-    OVERDUE
+    OVERDUE,
+    UNKNOWN
 }
 
 data class Wear(
@@ -32,6 +34,12 @@ object WearCalculator {
 
         val life = ((1.0 - used) * 100.0).toInt().coerceIn(0, 100)
         val status = when {
+            rule.baselineCertainty != BaselineCertainty.CONFIRMED ||
+                !rule.intervalKm.isFinite() || rule.intervalKm < 0 || rule.intervalDays < 0 ||
+                !rule.lastServicedOdometerKm.isFinite() || !odometer.isFinite() ||
+                rule.lastServicedOdometerKm < 0 || rule.lastServicedOdometerKm > odometer ||
+                rule.lastServicedEpochDays < 0 || rule.lastServicedEpochDays > todayEpochDays ||
+                (rule.intervalKm <= 0 && rule.intervalDays <= 0) -> WearStatus.UNKNOWN
             used >= 1.0 -> WearStatus.OVERDUE
             used >= 0.75 -> WearStatus.SOON
             else -> WearStatus.OK
@@ -50,7 +58,10 @@ object WearCalculator {
     }
 
     fun byUrgency(rules: List<ComponentRule>, odometer: Double, todayEpochDays: Long): List<Wear> {
-        return rules.map { wearOf(it, odometer, todayEpochDays) }.sortedByDescending { it.used }
+        return rules.map { wearOf(it, odometer, todayEpochDays) }.sortedWith(
+            compareByDescending<Wear> { when (it.status) { WearStatus.OVERDUE -> 3; WearStatus.UNKNOWN -> 2; WearStatus.SOON -> 1; WearStatus.OK -> 0 } }
+                .thenByDescending { it.used }
+        )
     }
 
     /**
@@ -58,6 +69,7 @@ object WearCalculator {
      * The old app printed "0 km / 30 দিন বাকি" under "সময় পেরিয়েছে".
      */
     fun describeWear(w: Wear, f: Fmt): String {
+        if (w.status == WearStatus.UNKNOWN) return "আগের সার্ভিস নিশ্চিত নয়"
         if (w.status == WearStatus.OVERDUE) {
             val overdueKm = if (w.remainingKm != null && w.remainingKm < 0) -w.remainingKm else 0.0
             val overdueDays = if (w.remainingDays != null && w.remainingDays < 0) -w.remainingDays else 0
@@ -76,7 +88,8 @@ object WearCalculator {
     fun statusLabel(s: WearStatus): String = when (s) {
         WearStatus.OVERDUE -> "সার্ভিস দরকার"
         WearStatus.SOON -> "শিগগির"
-        WearStatus.OK -> "ভালো আছে"
+        WearStatus.OK -> "সময় বাকি"
+        WearStatus.UNKNOWN -> "তথ্য নিশ্চিত করুন"
     }
 
     fun economySeries(logs: List<RideLog>): List<Double> {
@@ -130,7 +143,7 @@ object WearCalculator {
             }.getOrDefault(1)
             perDay = maxOf(5.0, (last.odometer - first.odometer) / daysBetween)
         }
-        val lastDate = runCatching { LocalDate.parse(last?.date ?: "") }.getOrNull() ?: today
+        val lastDate = runCatching { LocalDate.parse(ride.odometerConfirmedDate ?: "") }.getOrNull() ?: return ride.odometer
         val since = (today.toEpochDays() - lastDate.toEpochDays()).coerceAtLeast(0)
         val raw = ride.odometer + perDay * since
         return (kotlin.math.round(raw / 5.0) * 5.0).coerceAtLeast(ride.odometer)

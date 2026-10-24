@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.domain.preset.KtmDuke125PresetTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-24T09:54:21" hostname="MacBookPro" time="0.003">
+  <properties/>
+  <testcase name="testDefaultComponentRules_ContainsAll7FactoryMaintenanceItems" classname="com.motovault.app.domain.preset.KtmDuke125PresetTest" time="0.001"/>
+  <testcase name="testPresetCreation_IndianBS4_Has10Point2LitersTank" classname="com.motovault.app.domain.preset.KtmDuke125PresetTest" time="0.002"/>
+  <testcase name="testPresetCreation_IndianBS6_Has13Point5LitersTank" classname="com.motovault.app.domain.preset.KtmDuke125PresetTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,41 @@
+{
+  "sourceRun": "p01-background-r5.xcresult",
+  "attachments": [
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+      "deviceName": "MotoVault-P00-Baseline",
+      "exportedFileName": "A0070A4C-E7B2-4FA5-BAD2-7CB94D57CEA8.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "background-notification_0_58F69D3C-F41E-4D56-A5E3-A38D376ADC99.png",
+      "timestamp": 1792860066.156
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+      "deviceName": "MotoVault-P00-Baseline",
+      "exportedFileName": "73F20A0A-AFBD-4B3D-8F47-B0DC0C19D776.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "background-notification-tree_0_8F7EF147-1CFA-4446-BFAB-91BAA030E13B.txt",
+      "timestamp": 1792860065.942
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+      "deviceName": "MotoVault-P00-Baseline",
+      "exportedFileName": "F7C7A443-07CF-4F75-9596-E0CFB8EE38C5.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "permission-enabled-tree_0_F3C8A302-FA7D-4D76-993F-6BA92839E958.txt",
+      "timestamp": 1792859980.289
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+      "deviceName": "MotoVault-P00-Baseline",
+      "exportedFileName": "4490305A-6515-4DDB-8EE6-24D282DC08C2.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "permission-enabled_0_D451CC80-4E68-4B28-821F-0228A405A1E3.png",
+      "timestamp": 1792859980.111
+    }
+  ]
+}

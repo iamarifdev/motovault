@@ -22,6 +22,17 @@ internal class VaultSession(
 ) {
     private val current = MutableStateFlow(VaultSnapshot())
     val snapshots = current.asStateFlow()
+    private var undoState: VaultState? = null
+
+    /** The inverse belongs to one committed revision; later writes invalidate it. */
+    fun undo(expectedRevision: Long, completed: (Boolean) -> Unit) {
+        val inverse = undoState
+        if (inverse == null || current.value.revision != expectedRevision) {
+            completed(false)
+            return
+        }
+        commit(inverse, expectedRevision, completed)
+    }
 
     init {
         scope.launch(start = CoroutineStart.UNDISPATCHED) {
@@ -58,7 +69,9 @@ internal class VaultSession(
                 completed(false)
                 return@launch
             }
-            val removed = before.state.documents.flatMap { it.assetIds() }.toSet() - next.documents.flatMap { it.assetIds() }.toSet()
+            val retained = (before.state.documents + next.documents).flatMap { it.assetIds() }.toSet()
+            val removed = undoState?.documents.orEmpty().flatMap { it.assetIds() }.toSet() - retained
+            undoState = before.state
             current.value = before.copy(state = next, saving = false, error = null, revision = before.revision + 1)
             runCatching { cleanup(removed) }
             completed(true)

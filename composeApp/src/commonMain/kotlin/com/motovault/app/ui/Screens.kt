@@ -56,13 +56,13 @@ fun GarageScreen(
     val haptic = currentHaptic
     val today = today()
     val ride = state.ride ?: return
-    val wears = remember(state.rules, ride.odometer) {
-        WearCalculator.byUrgency(state.rules, ride.odometer, today.toEpochDays().toLong())
+    val wears = remember(state.rules, state.logs, ride.odometer, today) {
+        WearCalculator.byUrgency(state.confirmedRules(), ride.odometer, today.toEpochDays().toLong())
     }
     val topWear = wears.firstOrNull()
     val economy = remember(state.logs) { WearCalculator.economyOf(state.logs) }
     val series = remember(state.logs) { WearCalculator.economySeries(state.logs) }
-    val estimate = remember(state.logs, ride.odometer) { WearCalculator.estimateOdometer(ride, state.logs, today) }
+    val estimate = remember(state.logs, ride, today) { WearCalculator.estimateOdometer(ride, state.logs, today) }
 
     val lastFuel = state.logs.filter { it.isFuel }.maxByOrNull { it.odometer }
     val sinceFuelDays = lastFuel?.let {
@@ -70,10 +70,10 @@ fun GarageScreen(
     }
     var nudgeHidden by remember { mutableStateOf(false) }
 
-    val renewals = remember(state.documents) {
+    val renewals = remember(state.documents, state.reminderPolicy, today) {
         state.documents.mapNotNull { doc ->
             val days = doc.daysRemaining
-            if (days != null && days <= 30) doc to days else null
+            if (days != null && days <= (doc.reminderWarningDays ?: state.reminderPolicy.warningDays)) doc to days else null
         }.sortedBy { it.second }
     }
 
@@ -134,12 +134,14 @@ fun GarageScreen(
             val (statusBg, statusBorder, statusColor, statusLabel) = when (topWear.status) {
                 WearStatus.OVERDUE -> Quad(palette.err.copy(alpha = 0.09f), palette.err.copy(alpha = 0.4f), palette.err, "এখনই দরকার")
                 WearStatus.SOON -> Quad(palette.warn.copy(alpha = 0.09f), palette.warn.copy(alpha = 0.4f), palette.warn, "শিগগির দরকার")
-                WearStatus.OK -> Quad(palette.ok.copy(alpha = 0.08f), palette.ok.copy(alpha = 0.35f), palette.ok, "সব ঠিক আছে · পরের কাজ")
+                WearStatus.OK -> Quad(palette.ok.copy(alpha = 0.08f), palette.ok.copy(alpha = 0.35f), palette.ok, "ব্যবধান বাকি · পরের কাজ")
+                WearStatus.UNKNOWN -> Quad(palette.surface, palette.line, palette.text2, "সার্ভিসের তথ্য নিশ্চিত করুন")
             }
             val statusIcon = when (topWear.status) {
                 WearStatus.OVERDUE -> "fi_alert-triangle.svg"
                 WearStatus.SOON -> "fi_clock.svg"
                 WearStatus.OK -> "fi_check-circle.svg"
+                WearStatus.UNKNOWN -> "fi_help-circle.svg"
             }
             val topItem = catalogItemOf(topWear.rule.id) ?: catalogItemOf(topWear.rule.name.lowercase())
             val partTitle = topWear.rule.name.substringBefore(" ও ").substringBefore(" পরিষ্কার")
@@ -175,7 +177,7 @@ fun GarageScreen(
                 }
 
                 // Meter progress bar
-                Box(
+                if (topWear.status != WearStatus.UNKNOWN) Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(8.dp)
@@ -194,7 +196,7 @@ fun GarageScreen(
                 val lastDateParsed = runCatching { LocalDate.fromEpochDays(topWear.rule.lastServicedEpochDays.toInt()) }.getOrNull()
                 val lastDateStr = if (lastDateParsed != null) f.date(lastDateParsed) else ""
                 Text(
-                    text = "শেষ সার্ভিস: $lastDateStr · ${f.km(topWear.rule.lastServicedOdometerKm)}",
+                    text = if (topWear.status == WearStatus.UNKNOWN) "অজানা তথ্য থেকে শতাংশ দেখানো হয় না" else "শেষ নিশ্চিত সার্ভিস: $lastDateStr · ${f.km(topWear.rule.lastServicedOdometerKm)}",
                     fontSize = 13.sp,
                     color = TextSecondary
                 )
@@ -326,6 +328,7 @@ fun GarageScreen(
                     color = TextSecondary,
                     maxLines = 1
                 )
+                Text(text = "শেষ নিশ্চিত: ${ride.odometerConfirmedDate ?: "তারিখ জানা নেই"}", fontSize = 12.sp, color = TextSecondary)
             }
 
             // Economy card
@@ -369,7 +372,7 @@ fun GarageScreen(
         }
 
         // Gauges Section
-        SectionTitle("যন্ত্রাংশের অবস্থা")
+        SectionTitle("সার্ভিসের ব্যবধান বাকি")
         Row(
             modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -380,7 +383,7 @@ fun GarageScreen(
                     index = i,
                     onClick = {
                         haptic.perform(HapticKind.TICK)
-                        onOpenServiceForItem(wear.rule.id)
+                        onOpenSheet("gaugeDetail", wear.rule.id)
                     }
                 )
             }
@@ -479,14 +482,15 @@ fun VaultScreen(
     state: VaultState,
     onOpenAddDoc: () -> Unit,
     onOpenDocView: (VaultDocument) -> Unit,
-    onToggleDocReminders: (Boolean) -> Unit
+    onToggleDocReminders: (Boolean) -> Unit,
+    onReminderSettings: () -> Unit = {}
 ) {
     val f = currentFmt
     val haptic = currentHaptic
     val sortedDocs = remember(state.documents) {
         state.documents.sortedBy { it.daysRemaining ?: Int.MAX_VALUE }
     }
-    val nextRenewal = sortedDocs.firstOrNull()
+    val nextRenewal = sortedDocs.firstOrNull { it.daysRemaining != null }
 
     Column(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp),
@@ -542,7 +546,7 @@ fun VaultScreen(
                         fontSize = 13.sp,
                         color = TextSecondary
                     )
-                    ExpiryChip(doc = nextRenewal)
+                    ExpiryChip(doc = nextRenewal, warningDays = nextRenewal.reminderWarningDays ?: state.reminderPolicy.warningDays)
                 }
             }
         } else {
@@ -558,7 +562,7 @@ fun VaultScreen(
             ) {
                 SkySvgIcon(path = "feather_icon/fi_file-text.svg", description = null, modifier = Modifier.size(36.dp), tint = TextSecondary)
                 Text(
-                    text = "প্রথম কাগজটি স্ক্যান করুন। মেয়াদ ফুরানোর আগেই জানানো হবে।",
+                    text = if (sortedDocs.isEmpty()) "প্রথম কাগজটি যোগ করুন। অনুমতি দিলে মেয়াদের আগে জানানো হবে।" else "এই কাগজগুলোর মেয়াদ শেষের তারিখ নেই।",
                     fontSize = 15.sp,
                     color = TextSecondary,
                     textAlign = TextAlign.Center
@@ -591,7 +595,7 @@ fun VaultScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(text = d.title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                            ExpiryChip(doc = d)
+                            ExpiryChip(doc = d, warningDays = d.reminderWarningDays ?: state.reminderPolicy.warningDays)
                         }
                         DocArt(doc = d)
                     }
@@ -601,10 +605,12 @@ fun VaultScreen(
 
         VaultSwitch(
             title = "মেয়াদের আগে জানান",
-            subtitle = "৩০ দিন আগে এবং মেয়াদের দিন, সকাল ৯টায়",
+            subtitle = "${f.n(state.reminderPolicy.warningDays.toLong())} দিন আগে এবং মেয়াদের দিন। ফোনের অনুমতি প্রয়োজন।",
             checked = state.docReminders,
             onCheckedChange = onToggleDocReminders
         )
+        ReminderAccessPanel(rememberReminderAccess(), state)
+        VaultButton("অনুমতি, সময় ও পরে জানান", onClick = onReminderSettings, full = true, kind = ButtonKind.SECONDARY)
 
         if (sortedDocs.isNotEmpty()) {
             VaultButton(
@@ -1010,6 +1016,7 @@ fun MeScreen(
 
         // Reminders section
         SectionTitle("রিমাইন্ডার")
+        ReminderAccessPanel(rememberReminderAccess(), state)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -1019,18 +1026,19 @@ fun MeScreen(
         ) {
             VaultSwitch(
                 title = "সার্ভিসের সময় হলে জানান",
-                subtitle = "চেইন, অয়েল ও অন্য যন্ত্রাংশ · সকাল ৯টায়",
+                subtitle = "চেইন, অয়েল ও অন্য যন্ত্রাংশ · ${f.d((state.reminderPolicy.minuteOfDay / 60).toString().padStart(2, '0'))}:${f.d((state.reminderPolicy.minuteOfDay % 60).toString().padStart(2, '0'))}",
                 checked = state.serviceReminders,
                 onCheckedChange = { onUpdateState(state.copy(serviceReminders = it)) }
             )
             HorizontalDivider(color = BorderColor, thickness = 0.5.dp)
             VaultSwitch(
                 title = "কাগজের মেয়াদের আগে জানান",
-                subtitle = "৩০ দিন আগে এবং মেয়াদের দিন",
+                subtitle = "${f.n(state.reminderPolicy.warningDays.toLong())} দিন আগে এবং মেয়াদের দিন। ফোনের অনুমতি প্রয়োজন।",
                 checked = state.docReminders,
                 onCheckedChange = { onUpdateState(state.copy(docReminders = it)) }
             )
         }
+        VaultButton("অনুমতি, সময় ও পরে জানান", kind = ButtonKind.SECONDARY, full = true, onClick = { onOpenSheet("reminders", null) })
 
         // New concepts (demo)
         SectionTitle("নতুন ধারণা (ডেমো)")
@@ -1404,8 +1412,8 @@ fun OnboardingScreen(
                     }
 
                     Text(
-                        text = if (knowsLastService) "আগের সার্ভিসের মোটামুটি সময় ধরে রিমাইন্ডার চালু হবে। পরে ঠিক করা যাবে।"
-                               else "আজ থেকে গুনতে শুরু করব। পরে সার্ভিস লিখলে সময় ঠিক হয়ে যাবে।",
+                        text = if (knowsLastService) "অনুমান থেকে শতাংশ দেখানো হবে না। সার্ভিসের তথ্য দিয়ে নিশ্চিত করুন।"
+                               else "শেষ সার্ভিস অজানা থাকবে। সার্ভিস লিখলে ব্যবধানের হিসাব শুরু হবে।",
                         fontSize = 13.sp,
                         color = TextSecondary,
                         lineHeight = 18.sp

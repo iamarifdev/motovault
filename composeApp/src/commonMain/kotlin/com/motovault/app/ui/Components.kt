@@ -8,7 +8,11 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,21 +21,26 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import kotlinx.datetime.LocalDate
@@ -41,6 +50,17 @@ import androidx.compose.ui.unit.sp
 import dev.sky.design.SkySvgIcon
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+private val VaultPosition = SemanticsPropertyKey<Rect>("VaultPosition")
+
+/** Keep the native accessibility bridge informed when a button moves inside a scroll container. */
+private fun Modifier.accessiblePosition(): Modifier = composed {
+    var position by remember { mutableStateOf(Rect.Zero) }
+    onGloballyPositioned { coordinates ->
+        val next = coordinates.boundsInWindow()
+        if (next != position) position = next
+    }.semantics { this[VaultPosition] = position }
+}
 
 enum class ButtonKind {
     PRIMARY,
@@ -73,7 +93,8 @@ fun VaultButton(
 ) {
     val haptic = currentHaptic
     val reducedMotion = isReducedMotion
-    var isPressed by remember { mutableStateOf(false) }
+    val interaction = remember { MutableInteractionSource() }
+    val isPressed by interaction.collectIsPressedAsState()
     val scale by animateFloatAsState(
         targetValue = if (isPressed && enabled) 0.97f else 1f,
         animationSpec = VaultMotion.pressSpring(reducedMotion)
@@ -113,26 +134,17 @@ fun VaultButton(
     Box(
         modifier = modifier
             .then(widthModifier)
+            .accessiblePosition()
             .scale(scale)
             .heightIn(min = minHeight)
             .clip(RoundedCornerShape(corner))
             .background(bgColor)
             .then(borderModifier)
-            .pointerInput(enabled) {
-                if (!enabled) return@pointerInput
-                detectTapGestures(
-                    onPress = {
-                        isPressed = true
-                        tryAwaitRelease()
-                        isPressed = false
-                    },
-                    onTap = {
-                        haptic.perform(HapticKind.TICK)
-                        onClick()
-                    }
-                )
+            .clickable(enabled = enabled, role = Role.Button, interactionSource = interaction, indication = null) {
+                haptic.perform(HapticKind.TICK)
+                onClick()
             }
-            .semantics {
+            .semantics(mergeDescendants = true) {
                 this.role = Role.Button
                 contentDescription?.let { this.contentDescription = it }
             }
@@ -172,7 +184,8 @@ fun VaultIconButton(
 ) {
     val haptic = currentHaptic
     val reducedMotion = isReducedMotion
-    var isPressed by remember { mutableStateOf(false) }
+    val interaction = remember { MutableInteractionSource() }
+    val isPressed by interaction.collectIsPressedAsState()
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.92f else 1f,
         animationSpec = VaultMotion.pressSpring(reducedMotion)
@@ -187,18 +200,9 @@ fun VaultIconButton(
             .size(44.dp)
             .clip(CircleShape)
             .background(bgColor)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = {
-                        isPressed = true
-                        tryAwaitRelease()
-                        isPressed = false
-                    },
-                    onTap = {
-                        haptic.perform(HapticKind.TICK)
-                        onClick()
-                    }
-                )
+            .clickable(role = Role.Button, interactionSource = interaction, indication = null) {
+                haptic.perform(HapticKind.TICK)
+                onClick()
             }
             .semantics {
                 role = Role.Button
@@ -226,7 +230,8 @@ fun VaultChip(
 ) {
     val haptic = currentHaptic
     val reducedMotion = isReducedMotion
-    var isPressed by remember { mutableStateOf(false) }
+    val interaction = remember { MutableInteractionSource() }
+    val isPressed by interaction.collectIsPressedAsState()
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.95f else 1f,
         animationSpec = VaultMotion.pressSpring(reducedMotion)
@@ -243,20 +248,11 @@ fun VaultChip(
             .clip(RoundedCornerShape(999.dp))
             .background(bgColor)
             .border(1.5.dp, borderColor, RoundedCornerShape(999.dp))
-            .pointerInput(active) {
-                detectTapGestures(
-                    onPress = {
-                        isPressed = true
-                        tryAwaitRelease()
-                        isPressed = false
-                    },
-                    onTap = {
-                        haptic.perform(HapticKind.TICK)
-                        onClick()
-                    }
-                )
+            .clickable(role = Role.Button, interactionSource = interaction, indication = null) {
+                haptic.perform(HapticKind.TICK)
+                onClick()
             }
-            .semantics { role = Role.Checkbox }
+            .semantics { selected = active }
             .padding(horizontal = 14.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -301,6 +297,7 @@ fun <T> VaultSegmented(
     val haptic = currentHaptic
     Row(
         modifier = modifier
+            .selectableGroup()
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))
             .background(SurfaceColor2)
@@ -317,7 +314,7 @@ fun <T> VaultSegmented(
                     .clip(RoundedCornerShape(10.dp))
                     .background(if (isSelected) SurfaceColor else Color.Transparent)
                     .then(if (isSelected) Modifier.border(0.5.dp, BorderColor, RoundedCornerShape(10.dp)) else Modifier)
-                    .clickable {
+                    .selectable(selected = isSelected, role = Role.RadioButton) {
                         if (!isSelected) {
                             haptic.perform(HapticKind.TICK)
                             onSelect(value)
@@ -355,9 +352,9 @@ fun VaultSwitch(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable {
+            .toggleable(value = checked, role = Role.Switch) {
                 haptic.perform(HapticKind.TICK)
-                onCheckedChange(!checked)
+                onCheckedChange(it)
             }
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -457,23 +454,25 @@ fun Gauge(
         WearStatus.OK -> palette.ok
         WearStatus.SOON -> palette.warn
         WearStatus.OVERDUE -> palette.err
+        WearStatus.UNKNOWN -> TextSecondary
     }
 
     val iconName = when (wear.status) {
         WearStatus.OK -> "fi_check-circle.svg"
         WearStatus.SOON -> "fi_clock.svg"
         WearStatus.OVERDUE -> "fi_alert-triangle.svg"
+        WearStatus.UNKNOWN -> "fi_help-circle.svg"
     }
 
     val text = if (wear.status == WearStatus.OVERDUE) WearCalculator.describeWear(wear, f)
                else WearCalculator.statusLabel(wear.status)
     val partName = wear.rule.name.substringBefore(" ও ").substringBefore(" পরিষ্কার")
 
-    val targetSweep = (wear.life / 100f).coerceIn(0.02f, 1f)
+    val targetSweep = if (wear.status == WearStatus.UNKNOWN) 0f else (wear.life / 100f).coerceIn(0.02f, 1f)
     val animSweep = remember { Animatable(if (reducedMotion) targetSweep else 0f) }
 
-    LaunchedEffect(wear.life, reducedMotion) {
-        if (reducedMotion) {
+    LaunchedEffect(wear.life, wear.status, reducedMotion) {
+        if (reducedMotion || wear.status == WearStatus.UNKNOWN) {
             animSweep.snapTo(targetSweep)
         } else {
             delay((index * 70).toLong())
@@ -484,6 +483,10 @@ fun Gauge(
     Column(
         modifier = modifier
             .width(124.dp)
+            .semantics(mergeDescendants = true) {
+                role = Role.Button
+                contentDescription = "$partName, " + if (wear.status == WearStatus.UNKNOWN) "আগের সার্ভিস নিশ্চিত নয়" else "সার্ভিসের ব্যবধান ${f.n(wear.life.toLong())} শতাংশ বাকি, $text"
+            }
             .clip(RoundedCornerShape(16.dp))
             .background(if (wear.status == WearStatus.OVERDUE) palette.err.copy(alpha = 0.07f) else SurfaceColor)
             .border(
@@ -526,7 +529,8 @@ fun Gauge(
                 )
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            if (wear.status == WearStatus.UNKNOWN) Text("?", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+            else Row(verticalAlignment = Alignment.CenterVertically) {
                 CountUp(
                     value = wear.life.toDouble(),
                     format = { n -> f.d(kotlin.math.round(n).toInt().toString()) },
@@ -548,7 +552,7 @@ fun Gauge(
             fontWeight = FontWeight.SemiBold,
             color = TextPrimary,
             textAlign = TextAlign.Center,
-            maxLines = 1
+            maxLines = Int.MAX_VALUE
         )
 
         Row(
@@ -567,7 +571,7 @@ fun Gauge(
                 fontWeight = FontWeight.SemiBold,
                 color = arcColor,
                 textAlign = TextAlign.Center,
-                maxLines = 1
+                maxLines = Int.MAX_VALUE
             )
         }
     }
@@ -615,15 +619,17 @@ fun Spark(
 @Composable
 fun ExpiryChip(
     doc: VaultDocument,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    warningDays: Int = doc.reminderWarningDays ?: 30
 ) {
     val f = currentFmt
     val palette = LocalVaultPalette.current
-    val days = doc.daysRemaining ?: 0
+    val days = doc.daysRemaining
 
     val (icon, text, color) = when {
+        days == null -> Triple("fi_file-text.svg", if (doc.expiry.isBlank()) "মেয়াদ নেই" else "তারিখ যাচাই করুন", palette.text2)
         days < 0 -> Triple("fi_alert-triangle.svg", "${f.days(-days)} আগে শেষ", palette.err)
-        days <= 30 -> Triple("fi_clock.svg", "${f.days(days)} বাকি", palette.warn)
+        days <= warningDays -> Triple("fi_clock.svg", "${f.days(days)} বাকি", palette.warn)
         else -> Triple("fi_check-circle.svg", "মেয়াদ আছে", palette.ok)
     }
 
@@ -762,30 +768,23 @@ fun VaultKeypad(
                     if (k.isEmpty()) {
                         Spacer(Modifier.weight(1f).height(52.dp))
                     } else {
-                        var isPressed by remember { mutableStateOf(false) }
+                        val interaction = remember(k) { MutableInteractionSource() }
+                        val isPressed by interaction.collectIsPressedAsState()
                         Box(
                             modifier = Modifier
                                 .weight(1f)
                                 .height(52.dp)
                                 .clip(RoundedCornerShape(12.dp))
                                 .background(if (isPressed) KeyDownColor else KeyColor)
-                                .pointerInput(k) {
-                                    detectTapGestures(
-                                        onPress = {
-                                            isPressed = true
-                                            haptic.perform(HapticKind.TICK)
-                                            tryAwaitRelease()
-                                            isPressed = false
-                                        },
-                                        onTap = { onKey(k) }
-                                    )
+                                .clickable(role = Role.Button, interactionSource = interaction, indication = null) {
+                                    haptic.perform(HapticKind.TICK)
+                                    onKey(k)
                                 }
                                 .semantics {
                                     role = Role.Button
-                                    contentDescription = when (k) {
-                                        "back" -> "মুছুন"
-                                        "." -> "দশমিক"
-                                        else -> k
+                                    when (k) {
+                                        "back" -> contentDescription = "মুছুন"
+                                        "." -> contentDescription = "দশমিক"
                                     }
                                 },
                             contentAlignment = Alignment.Center
@@ -793,7 +792,7 @@ fun VaultKeypad(
                             if (k == "back") {
                                 SkySvgIcon(
                                     path = "feather_icon/fi_delete.svg",
-                                    description = "মুছুন",
+                                    description = null,
                                     modifier = Modifier.size(22.dp),
                                     tint = TextSecondary
                                 )

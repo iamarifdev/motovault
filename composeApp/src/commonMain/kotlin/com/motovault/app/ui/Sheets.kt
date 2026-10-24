@@ -374,7 +374,7 @@ fun FuelSheet(
                         val updatedPlaces = if (place.isNotBlank()) listOf(place.trim()) + state.places.filterNot { it == place.trim() } else state.places
                         val updatedPrices = state.lastPrices + (fuelType to price)
                         val next = state.copy(
-                            ride = ride.copy(odometer = maxOf(ride.odometer, odoVal)),
+                            ride = ride.confirmedMileage(odoVal, date),
                             logs = listOf(newLog) + state.logs,
                             places = updatedPlaces.take(6),
                             lastPrices = updatedPrices
@@ -383,7 +383,6 @@ fun FuelSheet(
                         onSave(next, toastMsg) {
                             // Undo action: restore previous state
                         }
-                        onDismiss()
                     }
                 },
                 full = true,
@@ -653,6 +652,9 @@ fun ServiceSheet(
     val today = today()
     val estimate = remember(ride, state.logs) { WearCalculator.estimateOdometer(ride, state.logs, today) }
     val lastService = remember { state.logs.firstOrNull { it.kind == "service" && !it.isFuel } }
+    val selectedRule = state.rules.firstOrNull { it.id == initialItemKey }
+    val initialCatalogueKey = selectedRule?.let { BangladeshServiceCatalogue.itemForScheduleName(it.name).id } ?: initialItemKey
+    var saveIssue by remember { mutableStateOf<String?>(null) }
 
     val rows = remember {
         mutableStateListOf<ServiceRowState>().apply {
@@ -660,8 +662,8 @@ fun ServiceSheet(
                 initialRows.forEachIndexed { i, p ->
                     add(ServiceRowState("$i-${p.item}", p.item, catalogItemOf(p.item)?.bn ?: p.item, p.qty))
                 }
-            } else if (initialItemKey != null) {
-                add(ServiceRowState("0-$initialItemKey", initialItemKey, catalogItemOf(initialItemKey)?.bn ?: initialItemKey, 1.0))
+            } else if (initialCatalogueKey != null) {
+                add(ServiceRowState("0-$initialCatalogueKey", initialCatalogueKey, catalogItemOf(initialCatalogueKey)?.bn ?: initialCatalogueKey, 1.0))
             }
         }
     }
@@ -771,15 +773,16 @@ fun ServiceSheet(
                             if (p != null) updatedPrices[r.itemKey] = p
                         }
                         val updatedWorkshops = if (workshop.isNotBlank()) listOf(workshop.trim()) + state.workshops.filterNot { it == workshop.trim() } else state.workshops
-                        val next = state.copy(
-                            ride = ride.copy(odometer = maxOf(ride.odometer, odoVal)),
-                            logs = listOf(newLog) + state.logs,
+                        val recorded = runCatching { state.saveQuickService(newLog, selectedRule?.id) }.getOrElse {
+                            saveIssue = it.message ?: "সার্ভিসের তথ্য ঠিক করুন।"
+                            return@VaultButton
+                        }
+                        val next = recorded.copy(
                             lastItemPrices = updatedPrices,
                             workshops = updatedWorkshops.take(6)
                         )
                         val toastMsg = "সার্ভিস যোগ হয়েছে · ${f.money(total)}"
                         onSave(next, toastMsg) {}
-                        onDismiss()
                     }
                 },
                 full = true,
@@ -805,6 +808,9 @@ fun ServiceSheet(
         }
     ) {
         // Top action row
+        selectedRule?.let { Text("সময়সূচি: ${it.name}", fontSize = 14.sp, color = TextPrimary) }
+        saveIssue?.let { Text(it, color = ErrorColor, fontSize = 14.sp) }
+        Text("মিল থাকা সময়সূচির শেষ সার্ভিস এই কিমি ও তারিখে আপডেট হবে।", fontSize = 13.sp, color = TextSecondary)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -1192,10 +1198,9 @@ fun OdometerSheet(
                     if (badError != null) {
                         haptic.perform(HapticKind.ERROR)
                     } else {
-                        val next = state.copy(ride = ride.copy(odometer = odoVal))
+                        val next = state.copy(ride = ride.copy(odometer = odoVal, odometerConfirmedDate = today.toString()))
                         val toastMsg = "ওডোমিটার ${f.km(odoVal)} করা হয়েছে"
                         onSave(next, toastMsg) {}
-                        onDismiss()
                     }
                 },
                 full = true,
@@ -1586,9 +1591,8 @@ fun DocAddSheet(
                                 reminder = true
                             )
                             val next = state.copy(documents = listOf(newDoc) + state.documents.filterNot { it.kind == selectedKind })
-                            val toastMsg = "${docNameBn(selectedKind)} সেভ হয়েছে · নোটিফিকেশন চালু"
+                            val toastMsg = "${docNameBn(selectedKind)} সেভ হয়েছে · ফোনের অনুমতি থাকলে জানানো হবে"
                             onSave(next, toastMsg) {}
-                            onDismiss()
                         }
                     )
                     VaultButton(
@@ -1607,7 +1611,6 @@ fun DocAddSheet(
                             val next = state.copy(documents = listOf(newDoc) + state.documents.filterNot { it.kind == selectedKind })
                             val toastMsg = "${docNameBn(selectedKind)} সেভ হয়েছে"
                             onSave(next, toastMsg) {}
-                            onDismiss()
                         }
                     )
                 }
@@ -1620,7 +1623,9 @@ fun DocAddSheet(
 fun DocViewSheet(
     doc: VaultDocument,
     onDismiss: () -> Unit,
-    onUpdateReminder: (Boolean) -> Unit
+    onUpdateReminder: (Boolean) -> Unit,
+    onReminderSettings: () -> Unit = {},
+    warningDays: Int = doc.reminderWarningDays ?: 30
 ) {
     val f = currentFmt
     var roadsideMode by remember { mutableStateOf(false) }
@@ -1654,10 +1659,10 @@ fun DocViewSheet(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ExpiryChip(doc = doc)
+                ExpiryChip(doc = doc, warningDays = warningDays)
                 val expiryDate = runCatching { LocalDate.parse(doc.expiry) }.getOrNull()
                 Text(
-                    text = "মেয়াদ শেষ: " + if (expiryDate != null) f.dateFull(expiryDate) else doc.expiry,
+                    text = if (doc.expiry.isBlank()) "মেয়াদ নেই" else "মেয়াদ শেষ: " + if (expiryDate != null) f.dateFull(expiryDate) else doc.expiry,
                     fontSize = 13.sp,
                     color = if (roadsideMode) Color(0xFF3A3A3A) else TextSecondary,
                     fontWeight = FontWeight.SemiBold
@@ -1672,11 +1677,12 @@ fun DocViewSheet(
             onCheckedChange = { roadsideMode = it }
         )
 
-        VaultSwitch(
-            title = "মেয়াদের ৩০ দিন আগে জানান",
+        if (doc.expiry.isNotBlank()) VaultSwitch(
+            title = "এই কাগজের রিমাইন্ডার",
             checked = doc.reminder,
             onCheckedChange = { onUpdateReminder(it) }
         )
+        VaultButton("অনুমতি, সময় ও পরে জানান", onClick = onReminderSettings, full = true, kind = ButtonKind.SECONDARY)
     }
 }
 

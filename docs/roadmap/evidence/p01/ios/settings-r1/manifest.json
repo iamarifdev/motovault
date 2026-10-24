@@ -1,0 +1,80 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "46710D6B-C964-45EF-BB78-6EE30C895F9C.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "returned-from-system-settings-denied-tree_0_F826F057-BEFD-4A53-9822-2B44EB0DD815.txt",
+        "timestamp" : 1792839920.906
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "30E38138-B0C8-4A7B-90EB-DF3B618895A5.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "returned-from-system-settings-denied_0_A01019B7-F330-4951-AE5F-D1AC2504EA02.png",
+        "timestamp" : 1792839920.802
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "3CBC5F50-8374-42FF-B25E-02C9826876D2.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "native-app-notification-settings-tree_0_00198060-E902-47F4-90E5-7A889EA73AE7.txt",
+        "timestamp" : 1792839913.749
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "93909349-BB52-424E-BF02-E7478C8A1885.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "native-app-notification-settings_0_1429BEEA-7507-4E4D-9936-4AD860E01C57.png",
+        "timestamp" : 1792839913.732
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "A932D59D-2008-4978-B861-51CA3D523A9E.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "reminder-before-permission-tree_0_A72957F3-81D5-4BD0-BB9D-3658B40C011F.txt",
+        "timestamp" : 1792839913.087
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "6EAF5964-FEE6-4E45-97D4-1B3921FCAF9E.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "reminder-before-permission_0_41BE7EE7-D688-4CB6-AB7B-B65917F5A45A.png",
+        "timestamp" : 1792839912.984
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "40E7C8C3-5544-46CF-99B5-BD3D9CE22960.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "me-reminder-entry-tree_0_7F4936DB-A5D5-4BC2-A2B4-708890D6C9F6.txt",
+        "timestamp" : 1792839911.287
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "639D8717-57E7-49B8-9DAA-2C365E2F1508",
+        "deviceName" : "MotoVault-P00-Baseline",
+        "exportedFileName" : "C716E153-195B-496C-9BF9-ECEA428DA3CE.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "me-reminder-entry_0_ABBE4014-4302-43F2-9A95-DE8DE130CC0E.png",
+        "timestamp" : 1792839911.127
+      }
+    ],
+    "testIdentifier" : "P01DeliveryTests/testOpenSystemNotificationSettings()",
+    "testIdentifierURL" : "test://com.apple.xcode/MotoVault/MotoVaultUITests/P01DeliveryTests/testOpenSystemNotificationSettings"
+  }
+]

@@ -110,4 +110,53 @@ class VaultSessionTest {
         broken.commit(original, 0) { assertFalse(it) }
         assertEquals(0, writes)
     }
+
+    @Test fun inverseSaveRestoresMileageAndRemindersButCannotOverwriteANewerRevision() = runBlocking {
+        val original = initial()
+        var durable = original
+        val reconciled = mutableListOf<List<VaultDocument>>()
+        val session = VaultSession(this, { durable }, { durable = it }, {}, {}, { reconciled += it })
+        session.commit(original.copy(ride = original.ride!!.copy(odometer = 1010.0)), 0) { assertTrue(it) }
+        session.undo(1) { assertTrue(it) }
+        assertEquals(original, durable)
+        session.commit(original.copy(appearance = Appearance.DARK), 2) { assertTrue(it) }
+        session.undo(1) { assertFalse(it) }
+        assertEquals(Appearance.DARK, durable.appearance)
+        assertEquals(4, reconciled.size)
+    }
+
+    @Test fun undoRetainsOriginalAssetsUntilItIsSuperseded() = runBlocking {
+        val page = DocumentPage("raw.jpg", "preview.jpg", "image/jpeg", 1, 1, "Front")
+        val original = initial().copy(documents = listOf(VaultDocument("Test", "TEST", "Synthetic", "", pages = listOf(page))))
+        var durable = original
+        val retired = mutableSetOf<String>()
+        val session = VaultSession(this, { durable }, { durable = it }, { retired += it }, {})
+        session.commit(original.copy(documents = emptyList()), 0) { assertTrue(it) }
+        assertTrue(retired.isEmpty())
+        session.undo(1) { assertTrue(it) }
+        assertEquals(original, durable)
+        assertTrue(retired.isEmpty())
+        session.commit(original.copy(documents = emptyList()), 2) { assertTrue(it) }
+        session.commit(durable.copy(appearance = Appearance.DARK), 3) { assertTrue(it) }
+        assertEquals(setOf("raw.jpg", "preview.jpg"), retired)
+    }
+
+    @Test fun failedInverseDoesNotPublishOrScheduleAndCanBeRetried() = runBlocking {
+        val original = initial()
+        var durable = original
+        var fail = false
+        var scheduled = 0
+        val session = VaultSession(this, { durable }, { if (fail) error("disk full"); durable = it }, {}, {}, { scheduled++ })
+        val changed = original.copy(ride = original.ride!!.copy(odometer = 1010.0))
+        session.commit(changed, 0) { assertTrue(it) }
+        fail = true
+        session.undo(1) { assertFalse(it) }
+        assertEquals(changed, durable)
+        assertEquals(1L, session.snapshots.value.revision)
+        assertEquals(2, scheduled)
+        fail = false
+        session.undo(1) { assertTrue(it) }
+        assertEquals(original, durable)
+        assertEquals(3, scheduled)
+    }
 }

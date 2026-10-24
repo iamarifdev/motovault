@@ -33,7 +33,7 @@ object BangladeshServiceCatalogue {
     fun find(id: String) = items.firstOrNull { it.id == id }
 
     fun itemForScheduleName(name: String): ServiceCatalogueItem {
-        val normalized = name.lowercase()
+        val normalized = name.lowercase().replace("\u09af\u09bc", "\u09df")
         val id = when {
             "chain" in normalized || "চেইন" in normalized -> "chain_sprocket"
             "oil filter" in normalized || "অয়েল ফিল্টার" in normalized -> "oil_filter"

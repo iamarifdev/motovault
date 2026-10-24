@@ -1,0 +1,2 @@
+Query chain:
+ →Find: Application 'com.apple.Preferences'

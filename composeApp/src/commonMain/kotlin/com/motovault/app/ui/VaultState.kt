@@ -28,11 +28,16 @@ data class Ride(
     val brandId: String, val edition: String, val year: Int, val odometer: Double,
     val modelId: String? = null, val modelName: String = "", val registration: String = "",
     val market: RideMarket = RideMarket.UNKNOWN, val emission: RideEmission = RideEmission.UNKNOWN,
-    val modelCode: String = "", val factoryProfileId: String? = null
+    val modelCode: String = "", val factoryProfileId: String? = null,
+    val odometerConfirmedDate: String? = null
 ) {
     val selectedModel: BikeModel? get() = BikeCatalogue.find(modelId)?.takeIf { it.brandId == brandId }
         ?: if (modelName.isBlank()) BikeCatalogue.legacyModel(brandId) else null
     val displayName: String get() = modelName.ifBlank { selectedModel?.name ?: "Your motorcycle" }
+    fun confirmedMileage(value: Double, date: LocalDate): Ride {
+        require(value.isFinite() && value in 0.0..9999999.0 && date <= today())
+        return if (value >= odometer) copy(odometer = value, odometerConfirmedDate = date.toString()) else this
+    }
 }
 
 @Serializable
@@ -64,9 +69,11 @@ data class VaultDocument(
     val detailsConfirmed: Boolean = false,
     val extractionCandidates: Map<String, String> = emptyMap(), val capturedAt: String = "",
     val reminder: Boolean = false,
-    val kind: String = ""
+    val kind: String = "",
+    val reminderWarningDays: Int? = null,
+    val reminderSnoozedUntil: String? = null
 ) {
-    val daysRemaining: Int? get() = expiry.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it).toEpochDays() - today().toEpochDays() }
+    val daysRemaining: Int? get() = expiry.takeIf { it.isNotBlank() }?.let { runCatching { LocalDate.parse(it).toEpochDays() - today().toEpochDays() }.getOrNull() }
     val expiryStatus: DocumentExpiryStatus get() = DocumentExpiryUseCase().evaluate(daysRemaining)
     val expiryLabel: String get() {
         val days = daysRemaining
@@ -99,8 +106,19 @@ data class VaultState(
     val lastPrices: Map<String, Double> = mapOf("octane" to 120.0, "petrol" to 115.0),
     val lastItemPrices: Map<String, Double> = emptyMap(),
     val workshops: List<String> = emptyList(),
-    val places: List<String> = emptyList()
+    val places: List<String> = emptyList(),
+    val reminderPolicy: ReminderPolicy = ReminderPolicy()
 ) {
+    /** Only linked, matching recorded service can establish certainty for an older schedule. */
+    fun confirmedRules() = rules.map { rule ->
+        if (rule.baselineCertainty != com.motovault.app.domain.model.BaselineCertainty.UNKNOWN) rule
+        else if (logs.any { log -> !log.isFuel && !log.isDocumentFee &&
+            (rule.id in log.scheduleIds || log.componentId == rule.id) &&
+            log.odometer == rule.lastServicedOdometerKm &&
+            runCatching { LocalDate.parse(log.date).toEpochDays().toLong() }.getOrNull() == rule.lastServicedEpochDays
+        }) rule.copy(baselineCertainty = com.motovault.app.domain.model.BaselineCertainty.CONFIRMED) else rule
+    }
+
     fun logFuel(odometer: Double, liters: Double, cost: Double = 0.0, date: LocalDate = today(), fullTank: Boolean = true, location: GeoCapture? = null, locationLabel: String = ""): VaultState {
         val currentRide = requireNotNull(ride)
         require(odometer.isFinite() && odometer in 0.0..9999999.0) { "Enter valid mileage." }
@@ -113,7 +131,7 @@ data class VaultState(
         require(fuel.none { LocalDate.parse(it.date) > date }) { "Use a date at or after your latest fill-up." }
         val updatedLogs = listOf(RideLog("Fuel fill-up", "$liters L · " + if (fullTank) "Full tank" else "Partial fill",
             date.toString(), odometer, kind = "fuel", liters = liters, fullTank = fullTank, cost = cost, location = location, locationLabel = locationLabel.trim())) + logs
-        return copy(ride = currentRide.copy(odometer = maxOf(currentRide.odometer, odometer)),
+        return copy(ride = currentRide.confirmedMileage(odometer, date),
             lastFuelOdometer = odometer, economy = calculateEconomy(updatedLogs), logs = updatedLogs)
     }
 
@@ -133,7 +151,7 @@ data class VaultState(
         require(ordered.zipWithNext().all { (previous, next) ->
             next.odometer > previous.odometer && LocalDate.parse(next.date) >= LocalDate.parse(previous.date)
         }) { "Fuel mileage and dates must stay in order with the other fill-ups." }
-        return copy(ride = requireNotNull(ride).copy(odometer = maxOf(ride.odometer, odometer)), logs = updatedLogs,
+        return copy(ride = requireNotNull(ride).confirmedMileage(odometer, date), logs = updatedLogs,
             economy = calculateEconomy(updatedLogs), lastFuelOdometer = ordered.lastOrNull()?.odometer)
     }
 
@@ -241,8 +259,10 @@ data class VaultState(
         require(rule.intervalKm.isFinite() && rule.intervalKm in 0.0..1000000.0 && rule.intervalDays in 0..10000 &&
             (rule.intervalKm > 0 || rule.intervalDays > 0)) { "Set a distance or time interval." }
         require(rule.lastServicedOdometerKm.isFinite() && rule.lastServicedOdometerKm in 0.0..currentRide.odometer) { "Check the service baseline mileage." }
-        require(rule.lastServicedEpochDays <= today().toEpochDays().toLong()) { "Baseline date cannot be in the future." }
-        return copy(rules = if (rules.any { it.id == rule.id }) rules.map { if (it.id == rule.id) rule else it } else rules + rule)
+        require(rule.lastServicedEpochDays in 0..today().toEpochDays().toLong()) { "Check the baseline date. It cannot be in the future." }
+        val old = rules.firstOrNull { it.id == rule.id }
+        val saved = if (old != null && old.reminderRevision() != rule.reminderRevision()) rule.copy(reminderSnoozedUntil = null) else rule
+        return copy(rules = if (old != null) rules.map { if (it.id == rule.id) saved else it } else rules + saved)
     }
 
     fun deleteLog(log: RideLog): VaultState {
@@ -274,6 +294,8 @@ data class VaultState(
     }
 
     fun saveDocument(document: VaultDocument): VaultState {
+        require(document.reminderWarningDays == null || document.reminderWarningDays in 1..365)
+        document.reminderSnoozedUntil?.let { kotlinx.datetime.LocalDateTime.parse(it) }
         require(document.pages.size <= documentPageLimit(document.title)) { "Too many document pages." }
         document.pages.forEach { validateDocumentAssetId(it.originalId); validateDocumentAssetId(it.previewId); it.acceptedId?.let(::validateDocumentAssetId); require(it.width > 0 && it.height > 0) }
         document.originalPdf?.let { validateDocumentAssetId(it) }
@@ -281,7 +303,9 @@ data class VaultState(
         val issued = document.issued.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) }
         val expiry = document.expiry.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) }
         require(issued == null || expiry == null || expiry >= issued) { "Expiry must be on or after the issue date." }
-        return copy(documents = if (documents.any { it.id == document.id }) documents.map { if (it.id == document.id) document else it } else documents + document)
+        val old = documents.firstOrNull { it.id == document.id }
+        val saved = if (old != null && old.expiry != document.expiry) document.copy(reminderSnoozedUntil = null) else document
+        return copy(documents = if (old != null) documents.map { if (it.id == document.id) saved else it } else documents + saved)
     }
 
     companion object {
@@ -340,7 +364,7 @@ data class VaultState(
                 ComponentRule("r-air", "primary", "এয়ার ফিল্টার", "এয়ার ফিল্টার", 5000.0, 180, 9900.0, today.toEpochDays().toLong() - 140),
                 ComponentRule("r-spark", "primary", "স্পার্ক প্লাগ", "স্পার্ক প্লাগ", 8000.0, 365, 8000.0, today.toEpochDays().toLong() - 200),
                 ComponentRule("r-brakes", "primary", "ব্রেক প্যাড", "ব্রেক প্যাড", 10000.0, 365, 7200.0, today.toEpochDays().toLong() - 300)
-            )
+            ).map { it.copy(baselineCertainty = com.motovault.app.domain.model.BaselineCertainty.CONFIRMED) }
             val docs = listOf(
                 VaultDocument("রেজিস্ট্রেশন স্মার্ট কার্ড", "ঢাকা মেট্রো-ল ৬২-৪৫১৮", "মো. রাফিদ হাসান", d(400), "d1", reminder = true, kind = "registration"),
                 VaultDocument("ড্রাইভিং লাইসেন্স", "DL-1987-654321", "মো. রাফিদ হাসান", d(24), "d2", reminder = false, kind = "licence"),
