@@ -28,7 +28,8 @@ data class VaultMetaRow(
     val appearance: String,
     val legacyImported: Boolean,
     @ColumnInfo(defaultValue = "0") val autoLocation: Boolean = false,
-    @ColumnInfo(defaultValue = "'{}'") val preferences: String = "{}"
+    @ColumnInfo(defaultValue = "'{}'") val preferences: String = "{}",
+    @ColumnInfo(defaultValue = "1") val assetFormatVersion: Int = 1
 )
 
 @Dao
@@ -56,6 +57,7 @@ abstract class VaultDao {
     @Transaction
     open suspend fun read(): VaultState? {
         val settings = meta() ?: return null
+        check(settings.assetFormatVersion == 1) { "This vault uses an unsupported document format. Existing records have been preserved." }
         val logs = ledger().map { row -> codec.decodeFromString<RideLog>(row.payload).also { check(it.id == row.id) { "Ledger record does not match its stored ID." } } }
         val docs = documents().map { row -> codec.decodeFromString<VaultDocument>(row.payload).also { check(it.id == row.id) { "Document record does not match its stored ID." } } }
         check(references().toSet() == assetRows(docs).toSet()) { "Document asset references could not be read. Existing storage has been preserved." }
@@ -120,7 +122,7 @@ abstract class VaultDao {
     }
 }
 
-@Database(entities = [VehicleRow::class, ScheduleRow::class, LedgerRow::class, DocumentRow::class, AssetReferenceRow::class, VaultMetaRow::class, SyncOutboxRow::class], version = 4, exportSchema = true)
+@Database(entities = [VehicleRow::class, ScheduleRow::class, LedgerRow::class, DocumentRow::class, AssetReferenceRow::class, VaultMetaRow::class, SyncOutboxRow::class], version = 5, exportSchema = true)
 @ConstructedBy(VaultDatabaseConstructor::class)
 abstract class VaultDatabase : RoomDatabase() { abstract fun vault(): VaultDao }
 
@@ -130,7 +132,7 @@ expect object VaultDatabaseConstructor : RoomDatabaseConstructor<VaultDatabase> 
 }
 
 fun buildVaultDatabase(builder: RoomDatabase.Builder<VaultDatabase>): VaultDatabase = builder
-    .addMigrations(VaultMigration1To2, VaultMigration2To3, VaultMigration3To4)
+    .addMigrations(VaultMigration1To2, VaultMigration2To3, VaultMigration3To4, VaultMigration4To5)
     .setDriver(BundledSQLiteDriver()).setQueryCoroutineContext(Dispatchers.IO).build()
 
 object VaultMigration1To2 : Migration(1, 2) {
@@ -158,5 +160,12 @@ object VaultMigration3To4 : Migration(3, 4) {
             update.bindText(1, Json.encodeToString(VaultSettings.from(prior)))
             update.step()
         }
+    }
+}
+
+/** Version 5 declares support for protected asset references; it does not claim full encryption. */
+object VaultMigration4To5 : Migration(4, 5) {
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("ALTER TABLE `vault_meta` ADD COLUMN `assetFormatVersion` INTEGER NOT NULL DEFAULT 1")
     }
 }

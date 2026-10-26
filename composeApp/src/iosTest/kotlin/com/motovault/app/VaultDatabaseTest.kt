@@ -104,6 +104,7 @@ class VaultDatabaseTest {
         seeded.close()
         BundledSQLiteDriver().open(location).use { connection ->
             connection.execSQL("ALTER TABLE vault_meta DROP COLUMN preferences")
+            connection.execSQL("ALTER TABLE vault_meta DROP COLUMN assetFormatVersion")
             connection.execSQL("UPDATE room_master_table SET identity_hash = 'bebecf50ab9f7b3c1ae463e6c3f06007' WHERE id = 42")
             connection.execSQL("PRAGMA user_version = 3")
         }
@@ -125,6 +126,7 @@ class VaultDatabaseTest {
         seeded.close()
         BundledSQLiteDriver().open(location).use { connection ->
             connection.execSQL("ALTER TABLE vault_meta DROP COLUMN preferences")
+            connection.execSQL("ALTER TABLE vault_meta DROP COLUMN assetFormatVersion")
             connection.execSQL("UPDATE room_master_table SET identity_hash = 'bebecf50ab9f7b3c1ae463e6c3f06007' WHERE id = 42")
             connection.execSQL("UPDATE sync_outbox SET payload = '{broken' WHERE id = 1")
             connection.execSQL("PRAGMA user_version = 3")

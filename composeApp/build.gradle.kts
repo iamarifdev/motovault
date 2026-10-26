@@ -85,6 +85,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0.0"
+        testInstrumentationRunner = "com.motovault.app.storage.security.NativeAssetInstrumentation"
     }
     packaging {
         resources {
@@ -92,10 +93,17 @@ android {
         }
     }
     buildTypes {
+        create("privacyProbe") {
+            initWith(getByName("debug"))
+            applicationIdSuffix = ".privacyprobe"
+            versionNameSuffix = "-privacyprobe"
+            matchingFallbacks += listOf("debug")
+        }
         getByName("release") {
             isMinifyEnabled = false
         }
     }
+    testBuildType = "privacyProbe"
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
