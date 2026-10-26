@@ -118,6 +118,10 @@
     <string name="doc_fitness">ফিটনেস সার্টিফিকেট</string>
     <string name="doc_insurance">ইন্স্যুরেন্স / বিমা</string>
     <string name="doc_driving_license">ড্রাইভিং লাইসেন্স</string>
+    <string name="doc_side_front">সামনের দিক</string>
+    <string name="doc_side_back">পেছনের দিক</string>
+    <string name="doc_side_page">পৃষ্ঠা %1$s</string>
+    <string name="doc_back_photo_missing">পেছনের ছবি যোগ করা হয়নি</string>
 
     <!-- Roadside Inspection -->
     <string name="handover_title">পুলিশ চেকিং বা ডকুমেন্ট প্রদর্শন মোড</string>

@@ -118,6 +118,10 @@
     <string name="doc_fitness">Fitness Certificate</string>
     <string name="doc_insurance">Insurance</string>
     <string name="doc_driving_license">Driving License</string>
+    <string name="doc_side_front">Front side</string>
+    <string name="doc_side_back">Back side</string>
+    <string name="doc_side_page">Page %1$s</string>
+    <string name="doc_back_photo_missing">Back photo not added</string>
 
     <!-- Roadside Inspection -->
     <string name="handover_title">Police Inspection Mode</string>

@@ -39,6 +39,8 @@ import kotlinx.datetime.Clock
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.decodeToImageBitmap
+import org.jetbrains.compose.resources.stringResource
+import motovault.composeapp.generated.resources.*
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -295,7 +297,7 @@ expect fun documentDialogProperties(): DialogProperties
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { Eyebrow(if (inspection) "সংরক্ষিত কাগজের কপি" else "আপনার আসল কাগজ"); DocumentBadge(document.expiryLabel, warning = (document.daysRemaining ?: Int.MAX_VALUE) <= RENEWAL_WARNING_DAYS, good = (document.daysRemaining ?: 0) > RENEWAL_WARNING_DAYS) }
         DocumentHeading(document.title); DocumentCopy(if (inspection) "শুধু এই কাগজটি দেখানো হচ্ছে।" else "তোলা অবস্থায় সংরক্ষিত ছবিটি খুলুন।")
         if (document.pages.isNotEmpty()) {
-            Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).clip(RoundedCornerShape(11.dp)).border(1.dp, BorderColor, RoundedCornerShape(11.dp)).padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) { val count = if (isCardDocument(document.title)) 2 else document.pages.size; repeat(count) { index -> val page = document.pages.getOrNull(index); TextButton(onClick = { selected = index }, enabled = page != null, shape = RoundedCornerShape(7.dp), colors = ButtonDefaults.textButtonColors(containerColor = if (selected == index) MaterialTheme.colorScheme.primary else Color.Transparent, contentColor = if (selected == index) MaterialTheme.colorScheme.onPrimary else TextSecondary), modifier = if (count <= 2) Modifier.weight(1f) else Modifier) { Text(page?.side?.let(::documentSideName) ?: "পেছনের ছবি যোগ করা হয়নি", fontSize = 12.sp) } } }
+            Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).clip(RoundedCornerShape(11.dp)).border(1.dp, BorderColor, RoundedCornerShape(11.dp)).padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) { val count = if (isCardDocument(document.title)) 2 else document.pages.size; repeat(count) { index -> val page = document.pages.getOrNull(index); val sideLabel = page?.side?.let { documentSideName(it) } ?: stringResource(Res.string.doc_back_photo_missing); TextButton(onClick = { selected = index }, enabled = page != null, shape = RoundedCornerShape(7.dp), colors = ButtonDefaults.textButtonColors(containerColor = if (selected == index) MaterialTheme.colorScheme.primary else Color.Transparent, contentColor = if (selected == index) MaterialTheme.colorScheme.onPrimary else TextSecondary), modifier = if (count <= 2) Modifier.weight(1f) else Modifier) { Text(sideLabel, fontSize = 12.sp) } } }
             val page = document.pages[selected.coerceIn(document.pages.indices)]
             DocumentImage(page, Modifier.clip(RoundedCornerShape(if (isCardDocument(document.title)) 9.dp else 4.dp)))
             DocumentNote("${documentSideName(page.side)} · আসল রং অপরিবর্তিত")

@@ -6,7 +6,11 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
 val documentTypes = listOf("Registration smart card", "Driving licence", "Tax token", "Insurance", "Fitness certificate")
-fun isCardDocument(type: String) = type == "Registration smart card" || type == "Driving licence"
+fun isCardDocument(type: String): Boolean = when (type) {
+    "Registration smart card", "smart_card", "registration", "রেজিস্ট্রেশন স্মার্ট কার্ড", "রেজিস্ট্রেশন সার্টিফিকেট",
+    "Driving licence", "Driving license", "licence", "license", "ড্রাইভিং লাইসেন্স" -> true
+    else -> false
+}
 fun documentPageLimit(type: String) = if (isCardDocument(type)) 2 else 8
 fun reviewedDocumentDetails(type: String, values: Map<String, String>, previous: Map<String, String>, includeExtras: Boolean): Map<String, String> {
     val core = if (type == "Registration smart card") setOf("registration") else emptySet()
