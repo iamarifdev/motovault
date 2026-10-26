@@ -1,0 +1,7 @@
+{
+  "result": "Passed",
+  "applicationId": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "fixtures": "build/v3-edge-fixtures-final-r1",
+  "scope": "Empty Vault ScanLine, unlisted-model Gauge fallback, onboarding Bike and preserved native brand logos. Visual captures, not complete onboarding acceptance."
+}

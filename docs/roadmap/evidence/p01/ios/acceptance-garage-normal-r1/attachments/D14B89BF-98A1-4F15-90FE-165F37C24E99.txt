@@ -1,0 +1,51 @@
+Application, 0x105cab480, pid: 6331, label: 'MotoVault P01 Test' <App element pid: 6331>
+  Window (Main), 0x105caad00, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4360306688.6>
+    Other, 0x105cab700, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4412494336.8>
+      Other, 0x105cab980, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4413486848.10>
+        Other, 0x105ca9cc0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4361192320.12>
+          Other, 0x105caaf80, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4361192768.13>
+            Other, 0x105cab0c0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4361195904.14>
+              Other, 0x105caae40, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4358559616.16>
+                Other, 0x105cab200, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=1)' <AX element pid: 6331, elementOrHash.elementID: 4415765024.17>
+                Other, 0x10f426f80, {{0.0, 62.0}, {440.0, 860.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=5)' <AX element pid: 6331, elementOrHash.elementID: 4765992992.69>
+            Other, 0x10f426e40, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4361194560.15>
+    Other, 0x10f426d00, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4361193216.59>
+      Other, 0x10f426bc0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4361199936.60>
+        Other, 0x10f426a80, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4361201280.62>
+          Other, 0x10f426940, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4412707712.63>
+            Other, 0x10f426800, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=156)' <AX element pid: 6331, elementOrHash.elementID: 4765993232.64>
+            Other, 0x10f4266c0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4360718592.65>
+              Other, 0x10f426440, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=159)' <AX element pid: 6331, elementOrHash.elementID: 4765993152.66>
+              Button, 0x10f426580, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=162)' <AX element pid: 6331, elementOrHash.elementID: 4765993472.67>
+              Other, 0x10f425a40, {{0.0, 253.0}, {440.0, 703.0}} <AX element pid: 6331, elementOrHash.elementID: 4360718784.68>
+                Other, 0x10f425b80, {{0.0, 253.0}, {440.0, 703.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=163)' <AX element pid: 6331, elementOrHash.elementID: 4765990992.70>
+                Button, 0x10f425cc0, {{388.0, 275.0}, {44.0, 44.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=169)', label: 'বন্ধ করুন' <AX element pid: 6331, elementOrHash.elementID: 4765994352.58>
+                Other, 0x10f425e00, {{20.0, 281.0}, {368.0, 32.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=168)', label: 'ওডোমিটার' <AX element pid: 6331, elementOrHash.elementID: 4765994432.71>
+                Other, 0x10f425f40, {{0.0, 328.0}, {440.0, 275.3}} <AX element pid: 6331, elementOrHash.elementID: 4360717248.72>
+                  Other, 0x10f426080, {{0.0, 328.0}, {440.0, 275.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=172)' <AX element pid: 6331, elementOrHash.elementID: 4765994832.81>
+                  Other, 0x10f4261c0, {{175.7, 352.0}, {88.7, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=174)', label: 'আজ আনুমানিক' <AX element pid: 6331, elementOrHash.elementID: 4765995312.82>
+                  Other, 0x10f426300, {{139.3, 378.0}, {119.3, 53.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=176)', label: '১২,৫৭৫' <AX element pid: 6331, elementOrHash.elementID: 4765993952.83>
+                  Other, 0x10f638000, {{264.7, 392.7}, {36.3, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=178)', label: 'কিমি' <AX element pid: 6331, elementOrHash.elementID: 4765994672.84>
+                  Other, 0x10f638140, {{134.0, 433.3}, {172.3, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=179)', label: 'বর্তমান ওডোমিটার: ১২,৩৪০ কিমি' <AX element pid: 6331, elementOrHash.elementID: 4765994752.85>
+                  Button, 0x10f638280, {{20.0, 479.3}, {51.7, 42.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=181)', label: '+১০' <AX element pid: 6331, elementOrHash.elementID: 4765995152.86>
+                  Button, 0x10f6383c0, {{79.7, 479.3}, {52.3, 42.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=184)', label: '+৫০' <AX element pid: 6331, elementOrHash.elementID: 4765994272.87>
+                  Button, 0x10f638500, {{140.0, 479.3}, {60.0, 42.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=187)', label: '+১০০' <AX element pid: 6331, elementOrHash.elementID: 4765994992.88>
+                  Button, 0x10f638640, {{208.0, 479.3}, {61.0, 42.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=190)', label: '+৫০০' <AX element pid: 6331, elementOrHash.elementID: 4765995072.89>
+                  Button, 0x10f638780, {{277.0, 479.3}, {90.7, 42.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=193)', label: 'আনুমানিক' <AX element pid: 6331, elementOrHash.elementID: 4765995472.90>
+                  Button, 0x10f6388c0, {{20.0, 535.3}, {400.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=196)', label: 'ডিসপ্লের ছবি তুলে পড়ুন (ডেমো)' <AX element pid: 6331, elementOrHash.elementID: 4765994592.91>
+                Button, 0x10f638a00, {{20.0, 616.0}, {400.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=202)', label: 'ঠিক আছে, সেভ করুন' <AX element pid: 6331, elementOrHash.elementID: 4765993392.53>
+                Button, 0x10f638b40, {{20.0, 678.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=208)', label: '১' <AX element pid: 6331, elementOrHash.elementID: 4765993072.73>
+                Button, 0x10f638c80, {{156.0, 678.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=210)', label: '২' <AX element pid: 6331, elementOrHash.elementID: 4765993872.74>
+                Button, 0x10f638dc0, {{292.0, 678.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=212)', label: '৩' <AX element pid: 6331, elementOrHash.elementID: 4765993312.75>
+                Button, 0x10f638f00, {{20.0, 738.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=215)', label: '৪' <AX element pid: 6331, elementOrHash.elementID: 4765993712.55>
+                Button, 0x10f639040, {{156.0, 738.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=217)', label: '৫' <AX element pid: 6331, elementOrHash.elementID: 4765993792.76>
+                Button, 0x10f639180, {{292.0, 738.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=219)', label: '৬' <AX element pid: 6331, elementOrHash.elementID: 4765994192.77>
+                Button, 0x10f6392c0, {{20.0, 798.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=222)', label: '৭' <AX element pid: 6331, elementOrHash.elementID: 4765993552.56>
+                Button, 0x10f639400, {{156.0, 798.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=224)', label: '৮' <AX element pid: 6331, elementOrHash.elementID: 4765994032.78>
+                Button, 0x10f639540, {{292.0, 798.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=226)', label: '৯' <AX element pid: 6331, elementOrHash.elementID: 4765994112.79>
+                Button, 0x10f639680, {{156.0, 858.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=230)', label: '০' <AX element pid: 6331, elementOrHash.elementID: 4765994512.57>
+                Button, 0x10f6397c0, {{292.0, 858.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=232)', label: 'মুছুন' <AX element pid: 6331, elementOrHash.elementID: 4765993632.80>
+      Other, 0x10f639900, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4361193664.61>
+  Window, 0x10f639a40, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4360440320.7>
+    Other, 0x10f639b80, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4412493824.9>
+      Other, 0x10f639cc0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 6331, elementOrHash.elementID: 4361197248.11>

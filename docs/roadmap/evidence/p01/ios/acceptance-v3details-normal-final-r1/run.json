@@ -1,0 +1,30 @@
+{
+  "device": {
+    "udid": "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+    "name": "iPhone 18 Pro Max",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-0"
+  },
+  "fixture": "runtime",
+  "synthetic": true,
+  "applicationId": "com.motovault.baseline.p00",
+  "host": {
+    "bundleId": "com.motovault.baseline.p00",
+    "displayName": "MotoVault P01 Test",
+    "signingIdentifier": "com.motovault.baseline.p00",
+    "scope": "Local ad-hoc simulator test packaging only; not a signed device or release build.",
+    "products": [
+      {
+        "path": "build/p01-ios-tests-derived/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault",
+        "sha256": "7698de807449dc09824ab2c7541832a0246ce6c7b9abe52809882af9f10dba70"
+      },
+      {
+        "path": "build/p01-ios-tests-derived/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault.debug.dylib",
+        "sha256": "6f6ccfd44feeed027349ff77a6cbffcff8c04755ddbd397f3ac5e637280fb9ad"
+      }
+    ]
+  },
+  "tests": [
+    "testV3DetailSurfaces"
+  ],
+  "scope": "V3 icon/geometry/theme screenshots and save/Undo with restart. No full-app parity or physical-device claim."
+}

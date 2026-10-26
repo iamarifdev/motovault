@@ -1,0 +1,44 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "8215BE62-4365-4130-96C8-E7F024790EB0.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-cancel-restored-home-tree_0_D8E1840F-5B77-4043-8B2C-88AE5ED5E833.txt",
+        "timestamp" : 1793007089.861
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "EC4B7461-35FD-491C-AD70-54CEB314BDAD.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-cancel-restored-home_0_F1DE0248-319E-4FB9-9353-6BD979430125.png",
+        "timestamp" : 1793007089.77
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "D7880398-1391-402C-B902-592A3E4C9F7B.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-keypad-safe-area-tree_0_725BADCA-EC1D-45E3-9462-F4F0DCAF27D3.txt",
+        "timestamp" : 1793007088.1
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "73219260-4DA4-474F-A056-5CBFFA023DCC.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-keypad-safe-area_0_9E34B732-4B6A-44F3-9D7B-546870FAD45A.png",
+        "timestamp" : 1793007087.985
+      }
+    ],
+    "testIdentifier" : "P01DeliveryTests/testNumericKeypadSafeAreaAndCancel()",
+    "testIdentifierURL" : "test://com.apple.xcode/MotoVault/MotoVaultUITests/P01DeliveryTests/testNumericKeypadSafeAreaAndCancel"
+  }
+]

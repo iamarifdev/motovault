@@ -1,0 +1,19 @@
+{
+  "normal": {
+    "cardWidth": 188,
+    "cardHeights": [
+      156,
+      156
+    ],
+    "valueFont": 30
+  },
+  "large": {
+    "cardWidth": 188,
+    "cardHeights": [
+      184,
+      184
+    ],
+    "valueFont": 39
+  },
+  "scope": "Live browser DOM offset sizes in the v3 review phone; physical native pixels are not compared directly"
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "AA5DEF44-932A-4A89-99D0-B7EAE07507DC.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "garage-stat-bounds_0_E08FA4A6-BC58-4BA8-9E6D-B39679D3CE6D.txt",
+        "timestamp" : 1793007063.326
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "15389D89-E6F2-4940-8B19-6B59F813C0EB.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "garage-stats-tree_0_E3C7BC81-B011-45EC-B4C2-F37FAEB610BA.txt",
+        "timestamp" : 1793007063.26
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "1A987E71-1EB7-4C51-8020-83CEA4AD7006.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "garage-stats_0_F4ADFFD4-5734-4D07-A494-FE8308F23A9D.png",
+        "timestamp" : 1793007063.16
+      }
+    ],
+    "testIdentifier" : "P01DeliveryTests/testGarageStatCardGeometry()",
+    "testIdentifierURL" : "test://com.apple.xcode/MotoVault/MotoVaultUITests/P01DeliveryTests/testGarageStatCardGeometry"
+  }
+]

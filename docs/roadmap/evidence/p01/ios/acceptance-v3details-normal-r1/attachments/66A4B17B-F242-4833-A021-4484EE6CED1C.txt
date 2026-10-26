@@ -1,0 +1,48 @@
+Attributes: Application, 0x1065d0a00, pid: 47988, label: 'MotoVault P01 Test'
+Element subtree:
+ →Application, 0x1065d0a00, pid: 47988, label: 'MotoVault P01 Test'
+    Window (Main), 0x1065d0b40, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1065d0c80, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1065d08c0, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1065d0780, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1065d0640, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1065d0500, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1065d03c0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1065d0280, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=1)'
+                  Other, 0x1065d0140, {{0.0, 62.0}, {440.0, 860.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=5)'
+              Other, 0x1065d0000, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1065d26c0, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1065d3d40, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1065d3c00, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1065d3ac0, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1065d3980, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=152)'
+              Other, 0x1065d3840, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1065d3700, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=155)'
+                Button, 0x1065d35c0, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=158)'
+                Other, 0x1065d3480, {{0.0, 433.0}, {440.0, 523.0}}
+                  Other, 0x1065d2580, {{0.0, 433.0}, {440.0, 523.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=159)'
+                  Other, 0x1065d2440, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=164)', label: 'কী যোগ করবেন?'
+                  Button, 0x1065d2300, {{388.0, 455.0}, {44.0, 44.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=165)', label: 'বন্ধ করুন'
+                  Other, 0x1065d21c0, {{0.0, 508.0}, {440.0, 414.0}}
+                    Other, 0x1065d2080, {{0.0, 508.0}, {440.0, 414.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=168)'
+                    Button, 0x1065d1b80, {{20.0, 524.0}, {194.0, 140.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=171)', label: 'তেল ভরা
+টাকা লিখুন, লিটার নিজেই হবে'
+                    Button, 0x1065d1f40, {{226.0, 524.0}, {194.0, 140.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=177)', label: 'সার্ভিস
+এক ট্যাপে পার্টস যোগ'
+                    Button, 0x1065d1e00, {{20.0, 676.0}, {194.0, 140.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=184)', label: 'ওডোমিটার
+আনুমানিক কিমি ঠিক করুন'
+                    Button, 0x1065d1cc0, {{226.0, 676.0}, {194.0, 140.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=190)', label: 'কাগজ
+স্ক্যান করে মেয়াদ রাখুন'
+                    Button, 0x1065d1a40, {{20.0, 828.0}, {400.0, 78.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=196)', label: 'লিখে বা পেস্ট করে সাজান
+মেকানিকের মেসেজ, বিকাশ বা নগদের টেক্সট'
+        Other, 0x1065d17c0, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x1032892c0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x10328b980, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x10328bc00, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x1065d0a00, pid: 47988, label: 'MotoVault P01 Test'
+Query chain:
+ →Find: Target Application 'com.motovault.baseline.p00'
+  Output: {
+    Application, 0x10328bac0, pid: 47988, label: 'MotoVault P01 Test'
+  }

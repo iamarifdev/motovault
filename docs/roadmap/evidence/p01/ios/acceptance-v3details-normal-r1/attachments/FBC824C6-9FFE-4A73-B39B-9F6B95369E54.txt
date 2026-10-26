@@ -1,0 +1,39 @@
+Application, 0x1060b6f80, pid: 47988, label: 'MotoVault P01 Test' <App element pid: 47988>
+  Window (Main), 0x1060b6d00, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4397826048.6>
+    Other, 0x1060b6580, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4399714816.8>
+      Other, 0x1060b61c0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4446992128.10>
+        Other, 0x1060b6440, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4398793600.12>
+          Other, 0x1060b6bc0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4398794048.13>
+            Other, 0x1060b7e80, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4398797184.14>
+              Other, 0x1060b7ac0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4396310144.16>
+                Other, 0x1060b7200, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=1)' <AX element pid: 47988, elementOrHash.elementID: 4449221232.17>
+                Other, 0x1060b7340, {{0.0, 62.0}, {440.0, 860.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=5)' <AX element pid: 47988, elementOrHash.elementID: 4803527056.65>
+            Other, 0x1060b75c0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4398795840.15>
+    Other, 0x1060b7480, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4398794496.53>
+      Other, 0x1060b7700, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4398802112.54>
+        Other, 0x1060b7840, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4398802560.56>
+          Other, 0x1060b7980, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4446687168.59>
+            Other, 0x1060b7c00, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=152)' <AX element pid: 47988, elementOrHash.elementID: 4803529376.60>
+            Other, 0x1060b7d40, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4446684864.61>
+              Other, 0x1060b43c0, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=155)' <AX element pid: 47988, elementOrHash.elementID: 4803526816.62>
+              Button, 0x1060b4640, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=158)' <AX element pid: 47988, elementOrHash.elementID: 4803529056.63>
+              Other, 0x1060b6800, {{0.0, 433.0}, {440.0, 523.0}} <AX element pid: 47988, elementOrHash.elementID: 4446684800.64>
+                Other, 0x1060b5e00, {{0.0, 433.0}, {440.0, 523.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=159)' <AX element pid: 47988, elementOrHash.elementID: 4803526736.66>
+                Other, 0x1060b6080, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=164)', label: 'কী যোগ করবেন?' <AX element pid: 47988, elementOrHash.elementID: 4803526896.58>
+                Button, 0x1060b5f40, {{388.0, 455.0}, {44.0, 44.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=165)', label: 'বন্ধ করুন' <AX element pid: 47988, elementOrHash.elementID: 4803529296.67>
+                Other, 0x1060b6940, {{0.0, 508.0}, {440.0, 414.0}} <AX element pid: 47988, elementOrHash.elementID: 4446685248.68>
+                  Other, 0x1060b6a80, {{0.0, 508.0}, {440.0, 414.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=168)' <AX element pid: 47988, elementOrHash.elementID: 4803529136.69>
+                  Button, 0x10328bac0, {{20.0, 524.0}, {194.0, 140.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=171)', label: 'তেল ভরা
+টাকা লিখুন, লিটার নিজেই হবে' <AX element pid: 47988, elementOrHash.elementID: 4803529536.70>
+                  Button, 0x10328b840, {{226.0, 524.0}, {194.0, 140.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=177)', label: 'সার্ভিস
+এক ট্যাপে পার্টস যোগ' <AX element pid: 47988, elementOrHash.elementID: 4803526656.71>
+                  Button, 0x10328b700, {{20.0, 676.0}, {194.0, 140.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=184)', label: 'ওডোমিটার
+আনুমানিক কিমি ঠিক করুন' <AX element pid: 47988, elementOrHash.elementID: 4803529456.72>
+                  Button, 0x10328b5c0, {{226.0, 676.0}, {194.0, 140.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=190)', label: 'কাগজ
+স্ক্যান করে মেয়াদ রাখুন' <AX element pid: 47988, elementOrHash.elementID: 4803529216.73>
+                  Button, 0x10328b340, {{20.0, 828.0}, {400.0, 78.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=196)', label: 'লিখে বা পেস্ট করে সাজান
+মেকানিকের মেসেজ, বিকাশ বা নগদের টেক্সট' <AX element pid: 47988, elementOrHash.elementID: 4803529616.74>
+      Other, 0x10328b0c0, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4398794944.55>
+  Window, 0x10328af80, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4397959680.7>
+    Other, 0x1065d3340, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4399714304.9>
+      Other, 0x106760000, {{0.0, 0.0}, {440.0, 956.0}} <AX element pid: 47988, elementOrHash.elementID: 4398798528.11>

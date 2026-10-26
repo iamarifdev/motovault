@@ -1,0 +1,13 @@
+{
+  "result": "Passed",
+  "applicationId": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "appReducedMotion": false,
+  "tabs": [
+    "vault",
+    "history",
+    "me",
+    "home"
+  ],
+  "scope": "Retained normal tab navigation recording and settled marker captures. Fine spring equality with the browser is not claimed."
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.ui.VaultStateTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2026-10-26T08:01:51" hostname="MacBookPro" time="0.003">
+  <properties/>
+  <testcase name="deletingFuelRecalculatesCycles" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="zeroSchedulesAndInvalidDocumentDateOrderAreRejected" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="everyBrandGetsExplicitOwnerDefinedExampleSchedules" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="lastServiceBaselineUsesOwnerEnteredDistanceAndDate" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="historyCannotDeleteTheActiveServiceBaseline" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
+  <testcase name="recordsSurviveSerializationRoundTrip" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="economyUsesDistanceAndLitresAcrossAllCompletedCycles" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="selectedModelAndManualNameSurviveRestartWithoutWrongPhoto" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="recordingServiceOnlyResetsSelectedComponent" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
+  <testcase name="oldRecordsKeepTheirBikeAndDocumentIdentity" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="partialFillsAccumulateAcrossACompleteCycle" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="newGarageStartsMaintenanceAtCurrentDistanceAndDate" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="firstFuelLogSetsBaselineAndSecondCalculatesActualEconomy" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="fuelLogRejectsRollbackAndInvalidFuel" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="partialFillsWithoutAFullBaselineDoNotReportEconomy" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
+  <testcase name="catalogueSearchAndBrandBoundariesMatchThePrototype" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

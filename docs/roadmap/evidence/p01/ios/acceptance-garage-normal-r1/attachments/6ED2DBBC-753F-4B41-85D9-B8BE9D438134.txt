@@ -1,0 +1,5 @@
+Query chain:
+ →Find: Target Application 'com.motovault.baseline.p00'
+  ↪︎Find: Descendants matching type Any
+    ↪︎Find: Elements matching predicate 'label == "সেভ করুন"'
+      ↪︎Find: First Match

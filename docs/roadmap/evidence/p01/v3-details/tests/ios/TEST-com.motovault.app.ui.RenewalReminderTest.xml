@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.ui.RenewalReminderTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-26T08:01:50" hostname="MacBookPro" time="0.002">
+  <properties/>
+  <testcase name="thirtyDayWarningAndExpiryAreAtNine[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="insideWindowUsesNextMorningAndDoesNotMoveOnRelaunch[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="beforeNineUsesTodayAndAtNineUsesTomorrow[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="expiredMissingAndInvalidDatesHaveNoNativeReminders[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="expiryDayUsesOneExpiryAlertIncludingLateAddition[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.001"/>
+  <testcase name="editingExpiryReplacesIdentityAndDeletingCancelsEverything[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="consumedReminderNeverReappearsEvenAfterClockMovesBack[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="fullIdsAvoidJavaHashCollisionsAndDisplayEditKeepsIdentity[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="recordOptOutAndMissingExpiryNeverSchedule[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="globalTimeAndPerRecordLeadOverrideUseLocalCalendar[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.001"/>
+  <testcase name="migrationReplacesOldSixtyDayDateWithoutReplayingConsumedEvents[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="snoozeDefersWithoutChangingExpiryAndDeduplicatesSameTime[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="consumedWarningCanSnoozeTomorrowWithoutRestoringTheOldCatchUp[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

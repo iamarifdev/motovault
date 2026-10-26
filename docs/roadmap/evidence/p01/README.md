@@ -1,5 +1,8 @@
 # P01 evidence index
 
+- [Garage height correction and further open details](../P01-12-garage-layout-review.md)
+- [Current Garage build and rendered-geometry provenance](garage-review/provenance.json)
+
 Status: implementation in review. Listed physical Android core scenarios pass;
 full motion/accessibility and physical iPhone acceptance remain pending. This folder contains synthetic data only, using
 the isolated application ID `com.motovault.baseline.p00`.
@@ -9,12 +12,15 @@ pending-device instruction recorded; its broader device/design matrix is not
 inferred from local builds.
 
 Initial base revision: `86c1598`. P01 implementation was pushed as `48fce40`;
-the delivered-alert retention follow-up remains uncommitted. Its collected source,
+the delivered-alert retention follow-up and existing evidence were subsequently
+committed/pushed as `792e63a` and `63198f9`. Historical collected source,
 fixture and binary fingerprints are in [provenance.json](provenance.json), including
 the iOS `MotoVault.debug.dylib` that contains the Kotlin implementation. A binary
 hash identifies the local artifact; it does not claim release signing or device
 validation. No owner database, document original or production app was reset.
 
+- [17 v3 detail corrections and final native captures](../P01-11-v3-detail-corrections.md)
+- [V3 working-tree source, artifact and test provenance](v3-details/provenance.json)
 - [Policy and migration](../P01-01-verification.md)
 - [Scheduling, exact targets and durable Undo](../P01-02-verification.md)
 - [Native permission, snooze and failed-save checks](../P01-03-verification.md)

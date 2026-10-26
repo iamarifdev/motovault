@@ -1,0 +1,316 @@
+{
+  "baseRevision": "63198f96743d0abf3df0a45736dea452885d2725",
+  "uncommitted": true,
+  "scope": "Garage paired-card geometry and adjacent details, actual app font scaling, History summary containment; not full-app acceptance",
+  "android": {
+    "result": "Passed",
+    "synthetic": true,
+    "applicationId": "com.motovault.baseline.p00",
+    "cases": [
+      {
+        "case": "normal-bn",
+        "digits": "bn",
+        "appTextScale": 1.0,
+        "odometerBounds": [
+          53,
+          1089,
+          527,
+          1523
+        ],
+        "economyBounds": [
+          553,
+          1089,
+          1027,
+          1523
+        ],
+        "labelHeight": 64,
+        "result": "Passed",
+        "historySummaryHeadingBounds": [
+          [
+            90,
+            372,
+            327,
+            435
+          ],
+          [
+            397,
+            372,
+            492,
+            435
+          ],
+          [
+            704,
+            372,
+            845,
+            435
+          ]
+        ]
+      },
+      {
+        "case": "large-en-unknown",
+        "digits": "en",
+        "appTextScale": 1.3,
+        "odometerBounds": [
+          53,
+          929,
+          527,
+          1410
+        ],
+        "economyBounds": [
+          553,
+          929,
+          1027,
+          1410
+        ],
+        "labelHeight": 84,
+        "result": "Passed",
+        "historySummaryHeadingBounds": [
+          [
+            90,
+            383,
+            376,
+            547
+          ],
+          [
+            397,
+            383,
+            517,
+            465
+          ],
+          [
+            704,
+            383,
+            884,
+            465
+          ]
+        ]
+      },
+      {
+        "case": "large-bn-long",
+        "digits": "bn",
+        "appTextScale": 1.3,
+        "odometerBounds": [
+          53,
+          1263,
+          527,
+          1906
+        ],
+        "economyBounds": [
+          553,
+          1263,
+          1027,
+          1906
+        ],
+        "labelHeight": 84,
+        "result": "Passed",
+        "historySummaryHeadingBounds": [
+          [
+            90,
+            383,
+            376,
+            547
+          ],
+          [
+            397,
+            383,
+            517,
+            465
+          ],
+          [
+            704,
+            383,
+            884,
+            465
+          ]
+        ]
+      },
+      {
+        "case": "large-en-long",
+        "digits": "en",
+        "appTextScale": 1.3,
+        "odometerBounds": [
+          53,
+          1237,
+          527,
+          1718
+        ],
+        "economyBounds": [
+          553,
+          1237,
+          1027,
+          1718
+        ],
+        "labelHeight": 84,
+        "result": "Passed",
+        "historySummaryHeadingBounds": [
+          [
+            90,
+            383,
+            376,
+            547
+          ],
+          [
+            397,
+            383,
+            517,
+            465
+          ],
+          [
+            704,
+            383,
+            884,
+            465
+          ]
+        ]
+      }
+    ],
+    "scope": "Rendered equal card heights/widths, text bounds, app text scaling, long values and unknown economy on an ARM64 emulator. Not full-app visual parity."
+  },
+  "ios": {
+    "normal": {
+      "result": "Passed",
+      "passedTests": 1,
+      "failedTests": 0
+    },
+    "large": {
+      "result": "Passed",
+      "passedTests": 1,
+      "failedTests": 0
+    }
+  },
+  "regressions": {
+    "androidKeypadNormalAndLarge": "Passed after font-density correction",
+    "iosLargeKeypad": "Passed after font-density correction",
+    "representativeMatrix": "Both hosts normal/large captured after font-density correction; before final History-column and caption-only refinements"
+  },
+  "sourceSha256": {
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Accessibility.kt": "86d56b28b98ba20206255817039e7d799813c32b8257f99acd7eb32bf0ed9917",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Appearance.kt": "e78bf173054871b2b918575b702bb6610f1cedb6a84b2c4bdb8adb41c9dfc002",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/BikeCatalogue.kt": "1e59c08a9f71329674e02e7a43950f7c29a2ec0adf2917a01f56b671e7c21672",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Bn.kt": "fb5d1110adc08d5d2082268d04d31caf94de964415f2d4e721bdfc8b1022d21e",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Catalog.kt": "b1d8d043b4459c59cf183d2cd558953582a31e9b6e445b656f1df09017bd5c80",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Components.kt": "976c7d61e60f81ea8f8601a5123b6df0c77ccc92bab319171aac6b593afec8e0",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt": "89319053fecd39dadc29cd4bed4a596c2a1243b3ef38c67e740bfecae3149d64",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt": "a94762946734d1f8e1fff84a2b54d37d3e742b39642460d13bb6f27a53511356",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentLabels.kt": "ef17a094698122a40253fdea564ba9c2b2df4c3f2643a2579216e2f62cb4135d",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentWallet.kt": "219956b4864d00c1ec89824483dc062338aaa01e205785abcdbee8cac9327312",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/FactoryProfiles.kt": "96509927637d36ee7f4b1ad8420d52b38bce4e5a2933f8f612fc484695ab7b47",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/GaugeDetailSheet.kt": "02d3c1daba1a7148cc3175a01d699f55652b96c951217611f1595fa2306f0dfa",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Haptics.kt": "420c7ca546f28af4f79aa9cb1a38259dc43c27a8c98d2544ed8b0af8c34228b8",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/InspectionBrightness.kt": "7991f90c7f7872267050ae06bcc8064784e17338388768b3f07d691db8f112f9",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/LaunchConfig.kt": "eda1f95d1bd6d9c2270789ba86e1fa27ca4cb769d84131aa03bc02b476717f5f",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/LocationCapture.kt": "07d405f9c2198006dce0a64fd4f719ecc632a958fc421d6cc2cd0a5a9345cbcb",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Motion.kt": "2c2d7d8051de905b449c10eb602132d16d5f6fa58c973c784097c70f6ec5c37c",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt": "ca51d5448a87ee74eed8f047a4a6c712cc18315de3291bd6f56d52b25c47e116",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Onboarding.kt": "9d7fc4f1a0ff03d81256918787b2bd6dde0e1961b1d542ef8abaee8354635491",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt": "47df0b6af0cbdf9d8ca7713800f63936f9d6d554c69ebec6889b465c73828346",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/PassportExportUi.kt": "21b6715ddf3cb108ff2fca187b77b4cf3943d7337691bfb90930b33ddf120825",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/QuickService.kt": "108101d5bfa1827f28da9171008bc94adab7d9fcfa32e49cc3ecd31721f4a208",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ReminderPlan.kt": "006c9071ab0a890f0d3f4c003d7ba5e627bfe63eaa2ac46050cc4b2e665f3ddb",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ReminderSheets.kt": "c913bf069395c8ae872ffd15155ada55ac8e040c6118f88cdb9c662225fa0e4d",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/RenewalJournal.kt": "a2a3aa3f0692e87ed757c885d2f7dc2e845eb17a75e8db4600ecfee0196fcf1a",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/RenewalReminders.kt": "7a6608a02bf444f728fc472b8aa09e6696f872500975ccc2d72f661ba7350006",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Screens.kt": "76214500f6b4a8c75398c05f07f0bb0bc55e439a2f329d1c5c5db942250a76cd",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt": "39b1a82498fa09c11710c9e44e764b310315bd5012dd3a5014592d07b515c9a7",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServicePassport.kt": "c322646b10ef1ae4012c0f1c80358b5f977dbc271dddce83eaf6e9304d41090d",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Sheets.kt": "11d81c24920a2fd531607f09b14c4d92f57622fa229ed9c099ee432162264c0e",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartParse.kt": "7ba976095ca748a2abf332fe1026fe31087fe1070f25f468196d0c3002787d16",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt": "abf89c7f59231c17035abc79948e891adc30b67319278e6aed8c87da91edbc6e",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/V3Borders.kt": "560484120f889b900439082bae2aa491f6ecf59eafa104c43991917000703848",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/V3Icon.kt": "7b520872edc16a9017420035af3ba3a6f511b265419c7ee6fc5122b0af00c8e1",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/V3IconPaths.kt": "f949ee08a797bb7206c51096190ffde7243e1d3652f6a7c60da0a955eef3fd1b",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultSettings.kt": "d91e5dcfffc569ac27d7cb6a126bf4fb31aeb28fbb2c72f2e59163b57ed7bfdf",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt": "20a021c77ac9c3726382e31a8552afcd300276147321ef0c6584ffa32b26f43b",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/WearDomain.kt": "e4d6672f4ceb96e1189cc1319a3f5222dca673d93c8aa29ae83122d5a6d45b85",
+    "design/app-ui-v3/src/App.tsx": "53d81074d9a9aa9b2ef4a5f2192b5a1e8341ce1abdde79b7699af1ef2caaf40e",
+    "design/app-ui-v3/src/components/DevPanel.tsx": "70e617f34ceb2d48ecf82a02fd45c2a1f6e4f715d95762ed3a09e20552a84726",
+    "design/app-ui-v3/src/components/DocCard.tsx": "d7e10c87214f1789c9d6dfeb57e73859bc0f80ed718a8e8d6ac71a3ff67cfae1",
+    "design/app-ui-v3/src/components/Gauge.tsx": "d374d8f9fbbc59247cc8f33d7f7041ead7997a08310a0fc0863fab33dbe64d67",
+    "design/app-ui-v3/src/components/Sheet.tsx": "6ebc9e9c7e02398c312e1e509643338e1e8ff932acd5b2a64af0cbeb36641cd0",
+    "design/app-ui-v3/src/components/SmartInput.tsx": "2e459618788e1e65946fead6d7e882b70c464e159bce96e892956d5684af4838",
+    "design/app-ui-v3/src/components/TabBar.tsx": "564544b80b71780670df684a5b340977c3e65039fd7bcd16ca6fbae2fb9f79a2",
+    "design/app-ui-v3/src/components/Toast.tsx": "725bcdf5fc7807a6c470fee704a284c59cd393d8f040df9c418409df9eb06ac2",
+    "design/app-ui-v3/src/components/entry.tsx": "c8e7a26259f924f947386fdd3bbe015c4e6c5dbd74d40aab4f296cce6574515c",
+    "design/app-ui-v3/src/components/ui.tsx": "7425286b08ab5ef19b95a9594a1a80e3e1199dfdffa01021597820be00026beb",
+    "design/app-ui-v3/src/data/catalog.ts": "9c73f0a5df5202b92c9845675acdbd2a20bba4ed93dbde808afc36192c8aeb4f",
+    "design/app-ui-v3/src/data/seed.ts": "6c1bd0582ec5f61879ec63dc00928c231629293f96284484f829f3afa3c67131",
+    "design/app-ui-v3/src/lib/bn.ts": "55050cb26935b5994b9c00e9defcb7b2be3b65c291be80a73408e42816e2dcae",
+    "design/app-ui-v3/src/lib/dates.ts": "b0bdad0eeeac565c6b848cfd45ffbf6a500fa940c93b9922b01e877d9d7c97cb",
+    "design/app-ui-v3/src/lib/haptics.ts": "9bab6d6c3ae78569510b3c80b303d993fcfd3b1e9b6467f509861f84f6f955fa",
+    "design/app-ui-v3/src/lib/motion.ts": "65eaf01ed12f9107bfe08e20553db5b05b01a32a82fd177a913eb754d118af2a",
+    "design/app-ui-v3/src/lib/smartParse.ts": "bc571faa0383f24ed9d19a77859413fee78bbcb7d361af945a4d7dc8e9a14071",
+    "design/app-ui-v3/src/lib/wear.ts": "d240df4cacb62beb577f6b8089d6f4dce1a044411065b74b2f37bb6a3e979e02",
+    "design/app-ui-v3/src/main.tsx": "e3320066b4927f97622f70f597d81e02c27011645835b403953357cbf0903c6b",
+    "design/app-ui-v3/src/screens/History.tsx": "1ba2d09ac95b540bd5b503fc48327cd737487a4297af4a29134943161949d166",
+    "design/app-ui-v3/src/screens/Home.tsx": "4734e87db80f7a24d26cab0d70065f321b31179ee765d21be7aea3ed25b35c88",
+    "design/app-ui-v3/src/screens/Me.tsx": "ca00090309345c16a91d9a7dcf32d9dd922cdc568b8069b69618223f87684266",
+    "design/app-ui-v3/src/screens/Onboarding.tsx": "0cf54984f405c67024f8fa9136968d683edc66d0dfe040b2b336d5a8c5014a8b",
+    "design/app-ui-v3/src/screens/Vault.tsx": "700e27340c6796304008d63ad90c5d7119680f4a7ba506ddeaa86343fc8b660f",
+    "design/app-ui-v3/src/sheets/DocAddSheet.tsx": "c7382a7b604a2b41f3d9afaa6d89fadf2d13a707fdbf541867913a28d4e1f27c",
+    "design/app-ui-v3/src/sheets/DocViewSheet.tsx": "143434b84c16497844cb847935660793cc11f63d0a86c6e49cfb5b3da50beed2",
+    "design/app-ui-v3/src/sheets/FuelSheet.tsx": "fd4b69d8369076d12771b7f23a128f23a55e6fe899075a12892dfcd525f00525",
+    "design/app-ui-v3/src/sheets/GaugeDetailSheet.tsx": "d5abf4978922a1378d8ab18f520d31b8fb52d6b846bb782715c5b47d90acd22c",
+    "design/app-ui-v3/src/sheets/OdometerSheet.tsx": "f78836e37822319aa29aa20d3c0af8ffe60234018ba6fb31ed85610f4e562cb9",
+    "design/app-ui-v3/src/sheets/PasteSheet.tsx": "87a4b55d374130343b41611e106ee5efb009dc6318f8fa137f4f17377a7a59fa",
+    "design/app-ui-v3/src/sheets/QuickAdd.tsx": "fb71611a84a2f37f4236cc56c7bbd27aa8d2faec4d284c282b26247bb54892f1",
+    "design/app-ui-v3/src/sheets/ReminderSheet.tsx": "bd1da556971e4cb7474b3471cc55ce655d47fe56a2d4f36e18671cd7b5721092",
+    "design/app-ui-v3/src/sheets/ServiceSheet.tsx": "bd811240469ae43005bf20ca0ba16caac50611f84a685644bcc36d4448c215c3",
+    "design/app-ui-v3/src/store.ts": "d36177621c045a5f2cee0448baf1d02d133ef4c7729c22d264751b3c619c75b6",
+    "design/app-ui-v3/src/styles/app.css": "0e1fd6fbcb6f359a758b7fcec10658f925e97eeaae5fa2f6c58e96acf33a369b",
+    "design/app-ui-v3/src/styles/base.css": "d7c31788c4e2a215fc101ca59ef5ec7e155d08ed05b70e8849f9ecb9d83358a6",
+    "design/app-ui-v3/src/styles/tokens.generated.css": "014d67007ee21a87e5942d127af2f83db5e69a25a98635289de97e6a536a5686",
+    "design/app-ui-v3/src/tokens.generated.ts": "b0cf0cbced59e58b1a844f73cb9ad1c7fa765dd16e198760691fa86f6befa29a",
+    "design/app-ui-v3/src/types.ts": "a570eaa7494384682708b069b8a31c5b8c2ceb4edb12f771bd8f31cff20fce22",
+    "tools/baseline/P01DeliveryTests.swift": "2824e22b33431f0988e5d95fc4a30771cb4c511918d3b060a89b1e18ed13a804",
+    "tools/baseline/p01_ios_acceptance.py": "a336a40ee7d83652462bad51310834f550ce94e191f6fd422194868515f6cd66",
+    "tools/baseline/v3_garage_layout.py": "f8e401ca7476ac9fd185b7da1ad51d4f4f6b404e7b790418163635acf6ffb702",
+    "tools/build-v3-icons.mjs": "c8d0f003b6cfcd1655b31a86ae308ffe671fb0e5360b5cc7104e43186ea654ec"
+  },
+  "artifactSha256": {
+    "composeApp/build/outputs/apk/debug/composeApp-debug.apk": "6d5f544393fc9442b225de57208e0f32a06caf33a673303fa3488af7fbac5f3e",
+    "build/p01-ios-tests-derived/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault.debug.dylib": "30221b2c5b8b70c8a228736bb254a492e135a54793de4361fd38e1342b5f1a80"
+  },
+  "evidenceSha256": {
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/fixtures/native/large-bn-long.json": "a901012cb28ee6fdd78491d3b8e2aad7ff38c262220336c851ef8774427b1913",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/fixtures/native/large-en-long.json": "586e61e1402c070fe0e680aacca58232c40a38546da312e37a41329413fe62c7",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/fixtures/native/large-en-unknown.json": "922dfe7c212c93874663b346a3b8f4d29327c5621bc780e6f1531e7b2820d709",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/fixtures/native/normal-bn.json": "39f4df899aa7c97112409bb25938db45dfc753112028bcae7527995e72e0fe9f",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-bn-long/history.png": "6c5d4d1e1d2284ca50d6e804f3dbbddbfa1e40d7772282215791e1ed081c700d",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-bn-long/history.xml": "0739713af6fe3d47f3e12116f6769b515b811e91692fd81446f140cf6e5ec150",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-bn-long/position-0.xml": "9f782376820e0f897e49e857b08a4542b390b8d3983c232304fa0be6b0b8278f",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-bn-long/position-1.xml": "25a6a20e95f1c93a1141c95aaa7f17207c631b17c3498c677b0cfb58c32f0871",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-bn-long/stats.png": "3666a6157511191b959c00861ac1b6afc9a01b2db3fbd7c7cfb845ce9a604e85",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-en-long/history.png": "ebdf3d4774360bdffad54da8b0b1f3591914743969a3e54c50e7b0517c26816e",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-en-long/history.xml": "c915a82617e111a34c4341c654220418ddd1b4f482d7d6da5c70e796670e373c",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-en-long/position-0.xml": "b5503d4c23f20799ff85e13f4aa2ad322f6a80105735512c2fc1378d80e3229b",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-en-long/position-1.xml": "6d3c20dcf5dff1a8137af00cfba0c41984705150ca1d12b2b5d64f5491f4f5cf",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-en-long/stats.png": "a8c42372b3411953a3df66666f2330df5a775d7807a9bc013f72e4def1f24864",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-en-unknown/history.png": "0d89358e955741081d2d8401e30eeacb7a1dbccd8a046ce4aa8141b7e17f003a",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-en-unknown/history.xml": "46c691fee8ccb6fab9fab51c15e844836bdbd7123a28f38f806e78d28c9b85c7",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-en-unknown/position-0.xml": "8039ecf86d8d5dddf550c72ffaecaccccd12ecffddd6f78008dc5ebae44968e1",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-en-unknown/position-1.xml": "abdde01544f443430d34d6f41d368e5c2ca1f9ce95ca32a88fc95d99a0b1e4e4",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/large-en-unknown/stats.png": "7c6d1f5c66b077cef5ab8ac2093aaf12cca746a7fe77dcbcf07a9294efeb8bc6",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/normal-bn/history.png": "72b2cad9417a2d6a67935754329d7a9a06ce629024753e25b45d81d3d9db3f3e",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/normal-bn/history.xml": "87feedf2801c89602e4bfc37ccb63405ab787c6c3edefd75f2967f0f9db58bad",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/normal-bn/position-0.xml": "ebb4a88efba3a12ade2d8001807e9202412cc60791c276100c8cdd8f7bdf664b",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/normal-bn/position-1.xml": "c1f35422321f642bbfe0ea5b7351b292c528fad3a2547b0d550cb650744055ce",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/normal-bn/stats.png": "e622cd7fd1608d38b73e57bad29293be96203d1d7cfa01dda391a92cbb559bf4",
+    "docs/roadmap/evidence/p01/android/garage-layout-r4/result.json": "feb73f074beac67257dfcf79a3e10ea086b94cb9d2e25b3cd09e8efe5ebabdde",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-large-r3/attachments/3C1584E7-8F1C-4236-8A77-4164FD547179.txt": "a0d972b17bf074c8f628b125a66f2fe60373d9b4c017b18d096952bc7d0f5f37",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-large-r3/attachments/9AB7C1BB-66E6-49A8-B25B-DBE555458A68.png": "d58f3f3a62bf9e8cad576303c96d946c56dc33217fb92ae4c60996a9345e9fd8",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-large-r3/attachments/C4EF8D2D-B2CC-45E4-B0DF-D580DBD2751B.png": "b23459af043c4a99fd4e1ecb2903f8c364ad6a88f6c1b421ff737e6c36315230",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-large-r3/attachments/E22FBE73-7FDF-42AB-BA5A-5A33089CB356.txt": "cf278da0558b537e3041af04edb8bf252155e6c0881796d1877972866bb76e6d",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-large-r3/attachments/EFE85DF0-F49F-44E7-A2A0-6A861BF58AE4.txt": "d8e0c9050c711cda7dcffb7d178ff87601f232f266cfb313045e12bb005961ad",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-large-r3/attachments/manifest.json": "6de4fff088530156b19a695ffcc69351754daf2748c6f3289e66892a9553feae",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-large-r3/run.json": "60154ba1c22fcd09f6717528fb4b09cde7e5c803844fd8cbe8649e5f52dfd713",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-large-r3/summary.json": "460531f3cd72a79181be87814e22abe2b85e5f0c8df4678eec5fdb325efbd082",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-normal-r3/attachments/0764F24F-0E81-49D5-A4A8-29C55CF28DCC.png": "357c0f81055ccb7ca6bd7019ce4246deb7d1f4411b2eb18777e65096ecea83c5",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-normal-r3/attachments/1391B9B3-8FB2-4AB8-B106-44B4786A9940.txt": "7789b5907e964504d89ff12a9966a2a7d603d9382b56a70cd71ebc70fd4bb45d",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-normal-r3/attachments/A67808A4-138D-4B47-B50F-099A376B07E6.txt": "40da0afb7fb39d9ffd4da3c81f2cf3048c0f521bce02cda0f8a25533d3f46d4e",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-normal-r3/attachments/CC349910-BE34-468E-A704-F3714C0BAA2A.png": "162d67dd0e7333335c01ac8a4d2caafeb4b92f06e8ece3f42e5475a4b6ddbdf9",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-normal-r3/attachments/DE120AC7-D6D3-4067-B62B-57ABCCA914D7.txt": "b1ffaedf4382e29919fb63d3346399ab768e3199e1b80c3d3c2aa8f379e8fd37",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-normal-r3/attachments/manifest.json": "72ed58101b52cb2aaec0e35a4fdbc7973d240449f171cc19ce4c389678742e8d",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-normal-r3/run.json": "34ac6bfc532d5063d008bc97c1ee95506eca3736e71e63208705b71659ff3de7",
+    "docs/roadmap/evidence/p01/ios/acceptance-garage-normal-r3/summary.json": "940987cf61b38f0a9d6fa96da44cd71d61782b36ccc8ef40e5f8442c33b30bae"
+  }
+}

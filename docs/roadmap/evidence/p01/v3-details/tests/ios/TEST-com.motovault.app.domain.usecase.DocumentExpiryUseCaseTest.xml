@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.domain.usecase.DocumentExpiryUseCaseTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-26T08:01:50" hostname="MacBookPro" time="0.001">
+  <properties/>
+  <testcase name="missingExpiryStaysUnclassifiedAsValidOrExpired[iosSimulatorArm64]" classname="com.motovault.app.domain.usecase.DocumentExpiryUseCaseTest" time="0.0"/>
+  <testcase name="moreThanThirtyDaysIsValid[iosSimulatorArm64]" classname="com.motovault.app.domain.usecase.DocumentExpiryUseCaseTest" time="0.0"/>
+  <testcase name="renewalWarningIncludesTheThirtiethAndLastRemainingDay[iosSimulatorArm64]" classname="com.motovault.app.domain.usecase.DocumentExpiryUseCaseTest" time="0.0"/>
+  <testcase name="expiryDayIsExpired[iosSimulatorArm64]" classname="com.motovault.app.domain.usecase.DocumentExpiryUseCaseTest" time="0.0"/>
+  <testcase name="pastExpiryIsExpired[iosSimulatorArm64]" classname="com.motovault.app.domain.usecase.DocumentExpiryUseCaseTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

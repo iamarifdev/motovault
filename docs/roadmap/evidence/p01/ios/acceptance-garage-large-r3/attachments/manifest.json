@@ -1,0 +1,53 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "3C1584E7-8F1C-4236-8A77-4164FD547179.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "garage-history-tree_0_B96E3A38-59CA-47C4-A6EF-94C1CE3B917D.txt",
+        "timestamp" : 1793007429.731
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "C4EF8D2D-B2CC-45E4-B0DF-D580DBD2751B.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "garage-history_0_E3E1E0D4-2CEC-4BC5-8461-01F0D0DF5786.png",
+        "timestamp" : 1793007429.659
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "EFE85DF0-F49F-44E7-A2A0-6A861BF58AE4.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "garage-stat-bounds_0_3DB4CB5A-B6F3-4540-AA11-4FD38F006346.txt",
+        "timestamp" : 1793007425.03
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "E22FBE73-7FDF-42AB-BA5A-5A33089CB356.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "garage-stats-tree_0_F4921CC8-B025-413E-8B45-BC4AFF5FF02B.txt",
+        "timestamp" : 1793007424.965
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "9AB7C1BB-66E6-49A8-B25B-DBE555458A68.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "garage-stats_0_899F2B59-D1EE-4BCF-889A-D1944372A1CF.png",
+        "timestamp" : 1793007424.875
+      }
+    ],
+    "testIdentifier" : "P01DeliveryTests/testGarageStatCardGeometry()",
+    "testIdentifierURL" : "test://com.apple.xcode/MotoVault/MotoVaultUITests/P01DeliveryTests/testGarageStatCardGeometry"
+  }
+]

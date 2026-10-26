@@ -1,5 +1,16 @@
 # P01 v3 design review
 
+Current Garage follow-up: [paired-card geometry and second detail sweep](P01-12-garage-layout-review.md).
+The previous audit missed unequal stat-card heights and incomplete app text
+scaling. Both are corrected with measured native cases; eight additional source
+differences remain explicitly open in that report.
+
+Latest follow-up: [17 v3 detail corrections](P01-11-v3-detail-corrections.md).
+Fuel/Gauge and other audited icons, navigation geometry, Quick Add, sheet headers
+and light/dark toast details are corrected in the working tree after `63198f9`.
+Native screenshots and save/Undo checks are retained for both hosts. This closes
+the listed source differences, not the full design acceptance matrix below.
+
 Reference: [v3 design contract](../DESIGN-CONTRACT.md). New flows were extended in
 `design/app-ui-v3/` before porting their native UI. Native brand-selection logos,
 the four tabs, central add action, font assets and token sources are preserved.

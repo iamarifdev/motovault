@@ -1,0 +1,164 @@
+{
+  "result": "Passed",
+  "synthetic": true,
+  "applicationId": "com.motovault.baseline.p00",
+  "cases": [
+    {
+      "case": "normal-bn",
+      "digits": "bn",
+      "appTextScale": 1.0,
+      "odometerBounds": [
+        53,
+        1089,
+        527,
+        1523
+      ],
+      "economyBounds": [
+        553,
+        1089,
+        1027,
+        1523
+      ],
+      "labelHeight": 64,
+      "result": "Passed",
+      "historySummaryHeadingBounds": [
+        [
+          90,
+          372,
+          327,
+          435
+        ],
+        [
+          397,
+          372,
+          492,
+          435
+        ],
+        [
+          704,
+          372,
+          845,
+          435
+        ]
+      ]
+    },
+    {
+      "case": "large-en-unknown",
+      "digits": "en",
+      "appTextScale": 1.3,
+      "odometerBounds": [
+        53,
+        929,
+        527,
+        1410
+      ],
+      "economyBounds": [
+        553,
+        929,
+        1027,
+        1410
+      ],
+      "labelHeight": 84,
+      "result": "Passed",
+      "historySummaryHeadingBounds": [
+        [
+          90,
+          383,
+          376,
+          547
+        ],
+        [
+          397,
+          383,
+          517,
+          465
+        ],
+        [
+          704,
+          383,
+          884,
+          465
+        ]
+      ]
+    },
+    {
+      "case": "large-bn-long",
+      "digits": "bn",
+      "appTextScale": 1.3,
+      "odometerBounds": [
+        53,
+        1263,
+        527,
+        1906
+      ],
+      "economyBounds": [
+        553,
+        1263,
+        1027,
+        1906
+      ],
+      "labelHeight": 84,
+      "result": "Passed",
+      "historySummaryHeadingBounds": [
+        [
+          90,
+          383,
+          376,
+          547
+        ],
+        [
+          397,
+          383,
+          517,
+          465
+        ],
+        [
+          704,
+          383,
+          884,
+          465
+        ]
+      ]
+    },
+    {
+      "case": "large-en-long",
+      "digits": "en",
+      "appTextScale": 1.3,
+      "odometerBounds": [
+        53,
+        1237,
+        527,
+        1718
+      ],
+      "economyBounds": [
+        553,
+        1237,
+        1027,
+        1718
+      ],
+      "labelHeight": 84,
+      "result": "Passed",
+      "historySummaryHeadingBounds": [
+        [
+          90,
+          383,
+          376,
+          547
+        ],
+        [
+          397,
+          383,
+          517,
+          465
+        ],
+        [
+          704,
+          383,
+          884,
+          465
+        ]
+      ]
+    }
+  ],
+  "scope": "Rendered equal card heights/widths, text bounds, app text scaling, long values and unknown economy on an ARM64 emulator. Not full-app visual parity."
+}

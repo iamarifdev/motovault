@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-26T07:10:22+00:00",
+  "updated_at": "2026-10-26T09:40:04+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -873,6 +873,22 @@
             {
               "at": "2026-10-26T07:10:22+00:00",
               "text": "Owner explicitly requested keeping the remaining TalkBack/spoken-accessibility and physical-haptic session pending because participation is not currently possible. TalkBack is installed but was not enabled; phone is locked and awake setting remains restored to 0. Physical iPhone is still unavailable. Preserve P01-05 in review with these acceptance gates open."
+            },
+            {
+              "at": "2026-10-26T07:54:57+00:00",
+              "text": "Owner requested correcting the 17 confirmed v3 detail differences after committing and pushing existing P01 work. Starting app-scoped exact Lucide icons and shared geometry/theme corrections; physical iPhone, spoken accessibility and haptics remain pending."
+            },
+            {
+              "at": "2026-10-26T09:10:42+00:00",
+              "text": "Corrected all 17 audited v3 source differences after pushing 792e63a and 63198f9. Exact app-scoped Lucide artwork, navigation marker/geometry, Quick Add, sheet header and theme-aware toast are implemented. Android 148 and iOS ARM64 170 tests pass; 10 final native capture/keypad/Undo/edge/navigation runs pass. New UI remains uncommitted; provenance records exact working sources and binaries. Physical iPhone, spoken accessibility/haptics, full state/motion parity and prior post-boot delivery limitation remain open."
+            },
+            {
+              "at": "2026-10-26T09:18:53+00:00",
+              "text": "Owner found unequal Garage stat card heights after the prior detail fixes. Reopening the Garage layout audit: compare paired-card measurement, value/unit baselines, hint rows and adjacent Home section spacing with v3. Preserve previous changes and keep physical acceptance gates pending."
+            },
+            {
+              "at": "2026-10-26T09:40:04+00:00",
+              "text": "Corrected owner-reported Garage stat height mismatch and adjacent v3 details. Final Android four-case measured geometry/text-containment/scaling checks pass; final iOS 27 Pro Max normal/large card geometry and navigation pass, heights 159/212 points. App font-size preference now reaches explicit sp values once; large-keypad and representative screen regressions pass after that change. Eight additional cross-screen/source visual differences are documented and remain open. No full-app parity, physical iPhone, haptics or spoken-accessibility completion claim."
             }
           ],
           "evidence": [
@@ -1008,6 +1024,34 @@
               "summary": "Owner explicitly requested keeping the remaining TalkBack/spoken-accessibility and physical-haptic session pending because participation is not currently possible. TalkBack is installed but was not enabled; phone is locked and awake setting remains restored to 0. Physical iPhone is still unavailable. Preserve P01-05 in review with these acceptance gates open.",
               "at": "2026-10-26T07:10:22+00:00",
               "revision": "48fce40"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P01-11-v3-detail-corrections.md",
+              "summary": "Corrected all 17 audited v3 source differences after pushing 792e63a and 63198f9. Exact app-scoped Lucide artwork, navigation marker/geometry, Quick Add, sheet header and theme-aware toast are implemented. Android 148 and iOS ARM64 170 tests pass; 10 final native capture/keypad/Undo/edge/navigation runs pass. New UI remains uncommitted; provenance records exact working sources and binaries. Physical iPhone, spoken accessibility/haptics, full state/motion parity and prior post-boot delivery limitation remain open.",
+              "at": "2026-10-26T09:10:42+00:00",
+              "revision": "63198f9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/p01/v3-details/provenance.json",
+              "summary": "Corrected all 17 audited v3 source differences after pushing 792e63a and 63198f9. Exact app-scoped Lucide artwork, navigation marker/geometry, Quick Add, sheet header and theme-aware toast are implemented. Android 148 and iOS ARM64 170 tests pass; 10 final native capture/keypad/Undo/edge/navigation runs pass. New UI remains uncommitted; provenance records exact working sources and binaries. Physical iPhone, spoken accessibility/haptics, full state/motion parity and prior post-boot delivery limitation remain open.",
+              "at": "2026-10-26T09:10:42+00:00",
+              "revision": "63198f9"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P01-12-garage-layout-review.md",
+              "summary": "Corrected owner-reported Garage stat height mismatch and adjacent v3 details. Final Android four-case measured geometry/text-containment/scaling checks pass; final iOS 27 Pro Max normal/large card geometry and navigation pass, heights 159/212 points. App font-size preference now reaches explicit sp values once; large-keypad and representative screen regressions pass after that change. Eight additional cross-screen/source visual differences are documented and remain open. No full-app parity, physical iPhone, haptics or spoken-accessibility completion claim.",
+              "at": "2026-10-26T09:40:04+00:00",
+              "revision": "63198f9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/p01/garage-review/provenance.json",
+              "summary": "Corrected owner-reported Garage stat height mismatch and adjacent v3 details. Final Android four-case measured geometry/text-containment/scaling checks pass; final iOS 27 Pro Max normal/large card geometry and navigation pass, heights 159/212 points. App font-size preference now reaches explicit sp values once; large-keypad and representative screen regressions pass after that change. Eight additional cross-screen/source visual differences are documented and remain open. No full-app parity, physical iPhone, haptics or spoken-accessibility completion claim.",
+              "at": "2026-10-26T09:40:04+00:00",
+              "revision": "63198f9"
             }
           ]
         }
@@ -3863,6 +3907,38 @@
       "to": "in_review",
       "note": "Owner explicitly requested keeping the remaining TalkBack/spoken-accessibility and physical-haptic session pending because participation is not currently possible. TalkBack is installed but was not enabled; phone is locked and awake setting remains restored to 0. Physical iPhone is still unavailable. Preserve P01-05 in review with these acceptance gates open.",
       "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T07:54:57+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_progress",
+      "note": "Owner requested correcting the 17 confirmed v3 detail differences after committing and pushing existing P01 work. Starting app-scoped exact Lucide icons and shared geometry/theme corrections; physical iPhone, spoken accessibility and haptics remain pending.",
+      "revision": "63198f9"
+    },
+    {
+      "at": "2026-10-26T09:10:42+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Corrected all 17 audited v3 source differences after pushing 792e63a and 63198f9. Exact app-scoped Lucide artwork, navigation marker/geometry, Quick Add, sheet header and theme-aware toast are implemented. Android 148 and iOS ARM64 170 tests pass; 10 final native capture/keypad/Undo/edge/navigation runs pass. New UI remains uncommitted; provenance records exact working sources and binaries. Physical iPhone, spoken accessibility/haptics, full state/motion parity and prior post-boot delivery limitation remain open.",
+      "revision": "63198f9"
+    },
+    {
+      "at": "2026-10-26T09:18:53+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_progress",
+      "note": "Owner found unequal Garage stat card heights after the prior detail fixes. Reopening the Garage layout audit: compare paired-card measurement, value/unit baselines, hint rows and adjacent Home section spacing with v3. Preserve previous changes and keep physical acceptance gates pending.",
+      "revision": "63198f9"
+    },
+    {
+      "at": "2026-10-26T09:40:04+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Corrected owner-reported Garage stat height mismatch and adjacent v3 details. Final Android four-case measured geometry/text-containment/scaling checks pass; final iOS 27 Pro Max normal/large card geometry and navigation pass, heights 159/212 points. App font-size preference now reaches explicit sp values once; large-keypad and representative screen regressions pass after that change. Eight additional cross-screen/source visual differences are documented and remain open. No full-app parity, physical iPhone, haptics or spoken-accessibility completion claim.",
+      "revision": "63198f9"
     }
   ]
 }

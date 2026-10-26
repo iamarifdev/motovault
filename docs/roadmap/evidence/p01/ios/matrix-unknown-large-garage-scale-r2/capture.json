@@ -1,0 +1,18 @@
+{
+  "case": "unknown-large",
+  "applicationId": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "fixture": "docs/roadmap/fixtures/p01/native/unknown-large.json",
+  "fixtureSha256": "922dfe7c212c93874663b346a3b8f4d29327c5621bc780e6f1531e7b2820d709",
+  "appearance": "DARK",
+  "digits": "EN",
+  "textScale": 1.3,
+  "appReducedMotion": true,
+  "host": {
+    "udid": "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+    "name": "iPhone 18 Pro Max",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-0",
+    "osAppearance": "light"
+  },
+  "scope": "Representative native screenshots and reachable controls, not motion parity or spoken accessibility proof."
+}

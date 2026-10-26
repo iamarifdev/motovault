@@ -1,0 +1,41 @@
+Attributes: Application, 0x11255a1c0, pid: 85159, label: 'MotoVault P01 Test'
+Element subtree:
+ →Application, 0x11255a1c0, pid: 85159, label: 'MotoVault P01 Test'
+    Window (Main), 0x112559680, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1125597c0, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112559900, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x112559a40, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x112559b80, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x112559cc0, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x112559e00, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x112559f40, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=1)'
+                  Other, 0x11255a300, {{0.0, 62.0}, {440.0, 789.3}}
+                    Other, 0x11255a440, {{0.0, 62.0}, {440.0, 789.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=296)'
+                    Other, 0x11255a580, {{20.0, 74.0}, {73.3, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=298)', label: 'ইতিহাস'
+                    Other, 0x11255a6c0, {{34.0, 135.3}, {91.7, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=301)', label: 'গত ৩০ দিনের খরচ'
+                    Other, 0x11255a800, {{219.7, 135.3}, {37.3, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=304)', label: 'চালানো'
+                    Other, 0x11255a940, {{350.7, 135.3}, {55.3, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=307)', label: 'জ্বালানি গড়'
+                    Other, 0x11255aa80, {{34.0, 168.7}, {18.7, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=302)', label: '৳0'
+                    Other, 0x11255abc0, {{219.7, 168.7}, {35.7, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=305)', label: '0 km'
+                    Other, 0x11255ad00, {{350.7, 168.7}, {13.7, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=308)', label: '--'
+                    Button, 0x11255ae40, {{20.0, 230.0}, {45.7, 47.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=311)', label: 'সব'
+                    Button, 0x11255af80, {{73.7, 230.0}, {64.7, 47.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=314)', label: 'সার্ভিস'
+                    Button, 0x11255b0c0, {{146.3, 230.0}, {70.3, 47.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=317)', label: 'জ্বালানি'
+                    Other, 0x11255b200, {{366.0, 238.0}, {54.0, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=320)', label: '0টি রেকর্ড'
+                    Other, 0x11255b340, {{125.7, 325.3}, {189.0, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=322)', label: 'এখনও কিছু নেই। নিচের + চাপুন।'
+                  Button, 0x11255b480, {{190.3, 834.0}, {60.0, 60.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=128)', label: 'নতুন রেকর্ড যোগ করুন'
+                  Button, 0x11255b5c0, {{8.0, 852.0}, {85.0, 70.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=119)', label: 'গ্যারেজ'
+                  Button, 0x11255b700, {{93.0, 852.0}, {85.0, 70.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=123)', label: 'কাগজপত্র'
+                  Button, 0x11255b840, {{262.7, 852.0}, {84.7, 70.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=130)', label: 'ইতিহাস'
+                  Button, 0x11255b980, {{347.3, 852.0}, {84.7, 70.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=134)', label: 'আমি'
+              Other, 0x11255bac0, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x11255bc00, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x11255bd40, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x11255be80, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x11255a1c0, pid: 85159, label: 'MotoVault P01 Test'
+Query chain:
+ →Find: Target Application 'com.motovault.baseline.p00'
+  Output: {
+    Application, 0x11255a080, pid: 85159, label: 'MotoVault P01 Test'
+  }

@@ -1,0 +1,8 @@
+{
+  "result": "Passed",
+  "case": "runtime",
+  "applicationId": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "nativeUndoPreservesData": true,
+  "scope": "Native screenshots for icon/geometry/theme review and real save/Undo. Not full-app parity or physical-device proof."
+}

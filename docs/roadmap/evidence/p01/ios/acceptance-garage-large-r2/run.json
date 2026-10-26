@@ -1,0 +1,30 @@
+{
+  "device": {
+    "udid": "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+    "name": "iPhone 18 Pro Max",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-0"
+  },
+  "fixture": "unknown-large",
+  "synthetic": true,
+  "applicationId": "com.motovault.baseline.p00",
+  "host": {
+    "bundleId": "com.motovault.baseline.p00",
+    "displayName": "MotoVault P01 Test",
+    "signingIdentifier": "com.motovault.baseline.p00",
+    "scope": "Local ad-hoc simulator test packaging only; not a signed device or release build.",
+    "products": [
+      {
+        "path": "build/p01-ios-tests-derived/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault",
+        "sha256": "da5fef4975383dd5fd70994a02fb54bfbcc0c491f6e928fe31f885f586a50ab5"
+      },
+      {
+        "path": "build/p01-ios-tests-derived/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault.debug.dylib",
+        "sha256": "dc056b856c025d12cc3545fd39ee6751cc4b8346d6056444be382e7b6c14a6da"
+      }
+    ]
+  },
+  "tests": [
+    "testGarageStatCardGeometry"
+  ],
+  "scope": "Garage stat-card measured geometry, navigation and screenshots. No full-app parity or physical-device claim."
+}

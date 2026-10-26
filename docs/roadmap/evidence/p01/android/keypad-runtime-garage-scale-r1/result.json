@@ -1,0 +1,87 @@
+{
+  "result": "Passed",
+  "applicationId": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "case": "runtime",
+  "screenPixels": [
+    1080,
+    2424
+  ],
+  "density": 2.625,
+  "keyBounds": {
+    "১": [
+      53,
+      1717,
+      364,
+      1854
+    ],
+    "২": [
+      385,
+      1717,
+      695,
+      1854
+    ],
+    "৩": [
+      716,
+      1717,
+      1026,
+      1854
+    ],
+    "৪": [
+      53,
+      1875,
+      364,
+      2012
+    ],
+    "৫": [
+      385,
+      1875,
+      695,
+      2012
+    ],
+    "৬": [
+      716,
+      1875,
+      1026,
+      2012
+    ],
+    "৭": [
+      53,
+      2033,
+      364,
+      2170
+    ],
+    "৮": [
+      385,
+      2033,
+      695,
+      2170
+    ],
+    "৯": [
+      716,
+      2033,
+      1026,
+      2170
+    ],
+    "০": [
+      385,
+      2191,
+      695,
+      2328
+    ],
+    "মুছুন": [
+      716,
+      2191,
+      1026,
+      2328
+    ]
+  },
+  "saveBounds": [
+    53,
+    1554,
+    1026,
+    1691
+  ],
+  "platformKeyboardShown": false,
+  "scope": "Numeric keypad hit bounds and Save placement in portrait. Closing a changed draft preserves persisted data. No spoken screen-reader or physical-device claim."
+}

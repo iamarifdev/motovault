@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.ui.DocumentCaptureTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-10-26T08:01:50" hostname="MacBookPro" time="0.01">
+  <properties/>
+  <testcase name="recoveryKeepsReferencesRecentFilesUnknownNamesAndNonFiles[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <testcase name="failedOrCancelledOperationRemovesOnlyItsOwnAllocations[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.001"/>
+  <testcase name="successfulOperationTransfersAllFilesWithoutCleanup[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <testcase name="retakingOnePaperPagePreservesOtherPagesAndSourcePdf[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <testcase name="appendingPagesKeepsTheirOrderAndEnforcesTheLimit[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <testcase name="unseenOcrExtrasStayCandidatesRatherThanConfirmedDetails[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <testcase name="rawAcceptedAndPreviewFilesAreAllRetainedByTheRecord[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <testcase name="cropRejectsOutsideImageAndUnreadablySmallRegions[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <testcase name="qualityBlocksUnreadyGlareDarkAndBlurredCaptures[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <testcase name="savedCropAndRecognitionMetadataSurviveSerialization[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <testcase name="readsLabelledValuesWithoutGuessingAmbiguousDates[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.004"/>
+  <testcase name="neverUsesTheNextLabelAsAName[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.004"/>
+  <testcase name="normalizesBanglaDigitsAndRejectsInvalidDates[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <testcase name="preventsPathsOutsideManagedStorage[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <testcase name="legacyRecordsRemainReadableAndEditingPreservesOriginals[iosSimulatorArm64]" classname="com.motovault.app.ui.DocumentCaptureTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
