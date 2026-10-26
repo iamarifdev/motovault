@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "plans": [],
+  "consumed": [
+    "service:9:p00-chain:11520.0:20709:500.0:30:due",
+    "renewal:18:p01-physical-today:2026-10-26:expiry"
+  ],
+  "notificationPermission": [
+    "android.permission.POST_NOTIFICATIONS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+    "android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+  ]
+}

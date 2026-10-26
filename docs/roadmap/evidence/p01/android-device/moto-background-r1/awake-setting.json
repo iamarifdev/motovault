@@ -1,0 +1,8 @@
+{
+  "userAuthorized": true,
+  "originalStayOnWhilePluggedIn": "0",
+  "temporarySetting": "15",
+  "reason": "Keep the screen awake while charging during the authorized USB physical test. The phone reports AC power for this cable.",
+  "restored": true,
+  "restoredStayOnWhilePluggedIn": "0"
+}

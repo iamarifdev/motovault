@@ -13,7 +13,7 @@ Command (native ARM64 JDK 17):
 rtk run ./gradlew -I tools/baseline/isolated-android.gradle :composeApp:testDebugUnitTest :composeApp:iosSimulatorArm64Test :composeApp:assembleDebug
 ```
 
-Result: PASS. The final full suites contain 142 Android/shared tests and 164 iOS
+Result: PASS. The final full suites contain 148 Android/shared tests and 170 iOS
 simulator tests, zero failures. Current XML is retained under [final tests](p01/tests/).
 The earlier focused policy evidence remains under [policy evidence](p01/policy/).
 

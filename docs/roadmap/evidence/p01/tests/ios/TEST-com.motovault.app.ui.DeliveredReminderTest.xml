@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.ui.DeliveredReminderTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-26T05:15:08" hostname="MacBookPro" time="0.001">
+  <properties/>
+  <testcase name="consumedDocumentEventStaysVisibleWithoutBeingScheduledAgain[iosSimulatorArm64]" classname="com.motovault.app.ui.DeliveredReminderTest" time="0.0"/>
+  <testcase name="deletedChangedOrDisabledDocumentsRemoveTheirDeliveredAlert[iosSimulatorArm64]" classname="com.motovault.app.ui.DeliveredReminderTest" time="0.0"/>
+  <testcase name="documentSnoozeReplacesTheOldAlertWithoutCompletingTheDocument[iosSimulatorArm64]" classname="com.motovault.app.ui.DeliveredReminderTest" time="0.001"/>
+  <testcase name="consumedServiceAlertSurvivesOpeningAnotherRecord[iosSimulatorArm64]" classname="com.motovault.app.ui.DeliveredReminderTest" time="0.0"/>
+  <testcase name="serviceSnoozeReplacesItsOldAlertAndCannotSurviveAReset[iosSimulatorArm64]" classname="com.motovault.app.ui.DeliveredReminderTest" time="0.0"/>
+  <testcase name="malformedDeliveredDataIsRemovedWithoutAffectingOtherAlerts[iosSimulatorArm64]" classname="com.motovault.app.ui.DeliveredReminderTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,9 @@
+{
+  "result": "Passed",
+  "synthetic": true,
+  "applicationId": "com.motovault.baseline.p00",
+  "case": "runtime",
+  "api": "37",
+  "architecture": "arm64-v8a",
+  "scope": "Native Back discards a changed draft and restores Me. Background tab labels absent from modal hierarchy. No spoken TalkBack claim."
+}

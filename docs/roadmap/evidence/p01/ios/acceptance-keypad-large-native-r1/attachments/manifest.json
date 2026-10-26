@@ -1,0 +1,44 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "C581418F-1817-45BA-B146-4D601D22C3C1.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-cancel-restored-home-tree_0_7B6DBAA9-5D45-4044-BE92-B142642D9CEB.txt",
+        "timestamp" : 1792991402.341
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "201F7502-C431-4D1D-9EED-6CA38EF0ECE3.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-cancel-restored-home_0_6337D387-DCF4-47C1-9D4E-AA3E1D989AD7.png",
+        "timestamp" : 1792991402.25
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "E38D1DBA-CA7B-42FB-B0CC-CB7C70E6C43C.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-keypad-safe-area-tree_0_EFF682BE-E2F1-4991-8649-9F7DDFBFD6B8.txt",
+        "timestamp" : 1792991400.636
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "644DAA03-EF06-40E3-B20A-7365EF48EB31.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-keypad-safe-area_0_82D435B4-6A02-4942-8C54-DD21D04EF408.png",
+        "timestamp" : 1792991400.526
+      }
+    ],
+    "testIdentifier" : "P01DeliveryTests/testNumericKeypadSafeAreaAndCancel()",
+    "testIdentifierURL" : "test://com.apple.xcode/MotoVault/MotoVaultUITests/P01DeliveryTests/testNumericKeypadSafeAreaAndCancel"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "result": "Passed",
+  "physical": true,
+  "applicationId": "com.motovault.baseline.p00",
+  "expected": "P01-PHYSICAL-TEST",
+  "scope": "Actual visible notification tap; no injected navigation intent."
+}

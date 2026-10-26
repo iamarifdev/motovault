@@ -1,0 +1,44 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "229D187D-1E73-44BB-AADB-6DD08D200CE4.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-cancel-restored-home-tree_0_08BFA3AB-3330-4194-BDAB-EEEA01880824.txt",
+        "timestamp" : 1792991974.559
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "DD4F0A37-89BE-4DBB-B38D-5B18E8663CD0.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-cancel-restored-home_0_5E7FD8B2-0280-4524-9C32-A0163ABA1ADE.png",
+        "timestamp" : 1792991974.465
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "4F43355B-A3F3-4415-A347-4F9AEBEF51AD.txt",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-keypad-safe-area-tree_0_37069CCA-BE62-46B5-AABA-6C6EE4395889.txt",
+        "timestamp" : 1792991972.838
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+        "deviceName" : "iPhone 18 Pro Max",
+        "exportedFileName" : "9F43A99A-7F0F-4513-A1FB-50E993B57FC6.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "numeric-keypad-safe-area_0_0FB3F9DC-7A51-4595-83B3-85F5C61635AC.png",
+        "timestamp" : 1792991972.706
+      }
+    ],
+    "testIdentifier" : "P01DeliveryTests/testNumericKeypadSafeAreaAndCancel()",
+    "testIdentifierURL" : "test://com.apple.xcode/MotoVault/MotoVaultUITests/P01DeliveryTests/testNumericKeypadSafeAreaAndCancel"
+  }
+]

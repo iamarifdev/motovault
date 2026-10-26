@@ -1,0 +1,86 @@
+Attributes: Application, 0x10a6ac780, pid: 21738, label: 'MotoVault P01 Test'
+Element subtree:
+ →Application, 0x10a6ac780, pid: 21738, label: 'MotoVault P01 Test'
+    Window (Main), 0x10a6ac8c0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x10a6aca00, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x10a6ac640, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x10a6ac500, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x10a6ac3c0, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x10a6ac280, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x10a6ac140, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x10a6ac000, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=1)'
+                  Other, 0x10a6af200, {{0.0, 62.0}, {440.0, 791.3}}
+                    Other, 0x10a6acc80, {{0.0, 62.0}, {440.0, 791.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=150)'
+                    Button, 0x10a6acdc0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=233)', label: 'Registration smart card
+মেয়াদ নেই
+রেজিস্ট্রেশন স্মার্ট কার্ড
+নমুনা · ডেমো
+নম্বর
+P00-TEST-REGISTRATION
+নাম
+SYNTHETIC OWNER
+মেয়াদ
+'
+                    Button, 0x10a6acf00, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=255)', label: 'মেয়াদের আগে জানান
+৩০ দিন আগে এবং মেয়াদের দিন। ফোনের অনুমতি প্রয়োজন।', Selected
+                    Other, 0x10a6ad040, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=263)', label: 'ফোনে জানানোর অনুমতি আছে'
+                    Other, 0x10a6ad180, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=264)', label: 'অ্যাপের ভেতরে তারিখ দেখা যাবে। ফোনের সময় বদলালে রিমাইন্ডারও স্থানীয় সময় অনুসরণ করবে।'
+                    Button, 0x10a6ad2c0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=271)', label: 'ফোনে জানানো বন্ধ করুন'
+                    Button, 0x10a6ad400, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=274)', label: 'অনুমতি আবার যাচাই করুন'
+                    Other, 0x10a6afe80, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=277)', label: '১টি রিমাইন্ডার নির্ধারিত আছে।'
+                    Other, 0x10a6af0c0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=278)', label: 'পরের সময়: ২০২৬-১১-১৭ ০৯:০০'
+                    Button, 0x10a6aef80, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=265)', label: 'অনুমতি, সময় ও পরে জানান'
+                    Button, 0x10a6aee40, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=268)', label: 'রাস্তায় দেখানোর মোড'
+                    Other, 0x10a6aed00, {{20.0, 75.7}, {97.0, 44.7}}, identifier: 'AccessibilityElement for SemanticsNode(id=153)', label: 'কাগজপত্র'
+                    Button, 0x10a6aebc0, {{376.0, 76.0}, {44.0, 44.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=154)', label: 'কাগজ যোগ করুন'
+                    Button, 0x10a6aea80, {{20.0, 140.0}, {400.0, 122.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=156)', label: 'পরের নবায়ন
+Tax token
+মেয়াদ শেষ: ১৯ অক্টোবর ২০২৬
+৬ দিন আগে শেষ'
+                    Other, 0x10a6ae940, {{20.0, 280.0}, {74.0, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=165)', label: 'সব কাগজ'
+                    Button, 0x10a6ae800, {{20.0, 332.0}, {400.0, 202.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=167)', label: 'Tax token
+৬ দিন আগে শেষ
+ট্যাক্স টোকেন
+নমুনা · ডেমো
+নম্বর
+P00-TEST-TAX
+নাম
+SYNTHETIC OWNER
+মেয়াদ
+১৯ অক্টোবর ২০২৬'
+                    Button, 0x10a6ae6c0, {{20.0, 544.0}, {400.0, 202.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=189)', label: 'P01 synthetic expiry today
+১ দিন আগে শেষ
+বিমা
+নমুনা · ডেমো
+নম্বর
+P01-TEST
+নাম
+SYNTHETIC OWNER
+মেয়াদ
+২৪ অক্টোবর ২০২৬'
+                    Button, 0x10a6ae580, {{20.0, 756.0}, {400.0, 97.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=211)', label: 'Driving licence
+২৩ দিন বাকি
+ড্রাইভিং লাইসেন্স
+নমুনা · ডেমো
+নম্বর
+P00-TEST-LICENCE
+নাম
+SYNTHETIC OWNER
+মেয়াদ
+১৭ নভেম্বর ২০২৬'
+                  Button, 0x10a6ae440, {{196.3, 844.0}, {48.0, 48.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=135)', label: 'নতুন রেকর্ড যোগ করুন'
+                  Button, 0x10a6ae300, {{8.0, 854.0}, {85.0, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=122)', label: 'গ্যারেজ'
+                  Button, 0x10a6ae1c0, {{93.0, 854.0}, {85.0, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=128)', label: 'কাগজপত্র'
+                  Button, 0x10a6ae080, {{262.7, 854.0}, {84.7, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=137)', label: 'ইতিহাস'
+                  Button, 0x10a6adf40, {{347.3, 854.0}, {84.7, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=143)', label: 'আমি'
+              Other, 0x10a6ade00, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x10a6adcc0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x10a6adb80, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x10a6ada40, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x10a6ac780, pid: 21738, label: 'MotoVault P01 Test'
+Query chain:
+ →Find: Target Application 'com.motovault.baseline.p00'
+  Output: {
+    Application, 0x10a6afd40, pid: 21738, label: 'MotoVault P01 Test'
+  }

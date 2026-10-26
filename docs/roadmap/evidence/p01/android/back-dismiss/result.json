@@ -1,0 +1,6 @@
+{
+  "result": "Passed",
+  "app": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "scope": "Android emulator system Back dismisses reminder settings; observed persisted fields unchanged. No spoken accessibility or physical-device claim."
+}

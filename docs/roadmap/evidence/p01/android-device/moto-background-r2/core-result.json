@@ -1,0 +1,32 @@
+{
+  "result": "Passed",
+  "phaseComplete": false,
+  "physical": true,
+  "synthetic": true,
+  "applicationId": "com.motovault.baseline.p00",
+  "device": {
+    "model": "motorola edge 50 fusion",
+    "android": "16",
+    "api": "36",
+    "abi": "arm64-v8a",
+    "timezone": "Asia/Dhaka"
+  },
+  "apkSha256": "6f504c6843bd78e085433d4f923d813d49aa619cad49b3b6fb48efe2d2c8445f",
+  "policyDue": "2026-10-26T12:34:00",
+  "verified": [
+    "Ordinary background actual-policy delivery after cached-process death",
+    "Individual expiry and service notification taps reach exact records",
+    "Service alert remains after document alert opens",
+    "Document/service snooze preserves expiry, baseline, mileage and history",
+    "App restart restores both snooze plans",
+    "Permission revocation empties queue and native Settings recovery restores it",
+    "Test opt-out cancels pending alarms; temporary awake setting restored"
+  ],
+  "pending": [
+    "Post-boot uninterrupted delivery remains negative in r1",
+    "Full physical motion/parity acceptance",
+    "Spoken TalkBack and physical haptic confirmation",
+    "Physical iPhone verification"
+  ],
+  "scope": "Passed only for the listed physical Android core scenarios while charging. No idle/Doze, reboot reliability, full design or iPhone completion claim."
+}

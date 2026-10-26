@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.motovault.app.ui.ReminderPlanTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:51" hostname="MacBookPro" time="0.002">
+<testsuite name="com.motovault.app.ui.ReminderPlanTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-26T05:15:08" hostname="MacBookPro" time="0.001">
   <properties/>
-  <testcase name="whicheverLimitFirstAndMileageUpdatesBringCalendarRequestForward[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.001"/>
+  <testcase name="whicheverLimitFirstAndMileageUpdatesBringCalendarRequestForward[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
   <testcase name="consumedServiceCannotReplayButNewBaselineHasANewIdentity[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
   <testcase name="disabledDeletedAndDistanceOnlyNotYetDueProduceNoRequests[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
   <testcase name="collisionIdsAndChangedOrMissingNotificationTargetsAreSafe[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
-  <testcase name="snoozeCreatesAnExplicitRequestWithoutErasingConsumedHistory[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.001"/>
-  <testcase name="snoozedExpiryMessageKeepsItsActualDateAndChosenDigits[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
+  <testcase name="snoozeCreatesAnExplicitRequestWithoutErasingConsumedHistory[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
+  <testcase name="snoozedExpiryMessageKeepsItsActualDateAndChosenDigits[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.001"/>
   <testcase name="tomorrowSnoozeOfAnOverdueServiceSurvivesRestartWithoutDailyReplay[iosSimulatorArm64]" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

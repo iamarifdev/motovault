@@ -1,0 +1,31 @@
+{
+  "deviceClock": "2026-10-26T12:14:37",
+  "bootCount": "54",
+  "bootCompleted": "1",
+  "processRunning": false,
+  "standbyBucket": "50",
+  "alarms": [
+    [
+      "RTC_WAKEUP #125: Alarm{a78920a type 0 origWhen 1792995099104 whenElapsed 31536180569 com.motovault.baseline.p00}",
+      "tag=*walarm*:com.motovault.RENEWAL",
+      "type=RTC_WAKEUP origWhen=2026-10-26 12:11:39.104 window=0 repeatInterval=0 count=0 flags=0x20",
+      "policyWhenElapsed: requester=-2m54s30ms app_standby=+364d23h57m0s971ms device_idle=-- battery_saver=-2m43s879ms",
+      "whenElapsed=+364d23h57m0s971ms maxWhenElapsed=+364d23h57m0s971ms",
+      "operation=PendingIntent{f916a7b: PendingIntentRecord{57e0098 com.motovault.baseline.p00 broadcastIntent}}",
+      "idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=2, android:broadcast.temporaryAppAllowlistReasonCode=-1, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=1, android:broadcast.flags=8}]"
+    ],
+    [
+      "RTC_WAKEUP #126: Alarm{864c0f1 type 0 origWhen 1792995099150 whenElapsed 31536180588 com.motovault.baseline.p00}",
+      "tag=*walarm*:com.motovault.RENEWAL",
+      "type=RTC_WAKEUP origWhen=2026-10-26 12:11:39.150 window=0 repeatInterval=0 count=0 flags=0x20",
+      "policyWhenElapsed: requester=-2m54s10ms app_standby=+364d23h57m0s990ms device_idle=-- battery_saver=-2m43s879ms",
+      "whenElapsed=+364d23h57m0s990ms maxWhenElapsed=+364d23h57m0s990ms",
+      "operation=PendingIntent{115c4d6: PendingIntentRecord{bc23357 com.motovault.baseline.p00 broadcastIntent}}",
+      "idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=2, android:broadcast.temporaryAppAllowlistReasonCode=-1, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=1, android:broadcast.flags=8}]"
+    ]
+  ],
+  "timebase": [
+    "nowRTC=1792995277172=2026-10-26 12:14:37.172 nowELAPSED=359598",
+    "mLastTimeChangeClockTime=1792995001008=2026-10-26 12:10:01.008"
+  ]
+}

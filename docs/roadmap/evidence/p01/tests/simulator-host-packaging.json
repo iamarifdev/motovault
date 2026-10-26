@@ -1,0 +1,16 @@
+{
+  "bundleId": "com.motovault.baseline.p00",
+  "displayName": "MotoVault P01 Test",
+  "signingIdentifier": "com.motovault.baseline.p00",
+  "scope": "Local ad-hoc simulator test packaging only; not a signed device or release build.",
+  "products": [
+    {
+      "path": "build/p01-ios-tests-derived/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault",
+      "sha256": "d0282851264dd8b293b0bfe108cea67b4a7659e8559ea4ff55ab5f8dd51db0b8"
+    },
+    {
+      "path": "build/p01-ios-tests-derived/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault.debug.dylib",
+      "sha256": "5c8e237726ea628267778cf903b3877386bb78041a0a92603c7bc7144f73796d"
+    }
+  ]
+}

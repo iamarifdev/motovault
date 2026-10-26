@@ -1,0 +1,17 @@
+{
+  "case": "system-appearance",
+  "applicationId": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "fixture": "docs/roadmap/fixtures/p01/native/system-appearance.json",
+  "fixtureSha256": "40d9b859bab016904a4c2361af3100df281fbf361465c44246a76ca0cc918f0c",
+  "appearance": "SYSTEM",
+  "digits": "BN",
+  "textScale": 1.0,
+  "appReducedMotion": false,
+  "host": {
+    "serial": "emulator-5554",
+    "api": "37",
+    "osAppearance": "Night mode: yes"
+  },
+  "scope": "Representative native screenshots and reachable controls, not motion parity or spoken accessibility proof."
+}

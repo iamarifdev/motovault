@@ -1,0 +1,7 @@
+{
+  "result": "Passed",
+  "app": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "fixture": "empty-reminders",
+  "scope": "Android emulator displays the existing v3 no-document/no-rule reminder state and preserves its named time/lead/save controls."
+}

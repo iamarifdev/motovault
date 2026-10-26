@@ -1,0 +1,6 @@
+{
+  "result": "Passed",
+  "app": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "scope": "Android emulator modal hides underlying Me semantics, retains named controls and status, and Back dismisses without changing observed persisted fields."
+}

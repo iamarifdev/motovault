@@ -206,7 +206,7 @@ Required completion evidence: implementation, verification.
 
 ### P01-03: Implement reminder settings, permission recovery and snooze in v3
 
-Status: **In review** | Size: **3** | Owner: Codex.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P01-02.
 
@@ -240,7 +240,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P01-05: Verify reminders and status on real devices
 
-Status: **Planned** | Size: **5** | Owner: Codex.
+Status: **In review** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P01-03, P01-04.
 

@@ -1,0 +1,67 @@
+Attributes: Application, 0x10f689680, pid: 97599, label: 'MotoVault P01 Test'
+Element subtree:
+ →Application, 0x10f689680, pid: 97599, label: 'MotoVault P01 Test'
+    Window (Main), 0x10f688000, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x10f688140, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x10f688280, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x10f6883c0, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x10f688500, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x10f688640, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x10f688780, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x10f689540, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=1)'
+                  Other, 0x10f68a440, {{0.0, 62.0}, {440.0, 791.3}}
+                    Other, 0x10f68a580, {{0.0, 62.0}, {440.0, 791.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=12)'
+                    Other, 0x10f68a6c0, {{0.0, 0.0}, {0.0, 0.0}}
+                      Other, 0x10f68a800, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=80)'
+                      Button, 0x10f68a940, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=81)', label: 'Chain, সার্ভিসের ব্যবধান ০ শতাংশ বাকি, ৩২০ কিমি পেরিয়েছে'
+                      Button, 0x10f68aa80, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=91)', label: 'Engine oil, আগের সার্ভিস নিশ্চিত নয়'
+                    Other, 0x10f68abc0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=100)', label: 'কাগজের মেয়াদ'
+                    Button, 0x10f68ad00, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=102)', label: 'Tax token
+৭ দিন আগে মেয়াদ শেষ'
+                    Button, 0x10f68ae40, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=109)', label: 'P01 synthetic expiry today
+২ দিন আগে মেয়াদ শেষ'
+                    Button, 0x10f68af80, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=116)', label: 'Driving licence
+মেয়াদ শেষ হতে ২২ দিন'
+                    Image, 0x10f68b0c0, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=125)', label: 'Yamaha R15 V4'
+                    Other, 0x10f68b200, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=126)', label: 'নমুনা ছবি · রঙ ও যন্ত্রাংশে পার্থক্য থাকতে পারে'
+                    Other, 0x10f68b340, {{20.0, 74.0}, {78.0, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=16)', label: 'আমার গ্যারেজ'
+                    Button, 0x10f68b480, {{364.0, 92.0}, {56.0, 56.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=19)', label: 'বাইকের সেটিংস'
+                    Other, 0x10f68b5c0, {{20.0, 100.0}, {87.3, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=17)', label: 'R15 V4'
+                    Other, 0x10f68b700, {{20.0, 142.0}, {83.0, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=18)', label: 'Yamaha · ২০২৩'
+                    Other, 0x10f68b840, {{102.0, 202.0}, {74.3, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=26)', label: 'এখনই দরকার'
+                    Other, 0x10f68b980, {{102.0, 228.0}, {46.3, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=27)', label: 'Chain'
+                    Other, 0x10f68bac0, {{102.0, 254.0}, {114.3, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=28)', label: '৩২০ কিমি পেরিয়েছে'
+                    Other, 0x10f68bc00, {{36.0, 310.0}, {247.7, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=31)', label: 'শেষ নিশ্চিত সার্ভিস: ১৩ সেপ্টেম্বর · ১১,৫২০ কিমি'
+                    Button, 0x10f68bd40, {{36.0, 346.0}, {368.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=32)', label: 'সার্ভিস লিখুন'
+                    Button, 0x10f68be80, {{20.0, 434.0}, {92.3, 108.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=37)', label: 'তেল ভরা'
+                    Button, 0x10f225680, {{122.3, 434.0}, {92.3, 108.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=41)', label: 'সার্ভিস'
+                    Button, 0x105c8da40, {{224.7, 434.0}, {92.7, 108.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=45)', label: 'কিমি'
+                    Button, 0x105c8ee40, {{327.3, 434.0}, {92.7, 108.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=49)', label: 'কাগজ'
+                    Button, 0x105c8db80, {{362.0, 572.0}, {44.0, 44.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=59)', label: 'লুকান'
+                    Button, 0x105c8cdc0, {{262.0, 574.0}, {90.0, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=56)', label: 'যোগ করুন'
+                    Other, 0x105c8dcc0, {{64.0, 582.0}, {188.0, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=55)', label: '১০ দিন ধরে তেলের হিসাব নেই।'
+                    Button, 0x105c8d040, {{20.0, 646.0}, {195.0, 142.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=62)', label: 'ওডোমিটার
+১২,৩৪০
+কিমি
+আজ আনুমানিক ১২,৫৭৫ · আপডেট
+শেষ নিশ্চিত: 2026-10-16'
+                    Button, 0x105c8d400, {{225.0, 646.0}, {195.0, 118.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=70)', label: 'জ্বালানি গড়
+৪৫.৫
+কিমি/লি'
+                    Other, 0x105c8d180, {{20.0, 808.3}, {160.0, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=79)', label: 'সার্ভিসের ব্যবধান বাকি'
+                  Button, 0x105c8d2c0, {{196.3, 844.0}, {48.0, 48.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=143)', label: 'নতুন রেকর্ড যোগ করুন'
+                  Button, 0x105c8d540, {{8.0, 854.0}, {85.0, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=130)', label: 'গ্যারেজ'
+                  Button, 0x105c8ea80, {{93.0, 854.0}, {85.0, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=136)', label: 'কাগজপত্র'
+                  Button, 0x105c8ed00, {{262.7, 854.0}, {84.7, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=145)', label: 'ইতিহাস'
+                  Button, 0x105c8f200, {{347.3, 854.0}, {84.7, 68.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=151)', label: 'আমি'
+              Other, 0x105c8ef80, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x105c8f340, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x105c8f5c0, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x105c8f700, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x10f689680, pid: 97599, label: 'MotoVault P01 Test'
+Query chain:
+ →Find: Target Application 'com.motovault.baseline.p00'
+  Output: {
+    Application, 0x105c8f480, pid: 97599, label: 'MotoVault P01 Test'
+  }

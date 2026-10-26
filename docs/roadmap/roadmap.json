@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-24T16:51:38+00:00",
+  "updated_at": "2026-10-26T07:10:22+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -549,10 +549,10 @@
             "verification",
             "design"
           ],
-          "status": "in_review",
+          "status": "done",
           "owner": "Codex",
           "started_at": "2026-10-24T10:08:57+00:00",
-          "completed_at": null,
+          "completed_at": "2026-10-24T19:26:23+00:00",
           "blocker": "",
           "notes": [
             {
@@ -574,6 +574,30 @@
             {
               "at": "2026-10-24T16:50:16+00:00",
               "text": "Final Android footer fault test passes with unchanged persisted settings and fault removed. Actual iOS permission grant and three OS background notifications observed; whole delivery/tap run and focused native-cell tap run failed to foreground the app. iOS Settings recovery and exact tap destinations remain unverified. Physical checks stay pending by owner request."
+            },
+            {
+              "at": "2026-10-24T17:57:13+00:00",
+              "text": "Continuing iOS runtime investigation from pushed 48fce40. App registration is valid and no recent MotoVault crash is present. Comparing a temporary isolated native UIKit notification/settings probe with the production host before changing routing logic. Physical-device verification remains pending by owner request."
+            },
+            {
+              "at": "2026-10-24T18:16:09+00:00",
+              "text": "User clarified that verification must use iOS 27 on iPhone 18 Pro/Pro Max, preferring the running iPhone 18 Pro Max. Removed only the temporary iOS 26 comparison device. Independent UIKit probe passes notification response with an inner-platter coordinate tap; MotoVault grouped notification routing and Settings recovery remain unverified. Continue on iOS 27 only, preserving owner app data."
+            },
+            {
+              "at": "2026-10-24T18:35:40+00:00",
+              "text": "On the running iOS 27 iPhone 18 Pro Max, native side-swipe/Open opens the exact expiry document. Actual-policy run r7 then fails because the separate delivered Chain alert disappears on foreground reconciliation. Fixing delivered-alert retention separately from consumed scheduling events; native physical checks remain pending."
+            },
+            {
+              "at": "2026-10-24T19:14:39+00:00",
+              "text": "Delivered-alert retention fixed independently from consumed scheduling on both hosts. iOS 27 Pro Max actual-policy run r8 passes exact document then Chain service routing. Six regression tests added; 148 Android/shared and 170 iOS Native tests pass, with explicit preferred iOS 27 destination. iOS interactive snooze passes for both records; stored expiry, service baseline and ledger count remain unchanged. Guarded permission recovery and Android retention runtime reruns continue. Physical verification remains pending by owner request."
+            },
+            {
+              "at": "2026-10-24T19:20:26+00:00",
+              "text": "iOS 27 Pro Max recovery-r4 passes real OS permission revocation, denied state on app return, app notification-settings action to the correct isolated pane, restoration and allowed state without force-restarting. Interactive document/service snooze also passes with unchanged expiry/baseline/history. Android rerun preserves Chain after opening the document; its first subsequent tap selected the automatic group summary, so an individual-alert rerun is active. Physical-device verification remains pending by owner request."
+            },
+            {
+              "at": "2026-10-24T19:26:23+00:00",
+              "text": "Native acceptance verified: actual calendar-policy document-then-service delivery and exact routing pass on both rebuilt isolated hosts; unrelated delivered alerts survive foreground reconciliation. iOS 27 Pro Max snooze and actual OS revoke/Settings-return/recovery pass, with expiry/baseline/history unchanged. Both-host denial, failed-save preservation and native accessibility labels retained. Physical-device and broader design/motion/accessibility exit gates remain P01-05 and are not inferred from these results."
             }
           ],
           "evidence": [
@@ -618,6 +642,41 @@
               "summary": "Final Android footer fault test passes with unchanged persisted settings and fault removed. Actual iOS permission grant and three OS background notifications observed; whole delivery/tap run and focused native-cell tap run failed to foreground the app. iOS Settings recovery and exact tap destinations remain unverified. Physical checks stay pending by owner request.",
               "at": "2026-10-24T16:50:16+00:00",
               "revision": "86c1598"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-03-verification.md",
+              "summary": "Delivered-alert retention fixed independently from consumed scheduling on both hosts. iOS 27 Pro Max actual-policy run r8 passes exact document then Chain service routing. Six regression tests added; 148 Android/shared and 170 iOS Native tests pass, with explicit preferred iOS 27 destination. iOS interactive snooze passes for both records; stored expiry, service baseline and ledger count remain unchanged. Guarded permission recovery and Android retention runtime reruns continue. Physical verification remains pending by owner request.",
+              "at": "2026-10-24T19:14:39+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/p01/ios/recovery-r4/summary.json",
+              "summary": "iOS 27 Pro Max recovery-r4 passes real OS permission revocation, denied state on app return, app notification-settings action to the correct isolated pane, restoration and allowed state without force-restarting. Interactive document/service snooze also passes with unchanged expiry/baseline/history. Android rerun preserves Chain after opening the document; its first subsequent tap selected the automatic group summary, so an individual-alert rerun is active. Physical-device verification remains pending by owner request.",
+              "at": "2026-10-24T19:20:26+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ReminderPlan.kt",
+              "summary": "Native acceptance verified: actual calendar-policy document-then-service delivery and exact routing pass on both rebuilt isolated hosts; unrelated delivered alerts survive foreground reconciliation. iOS 27 Pro Max snooze and actual OS revoke/Settings-return/recovery pass, with expiry/baseline/history unchanged. Both-host denial, failed-save preservation and native accessibility labels retained. Physical-device and broader design/motion/accessibility exit gates remain P01-05 and are not inferred from these results.",
+              "at": "2026-10-24T19:26:23+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-03-verification.md",
+              "summary": "Native acceptance verified: actual calendar-policy document-then-service delivery and exact routing pass on both rebuilt isolated hosts; unrelated delivered alerts survive foreground reconciliation. iOS 27 Pro Max snooze and actual OS revoke/Settings-return/recovery pass, with expiry/baseline/history unchanged. Both-host denial, failed-save preservation and native accessibility labels retained. Physical-device and broader design/motion/accessibility exit gates remain P01-05 and are not inferred from these results.",
+              "at": "2026-10-24T19:26:23+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P01-design.md",
+              "summary": "Native acceptance verified: actual calendar-policy document-then-service delivery and exact routing pass on both rebuilt isolated hosts; unrelated delivered alerts survive foreground reconciliation. iOS 27 Pro Max snooze and actual OS revoke/Settings-return/recovery pass, with expiry/baseline/history unchanged. Both-host denial, failed-save preservation and native accessibility labels retained. Physical-device and broader design/motion/accessibility exit gates remain P01-05 and are not inferred from these results.",
+              "at": "2026-10-24T19:26:23+00:00",
+              "revision": "48fce40"
             }
           ]
         },
@@ -709,15 +768,111 @@
             "android_device",
             "ios_device"
           ],
-          "status": "planned",
+          "status": "in_review",
           "owner": "Codex",
-          "started_at": null,
+          "started_at": "2026-10-24T19:26:23+00:00",
           "completed_at": null,
           "blocker": "",
           "notes": [
             {
               "at": "2026-10-24T16:51:38+00:00",
               "text": "Owner explicitly requested keeping physical Android/iPhone verification pending. Emulator/simulator evidence is retained but does not satisfy this task. P01-03 review, physical notification/settings/restart/deep-link checks, and the complete representative design/motion/accessibility matrix remain required before phase exit."
+            },
+            {
+              "at": "2026-10-24T19:26:23+00:00",
+              "text": "Beginning remaining phase acceptance after P01-03 native-host checks passed. Complete representative v3 Home/Vault/Me appearance, digit, text, motion and accessibility matrix. Actual physical Android/iPhone verification remains pending by explicit owner request; emulator/simulator checks do not satisfy the device evidence requirements."
+            },
+            {
+              "at": "2026-10-24T19:28:47+00:00",
+              "text": "Source audit found the persisted reduced-motion flag reaches Vault and Sky policies, but OS Reduce Motion is not wired into that shared flag. Connect platform preference observers at VaultTheme, preserving the persisted choice and existing v3 flow, then verify live OS changes and record the remaining matrix."
+            },
+            {
+              "at": "2026-10-24T19:34:37+00:00",
+              "text": "OS reduced-motion gap fixed at the native theme boundary. Android observes animator scale; iOS observes Reduce Motion and activation. Reduced springs snap and sheet entrances react to policy changes. Both native suites (148 Android/shared, 170 iOS simulator) and rebuilt isolated Xcode host pass. Runtime recording, full representative design matrix and owner-deferred physical checks remain open."
+            },
+            {
+              "at": "2026-10-24T19:37:04+00:00",
+              "text": "Retained three decoded Android emulator recordings with app reduced-motion off and live OS scale 1/0/1, without restarting between cases. Original unset OS scale was restored. These low-frame-rate captures do not establish fine motion parity; iOS OS-toggle runtime, representative Home/Vault/Me matrix, screen-reader focus/spoken checks and owner-deferred physical verification remain open."
+            },
+            {
+              "at": "2026-10-24T19:38:36+00:00",
+              "text": "Continuing on main from current uncommitted P01 follow-up. Capture Home/Vault/Me and reminder settings for the immutable runtime and unknown-large paired fixtures on both isolated native hosts. Validate reachable controls and retain screenshots/trees before visual review; keep system-toggle, fine motion, spoken accessibility and physical-device gates distinct."
+            },
+            {
+              "at": "2026-10-24T19:44:34+00:00",
+              "text": "Paired matrix runs passed on both hosts, but visual inspection caught an iOS large-text Me screenshot during a tab crossfade. Native tab transition calls pageTween without its reduced-motion flag; v3 data-reduce sets CSS transitions to zero. Connect the existing effective policy and capture settled states. iOS OS-toggle navigation stopped at Settings root before any preference change; correct its initial scroll position."
+            },
+            {
+              "at": "2026-10-25T13:59:55+00:00",
+              "text": "Accepted saved Android matrix captures now cover light/Bangla/normal, dark/English/large/app-reduced, and System appearance under OS dark. Original OS appearance was restored. iOS first captures expose transition timing and are diagnostic until settled recapture. The rebuilt iOS 27 host passed after environment reset; isolated-host installation and OS motion switch restoration are guarded explicitly."
+            },
+            {
+              "at": "2026-10-25T14:06:16+00:00",
+              "text": "iOS live OS motion r3 passes normal/reduced return without app restart and restores original Reduce Motion=0. Both hosts completed three representative matrix cases with OS appearance restored. Vault artwork review found clipped holder text: native uses fixed 140dp height and stacked labels while v3 uses a 1.586 aspect ratio and three label/value rows. Match that existing reference before closing visual acceptance; recapture initial iOS Home after layout settles."
+            },
+            {
+              "at": "2026-10-25T14:23:09+00:00",
+              "text": "Both native builds and all six r3 representative captures pass. Visual inspection confirms the holder/expiry clipping correction at normal and large text; reduced tab fades now follow v3. iOS real OS-motion r3 passes and restores Reduce Motion=0. Both OS appearance overrides restored. Remaining acceptance is fine motion comparison, native back/gesture and screen-reader focus/modal/announcement checks, plus owner-deferred physical Android/iPhone verification. Screenshots do not close those gates."
+            },
+            {
+              "at": "2026-10-25T14:25:04+00:00",
+              "text": "Continuing local acceptance with Android system Back and iOS sheet drag dismissal. Compare observed synthetic persisted values before and after dismissal without saving; do not equate touch/hierarchy checks with spoken screen-reader or physical-device evidence."
+            },
+            {
+              "at": "2026-10-25T14:39:50+00:00",
+              "text": "Local Back/drag checks pass with unchanged observed persisted values. The unfiltered iOS accessibility audit fails with 7 small-region and 3 missing-description findings, including background Me content behind the modal, the dismiss scrim and selector containers. Correct modal isolation and coherent text/control groups without hiding meaningful content or filtering the audit."
+            },
+            {
+              "at": "2026-10-26T04:52:44+00:00",
+              "text": "Resumed current-source verification. Evidence source hashes are stale. No physical Android or iPhone is connected. Physical delivery and spoken accessibility remain unverified."
+            },
+            {
+              "at": "2026-10-26T04:56:04+00:00",
+              "text": "Native ARM64 recheck passed: 148 Android/shared and 170 iOS 27 iPhone 18 Pro Max tests with zero failures. Android assembly passed. Owner reconfirmed physical devices unavailable and pending. Fine motion and spoken accessibility acceptance remain open. See P01-06-native-recheck.md."
+            },
+            {
+              "at": "2026-10-26T04:56:57+00:00",
+              "text": "Continue local acceptance: rebuild isolated iOS host from current source and rerun accessibility audits plus drag dismissal. Prior r2 audit has a retained hit-area failure that needs current-source verification. Physical gates stay pending by owner instruction."
+            },
+            {
+              "at": "2026-10-26T05:06:10+00:00",
+              "text": "Retained 11 passing iOS 27 iPhone 18 Pro Max XCTest acceptance cases: all-category global/document/service audits in normal and large/dark states, strengthened changed-draft drag dismissal/reopen, and empty audit. Android ARM64 API 37.1 normal/large native Back preserves identical persisted snapshots. Added reproducible runners and verifier checks. Spoken screen-reader, fine motion and physical gates remain open."
+            },
+            {
+              "at": "2026-10-26T05:07:37+00:00",
+              "text": "Continue numeric input acceptance using the existing odometer sheet. Add native layout checks for normal and large text: keypad and primary action within safe bounds, no system keyboard, and dismissal restores the confirmed reading. No new UI flow or data contract is introduced."
+            },
+            {
+              "at": "2026-10-26T05:20:42+00:00",
+              "text": "Numeric keypad checks pass on normal and large/dark native hosts. Denser Android recordings exposed a real duplicate dialog window scale/fade under reduced motion. SheetWindowPolicy disables only that sheet window animation; fresh normal/reduced/restored captures and current-build Back/keypad regressions pass. Android 148 and iOS 170 tests pass. Fine press/gauge parity, spoken screen-reader and physical gates remain open."
+            },
+            {
+              "at": "2026-10-26T05:23:27+00:00",
+              "text": "Completion audit reconfirmed the persistent external blocker: no physical Android or iPhone is connected, and owner requires those checks to remain pending. Required android_device and ios_device evidence is absent. Keep P01-05 in review. Full motion/spoken-accessibility and physical rendering/haptics acceptance remains open. Resume conditions and requirement-by-requirement evidence are recorded in P01-COMPLETION-AUDIT.md."
+            },
+            {
+              "at": "2026-10-26T05:59:01+00:00",
+              "text": "Owner connected a physical Android and authorized continuing Android acceptance. Identified Motorola edge 50 fusion. Prepare a separate guarded synthetic-only physical-device runner and verify the installed isolated APK identity before device writes. Physical iPhone evidence remains pending."
+            },
+            {
+              "at": "2026-10-26T06:24:38+00:00",
+              "text": "Physical Motorola Android 16/API 36 evidence now retained: real denial leaves queue empty; Settings grant preserves explicit opt-in boundary; two committed policy alerts deliver after foreground recovery. Owner-approved reboot restored two native alarms but OS app_standby policy deferred them with bucket 50 until natural app reopen promoted bucket 10. Reboot background delivery is not passed. Phone auto-lock currently prevents real notification taps; owner unlock/temporary-awake response pending. iPhone remains unavailable."
+            },
+            {
+              "at": "2026-10-26T06:27:33+00:00",
+              "text": "Added a physical-evidence consistency evaluator from retained device artifacts. Five observed permission/queue/reboot-restoration/foreground-recovery milestones validate, while uninterrupted reboot delivery is explicitly contradicted and the result remains Partial. Physical Android is still connected but locked; the existing unlock/temporary-awake request is unanswered, so real alert-tap checks remain pending."
+            },
+            {
+              "at": "2026-10-26T06:35:26+00:00",
+              "text": "Owner unlocked physical Android and authorized temporary screen-awake behavior during USB testing. Original setting 0 retained for restoration. First group-summary tap opened the launcher and is not accepted as an exact-target check. A new actual-policy background run is live at 12:34 after cached-process kill; Android reports bucket 10 and an inexact alarm window. No standby or battery exemption is forced."
+            },
+            {
+              "at": "2026-10-26T07:06:26+00:00",
+              "text": "Physical Motorola Android core scenarios now validate: actual-policy background delivery after cached-process death, exact individual document/service alert taps, retained service alert, durable snooze with unchanged expiry/baseline/history, app restart, and native permission revoke/recover. Test opt-out leaves queue and native alarms empty; owner-approved awake setting restored to 0. Dark/English/1.3-text/reduced captures retained. Post-boot delivery remains negative under observed app_standby policy; full motion, spoken TalkBack, physical haptics and iPhone remain open."
+            },
+            {
+              "at": "2026-10-26T07:10:22+00:00",
+              "text": "Owner explicitly requested keeping the remaining TalkBack/spoken-accessibility and physical-haptic session pending because participation is not currently possible. TalkBack is installed but was not enabled; phone is locked and awake setting remains restored to 0. Physical iPhone is still unavailable. Preserve P01-05 in review with these acceptance gates open."
             }
           ],
           "evidence": [
@@ -734,6 +889,125 @@
               "summary": "Owner explicitly requested keeping physical Android/iPhone verification pending. Emulator/simulator evidence is retained but does not satisfy this task. P01-03 review, physical notification/settings/restart/deep-link checks, and the complete representative design/motion/accessibility matrix remain required before phase exit.",
               "at": "2026-10-24T16:51:38+00:00",
               "revision": "86c1598"
+            },
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Motion.kt",
+              "summary": "OS reduced-motion gap fixed at the native theme boundary. Android observes animator scale; iOS observes Reduce Motion and activation. Reduced springs snap and sheet entrances react to policy changes. Both native suites (148 Android/shared, 170 iOS simulator) and rebuilt isolated Xcode host pass. Runtime recording, full representative design matrix and owner-deferred physical checks remain open.",
+              "at": "2026-10-24T19:34:37+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-05-verification.md",
+              "summary": "OS reduced-motion gap fixed at the native theme boundary. Android observes animator scale; iOS observes Reduce Motion and activation. Reduced springs snap and sheet entrances react to policy changes. Both native suites (148 Android/shared, 170 iOS simulator) and rebuilt isolated Xcode host pass. Runtime recording, full representative design matrix and owner-deferred physical checks remain open.",
+              "at": "2026-10-24T19:34:37+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P01-design.md",
+              "summary": "OS reduced-motion gap fixed at the native theme boundary. Android observes animator scale; iOS observes Reduce Motion and activation. Reduced springs snap and sheet entrances react to policy changes. Both native suites (148 Android/shared, 170 iOS simulator) and rebuilt isolated Xcode host pass. Runtime recording, full representative design matrix and owner-deferred physical checks remain open.",
+              "at": "2026-10-24T19:34:37+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/p01/android/motion-os/observations.json",
+              "summary": "Retained three decoded Android emulator recordings with app reduced-motion off and live OS scale 1/0/1, without restarting between cases. Original unset OS scale was restored. These low-frame-rate captures do not establish fine motion parity; iOS OS-toggle runtime, representative Home/Vault/Me matrix, screen-reader focus/spoken checks and owner-deferred physical verification remain open.",
+              "at": "2026-10-24T19:37:04+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Components.kt",
+              "summary": "Both native builds and all six r3 representative captures pass. Visual inspection confirms the holder/expiry clipping correction at normal and large text; reduced tab fades now follow v3. iOS real OS-motion r3 passes and restores Reduce Motion=0. Both OS appearance overrides restored. Remaining acceptance is fine motion comparison, native back/gesture and screen-reader focus/modal/announcement checks, plus owner-deferred physical Android/iPhone verification. Screenshots do not close those gates.",
+              "at": "2026-10-25T14:23:09+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-05-verification.md",
+              "summary": "Both native builds and all six r3 representative captures pass. Visual inspection confirms the holder/expiry clipping correction at normal and large text; reduced tab fades now follow v3. iOS real OS-motion r3 passes and restores Reduce Motion=0. Both OS appearance overrides restored. Remaining acceptance is fine motion comparison, native back/gesture and screen-reader focus/modal/announcement checks, plus owner-deferred physical Android/iPhone verification. Screenshots do not close those gates.",
+              "at": "2026-10-25T14:23:09+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P01-05-matrix.md",
+              "summary": "Both native builds and all six r3 representative captures pass. Visual inspection confirms the holder/expiry clipping correction at normal and large text; reduced tab fades now follow v3. iOS real OS-motion r3 passes and restores Reduce Motion=0. Both OS appearance overrides restored. Remaining acceptance is fine motion comparison, native back/gesture and screen-reader focus/modal/announcement checks, plus owner-deferred physical Android/iPhone verification. Screenshots do not close those gates.",
+              "at": "2026-10-25T14:23:09+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-06-native-recheck.md",
+              "summary": "Native ARM64 recheck passed: 148 Android/shared and 170 iOS 27 iPhone 18 Pro Max tests with zero failures. Android assembly passed. Owner reconfirmed physical devices unavailable and pending. Fine motion and spoken accessibility acceptance remain open. See P01-06-native-recheck.md.",
+              "at": "2026-10-26T04:56:04+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-07-accessibility-navigation.md",
+              "summary": "Retained 11 passing iOS 27 iPhone 18 Pro Max XCTest acceptance cases: all-category global/document/service audits in normal and large/dark states, strengthened changed-draft drag dismissal/reopen, and empty audit. Android ARM64 API 37.1 normal/large native Back preserves identical persisted snapshots. Added reproducible runners and verifier checks. Spoken screen-reader, fine motion and physical gates remain open.",
+              "at": "2026-10-26T05:06:10+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-08-keypad-layout.md",
+              "summary": "Numeric keypad checks pass on normal and large/dark native hosts. Denser Android recordings exposed a real duplicate dialog window scale/fade under reduced motion. SheetWindowPolicy disables only that sheet window animation; fresh normal/reduced/restored captures and current-build Back/keypad regressions pass. Android 148 and iOS 170 tests pass. Fine press/gauge parity, spoken screen-reader and physical gates remain open.",
+              "at": "2026-10-26T05:20:42+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-09-sheet-window-motion.md",
+              "summary": "Numeric keypad checks pass on normal and large/dark native hosts. Denser Android recordings exposed a real duplicate dialog window scale/fade under reduced motion. SheetWindowPolicy disables only that sheet window animation; fresh normal/reduced/restored captures and current-build Back/keypad regressions pass. Android 148 and iOS 170 tests pass. Fine press/gauge parity, spoken screen-reader and physical gates remain open.",
+              "at": "2026-10-26T05:20:42+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-COMPLETION-AUDIT.md",
+              "summary": "Completion audit reconfirmed the persistent external blocker: no physical Android or iPhone is connected, and owner requires those checks to remain pending. Required android_device and ios_device evidence is absent. Keep P01-05 in review. Full motion/spoken-accessibility and physical rendering/haptics acceptance remains open. Resume conditions and requirement-by-requirement evidence are recorded in P01-COMPLETION-AUDIT.md.",
+              "at": "2026-10-26T05:23:27+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P01-10-physical-android.md",
+              "summary": "Physical Motorola Android 16/API 36 evidence now retained: real denial leaves queue empty; Settings grant preserves explicit opt-in boundary; two committed policy alerts deliver after foreground recovery. Owner-approved reboot restored two native alarms but OS app_standby policy deferred them with bucket 50 until natural app reopen promoted bucket 10. Reboot background delivery is not passed. Phone auto-lock currently prevents real notification taps; owner unlock/temporary-awake response pending. iPhone remains unavailable.",
+              "at": "2026-10-26T06:24:38+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/p01/android-device/moto-background-r1/partial-result.json",
+              "summary": "Added a physical-evidence consistency evaluator from retained device artifacts. Five observed permission/queue/reboot-restoration/foreground-recovery milestones validate, while uninterrupted reboot delivery is explicitly contradicted and the result remains Partial. Physical Android is still connected but locked; the existing unlock/temporary-awake request is unanswered, so real alert-tap checks remain pending.",
+              "at": "2026-10-26T06:27:33+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P01-10-physical-android.md",
+              "summary": "Physical Motorola Android core scenarios now validate: actual-policy background delivery after cached-process death, exact individual document/service alert taps, retained service alert, durable snooze with unchanged expiry/baseline/history, app restart, and native permission revoke/recover. Test opt-out leaves queue and native alarms empty; owner-approved awake setting restored to 0. Dark/English/1.3-text/reduced captures retained. Post-boot delivery remains negative under observed app_standby policy; full motion, spoken TalkBack, physical haptics and iPhone remain open.",
+              "at": "2026-10-26T07:06:26+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/p01/android-device/moto-background-r2/core-result.json",
+              "summary": "Physical Motorola Android core scenarios now validate: actual-policy background delivery after cached-process death, exact individual document/service alert taps, retained service alert, durable snooze with unchanged expiry/baseline/history, app restart, and native permission revoke/recover. Test opt-out leaves queue and native alarms empty; owner-approved awake setting restored to 0. Dark/English/1.3-text/reduced captures retained. Post-boot delivery remains negative under observed app_standby policy; full motion, spoken TalkBack, physical haptics and iPhone remain open.",
+              "at": "2026-10-26T07:06:26+00:00",
+              "revision": "48fce40"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P01-10-physical-android.md",
+              "summary": "Owner explicitly requested keeping the remaining TalkBack/spoken-accessibility and physical-haptic session pending because participation is not currently possible. TalkBack is installed but was not enabled; phone is locked and awake setting remains restored to 0. Physical iPhone is still unavailable. Preserve P01-05 in review with these acceptance gates open.",
+              "at": "2026-10-26T07:10:22+00:00",
+              "revision": "48fce40"
             }
           ]
         }
@@ -3349,6 +3623,246 @@
       "to": "planned",
       "note": "Owner explicitly requested keeping physical Android/iPhone verification pending. Emulator/simulator evidence is retained but does not satisfy this task. P01-03 review, physical notification/settings/restart/deep-link checks, and the complete representative design/motion/accessibility matrix remain required before phase exit.",
       "revision": "86c1598"
+    },
+    {
+      "at": "2026-10-24T17:57:13+00:00",
+      "task": "P01-03",
+      "from": "in_review",
+      "to": "in_progress",
+      "note": "Continuing iOS runtime investigation from pushed 48fce40. App registration is valid and no recent MotoVault crash is present. Comparing a temporary isolated native UIKit notification/settings probe with the production host before changing routing logic. Physical-device verification remains pending by owner request.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-24T18:16:09+00:00",
+      "task": "P01-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "User clarified that verification must use iOS 27 on iPhone 18 Pro/Pro Max, preferring the running iPhone 18 Pro Max. Removed only the temporary iOS 26 comparison device. Independent UIKit probe passes notification response with an inner-platter coordinate tap; MotoVault grouped notification routing and Settings recovery remain unverified. Continue on iOS 27 only, preserving owner app data.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-24T18:35:40+00:00",
+      "task": "P01-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "On the running iOS 27 iPhone 18 Pro Max, native side-swipe/Open opens the exact expiry document. Actual-policy run r7 then fails because the separate delivered Chain alert disappears on foreground reconciliation. Fixing delivered-alert retention separately from consumed scheduling events; native physical checks remain pending.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-24T19:14:39+00:00",
+      "task": "P01-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Delivered-alert retention fixed independently from consumed scheduling on both hosts. iOS 27 Pro Max actual-policy run r8 passes exact document then Chain service routing. Six regression tests added; 148 Android/shared and 170 iOS Native tests pass, with explicit preferred iOS 27 destination. iOS interactive snooze passes for both records; stored expiry, service baseline and ledger count remain unchanged. Guarded permission recovery and Android retention runtime reruns continue. Physical verification remains pending by owner request.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-24T19:20:26+00:00",
+      "task": "P01-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "iOS 27 Pro Max recovery-r4 passes real OS permission revocation, denied state on app return, app notification-settings action to the correct isolated pane, restoration and allowed state without force-restarting. Interactive document/service snooze also passes with unchanged expiry/baseline/history. Android rerun preserves Chain after opening the document; its first subsequent tap selected the automatic group summary, so an individual-alert rerun is active. Physical-device verification remains pending by owner request.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-24T19:26:23+00:00",
+      "task": "P01-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Native acceptance verified: actual calendar-policy document-then-service delivery and exact routing pass on both rebuilt isolated hosts; unrelated delivered alerts survive foreground reconciliation. iOS 27 Pro Max snooze and actual OS revoke/Settings-return/recovery pass, with expiry/baseline/history unchanged. Both-host denial, failed-save preservation and native accessibility labels retained. Physical-device and broader design/motion/accessibility exit gates remain P01-05 and are not inferred from these results.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-24T19:26:23+00:00",
+      "task": "P01-05",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Beginning remaining phase acceptance after P01-03 native-host checks passed. Complete representative v3 Home/Vault/Me appearance, digit, text, motion and accessibility matrix. Actual physical Android/iPhone verification remains pending by explicit owner request; emulator/simulator checks do not satisfy the device evidence requirements.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-24T19:28:47+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Source audit found the persisted reduced-motion flag reaches Vault and Sky policies, but OS Reduce Motion is not wired into that shared flag. Connect platform preference observers at VaultTheme, preserving the persisted choice and existing v3 flow, then verify live OS changes and record the remaining matrix.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-24T19:34:37+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "OS reduced-motion gap fixed at the native theme boundary. Android observes animator scale; iOS observes Reduce Motion and activation. Reduced springs snap and sheet entrances react to policy changes. Both native suites (148 Android/shared, 170 iOS simulator) and rebuilt isolated Xcode host pass. Runtime recording, full representative design matrix and owner-deferred physical checks remain open.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-24T19:37:04+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Retained three decoded Android emulator recordings with app reduced-motion off and live OS scale 1/0/1, without restarting between cases. Original unset OS scale was restored. These low-frame-rate captures do not establish fine motion parity; iOS OS-toggle runtime, representative Home/Vault/Me matrix, screen-reader focus/spoken checks and owner-deferred physical verification remain open.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-24T19:38:36+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Continuing on main from current uncommitted P01 follow-up. Capture Home/Vault/Me and reminder settings for the immutable runtime and unknown-large paired fixtures on both isolated native hosts. Validate reachable controls and retain screenshots/trees before visual review; keep system-toggle, fine motion, spoken accessibility and physical-device gates distinct.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-24T19:44:34+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Paired matrix runs passed on both hosts, but visual inspection caught an iOS large-text Me screenshot during a tab crossfade. Native tab transition calls pageTween without its reduced-motion flag; v3 data-reduce sets CSS transitions to zero. Connect the existing effective policy and capture settled states. iOS OS-toggle navigation stopped at Settings root before any preference change; correct its initial scroll position.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-25T13:59:55+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Accepted saved Android matrix captures now cover light/Bangla/normal, dark/English/large/app-reduced, and System appearance under OS dark. Original OS appearance was restored. iOS first captures expose transition timing and are diagnostic until settled recapture. The rebuilt iOS 27 host passed after environment reset; isolated-host installation and OS motion switch restoration are guarded explicitly.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-25T14:06:16+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "iOS live OS motion r3 passes normal/reduced return without app restart and restores original Reduce Motion=0. Both hosts completed three representative matrix cases with OS appearance restored. Vault artwork review found clipped holder text: native uses fixed 140dp height and stacked labels while v3 uses a 1.586 aspect ratio and three label/value rows. Match that existing reference before closing visual acceptance; recapture initial iOS Home after layout settles.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-25T14:23:09+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Both native builds and all six r3 representative captures pass. Visual inspection confirms the holder/expiry clipping correction at normal and large text; reduced tab fades now follow v3. iOS real OS-motion r3 passes and restores Reduce Motion=0. Both OS appearance overrides restored. Remaining acceptance is fine motion comparison, native back/gesture and screen-reader focus/modal/announcement checks, plus owner-deferred physical Android/iPhone verification. Screenshots do not close those gates.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-25T14:25:04+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Continuing local acceptance with Android system Back and iOS sheet drag dismissal. Compare observed synthetic persisted values before and after dismissal without saving; do not equate touch/hierarchy checks with spoken screen-reader or physical-device evidence.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-25T14:39:50+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Local Back/drag checks pass with unchanged observed persisted values. The unfiltered iOS accessibility audit fails with 7 small-region and 3 missing-description findings, including background Me content behind the modal, the dismiss scrim and selector containers. Correct modal isolation and coherent text/control groups without hiding meaningful content or filtering the audit.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T04:52:44+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_progress",
+      "note": "Resumed current-source verification. Evidence source hashes are stale. No physical Android or iPhone is connected. Physical delivery and spoken accessibility remain unverified.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T04:56:04+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Native ARM64 recheck passed: 148 Android/shared and 170 iOS 27 iPhone 18 Pro Max tests with zero failures. Android assembly passed. Owner reconfirmed physical devices unavailable and pending. Fine motion and spoken accessibility acceptance remain open. See P01-06-native-recheck.md.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T04:56:57+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_progress",
+      "note": "Continue local acceptance: rebuild isolated iOS host from current source and rerun accessibility audits plus drag dismissal. Prior r2 audit has a retained hit-area failure that needs current-source verification. Physical gates stay pending by owner instruction.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T05:06:10+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Retained 11 passing iOS 27 iPhone 18 Pro Max XCTest acceptance cases: all-category global/document/service audits in normal and large/dark states, strengthened changed-draft drag dismissal/reopen, and empty audit. Android ARM64 API 37.1 normal/large native Back preserves identical persisted snapshots. Added reproducible runners and verifier checks. Spoken screen-reader, fine motion and physical gates remain open.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T05:07:37+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_progress",
+      "note": "Continue numeric input acceptance using the existing odometer sheet. Add native layout checks for normal and large text: keypad and primary action within safe bounds, no system keyboard, and dismissal restores the confirmed reading. No new UI flow or data contract is introduced.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T05:20:42+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Numeric keypad checks pass on normal and large/dark native hosts. Denser Android recordings exposed a real duplicate dialog window scale/fade under reduced motion. SheetWindowPolicy disables only that sheet window animation; fresh normal/reduced/restored captures and current-build Back/keypad regressions pass. Android 148 and iOS 170 tests pass. Fine press/gauge parity, spoken screen-reader and physical gates remain open.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T05:23:27+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Completion audit reconfirmed the persistent external blocker: no physical Android or iPhone is connected, and owner requires those checks to remain pending. Required android_device and ios_device evidence is absent. Keep P01-05 in review. Full motion/spoken-accessibility and physical rendering/haptics acceptance remains open. Resume conditions and requirement-by-requirement evidence are recorded in P01-COMPLETION-AUDIT.md.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T05:59:01+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_progress",
+      "note": "Owner connected a physical Android and authorized continuing Android acceptance. Identified Motorola edge 50 fusion. Prepare a separate guarded synthetic-only physical-device runner and verify the installed isolated APK identity before device writes. Physical iPhone evidence remains pending.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T06:24:38+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Physical Motorola Android 16/API 36 evidence now retained: real denial leaves queue empty; Settings grant preserves explicit opt-in boundary; two committed policy alerts deliver after foreground recovery. Owner-approved reboot restored two native alarms but OS app_standby policy deferred them with bucket 50 until natural app reopen promoted bucket 10. Reboot background delivery is not passed. Phone auto-lock currently prevents real notification taps; owner unlock/temporary-awake response pending. iPhone remains unavailable.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T06:27:33+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Added a physical-evidence consistency evaluator from retained device artifacts. Five observed permission/queue/reboot-restoration/foreground-recovery milestones validate, while uninterrupted reboot delivery is explicitly contradicted and the result remains Partial. Physical Android is still connected but locked; the existing unlock/temporary-awake request is unanswered, so real alert-tap checks remain pending.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T06:35:26+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_progress",
+      "note": "Owner unlocked physical Android and authorized temporary screen-awake behavior during USB testing. Original setting 0 retained for restoration. First group-summary tap opened the launcher and is not accepted as an exact-target check. A new actual-policy background run is live at 12:34 after cached-process kill; Android reports bucket 10 and an inexact alarm window. No standby or battery exemption is forced.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T07:06:26+00:00",
+      "task": "P01-05",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Physical Motorola Android core scenarios now validate: actual-policy background delivery after cached-process death, exact individual document/service alert taps, retained service alert, durable snooze with unchanged expiry/baseline/history, app restart, and native permission revoke/recover. Test opt-out leaves queue and native alarms empty; owner-approved awake setting restored to 0. Dark/English/1.3-text/reduced captures retained. Post-boot delivery remains negative under observed app_standby policy; full motion, spoken TalkBack, physical haptics and iPhone remain open.",
+      "revision": "48fce40"
+    },
+    {
+      "at": "2026-10-26T07:10:22+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Owner explicitly requested keeping the remaining TalkBack/spoken-accessibility and physical-haptic session pending because participation is not currently possible. TalkBack is installed but was not enabled; phone is locked and awake setting remains restored to 0. Physical iPhone is still unavailable. Preserve P01-05 in review with these acceptance gates open.",
+      "revision": "48fce40"
     }
   ]
 }

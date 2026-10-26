@@ -1,0 +1,85 @@
+{
+  "synthetic": true,
+  "applicationId": "com.motovault.baseline.p00",
+  "ride": {
+    "brandId": "yamaha",
+    "edition": "P00 synthetic",
+    "year": 2023,
+    "odometer": 12340.0,
+    "modelId": "yamaha-r15-v4",
+    "modelName": "R15 V4",
+    "registration": "P00-SYNTHETIC",
+    "market": "BANGLADESH",
+    "odometerConfirmedDate": "2026-10-26"
+  },
+  "preferences": {
+    "haptics": false,
+    "reminderPolicy": {
+      "minuteOfDay": 754
+    }
+  },
+  "documents": [
+    {
+      "title": "Driving licence",
+      "number": "P00-TEST-LICENCE",
+      "holder": "SYNTHETIC OWNER",
+      "expiry": "2026-11-17",
+      "id": "p00-doc-licence",
+      "detailsConfirmed": true,
+      "kind": "licence"
+    },
+    {
+      "title": "Registration smart card",
+      "number": "P00-TEST-REGISTRATION",
+      "holder": "SYNTHETIC OWNER",
+      "expiry": "",
+      "id": "p00-doc-registration",
+      "detailsConfirmed": true,
+      "kind": "registration"
+    },
+    {
+      "title": "Tax token",
+      "number": "P00-TEST-TAX",
+      "holder": "SYNTHETIC OWNER",
+      "expiry": "2026-10-19",
+      "id": "p00-doc-tax",
+      "detailsConfirmed": true,
+      "kind": "tax"
+    },
+    {
+      "title": "P01 physical synthetic expiry",
+      "number": "P01-PHYSICAL-TEST",
+      "holder": "SYNTHETIC OWNER",
+      "expiry": "2026-10-26",
+      "id": "p01-physical-today",
+      "reminder": true,
+      "kind": "insurance",
+      "reminderSnoozedUntil": "2026-10-27T09:00"
+    }
+  ],
+  "rules": [
+    {
+      "id": "p00-chain",
+      "vehicleId": "primary",
+      "name": "Chain",
+      "specification": "P00 synthetic owner-defined interval; no factory claim",
+      "intervalKm": 500.0,
+      "intervalDays": 30,
+      "lastServicedOdometerKm": 11520.0,
+      "lastServicedEpochDays": 20709,
+      "isCritical": false,
+      "baselineCertainty": "CONFIRMED"
+    },
+    {
+      "id": "p00-oil",
+      "vehicleId": "primary",
+      "name": "Engine oil",
+      "specification": "P00 synthetic owner-defined interval; no factory claim",
+      "intervalKm": 3000.0,
+      "intervalDays": 180,
+      "lastServicedOdometerKm": 11350.0,
+      "lastServicedEpochDays": 20705
+    }
+  ],
+  "logCount": 4
+}

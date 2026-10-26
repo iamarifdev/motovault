@@ -1,0 +1,7 @@
+{
+  "result": "Passed",
+  "fixture": "android-retention-20261025-012210",
+  "app": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "scope": "Android emulator actual policy delivery and exact document-then-service routing; physical devices remain pending."
+}

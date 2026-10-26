@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.motovault.app.ui.ServicePassportTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:51" hostname="MacBookPro" time="0.036">
+<testsuite name="com.motovault.app.ui.ServicePassportTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-26T05:15:08" hostname="MacBookPro" time="0.037">
   <properties/>
   <testcase name="shaMatchesPublishedVectorsAcrossBlockBoundaries[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.0"/>
   <testcase name="chronologicalOrderIsStableAndFuelAndOriginalsAreExcluded[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.002"/>
   <testcase name="everyCoveredServiceFieldChangesDigest[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.008"/>
-  <testcase name="verificationRejectsTamperingAndDifferentIndependentDigest[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.008"/>
-  <testcase name="ownerConfirmationAndValidNumericValuesAreRequired[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.001"/>
+  <testcase name="verificationRejectsTamperingAndDifferentIndependentDigest[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.009"/>
+  <testcase name="ownerConfirmationAndValidNumericValuesAreRequired[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.0"/>
   <testcase name="defaultsNeverUseUnconfirmedExtractionOrLicenceIdentity[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.0"/>
   <testcase name="unicodeQuotesNewlinesAndExactNumericBitsRoundTrip[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.002"/>
   <testcase name="schemaAndUnknownFieldsCannotSilentlyChangeVerificationCoverage[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.002"/>
-  <testcase name="legacyV1PassportsRemainVerifiable[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.004"/>
+  <testcase name="legacyV1PassportsRemainVerifiable[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.005"/>
   <testcase name="identityAndConfirmationAreAlsoCovered[iosSimulatorArm64]" classname="com.motovault.app.ui.ServicePassportTest" time="0.009"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

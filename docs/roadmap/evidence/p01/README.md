@@ -1,14 +1,15 @@
 # P01 evidence index
 
-Status: implementation in review. Physical Android and iPhone verification remains
-pending at the owner's request. This folder contains synthetic data only, using
+Status: implementation in review. Listed physical Android core scenarios pass;
+full motion/accessibility and physical iPhone acceptance remain pending. This folder contains synthetic data only, using
 the isolated application ID `com.motovault.baseline.p00`.
 
-P01-01, P01-02 and P01-04 are done. P01-03 remains in review for unresolved iOS
-runtime paths. P01-05 remains planned with the owner's pending-device instruction
-recorded; its broader device/design matrix is not inferred from local builds.
+P01-01 through P01-04 are done. P01-05 is in review with the owner's
+pending-device instruction recorded; its broader device/design matrix is not
+inferred from local builds.
 
-Base revision: `86c1598`. P01 is an uncommitted working change. Its collected source,
+Initial base revision: `86c1598`. P01 implementation was pushed as `48fce40`;
+the delivered-alert retention follow-up remains uncommitted. Its collected source,
 fixture and binary fingerprints are in [provenance.json](provenance.json), including
 the iOS `MotoVault.debug.dylib` that contains the Kotlin implementation. A binary
 hash identifies the local artifact; it does not claim release signing or device
@@ -19,7 +20,15 @@ validation. No owner database, document original or production app was reset.
 - [Native permission, snooze and failed-save checks](../P01-03-verification.md)
 - [Honest gauges and confirmed mileage](../P01-04-verification.md)
 - [Design coverage and remaining acceptance](../P01-design.md)
-- [Final test counts](tests/summary.json): 142 Android/shared and 164 iOS simulator
+- [P01-05 system motion and remaining phase gates](../P01-05-verification.md)
+- [Representative native matrix and visual corrections](../P01-05-matrix.md)
+- [Native toolchain recheck](../P01-06-native-recheck.md)
+- [Automated accessibility and native navigation](../P01-07-accessibility-navigation.md)
+- [Numeric keypad and portrait safe bounds](../P01-08-keypad-layout.md)
+- [Android duplicate window-motion correction](../P01-09-sheet-window-motion.md)
+- [Completion audit and device resume conditions](../P01-COMPLETION-AUDIT.md)
+- [Physical Motorola Android acceptance, including partial reboot result](../P01-10-physical-android.md)
+- [Final test counts](tests/summary.json): 148 Android/shared and 170 iOS simulator
   tests, zero failures. Full XML is retained in `tests/android/` and `tests/ios/`.
 
 `policy/` and `scheduling/` retain earlier targeted results. `android/` contains
@@ -47,6 +56,27 @@ retained under `ios/notifications/` and `ios/background-observation.json`. Its
 whole-run summary remains **Failed** because the later notification tap did not
 foreground the app. The focused `notification-taps-r4` also failed. These are
 delivery observations, not accepted exact-target routing tests.
+
+The follow-up [background-r8](ios/background-r8/summary.json) passes on the
+preferred iOS 27 iPhone 18 Pro Max. Native side-swipe/Open reaches the exact
+document, preserves the separate Chain alert, then reaches the exact service
+schedule. Six new shared regression tests cover delivered alerts independently
+of consumed scheduling events. The iOS Native suite was rerun with the explicit
+`50709DF0-FEA9-4B34-9DE6-6172D868875D` destination using
+`tools/baseline/isolated-ios.gradle`. Local ad-hoc test-host signing is distinct
+from device/release signing.
+
+[recovery-r4](ios/recovery-r4/summary.json) now passes revocation, the app's
+notification-settings action and restoration on return on that same device.
+[Snooze](ios/snooze-r1/tests.json) passes for both exact records; persisted
+comparisons show unchanged expiry, baseline and ledger count. Its separate
+whole-run Settings assertion failed and is retained, not relabeled as passed.
+
+The Android [retention follow-up](android/android-retention-20261025-012210/result.json)
+passes the actual-policy document-then-service sequence on the rebuilt isolated
+APK. The test expands automatic notification groups before selecting individual
+alerts. Earlier captures that selected the group summary, captured the launcher
+before shade animation settled, or raced permission loading are diagnostic only.
 
 Some early Android gauge captures were taken before navigation settled. Only the
 accepted `paired-unknown-large-gauges` and fresh `unknown-detail-fresh` captures

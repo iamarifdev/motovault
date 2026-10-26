@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.motovault.app.storage.LocalSyncTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:52" hostname="MacBookPro" time="0.007">
+<testsuite name="com.motovault.app.storage.LocalSyncTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-26T05:14:31" hostname="MacBookPro" time="0.007">
   <properties/>
   <testcase name="coalescingKeepsInstallationAndIncrementsRevision" classname="com.motovault.app.storage.LocalSyncTest" time="0.005"/>
-  <testcase name="revisionOverflowFailsWithoutWraparound" classname="com.motovault.app.storage.LocalSyncTest" time="0.0"/>
+  <testcase name="revisionOverflowFailsWithoutWraparound" classname="com.motovault.app.storage.LocalSyncTest" time="0.001"/>
   <testcase name="retryDoesNotPersistArbitrarySensitiveErrors" classname="com.motovault.app.storage.LocalSyncTest" time="0.0"/>
   <testcase name="sharedAssetsAreNeverMarkedDeleted" classname="com.motovault.app.storage.LocalSyncTest" time="0.0"/>
-  <testcase name="retryHasBoundedDelayAndNewSnapshotClearsFailure" classname="com.motovault.app.storage.LocalSyncTest" time="0.0"/>
-  <testcase name="deletesAccumulateButRecreatedIdsAreRemovedFromTombstones" classname="com.motovault.app.storage.LocalSyncTest" time="0.001"/>
+  <testcase name="retryHasBoundedDelayAndNewSnapshotClearsFailure" classname="com.motovault.app.storage.LocalSyncTest" time="0.001"/>
+  <testcase name="deletesAccumulateButRecreatedIdsAreRemovedFromTombstones" classname="com.motovault.app.storage.LocalSyncTest" time="0.0"/>
   <testcase name="malformedPersistedRetryMetadataIsRejected" classname="com.motovault.app.storage.LocalSyncTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

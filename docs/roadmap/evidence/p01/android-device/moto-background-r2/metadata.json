@@ -1,0 +1,20 @@
+{
+  "physical": true,
+  "synthetic": true,
+  "applicationId": "com.motovault.baseline.p00",
+  "device": {
+    "model": "motorola edge 50 fusion",
+    "android": "16",
+    "api": "36",
+    "abi": "arm64-v8a",
+    "timezone": "Asia/Dhaka"
+  },
+  "baseRevision": "48fce40321600e4fbdfe124a3bb63b3032276502",
+  "uncommitted": true,
+  "apkSha256": "6f504c6843bd78e085433d4f923d813d49aa619cad49b3b6fb48efe2d2c8445f",
+  "fixtureSha256": "2683548a572229c5da82d8d7d10da4bf37df45c4e70d24bf4c19c8b4931d89d5",
+  "deviceClock": "2026-10-26T12:31:14",
+  "policyDue": "2026-10-26T12:34:00",
+  "ownerPackagePathUnchanged": true,
+  "scope": "Physical Android synthetic-only acceptance. Actual policy minute is customized in committed fixture; no injected delivery broadcast."
+}

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.motovault.app.VaultDatabaseTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:51" hostname="MacBookPro" time="0.136">
+<testsuite name="com.motovault.app.VaultDatabaseTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-26T05:15:08" hostname="MacBookPro" time="0.141">
   <properties/>
-  <testcase name="versionOneDatabaseMigratesWithoutReplacingOwnerRows[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.02"/>
-  <testcase name="outboxAndOwnerWriteRollBackTogetherAndSurviveReopen[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.013"/>
-  <testcase name="versionThreeRestoresPreferencesFromItsAtomicOutboxWithoutChangingOwnerRows[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.014"/>
-  <testcase name="failedPreferenceMigrationPreservesSchemaAndOwnerRowsForRepairAndRetry[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.011"/>
-  <testcase name="coalescedQueueRejectsStaleFailureAndPreservesIdentity[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.012"/>
+  <testcase name="versionOneDatabaseMigratesWithoutReplacingOwnerRows[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.024"/>
+  <testcase name="outboxAndOwnerWriteRollBackTogetherAndSurviveReopen[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.014"/>
+  <testcase name="versionThreeRestoresPreferencesFromItsAtomicOutboxWithoutChangingOwnerRows[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.015"/>
+  <testcase name="failedPreferenceMigrationPreservesSchemaAndOwnerRowsForRepairAndRetry[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.013"/>
+  <testcase name="coalescedQueueRejectsStaleFailureAndPreservesIdentity[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.011"/>
   <testcase name="legacyMigrationIsRepeatableAndSurvivesDatabaseReopen[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.01"/>
   <testcase name="corruptLegacyDoesNotMarkMigrationComplete[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.007"/>
-  <testcase name="failedInsertRollsBackEveryTable[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.01"/>
-  <testcase name="sharedAssetsRemainReferencedAndBikeReplacementKeepsDocuments[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.014"/>
+  <testcase name="failedInsertRollsBackEveryTable[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.011"/>
+  <testcase name="sharedAssetsRemainReferencedAndBikeReplacementKeepsDocuments[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.013"/>
   <testcase name="migrationUsesFuelHistoryInsteadOfStaleStoredEconomy[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.007"/>
   <testcase name="damagedAssetReferencesDoNotFallBackToStaleLegacyRecords[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.009"/>
-  <testcase name="documentPayloadWithDifferentIdIsRejectedWithoutOverwrite[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.008"/>
+  <testcase name="documentPayloadWithDifferentIdIsRejectedWithoutOverwrite[iosSimulatorArm64]" classname="com.motovault.app.VaultDatabaseTest" time="0.007"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

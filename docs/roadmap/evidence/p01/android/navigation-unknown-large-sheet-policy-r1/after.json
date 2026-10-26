@@ -1,0 +1,54 @@
+{
+  "platform": "android",
+  "app": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "odometer": 12340.0,
+  "odometerConfirmedDate": "2026-10-16",
+  "preferences": {
+    "digits": "EN",
+    "haptics": false,
+    "reduceMotion": true,
+    "textScale": 1.3,
+    "serviceReminders": false,
+    "docReminders": false
+  },
+  "documents": [
+    {
+      "id": "p00-doc-tax",
+      "expiry": "2026-10-19",
+      "snooze": null
+    },
+    {
+      "id": "p00-doc-licence",
+      "expiry": "2026-11-17",
+      "snooze": null
+    },
+    {
+      "id": "p00-doc-registration",
+      "expiry": "",
+      "snooze": null
+    },
+    {
+      "id": "p01-today",
+      "expiry": "2026-10-24",
+      "snooze": null
+    }
+  ],
+  "rules": [
+    {
+      "id": "p00-chain",
+      "odometer": 11520.0,
+      "day": 20709,
+      "certainty": null,
+      "snooze": null
+    },
+    {
+      "id": "p00-oil",
+      "odometer": 11350.0,
+      "day": 20705,
+      "certainty": null,
+      "snooze": null
+    }
+  ],
+  "logCount": 0
+}

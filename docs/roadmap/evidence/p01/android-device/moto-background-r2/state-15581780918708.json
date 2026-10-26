@@ -1,0 +1,30 @@
+{
+  "enabled": true,
+  "plans": [
+    {
+      "key": "renewal:18:p01-physical-today:2026-10-26:expiry",
+      "documentId": "p01-physical-today",
+      "expiry": "2026-10-26",
+      "date": "2026-10-26",
+      "kind": "expiry",
+      "minuteOfDay": 754,
+      "warningDays": 30
+    },
+    {
+      "key": "service:9:p00-chain:11520.0:20709:500.0:30:due",
+      "documentId": "p00-chain",
+      "expiry": "2026-10-26",
+      "date": "2026-10-26",
+      "kind": "service",
+      "minuteOfDay": 754,
+      "warningDays": 0,
+      "targetType": "service",
+      "targetRevision": "11520.0:20709:500.0:30"
+    }
+  ],
+  "consumed": [],
+  "notificationPermission": [
+    "android.permission.POST_NOTIFICATIONS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+    "android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+  ]
+}

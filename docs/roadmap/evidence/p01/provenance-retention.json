@@ -1,0 +1,1958 @@
+{
+  "baseCommit": "48fce40321600e4fbdfe124a3bb63b3032276502",
+  "revision": "uncommitted P01 working change on 48fce40321600e4fbdfe124a3bb63b3032276502",
+  "applicationId": "com.motovault.baseline.p00",
+  "syntheticOnly": true,
+  "scope": "Collected source and artifact fingerprints; hashes alone do not establish runtime parity or physical-device validation.",
+  "sources": [
+    {
+      "path": "composeApp/src/androidDebug/kotlin/com/motovault/app/PassportFixtureActivity.kt",
+      "sha256": "7654470c20e797b2da3e193459e4a90429e3c5f612a86f9168e4c9aca66f07de"
+    },
+    {
+      "path": "composeApp/src/androidDebug/kotlin/com/motovault/app/RenewalFixtureActivity.kt",
+      "sha256": "0417c4afb5fbcbec5d2b5866c583bf5bcd1505fe7d71485da3b57c48adbe7a1c"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/MainActivity.kt",
+      "sha256": "889abe8bb88bf7c474a3c1bb19570eac232c36be9f84dadd837d6238dcc39022"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/AttachmentPicker.kt",
+      "sha256": "5d45f24f03242621c008b4a7b51b44a324231898f775b709f2df6b6145b942a4"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCamera.kt",
+      "sha256": "646ed808cc2776e334c0257f9601dfd59554a64df9b770a47b3793fee6439ce6"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCapture.kt",
+      "sha256": "32ec9ec384564b2956d5d149ff98ad6c3be55731bad5e719aef6cbb9005c6078"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/InspectionBrightness.kt",
+      "sha256": "71c25e9788b6b6a2dcd2f6b6e1f1c27bcf3489f87e28774850490c764a6dfeb7"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/LocationCapture.android.kt",
+      "sha256": "5a1e75630ba2c3aaef38b6e9c14d78c389ce41133d15f412bef40c4d62f91810"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/PlatformAppearance.kt",
+      "sha256": "8eb5f51385ddafa451098d921a8ced66f87867a78802a3a071fed21d8c1aeff1"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/RenewalReminders.kt",
+      "sha256": "b2dbc58430bcd6c73cb14f16223f3af8cdfe0b404d157732d23d810ae54768c7"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/ServicePassport.kt",
+      "sha256": "d623c15a2380227896e0769f38d396b6bf7346745a7c7a4b0838ed354f65cbe2"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/VaultStorage.kt",
+      "sha256": "42f17a063a39ce4d23cb92fdccb9e5135f0eca7b77e631e1948673682f7812f5"
+    },
+    {
+      "path": "composeApp/src/androidUnitTest/kotlin/com/motovault/app/ui/DocumentRecoveryFileTest.kt",
+      "sha256": "b4872d777820e656560107ac1a15d6411ae25e23b8552653c6220be41acc14d8"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/App.kt",
+      "sha256": "3684696f755e822fd08f35614e673558595353b59670d9d6a67fb43395ef8428"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/model/ComponentRule.kt",
+      "sha256": "f9f23fbd4a107b6c2313c5905cea62524e114f9611f76e3496b3a1abc8369e02"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/model/DocumentExpiry.kt",
+      "sha256": "c2efcc0dfa90043da909053414b0b53716a02e43304371967a5e3dcf6c6398bd"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/model/Powertrain.kt",
+      "sha256": "756050a34831f5928506b889fb2b1096a276c0731b361b6d5cac4331a5c953d1"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/model/Vehicle.kt",
+      "sha256": "c77cba124260ae017409173de10c8f8fe93d2f187605d469538f7d6e7a644ccc"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/preset/KtmDuke125Preset.kt",
+      "sha256": "6e4117140b35012e80153a3d420f25b13a7c400ac2d54625c6bc2c6382dad8cb"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/usecase/CalculateWearUseCase.kt",
+      "sha256": "908381b62901cde9e102ffc2191f4322310cbfef39d0e0d5ff46549371a009ab"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/usecase/DocumentExpiryUseCase.kt",
+      "sha256": "ea7a65cffaad489a32fa10a89920465aae4aafbbd2e8444f345397d6ce70b23b"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/usecase/FuelEfficiencyUseCase.kt",
+      "sha256": "84eb9aeb2c2a3708342c30468ecf14e4bce02658bc967e8c0c21fb65f1b6d935"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/usecase/LogMaintenanceUseCase.kt",
+      "sha256": "9adec97f4b24e4b28ed13eb97fcf4e4b50e487607f87b7d5d14e830e051c711f"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/storage/LocalSync.kt",
+      "sha256": "cf8aab97644163b29cd7c29d09cb4f8544bf9a135b7cd97b35ef349c0b871ff5"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt",
+      "sha256": "4e7eeaf379f02777647b9e49c67b040f5a6acc238cdbb0c25b2bc4292dc4c597"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultSession.kt",
+      "sha256": "48e500a9b0d6ca51ae45aa45e5e8abc33424917cc195b3c09e5a40f5a0badd17"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Appearance.kt",
+      "sha256": "351775a12adf46769c053e987ff998c1e2e3a3e098469c3b3344c33dcf5ea69f"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/BikeCatalogue.kt",
+      "sha256": "1e59c08a9f71329674e02e7a43950f7c29a2ec0adf2917a01f56b671e7c21672"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Bn.kt",
+      "sha256": "fb5d1110adc08d5d2082268d04d31caf94de964415f2d4e721bdfc8b1022d21e"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Catalog.kt",
+      "sha256": "b1d8d043b4459c59cf183d2cd558953582a31e9b6e445b656f1df09017bd5c80"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Components.kt",
+      "sha256": "2b84a8128fc4896da14861896ae1a7496361d0a725519eba243a162e873dedf6"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt",
+      "sha256": "89319053fecd39dadc29cd4bed4a596c2a1243b3ef38c67e740bfecae3149d64"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt",
+      "sha256": "a94762946734d1f8e1fff84a2b54d37d3e742b39642460d13bb6f27a53511356"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentLabels.kt",
+      "sha256": "ef17a094698122a40253fdea564ba9c2b2df4c3f2643a2579216e2f62cb4135d"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentWallet.kt",
+      "sha256": "219956b4864d00c1ec89824483dc062338aaa01e205785abcdbee8cac9327312"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/FactoryProfiles.kt",
+      "sha256": "96509927637d36ee7f4b1ad8420d52b38bce4e5a2933f8f612fc484695ab7b47"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/GaugeDetailSheet.kt",
+      "sha256": "02d3c1daba1a7148cc3175a01d699f55652b96c951217611f1595fa2306f0dfa"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Haptics.kt",
+      "sha256": "420c7ca546f28af4f79aa9cb1a38259dc43c27a8c98d2544ed8b0af8c34228b8"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/InspectionBrightness.kt",
+      "sha256": "7991f90c7f7872267050ae06bcc8064784e17338388768b3f07d691db8f112f9"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/LaunchConfig.kt",
+      "sha256": "eda1f95d1bd6d9c2270789ba86e1fa27ca4cb769d84131aa03bc02b476717f5f"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/LocationCapture.kt",
+      "sha256": "07d405f9c2198006dce0a64fd4f719ecc632a958fc421d6cc2cd0a5a9345cbcb"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Motion.kt",
+      "sha256": "6b1c237302f45119dea63dec0d3d3c147e1e3c781010fc2f65628949de08c8a0"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt",
+      "sha256": "66e08b33c77b0e8ad218fba739b32473c1695de92137da0b5df4ab4256688f5f"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Onboarding.kt",
+      "sha256": "9d7fc4f1a0ff03d81256918787b2bd6dde0e1961b1d542ef8abaee8354635491"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt",
+      "sha256": "47df0b6af0cbdf9d8ca7713800f63936f9d6d554c69ebec6889b465c73828346"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/PassportExportUi.kt",
+      "sha256": "21b6715ddf3cb108ff2fca187b77b4cf3943d7337691bfb90930b33ddf120825"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/QuickService.kt",
+      "sha256": "108101d5bfa1827f28da9171008bc94adab7d9fcfa32e49cc3ecd31721f4a208"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ReminderPlan.kt",
+      "sha256": "006c9071ab0a890f0d3f4c003d7ba5e627bfe63eaa2ac46050cc4b2e665f3ddb"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ReminderSheets.kt",
+      "sha256": "a6e2a0c54c58790ba88b85077f29e427a9f34a489bdd900a2cebbdb0f5197aec"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/RenewalJournal.kt",
+      "sha256": "a2a3aa3f0692e87ed757c885d2f7dc2e845eb17a75e8db4600ecfee0196fcf1a"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/RenewalReminders.kt",
+      "sha256": "7a6608a02bf444f728fc472b8aa09e6696f872500975ccc2d72f661ba7350006"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Screens.kt",
+      "sha256": "fb291892c5ad7995bda5a80c5ecf597297d60a28a2b87e5a1a938481bff766a4"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt",
+      "sha256": "39b1a82498fa09c11710c9e44e764b310315bd5012dd3a5014592d07b515c9a7"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServicePassport.kt",
+      "sha256": "c322646b10ef1ae4012c0f1c80358b5f977dbc271dddce83eaf6e9304d41090d"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Sheets.kt",
+      "sha256": "c0479235c36068d118068ae702f853fe811b919248609a712532cfc1522d4711"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartParse.kt",
+      "sha256": "7ba976095ca748a2abf332fe1026fe31087fe1070f25f468196d0c3002787d16"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt",
+      "sha256": "abf89c7f59231c17035abc79948e891adc30b67319278e6aed8c87da91edbc6e"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultSettings.kt",
+      "sha256": "d91e5dcfffc569ac27d7cb6a126bf4fb31aeb28fbb2c72f2e59163b57ed7bfdf"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt",
+      "sha256": "20a021c77ac9c3726382e31a8552afcd300276147321ef0c6584ffa32b26f43b"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/WearDomain.kt",
+      "sha256": "e4d6672f4ceb96e1189cc1319a3f5222dca673d93c8aa29ae83122d5a6d45b85"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/FactorySetupTest.kt",
+      "sha256": "1f62fd0ee17aeb427066251b8b290234634a1a1a773f801ae5ead70583d68da1"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/domain/preset/KtmDuke125PresetTest.kt",
+      "sha256": "d5e1b572f9915ead952af8a3f65cf2bb528edf4ef34b4be0614f4bd7dac7bf8d"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/domain/usecase/CalculateWearUseCaseTest.kt",
+      "sha256": "93674aa5e8ee35059217321afdf5fd8ad4d7bde8f92d5daf2bff6216c9a51beb"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/domain/usecase/DocumentExpiryUseCaseTest.kt",
+      "sha256": "68df6f0e8e79f9faaa34134af7b372f292777673ad0e2aa9910ebd75ba8bbda8"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/domain/usecase/FuelEfficiencyUseCaseTest.kt",
+      "sha256": "4104e8220c28e3a25d44c2dc4358ff4fa2440cb793ade89efc1dec52eb777e96"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/domain/usecase/LogMaintenanceUseCaseTest.kt",
+      "sha256": "3b93dc33ac7253d12659935aa655ed530a1e8bdcc3f7aca30868a789ff7bfde5"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/storage/LocalSyncTest.kt",
+      "sha256": "e02fad6e42cf18c13d702e44e85e54e357460211e14e20159e3c441e65f2362b"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/AppearanceTest.kt",
+      "sha256": "7cd75d0f7a5b5ca0be14cef7445b3e950a75c3dc0c275bd32a5b30f8b6ed794e"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/DeliveredReminderTest.kt",
+      "sha256": "03021e7e268ed35751c79a5ea1d23a4222c7653021277263cbc795e5fe6eec01"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/DocumentCaptureTest.kt",
+      "sha256": "dbc64426b072330bd4948b9da5d7f83d9755cee9e40401c197fa7340d3283185"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/IntervalHonestyTest.kt",
+      "sha256": "2997cd1607181f8a89d32f8caaa4fddcc29903f873db121b2c0c0e4b646b0983"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/ItemizedServiceTest.kt",
+      "sha256": "9892f5ff66f2a2a72a33fb4c5a12d6b415c55aea32ac2713c9478d7d5f6fcff6"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/LocationCaptureTest.kt",
+      "sha256": "e64a67e8ac63ef06ade81606cac0e082ba9864077971c8504ee8b5bec3942eff"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/P00CompatibilityTest.kt",
+      "sha256": "985b5c300c45755b2cc456fb7930eb349ce7a4c0d554d4019a7b356ed61019d3"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/P00FixtureData.kt",
+      "sha256": "2a9313777903ed02346005a8d7a815d4ca998ba2f0347f012c66c7953d1523d0"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/ReminderPlanTest.kt",
+      "sha256": "dcbcce892248a6f491be0940aa18b6c838ce0b319c9e85cdd07980472d9046e4"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/RenewalJournalTest.kt",
+      "sha256": "df5e4403577a58b3a5a922058821ff6e34225257e45848b611f1b59bd384d4a0"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/RenewalReminderTest.kt",
+      "sha256": "7486a32337a587b855e3795ee65e4bd86817677e58b3df3ae87811533436e421"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/ServicePassportTest.kt",
+      "sha256": "db0ed4b44b77b22c2c81e9832985d68be07bc173a8509c02c7472392e76d560c"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/VaultSettingsTest.kt",
+      "sha256": "9b538e3f72a2db1b74fff3dd340eeebef37926cf5acecb6ce8cd7f5d77fd3712"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/ui/VaultStateTest.kt",
+      "sha256": "dcfc657740142874a1e4b64c0139bc4c4bb1339c8c254f3a3fceea7bd2a17cca"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/IosRuntimeFixtures.kt",
+      "sha256": "3ea5ec6d6db33f06944d80b1b746efd704ba90ed1f32f3f659e9550619b6623d"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/MainViewController.kt",
+      "sha256": "b12ff559c41db3c9c3149470a315f2722d781be32c92ec0fc2834b8de1c06edd"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/AttachmentPicker.kt",
+      "sha256": "32b04a6baf4f1f644a1e4cc5c38a84a582fb9f26df2acca80dcd3e8a9b652b92"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/DocumentCamera.kt",
+      "sha256": "1ac9ec149f0ed0cbd61146d105b4c0d116fbf587cf1cad2adc5015a717f6a4bf"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/DocumentCapture.kt",
+      "sha256": "6a5b5629a4ef12d5bcfcfe18a492e40c7347ee60382f95bc686a3167e92bc127"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/InspectionBrightness.kt",
+      "sha256": "5314c290c808ac72deeb5776f52ba216a03b3318b10064f85d8dfd312d46ec98"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/LocationCapture.ios.kt",
+      "sha256": "b9e6fb6bbf3922c4ce63dc4076c3557a283ea369867d56e3348e33a3672016ef"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/PlatformAppearance.kt",
+      "sha256": "13e9d86d739446b6d6e0218c101652b1396d538383eca58f99aeb13fe65bef53"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/RenewalJournalStorage.kt",
+      "sha256": "cededb47d43f763d7f7bb0f6fa555a8a970caca80875b65ee5eb505725b7060a"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/RenewalReminders.kt",
+      "sha256": "db62463f35c3e1dd152bdf0b28bbea8b554617b69d99f556df67809205d1c75a"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/ServicePassport.kt",
+      "sha256": "d132d981520c95021464ed8b8a08b8f7effcd89e9bfacb033313d4ad3cab93ae"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/VaultStorage.kt",
+      "sha256": "24331b604e33091d3239bfebdc66e8b83204cef999a3669300e93810a30b2a1c"
+    },
+    {
+      "path": "composeApp/src/iosTest/kotlin/com/motovault/app/VaultDatabaseTest.kt",
+      "sha256": "e211f012c937ebeba3f81bbd80b69acb2122727f76043aa8577971329976e0ac"
+    },
+    {
+      "path": "composeApp/src/iosTest/kotlin/com/motovault/app/VaultSessionTest.kt",
+      "sha256": "dc709da3b2a901d056bff6c54e4fa2d379bb563f27d028902f75a3bae831b073"
+    },
+    {
+      "path": "composeApp/src/iosTest/kotlin/com/motovault/app/ui/DocumentImportReadTest.kt",
+      "sha256": "0e67af7ea9943edfccb2edac2903f3bb02be0b88ca3441d900fb746665375b94"
+    },
+    {
+      "path": "composeApp/src/iosTest/kotlin/com/motovault/app/ui/RenewalJournalStorageTest.kt",
+      "sha256": "d01b79339738b60bedd08ca229e299be882e7113d19a8624166c299cb875b2a2"
+    },
+    {
+      "path": "design/app-ui-v3/src/App.tsx",
+      "sha256": "53d81074d9a9aa9b2ef4a5f2192b5a1e8341ce1abdde79b7699af1ef2caaf40e"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/DevPanel.tsx",
+      "sha256": "70e617f34ceb2d48ecf82a02fd45c2a1f6e4f715d95762ed3a09e20552a84726"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/DocCard.tsx",
+      "sha256": "d7e10c87214f1789c9d6dfeb57e73859bc0f80ed718a8e8d6ac71a3ff67cfae1"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/Gauge.tsx",
+      "sha256": "d374d8f9fbbc59247cc8f33d7f7041ead7997a08310a0fc0863fab33dbe64d67"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/Sheet.tsx",
+      "sha256": "6ebc9e9c7e02398c312e1e509643338e1e8ff932acd5b2a64af0cbeb36641cd0"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/SmartInput.tsx",
+      "sha256": "2e459618788e1e65946fead6d7e882b70c464e159bce96e892956d5684af4838"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/TabBar.tsx",
+      "sha256": "564544b80b71780670df684a5b340977c3e65039fd7bcd16ca6fbae2fb9f79a2"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/Toast.tsx",
+      "sha256": "725bcdf5fc7807a6c470fee704a284c59cd393d8f040df9c418409df9eb06ac2"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/entry.tsx",
+      "sha256": "c8e7a26259f924f947386fdd3bbe015c4e6c5dbd74d40aab4f296cce6574515c"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/ui.tsx",
+      "sha256": "7425286b08ab5ef19b95a9594a1a80e3e1199dfdffa01021597820be00026beb"
+    },
+    {
+      "path": "design/app-ui-v3/src/data/catalog.ts",
+      "sha256": "9c73f0a5df5202b92c9845675acdbd2a20bba4ed93dbde808afc36192c8aeb4f"
+    },
+    {
+      "path": "design/app-ui-v3/src/data/seed.ts",
+      "sha256": "6c1bd0582ec5f61879ec63dc00928c231629293f96284484f829f3afa3c67131"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/bn.ts",
+      "sha256": "55050cb26935b5994b9c00e9defcb7b2be3b65c291be80a73408e42816e2dcae"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/dates.ts",
+      "sha256": "b0bdad0eeeac565c6b848cfd45ffbf6a500fa940c93b9922b01e877d9d7c97cb"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/haptics.ts",
+      "sha256": "9bab6d6c3ae78569510b3c80b303d993fcfd3b1e9b6467f509861f84f6f955fa"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/motion.ts",
+      "sha256": "65eaf01ed12f9107bfe08e20553db5b05b01a32a82fd177a913eb754d118af2a"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/smartParse.ts",
+      "sha256": "bc571faa0383f24ed9d19a77859413fee78bbcb7d361af945a4d7dc8e9a14071"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/wear.ts",
+      "sha256": "d240df4cacb62beb577f6b8089d6f4dce1a044411065b74b2f37bb6a3e979e02"
+    },
+    {
+      "path": "design/app-ui-v3/src/main.tsx",
+      "sha256": "e3320066b4927f97622f70f597d81e02c27011645835b403953357cbf0903c6b"
+    },
+    {
+      "path": "design/app-ui-v3/src/screens/History.tsx",
+      "sha256": "1ba2d09ac95b540bd5b503fc48327cd737487a4297af4a29134943161949d166"
+    },
+    {
+      "path": "design/app-ui-v3/src/screens/Home.tsx",
+      "sha256": "4734e87db80f7a24d26cab0d70065f321b31179ee765d21be7aea3ed25b35c88"
+    },
+    {
+      "path": "design/app-ui-v3/src/screens/Me.tsx",
+      "sha256": "ca00090309345c16a91d9a7dcf32d9dd922cdc568b8069b69618223f87684266"
+    },
+    {
+      "path": "design/app-ui-v3/src/screens/Onboarding.tsx",
+      "sha256": "0cf54984f405c67024f8fa9136968d683edc66d0dfe040b2b336d5a8c5014a8b"
+    },
+    {
+      "path": "design/app-ui-v3/src/screens/Vault.tsx",
+      "sha256": "700e27340c6796304008d63ad90c5d7119680f4a7ba506ddeaa86343fc8b660f"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/DocAddSheet.tsx",
+      "sha256": "c7382a7b604a2b41f3d9afaa6d89fadf2d13a707fdbf541867913a28d4e1f27c"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/DocViewSheet.tsx",
+      "sha256": "143434b84c16497844cb847935660793cc11f63d0a86c6e49cfb5b3da50beed2"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/FuelSheet.tsx",
+      "sha256": "fd4b69d8369076d12771b7f23a128f23a55e6fe899075a12892dfcd525f00525"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/GaugeDetailSheet.tsx",
+      "sha256": "d5abf4978922a1378d8ab18f520d31b8fb52d6b846bb782715c5b47d90acd22c"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/OdometerSheet.tsx",
+      "sha256": "f78836e37822319aa29aa20d3c0af8ffe60234018ba6fb31ed85610f4e562cb9"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/PasteSheet.tsx",
+      "sha256": "87a4b55d374130343b41611e106ee5efb009dc6318f8fa137f4f17377a7a59fa"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/QuickAdd.tsx",
+      "sha256": "fb71611a84a2f37f4236cc56c7bbd27aa8d2faec4d284c282b26247bb54892f1"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/ReminderSheet.tsx",
+      "sha256": "bd1da556971e4cb7474b3471cc55ce655d47fe56a2d4f36e18671cd7b5721092"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/ServiceSheet.tsx",
+      "sha256": "bd811240469ae43005bf20ca0ba16caac50611f84a685644bcc36d4448c215c3"
+    },
+    {
+      "path": "design/app-ui-v3/src/store.ts",
+      "sha256": "d36177621c045a5f2cee0448baf1d02d133ef4c7729c22d264751b3c619c75b6"
+    },
+    {
+      "path": "design/app-ui-v3/src/styles/app.css",
+      "sha256": "0e1fd6fbcb6f359a758b7fcec10658f925e97eeaae5fa2f6c58e96acf33a369b"
+    },
+    {
+      "path": "design/app-ui-v3/src/styles/base.css",
+      "sha256": "d7c31788c4e2a215fc101ca59ef5ec7e155d08ed05b70e8849f9ecb9d83358a6"
+    },
+    {
+      "path": "design/app-ui-v3/src/styles/tokens.generated.css",
+      "sha256": "014d67007ee21a87e5942d127af2f83db5e69a25a98635289de97e6a536a5686"
+    },
+    {
+      "path": "design/app-ui-v3/src/tokens.generated.ts",
+      "sha256": "b0cf0cbced59e58b1a844f73cb9ad1c7fa765dd16e198760691fa86f6befa29a"
+    },
+    {
+      "path": "design/app-ui-v3/src/types.ts",
+      "sha256": "a570eaa7494384682708b069b8a31c5b8c2ceb4edb12f771bd8f31cff20fce22"
+    },
+    {
+      "path": "design/app-ui-v3/tokens/sky-tokens.json",
+      "sha256": "0d09d404cfd14bff514b1e6fd76ee8a680740a59d513a56b2e0842731a9db9f8"
+    },
+    {
+      "path": "iosApp/MotoVault/AppDelegate.swift",
+      "sha256": "f31d72824dfcdccb99ddd9a2df4f1d548d4786e5e44d04f5210ce02f02571b6b"
+    },
+    {
+      "path": "iosApp/MotoVault/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "6ad2c5c3bbcf972c7f02d217d6afcac3f24a10e30510c7e2d06c582371ed9d22"
+    },
+    {
+      "path": "iosApp/MotoVault/Assets.xcassets/Contents.json",
+      "sha256": "10e3b5dc202f1cd9fad1f688c8fc9fe9e9669bf3f8295e67d216b10fd99b6f49"
+    },
+    {
+      "path": "tools/baseline/P00BaselineTests.swift",
+      "sha256": "5e89a9d7028f3cc837f8a9a418bcd0f1d48eb534cd9befaed3e7bda9d97ada4f"
+    },
+    {
+      "path": "tools/baseline/P01DeliveryTests.swift",
+      "sha256": "1f8fb704579256cdadb7d58f2ca55eb4f44de00fb401bee24d18f5ce2df09666"
+    },
+    {
+      "path": "tools/baseline/build_index.py",
+      "sha256": "8edf562e9b21c52f647a92e235e049eefe60c0bb8cfc1d93fdda594ca5e21efd"
+    },
+    {
+      "path": "tools/baseline/capture_android.py",
+      "sha256": "fdb833932f655822367fd6eb68951edd0f2d1d0a903ba82a99e062ff1fa54717"
+    },
+    {
+      "path": "tools/baseline/capture_android_motion.py",
+      "sha256": "cc69633fd15f7cf19676ace0a3a2f9cb164b02ce168fa37ac9e8365501918f61"
+    },
+    {
+      "path": "tools/baseline/capture_ios.py",
+      "sha256": "fcc3c22ef130e0bcb5ab3d0d8172560ce004f5ebd467e2d25519ae1faf695604"
+    },
+    {
+      "path": "tools/baseline/capture_ios_motion.py",
+      "sha256": "60041aabb932eb0971dedbcb6f9dc3404a2489828882bf5f7a95c2ca9bdb1946"
+    },
+    {
+      "path": "tools/baseline/collect_evidence.py",
+      "sha256": "aa3e3a076d7ac1f61558df506452cfb326fd43baafc55772b2ae9b5c6c37855e"
+    },
+    {
+      "path": "tools/baseline/compatibility.py",
+      "sha256": "6df5218314d94e78c63fe8965ecb74f10cb58112c67fbd084e0b938807516554"
+    },
+    {
+      "path": "tools/baseline/encode-motion.swift",
+      "sha256": "a83e812fca0fd23d3870ad50f0f9959a4b252bbdeedca2890b089081b2cc48eb"
+    },
+    {
+      "path": "tools/baseline/inspect_persistence.py",
+      "sha256": "e1b0185009907060ede8dfbd948cd337601afe9097894aa6b3b6fea617ddac8f"
+    },
+    {
+      "path": "tools/baseline/isolated-android.gradle",
+      "sha256": "9af277f9741b4e10a640ba93c8abfed0b014b861f0fcb80062317d2ed3fd5484"
+    },
+    {
+      "path": "tools/baseline/isolated-ios.gradle",
+      "sha256": "3deb9a2ce728d4a3b36093bf58ef0259e422aa7c3129ecedebd97c6e3061051c"
+    },
+    {
+      "path": "tools/baseline/normalize_formats.py",
+      "sha256": "e6124dd03b61d06e521b82c644a931308ae57bdb93fe7b5319652a85553ef05e"
+    },
+    {
+      "path": "tools/baseline/p00.py",
+      "sha256": "9b068bd23f9994aae9a6e7556c91086214a971db3cbb3636768edd2b9661df01"
+    },
+    {
+      "path": "tools/baseline/p01_android.py",
+      "sha256": "56af926e41571648ab80b7e7e8f0bc2e3431db6ab2ea8b7505d7293c725d64ef"
+    },
+    {
+      "path": "tools/baseline/p01_android_reminders.py",
+      "sha256": "35e4fb325fdeac994c09d9f3a8bd51f4407b4f56a10308002b960cb89609cfe7"
+    },
+    {
+      "path": "tools/baseline/p01_android_retention.py",
+      "sha256": "83cfd1973e5b542a8f82934c2374aaf1069685e6dcb1a269054df6c0b5b9c91c"
+    },
+    {
+      "path": "tools/baseline/p01_fixtures.py",
+      "sha256": "da8c1af05a18208ecf3e8b791e6d2e845074b6abb7021a1c204fc344f870ea9f"
+    },
+    {
+      "path": "tools/baseline/p01_ios.py",
+      "sha256": "0d2a3d8c96621a772cdcb6bb3d04169d22408953001ea9501edf341aa949eac7"
+    },
+    {
+      "path": "tools/baseline/p01_storage.py",
+      "sha256": "61de19a896eff4a3eab14df14090e59311e2e1505ca63ec13eb62a6a1a46ed63"
+    },
+    {
+      "path": "tools/baseline/verify_p00.py",
+      "sha256": "369e2fb30a6d8cd6402fa649c3c1b610d30dd56fc4dbc049c2b20cfc74528099"
+    },
+    {
+      "path": "tools/baseline/verify_p01.py",
+      "sha256": "5d46b8c79d5f468313b4de6c076ba794840559dc7538c23e8c92ffc62a582dcb"
+    }
+  ],
+  "buildProducts": [
+    {
+      "path": "composeApp/build/outputs/apk/debug/composeApp-debug.apk",
+      "sha256": "3e4d35f078dae85aceeea48e7b7a5275c29f500cc6f088865c42628daa1b9524"
+    },
+    {
+      "path": "build/p01-ios-tests-derived/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault",
+      "sha256": "22020fac12ce5c71a45f1e7ca2811e1320a2a85d90d06dd5ad6f05e8473d3ccc"
+    },
+    {
+      "path": "build/p01-ios-tests-derived/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault.debug.dylib",
+      "sha256": "f0b3be3e0d4bb3be0a76471ef2d1fe9a182b28f011f52241fa6304b28120039a"
+    }
+  ],
+  "reports": [
+    {
+      "path": "docs/roadmap/evidence/P01-01-verification.md",
+      "sha256": "d940e9502946025df562663dc533a27c328f4bec04d93041a48951253f62499f"
+    },
+    {
+      "path": "docs/roadmap/evidence/P01-02-verification.md",
+      "sha256": "24c05bdbaebe14ef6ca87abaacc57e5a13a6e4946363689dbc33b8dfb9ff1fa8"
+    },
+    {
+      "path": "docs/roadmap/evidence/P01-03-verification.md",
+      "sha256": "ca2d87aa1f82518cd2b770d09822d28e94bdc57abc4a197f8953b441bd970126"
+    },
+    {
+      "path": "docs/roadmap/evidence/P01-04-verification.md",
+      "sha256": "b88518853d42b46e8883a5fb847f0d62881b5eb778a5a38e0e4880bebfe29c23"
+    },
+    {
+      "path": "docs/roadmap/evidence/P01-design.md",
+      "sha256": "cf4acf140221cca996668cee6698f579e00b5ed6f5e4c4aca81fcb1ee91321c4"
+    }
+  ],
+  "fixtures": [
+    {
+      "path": "docs/roadmap/fixtures/p01/manifest.json",
+      "sha256": "ee6398a88ba37c05ce116b5b8a81a02affed84270b24e964f935fd1f02041a0d"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/android-retention-20261025-011347.json",
+      "sha256": "d38bff396d65621987bdda1fbf3d8d606e84bfb1a6977b9610eb2e7469cbe5b7"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/android-retention-20261025-011937.json",
+      "sha256": "c9e01024c991126129d7354e7579924e5207508b8ec88ec52a4cf6525de54868"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/android-retention-20261025-012210.json",
+      "sha256": "cdbb832e85e32d6356790dbe82bed1ccf6072b8d4d5b0211613ebc7ffa8d42ed"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/ios-delivery-20261025-r6.json",
+      "sha256": "895bc627f68ddbad7b337933d307748fac2c9d5bd962faf85c5b02082c4c562a"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/ios-delivery-20261025-r7.json",
+      "sha256": "c85b8d0d5bf1f371f5513b9593992b2a7e8943d17013a418d5a21b8ea117a93a"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/ios-delivery-20261025-r8.json",
+      "sha256": "4b3471fac9406c27fc3a8942721c85807f55671fbf5f23e4a8c192b620e19e6d"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/ios-delivery.json",
+      "sha256": "0df142902d508f784eec38bfb40958985e733ade59541150fcb8b998f33508d5"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/runtime.json",
+      "sha256": "6d6a8ec997324bc60c8ed86ad965f78d4176e5bef42e5b2cced4dad7e3773fd4"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/service-runtime.json",
+      "sha256": "cef51045db1de9cb2ead90410791fdc3ec1f6262d0b51e3d6e4914545c848da8"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/unknown-large.json",
+      "sha256": "922dfe7c212c93874663b346a3b8f4d29327c5621bc780e6f1531e7b2820d709"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/native/unknown.json",
+      "sha256": "ec113587a0b0e2149df1e187eddca1a9aa7922d6a131ee3a561aa5312f574ede"
+    },
+    {
+      "path": "docs/roadmap/fixtures/p01/paired.json",
+      "sha256": "61140e441bdd8f00649d234482009d85fa307f255c636dd2fc4d56f40852cf75"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/roadmap/evidence/p01/README.md",
+      "sha256": "973aefec7bb33b0446f03cf9f8bb46c02a983d554348bdcc8819c76814215960"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/actual-notification-shade.xml",
+      "sha256": "5d526c3fa633a86747f9c8cd9d39c31c3771df6675c4ac48479e391b81f1d13b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/after-failed-save.json",
+      "sha256": "4c033e7806f651f6e968b2543115affacf856e44222e1320669d297ac6b85bcf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/background-notification.json",
+      "sha256": "af4a3f1727476291b79add2f3dbc6d9721c11746f5b81771ed4428343fefbb75"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/background-service-notification.json",
+      "sha256": "27ea039a8ceeb5687fac11fcd355fea173f5c31807a55481e170fa79b7ac3791"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/before-document-tap.xml",
+      "sha256": "01e0129e62825f14fbc2cf0df0143318e0c6b5ade955107a9cdb85b161493637"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/chain-retained-after-document-open.xml",
+      "sha256": "b5184f0703c69c5fe1b99b2fb730d20bec566e0de25555bd7208cbcc252c3cec"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/exact-document.png",
+      "sha256": "56d3fc3e71b989f0bed8d8e3acb5208290f0bcb6c120f0eb1fd5a4b52de504d8"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/exact-document.xml",
+      "sha256": "8ba82c2d5d7eeb6f318e6f85f6a6fd4f23beaf6349233bd50cd7c67562585214"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/exact-service-settled.png",
+      "sha256": "4be6cd5baf4eca7ffde9d054410dbde62fbe9ddec582e7f0154bb8f4fedea6b6"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/exact-service-settled.xml",
+      "sha256": "ffd189abbc64bb66b1785b999a1a04c11c603bc5fb7e2e25cb2fc83542be3ece"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/exact-service.xml",
+      "sha256": "ffd189abbc64bb66b1785b999a1a04c11c603bc5fb7e2e25cb2fc83542be3ece"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/permission-entry.xml",
+      "sha256": "6e150ece008f2012417c7ac005f44277b2b5724a7ee10eddf0854bad490e59a4"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/permission-scroll-0.xml",
+      "sha256": "00f33a5c90e238e51e7bb0baa6294981ec4131c1ca45fba8fbb94aed69397f62"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/permission-scroll-1.xml",
+      "sha256": "c8b0a3cd6abcc4854562bfd581d3040cfcd08913e8b15d93108e0c12b59561b8"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/permission-scroll-2.xml",
+      "sha256": "71d3942ac4b252a8bcb7978b2d5e89e2436fec7a8457db89070ffee3d5915e72"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/permission-sheet-0.xml",
+      "sha256": "da35e61691bed99706726c3c37b49ddd4eb03ddbc3bf336fd86fa3901eeefde7"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011347/service-group-summary.xml",
+      "sha256": "f369aafd46c2b4d5a656c994fe1fccb5b4a2239b6d0b6da7e3e0cd63dd5c1a5d"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011937/permission-entry-wait-0.xml",
+      "sha256": "33e5ac05881e79cd5cccdf3c4a524440244324fd4aaea8124b6f4d6c75f16807"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011937/permission-entry-wait-1.xml",
+      "sha256": "33e5ac05881e79cd5cccdf3c4a524440244324fd4aaea8124b6f4d6c75f16807"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011937/permission-entry-wait-2.xml",
+      "sha256": "33e5ac05881e79cd5cccdf3c4a524440244324fd4aaea8124b6f4d6c75f16807"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011937/permission-entry-wait-3.xml",
+      "sha256": "33e5ac05881e79cd5cccdf3c4a524440244324fd4aaea8124b6f4d6c75f16807"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011937/permission-entry-wait-4.xml",
+      "sha256": "f26b5a91a68488ecad98d40ac6ccce9491d2ca8c2f7b1b7dbde6c1a795c19619"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011937/permission-entry.xml",
+      "sha256": "ffd189abbc64bb66b1785b999a1a04c11c603bc5fb7e2e25cb2fc83542be3ece"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011937/permission-scroll-0.xml",
+      "sha256": "00f33a5c90e238e51e7bb0baa6294981ec4131c1ca45fba8fbb94aed69397f62"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011937/permission-scroll-1.xml",
+      "sha256": "e92608f9a1bc0e773045ea816319a5181054c6d3e937cf56ad6d80ad61c99586"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011937/permission-scroll-2.xml",
+      "sha256": "5e5865a8a772726720e31f28800645487d396d07b0c7bb3d4f2c21e2763b1878"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011937/permission-scroll-3.xml",
+      "sha256": "345c5c79ec82da1083424510561de38a2989c864a510b3ed6f3895c496910778"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-011937/permission-sheet-0.xml",
+      "sha256": "b3b75883d6a53a208b807c243333a0886f36ccb41bc8fef20b10b39f9a310155"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/background-notification.json",
+      "sha256": "af679d48c176c21979c1ef6bb5e6d4dacc709f5fe1c75b89634bd78cb5ebc84a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/background-service-notification.json",
+      "sha256": "4af2400461e587bf9050696c6fa389d6606ba65b4d7a84158cc88f89d2f3d56a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/before-document-tap-0.xml",
+      "sha256": "463090033d431c8f095b79bca13d4c90538188828d85d9a4cc3106fa4a29c51e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/before-document-tap.xml",
+      "sha256": "15fa6121b762996f2d104ed8f71d65a1e829d17bc1a8d49ed2d1bfc6709349eb"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/chain-retained-after-document-open-0.xml",
+      "sha256": "4ce472fd6ec70641bbc7cf7c3ce857c240f730dadb079e1a6aa5af260ff93289"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/exact-document.png",
+      "sha256": "add799522096e6646ebcb1fcd4ca7d5cd974b22a505467d917ff42428dd7ad81"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/exact-document.xml",
+      "sha256": "8ba82c2d5d7eeb6f318e6f85f6a6fd4f23beaf6349233bd50cd7c67562585214"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/exact-service.png",
+      "sha256": "61888c9c5017362b6f4ef54c18e03011a6e9b6ed68a7bc5043ba137c78e6cc0a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/exact-service.xml",
+      "sha256": "651bcbd1b2c81dba21b0a9d9cfbbbf1ad85babe7c27e7e68abbd958902d0b398"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/expanded-individual-alert-Chain.xml",
+      "sha256": "0410a736f6c7dcd0d95c4187d58ff04cf8b5fff7196a9faa172a7b0243b8dd49"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/expanded-individual-alert-P01 synthetic expiry today.xml",
+      "sha256": "6d5e49f1fd87142dd7784daf442bd42d1a178f78a4fc6fe857152635e1992fb4"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/permission-entry.xml",
+      "sha256": "ffd189abbc64bb66b1785b999a1a04c11c603bc5fb7e2e25cb2fc83542be3ece"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/permission-scroll-0.xml",
+      "sha256": "00f33a5c90e238e51e7bb0baa6294981ec4131c1ca45fba8fbb94aed69397f62"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/permission-scroll-1.xml",
+      "sha256": "99b4b98f91968df3bba8798509bcc998d6fd04b8d5bb5f8e51204dc6316c3895"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/permission-scroll-2.xml",
+      "sha256": "5d3244c0ff43c3f81ce48869e094ea1e717ba2c12f3d5fc4abb90b1135c1c8b7"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/permission-scroll-3.xml",
+      "sha256": "7b04788d803a9fd4ac73b3445755b1a2564bf96d46a1250d1dde1f8891abb431"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/permission-sheet-0.xml",
+      "sha256": "8df3580ccc50530ea05419cbf1145e48c6468d5488c292b7a70611fe1b158d7b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/android-retention-20261025-012210/result.json",
+      "sha256": "87672c445e0c231ff633ef5dd97bbbe8afd853c3ec4d7e673c6669216dd6cff0"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/background-notification.json",
+      "sha256": "7cd480316ef5874fb63ac105c109b3facaeaab1ab026c42a096df5141f31bb11"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/before-failed-save.json",
+      "sha256": "4c033e7806f651f6e968b2543115affacf856e44222e1320669d297ac6b85bcf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/before-failed-settings-save.xml",
+      "sha256": "e8c9b5df32689be1265b8a63449f5150e08db5efbf4e3d83ea42405f077e3042"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/before-native-permission.xml",
+      "sha256": "cb1057a92233aa34c0a330f34c5d1beb3da076ebb767d9837043bbad1af1cb97"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/before-notification-tap.xml",
+      "sha256": "4bc204344c3a8fcfa8e12046cf7be2d1678557c309965cfed292d896caaa4069"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/before-snooze.xml",
+      "sha256": "cb1057a92233aa34c0a330f34c5d1beb3da076ebb767d9837043bbad1af1cb97"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/before-system-settings.xml",
+      "sha256": "8090830544b8775a8ea3f028463ad409246f8a28c58fb4377859b74a7738603b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/document-reminder-sheet.xml",
+      "sha256": "983deafff90e9e29a79ebb6e530e799c8f1b9b3d57e863b29479109c61f35c7b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/document-snoozed.xml",
+      "sha256": "d9ebaa4f6e6f6a5863a6895479236449bb8717e942673b46886ece833598ecd7"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/final-after-failed-save.json",
+      "sha256": "9795745b43e0d235edc5c01fa33e89416ce0340c0097dac456849e72dd3dc8d3"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/final-before-failed-save.json",
+      "sha256": "9795745b43e0d235edc5c01fa33e89416ce0340c0097dac456849e72dd3dc8d3"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/fresh-capture-current.xml",
+      "sha256": "b37f849cdf44a1d020e619742bda3bbcac9d1b8adbf90ccb52fe4b6b0fc5ee60"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/native-after-notification-enable.xml",
+      "sha256": "e0e18ed8d1015c483ad0aa09d09036a2ebbda0175be3c859f96c775c5d09a641"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/native-before-notification-enable.xml",
+      "sha256": "50ad64bd684cf664d4a7e006ec8d0e0b596351c9ba8b34bb29a93e2921ead6cf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/native-notification-settings.xml",
+      "sha256": "8090830544b8775a8ea3f028463ad409246f8a28c58fb4377859b74a7738603b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/native-permission-dialog.xml",
+      "sha256": "0b880d1d511161919bf7c896e746bec4f83b5a13711b0d7f2e68bf9299e2e49f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/notification-exact-document.xml",
+      "sha256": "132a806380c8666cb1954e2aebc168e30fd83b56eec10ec6474f9383f658c777"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/paired-unknown-large-gauges.png",
+      "sha256": "2cdc220e12357a5bd7a994563a225ea18fdd385ae462d4017c1a7a02a4dbd310"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/paired-unknown-large-gauges.xml",
+      "sha256": "06e9383fd223f925627ef80bbe126cefcdc9b53704b807ab274dd430246a9062"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-denied.xml",
+      "sha256": "cb1057a92233aa34c0a330f34c5d1beb3da076ebb767d9837043bbad1af1cb97"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-entry-wait-0.xml",
+      "sha256": "50ad64bd684cf664d4a7e006ec8d0e0b596351c9ba8b34bb29a93e2921ead6cf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-entry-wait-1.xml",
+      "sha256": "50ad64bd684cf664d4a7e006ec8d0e0b596351c9ba8b34bb29a93e2921ead6cf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-entry-wait-2.xml",
+      "sha256": "50ad64bd684cf664d4a7e006ec8d0e0b596351c9ba8b34bb29a93e2921ead6cf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-entry-wait-3.xml",
+      "sha256": "50ad64bd684cf664d4a7e006ec8d0e0b596351c9ba8b34bb29a93e2921ead6cf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-entry-wait-4.xml",
+      "sha256": "50ad64bd684cf664d4a7e006ec8d0e0b596351c9ba8b34bb29a93e2921ead6cf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-entry.xml",
+      "sha256": "656e51e663cbdd52e7b113ef0b8fd3c79ff407cea982bae650a77d8502ed69e1"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-revoked-after-return.xml",
+      "sha256": "8090830544b8775a8ea3f028463ad409246f8a28c58fb4377859b74a7738603b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-scroll-0.xml",
+      "sha256": "00f33a5c90e238e51e7bb0baa6294981ec4131c1ca45fba8fbb94aed69397f62"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-scroll-1.xml",
+      "sha256": "cbb19299221e3e65965c5996dac70958807fb5c28b15da2cfef71762a385a1b1"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-scroll-2.xml",
+      "sha256": "f638c26b7a3b6383f80a9bac09c17baa430608f9866238dfda36c834b1d8244d"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-scroll-3.xml",
+      "sha256": "e5d3e37d1521a78aab83b7ff6487fe29253a95d429fb0630dd543a1631dc3016"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-sheet-0.xml",
+      "sha256": "7774d42fcf2fbf2229035b40740945924cb02d80369212c6f219b9772bc731f6"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/permission-sheet.xml",
+      "sha256": "8090830544b8775a8ea3f028463ad409246f8a28c58fb4377859b74a7738603b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/reminder-deny.png",
+      "sha256": "9bb7e4d97350eaa8d3c8cbba1a9d2b009ad2edfb15ad1a6c5be117cfdf7721fc"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/reminder-fail-save.png",
+      "sha256": "429060d8d52bf1fe6ecedfbc67f673c68ff718e85a9ad42ac586cafefc01b929"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/reminder-observe.png",
+      "sha256": "dd8800e381dd34e69b9a641f4b62cb3803bd919c342c67220141171791cfb1ec"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/reminder-prepare.png",
+      "sha256": "9367d9c6a73dbed84e665faf92e348833a3e994ef6ada38ce1a90001fd605cdf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/reminder-revoke.png",
+      "sha256": "0f46b8d7482457ee660c7d6028c8f95b183c46a17891968f10a3af97bc81cd1f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/reminder-snooze.png",
+      "sha256": "a2e529e43fe99f9f16c715b14d1fd801b3686c4dc925fe6dbc6def25694d4032"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/reminder-tap.png",
+      "sha256": "b3eca092369e4a7586750768f3db471603b9375657733a8cccef21390c43140f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/saved-12350.png",
+      "sha256": "df49f6682a7fd16a2c74c03132df7b408bc31a4ba56c1ba98eae0f3318d136bd"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/actual-service-notification-shade.xml",
+      "sha256": "ef15c221e59ceddc40e2833821bcd547b80c85ae9ff87119a63f37bb9f8cbf42"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/background-service-notification.json",
+      "sha256": "a50dd79080d43ca7be7d25971ac70512f65236713ecd697d94c47f925d7af797"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/before-service-notification-tap.xml",
+      "sha256": "14b937d5fa98aa57ef98a4005099b0d0da451a8f2b86c0e31b6d713599f0e4ae"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/notification-exact-service.xml",
+      "sha256": "6eee530e91f0a969c7f8c053b2333c03087f7731cd5985a5013c8fd2a274cd5c"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/permission-enabled-after-return.xml",
+      "sha256": "b8391630468d894918005ae9bf9403a87c57464bb25e63c438ac310a6ecb13e5"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/permission-entry.xml",
+      "sha256": "74324c549a894caf440cdd55ccfd4925b1a734476a96291af48bd9fbb3774c36"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/permission-scroll-0.xml",
+      "sha256": "a3a08ba19cc088d0463fe71fe64e133ede82dc67cb6bae7aa64edb37bae404df"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/permission-scroll-1.xml",
+      "sha256": "a8f7e9298871b21ef2124ab9a000b17876ac619c1e1805a4a4197430feb3b170"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/permission-scroll-2.xml",
+      "sha256": "27e75cd6f8970dd1999d27a6ede4031803d8107ed1afa648e0eb441694e59871"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/permission-sheet.xml",
+      "sha256": "0f0716511f98aa0826057e1f7e2597b0949c57e20355e6c66667ffacb981f40e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/reminder-grant.png",
+      "sha256": "083113ba6f63965653167446d421fde2dce365e8e5a7ca0ee9a6282d658d780c"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/reminder-prepare.png",
+      "sha256": "a0225f82cfc3d524eef984b52993ad410cc8998f836c392d8ecb4211635f0053"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/service-runtime/reminder-service-tap.png",
+      "sha256": "0174a8a4083478f8b6d53662f10efa810117045679bcac810b5b7b96403d76e9"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/settings-return-recovered-final.png",
+      "sha256": "28041d6052951d95cea7ffe346e5f450c21f3e82439700474f9f138e15c2f519"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/settings-return-recovered-final.xml",
+      "sha256": "50ad64bd684cf664d4a7e006ec8d0e0b596351c9ba8b34bb29a93e2921ead6cf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/settings-save-failed.xml",
+      "sha256": "7ceea8332d12bc8501d1a3a6007a9a8b3128eabd723cf308a72b89b5a0962ebc"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/snooze-scroll-0.xml",
+      "sha256": "fa8920a7ddebf79c73be7c71eeab8a3402098ffb95a4830eb6215dafc162599d"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/undo-after-restart.xml",
+      "sha256": "f5070311f71ba0208cc1e7baf76ec407377d9e84242f3c99670a3cddd1f0401a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/undo-home.xml",
+      "sha256": "26cbaf0823114456af5f001aef815cc42b9e149b4550a3158b24a8d92cf49a07"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/undo-increment.xml",
+      "sha256": "266c27b313b4100e95b7998bab5ad8d0d5d7a00cc66e78311b7c82e1900efeaf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/undo-restored.png",
+      "sha256": "1506a8564876061c990caa4b0b50e5ce19c2ad1f5996eca52ca9c134746d196e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/undo-restored.xml",
+      "sha256": "26cbaf0823114456af5f001aef815cc42b9e149b4550a3158b24a8d92cf49a07"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/undo-result.json",
+      "sha256": "c81dcc235cbcfba3197e09a8aec8a15cba41460bc288eb5bd04049a2c2e7ae34"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/undo-saved.xml",
+      "sha256": "2ac0e4626c0235ff69ea8a1515d2b1b070bb8deedc05b61362d1486f515b6d2e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/undo-sheet.xml",
+      "sha256": "14557b46e531d516bc2864e79d8fd964cacf112219a02d9dd903b1fd45373a58"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/unknown-before-gauge-detail.xml",
+      "sha256": "06e9383fd223f925627ef80bbe126cefcdc9b53704b807ab274dd430246a9062"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/unknown-detail-fresh.png",
+      "sha256": "0f28045d2e74b03d43dd145ce814c240d5c108d9a485af30f813772fc54528a3"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/unknown-detail-fresh.xml",
+      "sha256": "63113080fb2d267765ee0e9ccd9e2a33429dd3144b397968b98c5c97533d38a8"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/android/unknown-gauges-fresh.xml",
+      "sha256": "5f1570bdd740ba06133f0637a35cc32d8615e7167dd754380fc89823bc6c1c6e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/after-failed-save.json",
+      "sha256": "fa220db3284484bba5f2c874db0a28eadc153510e37fc67c973f875444b401af"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-observation.json",
+      "sha256": "39e7331473388832742187b28776d18e18c0fa721aa8bff316d5f800418c9439"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r5-summary.json",
+      "sha256": "a6787f16332d68e7277319b0355fa7ca0eeb235baf1929a2d62464619454eb0a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/attachments.json",
+      "sha256": "e85cc5c241bc7a4211d92ebee71d843f33611c146d7e02986134e7c46171df2b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/background-notification-tree.txt",
+      "sha256": "a70da6a8d4eb4f56c273f84a4fe3702781f01211b48cfef35c6680ef811f4973"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/background-notification.png",
+      "sha256": "1118744d3a1c16b59cb2d4638fd7071cca3665c4f746a712f11b84592395e563"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/me-reminder-entry-tree.txt",
+      "sha256": "163deebda565b5cb3eeed49e420e9b471bd79418c2953d7f506ed6734d8bdf5c"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/me-reminder-entry.png",
+      "sha256": "c8005219834ccb7295f6b018c8561df3d0fb52f0a29bc4111a0e7b7ccb24a463"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/notification-exact-document-tree.txt",
+      "sha256": "14fdb4a4bbc64be6c07f5a97863e0b7c74414eeb550b0f49ea41f3f111fd432b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/notification-exact-document.png",
+      "sha256": "c46bc218396936882f785b9e74bd1722b0678ae213c315c95d343a1c9d3cb9e0"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/notification-exact-service-tree.txt",
+      "sha256": "35e57f1f915791b053b68ae33379ee6b2d703febfd62257394341861a9ef2f38"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/notification-exact-service.png",
+      "sha256": "cd861ed457d3bd5db565688f5ac8813125b1068f61d80b7739588579d2c32237"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/permission-enabled-tree.txt",
+      "sha256": "af22cdefef608943effc538352aebcb28de6af50cb42babe38124bcadab8d68a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/permission-enabled.png",
+      "sha256": "22347ce267e7b03c7f38cab2be288be7f98639de37f1c72e21dd192edee0639e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/reminder-before-permission-tree.txt",
+      "sha256": "0bf4d30b129b228ceeda4ea83fe067cdc76ac32274d1802e8b60ba06e891563c"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/reminder-before-permission.png",
+      "sha256": "3bb8df5a527fad6f286377a877670793a6c8461aa404178089e895505211e073"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/background-r8/summary.json",
+      "sha256": "db03713239083ac572b23363589f16840dbad70493e7886847a2b39a43e04ee6"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/before-failed-save.json",
+      "sha256": "fa220db3284484bba5f2c874db0a28eadc153510e37fc67c973f875444b401af"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/denial-r5/30EED87B-EDCD-4680-867B-45C76B5D04DB.txt",
+      "sha256": "151e80377dbd9eb5ff1b3014d5ecae48d1c6bf7bfd04d9397930b72f37dbb69a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/denial-r5/461C1CC5-3F53-4B4F-9FF7-980137203EF8.txt",
+      "sha256": "a7b1321d6c85dfef27c0fa80655e76f7c3ad190e9f57280f28c52b6b5d417258"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/denial-r5/50114E18-37F7-478F-BD52-EC442E3740FD.png",
+      "sha256": "f3f8dc2fc87d0c0529fbe1fccf4056799ef6d2500730a73a4a1739280d611910"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/denial-r5/7DD7581F-F713-45B0-B5C9-452F5F946915.png",
+      "sha256": "71992e5f42b064e9b037b2c269f08397380486245a5bb355a1ab309feff95c33"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/denial-r5/DD07D6A6-4F2E-4CBF-BD13-A110D743F093.txt",
+      "sha256": "8081801c5d84ee0a41f07acb0857315d15808a5ed41e4f8f3d7f2076a9ddb071"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/denial-r5/DEFFF46B-F2E5-499F-935B-0092EE286805.txt",
+      "sha256": "e91825a9e28a697b240cd65b51ff0dd36bb1444227667938b6c807e0045dfa82"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/denial-r5/E8C1C456-C3CB-49CE-B086-A2B23A6108FB.png",
+      "sha256": "b70f5f6846760833ca9b54f6c119e31b7ea4fed84234d082d9562a8ea2c79de7"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/denial-r5/FF24B298-E560-446D-9D28-C570E286A259.png",
+      "sha256": "71992e5f42b064e9b037b2c269f08397380486245a5bb355a1ab309feff95c33"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/denial-r5/manifest.json",
+      "sha256": "b60195e6e4b5f058f86c712f97078beeac7339222f0d4e8f530c9360b016a7de"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/denial-r5-summary.json",
+      "sha256": "10c914d1c2ff43b48c65f73f524eaeb634edd337703687c3f77c6d0e34dc554e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/notification-taps-r4-summary.json",
+      "sha256": "62219bc6cf97dc58e598fe74b9aec917bb9a71907268eac00874c4fe3e4c383b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/notifications/4490305A-6515-4DDB-8EE6-24D282DC08C2.png",
+      "sha256": "20792846a0e63797f71ffd481ad184443c6ea41e24f82a10ff852553b5f3e142"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/notifications/73F20A0A-AFBD-4B3D-8F47-B0DC0C19D776.txt",
+      "sha256": "27ec609ce355f265fb2e1d9042102f3db918aa3d39e034d4f98804aa272a1e75"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/notifications/A0070A4C-E7B2-4FA5-BAD2-7CB94D57CEA8.png",
+      "sha256": "72627b3eb4f6c56ed96827aa6322f22108a4ebd058b676afb4225bb729179118"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/notifications/F7C7A443-07CF-4F75-9596-E0CFB8EE38C5.txt",
+      "sha256": "a88fa653ae6a14a0151434a8f032e8641179c1be6092a7c94478b1c9cc340651"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/notifications/selected-attachments.json",
+      "sha256": "b41fff122bcd9cae8cbac8542ed8c8cf31cb84891fab44e5d9892c24d04eb0d0"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/recovery-r4/permission-recovered-after-return-tree.txt",
+      "sha256": "de9a00df393fbba426f011b109f56f2128d2f4a9ff41a37e9518ba5fe3bfcff1"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/recovery-r4/permission-recovered-after-return.png",
+      "sha256": "4a3f3971baaaa32209eb8d50c6b6cfd7ca793a2264cb65cd2a96b67f4da54d02"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/recovery-r4/permission-revoked-after-return-tree.txt",
+      "sha256": "a47becf16f1ab7d1e8dda1733eb5076f1f2375920e8f14d4509a2e4d2c0db2d1"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/recovery-r4/permission-revoked-after-return.png",
+      "sha256": "42424e084be6177e312719785eb7e20b48dde4e03926ed529e5f91153d1cc069"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/recovery-r4/second-verified-isolated-app-settings.txt",
+      "sha256": "d0de1186cd3b40da65ac461961acdd323e3a6e6ee3b76cd05e29737ebb865591"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/recovery-r4/selected-attachments.json",
+      "sha256": "af2e331f061ff7cdac997521c1515e9fb80481561bd55f6ef290b9932eb55c34"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/recovery-r4/settings-url-destination.txt",
+      "sha256": "349b41febba789a6428fafa2233085f3c60e6509b446aecbe0238de6f8ebde01"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/recovery-r4/summary.json",
+      "sha256": "fbc5cef6a63f959600f6abb23f29bd2c98ae1dedf824b3792f7bfa83ea08ff43"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/recovery-r4/verified-isolated-app-settings.txt",
+      "sha256": "147d40f18e2bd2f133e84cbf2d84285923be7dc29dca8cd7b7a066c3506d523d"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/save-failure-r2/5B78E8D7-6DC8-43A0-88A6-2EED93A3411C.png",
+      "sha256": "7a23df9269a4f8e212cde833357afc4c4240cc8a82ed45a055b6bab18b642d69"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/save-failure-r2/5F6D74DD-5F5D-4CB7-9D1D-B0F50D643819.png",
+      "sha256": "85c759419f421e269996079d8150d7fd858924ea2c59e2a8fbe963c7dd6752f7"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/save-failure-r2/85B525FE-DB6C-419B-AD3E-65100CFFA40A.txt",
+      "sha256": "f6fab77eeb0b8a22447b380140ece3ab9da1e6a113eecb062ada0092dfce7219"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/save-failure-r2/D42FF700-310E-47CB-8D57-FF95C120A0DA.txt",
+      "sha256": "57bcebba556601aa214f935fcbf6475c5802106ea552e2586122754bfcb0b10a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/save-failure-r2/D94DFE65-BACB-4E48-A9FE-CAC5801B7B1F.png",
+      "sha256": "b9178548fcfb4714453a49ebcda5c6815e74987f7293e7e76f0923a55a056806"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/save-failure-r2/FE4137B9-CB0C-414F-B3F6-81BBC25568CA.txt",
+      "sha256": "f12c4e4515c998527a538b0a2af7bc10e8ef32334988fbb1ffbfb16cde203192"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/save-failure-r2/manifest.json",
+      "sha256": "91507934e8ec7fcf74adef43cdde66ced691dfc8b27afc6e11e5f2fa39a22488"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/save-failure-r2-summary.json",
+      "sha256": "76ce77e6ec5096b75f685c7b228eb90f67e8662b0dc047b411b6b9258ade7970"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-diagnostics/C96B83AE-99F8-4A4C-A1D9-BE8649F8DCED.txt",
+      "sha256": "dd87bbd245a25bd5b953be51a772412375c8ea50e50e2dcc51dcc091aa896229"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-diagnostics/DAD926AF-133C-4E5D-9802-E715233F9E6C.png",
+      "sha256": "25ed221e6c92415458f065eb1c9d4e524aa719b20b518f0a728091270c11f362"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-diagnostics/selected-attachments.json",
+      "sha256": "80919f687dadcfbcabd8aa1c0831eb8bcd3cdf9a8c2273fbe87fd00162241f78"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-manual-r1-summary.json",
+      "sha256": "dd26fadc83302f5a2b9e17f687918075158652f185d7d3137b2ba0f4c2b20bec"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-r1/30E38138-B0C8-4A7B-90EB-DF3B618895A5.png",
+      "sha256": "697fd55ae0a59d06cbffb465273ea3687d364ebafe99cb85afd76a519723851f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-r1/3CBC5F50-8374-42FF-B25E-02C9826876D2.txt",
+      "sha256": "fbbca64a1fd1d63a5b1a06b9e60e47f0bfbe18e147e02011bedd4ff7f8f3ce19"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-r1/40E7C8C3-5544-46CF-99B5-BD3D9CE22960.txt",
+      "sha256": "4a4175f38e44c2b43e699c199566d8dc50f98725ef59b319accceb2b4d0c2e64"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-r1/46710D6B-C964-45EF-BB78-6EE30C895F9C.txt",
+      "sha256": "200ebe3988001f4d16cfd93327155bf3a7b1cf1e16f58358438c345da63d3410"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-r1/6EAF5964-FEE6-4E45-97D4-1B3921FCAF9E.png",
+      "sha256": "b148bcb119a4b565039f57fb9b6f4babf5b0c01bc6c71c9fe391cc0875d7e3a8"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-r1/93909349-BB52-424E-BF02-E7478C8A1885.png",
+      "sha256": "4c9093870ba8b19b4ab912a672abf18709c9a159a5cd3431ffeef0ced01c392a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-r1/A932D59D-2008-4978-B861-51CA3D523A9E.txt",
+      "sha256": "b6f289847f6a2d37628e26a4f2cb3e28c0762c91627409c939219c0bc2f303ea"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-r1/C716E153-195B-496C-9BF9-ECEA428DA3CE.png",
+      "sha256": "91434062450ab80c33aff5a3bdc5274ea1fac1458c7f55f24e2ab78f15982b97"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-r1/manifest.json",
+      "sha256": "96b961991071a7b8f21bdd417a318fa1a01ff0bcd561880f482053c03c554ca6"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-r4-summary.json",
+      "sha256": "88f57743c4317980c94b4a7769c56cccfed15eb247eb54d5db4675e3eaa2a25a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/settings-r5-summary.json",
+      "sha256": "8e386a7d26714a1a43581b9f4865ac62262cb31046e3aa29700233688da34501"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/snooze-r1/after.json",
+      "sha256": "cd3bc3d200489adc5ddd9f00097017e6615e0bbdb10ddc0c7af98333150b3cdf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/snooze-r1/before.json",
+      "sha256": "93a3d6396f0e7da0045ab55fff8fc02e7b884c612cb5a8b762e6edab137c9f7c"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/snooze-r1/document-snoozed-without-completion-tree.txt",
+      "sha256": "be97e7ec8b6d4a211e37328dd0fe6a87f571b54c7ec363c724cd3ed40cf40b44"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/snooze-r1/document-snoozed-without-completion.png",
+      "sha256": "a3add07bf1bc59e26c2b361b61d7f117e7bdb836a9788089b8261108688d1f6f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/snooze-r1/selected-attachments.json",
+      "sha256": "a3bb175db7c431140cd25e5eeb58945e1a33043fd5036372c8332f66c05c502e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/snooze-r1/service-snoozed-without-completion-tree.txt",
+      "sha256": "6a078843bbfe82e345a2c8f7c038307241988e974d64698865a44b4d3181df87"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/snooze-r1/service-snoozed-without-completion.png",
+      "sha256": "716c54c746969a4a912c4f405925781720179218c26d33fd69ad88567513ce3f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/snooze-r1/tests.json",
+      "sha256": "d885e2209f10ffc8d3e82300a3263d4a0e035aaeee0a2c7a1caaae5347bac2e1"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/snooze-r1/whole-run-summary.json",
+      "sha256": "b1261c0991356c35d6fa5aa8049eaefc1276a6b5447673bf4ae151cb882939f0"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/undo-r2/5BBD6370-0FBF-40EE-8A9E-827BA38E9492.txt",
+      "sha256": "1076818a9b4867adf476491878f6158455fa5eace04683a2a10e4c80fdf27715"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/undo-r2/6438A1F5-6102-4AFE-9996-4376426FEA5A.png",
+      "sha256": "e1a823389b620f61fa2a32658d1a8cb8c0f6fccdb6602c47d8f516050aecb9bb"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/undo-r2/7CAC89C3-DBFB-461C-99E3-4F1824F7DAC7.txt",
+      "sha256": "2303b62ee4da615a37e7a0d09126dbd788933de41c515399381f82d75a72446d"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/undo-r2/B170F353-B20A-45CD-8074-5EFF6DF1D5E9.png",
+      "sha256": "e1a823389b620f61fa2a32658d1a8cb8c0f6fccdb6602c47d8f516050aecb9bb"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/undo-r2/manifest.json",
+      "sha256": "9769a2166ff8c6b8b0fd9c483903e84d33ca6ded1cc51f30d6c492dd49ea4abb"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/undo-r2-summary.json",
+      "sha256": "52bfa5ee84702b881668f068699e1cd1bd934ad4d363f42833fff1c0f9447989"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/unknown-large-r1/0C24D29B-FA9C-4828-B48E-8D8E54B6B0F5.png",
+      "sha256": "187ecdd25ca4a29495feb2f7e849ed10ecd9925f3cc30aa87a7ec7f4bd2afd43"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/unknown-large-r1/5F711B77-E54F-4CC1-901B-8899FFD57E70.png",
+      "sha256": "a1293eb2993ee2cb8595e5e34daba7d8332c68ea15f8377c68d4e8f4472d1f28"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/unknown-large-r1/76464DF9-453D-446B-AC2E-E2050E4DA200.txt",
+      "sha256": "d04bbfb06d5d816a19b8057ec3922ead0aab2ab09d50101e719253c33b3d529e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/unknown-large-r1/80AC693E-CFF4-44FB-B97F-3A28EF3257C9.txt",
+      "sha256": "fc6a49d4acfe8e134d3eb0781f864d7d092452e65e37ac10befe63dab80510cf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/unknown-large-r1/manifest.json",
+      "sha256": "6ffa592b3a08d8e203035c53a71d010b435649a1e49905605b41abf5dd281f50"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/ios/unknown-large-r1-summary.json",
+      "sha256": "8f6f23f133aeabecfc26e41a8ce2f00c4d239f862d154ab08486b80f9f4a4a47"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/platforms.json",
+      "sha256": "cd6e5aed2903345c1f50f604df09ef557fdbadb5a93b3c82391cb8d1063132a3"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.FactorySetupTest.xml",
+      "sha256": "6e2ef5f6cda748e43cf0bfd34feccdaaae8b838fe476b9080aaa02c80595dbc3"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.domain.preset.KtmDuke125PresetTest.xml",
+      "sha256": "1c132333332ece0d2ca9c61bdc421eff3530cb85c44b83725295d7c11a38956c"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.domain.usecase.CalculateWearUseCaseTest.xml",
+      "sha256": "c1d961f27f46afeac27ad458fbc6131d224f1d5c41bbdb872aae9c3975867613"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.domain.usecase.DocumentExpiryUseCaseTest.xml",
+      "sha256": "a4fde2a0e85d4ff8987892b9b8ff4608280810f52f14ee72af0e128b1fd3342d"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.domain.usecase.FuelEfficiencyUseCaseTest.xml",
+      "sha256": "1608af98387efe7a20068692a23483f19e1869d096e2087eac35d46256bed0ac"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.domain.usecase.LogMaintenanceUseCaseTest.xml",
+      "sha256": "69f0a058b77e30ac00487e4ee8b4b21938e6955874ab758c45ddee2f1482caac"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.storage.LocalSyncTest.xml",
+      "sha256": "3b12007099bb97fe60b2096e00d6e3cfeb735bd3382ffefca47c7977c4b5727f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.ui.AppearanceTest.xml",
+      "sha256": "06c4020a8156d1dfb79b4d77e9b0a005736597344ad8e50ec3390e3f299f9bce"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.ui.DocumentCaptureTest.xml",
+      "sha256": "fbc43d49b5f1b294eb460488b35dc7578b10cd22914e324b559a3ee9a1d4e2c1"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.ui.DocumentRecoveryFileTest.xml",
+      "sha256": "2a87fde6e039c2d0da0c86e803b6a4c96d8066c10240f6352b6b34cbb54fd619"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.ui.ItemizedServiceTest.xml",
+      "sha256": "4ed97a03b932d13be01e23f2404eb8cc31a3ee3a1d1878ea7c80fd4de5ed504f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.ui.LocationCaptureTest.xml",
+      "sha256": "e238c9d01852ae1519798a5c69a8c2ba90b9938748a2f068002dc018dade92a6"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.ui.P00CompatibilityTest.xml",
+      "sha256": "9941cbb6c50518d7234ab7e66a0c48ba7c134a7e18ed2e0c5ee2ecd1403f01e6"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.ui.RenewalJournalTest.xml",
+      "sha256": "acb6eecef7cae9c84a9c74996001dabf46a26c05f5821e55564fce04d607b178"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.ui.RenewalReminderTest.xml",
+      "sha256": "bf7f92ca8459fa0a6fdd8c834bca956c95e1e8cd2daa5592ca16dc26289091c4"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.ui.ServicePassportTest.xml",
+      "sha256": "ac56d7ff3b619c7a23e842fbfe4f08294ba2cf384ebdb9f6f394f00fd2277deb"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.ui.VaultSettingsTest.xml",
+      "sha256": "083cc2153d22fef6fcc37c83f899c1e33e0566465ab4cc4ce3eaaf95f2d66adc"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/android/TEST-com.motovault.app.ui.VaultStateTest.xml",
+      "sha256": "47dfd6eff3eb0b179627119e2cb0492f4ca08eabb3eb83ef650faa216c6a13c0"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/ios/TEST-com.motovault.app.VaultDatabaseTest.xml",
+      "sha256": "38bd129836edd16216b36b68da0e9fb4c3fa372812470b45984ffe355dbf8ed7"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/ios/TEST-com.motovault.app.VaultSessionTest.xml",
+      "sha256": "69697c2507a9d76ca3b10b813ec6806d46aca2f67ca51403fc4f75fec4696b93"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/ios/TEST-com.motovault.app.domain.usecase.DocumentExpiryUseCaseTest.xml",
+      "sha256": "64686635b0ed5367233c1b2feb6ba62d3254c78a57554cdcaaefbbf14d93362c"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/ios/TEST-com.motovault.app.ui.RenewalJournalTest.xml",
+      "sha256": "7f11a6a4ce081740000bfb3a35c4702d8b343e6e45be6c04e866cdf014dd116e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/ios/TEST-com.motovault.app.ui.RenewalReminderTest.xml",
+      "sha256": "6ba908149641c181934894aa87a6a7c2a18466c78c3b7124f9b15b44ca1ac923"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/policy/ios/TEST-com.motovault.app.ui.VaultSettingsTest.xml",
+      "sha256": "dcd366d10d6c17de43a6532d1671ca02e31f2d9d0e3e1b07998e9f9771475974"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/gauge-detail.jpg",
+      "sha256": "a3160ffd669213ad340770ef6eede42b7462ec2f72f0c149a93865b5c4c31a4e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/gauge-detail.txt",
+      "sha256": "259a4e908d519e1b7b4b7fdc0a14dd0d046dac7594d019368f4aabf24e46e578"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/paired-runtime-home.jpg",
+      "sha256": "08c4b69415327f465def1212c3c39e1c60471aa2c6b74ec826acf93416c0d4bc"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/paired-unknown-detail.jpg",
+      "sha256": "380987e73fed5813b69016cb787c83688ca57913e01ffd40d672b40bc3634f14"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/paired-unknown-detail.txt",
+      "sha256": "e61332a3b6c2a707f8ee3feffd6b7fdf5342b1c30c1cb0bd2453f61c494f76ff"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/paired-unknown-large.jpg",
+      "sha256": "6d5358409406eb1a0700d7949f0d419ecb3f54c365ad56c13072d44fa74ed59c"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/reminder-denied.jpg",
+      "sha256": "617194743753e5e5989ecc4aa48331d65eed1d1ab320c7c230b3451518d5dc47"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/reminder-denied.txt",
+      "sha256": "9fc3ac86dd43505be1c049e5351ed059a878c030ca4a22f69e6c9a7c8f5ce71f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/reminder-save-failed.jpg",
+      "sha256": "bf77372f6bc82534815adc8796e1461d417f85f0603185be603cccfb0df0af0e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/reminder-snoozed.jpg",
+      "sha256": "2b4e4de8ccede194ad8fb4e449ffadd419198d28ccc53dd2124984b61889fa61"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/reminder-snoozed.txt",
+      "sha256": "6c0c9bb7dc7401c207bd87b58621c7c002f7aa15d8af6dd9228e3342705ea3a1"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/unknown-detail.jpg",
+      "sha256": "f4c66ac98248adcd107a067e350bbf3aa9a6a0a0b53ca0a4ff4088b61e2a81dd"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/unknown-home.jpg",
+      "sha256": "e5e8e69d18e6e272b2216867a44a4b67e2d77268b4df9eb48ba894f315751a37"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/prototype/unknown-home.txt",
+      "sha256": "0dcd8b87af22eb7609f716ceae98791208dbd10cf6af05eae8f3621117caf64f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/scheduling/android/TEST-com.motovault.app.ui.ReminderPlanTest.xml",
+      "sha256": "1957ec2724e3d52479590de442c33944e9e32f97caaac802d5be1e5fe4301c95"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/scheduling/android/TEST-com.motovault.app.ui.RenewalJournalTest.xml",
+      "sha256": "9c074e68fa73b2d543bd049559d05497c1d13c4e8b6ec5e840f720d14943d965"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/scheduling/android/TEST-com.motovault.app.ui.RenewalReminderTest.xml",
+      "sha256": "1f08b59de6605a7219fb70e472057211a758f353191add8ae431d6ae53fa5315"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/scheduling/ios/TEST-com.motovault.app.VaultSessionTest.xml",
+      "sha256": "7ded1d871921f580bb4cc41f259a5466f1cc11de3e5cf026e66515e9005362e7"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/scheduling/ios/TEST-com.motovault.app.ui.ReminderPlanTest.xml",
+      "sha256": "460a395383e36c17b9f128bcb493bafc579ef235fb160495707aecbede2261df"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/scheduling/ios/TEST-com.motovault.app.ui.RenewalJournalTest.xml",
+      "sha256": "96bdb336b9a1c3952f23b45e5c46cc2583b50d82a1a80a06a2715881da58184e"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/scheduling/ios/TEST-com.motovault.app.ui.RenewalReminderTest.xml",
+      "sha256": "316f257e4c006074bffdf5f0520ab6075a1d6489385218e304796cee38f5e589"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.FactorySetupTest.xml",
+      "sha256": "37b9df02d7ff84bb7d7c06b5caa631aad1f9751c0ac60e07b7f89f8d881ce267"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.domain.preset.KtmDuke125PresetTest.xml",
+      "sha256": "bf5c0a26776c0dd09fb40e1a92eec46a6abea67023707f646b3ab2a656be3204"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.domain.usecase.CalculateWearUseCaseTest.xml",
+      "sha256": "4bfe26bf9f4e1b95bc5d4ff84d09d91951ebc2abf57a0db7f7a5232a211be20c"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.domain.usecase.DocumentExpiryUseCaseTest.xml",
+      "sha256": "2164ce1332cde69e1c074bc9732284c81cc62a6ba41e3f5674cf66c26fd3ebef"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.domain.usecase.FuelEfficiencyUseCaseTest.xml",
+      "sha256": "68faf579a5d3fc650b7f1867e5431bf701316aaaef40addbf10e8555c2644834"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.domain.usecase.LogMaintenanceUseCaseTest.xml",
+      "sha256": "931736fd31f11d6ab72f6325faff5a0f5791f6bb9b42b4cdb4c6caad102f09c6"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.storage.LocalSyncTest.xml",
+      "sha256": "98f427a28feea8c4c822a426e209d13118d4da61946ee5fe1891c20b0941f567"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.AppearanceTest.xml",
+      "sha256": "b8dd7ae93a6ee94fb7cf81cbce94fd5a9b913df62d8b46715c0006d528d22bfc"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.DeliveredReminderTest.xml",
+      "sha256": "a2a6d4db583cc6789418d25ba9153aef64eff0e076b42ef7ea8c88442a6fbc9a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.DocumentCaptureTest.xml",
+      "sha256": "6ae51215e5e441727f2f6827a110a381c193e58a7cd36ea1d0a6bb97195bd78f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.DocumentRecoveryFileTest.xml",
+      "sha256": "b9c49c2fa63e69d90121ca5bb4cd1e23a2e05094a17bbb05aab418ede9dc09b1"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.IntervalHonestyTest.xml",
+      "sha256": "c8bb91f3cd83b8a8ad707ba5ac8cda62ddb31c191d428be0a1b775b514b4fae6"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.ItemizedServiceTest.xml",
+      "sha256": "e76bc889a329fede3d285518165a0d7946042c4f92068e0e9d03e8e2c760bc3b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.LocationCaptureTest.xml",
+      "sha256": "95b52b71f355decffb9585dfb981afd40d2506fe76da7838c60b6b714861d63b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.P00CompatibilityTest.xml",
+      "sha256": "59832c27978f436f281f54e15fc6bab78d2c2208a6fc2564243f64f9be827acd"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.ReminderPlanTest.xml",
+      "sha256": "439106211e9c6870df85c38a43fcd790c12649242a8b06fff0a2f66a6a04405a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.RenewalJournalTest.xml",
+      "sha256": "670d1b331bc5f0c5f32ac82e8a8b8fa6cbab24d38407a118e3a167090e30620d"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.RenewalReminderTest.xml",
+      "sha256": "0ddd1268a65780e5cd8cbfa6defca80f159ef8b0923c1913a5157cd347d48306"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.ServicePassportTest.xml",
+      "sha256": "3f1327cf67180e2eb7d94fda0d6bc9d58a1c8640f5559725ce9c47adf0315120"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.VaultSettingsTest.xml",
+      "sha256": "5cae409d90287511a5411dbbc467ce71d82a18071dea4f5439c57255c5fef461"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/android/TEST-com.motovault.app.ui.VaultStateTest.xml",
+      "sha256": "8c30cc43b968d80e9f0b0bf845fb4f40a7beb4fbc5519918f97eeb02612841f0"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/explicit-ios27-destination.json",
+      "sha256": "84ba97c980af67b3819814ce29c31a1a7bab0e0c4d42d80678a8af8691002c00"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.FactorySetupTest.xml",
+      "sha256": "88aec66c3feb991112e9acec2f6b4b766253e152766d872c6f08a66712d9d797"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.VaultDatabaseTest.xml",
+      "sha256": "4e9e4dcbfd7f3b38091fb80530b5b7a0aaf172b8f120dc794a2a19f70bc42cca"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.VaultSessionTest.xml",
+      "sha256": "1675014e6f1d11cfa05d7f80aea57d3193ec01f007fedc2a31a2fefc7fb8fd68"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.domain.preset.KtmDuke125PresetTest.xml",
+      "sha256": "925920f90cb2b4f0f29dfd7f35965449088d46eb9e65a1e4d07f551d3c62dea2"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.domain.usecase.CalculateWearUseCaseTest.xml",
+      "sha256": "f973fff071e98abe64b121bbe854eea3c630d461a43dc35da2acf8f216744a13"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.domain.usecase.DocumentExpiryUseCaseTest.xml",
+      "sha256": "07fc176f711a38e6066127163ff2750578bbc3197c6facb5cfae02b0e8a044c8"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.domain.usecase.FuelEfficiencyUseCaseTest.xml",
+      "sha256": "dd26dfaf11c20f1f9039b0638d389f6df0e2e20e6d8f46199a0af611470f2197"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.domain.usecase.LogMaintenanceUseCaseTest.xml",
+      "sha256": "a891fcf97f4845fcabcc274511c18ec5e19afb9eda91d2df1f30c329e87f38f4"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.storage.LocalSyncTest.xml",
+      "sha256": "867e18c0f624d0ddffa8ee2ff491aa3386b2a81d3d53d243bc75947b29bf9cba"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.AppearanceTest.xml",
+      "sha256": "4fbefc4472721ec36b480fc99eefb3214ed0076cfbe00736f5d9f742edabcfc3"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.DeliveredReminderTest.xml",
+      "sha256": "5681daf2330866888140d6f94327f37c790941094c6fa040710c8ca2b4a9489b"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.DocumentCaptureTest.xml",
+      "sha256": "c782275bb545dbba6169bfb903645f42c3175ab853b00f814835a07f3bcb67cf"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.DocumentImportReadTest.xml",
+      "sha256": "4d0a0f143100b5ae210598473d9fc65807ce38b9d070a8ba81467c1ab1fc1706"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.IntervalHonestyTest.xml",
+      "sha256": "51d94242b069abdacce78935c11c25ac6bd4958edcbedf19c214160ce9ae04e3"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.ItemizedServiceTest.xml",
+      "sha256": "45220cfa30e1bed53264e5753cc08fb8d2a72af23cd314105a713bbd6b7daa4f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.LocationCaptureTest.xml",
+      "sha256": "0dee8d826b860ebb11717d1dc36733322dea0ca2ff5f390ded818fbe964a6118"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.P00CompatibilityTest.xml",
+      "sha256": "49a4e2d72ec9c61131eb9a56732a22630a83b556354bed0843221f3ce558f1db"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.ReminderPlanTest.xml",
+      "sha256": "e8a9ab0130867ef40253b83fda2ca93f843adbb8f7900e594b7b871cdd1b0934"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.RenewalJournalStorageTest.xml",
+      "sha256": "acee68d4c8995974d57904454058219d0df3569b61a4648d057ef77880eedb2a"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.RenewalJournalTest.xml",
+      "sha256": "88a8dab00c25a99066b12819d118b73c07d6f522e7a7d0b1fba07b161b92f0a4"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.RenewalReminderTest.xml",
+      "sha256": "838e2c4ba67677cdb952432761b228dadc995db5bc07482b47de6aa229308868"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.ServicePassportTest.xml",
+      "sha256": "e92f445647bfa597ada1eb1d20a10eded5594132275d9a032952312c23ee7a0c"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.VaultSettingsTest.xml",
+      "sha256": "a2db65c761859ded5855b7fe8fd01c324651afdf14152f49c08da9c50a74bd47"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/ios/TEST-com.motovault.app.ui.VaultStateTest.xml",
+      "sha256": "c4677f080cc6fd365699ae3e3359b489f68622c19e0fd0e26e63b48d98d3133f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/prototype-build.log",
+      "sha256": "63fca0e8b6e8678b23293b77185a345244c39efcf623ba19f7d0b4d299a0bf22"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/roadmap-tests.log",
+      "sha256": "dc8c40aee199058077864f7200b7423ab7b799942276da43c4662a72ccae847f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/simulator-host-packaging.json",
+      "sha256": "624c3e135ae7b771e57559f53f73d3467cfbf78d743185a456515bcb8153d44f"
+    },
+    {
+      "path": "docs/roadmap/evidence/p01/tests/summary.json",
+      "sha256": "6c86f0464a21ac508b5a2b5b840eddeeb5fb7319c3031b2aa1625882fe8a12c8"
+    }
+  ],
+  "pending": [
+    "Physical Android and iPhone background/denial/restart/settings checks, explicitly deferred by owner.",
+    "Any unresolved emulator/simulator runtime checks in P01-03-verification.md.",
+    "Design acceptance items in P01-design.md; native trees do not prove spoken screen-reader output."
+  ]
+}

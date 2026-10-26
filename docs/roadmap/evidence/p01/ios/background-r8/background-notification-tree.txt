@@ -1,0 +1,246 @@
+Attributes: Application, 0x112b45e00, pid: 34051, label: ' '
+Element subtree:
+ →Application, 0x112b45e00, pid: 34051, label: ' '
+    Window, 0x112b45f40, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112b46080, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112b461c0, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x112b46300, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x112b46440, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x112b46580, {{172.7, 14.0}, {94.7, 36.7}}
+            Other, 0x112b466c0, {{172.7, 14.0}, {94.7, 36.7}}
+    Window, 0x112b46800, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112b46940, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112b46a80, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x112b46bc0, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x112b46d00, {{172.7, 14.0}, {94.7, 36.7}}
+              Other, 0x112b46e40, {{172.7, 14.0}, {94.7, 36.7}}
+              Other, 0x112b46f80, {{172.7, 14.0}, {94.7, 36.7}}
+                Other, 0x112b470c0, {{172.7, 14.0}, {94.7, 36.7}}
+              Other, 0x112b47200, {{173.7, 15.0}, {92.7, 34.7}}
+          Other, 0x112b47340, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x112b47480, {{172.7, 14.0}, {94.7, 36.7}}
+              Other, 0x112b475c0, {{172.7, 14.0}, {94.7, 36.7}}
+            Other, 0x112b47700, {{172.7, 14.0}, {94.7, 36.7}}
+              Other, 0x112b47840, {{173.3, 14.7}, {93.3, 35.3}}
+          Other, 0x112b47980, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x112b47ac0, {{172.7, 14.0}, {94.7, 36.7}}
+              Other, 0x112b47c00, {{162.7, 10.0}, {114.7, 52.0}}
+              Other, 0x112b47d40, {{172.7, 14.0}, {94.7, 36.7}}
+                Other, 0x112b47e80, {{172.7, 14.0}, {94.7, 36.7}}
+                  Other, 0x112b3db80, {{172.7, 14.0}, {94.7, 36.7}}
+                Other, 0x112b3dcc0, {{172.7, 14.0}, {94.7, 36.7}}
+          Other, 0x112b3de00, {{221.7, 28.0}, {9.0, 9.0}}
+    Window, 0x112b3df40, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112b3e080, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112b3e1c0, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112b3e300, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112b3e440, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x112b3e580, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112b3e6c0, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x112b3e800, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112b3e940, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112b3ea80, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x112b3ebc0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112b3ed00, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112b3ee40, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x112b3ef80, {{0.0, 0.0}, {146.7, 318.7}}
+      Other, 0x112b3f0c0, {{0.0, 0.0}, {146.7, 318.7}}
+        Other, 0x112b3f200, {{0.0, 0.0}, {146.7, 318.7}}
+    Window, 0x112b3f340, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112b3f480, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112b3f5c0, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x112b3f700, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112b3f840, {{172.7, 14.0}, {94.7, 36.7}}
+    Window, 0x112b3f980, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112c20000, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112c20140, {{0.0, 0.0}, {0.0, 0.0}}
+    Window (Main), 0x112c20280, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'SBCoverSheetWindow'
+      Other, 0x112c203c0, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112c20500, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x112c20640, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x112c20780, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112c208c0, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x112c20a00, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x112c20b40, {{0.0, 0.0}, {440.0, 1912.0}}
+              Other, 0x112c20c80, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x112c20dc0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x112c20f00, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x112c21040, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x112c21180, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x112c212c0, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x112c21400, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x112c21540, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x112c21680, {{0.0, 0.0}, {440.0, 100.0}}
+                Other, 0x112c217c0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x112c21900, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x112c21a40, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x112c21b80, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x112c21cc0, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x112c21e00, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x112c21f40, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x112c22080, {{-159.3, 398.3}, {758.7, 717.0}}
+                  Other, 0x112c221c0, {{0.0, 0.0}, {440.0, 956.0}}
+                  ScrollView, 0x112c22300, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x112c22440, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x112c22580, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'combined-list-view'
+                        Other, 0x112c226c0, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x112c22800, {{0.0, 0.0}, {440.0, 956.0}}
+                            ScrollView, 0x112c22940, {{0.0, 0.0}, {440.0, 956.0}}
+                              ScrollView, 0x112c22a80, {{14.0, -0.0}, {412.0, 226.3}}
+                                ScrollView, 0x112c22bc0, {{14.0, -0.0}, {412.0, 226.3}}
+                                  Button, 0x112c22d00, {{14.0, -0.0}, {412.0, 226.0}}, identifier: 'ListCell'
+                                    Other, 0x112c22e40, {{14.0, -0.0}, {412.0, 226.0}}, identifier: 'ListCell.ContentView'
+                                      Other, 0x112c22f80, {{14.0, -0.0}, {412.0, 226.0}}
+                                        Other, 0x112c230c0, {{14.0, -0.0}, {412.0, 226.0}}
+                                          Other, 0x112c23200, {{14.0, -0.0}, {412.0, 226.0}}
+                                          Other, 0x112c23340, {{14.0, -0.0}, {412.0, 226.0}}
+                                          Other, 0x112c23480, {{14.0, -0.0}, {412.0, 226.0}}
+                                            Other, 0x112c235c0, {{14.0, -0.0}, {412.0, 226.0}}
+                                  Other, 0x112c23700, {{393.0, 48.0}, {30.0, 178.3}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                    Other, 0x112c23840, {{420.0, 51.3}, {3.0, 172.0}}
+                                  Other, 0x112c23980, {{393.0, 48.0}, {30.0, 178.3}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                    Other, 0x112c23ac0, {{420.0, 51.3}, {3.0, 172.0}}
+                                Other, 0x112c23c00, {{393.0, 48.0}, {30.0, 178.3}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                  Other, 0x112c23d40, {{420.0, 51.0}, {3.0, 172.3}}
+                                Other, 0x112c23e80, {{393.0, 48.0}, {30.0, 178.3}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                  Other, 0x112c48000, {{420.0, 51.0}, {3.0, 172.3}}
+                              ScrollView, 0x112c48140, {{14.0, 511.0}, {412.0, 309.0}}
+                                ScrollView, 0x112c48280, {{14.0, 511.0}, {412.0, 309.0}}
+                                  Other, 0x112c483c0, {{14.0, 511.0}, {412.0, 64.0}}
+                                    Other, 0x112c48500, {{24.0, 534.0}, {181.7, 32.3}}
+                                      StaticText, 0x112c48640, {{24.0, 534.0}, {181.7, 32.3}}, label: 'MotoVault P01 Test'
+                                    Other, 0x112c48780, {{278.3, 533.0}, {147.7, 34.0}}
+                                      Other, 0x112c488c0, {{278.3, 533.0}, {147.7, 34.0}}
+                                        Button, 0x112c48a00, {{278.3, 533.0}, {105.7, 34.0}}, label: 'Confirm Show less'
+                                        Button, 0x112c48b40, {{320.3, 533.0}, {105.7, 34.0}}, identifier: 'clear-button', label: 'Clear'
+                                  Button, 0x112c48c80, {{14.0, 575.0}, {412.0, 68.7}}, identifier: 'ListCell', label: 'MOTOVAULT P01 TEST, now, সার্ভিসের রিমাইন্ডার, Chain · রেকর্ড করা সার্ভিসের ব্যবধান দেখুন।'
+                                    Other, 0x112c48dc0, {{14.0, 575.0}, {412.0, 68.7}}, identifier: 'ListCell.ContentView'
+                                      Other, 0x112c48f00, {{14.0, 575.0}, {412.0, 68.7}}
+                                        Other, 0x112c49040, {{14.0, 575.0}, {412.0, 68.7}}
+                                          BannerNotification, 0x112c49180, {{14.0, 575.0}, {412.0, 68.7}}, identifier: 'NotificationShortLookView', label: 'MOTOVAULT P01 TEST, now, সার্ভিসের রিমাইন্ডার, Chain · রেকর্ড করা সার্ভিসের ব্যবধান দেখুন।'
+                                            Other, 0x112c492c0, {{14.0, 575.0}, {412.0, 68.7}}, identifier: 'ShortLook.Platter'
+                                              Other, 0x112c49400, {{14.0, 575.0}, {412.0, 68.7}}
+                                              Other, 0x112c49540, {{14.0, 575.0}, {412.0, 68.7}}
+                                              Other, 0x112c49680, {{14.0, 575.0}, {412.0, 68.7}}, identifier: 'ShortLook.Platter.Content'
+                                                Button, 0x112c497c0, {{14.0, 575.0}, {412.0, 68.7}}, identifier: 'ShortLook.Platter.Content.Seamless', label: 'now, সার্ভিসের রিমাইন্ডার, Chain · রেকর্ড করা সার্ভিসের ব্যবধান দেখুন।'
+                                                  Other, 0x112c49900, {{14.0, 575.0}, {412.0, 68.7}}, identifier: 'ShortLook.Platter.Content.Seamless.CrossFade'
+                                                    StaticText, 0x112c49a40, {{78.0, 586.3}, {296.0, 21.0}}, identifier: 'NotificationTitle', label: 'সার্ভিসের রিমাইন্ডার'
+                                                    Other, 0x112c49b80, {{78.0, 607.3}, {331.0, 23.0}}, identifier: 'NotificationBody.TopAligned.originalMessage'
+                                                      StaticText, 0x112c49cc0, {{78.0, 607.3}, {331.0, 23.0}}, identifier: 'TextContent.Primary', label: 'Chain · রেকর্ড করা সার্ভিসের ব্যবধান দেখুন।'
+                                                Other, 0x112c49e00, {{14.0, 575.0}, {412.0, 68.7}}
+                                                  Other, 0x112c49f40, {{14.0, 575.0}, {412.0, 68.7}}
+                                                    Other, 0x112c4a080, {{14.0, 575.0}, {412.0, 68.7}}
+                                                      Other, 0x112c4a1c0, {{14.0, 575.0}, {412.0, 68.7}}
+                                                        Other, 0x112c4a300, {{14.0, 575.0}, {412.0, 68.7}}
+                                                          Other, 0x112c4a440, {{14.0, 575.0}, {412.0, 91.7}}
+                                                      Other, 0x112c4a580, {{14.0, 575.0}, {412.0, 68.7}}
+                                                        Other, 0x112c4a6c0, {{14.0, 575.0}, {412.0, 91.7}}
+                                  Button, 0x112c4a800, {{14.0, 651.7}, {412.0, 91.7}}, identifier: 'ListCell', label: 'MOTOVAULT P01 TEST, now, কাগজের রিমাইন্ডার, P01 synthetic expiry today · মেয়াদ শেষ: ২৫ অক্টোবর ২০২৬'
+                                    Other, 0x112c4a940, {{14.0, 651.7}, {412.0, 91.7}}, identifier: 'ListCell.ContentView'
+                                      Other, 0x112c4aa80, {{14.0, 651.7}, {412.0, 91.7}}
+                                        Other, 0x112c4abc0, {{14.0, 651.7}, {412.0, 91.7}}
+                                          BannerNotification, 0x112c4ad00, {{14.0, 651.7}, {412.0, 91.7}}, identifier: 'NotificationShortLookView', label: 'MOTOVAULT P01 TEST, now, কাগজের রিমাইন্ডার, P01 synthetic expiry today · মেয়াদ শেষ: ২৫ অক্টোবর ২০২৬'
+                                            Other, 0x112c4ae40, {{14.0, 651.7}, {412.0, 91.7}}, identifier: 'ShortLook.Platter'
+                                              Other, 0x112c4af80, {{14.0, 651.7}, {412.0, 91.7}}
+                                              Other, 0x112c4b0c0, {{14.0, 651.7}, {412.0, 91.7}}
+                                              Other, 0x112c4b200, {{14.0, 651.7}, {412.0, 91.7}}, identifier: 'ShortLook.Platter.Content'
+                                                Button, 0x112c4b340, {{14.0, 651.7}, {412.0, 91.7}}, identifier: 'ShortLook.Platter.Content.Seamless', label: 'now, কাগজের রিমাইন্ডার, P01 synthetic expiry today · মেয়াদ শেষ: ২৫ অক্টোবর ২০২৬'
+                                                  Other, 0x112c4b480, {{14.0, 651.7}, {412.0, 91.7}}, identifier: 'ShortLook.Platter.Content.Seamless.CrossFade'
+                                                    StaticText, 0x112c4b5c0, {{78.0, 663.0}, {296.0, 21.0}}, identifier: 'NotificationTitle', label: 'কাগজের রিমাইন্ডার'
+                                                    Other, 0x112c4b700, {{78.0, 684.0}, {331.0, 46.0}}, identifier: 'NotificationBody.TopAligned.originalMessage'
+                                                      StaticText, 0x112c4b840, {{78.0, 684.0}, {331.0, 46.0}}, identifier: 'TextContent.Primary', label: 'P01 synthetic expiry today · মেয়াদ শেষ: ২৫ অক্টোবর ২০২৬'
+                                                Other, 0x112c4b980, {{14.0, 651.7}, {412.0, 91.7}}
+                                                  Other, 0x112c4bac0, {{14.0, 651.7}, {412.0, 91.7}}
+                                                    Other, 0x112c4bc00, {{14.0, 651.7}, {412.0, 91.7}}
+                                                      Other, 0x112c4bd40, {{14.0, 651.7}, {412.0, 91.7}}
+                                                        Other, 0x112c4be80, {{14.0, 651.7}, {412.0, 91.7}}
+                                                          Other, 0x112c4c000, {{14.0, 651.7}, {412.0, 68.7}}
+                                                      Other, 0x112c4c140, {{14.0, 651.7}, {412.0, 91.7}}
+                                                        Other, 0x112c4c280, {{14.0, 651.7}, {412.0, 68.7}}
+                                  Button, 0x112c4c3c0, {{14.0, 751.3}, {412.0, 68.7}}, identifier: 'ListCell', label: 'MOTOVAULT P01 TEST, now, কাগজের রিমাইন্ডার, Driving licence · মেয়াদ শেষ: ১৭ নভেম্বর ২০২৬'
+                                    Other, 0x112c4c500, {{14.0, 751.3}, {412.0, 68.7}}, identifier: 'ListCell.ContentView'
+                                      Other, 0x112c4c640, {{14.0, 751.3}, {412.0, 68.7}}
+                                        Other, 0x112c4c780, {{14.0, 751.3}, {412.0, 68.7}}
+                                          BannerNotification, 0x112c4c8c0, {{14.0, 751.3}, {412.0, 68.7}}, identifier: 'NotificationShortLookView', label: 'MOTOVAULT P01 TEST, now, কাগজের রিমাইন্ডার, Driving licence · মেয়াদ শেষ: ১৭ নভেম্বর ২০২৬'
+                                            Other, 0x112c4ca00, {{14.0, 751.3}, {412.0, 68.7}}, identifier: 'ShortLook.Platter'
+                                              Other, 0x112c4cb40, {{14.0, 751.3}, {412.0, 68.7}}
+                                              Other, 0x112c4cc80, {{14.0, 751.3}, {412.0, 68.7}}
+                                              Other, 0x112c4cdc0, {{14.0, 751.3}, {412.0, 68.7}}, identifier: 'ShortLook.Platter.Content'
+                                                Button, 0x112c4cf00, {{14.0, 751.3}, {412.0, 68.7}}, identifier: 'ShortLook.Platter.Content.Seamless', label: 'now, কাগজের রিমাইন্ডার, Driving licence · মেয়াদ শেষ: ১৭ নভেম্বর ২০২৬'
+                                                  Other, 0x112c4d040, {{14.0, 751.3}, {412.0, 68.7}}, identifier: 'ShortLook.Platter.Content.Seamless.CrossFade'
+                                                    StaticText, 0x112c4d180, {{78.0, 762.7}, {296.0, 21.0}}, identifier: 'NotificationTitle', label: 'কাগজের রিমাইন্ডার'
+                                                    Other, 0x112c4d2c0, {{78.0, 783.7}, {331.0, 23.0}}, identifier: 'NotificationBody.TopAligned.originalMessage'
+                                                      StaticText, 0x112c4d400, {{78.0, 783.7}, {331.0, 23.0}}, identifier: 'TextContent.Primary', label: 'Driving licence · মেয়াদ শেষ: ১৭ নভেম্বর ২০২৬'
+                                                Other, 0x112c4d540, {{14.0, 751.3}, {412.0, 68.7}}
+                                                  Other, 0x112c4d680, {{14.0, 751.3}, {412.0, 68.7}}
+                                                    Other, 0x112c4d7c0, {{14.0, 751.3}, {412.0, 68.7}}
+                                                      Other, 0x112c4d900, {{14.0, 751.3}, {412.0, 68.7}}
+                                                        Other, 0x112c4da40, {{14.0, 751.3}, {412.0, 68.7}}
+                                                          Other, 0x112c4db80, {{14.0, 751.3}, {412.0, 68.7}}
+                                                      Other, 0x112c4dcc0, {{14.0, 751.3}, {412.0, 68.7}}
+                                                        Other, 0x112c4de00, {{14.0, 751.3}, {412.0, 68.7}}
+                                  Other, 0x112c4df40, {{393.0, 511.0}, {30.0, 261.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                    Other, 0x112c4e080, {{420.0, 472.0}, {3.0, 36.0}}
+                                  Other, 0x112c4e1c0, {{393.0, 511.0}, {30.0, 261.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                    Other, 0x112c4e300, {{420.0, 472.0}, {3.0, 36.0}}
+                                Other, 0x112c4e440, {{393.0, 511.0}, {30.0, 261.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                  Other, 0x112c4e580, {{420.0, 592.7}, {3.0, 7.0}}
+                                Other, 0x112c4e6c0, {{393.0, 511.0}, {30.0, 261.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                  Other, 0x112c4e800, {{420.0, 592.7}, {3.0, 7.0}}
+                              ScrollView, 0x112c4e940, {{14.0, 828.0}, {412.0, 9.0}}
+                                Other, 0x112c4ea80, {{393.0, 828.0}, {30.0, 9.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                  Other, 0x112c4ebc0, {{420.0, 798.0}, {3.0, 36.0}}
+                                Other, 0x112c4ed00, {{393.0, 828.0}, {30.0, 9.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                  Other, 0x112c4ee40, {{420.0, 798.0}, {3.0, 36.0}}
+                            Other, 0x112c4ef80, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x112c4f0c0, {{407.0, 62.0}, {30.0, 832.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                      Other, 0x112c4f200, {{434.0, 65.0}, {3.0, 888.0}}
+                    Other, 0x112c4f340, {{407.0, 62.0}, {30.0, 832.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                      Other, 0x112c4f480, {{434.0, 65.0}, {3.0, 888.0}}
+                  Other, 0x112c4f5c0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x112c4f700, {{0.0, 0.0}, {440.0, 1912.0}}
+                    Other, 0x112c4f840, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'lockscreen-date-view'
+                      StaticText, 0x112c4f980, {{35.0, 77.0}, {370.0, 36.0}}, label: 'Sun 25 Oct'
+                      StaticText, 0x112c4fac0, {{26.3, 86.7}, {375.3, 149.7}}, label: '12:49 AM'
+                      Other, 0x112c4fc00, {{35.0, 218.0}, {370.0, 76.0}}
+                        Other, 0x112c4fd40, {{35.0, 218.0}, {370.0, 76.0}}
+                          Other, 0x112c4fe80, {{35.0, 218.0}, {370.0, 76.0}}
+                            Other, 0x112c50000, {{15.0, 198.0}, {410.0, 116.0}}
+                              Other, 0x112c50140, {{15.0, 198.0}, {410.0, 116.0}}
+                Other, 0x112c50280, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x112c503c0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x112c50500, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x112c50640, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x112c50780, {{321.3, 47.7}, {53.3, 2.3}}
+                        Other, 0x112c508c0, {{321.3, 47.7}, {53.3, 2.3}}
+                      Other, 0x112c50a00, {{321.3, 76.2}, {53.3, 2.3}}
+                    Other, 0x112c50b40, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x112c50c80, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x112c50dc0, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x112c50f00, {{141.7, 943.0}, {157.0, 5.0}}, label: 'Home indicator', Disabled
+                            Other, 0x112c51040, {{141.7, 943.0}, {157.0, 5.0}}
+                              Other, 0x112c51180, {{141.7, 943.0}, {157.0, 5.0}}
+                                Other, 0x112c512c0, {{141.7, 943.0}, {157.0, 5.0}}
+                                  Other, 0x112c51400, {{141.7, 943.0}, {157.0, 5.0}}
+                    Other, 0x112c51540, {{160.0, 889.3}, {120.0, 22.7}}
+                Other, 0x112c51680, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112c517c0, {{0.0, 0.0}, {440.0, 1912.0}}
+    Window, 0x112c51900, {{0.0, 0.0}, {440.0, 956.0}}
+      StatusBar, 0x112c51a40, {{0.0, 0.0}, {440.0, 54.0}}
+        Other, 0x112c51b80, {{0.0, 0.0}, {440.0, 54.0}}
+          Other, 0x112c51cc0, {{0.0, 0.0}, {440.0, 54.0}}
+            Other, 0x112c51e00, {{302.0, 24.0}, {22.3, 15.0}}, label: 'Mobile Service', value: No signal
+            Other, 0x112c51f40, {{332.7, 26.0}, {20.7, 13.0}}, identifier: '3 of 3 Wi-Fi bars', value: SSID, 3 of 3 Wi-Fi...
+              Image, 0x112c52080, {{330.3, 23.3}, {25.0, 18.7}}, identifier: 'wifi', label: 'Wi-Fi'
+            Other, 0x112c521c0, {{361.7, 24.7}, {32.3, 15.0}}, label: '100% battery power', value: Not charging
+    Window, 0x112c52300, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112c52440, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x112c52580, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112c526c0, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x112b45e00, pid: 34051, label: ' '
+Query chain:
+ →Find: Application 'com.apple.springboard'
+  Output: {
+    Application, 0x112c52800, pid: 34051, label: ' '
+  }

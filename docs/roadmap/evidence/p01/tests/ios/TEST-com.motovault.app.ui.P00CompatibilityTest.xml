@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.motovault.app.ui.P00CompatibilityTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:51" hostname="MacBookPro" time="0.003">
+<testsuite name="com.motovault.app.ui.P00CompatibilityTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-26T05:15:08" hostname="MacBookPro" time="0.003">
   <properties/>
   <testcase name="pairedFixtureInputsDecodeAndRoundTripWithoutLosingRecordIdentity[iosSimulatorArm64]" classname="com.motovault.app.ui.P00CompatibilityTest" time="0.002"/>
   <testcase name="partialFillFixtureRetainsPartialFlagAndCompletedCycleEconomy[iosSimulatorArm64]" classname="com.motovault.app.ui.P00CompatibilityTest" time="0.0"/>
-  <testcase name="metadataDocumentsHaveStableSyntheticIdsAndNoOwnerAssetReferences[iosSimulatorArm64]" classname="com.motovault.app.ui.P00CompatibilityTest" time="0.001"/>
+  <testcase name="metadataDocumentsHaveStableSyntheticIdsAndNoOwnerAssetReferences[iosSimulatorArm64]" classname="com.motovault.app.ui.P00CompatibilityTest" time="0.0"/>
   <testcase name="unknownHistoryCannotYetBeDistinguishedFromEmptyRules[iosSimulatorArm64]" classname="com.motovault.app.ui.P00CompatibilityTest" time="0.0"/>
   <testcase name="legacyMissingFieldsReceiveCompatibleDefaultsOnFirstDecode[iosSimulatorArm64]" classname="com.motovault.app.ui.P00CompatibilityTest" time="0.0"/>
   <testcase name="currentDtoPreservesSettingsAssetsAndExactServiceAmount[iosSimulatorArm64]" classname="com.motovault.app.ui.P00CompatibilityTest" time="0.0"/>

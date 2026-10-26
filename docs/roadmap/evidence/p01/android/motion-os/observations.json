@@ -1,0 +1,24 @@
+{
+  "app": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "originalScale": "null",
+  "restoredScale": "null",
+  "observations": [
+    {
+      "name": "normal",
+      "tapReturnedSeconds": 0.227,
+      "osAnimatorScale": "1"
+    },
+    {
+      "name": "os-reduced-live",
+      "tapReturnedSeconds": 0.262,
+      "osAnimatorScale": "0"
+    },
+    {
+      "name": "os-restored-live",
+      "tapReturnedSeconds": 0.2,
+      "osAnimatorScale": "1"
+    }
+  ],
+  "scope": "Emulator recordings after live OS changes with app reduceMotion=false; timing/parity review remains separate."
+}

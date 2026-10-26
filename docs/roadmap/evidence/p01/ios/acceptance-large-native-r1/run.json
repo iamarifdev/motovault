@@ -1,0 +1,33 @@
+{
+  "device": {
+    "udid": "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+    "name": "iPhone 18 Pro Max",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-0"
+  },
+  "fixture": "unknown-large",
+  "synthetic": true,
+  "applicationId": "com.motovault.baseline.p00",
+  "host": {
+    "bundleId": "com.motovault.baseline.p00",
+    "displayName": "MotoVault P01 Test",
+    "signingIdentifier": "com.motovault.baseline.p00",
+    "scope": "Local ad-hoc simulator test packaging only; not a signed device or release build.",
+    "products": [
+      {
+        "path": "build/p01-ios-tests-derived/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault",
+        "sha256": "5311d089de54ef93903bc833e6334bdab1832bbf2be9613ea9f5492bb149366c"
+      },
+      {
+        "path": "build/p01-ios-tests-derived/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault.debug.dylib",
+        "sha256": "c71b66051bb8a8f5c92257cef69d960704022ce41d29a97088d935597b5603e8"
+      }
+    ]
+  },
+  "tests": [
+    "testReminderAccessibilityAudit",
+    "testDocumentReminderAccessibilityAudit",
+    "testServiceReminderAccessibilityAudit",
+    "testReminderDragDismissDoesNotSave"
+  ],
+  "scope": "XCTest automated audits and drag dismissal only. No spoken VoiceOver or physical-device claim."
+}

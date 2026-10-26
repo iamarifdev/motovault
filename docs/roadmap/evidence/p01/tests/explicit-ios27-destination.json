@@ -1,0 +1,11 @@
+{
+  "base": "48fce40321600e4fbdfe124a3bb63b3032276502",
+  "workingChange": "Delivered-alert retention fix",
+  "device": "iPhone 18 Pro Max",
+  "runtime": "iOS 27",
+  "deviceId": "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+  "observedCommands": [
+    "Starting process 'command '/usr/bin/xcrun''. Working directory: /Users/arif/workspace/bbn/motovault/composeApp Command: /usr/bin/xcrun simctl spawn --standalone 50709DF0-FEA9-4B34-9DE6-6172D868875D /Users/arif/workspace/bbn/motovault/composeApp/build/bin/iosSimulatorArm64/debugTest/test.kexe -- --ktest_no_exit_code --ktest_logger=TEAMCITY"
+  ],
+  "scope": "Kotlin Native simulator tests only; separate XCTest artifacts prove UI paths."
+}

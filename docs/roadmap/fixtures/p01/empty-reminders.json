@@ -1,0 +1,72 @@
+{
+  "id": "p01-empty-reminders",
+  "synthetic": true,
+  "native": {
+    "ride": {
+      "brandId": "yamaha",
+      "edition": "P00 synthetic",
+      "year": 2023,
+      "odometer": 12340.0,
+      "modelId": "yamaha-r15-v4",
+      "modelName": "R15 V4",
+      "registration": "P00-SYNTHETIC",
+      "market": "BANGLADESH",
+      "emission": "UNKNOWN",
+      "odometerConfirmedDate": "2026-10-16"
+    },
+    "rules": [],
+    "logs": [],
+    "documents": [],
+    "appearance": "LIGHT",
+    "autoLocation": false,
+    "digits": "BN",
+    "haptics": false,
+    "reduceMotion": false,
+    "textScale": 1.0,
+    "serviceReminders": true,
+    "docReminders": true,
+    "lastPrices": {
+      "octane": 120.0,
+      "petrol": 115.0
+    },
+    "_synthetic": true,
+    "reminderPolicy": {
+      "warningDays": 30,
+      "minuteOfDay": 540
+    }
+  },
+  "prototype": {
+    "ride": {
+      "brandId": "yamaha",
+      "modelId": "yamaha-r15-v4",
+      "name": "R15 V4",
+      "year": 2023,
+      "odometer": 12340,
+      "odometerAt": "2026-10-16",
+      "startedAt": "2026-07-16"
+    },
+    "rules": [],
+    "logs": [],
+    "docs": [],
+    "lastPrice": {
+      "octane": 120.0,
+      "petrol": 115.0
+    },
+    "lastItemPrice": {},
+    "workshops": [],
+    "places": [],
+    "settings": {
+      "theme": "light",
+      "digits": "bn",
+      "haptics": false,
+      "reduceMotion": false,
+      "textScale": 1.0,
+      "gps": false,
+      "brandOverride": null,
+      "serviceReminders": true,
+      "docReminders": true,
+      "reminderLeadDays": 30,
+      "reminderMinute": 540
+    }
+  }
+}

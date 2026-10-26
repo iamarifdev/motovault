@@ -1,0 +1,47 @@
+Attributes: Application, 0x112703e80, pid: 86153, label: 'Settings'
+Element subtree:
+ →Application, 0x112703e80, pid: 86153, label: 'Settings'
+    Window (Main), 0x112700b40, {{3.2, 3.8}, {436.5, 948.3}}
+      Other, 0x112701540, {{3.2, 3.8}, {436.5, 948.3}}
+        Other, 0x112701f40, {{3.2, 3.8}, {436.5, 948.3}}
+          Other, 0x112702e40, {{3.2, 3.8}, {436.5, 948.3}}
+            Other, 0x112702d00, {{3.0, 3.3}, {437.0, 949.4}}
+              Other, 0x112702bc0, {{3.0, 3.3}, {437.0, 949.4}}
+                Other, 0x112701040, {{3.0, 3.3}, {437.0, 949.4}}
+                  Other, 0x112700f00, {{3.0, 3.3}, {437.0, 949.4}}
+                    Other, 0x112700dc0, {{3.0, 3.3}, {437.0, 949.4}}
+                      Other, 0x112700c80, {{3.0, 3.3}, {437.0, 949.4}}
+                        NavigationBar, 0x112701900, {{3.0, 64.9}, {437.0, 53.6}}, identifier: 'Notifications'
+                          Button, 0x112701a40, {{22.8, 64.9}, {43.7, 43.7}}, identifier: 'BackButton', label: 'MotoVault P01 Test'
+                          StaticText, 0x112703ac0, {{170.6, 74.0}, {100.7, 24.5}}, label: 'Notifications'
+                        Other, 0x1127012c0, {{2.3, 2.8}, {437.4, 950.4}}
+                          Other, 0x112703340, {{2.3, 2.8}, {437.4, 950.4}}
+                            Other, 0x112703200, {{2.3, 2.8}, {437.4, 950.4}}
+                              Other, 0x1127030c0, {{2.3, 2.8}, {437.4, 950.4}}
+                                Other, 0x112702f80, {{2.3, 118.1}, {437.4, 801.3}}
+                                  Table, 0x112700a00, {{2.3, 2.8}, {437.4, 950.4}}
+                                    Other, 0x1127008c0, {{2.3, 118.1}, {437.4, 17.6}}
+                                    Cell, 0x112700780, {{22.0, 135.4}, {398.0, 56.7}}, identifier: 'ALLOW_NOTIFICATIONS_ID'
+                                      Other, 0x112700640, {{22.0, 135.4}, {398.0, 56.7}}
+                                        Other, 0x112700000, {{22.0, 135.4}, {398.0, 56.7}}
+                                          Switch, 0x112700500, {{41.9, 150.0}, {358.2, 27.9}}, identifier: 'ALLOW_NOTIFICATIONS_ID', label: 'Allow Notifications', value: 0
+                                            Button, 0x1127003c0, {{41.9, 151.6}, {140.6, 24.2}}, identifier: 'ALLOW_NOTIFICATIONS_ID', label: 'Allow Notifications'
+                                            Switch, 0x112700280, {{339.4, 150.0}, {62.7, 27.9}}, value: 0
+                                    Other, 0x112700140, {{2.1, 192.1}, {437.8, 17.2}}
+                                    Other, 0x112702a80, {{407.0, 117.8}, {29.9, 774.1}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                      Other, 0x112706d00, {{433.9, 811.3}, {3.0, 77.6}}
+                                    Other, 0x1127c2800, {{63.3, 921.1}, {314.7, 29.9}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                                      Other, 0x1127c26c0, {{66.3, 948.0}, {308.7, 3.0}}
+                        Toolbar, 0x1127c2580, {{1.6, 2.0}, {438.1, 951.9}}, identifier: 'Toolbar', label: 'Toolbar'
+                          Other, 0x1127c2440, {{1.6, 2.0}, {438.1, 951.9}}
+                    Toolbar, 0x1127c2300, {{1.6, 2.0}, {438.1, 951.9}}, identifier: 'Toolbar', label: 'Toolbar'
+                      Other, 0x1127c21c0, {{1.6, 2.0}, {438.1, 951.9}}
+                Other, 0x11241d040, {{1.6, 2.0}, {438.1, 951.9}}
+                  Other, 0x11241ca00, {{1.6, 2.0}, {438.1, 951.9}}
+Path to element:
+ →Application, 0x112703e80, pid: 86153, label: 'Settings'
+Query chain:
+ →Find: Application 'com.apple.Preferences'
+  Output: {
+    Application, 0x11241cb40, pid: 86153, label: 'Settings'
+  }

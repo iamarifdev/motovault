@@ -17,7 +17,7 @@ remaining. It does not measure the physical condition of a component.
 | Detail basis and source | [Android native detail](p01/android/unknown-detail-fresh.xml), [iOS native XCTest](p01/ios/unknown-large-r1-summary.json), and prototype detail captures show source, calculation basis and last confirmed mileage/date. |
 | Large text and reduced motion | Paired unknown-large fixture uses dark appearance, English digits, 1.3 text scale and app reduced motion. [Android gauges](p01/android/paired-unknown-large-gauges.png) and the iOS unknown-large attachments show neutral gauges and usable scrolling. Source inspection confirms unknown/reduced-motion sweeps snap directly to their target. Stills alone are not motion-parity proof. |
 
-Final shared suites: [142 Android tests and 164 iOS simulator tests](p01/tests/summary.json),
+Final shared suites: [148 Android tests and 170 iOS simulator tests](p01/tests/summary.json),
 zero failures. Retained XML includes interval, service-baseline, reminder,
 migration/recovery and session tests. Prototype TypeScript and production build
 also pass; this is browser build evidence, not native visual parity.

@@ -1,0 +1,12 @@
+{
+  "deviceClock": "2026-10-26T12:14:54",
+  "bootCount": "54",
+  "bootCompleted": "1",
+  "processRunning": true,
+  "standbyBucket": "10",
+  "alarms": [],
+  "timebase": [
+    "nowRTC=1792995294854=2026-10-26 12:14:54.854 nowELAPSED=377280",
+    "mLastTimeChangeClockTime=1792995001008=2026-10-26 12:10:01.008"
+  ]
+}

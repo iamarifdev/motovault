@@ -1,0 +1,6 @@
+{
+  "processWasRunning": true,
+  "processStillRunning": false,
+  "deviceClock": "2026-10-26T12:32:16",
+  "scope": "Background cached-process kill only. No force-stop or device reboot; native alarms are not deliberately cancelled."
+}

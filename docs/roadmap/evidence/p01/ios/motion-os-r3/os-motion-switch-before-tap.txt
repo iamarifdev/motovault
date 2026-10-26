@@ -1,0 +1,51 @@
+Attributes: Switch, 0x10a9e9540, {{238.5, 197.9}, {305.8, 23.8}}, identifier: 'REDUCE_MOTION', label: 'Reduce Motion', value: 0
+Element subtree:
+ →Switch, 0x10a9e9540, {{238.5, 197.9}, {305.8, 23.8}}, identifier: 'REDUCE_MOTION', label: 'Reduce Motion', value: 0
+    Button, 0x10a9e9680, {{238.5, 199.3}, {97.4, 20.7}}, identifier: 'REDUCE_MOTION', label: 'Reduce Motion'
+    Switch, 0x10a9e97c0, {{492.5, 197.9}, {53.5, 23.8}}, value: 0
+Path to element:
+ →Application, 0x10a26a580, pid: 21081, label: 'Settings'
+  ↳Window (Main), 0x10a26a6c0, {{179.5, 72.9}, {372.9, 810.2}}
+   ↳Other, 0x10a26a800, {{179.5, 72.9}, {372.9, 810.2}}
+    ↳Other, 0x10a26a940, {{179.5, 72.9}, {372.9, 810.2}}
+     ↳Other, 0x10a26aa80, {{179.5, 72.9}, {372.9, 810.2}}
+      ↳Other, 0x10a26abc0, {{157.2, 71.6}, {374.1, 812.8}}
+       ↳Other, 0x10a26ad00, {{157.2, 71.6}, {374.1, 812.8}}
+        ↳Other, 0x10a26ae40, {{157.2, 71.6}, {374.1, 812.8}}
+         ↳Other, 0x10a26af80, {{157.2, 71.6}, {374.1, 812.8}}
+          ↳Other, 0x10a26b0c0, {{157.2, 71.6}, {374.1, 812.8}}
+           ↳Other, 0x10a26b200, {{137.2, 68.3}, {377.1, 819.4}}
+            ↳Other, 0x10a26b700, {{137.2, 68.3}, {377.1, 819.4}}
+             ↳Other, 0x10a26b840, {{137.2, 68.3}, {377.1, 819.4}}
+              ↳Other, 0x10a26b980, {{137.2, 68.3}, {377.1, 819.4}}
+               ↳Other, 0x10a26bac0, {{137.2, 68.3}, {377.1, 819.4}}
+                ↳Other, 0x10a26bc00, {{119.4, 164.5}, {381.1, 698.1}}
+                 ↳Table, 0x10a26bd40, {{119.4, 64.0}, {381.1, 828.0}}
+                  ↳Cell, 0x10a9e9a40, {{136.7, 179.8}, {346.4, 49.4}}, identifier: 'REDUCE_MOTION'
+                   ↳Other, 0x10a9e9b80, {{120.9, 176.3}, {350.5, 49.9}}
+                    ↳Other, 0x10a9e9400, {{120.9, 176.3}, {350.5, 49.9}}
+                     ↳Switch, 0x10a9e9540, {{238.5, 197.9}, {305.8, 23.8}}, identifier: 'REDUCE_MOTION', label: 'Reduce Motion', value: 0
+Query chain:
+ →Find: Application 'com.apple.Preferences'
+  Output: {
+    Application, 0x10a2fc280, pid: 21081, label: 'Settings'
+  }
+  ↪︎Find: Descendants matching type Switch
+    Output: {
+      Switch, 0x10a2f3e80, {{72.4, 167.6}, {339.0, 26.4}}, identifier: 'REDUCE_MOTION', label: 'Reduce Motion', value: 0
+      Switch, 0x10a2f4a00, {{72.4, 285.9}, {339.0, 26.4}}, identifier: 'REDUCE_MOTION_AUTOPLAY_ANIMATED_IMAGES', label: 'Auto-Play Animated Images', value: 1
+      Switch, 0x10a2f5180, {{72.4, 339.6}, {339.0, 26.4}}, identifier: 'REDUCE_MOTION_AUTOPLAY_VIDEO_PREVIEWS', label: 'Auto-Play Video Previews', value: 1
+      Switch, 0x10a2f5900, {{72.4, 393.3}, {339.0, 26.4}}, identifier: 'ReduceMotionAutoplayMessagesEffects', label: 'Auto-Play Message Effects', value: 1
+      Switch, 0x10a2f6440, {{67.4, 511.8}, {341.6, 26.6}}, identifier: 'PREFER_NONBLINKING_CURSOR', label: 'Prefer Non-Blinking Cursor', value: 0
+      Switch, 0x10a2f6f80, {{67.4, 611.2}, {341.6, 26.6}}, identifier: 'REFRESH_RATE', label: 'Limit Frame Rate', value: 0
+      Switch, 0x10a2f4140, {{351.1, 165.2}, {59.8, 26.6}}, value: 0
+      Switch, 0x10a2f4c80, {{351.1, 284.4}, {59.8, 26.6}}, value: 1
+      Switch, 0x10a2f5400, {{351.1, 338.5}, {59.8, 26.6}}, value: 1
+      Switch, 0x10a2f5b80, {{351.1, 392.6}, {59.8, 26.6}}, value: 1
+      Switch, 0x10a2f66c0, {{348.7, 512.1}, {60.2, 26.7}}, value: 0
+      Switch, 0x10a2f7200, {{348.7, 612.1}, {60.2, 26.7}}, value: 0
+    }
+    ↪︎Find: Elements matching predicate '"Reduce Motion" IN identifiers'
+      Output: {
+        Switch, 0x10a26f700, {{63.0, 163.1}, {343.9, 26.7}}, identifier: 'REDUCE_MOTION', label: 'Reduce Motion', value: 0
+      }

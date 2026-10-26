@@ -1,0 +1,33 @@
+{
+  "result": "Partial",
+  "physical": true,
+  "synthetic": true,
+  "applicationId": "com.motovault.baseline.p00",
+  "device": {
+    "model": "motorola edge 50 fusion",
+    "android": "16",
+    "api": "36",
+    "abi": "arm64-v8a",
+    "timezone": "Asia/Dhaka"
+  },
+  "apkSha256": "6f504c6843bd78e085433d4f923d813d49aa619cad49b3b6fb48efe2d2c8445f",
+  "policyDue": "2026-10-26T12:11:00",
+  "verified": [
+    "Real notification prompt and denied state",
+    "Native Settings return with explicit app opt-in boundary",
+    "Two committed document/service plans",
+    "Authorized reboot restores native alarms",
+    "Foreground recovery delivers both actual-policy alerts and consumes their keys"
+  ],
+  "contradicted": [
+    "Uninterrupted post-boot background delivery: OS app_standby deferred both alarms until app reopen"
+  ],
+  "pending": [
+    "Actual document and service notification tap destinations and delivered-alert retention",
+    "Ordinary background delivery without reboot",
+    "Snooze and permission revocation recovery",
+    "Complete physical motion, spoken TalkBack and haptic acceptance",
+    "Physical iPhone verification"
+  ],
+  "scope": "Retained evidence consistency only. Partial physical acceptance remains partial."
+}

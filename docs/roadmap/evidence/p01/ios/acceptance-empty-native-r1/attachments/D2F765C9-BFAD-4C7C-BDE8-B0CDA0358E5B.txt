@@ -1,0 +1,57 @@
+Attributes: Application, 0x1067d1540, pid: 69860, label: 'MotoVault P01 Test'
+Element subtree:
+ →Application, 0x1067d1540, pid: 69860, label: 'MotoVault P01 Test'
+    Window (Main), 0x1067d1680, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1067d17c0, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1067d1400, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1067d12c0, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1067d1180, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1067d1040, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1067d0f00, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1067d0dc0, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=1)'
+                  Other, 0x1067d0c80, {{0.0, 62.0}, {440.0, 860.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=5)'
+              Other, 0x1067d0b40, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1067d0a00, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1067d08c0, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1067d0780, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1067d0640, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1067d0000, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=227)'
+              Other, 0x1067d0500, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1067d03c0, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=230)'
+                Button, 0x1067d0280, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=233)'
+                Other, 0x1067d0140, {{0.0, 196.7}, {440.0, 759.3}}
+                  Other, 0x1067d3d40, {{0.0, 196.7}, {440.0, 759.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=234)'
+                  Button, 0x1067d3e80, {{384.0, 214.7}, {44.0, 44.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=240)', label: 'বন্ধ করুন'
+                  Other, 0x1067c9b80, {{20.0, 224.7}, {88.7, 24.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=239)', label: 'রিমাইন্ডার'
+                  Other, 0x1067c83c0, {{0.0, 267.3}, {440.0, 578.0}}
+                    Other, 0x1067c9180, {{0.0, 267.3}, {440.0, 578.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=243)'
+                    Other, 0x1067c92c0, {{20.0, 283.3}, {400.0, 302.0}}
+                      Other, 0x1067c9400, {{20.0, 283.3}, {400.0, 302.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=244)', label: 'ফোনের সেটিংসে নোটিফিকেশনের অনুমতি নেই
+অ্যাপের ভেতরে তারিখ দেখা যাবে। ফোনের সময় বদলালে রিমাইন্ডারও স্থানীয় সময় অনুসরণ করবে।
+ফোনের Settings > Notifications > MotoVault থেকেও অনুমতি দিতে পারবেন।'
+                      Button, 0x1067c9540, {{36.0, 372.3}, {368.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=270)', label: 'ফোনে জানানোর অনুমতি দিন'
+                      Button, 0x1067c9680, {{36.0, 438.3}, {134.7, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=273)', label: 'নোটিফিকেশন সেটিংস খুলুন'
+                      Button, 0x1067c97c0, {{36.0, 525.3}, {133.3, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=277)', label: 'অনুমতি আবার যাচাই করুন'
+                    Other, 0x1067c9cc0, {{20.0, 599.3}, {400.0, 77.0}}
+                      Other, 0x1067cbe80, {{20.0, 599.3}, {400.0, 77.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=247)', label: 'মেয়াদের কত দিন আগে'
+                      Button, 0x1067cbd40, {{24.0, 632.3}, {129.3, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=250)', label: '৩০ দিন'
+                      Button, 0x1067cbc00, {{155.3, 632.3}, {129.3, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=252)', label: '১৪ দিন'
+                      Button, 0x1067cae40, {{286.7, 632.3}, {129.3, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=254)', label: '৭ দিন'
+                    Other, 0x1067cbac0, {{20.0, 690.3}, {400.0, 139.0}}
+                      Other, 0x1067cb980, {{20.0, 690.3}, {400.0, 139.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=256)', label: 'ফোনের স্থানীয় সময়
+এখন: ৩০ দিন আগে, ৯:০০
+কাগজ বা সার্ভিসের সময়সূচি যোগ করলে এখানে দেখা যাবে।'
+                      Button, 0x1067cb840, {{24.0, 723.3}, {195.0, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=259)', label: 'সকাল ৯টা'
+                      Button, 0x1067cb700, {{221.0, 723.3}, {195.0, 40.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=261)', label: 'সন্ধ্যা ৬টা'
+                  Button, 0x1067cb5c0, {{20.0, 858.0}, {400.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=267)', label: 'সেভ করুন'
+        Other, 0x1067cb480, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x1067cb340, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1067cb200, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1067cb0c0, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x1067d1540, pid: 69860, label: 'MotoVault P01 Test'
+Query chain:
+ →Find: Target Application 'com.motovault.baseline.p00'
+  Output: {
+    Application, 0x1067caf80, pid: 69860, label: 'MotoVault P01 Test'
+  }

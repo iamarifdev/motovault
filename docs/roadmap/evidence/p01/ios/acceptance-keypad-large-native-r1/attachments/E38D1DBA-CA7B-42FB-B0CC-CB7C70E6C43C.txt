@@ -1,0 +1,60 @@
+Attributes: Application, 0x112b3bac0, pid: 75584, label: 'MotoVault P01 Test'
+Element subtree:
+ →Application, 0x112b3bac0, pid: 75584, label: 'MotoVault P01 Test'
+    Window (Main), 0x112b3bc00, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112b3bd40, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112b3be80, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1126c3700, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x11295a080, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x11295bc00, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x11295bd40, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x11295be80, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=1)'
+                  Other, 0x11295bac0, {{0.0, 62.0}, {440.0, 860.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=5)'
+              Other, 0x11295af80, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x11295b0c0, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x11295b200, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x11295b340, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x11295b480, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x11295b5c0, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=144)'
+              Other, 0x11295b700, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x11295b840, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=147)'
+                Button, 0x11295b980, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=150)'
+                Other, 0x112be4000, {{0.0, 245.3}, {440.0, 710.7}}
+                  Other, 0x112be4140, {{0.0, 245.3}, {440.0, 710.7}}, identifier: 'AccessibilityElement for SemanticsNode(id=151)'
+                  Button, 0x112be4280, {{384.0, 263.3}, {44.0, 44.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=157)', label: 'বন্ধ করুন'
+                  Other, 0x112be43c0, {{20.0, 269.7}, {95.7, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=156)', label: 'ওডোমিটার'
+                  Other, 0x112be4500, {{0.0, 316.0}, {440.0, 287.3}}
+                    Other, 0x112be4640, {{0.0, 316.0}, {440.0, 287.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=160)'
+                    Other, 0x112be4780, {{169.3, 340.0}, {101.3, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=162)', label: 'আপনার লেখা কিমি'
+                    Other, 0x112be48c0, {{138.3, 373.3}, {133.3, 45.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=164)', label: '12,600'
+                    Other, 0x112be4a00, {{277.7, 380.3}, {24.0, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=166)', label: 'km'
+                    Other, 0x112be4b40, {{142.7, 420.7}, {155.0, 31.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=167)', label: 'বর্তমান ওডোমিটার: 12,340 km'
+                    Button, 0x112be4c80, {{20.0, 474.0}, {48.0, 47.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=169)', label: '+10'
+                    Button, 0x112be4dc0, {{76.0, 474.0}, {50.7, 47.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=172)', label: '+50'
+                    Button, 0x112be4f00, {{134.7, 474.0}, {56.0, 47.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=175)', label: '+100'
+                    Button, 0x112be5040, {{198.7, 474.0}, {58.7, 47.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=178)', label: '+500'
+                    Button, 0x112be5180, {{265.3, 474.0}, {90.7, 47.3}}, identifier: 'AccessibilityElement for SemanticsNode(id=181)', label: 'আনুমানিক'
+                    Button, 0x112be52c0, {{20.0, 535.3}, {400.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=184)', label: 'ডিসপ্লের ছবি তুলে পড়ুন (ডেমো)'
+                  Button, 0x112be5400, {{20.0, 616.0}, {400.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=190)', label: 'সেভ করুন'
+                  Button, 0x112be5540, {{20.0, 678.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=196)', label: '1'
+                  Button, 0x112be5680, {{156.0, 678.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=198)', label: '2'
+                  Button, 0x112be57c0, {{292.0, 678.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=200)', label: '3'
+                  Button, 0x112be5900, {{20.0, 738.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=203)', label: '4'
+                  Button, 0x112be5a40, {{156.0, 738.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=205)', label: '5'
+                  Button, 0x112be5b80, {{292.0, 738.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=207)', label: '6'
+                  Button, 0x112be5cc0, {{20.0, 798.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=210)', label: '7'
+                  Button, 0x112be5e00, {{156.0, 798.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=212)', label: '8'
+                  Button, 0x112be5f40, {{292.0, 798.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=214)', label: '9'
+                  Button, 0x112be6080, {{156.0, 858.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=218)', label: '0'
+                  Button, 0x112be61c0, {{292.0, 858.0}, {128.0, 52.0}}, identifier: 'AccessibilityElement for SemanticsNode(id=220)', label: 'মুছুন'
+        Other, 0x112be6300, {{0.0, 0.0}, {440.0, 956.0}}
+    Window, 0x112be6440, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112be6580, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112be66c0, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x112b3bac0, pid: 75584, label: 'MotoVault P01 Test'
+Query chain:
+ →Find: Target Application 'com.motovault.baseline.p00'
+  Output: {
+    Application, 0x112be6800, pid: 75584, label: 'MotoVault P01 Test'
+  }

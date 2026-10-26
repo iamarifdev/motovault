@@ -1,0 +1,34 @@
+{
+  "ride": {
+    "brandId": "yamaha",
+    "edition": "P00 synthetic",
+    "year": 2023,
+    "odometer": 12340.0,
+    "modelId": "yamaha-r15-v4",
+    "modelName": "R15 V4",
+    "registration": "P00-SYNTHETIC",
+    "market": "BANGLADESH",
+    "emission": "UNKNOWN",
+    "odometerConfirmedDate": "2026-10-16"
+  },
+  "rules": [],
+  "logs": [],
+  "documents": [],
+  "appearance": "LIGHT",
+  "autoLocation": false,
+  "digits": "BN",
+  "haptics": false,
+  "reduceMotion": false,
+  "textScale": 1.0,
+  "serviceReminders": true,
+  "docReminders": true,
+  "lastPrices": {
+    "octane": 120.0,
+    "petrol": 115.0
+  },
+  "_synthetic": true,
+  "reminderPolicy": {
+    "warningDays": 30,
+    "minuteOfDay": 540
+  }
+}

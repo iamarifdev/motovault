@@ -1,0 +1,17 @@
+{
+  "case": "unknown-large",
+  "applicationId": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "fixture": "docs/roadmap/fixtures/p01/native/unknown-large.json",
+  "fixtureSha256": "922dfe7c212c93874663b346a3b8f4d29327c5621bc780e6f1531e7b2820d709",
+  "appearance": "DARK",
+  "digits": "EN",
+  "textScale": 1.3,
+  "appReducedMotion": true,
+  "host": {
+    "serial": "emulator-5554",
+    "api": "37",
+    "osAppearance": "Night mode: no"
+  },
+  "scope": "Representative native screenshots and reachable controls, not motion parity or spoken accessibility proof."
+}

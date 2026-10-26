@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.motovault.app.domain.preset.KtmDuke125PresetTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:51" hostname="MacBookPro" time="0.001">
+<testsuite name="com.motovault.app.domain.preset.KtmDuke125PresetTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-26T05:15:08" hostname="MacBookPro" time="0.001">
   <properties/>
-  <testcase name="testPresetCreation_IndianBS4_Has10Point2LitersTank[iosSimulatorArm64]" classname="com.motovault.app.domain.preset.KtmDuke125PresetTest" time="0.0"/>
-  <testcase name="testPresetCreation_IndianBS6_Has13Point5LitersTank[iosSimulatorArm64]" classname="com.motovault.app.domain.preset.KtmDuke125PresetTest" time="0.001"/>
+  <testcase name="testPresetCreation_IndianBS4_Has10Point2LitersTank[iosSimulatorArm64]" classname="com.motovault.app.domain.preset.KtmDuke125PresetTest" time="0.001"/>
+  <testcase name="testPresetCreation_IndianBS6_Has13Point5LitersTank[iosSimulatorArm64]" classname="com.motovault.app.domain.preset.KtmDuke125PresetTest" time="0.0"/>
   <testcase name="testDefaultComponentRules_ContainsAll7FactoryMaintenanceItems[iosSimulatorArm64]" classname="com.motovault.app.domain.preset.KtmDuke125PresetTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

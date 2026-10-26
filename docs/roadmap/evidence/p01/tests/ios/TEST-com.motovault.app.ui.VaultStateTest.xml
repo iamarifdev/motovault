@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.motovault.app.ui.VaultStateTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:51" hostname="MacBookPro" time="0.02">
+<testsuite name="com.motovault.app.ui.VaultStateTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2026-10-26T05:15:08" hostname="MacBookPro" time="0.022">
   <properties/>
   <testcase name="newGarageStartsMaintenanceAtCurrentDistanceAndDate[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
   <testcase name="everyBrandGetsExplicitOwnerDefinedExampleSchedules[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
   <testcase name="recordingServiceOnlyResetsSelectedComponent[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
   <testcase name="firstFuelLogSetsBaselineAndSecondCalculatesActualEconomy[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.002"/>
-  <testcase name="fuelLogRejectsRollbackAndInvalidFuel[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.004"/>
+  <testcase name="fuelLogRejectsRollbackAndInvalidFuel[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.005"/>
   <testcase name="recordsSurviveSerializationRoundTrip[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
-  <testcase name="partialFillsAccumulateAcrossACompleteCycle[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.002"/>
+  <testcase name="partialFillsAccumulateAcrossACompleteCycle[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.003"/>
   <testcase name="economyUsesDistanceAndLitresAcrossAllCompletedCycles[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.002"/>
   <testcase name="partialFillsWithoutAFullBaselineDoNotReportEconomy[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.002"/>
   <testcase name="deletingFuelRecalculatesCycles[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
   <testcase name="historyCannotDeleteTheActiveServiceBaseline[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
-  <testcase name="oldRecordsKeepTheirBikeAndDocumentIdentity[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
+  <testcase name="oldRecordsKeepTheirBikeAndDocumentIdentity[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
   <testcase name="selectedModelAndManualNameSurviveRestartWithoutWrongPhoto[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
-  <testcase name="catalogueSearchAndBrandBoundariesMatchThePrototype[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
+  <testcase name="catalogueSearchAndBrandBoundariesMatchThePrototype[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
   <testcase name="lastServiceBaselineUsesOwnerEnteredDistanceAndDate[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.0"/>
   <testcase name="zeroSchedulesAndInvalidDocumentDateOrderAreRejected[iosSimulatorArm64]" classname="com.motovault.app.ui.VaultStateTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>

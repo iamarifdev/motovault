@@ -1,16 +1,16 @@
 {
   "android": {
-    "tests": 142,
+    "tests": 148,
     "failures": 0,
     "errors": 0,
     "skipped": 0,
-    "suites": 20
+    "suites": 21
   },
   "ios": {
-    "tests": 164,
+    "tests": 170,
     "failures": 0,
     "errors": 0,
     "skipped": 0,
-    "suites": 23
+    "suites": 24
   }
 }

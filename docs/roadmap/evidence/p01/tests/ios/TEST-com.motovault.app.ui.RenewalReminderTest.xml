@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.motovault.app.ui.RenewalReminderTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:51" hostname="MacBookPro" time="0.003">
+<testsuite name="com.motovault.app.ui.RenewalReminderTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-26T05:15:08" hostname="MacBookPro" time="0.003">
   <properties/>
-  <testcase name="thirtyDayWarningAndExpiryAreAtNine[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.001"/>
-  <testcase name="insideWindowUsesNextMorningAndDoesNotMoveOnRelaunch[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="thirtyDayWarningAndExpiryAreAtNine[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
+  <testcase name="insideWindowUsesNextMorningAndDoesNotMoveOnRelaunch[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.001"/>
   <testcase name="beforeNineUsesTodayAndAtNineUsesTomorrow[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
   <testcase name="expiredMissingAndInvalidDatesHaveNoNativeReminders[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>
   <testcase name="expiryDayUsesOneExpiryAlertIncludingLateAddition[iosSimulatorArm64]" classname="com.motovault.app.ui.RenewalReminderTest" time="0.0"/>

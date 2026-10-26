@@ -1,0 +1,31 @@
+{
+  "deviceClock": "2026-10-26T12:33:38",
+  "bootCount": "54",
+  "bootCompleted": "1",
+  "processRunning": false,
+  "standbyBucket": "10",
+  "alarms": [
+    [
+      "RTC_WAKEUP #2: Alarm{7cf9010 type 0 origWhen 1792996440000 whenElapsed 1522426 com.motovault.baseline.p00}",
+      "tag=*walarm*:com.motovault.RENEWAL",
+      "type=RTC_WAKEUP origWhen=2026-10-26 12:34:00.000 window=+1m23s272ms repeatInterval=0 count=0 flags=0x20",
+      "policyWhenElapsed: requester=+21s146ms app_standby=-1m29s883ms device_idle=-- battery_saver=-1m23s511ms",
+      "whenElapsed=+21s146ms maxWhenElapsed=+1m44s418ms",
+      "operation=PendingIntent{da56709: PendingIntentRecord{ec7cd0e com.motovault.baseline.p00 broadcastIntent}}",
+      "idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=2, android:broadcast.temporaryAppAllowlistReasonCode=-1, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=1, android:broadcast.flags=8}]"
+    ],
+    [
+      "RTC_WAKEUP #4: Alarm{4059d3c type 0 origWhen 1792996440000 whenElapsed 1522427 com.motovault.baseline.p00}",
+      "tag=*walarm*:com.motovault.RENEWAL",
+      "type=RTC_WAKEUP origWhen=2026-10-26 12:34:00.000 window=+1m23s274ms repeatInterval=0 count=0 flags=0x20",
+      "policyWhenElapsed: requester=+21s147ms app_standby=-1m29s885ms device_idle=-- battery_saver=-1m23s511ms",
+      "whenElapsed=+21s147ms maxWhenElapsed=+1m44s421ms",
+      "operation=PendingIntent{4b46ac5: PendingIntentRecord{2b7ac1a com.motovault.baseline.p00 broadcastIntent}}",
+      "idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=2, android:broadcast.temporaryAppAllowlistReasonCode=-1, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=1, android:broadcast.flags=8}]"
+    ]
+  ],
+  "timebase": [
+    "nowRTC=1792996418854=2026-10-26 12:33:38.854 nowELAPSED=1501280",
+    "mLastTimeChangeClockTime=1792995001008=2026-10-26 12:10:01.008"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "case": "system-appearance",
+  "applicationId": "com.motovault.baseline.p00",
+  "synthetic": true,
+  "fixture": "docs/roadmap/fixtures/p01/native/system-appearance.json",
+  "fixtureSha256": "40d9b859bab016904a4c2361af3100df281fbf361465c44246a76ca0cc918f0c",
+  "appearance": "SYSTEM",
+  "digits": "BN",
+  "textScale": 1.0,
+  "appReducedMotion": false,
+  "host": {
+    "udid": "50709DF0-FEA9-4B34-9DE6-6172D868875D",
+    "name": "iPhone 18 Pro Max",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-0",
+    "osAppearance": "dark"
+  },
+  "scope": "Representative native screenshots and reachable controls, not motion parity or spoken accessibility proof."
+}

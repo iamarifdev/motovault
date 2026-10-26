@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.motovault.app.ui.ReminderPlanTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:52" hostname="MacBookPro" time="0.007">
+<testsuite name="com.motovault.app.ui.ReminderPlanTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-26T05:14:32" hostname="MacBookPro" time="0.003">
   <properties/>
-  <testcase name="snoozedExpiryMessageKeepsItsActualDateAndChosenDigits" classname="com.motovault.app.ui.ReminderPlanTest" time="0.004"/>
-  <testcase name="disabledDeletedAndDistanceOnlyNotYetDueProduceNoRequests" classname="com.motovault.app.ui.ReminderPlanTest" time="0.002"/>
+  <testcase name="snoozedExpiryMessageKeepsItsActualDateAndChosenDigits" classname="com.motovault.app.ui.ReminderPlanTest" time="0.001"/>
+  <testcase name="disabledDeletedAndDistanceOnlyNotYetDueProduceNoRequests" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
   <testcase name="tomorrowSnoozeOfAnOverdueServiceSurvivesRestartWithoutDailyReplay" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
-  <testcase name="consumedServiceCannotReplayButNewBaselineHasANewIdentity" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
+  <testcase name="consumedServiceCannotReplayButNewBaselineHasANewIdentity" classname="com.motovault.app.ui.ReminderPlanTest" time="0.001"/>
   <testcase name="collisionIdsAndChangedOrMissingNotificationTargetsAreSafe" classname="com.motovault.app.ui.ReminderPlanTest" time="0.001"/>
   <testcase name="snoozeCreatesAnExplicitRequestWithoutErasingConsumedHistory" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>
   <testcase name="whicheverLimitFirstAndMileageUpdatesBringCalendarRequestForward" classname="com.motovault.app.ui.ReminderPlanTest" time="0.0"/>

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.motovault.app.ui.ItemizedServiceTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-10-24T11:44:51" hostname="MacBookPro" time="0.019">
+<testsuite name="com.motovault.app.ui.ItemizedServiceTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-10-26T05:15:08" hostname="MacBookPro" time="0.021">
   <properties/>
   <testcase name="specificScheduleNamesDoNotFallIntoBroadCategories[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.0"/>
   <testcase name="legacyJsonWithoutItemizedFieldsStillDecodes[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.0"/>
   <testcase name="requestedLocationIsStoredWithFuelAndServiceAndRoundTrips[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.003"/>
   <testcase name="oilFieldsRoundTripWithItemizedVisit[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.001"/>
-  <testcase name="unknownInputsRemainUnknownAndInvalidOilMetadataIsRejected[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.003"/>
+  <testcase name="unknownInputsRemainUnknownAndInvalidOilMetadataIsRejected[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.004"/>
   <testcase name="explicitFreeIsZeroAndUnknownPriceStaysUnknown[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.0"/>
   <testcase name="oneVisitCanUpdateSeveralChosenSchedulesAndProtectsEachBaseline[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.001"/>
   <testcase name="aServiceLineCannotResetAnUnrelatedSchedule[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.001"/>
   <testcase name="inspectionDoesNotResetSchedulesOrClaimTheBaseline[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.001"/>
   <testcase name="v2PassportExportPreservesItemizedRecordsAndAllowsLegacyState[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.003"/>
-  <testcase name="smartEntryCreatesReviewableCandidatesAndKeepsUnknownText[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.0"/>
+  <testcase name="smartEntryCreatesReviewableCandidatesAndKeepsUnknownText[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.001"/>
   <testcase name="editingAnItemizedVisitKeepsItsIdAndRecalculatesTheTotal[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.002"/>
   <testcase name="documentRenewalFeesAreSeparateEventsAndStayOutOfPassport[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.002"/>
   <testcase name="correctingFuelRecalculatesEconomyWithoutBreakingOrder[iosSimulatorArm64]" classname="com.motovault.app.ui.ItemizedServiceTest" time="0.002"/>

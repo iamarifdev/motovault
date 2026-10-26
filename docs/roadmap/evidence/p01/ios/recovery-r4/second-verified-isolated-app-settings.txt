@@ -1,0 +1,92 @@
+Attributes: Application, 0x112702580, pid: 86153, label: 'Settings'
+Element subtree:
+ →Application, 0x112702580, pid: 86153, label: 'Settings'
+    Window (Main), 0x1127026c0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112702800, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112702940, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x112704640, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1127b8000, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1127b8140, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1127b8280, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1127b83c0, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x1127b8500, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x1127b8640, {{0.0, 0.0}, {440.0, 956.0}}
+                        NavigationBar, 0x1127b8780, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'MotoVault P01 Test'
+                          Button, 0x1127b88c0, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Apps'
+                          StaticText, 0x1127b8a00, {{144.0, 71.7}, {152.0, 24.7}}, label: 'MotoVault P01 Test'
+                        Other, 0x1127b8b40, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x1127b8c80, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x1127b8dc0, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x1127b8f00, {{0.0, 0.0}, {440.0, 956.0}}
+                                CollectionView, 0x1127b9040, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x1127b9180, {{-12.0, -1796.0}, {464.0, 4135.7}}
+                                  Other, 0x1127b92c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                    Other, 0x1127b9400, {{0.0, 0.0}, {440.0, 156.0}}
+                                  Other, 0x1127b9540, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Cell, 0x1127b9680, {{20.0, 116.0}, {400.0, 44.3}}
+                                    Other, 0x1127b97c0, {{20.0, 116.0}, {400.0, 44.3}}
+                                    Other, 0x1127b9900, {{20.0, 116.0}, {400.0, 44.3}}
+                                      Other, 0x1127b9a40, {{20.0, 116.0}, {400.0, 44.3}}
+                                        Other, 0x1127b9b80, {{20.0, 116.0}, {400.0, 44.3}}
+                                          StaticText, 0x1127b9cc0, {{20.0, 116.0}, {400.0, 44.3}}, label: 'Allow MotoVault P01 Test to Access'
+                                  Cell, 0x1127b9e00, {{20.0, 160.3}, {400.0, 56.0}}
+                                    Other, 0x1127b9f40, {{20.0, 160.3}, {400.0, 56.0}}
+                                      Other, 0x1127ba080, {{20.0, 160.3}, {400.0, 56.0}}
+                                    Other, 0x1127ba1c0, {{20.0, 160.3}, {400.0, 56.0}}
+                                      Other, 0x1127ba300, {{20.0, 160.3}, {400.0, 56.0}}
+                                        Other, 0x1127ba440, {{20.0, 160.3}, {400.0, 56.0}}
+                                          Button, 0x1127ba580, {{20.0, 160.3}, {400.0, 56.0}}, identifier: 'SIRI', label: 'Siri'
+                                            StaticText, 0x1127ba6c0, {{38.0, 174.3}, {66.0, 28.0}}, label: 'Siri'
+                                            Image, 0x1127ba800, {{38.0, 174.3}, {28.0, 28.0}}
+                                            Image, 0x1127ba940, {{390.7, 182.3}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                  Cell, 0x1127baa80, {{20.0, 216.3}, {400.0, 56.0}}
+                                    Other, 0x1127babc0, {{20.0, 216.3}, {400.0, 56.0}}
+                                      Other, 0x1127bad00, {{20.0, 216.3}, {400.0, 56.0}}
+                                    Other, 0x1127bae40, {{20.0, 216.3}, {400.0, 56.0}}
+                                      Other, 0x1127baf80, {{20.0, 216.3}, {400.0, 56.0}}
+                                        Other, 0x1127bb0c0, {{20.0, 216.3}, {400.0, 56.0}}
+                                          Button, 0x1127bb200, {{20.0, 216.3}, {400.0, 56.0}}, identifier: 'SEARCH', label: 'Search'
+                                            StaticText, 0x1127bb340, {{38.0, 230.3}, {95.3, 28.0}}, label: 'Search'
+                                            Image, 0x1127bb480, {{38.0, 230.3}, {28.0, 28.0}}
+                                            Image, 0x1127bb5c0, {{390.7, 238.3}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                  Other, 0x1127bb700, {{80.0, 215.3}, {320.0, 1.0}}
+                                  Cell, 0x1127bb840, {{20.0, 272.3}, {400.0, 79.3}}
+                                    Other, 0x1127bb980, {{20.0, 272.3}, {400.0, 79.3}}
+                                      Other, 0x1127bbac0, {{20.0, 272.3}, {400.0, 79.3}}
+                                    Other, 0x1127bbc00, {{20.0, 272.3}, {400.0, 79.3}}
+                                      Other, 0x1127bbd40, {{20.0, 272.3}, {400.0, 79.3}}
+                                        Other, 0x1127bbe80, {{20.0, 272.3}, {400.0, 79.3}}
+                                          Button, 0x1127c0000, {{20.0, 272.3}, {400.0, 79.3}}, identifier: 'NOTIFICATIONS', label: 'Notifications, Banners, Sounds'
+                                            StaticText, 0x1127c0140, {{80.0, 287.3}, {96.0, 24.3}}, label: 'Notifications'
+                                            Image, 0x1127c0280, {{38.0, 298.0}, {28.0, 28.0}}
+                                            Image, 0x1127c03c0, {{390.7, 306.0}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                            StaticText, 0x1127c0500, {{80.0, 315.7}, {116.0, 21.0}}, label: 'Banners, Sounds'
+                                  Other, 0x1127c0640, {{80.0, 271.3}, {320.0, 1.0}}
+                                  Cell, 0x1127c0780, {{20.0, 351.7}, {400.0, 56.0}}
+                                    Other, 0x1127c08c0, {{20.0, 351.7}, {400.0, 56.0}}
+                                      Other, 0x1127c0a00, {{20.0, 351.7}, {400.0, 56.0}}
+                                    Other, 0x1127c0b40, {{20.0, 351.7}, {400.0, 56.0}}
+                                      Other, 0x1127c0c80, {{20.0, 351.7}, {400.0, 56.0}}
+                                        Other, 0x1127c0dc0, {{20.0, 351.7}, {400.0, 56.0}}
+                                          Switch, 0x1127c0f00, {{20.0, 351.7}, {400.0, 56.0}}, identifier: 'com.motovault.baseline.p00.wireless', label: 'Mobile Data', value: 0, Disabled
+                                            Image, 0x1127c1040, {{38.0, 365.7}, {28.0, 28.0}}, Disabled
+                                            StaticText, 0x1127c1180, {{80.0, 367.5}, {91.0, 24.3}}, label: 'Mobile Data', Disabled
+                                            Switch, 0x1127c12c0, {{339.0, 365.7}, {63.0, 28.0}}, value: 0, Disabled
+                                  Other, 0x1127c1400, {{80.0, 350.7}, {320.0, 1.0}}
+                                  Other, 0x1127c1540, {{407.0, 116.0}, {30.0, 778.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                    Other, 0x1127c1680, {{434.0, 663.3}, {3.0, 232.0}}
+                                  Other, 0x1127c17c0, {{407.0, 116.0}, {30.0, 778.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                    Other, 0x1127c1900, {{434.0, 663.3}, {3.0, 232.0}}
+                        Toolbar, 0x1127c1a40, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                          Other, 0x1127c1b80, {{0.0, 0.0}, {440.0, 956.0}}
+                    Toolbar, 0x1127c1cc0, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                      Other, 0x1127c1e00, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1127c1f40, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1127c2080, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x112702580, pid: 86153, label: 'Settings'
+Query chain:
+ →Find: Application 'com.apple.Preferences'
+  Output: {
+    Application, 0x1127c21c0, pid: 86153, label: 'Settings'
+  }
