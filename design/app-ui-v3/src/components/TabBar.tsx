@@ -8,8 +8,8 @@ import type { Tab } from '../types'
 const TABS: { id: Tab; label: string; icon: typeof House }[] = [
   { id: 'home', label: 'গ্যারেজ', icon: House },
   { id: 'vault', label: 'কাগজপত্র', icon: FolderOpen },
-  { id: 'history', label: 'ইতিহাস', icon: History },
-  { id: 'me', label: 'আমি', icon: User },
+  { id: 'history', label: 'রেকর্ড', icon: History },
+  { id: 'me', label: 'প্রোফাইল', icon: User },
 ]
 
 /**

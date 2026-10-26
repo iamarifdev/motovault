@@ -82,11 +82,13 @@ val worlds = listOf(
     BrandWorld("enfield", "Royal Enfield", Color(0xFFDBB77C), "Heritage gold")
 )
 
-enum class Tab(val id: String, val title: String, val icon: String) {
-    GARAGE("garage", "গ্যারেজ", "fi_home.svg"),
-    VAULT("vault", "কাগজপত্র", "fi_folder-open.svg"),
-    HISTORY("history", "ইতিহাস", "fi_history.svg"),
-    ME("me", "আমি", "fi_user.svg")
+enum class Tab(val id: String, val titleBn: String, val titleEn: String, val icon: String) {
+    GARAGE("garage", "গ্যারেজ", "Garage", "fi_home.svg"),
+    VAULT("vault", "কাগজপত্র", "Documents", "fi_folder-open.svg"),
+    HISTORY("history", "রেকর্ড", "Records", "fi_history.svg"),
+    ME("me", "প্রোফাইল", "Profile", "fi_user.svg");
+    val title: String get() = titleBn
+    fun label(lang: AppLanguage) = if (lang == AppLanguage.EN) titleEn else titleBn
 }
 
 data class ActiveSheet(
@@ -342,7 +344,8 @@ fun MotoVault() {
                 onUnlock = { unlockVault() },
                 onExitInspection = { exitInspection() },
                 onLock = { lockNow() },
-                authMessage = privacyAuthMessage
+                authMessage = privacyAuthMessage,
+                language = state.language
             )
         } else {
             Box(
@@ -615,7 +618,8 @@ fun MotoVault() {
                                 warningDays = doc.reminderWarningDays ?: state.reminderPolicy.warningDays,
                                 privacyEnabled = state.privacy.enabled,
                                 onInspect = { inspectDocument(doc.id) },
-                                onOpenPrivacy = { activeSheet = ActiveSheet("privacy") }
+                                onOpenPrivacy = { activeSheet = ActiveSheet("privacy") },
+                                language = state.language
                             )
                         }
                     }
@@ -640,7 +644,8 @@ fun MotoVault() {
                         onDismiss = { activeSheet = null },
                         onSelectFlow = { flow, payload ->
                             activeSheet = ActiveSheet(flow, payload)
-                        }
+                        },
+                        language = state.language
                     )
                 }
             }

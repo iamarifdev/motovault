@@ -144,7 +144,7 @@ expect fun documentDialogProperties(): DialogProperties
                 (if (moreTypes) documentTypes else documentTypes.take(3)).forEach { kind -> Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(13.dp)).background(SurfaceColor).border(1.dp, BorderColor, RoundedCornerShape(13.dp)).clickable { type = kind; discard(); draftJson = null; reviewValues = null; scan(false) }.padding(16.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                     Text(documentDisplayName(kind), fontSize = 14.sp, fontWeight = FontWeight.SemiBold); DocumentNote(if (isCardDocument(kind)) "কার্ডের সামনে ও পেছনের ছবি তুলুন" else "কাগজ বা ডিজিটাল কপি। পুরো পৃষ্ঠা রাখুন")
                 } }
-                DocumentLink(if (moreTypes) "প্রয়োজনীয় কাগজগুলো দেখুন" else "বিমা ও ফিটনেস সনদ") { moreTypes = !moreTypes }
+                DocumentLink(if (moreTypes) "প্রয়োজনীয় কাগজগুলো দেখুন" else "ইন্স্যুরেন্স ও ফিটনেস সার্টিফিকেট") { moreTypes = !moreTypes }
                 Panel {
                     Text("আগেই কপি রাখা আছে?", fontSize = 16.sp, fontWeight = FontWeight.Bold); DocumentCopy("ছবি বা PDF যোগ করুন। সেভ করার আগে তথ্য মিলিয়ে নিন।")
                     var expanded by remember { mutableStateOf(false) }

@@ -47,7 +47,7 @@ private fun PassportReview(state: VaultState, dismiss: () -> Unit) {
         PassportField("মালিকের নাম", identity.owner, !busy) { edit(identity.copy(owner = it.take(160))) }
         PassportField("বাইকের ব্র্যান্ড", identity.brand, !busy) { edit(identity.copy(brand = it.take(100))) }
         PassportField("বাইকের মডেল", identity.model, !busy) { edit(identity.copy(model = it.take(160))) }
-        PassportField("সংস্করণ", identity.edition, !busy) { edit(identity.copy(edition = it.take(160))) }
+        PassportField("ভ্যারিয়েন্ট / সংস্করণ (ঐচ্ছিক)", identity.edition, !busy) { edit(identity.copy(edition = it.take(160))) }
         PassportField("রেজিস্ট্রেশন (ঐচ্ছিক)", identity.registration, !busy) { edit(identity.copy(registration = it.take(160))) }
         PassportField("চেসিস (ঐচ্ছিক)", identity.chassis, !busy) { edit(identity.copy(chassis = it.take(160))) }
         PassportField("ইঞ্জিন (ঐচ্ছিক)", identity.engine, !busy) { edit(identity.copy(engine = it.take(160))) }
@@ -97,12 +97,12 @@ private fun PassportVerifier(dismiss: () -> Unit) {
     Sheet("পাসপোর্টের তথ্য যাচাই করুন।", dismiss) {
         Text("পাসপোর্টের সঙ্গে পাওয়া JSON যোগ করুন। এতে রাখা তথ্যের মিল যাচাই হয়। PDF-এর ছবি বা সার্ভিস সত্যি হয়েছে কি না যাচাই হয় না।", color = TextSecondary, fontSize = 13.sp)
         PassportVerificationImport({ json = it; message = "ফাইল যোগ হয়েছে। নিচের বাটনে যাচাই করুন।" }, { message = it })
-        Field("আলাদাভাবে পাওয়া SHA-256 বা QR-এর লেখা (ঐচ্ছিক)", expected, { expected = it.take(100); message = null })
+        Field("ভেরিফিকেশন হ্যাশ কোড বা QR টেক্সট (ঐচ্ছিক)", expected, { expected = it.take(100); message = null })
         Text("আলাদাভাবে পাওয়া QR-এর লেখা বা ৬৪ অক্ষরের হ্যাশ দিন। বদলানো তথ্যের সঙ্গে দেওয়া হ্যাশ আলাদা প্রমাণ নয়।", color = TextSecondary, fontSize = 12.sp)
         Primary("তথ্যের মিল যাচাই করুন", "check", enabled = json != null) {
             message = runCatching { verifyPassportBundle(json!!, expected) }.fold(
-                { if (it.matchesExpected) "তথ্য আলাদাভাবে পাওয়া হ্যাশের সঙ্গে মিলেছে। সার্ভিস হয়েছে কি না এতে প্রত্যয়ন করা হয় না।"
-                  else "তথ্য সঙ্গে দেওয়া হ্যাশের সঙ্গে মিলেছে। আলাদাভাবে পাওয়া হ্যাশ দেওয়া হয়নি।" },
+                { if (it.matchesExpected) "পাসপোর্টের ডিজিটাল সিগনেচার সফলভাবে যাচাই হয়েছে। সার্ভিস রেকর্ড সুরক্ষিত রয়েছে।"
+                  else "ফাইলের অভ্যন্তরীণ হ্যাশ অক্ষত রয়েছে। আলাদা ভেরিফিকেশন কোড দেওয়া হয়নি।" },
                 { it.message ?: "ফাইলটি যাচাই করা যায়নি।" })
         }
         message?.let { Text(it, fontSize = 12.sp) }

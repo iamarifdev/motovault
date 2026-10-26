@@ -43,8 +43,8 @@ export function ReminderSheet({ id, type }: { id?: string; type?: string }) {
     </div></div>
     {selected ? <div className="card-stack"><div className="setting">
       <b>{doc ? docName(doc.kind) : rule!.name}</b>
-      {doc && !settings.docReminders && <p>কাগজের রিমাইন্ডার আমি পাতায় বন্ধ আছে।</p>}
-      {rule && !settings.serviceReminders && <p>সার্ভিসের রিমাইন্ডার আমি পাতায় বন্ধ আছে।</p>}
+      {doc && !settings.docReminders && <p>কাগজের রিমাইন্ডার প্রোফাইল সেটিংসে বন্ধ আছে।</p>}
+      {rule && !settings.serviceReminders && <p>সার্ভিসের রিমাইন্ডার প্রোফাইল সেটিংসে বন্ধ আছে।</p>}
       <Switch label="এই রেকর্ডের রিমাইন্ডার" checked={doc?.reminder ?? rule?.reminder ?? true} onChange={(reminder) => {
         if (access === 'failed') { setError(true); return }
         useStore.setState((s) => doc ? {docs:s.docs.map((d) => d.id === id ? {...d,reminder} : d)} : {rules:s.rules.map((r) => r.id === id ? {...r,reminder} : r)})

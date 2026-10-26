@@ -37,7 +37,7 @@ export function Me() {
 
   return (
     <div className="screen-pad">
-      <header className="page-head"><h1>আমি</h1></header>
+      <header className="page-head"><h1>প্রোফাইল</h1></header>
 
       <section className="profile">
         <div className="profile-photo">{model?.photo ? <img src={model.photo} alt="" /> : <GaugeIcon size={32} aria-hidden />}</div>
@@ -60,8 +60,11 @@ export function Me() {
             </div>
             <small className="cap">{s.brandOverride ? `${brandOf(s.brandOverride).name} এর রঙ` : 'আপনার বাইকের ব্র্যান্ডের রঙ'}</small>
           </div>
-          <div className="setting"><span className="setting-label">সংখ্যা</span>
-            <Segmented label="সংখ্যা" value={s.digits} onChange={(v) => set('digits', v)} options={[{ value: 'bn', label: '১২৩ বাংলা' }, { value: 'en', label: '123 English' }]} />
+          <div className="setting"><span className="setting-label">ভাষা (Language)</span>
+            <Segmented label="ভাষা" value={(s as any).language ?? 'bn'} onChange={(v) => set('language' as any, v)} options={[{ value: 'bn', label: 'বাংলা' }, { value: 'en', label: 'English' }]} />
+          </div>
+          <div className="setting"><span className="setting-label">সংখ্যার ধরন</span>
+            <Segmented label="সংখ্যার ধরন" value={s.digits} onChange={(v) => set('digits', v)} options={[{ value: 'bn', label: '১২৩ বাংলা' }, { value: 'en', label: '123 English' }]} />
           </div>
           <div className="setting"><span className="setting-label">লেখার আকার</span>
             <Segmented label="লেখার আকার" value={s.textScale} onChange={(v) => set('textScale', v)} options={[{ value: 1, label: 'স্বাভাবিক' }, { value: 1.15, label: 'বড়' }, { value: 1.3, label: 'অনেক বড়' }]} />
@@ -69,11 +72,11 @@ export function Me() {
         </div>
       </section>
 
-      <section aria-label="আচরণ">
-        <SectionTitle>আচরণ</SectionTitle>
+      <section aria-label="ব্যবহার ও সতর্কতা">
+        <SectionTitle>ব্যবহার ও সতর্কতা</SectionTitle>
         <div className="card-stack">
-          <Switch checked={s.haptics} onChange={(v) => set('haptics', v)} label="ভাইব্রেশন ফিডব্যাক" sub="সেভ, ভুল ও ট্যাপে হালকা কাঁপুনি" />
-          <Switch checked={s.reduceMotion} onChange={(v) => set('reduceMotion', v)} label="অ্যানিমেশন কমান" sub="ফোনের সেটিং চালু থাকলে এটি নিজেই চালু হয়" />
+          <Switch checked={s.haptics} onChange={(v) => set('haptics', v)} label="টাচ ভাইব্রেশন (হ্যাপটিক)" sub="বাটন প্রেস ও সেভ করার সময় হালকা ভাইব্রেশন" />
+          <Switch checked={s.reduceMotion} onChange={(v) => set('reduceMotion', v)} label="অ্যানিমেশন কমান" sub="স্ক্রিন ট্রানজিশন ও অ্যানিমেশনের নড়াচড়া কমান" />
           <Switch checked={s.gps} onChange={(v) => set('gps', v)} label="তেল ও সার্ভিসে বর্তমান লোকেশন" sub="অনুমতি না দিলেও রেকর্ড সেভ হবে" />
         </div>
       </section>

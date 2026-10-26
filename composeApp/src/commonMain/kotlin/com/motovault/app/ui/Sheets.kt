@@ -1323,12 +1323,21 @@ fun OdometerSheet(
                     )
                 }
                 if (!camDone) {
-                    Text(text = "পড়া হচ্ছে… ফোন স্থির রাখুন", color = Color.White, fontSize = 14.sp)
+                    Text(
+                        text = if (state.language == AppLanguage.EN) "Scanning… Keep camera steady" else "স্ক্যান হচ্ছে… ক্যামেরা স্থির রাখুন",
+                        color = Color.White,
+                        fontSize = 14.sp
+                    )
                 } else {
-                    Text(text = "পড়া হয়েছে: ${f.n((estimate + 3).toLong())} ${if (f.digits == Digits.BN) "কিমি" else "km"}", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "${if (state.language == AppLanguage.EN) "Detected: " else "শনাক্ত হয়েছে: "}${f.n((estimate + 3).toLong())} ${if (state.language == AppLanguage.EN) "km" else "কিমি"}",
+                        color = Color.White,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         VaultButton(
-                            text = "ঠিক আছে",
+                            text = if (state.language == AppLanguage.EN) "Confirm" else "ঠিক আছে",
                             size = ButtonSize.SM,
                             onClick = {
                                 entry.set("odo", (estimate.toInt() + 3).toString())
@@ -1337,7 +1346,7 @@ fun OdometerSheet(
                             }
                         )
                         VaultButton(
-                            text = "নিজে লিখব",
+                            text = if (state.language == AppLanguage.EN) "Type manually" else "নিজে লিখুন",
                             kind = ButtonKind.SECONDARY,
                             size = ButtonSize.SM,
                             onClick = { camScanning = false }
@@ -1427,7 +1436,7 @@ fun DocAddSheet(
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("স্ক্যান ছাড়া নিজে লিখব", color = BrandColor, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                        Text(if (state.language == AppLanguage.EN) "Type manually without scan" else "স্ক্যান ছাড়া নিজে লিখুন", color = BrandColor, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
@@ -1579,11 +1588,11 @@ fun DocAddSheet(
                     ) {
                         V3Icon(path = "feather_icon/fi_bell.svg", description = null, modifier = Modifier.size(34.dp), tint = BrandColor)
                     }
-                    Text("মেয়াদ শেষ হওয়ার ৩০ দিন আগে জানাব?", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
-                    Text("সকাল ৯টায় একটি নোটিফিকেশন যাবে। নবায়নের সময় থাকবে।", fontSize = 14.sp, color = TextSecondary, textAlign = TextAlign.Center)
+                    Text(if (state.language == AppLanguage.EN) "Get reminder 30 days before expiry?" else "মেয়াদ শেষ হওয়ার ৩০ দিন আগে রিমাইন্ডার চান?", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
+                    Text(if (state.language == AppLanguage.EN) "You will receive a notification at 9 AM with renewal instructions." else "সকাল ৯টায় একটি নোটিফিকেশন পাবেন। নবায়নের জন্য যথেষ্ট সময় থাকবে।", fontSize = 14.sp, color = TextSecondary, textAlign = TextAlign.Center)
                     Spacer(Modifier.height(8.dp))
                     VaultButton(
-                        text = "হ্যাঁ, জানান",
+                        text = if (state.language == AppLanguage.EN) "Yes, remind me" else "হ্যাঁ, রিমাইন্ডার দিন",
                         full = true,
                         icon = "fi_bell.svg",
                         onClick = {
@@ -1633,9 +1642,11 @@ fun DocViewSheet(
     warningDays: Int = doc.reminderWarningDays ?: 30,
     privacyEnabled: Boolean = false,
     onInspect: (() -> Unit)? = null,
-    onOpenPrivacy: (() -> Unit)? = null
+    onOpenPrivacy: (() -> Unit)? = null,
+    language: AppLanguage = AppLanguage.BN
 ) {
     val f = currentFmt
+    val isEn = language == AppLanguage.EN
     var roadsideMode by remember { mutableStateOf(false) }
 
     Sheet(
@@ -1644,7 +1655,7 @@ fun DocViewSheet(
         detent = SheetDetent.TALL,
         footer = {
             VaultButton(
-                text = "ফিরে যান",
+                text = if (isEn) "Back" else "ফিরে যান",
                 kind = ButtonKind.SECONDARY,
                 full = true,
                 icon = "fi_sun.svg",
@@ -1670,7 +1681,7 @@ fun DocViewSheet(
                 ExpiryChip(doc = doc, warningDays = warningDays)
                 val expiryDate = runCatching { LocalDate.parse(doc.expiry) }.getOrNull()
                 Text(
-                    text = if (doc.expiry.isBlank()) "মেয়াদ নেই" else "মেয়াদ শেষ: " + if (expiryDate != null) f.dateFull(expiryDate) else doc.expiry,
+                    text = if (doc.expiry.isBlank()) (if (isEn) "No expiry" else "মেয়াদ নেই") else (if (isEn) "Expires: " else "মেয়াদ শেষ: ") + if (expiryDate != null) f.dateFull(expiryDate) else doc.expiry,
                     fontSize = 13.sp,
                     color = if (roadsideMode) Color(0xFF3A3A3A) else TextSecondary,
                     fontWeight = FontWeight.SemiBold
@@ -1679,7 +1690,7 @@ fun DocViewSheet(
         }
 
         VaultButton(
-            text = if (privacyEnabled) "শুধু এই কাগজ দেখান" else "সুরক্ষা চালু করে কাগজ দেখান",
+            text = if (privacyEnabled) (if (isEn) "Show this document only" else "শুধু এই ডকুমেন্ট দেখান") else (if (isEn) "Enable protection & show document" else "সুরক্ষা চালু করে ডকুমেন্ট দেখান"),
             kind = ButtonKind.SECONDARY,
             full = true,
             onClick = {
@@ -1688,28 +1699,30 @@ fun DocViewSheet(
         )
 
         VaultSwitch(
-            title = "রাস্তায় দেখানোর মোড",
-            subtitle = "সাদা পটভূমি, বড় ছবি, স্পষ্ট লেখা",
+            title = if (isEn) "Police check mode" else "পুলিশ বা ট্রাফিক চেকিং মোড",
+            subtitle = if (isEn) "Full brightness and clear display" else "ফুল ব্রাইটনেস ও পরিষ্কার ভিউ",
             checked = roadsideMode,
             onCheckedChange = { roadsideMode = it }
         )
 
         if (doc.expiry.isNotBlank()) VaultSwitch(
-            title = "এই কাগজের রিমাইন্ডার",
+            title = if (isEn) "Renewal reminder" else "এই ডকুমেন্টের রিমাইন্ডার",
             checked = doc.reminder,
             onCheckedChange = { onUpdateReminder(it) }
         )
-        VaultButton("অনুমতি, সময় ও পরে জানান", onClick = onReminderSettings, full = true, kind = ButtonKind.SECONDARY)
+        VaultButton(if (isEn) "Reminder settings & snooze" else "অনুমতি, সময় ও পরে জানান", onClick = onReminderSettings, full = true, kind = ButtonKind.SECONDARY)
     }
 }
 
 @Composable
 fun PasteSheet(
     onDismiss: () -> Unit,
-    onSelectFlow: (String, Any?) -> Unit
+    onSelectFlow: (String, Any?) -> Unit,
+    language: AppLanguage = AppLanguage.BN
 ) {
     val f = currentFmt
     val haptic = currentHaptic
+    val isEn = language == AppLanguage.EN
     var text by remember { mutableStateOf("") }
     val parsedService = remember(text) { SmartParse.parseServiceText(text) }
     val parsedAmount = remember(text) { SmartParse.parseAmount(text) }
@@ -1717,18 +1730,18 @@ fun PasteSheet(
     val hasService = parsedService.lines.isNotEmpty()
 
     Sheet(
-        title = "লিখে বা পেস্ট করে সাজান",
+        title = if (isEn) "Quick Add from SMS" else "মেসেজ থেকে খরচ যোগ",
         onDismiss = onDismiss
     ) {
-        Text("বিকাশ, নগদ বা মেকানিকের মেসেজ এখানে দিন। কিছু নিজে নিজে পড়া হয় না।", color = TextSecondary, fontSize = 14.sp)
+        Text(if (isEn) "Paste bKash, Nagad or mechanic's message here. No messages are read automatically without your consent." else "বিকাশ, নগদ বা মেকানিকের পাঠানো মেসেজ এখানে দিন। আপনার অনুমতি ছাড়া স্বয়ংক্রিয়ভাবে কোনো মেসেজ পড়া হয় না।", color = TextSecondary, fontSize = 14.sp)
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             VaultChip(
-                text = "নগদ/বিকাশ মেসেজ",
+                text = if (isEn) "bKash / Nagad SMS" else "নগদ/বিকাশ মেসেজ",
                 onClick = { text = "Payment Tk 500.00 to Padma Filling Station successful. TrxID 9K3L2M. Balance Tk 2,140.50" }
             )
             VaultChip(
-                text = "মেকানিকের মেসেজ",
+                text = if (isEn) "Mechanic message" else "মেকানিকের মেসেজ",
                 onClick = { text = "ভাই আপনার বাইকের ইঞ্জিন অয়েল ৯০০ টাকা, অয়েল ফিল্টার ২৫০ টাকা, চেইন লুব ১৫০ টাকা" }
             )
         }

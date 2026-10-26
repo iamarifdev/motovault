@@ -30,9 +30,11 @@ internal fun PrivacyGate(
     onUnlock: () -> Unit,
     onExitInspection: () -> Unit,
     onLock: () -> Unit,
-    authMessage: String? = null
+    authMessage: String? = null,
+    language: AppLanguage = AppLanguage.BN
 ) {
     val palette = LocalVaultPalette.current
+    val isEn = language == AppLanguage.EN
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -50,7 +52,7 @@ internal fun PrivacyGate(
         ) {
             if (mode == VaultAccessMode.INSPECTION && selectedDoc != null) {
                 Text(
-                    text = "শুধু এই কাগজ · নির্বাচিত কপি",
+                    text = if (isEn) "Selected document · Preview" else "নির্বাচিত ডকুমেন্ট · প্রিভিউ",
                     fontSize = 13.sp,
                     color = BrandColor,
                     fontWeight = FontWeight.SemiBold
@@ -74,7 +76,7 @@ internal fun PrivacyGate(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.semantics {
-                            contentDescription = "${selectedDoc.title} এর নির্বাচিত সুরক্ষিত কপি"
+                            contentDescription = if (isEn) "${selectedDoc.title} selected secure copy" else "${selectedDoc.title} এর নির্বাচিত সুরক্ষিত কপি"
                         }
                     ) {
                         DocArt(doc = selectedDoc, large = true)
@@ -82,7 +84,7 @@ internal fun PrivacyGate(
                 }
 
                 Text(
-                    text = "এই মোডে অন্য কাগজ, সম্পাদনা বা পাঠানোর বোতাম নেই।",
+                    text = if (isEn) "Other documents, edit and share options are hidden in this mode." else "এই মোডে অন্য কোনো ডকুমেন্ট বা এডিট অপশন দেখা যাবে না।",
                     fontSize = 14.sp,
                     color = TextSecondary,
                     textAlign = TextAlign.Center
@@ -98,14 +100,14 @@ internal fun PrivacyGate(
                 }
 
                 VaultButton(
-                    text = "ফোনের লক দিয়ে ফিরুন",
+                    text = if (isEn) "Unlock with phone lock" else "ফোনের লক দিয়ে ফিরুন",
                     kind = ButtonKind.PRIMARY,
                     full = true,
                     onClick = onExitInspection
                 )
 
                 VaultButton(
-                    text = "কাগজ লুকিয়ে লক করুন",
+                    text = if (isEn) "Lock and return to vault" else "লক করে ভল্টে ফিরুন",
                     kind = ButtonKind.SECONDARY,
                     full = true,
                     onClick = onLock
@@ -113,13 +115,13 @@ internal fun PrivacyGate(
             } else {
                 V3Icon(
                     path = "feather_icon/fi_lock.svg",
-                    description = "লক",
+                    description = if (isEn) "Lock" else "লক",
                     modifier = Modifier.size(48.dp),
                     tint = BrandColor
                 )
 
                 Text(
-                    text = "MotoVault লক করা আছে",
+                    text = if (isEn) "MotoVault is locked" else "MotoVault লক করা আছে",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextPrimary,
@@ -127,7 +129,7 @@ internal fun PrivacyGate(
                 )
 
                 Text(
-                    text = "ফোনের লক দিয়ে আপনার তথ্য খুলুন।",
+                    text = if (isEn) "Unlock with your phone screen lock or biometrics." else "লক খুলতে ফোনের স্ক্রিন লক বা ফিঙ্গারপ্রিন্ট দিন।",
                     fontSize = 15.sp,
                     color = TextSecondary,
                     textAlign = TextAlign.Center
@@ -153,7 +155,7 @@ internal fun PrivacyGate(
                 }
 
                 VaultButton(
-                    text = "ফোনের লক দিয়ে খুলুন",
+                    text = if (isEn) "Unlock" else "আনলক করুন",
                     kind = ButtonKind.PRIMARY,
                     full = true,
                     onClick = onUnlock
@@ -175,12 +177,12 @@ internal fun PrivacyGate(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("ফাইল খুলছে না?", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                        Text(if (isEn) "Cannot open files?" else "ফাইল খুলছে না?", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                         Text(if (helpExpanded) "▲" else "▼", fontSize = 12.sp, color = TextSecondary)
                     }
                     if (helpExpanded) {
                         Text(
-                            text = "অ্যাপ মুছবেন না বা ডেটা সাফ করবেন না। চাবি না পাওয়া গেলে আসল ফাইল থেকে আবার যোগ করার সাহায্য নিন। Phones PIN হারানো ফাইলের চাবি ফেরায় না।",
+                            text = if (isEn) "Do not uninstall or clear app data. If security keys are cleared, encrypted files cannot be restored with screen lock." else "অ্যাপ আনইনস্টল বা অ্যাপ ডেটা ক্লিয়ার করবেন না। সিকিউরিটি কি হারিয়ে গেলে ফোনের স্ক্রিন লক দিয়ে এনক্রিপ্ট করা ফাইল রিকভার করা সম্ভব নয়।",
                             fontSize = 13.sp,
                             color = TextSecondary,
                             lineHeight = 18.sp
@@ -189,7 +191,7 @@ internal fun PrivacyGate(
                 }
 
                 Text(
-                    text = "ফোনের PIN, পাসকোড বা বায়োমেট্রিক দিয়ে সুরক্ষিত।",
+                    text = if (isEn) "Protected with device PIN, passcode or biometrics." else "ফোনের PIN, পাসকোড বা বায়োমেট্রিক দিয়ে সুরক্ষিত।",
                     fontSize = 12.sp,
                     color = TextSecondary,
                     textAlign = TextAlign.Center
@@ -214,13 +216,15 @@ fun PrivacySheet(
     var successNotice by remember { mutableStateOf<String?>(null) }
     val privacy = state.privacy
 
+    val isEn = state.language == AppLanguage.EN
+
     Sheet(
-        title = "গোপনীয়তা",
+        title = if (isEn) "Privacy & App Lock" else "গোপনীয়তা ও সুরক্ষা",
         detent = SheetDetent.TALL,
         onDismiss = onDismiss,
         footer = {
             VaultButton(
-                text = "হয়েছে",
+                text = if (isEn) "Done" else "সম্পন্ন",
                 kind = ButtonKind.SECONDARY,
                 full = true,
                 onClick = onDismiss
@@ -244,8 +248,8 @@ fun PrivacySheet(
             ) {
                 V3Icon(path = "feather_icon/fi_shield.svg", description = null, modifier = Modifier.size(32.dp), tint = BrandColor)
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("কাগজ আপনার নিয়ন্ত্রণে", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                    Text("ফোন অন্য কাউকে দেওয়ার আগে শুধু বেছে নেওয়া কাগজটি দেখান।", fontSize = 13.sp, color = TextSecondary)
+                    Text(if (isEn) "Documents under your control" else "ডকুমেন্টস আপনার নিয়ন্ত্রণে", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                    Text(if (isEn) "Hand over your phone safely by showing only the selected document." else "কাউকে ফোন দেওয়ার আগে শুধু বেছে নেওয়া ডকুমেন্টটি প্রদর্শন করুন।", fontSize = 13.sp, color = TextSecondary)
                 }
             }
 
@@ -259,7 +263,7 @@ fun PrivacySheet(
                         .padding(14.dp)
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text("সুরক্ষা চালু করা যায়নি", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = palette.err)
+                        Text(if (isEn) "Could not enable app lock" else "সুরক্ষা চালু করা যায়নি", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = palette.err)
                         Text(error, fontSize = 13.sp, color = palette.err)
                     }
                 }
@@ -289,25 +293,25 @@ fun PrivacySheet(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = if (privacy.enabled) "অ্যাপ লক চালু" else "অ্যাপ লক বন্ধ",
+                    text = if (privacy.enabled) (if (isEn) "App lock is ON" else "অ্যাপ লক চালু") else (if (isEn) "App lock is OFF" else "অ্যাপ লক বন্ধ"),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextPrimary
                 )
 
                 Text(
-                    text = "${f.n(state.documents.size.toLong())}টি কাগজ। ${if (state.documents.isNotEmpty()) "তালিকায় নম্বর ও ছবি লুকানো থাকবে।" else "এখনও কাগজ নেই। পরে যোগ করা কাগজেও একই সুরক্ষা থাকবে।"}",
+                    text = "${f.n(state.documents.size.toLong())} ${if (isEn) "documents." else "টি কাগজ।" } ${if (state.documents.isNotEmpty()) (if (isEn) "Numbers and previews are hidden in list." else "তালিকায় নম্বর ও ছবি লুকানো থাকবে।") else (if (isEn) "No documents yet. Same protection applies to documents added later." else "এখনও কাগজ নেই। পরে যোগ করা কাগজেও একই সুরক্ষা থাকবে।")}",
                     fontSize = 13.sp,
                     color = TextSecondary
                 )
 
                 if (privacy.enabled) {
-                    Text("নিজে থেকে লক হওয়ার সময়", fontSize = 13.sp, color = TextSecondary)
+                    Text(if (isEn) "Auto-lock after" else "অটো-লক সময়", fontSize = 13.sp, color = TextSecondary)
                     VaultSegmented(
                         options = listOf(
-                            60 to "১ মিনিট",
-                            300 to "৫ মিনিট",
-                            900 to "১৫ মিনিট"
+                            60 to (if (isEn) "1 min" else "১ মিনিট"),
+                            300 to (if (isEn) "5 min" else "৫ মিনিট"),
+                            900 to (if (isEn) "15 min" else "১৫ মিনিট")
                         ),
                         selected = privacy.timeoutSeconds,
                         onSelect = { seconds ->
@@ -315,10 +319,10 @@ fun PrivacySheet(
                         }
                     )
 
-                    Text("অ্যাপ পেছনে গেলে সঙ্গে সঙ্গে লক হবে।", fontSize = 12.sp, color = TextSecondary)
+                    Text(if (isEn) "Locks immediately when minimized or sent to background." else "অ্যাপ মিনিমাইজ বা ব্যাকগ্রাউন্ডে পাঠালে সাথে সাথে লক হবে।", fontSize = 12.sp, color = TextSecondary)
 
                     VaultButton(
-                        text = "এখন লক করুন",
+                        text = if (isEn) "Lock now" else "এখন লক করুন",
                         kind = ButtonKind.SECONDARY,
                         full = true,
                         icon = "fi_lock.svg",
@@ -329,7 +333,7 @@ fun PrivacySheet(
                     )
 
                     VaultButton(
-                        text = "ফোনের লক দিয়ে অ্যাপ লক বন্ধ করুন",
+                        text = if (isEn) "Turn OFF app lock with phone lock" else "ফোনের লক দিয়ে অ্যাপ লক বন্ধ করুন",
                         kind = ButtonKind.GHOST,
                         full = true,
                         enabled = !busy,
@@ -337,20 +341,23 @@ fun PrivacySheet(
                             busy = true
                             errorMessage = null
                             scope.launch {
-                                val result = NativeSystemAuth.authenticate("MotoVault লক বন্ধ করুন", "সুরক্ষা বন্ধ করতে ফোনের লক দিয়ে যাচাই করুন")
+                                val result = NativeSystemAuth.authenticate(
+                                    if (isEn) "Turn OFF MotoVault lock" else "MotoVault লক বন্ধ করুন",
+                                    if (isEn) "Verify phone lock to turn off protection" else "সুরক্ষা বন্ধ করতে ফোনের লক দিয়ে যাচাই করুন"
+                                )
                                 busy = false
                                 if (result.isSuccess) {
                                     onUpdatePrivacy(privacy.copy(enabled = false))
-                                    successNotice = "অ্যাপ লক বন্ধ করা হয়েছে।"
+                                    successNotice = if (isEn) "App lock turned off." else "অ্যাপ লক বন্ধ করা হয়েছে।"
                                 } else {
-                                    errorMessage = result.message ?: "যাচাই সম্পন্ন করা যায়নি।"
+                                    errorMessage = result.message ?: (if (isEn) "Verification failed." else "যাচাই সম্পন্ন করা যায়নি।")
                                 }
                             }
                         }
                     )
                 } else {
                     VaultButton(
-                        text = "ফোনের লক দিয়ে চালু করুন",
+                        text = if (isEn) "Turn ON with phone lock" else "ফোনের লক দিয়ে চালু করুন",
                         kind = ButtonKind.PRIMARY,
                         full = true,
                         icon = "fi_lock.svg",
@@ -359,10 +366,13 @@ fun PrivacySheet(
                             busy = true
                             errorMessage = null
                             scope.launch {
-                                val result = NativeSystemAuth.authenticate("MotoVault লক চালু করুন", "সুরক্ষা চালু করতে ফোনের লক দিয়ে যাচাই করুন")
+                                val result = NativeSystemAuth.authenticate(
+                                    if (isEn) "Turn ON MotoVault lock" else "MotoVault লক চালু করুন",
+                                    if (isEn) "Verify phone lock to enable protection" else "সুরক্ষা চালু করতে ফোনের লক দিয়ে যাচাই করুন"
+                                )
                                 if (!result.isSuccess) {
                                     busy = false
-                                    errorMessage = result.message ?: "যাচাই বাতিল বা ব্যর্থ হয়েছে।"
+                                    errorMessage = result.message ?: (if (isEn) "Verification cancelled or failed." else "যাচাই বাতিল বা ব্যর্থ হয়েছে।")
                                     return@launch
                                 }
                                 // Run asset protection / verification
@@ -372,9 +382,9 @@ fun PrivacySheet(
                                         protectDocumentAssets(referenced)
                                     }
                                     onUpdatePrivacy(privacy.copy(enabled = true))
-                                    successNotice = "অ্যাপ লক চালু হয়েছে। অ্যাপ ছাড়লে বা সময় শেষ হলে নিজে থেকে লক হবে।"
+                                    successNotice = if (isEn) "App lock turned on. Locks on exit or timeout." else "অ্যাপ লক চালু হয়েছে। অ্যাপ থেকে বের হলে বা সময় শেষ হলে অটো-লক হবে।"
                                 } catch (e: Exception) {
-                                    errorMessage = "সুরক্ষা চালু করা যায়নি: ${e.message ?: "ফাইল যাচাই ব্যর্থ"}. আগের রেকর্ড ও আসল কপি রাখা আছে।"
+                                    errorMessage = if (isEn) "Could not enable protection: ${e.message ?: "Asset verification failed"}. Existing records preserved." else "সুরক্ষা চালু করা যায়নি: ${e.message ?: "ফাইল যাচাই ব্যর্থ"}. আগের রেকর্ড ও আসল কপি রাখা আছে।"
                                 } finally {
                                     busy = false
                                 }
@@ -394,15 +404,15 @@ fun PrivacySheet(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text("কোন তথ্য সুরক্ষিত হবে", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                Text(if (isEn) "What is protected" else "কোন তথ্য সুরক্ষিত থাকবে", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                 Text(
-                    text = "আসল ফাইল, কাটা ছবি, প্রিভিউ ও উদ্ধার করা ফাইল সুরক্ষিত হবে। নাম, কাগজের নম্বর, তারিখ এবং আগে রেকর্ডের ভেতরে রাখা ছবি এই সুরক্ষার বাইরে থাকতে পারে। অ্যাপের সব তথ্য এনক্রিপ্ট হচ্ছে না।",
+                    text = if (isEn) "Original files, cropped photos, and saved documents are encrypted with AES-256. Metadata like title, document number, and date may remain outside encryption." else "মূল ফাইল, ক্রপ করা ছবি ও সেভ করা ডকুমেন্টস AES-256 দিয়ে সুরক্ষিত থাকবে। নাম, কাগজের নম্বর ও তারিখ সুরক্ষার বাইরে থাকতে পারে। অ্যাপের সব তথ্য এনক্রিপ্ট হচ্ছে না।",
                     fontSize = 13.sp,
                     color = TextSecondary,
                     lineHeight = 18.sp
                 )
                 Text(
-                    text = "অন্য অ্যাপে পাঠানো কপি সেই অ্যাপ রাখতে পারে। পাঠানোর আগে আবার ফোনের লক দিয়ে যাচাই করতে হবে।",
+                    text = if (isEn) "Documents shared to other apps are outside this vault. Phone lock is required before exporting." else "অন্য অ্যাপে পাঠানো কপি সেই অ্যাপ রাখতে পারে। পাঠানোর আগে আবার ফোনের লক দিয়ে যাচাই করতে হবে।",
                     fontSize = 13.sp,
                     color = TextSecondary,
                     lineHeight = 18.sp
@@ -419,9 +429,9 @@ fun PrivacySheet(
                     .padding(16.dp)
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text("চাবি হারালে", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                    Text(if (isEn) "If security key is lost" else "সিকিউরিটি কি (Security Key) হারিয়ে গেলে", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                     Text(
-                        text = "ফোনের PIN দিয়ে হারানো এনক্রিপশন চাবি ফেরানো যায় না। অ্যাপ মুছবেন না বা ডেটা সাফ করবেন না। ফাইল না খুললে আসল কপি থেকে আবার যোগ করার সাহায্য নিন। এই ফোনের এনক্রিপ্ট করা ফাইল অন্য ফোনে কপি করলেই খুলবে না।",
+                        text = if (isEn) "Encrypted files cannot be restored with screen lock if keys are cleared. Do not uninstall the app or clear app data. Files encrypted on this phone cannot be opened on another phone." else "ফোনের স্ক্রিন লক দিয়ে হারানো এনক্রিপশন কি (Key) ফেরানো যায় না। অ্যাপ আনইনস্টল বা ডেটা ক্লিয়ার করবেন না। ফাইল না খুললে আসল কপি থেকে আবার যোগ করার সাহায্য নিন। এই ফোনের এনক্রিপ্ট করা ফাইল অন্য ফোনে কপি করলেও খুলবে না।",
                         fontSize = 13.sp,
                         color = TextSecondary,
                         lineHeight = 18.sp

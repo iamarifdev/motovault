@@ -22,7 +22,7 @@ On a desktop it shows a phone frame with a review panel (theme, digits, text siz
 | Documents | Vault tab or "+" > কাগজ | Scan (mock), review, save, then the reminder prompt |
 | History | History tab | Tap a row to expand, drag a row left to delete, then Undo |
 | Onboarding | Review panel > Onboarding | Three inputs only |
-| Theme, digits, text size, accent | "আমি" tab | Bengali or Latin digits, 1.3× text, all nine brand accents |
+| Theme, digits, text size, accent | "প্রোফাইল" tab | Bengali or Latin digits, 1.3× text, all nine brand accents |
 
 Mocks, clearly labelled in the UI: camera scan, odometer photo reading, speech (uses the browser's bn-BD recogniser when it exists), share-sheet and widget.
 

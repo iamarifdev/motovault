@@ -691,7 +691,7 @@ fun HistoryScreen(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(text = "ইতিহাস", fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+        Text(text = if (state.language == AppLanguage.EN) "Records" else "রেকর্ড", fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
 
         // 3-stat summary banner
         Row(
@@ -820,8 +820,8 @@ fun HistoryScreen(
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
                                 if (log.isFuel) {
-                                    log.fuelPrice?.let { Text("${f.money(it)} প্রতি লিটার · ${if (log.fuelType == "petrol") "পেট্রোল" else "অকটেন"}", fontSize = 13.sp, color = TextSecondary) }
-                                    Text(if (log.fullTank) "ট্যাংক পূর্ণ করা হয়েছে" else "আংশিক, পরের পূর্ণ ট্যাংকে হিসাব হবে", fontSize = 13.sp, color = TextSecondary)
+                                    log.fuelPrice?.let { Text("${f.money(it)} ${if (state.language == AppLanguage.EN) "per liter" else "প্রতি লিটার"} · ${if (log.fuelType == "petrol") (if (state.language == AppLanguage.EN) "Petrol" else "পেট্রোল") else (if (state.language == AppLanguage.EN) "Octane" else "অকটেন")}", fontSize = 13.sp, color = TextSecondary) }
+                                    Text(if (log.fullTank) (if (state.language == AppLanguage.EN) "Full tank" else "ফুল ট্যাংক করা হয়েছে") else (if (state.language == AppLanguage.EN) "Partial fill (mileage calculated on next full tank)" else "আংশিক তেল ভরা হয়েছে (পরের ফুল ট্যাংকে হিসাব হবে)"), fontSize = 13.sp, color = TextSecondary)
                                     if (log.locationLabel.isNotBlank()) Text(log.locationLabel, fontSize = 13.sp, color = TextSecondary)
                                 } else {
                                     log.serviceLines.forEach { l ->
@@ -835,7 +835,7 @@ fun HistoryScreen(
                                                 color = TextSecondary
                                             )
                                             Text(
-                                                text = l.unitPricePoisha?.let { f.money(it / 100.0 * l.quantity) } ?: "দাম জানা নেই",
+                                                text = l.unitPricePoisha?.let { f.money(it / 100.0 * l.quantity) } ?: (if (state.language == AppLanguage.EN) "Price unknown" else "দাম জানা নেই"),
                                                 fontSize = 13.sp,
                                                 fontWeight = FontWeight.SemiBold,
                                                 color = TextPrimary
@@ -844,13 +844,13 @@ fun HistoryScreen(
                                     }
                                     log.serviceLabourPoisha?.takeIf { it > 0 }?.let {
                                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                            Text("শ্রম", fontSize = 13.sp, color = TextSecondary)
+                                            Text(if (state.language == AppLanguage.EN) "Service charge / labor" else "সার্ভিস চার্জ / মজুরি", fontSize = 13.sp, color = TextSecondary)
                                             Text(f.money(it / 100.0), fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                                         }
                                     }
                                     log.serviceDiscountPoisha?.takeIf { it > 0 }?.let {
                                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                            Text("ছাড়", fontSize = 13.sp, color = TextSecondary)
+                                            Text(if (state.language == AppLanguage.EN) "Discount" else "ছাড় / ডিসকাউন্ট", fontSize = 13.sp, color = TextSecondary)
                                             Text("−${f.money(it / 100.0)}", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                                         }
                                     }
@@ -897,7 +897,7 @@ fun MeScreen(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
-        Text(text = "আমি", fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+        Text(text = if (state.language == AppLanguage.EN) "Profile" else "প্রোফাইল", fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
 
         // Profile card
         Row(
@@ -990,9 +990,20 @@ fun MeScreen(
             }
             HorizontalDivider(color = BorderColor, thickness = 0.5.dp)
 
+            // Language
+            Column(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(if (state.language == AppLanguage.EN) "Language" else "ভাষা (Language)", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                VaultSegmented(
+                    options = listOf(AppLanguage.BN to "বাংলা", AppLanguage.EN to "English"),
+                    selected = state.language,
+                    onSelect = { onUpdateState(state.copy(language = it)) }
+                )
+            }
+            HorizontalDivider(color = BorderColor, thickness = 0.5.dp)
+
             // Digits
             Column(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("সংখ্যা", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                Text(if (state.language == AppLanguage.EN) "Number style" else "সংখ্যার ধরন", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
                 VaultSegmented(
                     options = listOf(Digits.BN to "১২৩ বাংলা", Digits.EN to "123 English"),
                     selected = state.digits,
@@ -1013,7 +1024,7 @@ fun MeScreen(
         }
 
         // Behavior section
-        SectionTitle("আচরণ")
+        SectionTitle(if (state.language == AppLanguage.EN) "Preferences" else "ব্যবহার ও সতর্কতা")
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -1022,15 +1033,15 @@ fun MeScreen(
                 .border(1.dp, BorderColor, RoundedCornerShape(16.dp))
         ) {
             VaultSwitch(
-                title = "ভাইব্রেশন ফিডব্যাক",
-                subtitle = "সেভ, ভুল ও ট্যাপে হালকা কাঁপুনি",
+                title = if (state.language == AppLanguage.EN) "Touch vibration (Haptic)" else "টাচ ভাইব্রেশন (হ্যাপটিক)",
+                subtitle = if (state.language == AppLanguage.EN) "Gentle vibration on button taps and actions" else "বাটন প্রেস ও সেভ করার সময় হালকা ভাইব্রেশন",
                 checked = state.haptics,
                 onCheckedChange = { onUpdateState(state.copy(haptics = it)) }
             )
             HorizontalDivider(color = BorderColor, thickness = 0.5.dp)
             VaultSwitch(
-                title = "অ্যানিমেশন কমান",
-                subtitle = "ফোনের সেটিং চালু থাকলে এটি নিজেই চালু হয়",
+                title = if (state.language == AppLanguage.EN) "Reduce motion" else "অ্যানিমেশন কমান",
+                subtitle = if (state.language == AppLanguage.EN) "Minimize screen transitions and animations" else "স্ক্রিন ট্রানজিশন ও অ্যানিমেশনের নড়াচড়া কমান",
                 checked = state.reduceMotion,
                 onCheckedChange = { onUpdateState(state.copy(reduceMotion = it)) }
             )

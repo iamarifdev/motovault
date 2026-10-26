@@ -76,7 +76,7 @@ internal fun Setup(
         if (step == 1) {
             Eyebrow("আপনার গ্যারেজ শুরু হোক")
             Heading("কোন বাইক চালান?")
-            Text("ব্র্যান্ড বেছে নিন। আপনার বাইকের জন্যই সাজবে এই জায়গা।", color = TextSecondary, lineHeight = 21.sp)
+            Text("ব্র্যান্ড বেছে নিন। আপনার বাইকের জন্যই সাজবে এই গ্যারেজ।", color = TextSecondary, lineHeight = 21.sp)
             worlds.chunked(3).forEach { row -> Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
                 row.forEach { world ->
                     Column(Modifier.weight(1f).heightIn(min = 80.dp).clip(RoundedCornerShape(12.dp)).background(if (brand.id == world.id) MaterialTheme.colorScheme.primary.copy(alpha = .10f) else SurfaceColor)
@@ -123,7 +123,7 @@ internal fun Setup(
                     )
                 }
             }
-            Text("কাগজে থাকা নির্গমন মান", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Text("এমিশন স্ট্যান্ডার্ড (যেমন: BS4, BS6)", fontWeight = FontWeight.Bold, fontSize = 13.sp)
             Text("গাড়ির কাগজ দেখে লিখুন। মডেল বা বছর থেকে অ্যাপ এটি যাচাই করে না।", color = TextSecondary, fontSize = 12.sp)
             emissions.forEach { option ->
                 Row(Modifier.fillMaxWidth().clickable { emission = option }, verticalAlignment = Alignment.CenterVertically) {
@@ -157,7 +157,7 @@ internal fun Setup(
             Text(if (useManual && profile != null) "ম্যানুয়াল অনুযায়ী: প্রথম সার্ভিস ১,০০০ কিমিতে। এরপর অয়েল, ফিল্টার ও স্ক্রিন ৭,৫০০ কিমি বা ১২ মাস পরপর। সময়ের জন্য অ্যাপে ৩৬৫ দিনের রিমাইন্ডার। চেইনের সময়সূচি আপনি বদলাতে পারবেন। স্থানীয় ব্যবহার নিয়ে ডিলারের সঙ্গে মিলিয়ে নিন। এটি সম্পূর্ণ ওয়ার্কশপ চেকলিস্ট নয়।" else "শুরুর উদাহরণ: চেইন ৫০০ কিমি / ৩০ দিন, অয়েল ৩,০০০ কিমি / ১৮০ দিন, এয়ার ফিল্টার ৫,০০০ কিমি / ১৮০ দিন। এগুলো বদলানো যায়, কোম্পানির নিয়ম নয়। শেষ কবে সার্ভিস করেছেন লিখুন, পরে বাইক অনুযায়ী সময় ঠিক করুন।", color = TextSecondary, fontSize = 12.sp, lineHeight = 19.sp)
             Row(Modifier.fillMaxWidth().clickable { confirmed = !confirmed }, verticalAlignment = Alignment.CenterVertically) { Checkbox(confirmed, onCheckedChange = { confirmed = it }); Text("সময় ও শেষ সার্ভিসের তথ্য মিলিয়ে দেখেছি।", fontSize = 12.sp) }
             if (useManual && (base ?: 0.0) < 1000) Text("১,০০০ কিমির প্রথম সার্ভিসের পরের তথ্য দিয়ে এই সময়সূচি চালু করুন। আপাতত নিজের রিমাইন্ডার ব্যবহার করুন।", color = WarningColor, fontSize = 12.sp)
-            Primary(if (existing == null) "গ্যারেজ তৈরি করুন" else "বাইক বদলানো পর্যালোচনা করুন", "arrow", enabled = confirmed && odo != null && base != null && date != null && validYear != null && modelName.isNotBlank() && (!useManual || base >= 1000)) {
+            Primary(if (existing == null) "গ্যারেজ তৈরি করুন" else "পরিবর্তনগুলো মিলিয়ে নিন", "arrow", enabled = confirmed && odo != null && base != null && date != null && validYear != null && modelName.isNotBlank() && (!useManual || base >= 1000)) {
                 onCreate(Ride(brand.id, edition.trim().ifBlank { "নিজের সেটআপ" }, validYear!!, odo!!, modelId, modelName, registration.trim(), market, emission, modelCode.trim().uppercase(), profile?.id?.takeIf { useManual }), base!!, date!!)
             }
             TextButton(onClick = { step = 1 }) { Text("ব্র্যান্ডে ফিরে যান") }

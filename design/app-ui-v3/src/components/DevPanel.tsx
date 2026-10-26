@@ -12,7 +12,7 @@ const CHANGES: { id: string; text: string }[] = [
   { id: 'P1-5', text: 'Overdue now says how far overdue ("৩২০ কিমি পেরিয়েছে"), never "0 km left".' },
   { id: 'P1-6', text: 'No OS keyboard for numbers: in-app keypad with Bengali digits, a visible Save above it, nothing hidden.' },
   { id: 'Home', text: 'Next-up card and quick actions come first; the bike photo moved down; gauges sorted by urgency with icon + words.' },
-  { id: 'Nav', text: 'Centre "+" opens quick-add from any tab. Theme and settings moved into the "আমি" tab.' },
+  { id: 'Nav', text: 'Centre "+" opens quick-add from any tab. Theme and settings moved into the "প্রোফাইল" tab.' },
   { id: 'Input', text: 'Fuel by taka (litres derived), remembered price, date chips, estimated odometer, recent pumps.' },
   { id: 'Service', text: 'Tap parts instead of dropdowns, last price remembered, "same as last time", oil grade chips, extras hidden.' },
   { id: 'Smart', text: 'Paste, type or speak: parsed live, handles Bengali digits. Share-to-app and odometer photo are mock-ups.' },

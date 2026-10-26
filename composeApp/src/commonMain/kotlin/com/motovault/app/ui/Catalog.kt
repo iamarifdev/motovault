@@ -36,8 +36,8 @@ val DOCUMENT_KINDS = listOf(
     DocumentKindInfo("registration", "Registration certificate", "রেজিস্ট্রেশন স্মার্ট কার্ড", true),
     DocumentKindInfo("licence", "Driving licence", "ড্রাইভিং লাইসেন্স", true),
     DocumentKindInfo("tax", "Tax token", "ট্যাক্স টোকেন", false),
-    DocumentKindInfo("insurance", "Insurance certificate", "বিমা", false),
-    DocumentKindInfo("fitness", "Fitness certificate", "ফিটনেস সনদ", false)
+    DocumentKindInfo("insurance", "Insurance certificate", "ইন্স্যুরেন্স / বিমা", false),
+    DocumentKindInfo("fitness", "Fitness certificate", "ফিটনেস সার্টিফিকেট", false)
 )
 
 fun docKindInfo(kind: String): DocumentKindInfo = DOCUMENT_KINDS.firstOrNull { it.kind == kind }

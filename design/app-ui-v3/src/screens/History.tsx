@@ -90,7 +90,7 @@ export function History() {
 
   return (
     <div className="screen-pad">
-      <header className="page-head"><h1>ইতিহাস</h1></header>
+      <header className="page-head"><h1>রেকর্ড</h1></header>
       <section className="summary" aria-label="গত ৩০ দিন">
         <div><small>গত ৩০ দিনের খরচ</small><b>{f.money(spend)}</b></div>
         <div><small>চালানো</small><b>{f.km(km)}</b></div>
