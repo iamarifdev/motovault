@@ -26,6 +26,13 @@ private tailrec fun Context.activity(): Activity? = when (this) {
 actual fun documentDialogProperties() = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)
 internal actual fun sheetDialogProperties() = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)
 
+@Composable
+internal actual fun SheetWindowPolicy() {
+    val view = LocalView.current
+    val window = (view.parent as? DialogWindowProvider)?.window
+    SideEffect { window?.setWindowAnimations(0) }
+}
+
 @Suppress("DEPRECATION")
 @Composable
 actual fun DocumentWindowAppearance(dark: Boolean) {

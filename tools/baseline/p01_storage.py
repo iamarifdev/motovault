@@ -9,12 +9,12 @@ import sqlite3
 import subprocess
 import tempfile
 import p00
+import p01_ios
 
-DEVICE = '639D8717-57E7-49B8-9DAA-2C365E2F1508'
 SERIAL = 'emulator-5554'
 
 
-def operate(platform, mode):
+def operate(platform, mode, device=None):
     assert p00.APP == 'com.motovault.baseline.p00'
     with tempfile.TemporaryDirectory(prefix='motovault-p01-') as folder:
         temporary = Path(folder)
@@ -27,8 +27,9 @@ def operate(platform, mode):
                     with (temporary/name).open('wb') as stream:
                         subprocess.run(['rtk', 'run', '-c', shlex.join(command)], stdout=stream, check=True)
         else:
-            p00.run('xcrun', 'simctl', 'terminate', DEVICE, p00.APP, check=False)
-            container = Path(p00.run('xcrun', 'simctl', 'get_app_container', DEVICE, p00.APP, 'data'))
+            p01_ios.validate_device(device)
+            p00.run('xcrun', 'simctl', 'terminate', device, p00.APP, check=False)
+            container = Path(p00.run('xcrun', 'simctl', 'get_app_container', device, p00.APP, 'data'))
             assert 'Containers/Data/Application' in str(container)
             support = container/'Library/Application Support'
             for name in ['motovault.db', 'motovault.db-wal', 'motovault.db-shm']:
@@ -46,7 +47,11 @@ def operate(platform, mode):
             odometer=ride['odometer'], odometerConfirmedDate=ride.get('odometerConfirmedDate'),
             preferences=json.loads(db.execute('SELECT preferences FROM vault_meta WHERE id=1').fetchone()[0]),
             documents=[dict(id=r['id'], expiry=r['expiry'], snooze=r.get('reminderSnoozedUntil'))
-                for (raw,) in db.execute('SELECT payload FROM document') for r in [json.loads(raw)]])
+                for (raw,) in db.execute('SELECT payload FROM document') for r in [json.loads(raw)]],
+            rules=[dict(id=r['id'], odometer=r['lastServicedOdometerKm'], day=r['lastServicedEpochDays'],
+                        certainty=r.get('baselineCertainty'), snooze=r.get('reminderSnoozedUntil'))
+                   for (raw,) in db.execute('SELECT payload FROM schedule') for r in [json.loads(raw)]],
+            logCount=db.execute('SELECT COUNT(*) FROM ledger').fetchone()[0])
         db.execute('PRAGMA wal_checkpoint(TRUNCATE)')
         db.close()
         if mode != 'read':
@@ -65,5 +70,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('platform', choices=['android', 'ios'])
     parser.add_argument('mode', choices=['read', 'fail', 'recover'])
+    parser.add_argument('--device', help='Verified running iOS 27 iPhone 18 Pro/Pro Max UUID; required for iOS')
     args = parser.parse_args()
-    print(json.dumps(operate(args.platform, args.mode), ensure_ascii=False, indent=2))
+    print(json.dumps(operate(args.platform, args.mode, args.device), ensure_ascii=False, indent=2))

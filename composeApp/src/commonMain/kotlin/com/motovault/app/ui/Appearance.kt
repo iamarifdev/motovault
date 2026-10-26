@@ -161,6 +161,9 @@ expect fun PlatformAppearance(dark: Boolean)
 
 internal expect fun sheetDialogProperties(): androidx.compose.ui.window.DialogProperties
 
+@Composable
+internal expect fun SheetWindowPolicy()
+
 data class VaultTypography(
     val display: TextStyle,
     val title: TextStyle,
@@ -239,6 +242,7 @@ internal fun VaultTheme(
     content: @Composable () -> Unit
 ) {
     val dark = appearance.usesDarkPalette(isSystemInDarkTheme())
+    val effectiveReducedMotion = systemReducedMotion() || reduceMotion
     val palette = vaultPalette(brandId, dark)
     val (materialTypography, vaultTypography) = rememberBanglaTypography(textScale)
 
@@ -295,7 +299,7 @@ internal fun VaultTheme(
         dark = dark,
         colors = skyColors,
         typography = skyType,
-        motion = SkyMotionPolicy(reducedMotion = reduceMotion),
+        motion = SkyMotionPolicy(reducedMotion = effectiveReducedMotion),
         brand = SkyBrand(gradientStart = palette.accent, gradientEnd = palette.accent) // Solid brand ink for headings
     ) {
         MaterialTheme(colorScheme = scheme, typography = materialTypography) {
@@ -303,7 +307,7 @@ internal fun VaultTheme(
                 LocalVaultPalette provides palette,
                 LocalVaultBrandId provides brandId,
                 LocalVaultTypography provides vaultTypography,
-                LocalReducedMotion provides reduceMotion,
+                LocalReducedMotion provides effectiveReducedMotion,
                 LocalFmt provides Fmt(digits),
                 LocalContentColor provides palette.text
             ) {

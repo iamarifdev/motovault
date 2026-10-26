@@ -62,8 +62,9 @@ fun Sheet(
     val offsetY = remember { Animatable(if (reducedMotion) 0f else 600f) }
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
-        if (!reducedMotion) {
+    LaunchedEffect(reducedMotion) {
+        if (reducedMotion) offsetY.snapTo(0f)
+        else {
             offsetY.animateTo(0f, VaultMotion.sheetSpring())
         }
     }
@@ -83,6 +84,7 @@ fun Sheet(
         onDismissRequest = { dismiss() },
         properties = sheetDialogProperties()
     ) {
+        SheetWindowPolicy()
         PlatformAppearance(LocalVaultPalette.current.dark)
         BoxWithConstraints(
             modifier = Modifier.fillMaxSize().imePadding(),
@@ -97,6 +99,7 @@ fun Sheet(
                     .fillMaxSize()
                     .background(Color.Black.copy(alpha = 0.55f))
                     .clickable { dismiss() }
+                    .excludeFromAccessibility()
             )
 
             Surface(

@@ -33,9 +33,11 @@ private suspend fun permitted(): Boolean = suspendCancellableCoroutine { continu
 private suspend fun pending(): Set<String> = suspendCancellableCoroutine { continuation ->
     center.getPendingNotificationRequestsWithCompletionHandler { requests -> continuation.resume(requests?.filterIsInstance<UNNotificationRequest>()?.map { it.identifier }?.toSet() ?: emptySet()) }
 }
-private suspend fun delivered(): Set<String> = suspendCancellableCoroutine { continuation ->
+private suspend fun delivered(): List<UNNotification> = suspendCancellableCoroutine { continuation ->
     center.getDeliveredNotificationsWithCompletionHandler { notifications ->
-        continuation.resume(notifications?.filterIsInstance<UNNotification>()?.map { it.request.identifier }?.filter { it.startsWith("renewal:") || it.startsWith("service:") }?.toSet() ?: emptySet())
+        continuation.resume(notifications?.filterIsInstance<UNNotification>()?.filter {
+            it.request.identifier.startsWith("renewal:") || it.request.identifier.startsWith("service:")
+        } ?: emptyList())
     }
 }
 private suspend fun add(plan: RenewalReminder, target: ReminderTarget, now: LocalDateTime) {
@@ -66,14 +68,20 @@ internal actual suspend fun reconcileRenewalReminders(documents: List<VaultDocum
         var journal = storage.read() ?: RenewalJournal(plans(), consumed())
         val old = journal.requests
         val pending = pending()
+        val posted = delivered()
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         // Accepted requests which elapsed and left the OS queue must never be reposted on relaunch.
-        journal = journal.recover(now, pending, delivered())
+        journal = journal.recover(now, pending, posted.map { it.request.identifier }.toSet())
         storage.write(journal)
-        val next = if (enabled() && permitted()) reminderPlan(state, now, old, journal.consumed) else emptyList()
+        val allowed = enabled() && permitted()
+        val next = if (allowed) reminderPlan(state, now, old, journal.consumed) else emptyList()
         val obsolete = (pending.filter { it.startsWith("renewal:") || it.startsWith("service:") } + old.map { it.key }).filter { key -> next.none { it.key == key } }
         center.removePendingNotificationRequestsWithIdentifiers(obsolete)
-        center.removeDeliveredNotificationsWithIdentifiers(obsolete)
+        val invalidDelivered = posted.filter { notification ->
+            val plan = (notification.request.content.userInfo["motovault.reminder"] as? String)?.let(::decodeReminderPayload)
+            !allowed || plan == null || !deliveredReminderIsCurrent(state, plan)
+        }.map { it.request.identifier }
+        center.removeDeliveredNotificationsWithIdentifiers(invalidDelivered)
         journal = journal.retain(next.map { it.key }.toSet())
         storage.write(journal)
         var failure: Exception? = null

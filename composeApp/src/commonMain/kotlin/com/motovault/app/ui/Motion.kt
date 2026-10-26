@@ -1,7 +1,7 @@
 package com.motovault.app.ui
 
 import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
@@ -26,22 +26,25 @@ object VaultMotion {
     fun <T> sweepTween(reducedMotion: Boolean = false) = if (reducedMotion) tween<T>(0) else tween<T>(SweepMs, easing = SkyCurve)
 
     fun <T> sheetSpring(reducedMotion: Boolean = false) =
-        if (reducedMotion) spring<T>(stiffness = Spring.StiffnessHigh)
+        if (reducedMotion) snap<T>()
         else spring<T>(dampingRatio = 0.85f, stiffness = 420f)
 
     fun <T> pressSpring(reducedMotion: Boolean = false) =
-        if (reducedMotion) spring<T>(stiffness = Spring.StiffnessHigh)
+        if (reducedMotion) snap<T>()
         else spring<T>(dampingRatio = 0.8f, stiffness = 600f)
 
     fun <T> listSpring(reducedMotion: Boolean = false) =
-        if (reducedMotion) spring<T>(stiffness = Spring.StiffnessHigh)
+        if (reducedMotion) snap<T>()
         else spring<T>(dampingRatio = 0.82f, stiffness = 500f)
 
     fun <T> markerSpring(reducedMotion: Boolean = false) =
-        if (reducedMotion) spring<T>(stiffness = Spring.StiffnessHigh)
+        if (reducedMotion) snap<T>()
         else spring<T>(dampingRatio = 0.8f, stiffness = 520f)
 }
 
 val LocalReducedMotion = staticCompositionLocalOf { false }
 val isReducedMotion: Boolean
     @Composable get() = LocalReducedMotion.current
+
+@Composable
+internal expect fun systemReducedMotion(): Boolean

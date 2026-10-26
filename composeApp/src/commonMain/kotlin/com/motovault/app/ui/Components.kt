@@ -672,13 +672,12 @@ fun DocArt(
         else -> Color(0xFF3E4A55) to Color(0xFF5D6B78)
     }
 
-    val height = if (large) 220.dp else 140.dp
     val pPad = if (large) 18.dp else 12.dp
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(height)
+            .aspectRatio(1.586f)
             .clip(RoundedCornerShape(14.dp))
             .background(Brush.linearGradient(listOf(gradStart, gradEnd)))
             .padding(pPad)
@@ -713,27 +712,20 @@ fun DocArt(
                     .background(Brush.linearGradient(listOf(Color(0xFFE7D49A), Color(0xFFB99B4C))))
             )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
-                    Text(text = "নম্বর", fontSize = 10.sp, color = Color.White.copy(alpha = 0.8f))
-                    Text(text = doc.number, fontSize = if (large) 15.sp else 12.sp, fontWeight = FontWeight.Bold, color = Color.White)
-                    Spacer(Modifier.height(2.dp))
-                    Text(text = "নাম", fontSize = 10.sp, color = Color.White.copy(alpha = 0.8f))
-                    Text(text = doc.holder, fontSize = if (large) 14.sp else 12.sp, fontWeight = FontWeight.SemiBold, color = Color.White)
-                }
-                Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(1.dp)) {
-                    Text(text = "মেয়াদ", fontSize = 10.sp, color = Color.White.copy(alpha = 0.8f))
-                    val expiryDate = runCatching { LocalDate.parse(doc.expiry) }.getOrNull()
-                    Text(
-                        text = if (expiryDate != null) f.dateFull(expiryDate) else doc.expiry,
-                        fontSize = if (large) 14.sp else 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
+            val expiryDate = runCatching { LocalDate.parse(doc.expiry) }.getOrNull()
+            val fields = listOf(
+                "নম্বর" to doc.number,
+                "নাম" to doc.holder,
+                "মেয়াদ" to (expiryDate?.let(f::dateFull) ?: doc.expiry.ifBlank { "মেয়াদ নেই" })
+            )
+            Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
+                fields.forEach { (label, value) ->
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text(label, Modifier.widthIn(min = 40.dp), fontSize = if (large) 12.sp else 10.sp,
+                            lineHeight = if (large) 20.sp else 17.sp, color = Color.White.copy(alpha = 0.8f))
+                        Text(value, Modifier.weight(1f), fontSize = if (large) 15.sp else 12.sp,
+                            lineHeight = if (large) 20.sp else 17.sp, fontWeight = FontWeight.SemiBold, color = Color.White)
+                    }
                 }
             }
         }

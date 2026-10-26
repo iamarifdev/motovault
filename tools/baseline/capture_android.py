@@ -18,10 +18,15 @@ def adb(*args, check=True):
 
 
 def tree(name):
-    remote=f'/sdcard/motovault-capture-{time.monotonic_ns()}.xml'
-    result=adb('shell','uiautomator','dump',remote)
-    if 'dumped to:' not in result:
-        raise RuntimeError(f'Android did not produce a fresh hierarchy: {result}')
+    for attempt in range(3):
+        remote=f'/sdcard/motovault-capture-{time.monotonic_ns()}.xml'
+        result=adb('shell','uiautomator','dump',remote)
+        if 'dumped to:' in result:
+            break
+        adb('shell','rm','-f',remote,check=False)
+        if attempt == 2:
+            raise RuntimeError(f'Android did not produce a fresh hierarchy: {result}')
+        time.sleep(0.5)
     try:
         content=adb('exec-out','cat',remote)
     finally:

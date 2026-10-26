@@ -1,8 +1,10 @@
 package com.motovault.app.ui
 
 import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -16,7 +18,7 @@ private fun ReminderAction(text: String, onClick: () -> Unit) = VaultButton(text
 internal fun ReminderAccessPanel(access: ReminderAccess, fingerprint: Any? = null) {
     val f = currentFmt
     LaunchedEffect(fingerprint) { if (fingerprint != null) access.refresh() }
-    Panel {
+    Panel(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         DocumentNote(when {
             access.busy -> "নোটিফিকেশনের অনুমতি যাচাই হচ্ছে"
             !access.allowed -> "ফোনের সেটিংসে নোটিফিকেশনের অনুমতি নেই"
@@ -77,6 +79,7 @@ internal fun ReminderSettingsSheet(
     }) {
         ReminderAccessPanel(access, state)
         if (id != null) {
+            Column(Modifier.fillMaxWidth().heightIn(min = 44.dp).semantics(mergeDescendants = true) {}, verticalArrangement = Arrangement.spacedBy(14.dp)) {
             if (doc == null && rule == null) DocumentNote("এই রেকর্ড বদলেছে বা মুছে গেছে। তালিকা দেখে নিন।")
             else {
                 DocumentNote(doc?.title ?: rule!!.name)
@@ -102,13 +105,18 @@ internal fun ReminderSettingsSheet(
                     ReminderAction("৭ দিন পরে সকাল ৯টা") { snooze(7) }
                 }
             }
+            }
         } else {
-            DocumentNote("মেয়াদের কত দিন আগে")
-            VaultSegmented(listOf(30 to "৩০ দিন", 14 to "১৪ দিন", 7 to "৭ দিন"), lead, onSelect = { lead = it })
-            DocumentNote("ফোনের স্থানীয় সময়")
-            VaultSegmented(listOf(540 to "সকাল ৯টা", 1080 to "সন্ধ্যা ৬টা"), minute, onSelect = { minute = it })
-            DocumentCopy("এখন: ${f.n(lead.toLong())} দিন আগে, ${f.n((minute / 60).toLong())}:${f.d((minute % 60).toString().padStart(2, '0'))}")
-            if (state.documents.isEmpty() && state.rules.isEmpty()) DocumentNote("কাগজ বা সার্ভিসের সময়সূচি যোগ করলে এখানে দেখা যাবে।")
+            Column(Modifier.semantics(mergeDescendants = true) {}, verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                DocumentNote("মেয়াদের কত দিন আগে")
+                VaultSegmented(listOf(30 to "৩০ দিন", 14 to "১৪ দিন", 7 to "৭ দিন"), lead, onSelect = { lead = it })
+            }
+            Column(Modifier.semantics(mergeDescendants = true) {}, verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                DocumentNote("ফোনের স্থানীয় সময়")
+                VaultSegmented(listOf(540 to "সকাল ৯টা", 1080 to "সন্ধ্যা ৬টা"), minute, onSelect = { minute = it })
+                DocumentCopy("এখন: ${f.n(lead.toLong())} দিন আগে, ${f.n((minute / 60).toLong())}:${f.d((minute % 60).toString().padStart(2, '0'))}")
+                if (state.documents.isEmpty() && state.rules.isEmpty()) DocumentNote("কাগজ বা সার্ভিসের সময়সূচি যোগ করলে এখানে দেখা যাবে।")
+            }
             state.documents.forEach { ReminderAction(it.title) { onOpen("document", it.id) } }
             state.rules.forEach { ReminderAction(it.name) { onOpen("service", it.id) } }
         }

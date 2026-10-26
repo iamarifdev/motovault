@@ -1,0 +1,10 @@
+// Never let the native test runner choose a different simulator implicitly.
+def simulatorId = gradle.startParameter.projectProperties.get('p01.ios.device')
+if (!simulatorId) throw new GradleException('Pass -Pp01.ios.device=<verified iOS 27 simulator UUID>')
+gradle.beforeProject { project ->
+    project.pluginManager.withPlugin('org.jetbrains.kotlin.multiplatform') {
+        project.tasks.matching { it.name == 'iosSimulatorArm64Test' }.configureEach { task ->
+            task.device.set(simulatorId)
+        }
+    }
+}

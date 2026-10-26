@@ -58,6 +58,33 @@ internal fun reminderTarget(state: VaultState, plan: RenewalReminder): ReminderT
     else -> null
 }
 
+/** Delivery consumes a scheduling event, but a current alert stays visible until the owner opens or dismisses it. */
+internal fun deliveredReminderIsCurrent(state: VaultState, plan: RenewalReminder): Boolean = runCatching {
+    if (reminderTarget(state, plan) == null) return@runCatching false
+    when (plan.targetType) {
+        "document" -> {
+            val document = state.documents.first { it.id == plan.documentId }
+            if (!state.docReminders || !document.reminder) return@runCatching false
+            LocalDate.parse(document.expiry)
+            val snooze = document.reminderSnoozedUntil?.let { LocalDateTime.parse(it) }
+            when (plan.kind) {
+                "snooze" -> snooze == plan.localDateTime()
+                "warning", "expiry" -> snooze == null || plan.localDateTime() > snooze
+                else -> false
+            }
+        }
+        "service" -> {
+            val rule = state.confirmedRules().first { it.id == plan.documentId }
+            if (state.ride == null || !state.serviceReminders || !rule.reminder ||
+                rule.baselineCertainty != com.motovault.app.domain.model.BaselineCertainty.CONFIRMED) return@runCatching false
+            val snooze = rule.reminderSnoozedUntil?.let { LocalDateTime.parse(it) }
+            if (snooze == null) plan.key.endsWith(":due")
+            else plan.localDateTime() == snooze && plan.key.endsWith(":snooze:$snooze")
+        }
+        else -> false
+    }
+}.getOrDefault(false)
+
 object ReminderNavigation {
     private val request = MutableStateFlow<String?>(null)
     internal val requests = request.asStateFlow()

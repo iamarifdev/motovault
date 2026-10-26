@@ -7,6 +7,7 @@ import android.content.*
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.*
@@ -36,9 +37,8 @@ private fun permitted(): Boolean {
 private fun enabled() = preferences.getBoolean("enabled", false)
 private fun intent(key: String) = Intent(vaultContext, RenewalAlarmReceiver::class.java).setAction("com.motovault.RENEWAL").setData(Uri.parse("motovault://renewal/" + Uri.encode(key)))
 private fun pending(key: String) = PendingIntent.getBroadcast(vaultContext, 0, intent(key), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-private fun cancel(plan: RenewalReminder) {
+private fun cancelAlarm(plan: RenewalReminder) {
     vaultContext.getSystemService(AlarmManager::class.java).cancel(pending(plan.key))
-    vaultContext.getSystemService(NotificationManager::class.java).cancel(plan.key, 0)
 }
 private fun channel() {
     if (Build.VERSION.SDK_INT >= 26) vaultContext.getSystemService(NotificationManager::class.java).createNotificationChannel(NotificationChannel(CHANNEL, "Document renewals", NotificationManager.IMPORTANCE_DEFAULT).apply { description = "Document warnings and expiry-day reminders" })
@@ -53,6 +53,7 @@ internal fun renewalNotification(context: Context, plan: RenewalReminder, target
     val builder = if (Build.VERSION.SDK_INT >= 26) Notification.Builder(context, CHANNEL) else Notification.Builder(context)
     return builder.setSmallIcon(com.motovault.app.R.drawable.motovault_icon).setContentTitle(reminderHeading(plan))
         .setContentText(reminderMessage(plan, target))
+        .addExtras(Bundle().apply { putString("motovault.reminder", reminderPayload(plan)) })
         .setContentIntent(open).setAutoCancel(true).setVisibility(Notification.VISIBILITY_PRIVATE).build()
 }
 
@@ -61,8 +62,14 @@ internal actual suspend fun reconcileRenewalReminders(documents: List<VaultDocum
         val state = VaultState.restore()
         channel()
         val old = plans()
-        val next = if (enabled() && permitted()) reminderPlan(state, Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()), old, consumed()) else emptyList()
-        old.filter { previous -> next.none { it.key == previous.key } }.forEach(::cancel)
+        val allowed = enabled() && permitted()
+        val next = if (allowed) reminderPlan(state, Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()), old, consumed()) else emptyList()
+        old.filter { previous -> next.none { it.key == previous.key } }.forEach(::cancelAlarm)
+        val manager = vaultContext.getSystemService(NotificationManager::class.java)
+        manager.activeNotifications.filter { it.tag?.let { key -> key.startsWith("renewal:") || key.startsWith("service:") } == true }.forEach { notification ->
+            val plan = notification.notification.extras.getString("motovault.reminder")?.let(::decodeReminderPayload)
+            if (!allowed || plan == null || !deliveredReminderIsCurrent(state, plan)) manager.cancel(notification.tag, notification.id)
+        }
         // Persist the allow-list before scheduling so old broadcasts cannot deliver after edit/delete.
         check(preferences.edit().putString("plans", Json.encodeToString(next)).commit())
         next.forEach { plan ->

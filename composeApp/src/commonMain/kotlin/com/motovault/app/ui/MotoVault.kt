@@ -243,6 +243,7 @@ fun MotoVault() {
                 modifier = Modifier
                     .widthIn(max = 600.dp)
                     .fillMaxSize()
+                    .then(if (activeSheet != null) Modifier.excludeFromAccessibility() else Modifier)
             ) {
                 storageError?.let {
                     Text(
@@ -299,10 +300,11 @@ fun MotoVault() {
                             .weight(1f)
                             .fillMaxWidth()
                     ) {
+                        val reducedMotion = isReducedMotion
                         AnimatedContent(
                             targetState = tab,
                             transitionSpec = {
-                                fadeIn(VaultMotion.pageTween()) togetherWith fadeOut(VaultMotion.pageTween())
+                                fadeIn(VaultMotion.pageTween(reducedMotion)) togetherWith fadeOut(VaultMotion.pageTween(reducedMotion))
                             },
                             label = "VaultScreenPage",
                             modifier = Modifier.fillMaxSize()
@@ -711,9 +713,9 @@ fun Eyebrow(text: String, color: Color = MaterialTheme.colorScheme.primary) =
 fun Heading(text: String) = SkyGradientHeading(text)
 
 @Composable
-fun Panel(onClick: (() -> Unit)? = null, tint: Color = SurfaceColor, content: @Composable ColumnScope.() -> Unit) {
+fun Panel(onClick: (() -> Unit)? = null, tint: Color = SurfaceColor, modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
     Column(
-        Modifier.fillMaxWidth()
+        modifier.fillMaxWidth()
             .clip(RoundedCornerShape(SkyTokens.Radii.menu))
             .background(tint)
             .border(1.dp, BorderColor, RoundedCornerShape(SkyTokens.Radii.menu))
