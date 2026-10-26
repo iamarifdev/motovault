@@ -57,8 +57,18 @@ widget mocks are interaction references, not proof of native functionality.
   literal px-to-sp assumption.
 - Verify normal and 1.3 text scales plus the device accessibility setting. Allow
   labels to wrap; do not hide actions or truncate essential numbers.
-- Use natural Bangladeshi Bangla, existing terminology, lakh grouping and BDT.
-  Input accepts Bengali, Latin and Arabic-Indic digits independently of the
+- Use natural Bangladeshi Bangla (ব্যবহারিক চলিত বাংলা), existing terminology, lakh grouping and BDT.
+  Copy must follow the standard of leading Bangladeshi mobile apps (bKash, Pathao, Nagad) using respectful
+  "আপনি" tone-of-voice. Universal tech and biker loanwords written in Bengali script are standard and required
+  over literal dictionary translations (e.g., "প্রোফাইল" never "আমি"; "রেকর্ড" never "ইতিহাস"; "ফুল ট্যাংক"
+  never "ট্যাংক পূর্ণ"; "সার্ভিস চার্জ / মজুরি" never "শ্রম"; "টাচ ভাইব্রেশন" never "হালকা কাঁপুনি"; "স্ক্যান"
+  never "পড়া হচ্ছে"; "ফিটনেস সার্টিফিকেট" never "ফিটনেস সনদ"; "ব্যাকগ্রাউন্ড" never "অ্যাপ পেছনে গেলে").
+- All UI microcopy across Compose Multiplatform must be declared in string resource tables
+  (`composeResources/values/strings.xml` for English base and `composeResources/values-bn/strings.xml` for Bengali).
+  Raw hardcoded user-facing string literals in Composable functions are prohibited.
+- Support runtime language selection (AppLanguage.BN and AppLanguage.EN) with instant UI updates without
+  requiring an app restart.
+- Input accepts Bengali, Latin and Arabic-Indic digits independently of the
   chosen display digit style. Normalize through the shared parser.
 - Monetary precision/rounding belongs in the domain contract, not formatting.
   Dates have explicit local-time behavior; official fee/price/source freshness

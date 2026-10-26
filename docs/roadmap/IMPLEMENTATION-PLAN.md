@@ -255,6 +255,28 @@ Verification:
 
 Required completion evidence: verification, design, android_device, ios_device.
 
+### P01-06: Establish Compose Multiplatform string resource architecture and natural Bangladeshi Bangla microcopy
+
+Status: **Done** | Size: **5** | Owner: Codex.
+
+Additional task dependencies: P00-04, P00-05.
+
+Acceptance criteria:
+
+- Declare localized strings in Compose Multiplatform resource bundles (composeResources/values/strings.xml and values-bn/strings.xml).
+- Provide runtime language selection (AppLanguage.BN and AppLanguage.EN) in Settings without requiring app restart.
+- Guarantee 100% key parity and placeholder integrity between English and Bengali string bundles via automated test suite.
+- Modernize robotic machine-translated copy to natural colloquial-professional Bangladeshi standard (ব্যবহারিক চলিত বাংলা) with accepted tech loanwords in Bangla script.
+- Synchronize design/app-ui-v3 prototype navigation tabs (প্রোফাইল, রেকর্ড) and microcopy with the natural standard.
+
+Verification:
+
+- Execute automated StringResourceParityTest asserting key parity, placeholders, and bundle validity.
+- Run Android unit tests and iOS multiplatform tests verifying runtime compilation and resource bundle generation.
+- Verify prototype build and screen layout rendering under Bengali and English.
+
+Required completion evidence: implementation, verification, design.
+
 **Phase exit gate:**
 
 - Service and document notifications open the correct record and honor all opt-outs.

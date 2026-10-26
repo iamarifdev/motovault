@@ -1054,6 +1054,70 @@
               "revision": "63198f9"
             }
           ]
+        },
+        {
+          "id": "P01-06",
+          "title": "Establish Compose Multiplatform string resource architecture and natural Bangladeshi Bangla microcopy",
+          "size": 5,
+          "depends_on": [
+            "P00-04",
+            "P00-05"
+          ],
+          "acceptance": [
+            "Declare localized strings in Compose Multiplatform resource bundles (composeResources/values/strings.xml and values-bn/strings.xml).",
+            "Provide runtime language selection (AppLanguage.BN and AppLanguage.EN) in Settings without requiring app restart.",
+            "Guarantee 100% key parity and placeholder integrity between English and Bengali string bundles via automated test suite.",
+            "Modernize robotic machine-translated copy to natural colloquial-professional Bangladeshi standard (ব্যবহারিক চলিত বাংলা) with accepted tech loanwords in Bangla script.",
+            "Synchronize design/app-ui-v3 prototype navigation tabs (প্রোফাইল, রেকর্ড) and microcopy with the natural standard."
+          ],
+          "verification": [
+            "Execute automated StringResourceParityTest asserting key parity, placeholders, and bundle validity.",
+            "Run Android unit tests and iOS multiplatform tests verifying runtime compilation and resource bundle generation.",
+            "Verify prototype build and screen layout rendering under Bengali and English."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "design"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-26T21:10:00+00:00",
+          "completed_at": "2026-10-26T21:30:00+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-10-26T21:10:00+00:00",
+              "text": "Started foundation i18n architecture and linguistic modernization after audit confirmed absence of string resource bundles and prevalence of unnatural, robotic machine translations."
+            },
+            {
+              "at": "2026-10-26T21:30:00+00:00",
+              "text": "Completed string resource architecture for Compose Multiplatform with values/strings.xml and values-bn/strings.xml. Added automated StringResourceParityTest (100% parity verified). Overhauled all robotic microcopy to natural Bangladeshi standard (bKash/Pathao/Nagad style: প্রোফাইল, রেকর্ড, ফুল ট্যাংক, সার্ভিস চার্জ / মজুরি, টাচ ভাইব্রেশন, ফিটনেস সার্টিফিকেট). Synchronized prototype and updated DESIGN-CONTRACT.md."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/composeResources/values/strings.xml",
+              "summary": "Established base English and natural Bengali Compose Multiplatform string resource bundles, AppLanguage enum with runtime switching in Settings, and updated screens and sheets.",
+              "at": "2026-10-26T21:30:00+00:00",
+              "revision": "working tree"
+            },
+            {
+              "kind": "verification",
+              "reference": "composeApp/src/androidUnitTest/kotlin/com/motovault/app/ui/StringResourceParityTest.kt",
+              "summary": "StringResourceParityTest verifies 100% key parity, XML integrity, and formatting placeholders between English and Bengali bundles. All unit tests passed.",
+              "at": "2026-10-26T21:30:00+00:00",
+              "revision": "working tree"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/DESIGN-CONTRACT.md",
+              "summary": "Updated DESIGN-CONTRACT.md with mandatory colloquial-professional Bangladeshi Bengali tone-of-voice standard, permitted tech loanwords in Bangla script, and prohibition of raw hardcoded literals. Synchronized prototype tabs (প্রোফাইল, রেকর্ড) and settings.",
+              "at": "2026-10-26T21:30:00+00:00",
+              "revision": "working tree"
+            }
+          ]
         }
       ]
     },

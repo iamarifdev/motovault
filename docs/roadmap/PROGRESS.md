@@ -4,7 +4,7 @@
 
 Last tracker update: 2026-10-27 02:28 BDT (UTC+06). Baseline: `50eda3a` on `main`.
 
-Product delivery: **11%** (30/280 relative scope points). Foundation planning is reported separately.
+Product delivery: **12%** (35/285 relative scope points). Foundation planning is reported separately.
 
 Only `done` tasks count. Partial work, a completed build and elapsed time do not increase delivery progress. Points measure scope, not hours, value or release readiness. Deferred scope stays visible in the denominator.
 
@@ -15,9 +15,9 @@ Only `done` tasks count. Partial work, a completed build and elapsed time do not
 | Milestone | Scope | Done tasks | Gate |
 | --- | --- | --- | --- |
 | M0: Implementation baseline ready | P00 | 5/5 | Passed |
-| M1: Trustworthy local beta | P00, P01, P02, P03 | 13/20 | Open |
-| M2: Core ownership release candidate | P00, P01, P02, P03, P04, P05, P06, P07, P08 | 13/43 | Open |
-| M3: Expanded ownership release candidate | P00, P01, P02, P03, P04, P05, P06, P07, P08, P09, P10, P11, P12, P13, P16 | 13/67 | Open |
+| M1: Trustworthy local beta | P00, P01, P02, P03 | 14/21 | Open |
+| M2: Core ownership release candidate | P00, P01, P02, P03, P04, P05, P06, P07, P08 | 14/44 | Open |
+| M3: Expanded ownership release candidate | P00, P01, P02, P03, P04, P05, P06, P07, P08, P09, P10, P11, P12, P13, P16 | 14/68 | Open |
 | M4: Optional professional-rider mode | P14 | 0/4 | Open |
 | M5: Optional production cloud backup | P15 | 0/6 | Open |
 
@@ -26,7 +26,7 @@ Only `done` tasks count. Partial work, a completed build and elapsed time do not
 | Phase | Priority | Scope | Status | Done tasks | Scope points |
 | --- | --- | --- | --- | --- | --- |
 | [P00: Baseline, design contract and delivery foundations](IMPLEMENTATION-PLAN.md#p00) | P0 | foundation | Done | 5/5 | 11/11 (100%) |
-| [P01: Trustworthy reminders and understandable maintenance status](IMPLEMENTATION-PLAN.md#p01) | P0 | core | In progress | 4/5 | 14/19 (74%) |
+| [P01: Trustworthy reminders and understandable maintenance status](IMPLEMENTATION-PLAN.md#p01) | P0 | core | In progress | 5/6 | 19/24 (79%) |
 | [P02: Document privacy and safe phone handover](IMPLEMENTATION-PLAN.md#p02) | P0 | core | In progress | 4/5 | 16/21 (76%) |
 | [P03: Encrypted local backup and complete restore](IMPLEMENTATION-PLAN.md#p03) | P0 | core | Waiting for prerequisites | 0/5 | 0/24 (0%) |
 | [P04: Bangladesh maintenance and used-bike onboarding](IMPLEMENTATION-PLAN.md#p04) | P1 | core | Waiting for prerequisites | 0/5 | 0/17 (0%) |
@@ -66,6 +66,7 @@ Only `done` tasks count. Partial work, a completed build and elapsed time do not
 | P01-03 | Implement reminder settings, permission recovery and snooze in v3 | Done | Codex | P00-04, P00-05, P01-02 | [verification](../../docs/roadmap/evidence/P00-04-design.md), [implementation](../../composeApp/src/commonMain/kotlin/com/motovault/app/ui/ReminderSheets.kt), [verification](../../docs/roadmap/evidence/P01-03-verification.md), [design](../../docs/roadmap/evidence/P01-design.md), [verification](../../docs/roadmap/evidence/p01/ios/background-observation.json), [verification](../../docs/roadmap/evidence/p01/ios/notification-taps-r4-summary.json), [verification](../../docs/roadmap/evidence/P01-03-verification.md), [verification](../../docs/roadmap/evidence/p01/ios/recovery-r4/summary.json), [implementation](../../composeApp/src/commonMain/kotlin/com/motovault/app/ui/ReminderPlan.kt), [verification](../../docs/roadmap/evidence/P01-03-verification.md), [design](../../docs/roadmap/evidence/P01-design.md) |
 | P01-04 | Make gauges, unknown history and stale mileage honest | Done | Codex | P00-04, P00-05 | [implementation](../../composeApp/src/commonMain/kotlin/com/motovault/app/ui/GaugeDetailSheet.kt), [verification](../../docs/roadmap/evidence/P01-04-verification.md), [design](../../docs/roadmap/evidence/P01-design.md), [verification](../../docs/roadmap/evidence/P01-04-verification.md) |
 | P01-05 | Verify reminders and status on real devices | In review | Codex | P00-04, P00-05, P01-03, P01-04 | [verification](../../docs/roadmap/evidence/P01-03-verification.md), [design](../../docs/roadmap/evidence/P01-design.md), [implementation](../../composeApp/src/commonMain/kotlin/com/motovault/app/ui/Motion.kt), [verification](../../docs/roadmap/evidence/P01-05-verification.md), [design](../../docs/roadmap/evidence/P01-design.md), [verification](../../docs/roadmap/evidence/p01/android/motion-os/observations.json), [implementation](../../composeApp/src/commonMain/kotlin/com/motovault/app/ui/Components.kt), [verification](../../docs/roadmap/evidence/P01-05-verification.md), [design](../../docs/roadmap/evidence/P01-05-matrix.md), [verification](../../docs/roadmap/evidence/P01-06-native-recheck.md), [verification](../../docs/roadmap/evidence/P01-07-accessibility-navigation.md), [verification](../../docs/roadmap/evidence/P01-08-keypad-layout.md), [verification](../../docs/roadmap/evidence/P01-09-sheet-window-motion.md), [verification](../../docs/roadmap/evidence/P01-COMPLETION-AUDIT.md), [android_device](../../docs/roadmap/evidence/P01-10-physical-android.md), [verification](../../docs/roadmap/evidence/p01/android-device/moto-background-r1/partial-result.json), [android_device](../../docs/roadmap/evidence/P01-10-physical-android.md), [verification](../../docs/roadmap/evidence/p01/android-device/moto-background-r2/core-result.json), [verification](../../docs/roadmap/evidence/P01-10-physical-android.md), [design](../../docs/roadmap/evidence/P01-11-v3-detail-corrections.md), [verification](../../docs/roadmap/evidence/p01/v3-details/provenance.json), [design](../../docs/roadmap/evidence/P01-12-garage-layout-review.md), [verification](../../docs/roadmap/evidence/p01/garage-review/provenance.json) |
+| P01-06 | Establish Compose Multiplatform string resource architecture and natural Bangladeshi Bangla microcopy | Done | Codex | P00-04, P00-05 | [implementation](../../composeApp/src/commonMain/composeResources/values/strings.xml), [verification](../../composeApp/src/androidUnitTest/kotlin/com/motovault/app/ui/StringResourceParityTest.kt), [design](../../docs/roadmap/DESIGN-CONTRACT.md) |
 | P02-01 | Review privacy threat model, key lifecycle and recovery | Done | Codex | P00-04, P00-05 | [plan](../../docs/roadmap/P02-PRIVACY-CONTRACT.md), [review](../../docs/roadmap/evidence/P02-01-review.md) |
 | P02-02 | Implement secure key and sensitive-asset storage adapters | Done | Codex | P00-04, P00-05, P02-01 | [implementation](../../docs/roadmap/evidence/P02-02-storage-progress.md), [verification](../../docs/roadmap/evidence/P02-02-storage-progress.md), [implementation](../../docs/roadmap/evidence/P02-02-integrated-storage.md), [verification](../../docs/roadmap/evidence/P02-02-integrated-storage.md), [android_device](../../docs/roadmap/evidence/p02/storage/android-native-result.txt), [ios_runtime](../../docs/roadmap/evidence/p02/storage/ios-native-result.txt), [implementation](../../docs/roadmap/evidence/P02-02-acceptance.md), [verification](../../docs/roadmap/evidence/P02-02-acceptance.md) |
 | P02-03 | Add lock, auto-lock, masking and selected-document inspection | Done | Codex | P00-04, P00-05, P02-02 | [design](../../docs/roadmap/evidence/P02-03-prototype.md), [implementation](../../composeApp/src/commonMain/kotlin/com/motovault/app/ui/privacy/VaultPrivacySheet.kt), [verification](../../docs/roadmap/evidence/P02-03-verification.md) |
