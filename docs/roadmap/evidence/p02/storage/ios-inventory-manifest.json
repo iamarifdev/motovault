@@ -1,0 +1,33 @@
+{
+  "baseRevision": "cdc55e6",
+  "uncommittedDelta": true,
+  "platform": "ios",
+  "capturedAtUtc": "2026-10-26T19:23:50.003510+00:00",
+  "sources": {
+    "composeApp/build.gradle.kts": "20eac4ccd0bc868e0a36c12588d982c4bc694b9c7ef2b3cdd22c8087cccbdcf4",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/ProtectedDocumentStorage.kt": "8d8daf8979a5d6876b745279b055843e20390a777c67c68f52f124f172d0fde3",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/SecureAssetStore.kt": "3fc0ee5420ff9fe624c9085ceb6d3dba468625944a62b6afead6d125ec0355b5",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt": "84d96367ae28287fce090292104e067be7e9741850445dc3139d3b6e662ca227",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/storage/security/IosAssetCipher.kt": "3d7b6dfaf762b97b0c8c338d4abc169852c1a50ea79df22a7c25064db9cc9253",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/storage/security/IosAssetFiles.kt": "562e731bb485a77b6dd02556241ec6a057d9f347cb3dcb1f7d375d7eec953a48",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/storage/security/IosStorageProbe.kt": "d0e736a07d19e0a2168b395646699ea6b2c19363d8af3914e1f1f6b9d14c277f",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/storage/security/ProtectedDocumentStorage.ios.kt": "2a4f49643c16e4edf860230d22929d49dc0cc3d77bf10e213fa4ff808760a35c",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/ui/DocumentCamera.kt": "1ac9ec149f0ed0cbd61146d105b4c0d116fbf587cf1cad2adc5015a717f6a4bf",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/ui/DocumentCapture.kt": "e64846c7e4eebdab7eca6ebc807ea490c1a7b1950dcd6a9df15ad0740312dec6",
+    "iosApp/MotoVault/AppDelegate.swift": "e2dc8c464ec38c528d84961b98fa55249e9de508f96086a6b063c1a60d1eeec2",
+    "iosApp/MotoVault/MotoVault.entitlements": "3bd5621b6410986e2ea9df09e444990679e8f2fe23ccc0e8a1e887be7ceed64d",
+    "iosApp/MotoVault.xcodeproj/project.pbxproj": "56d365d63fa1a962af9fb116fb6cab57831b267954f0975bed36bc539a1955ff"
+  },
+  "artifacts": [
+    {
+      "name": "MotoVault",
+      "bytes": 40512,
+      "sha256": "c730be2b77603db92d00df5d2b5debc5f9ceaec043607b71cd05c104269c6c58"
+    },
+    {
+      "name": "MotoVault.debug.dylib",
+      "bytes": 63432944,
+      "sha256": "2d63ea8b2dad28ece2ecdbce97d58ed6b607a381d7649e6123bd58ba760456b0"
+    }
+  ]
+}

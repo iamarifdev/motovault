@@ -268,7 +268,7 @@ Required completion evidence: verification, design, android_device, ios_device.
 
 ## P02: Document privacy and safe phone handover
 
-**Priority:** P0 | **Scope:** core | **Current status:** Ready
+**Priority:** P0 | **Scope:** core | **Current status:** In progress
 
 **Outcome:** Owners control access to sensitive documents and can safely show one selected document.
 
@@ -290,7 +290,7 @@ Required completion evidence: verification, design, android_device, ios_device.
 
 ### P02-01: Review privacy threat model, key lifecycle and recovery
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: None.
 
@@ -307,7 +307,7 @@ Required completion evidence: plan, review.
 
 ### P02-02: Implement secure key and sensitive-asset storage adapters
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P02-01.
 
@@ -324,7 +324,7 @@ Required completion evidence: implementation, verification.
 
 ### P02-03: Add lock, auto-lock, masking and selected-document inspection
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P02-02.
 
@@ -341,7 +341,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P02-04: Protect export, import and temporary-file boundaries
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P02-03.
 
@@ -358,7 +358,7 @@ Required completion evidence: implementation, verification.
 
 ### P02-05: Verify privacy and key recovery on physical Android and iPhone
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **In review** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P02-03, P02-04.
 

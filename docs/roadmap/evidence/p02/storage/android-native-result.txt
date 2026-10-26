@@ -1,0 +1,20 @@
+Platform: physical Motorola edge 50 fusion, Android 16
+Package: com.motovault.app.privacyprobe (separate synthetic test sandbox)
+Runner: com.motovault.app.storage.security.NativeAssetInstrumentation
+Source base: cdc55e6 plus uncommitted P02 storage/reader/probe changes
+
+PASS 8 native storage checks:
+native-key-provision-and-missing-key-refusal
+native-interrupted-stage-retains-original-and-cleans-stage
+native-durable-migration-original-bytes-and-idempotent-reopen
+native-tamper-refuses-plaintext-fallback
+native-lost-key-retains-files-without-replacement
+native-encrypted-image-display-and-crop-readers
+native-legacy-and-recovery-migration-without-overwrite
+native-encrypted-pdf-import-and-no-processing-scratch-leak
+
+Scope: native Keystore, actual app-private file staging/fsync/retirement,
+byte-identical encrypted original reads, crop decode, recovery and PDF import.
+No owner database or primary app installation was modified by the test runner.
+No screen-lock changes, biometric lockout, handover, native viewer sharing,
+actual disk-full condition, UI design matrix or physical iPhone check is proved.

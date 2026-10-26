@@ -1,0 +1,44 @@
+{
+  "baseRevision": "cdc55e6",
+  "uncommittedDelta": true,
+  "platform": "android",
+  "capturedAtUtc": "2026-10-26T19:42:31.584859+00:00",
+  "sources": {
+    "composeApp/build.gradle.kts": "20eac4ccd0bc868e0a36c12588d982c4bc694b9c7ef2b3cdd22c8087cccbdcf4",
+    "composeApp/schemas/com.motovault.app.storage.VaultDatabase/1.json": "f4683dd38d634314e7ef62511dc83c8188eb3543ecba7b658dd351286d2692a3",
+    "composeApp/schemas/com.motovault.app.storage.VaultDatabase/2.json": "23beef3d9a484f99f1bf8cc1c965ac369c0c63828e7862436543bb25d150d8a0",
+    "composeApp/schemas/com.motovault.app.storage.VaultDatabase/3.json": "15aa4391e53c157388bdcbc30c55486a474fa5f326a732e8932b040cdb269d24",
+    "composeApp/schemas/com.motovault.app.storage.VaultDatabase/4.json": "125661e3b3ffe826235385fdaa909c1fb46fd88c858b67000c8c61d9e1a2a361",
+    "composeApp/schemas/com.motovault.app.storage.VaultDatabase/5.json": "85cb363d2ed9e496c29d69c25a55e5ae8c31ec671cb7440918f75b12419468e9",
+    "composeApp/src/androidInstrumentedTest/kotlin/com/motovault/app/storage/security/NativeAssetInstrumentation.kt": "ccd1f494bea40015c3f96a128dc62572d4c79765510c5418882030c8af2fd3d7",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/MainActivity.kt": "6f9f47db99f3c297df27d25cc956dd10963e7a0db67c5d868f03741dd8b61d96",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/storage/security/AndroidAssetCipher.kt": "947b7bde2a005f03e4cd5a2f3bd086b18c2af9d383a4e488e5509761a60c7f3a",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/storage/security/AndroidAssetFiles.kt": "3ffa6e8b6b8bf74e5e8fbcdacaceb3a745950200adb4f50b06077f7b71c8ca4b",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/storage/security/DocumentDigest.android.kt": "4fe53f9806839e93728dd52e51fd0d62b72c6596936fe22be7d757b11fd0d012",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/storage/security/ProtectedDocumentStorage.android.kt": "ac0c5159a1b9c5647a75c7df4b6d5864209b7b5efd26b90a63311650c1240453",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCamera.kt": "2d056961db8515caead70c65f3c2a2e3a80e64d7384b0d4aad09b179c108fb8e",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCapture.kt": "7011d2d71710e6e870f23ac1b4bf269777109aa9c35158135546f60749cb3a23",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/ui/VaultStorage.kt": "42f17a063a39ce4d23cb92fdccb9e5135f0eca7b77e631e1948673682f7812f5",
+    "composeApp/src/androidMain/res/xml/document_paths.xml": "f29664ffc5c1c585fe243b948e55418c6e477d8797cbaf761ea328f7accb413e",
+    "composeApp/src/androidUnitTest/kotlin/com/motovault/app/storage/security/SecureAssetStoreTest.kt": "7fb7b0209745cf9e0221f0fda63733bdf6bcb62b8806ef251ecaf0c5c0bf6268",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt": "7e2258921d4f62418165c94ec8d3031f5a927617dcf35c870457b0543f3474c6",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/ProtectedDocumentStorage.kt": "8d8daf8979a5d6876b745279b055843e20390a777c67c68f52f124f172d0fde3",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/SecureAssetStore.kt": "3fc0ee5420ff9fe624c9085ceb6d3dba468625944a62b6afead6d125ec0355b5",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/VaultFormatProbe.kt": "beae40c3e5fa849f927ebbb15f1a614a197b0a06b8a771df87220f1ce4304ca0",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt": "84d96367ae28287fce090292104e067be7e9741850445dc3139d3b6e662ca227",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultSettings.kt": "d91e5dcfffc569ac27d7cb6a126bf4fb31aeb28fbb2c72f2e59163b57ed7bfdf",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt": "20a021c77ac9c3726382e31a8552afcd300276147321ef0c6584ffa32b26f43b"
+  },
+  "artifacts": [
+    {
+      "name": "composeApp-privacyProbe.apk",
+      "bytes": 127618931,
+      "sha256": "c895a1393d91d05f49c1cadc36a0f20e9ad3712d53785b435b58102c717018a5"
+    },
+    {
+      "name": "composeApp-privacyProbe-androidTest.apk",
+      "bytes": 38279,
+      "sha256": "59a5df5467f4140083f61c210dfb0c1240a427497fbbf119dbb7a37acb6ee224"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "baseRevision": "cdc55e6",
+  "uncommittedDelta": true,
+  "platform": "android",
+  "capturedAtUtc": "2026-10-26T19:23:49.543665+00:00",
+  "sources": {
+    "composeApp/build.gradle.kts": "20eac4ccd0bc868e0a36c12588d982c4bc694b9c7ef2b3cdd22c8087cccbdcf4",
+    "composeApp/src/androidInstrumentedTest/kotlin/com/motovault/app/storage/security/NativeAssetInstrumentation.kt": "590cbbf503a7fcbad5d4cd060ae31c0e31fd29679217643fe64ebee74817020c",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/MainActivity.kt": "6f9f47db99f3c297df27d25cc956dd10963e7a0db67c5d868f03741dd8b61d96",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/storage/security/AndroidAssetCipher.kt": "947b7bde2a005f03e4cd5a2f3bd086b18c2af9d383a4e488e5509761a60c7f3a",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/storage/security/AndroidAssetFiles.kt": "3ffa6e8b6b8bf74e5e8fbcdacaceb3a745950200adb4f50b06077f7b71c8ca4b",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/storage/security/DocumentDigest.android.kt": "4fe53f9806839e93728dd52e51fd0d62b72c6596936fe22be7d757b11fd0d012",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/storage/security/ProtectedDocumentStorage.android.kt": "63650c6cb3d4c9836498479efd10f22f4c2b27c631518ee89734bf51c7a0959d",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCamera.kt": "2d056961db8515caead70c65f3c2a2e3a80e64d7384b0d4aad09b179c108fb8e",
+    "composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCapture.kt": "6500b1d37cfbb3769de87bddad64ac91e5d7d9d98e6277b1e5608f4fec3f0961",
+    "composeApp/src/androidMain/res/xml/document_paths.xml": "f29664ffc5c1c585fe243b948e55418c6e477d8797cbaf761ea328f7accb413e",
+    "composeApp/src/androidUnitTest/kotlin/com/motovault/app/storage/security/SecureAssetStoreTest.kt": "7fb7b0209745cf9e0221f0fda63733bdf6bcb62b8806ef251ecaf0c5c0bf6268",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/ProtectedDocumentStorage.kt": "8d8daf8979a5d6876b745279b055843e20390a777c67c68f52f124f172d0fde3",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/SecureAssetStore.kt": "3fc0ee5420ff9fe624c9085ceb6d3dba468625944a62b6afead6d125ec0355b5",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt": "84d96367ae28287fce090292104e067be7e9741850445dc3139d3b6e662ca227"
+  },
+  "artifacts": [
+    {
+      "name": "composeApp-privacyProbe.apk",
+      "bytes": 127677689,
+      "sha256": "9212628af7637aa60ee809fecf3f575be643106c69221dc9705ba1bbb5a565d0"
+    },
+    {
+      "name": "composeApp-privacyProbe-androidTest.apk",
+      "bytes": 34907,
+      "sha256": "87dd6d97013ab42bedda5358f153c0bcfba10f9ea70ba9d4f6d2f3b2d67a7a0a"
+    }
+  ]
+}

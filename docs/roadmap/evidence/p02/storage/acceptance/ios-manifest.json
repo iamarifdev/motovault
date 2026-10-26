@@ -1,0 +1,44 @@
+{
+  "baseRevision": "cdc55e6",
+  "uncommittedDelta": true,
+  "platform": "ios",
+  "capturedAtUtc": "2026-10-26T19:42:32.040661+00:00",
+  "sources": {
+    "composeApp/build.gradle.kts": "20eac4ccd0bc868e0a36c12588d982c4bc694b9c7ef2b3cdd22c8087cccbdcf4",
+    "composeApp/schemas/com.motovault.app.storage.VaultDatabase/1.json": "f4683dd38d634314e7ef62511dc83c8188eb3543ecba7b658dd351286d2692a3",
+    "composeApp/schemas/com.motovault.app.storage.VaultDatabase/2.json": "23beef3d9a484f99f1bf8cc1c965ac369c0c63828e7862436543bb25d150d8a0",
+    "composeApp/schemas/com.motovault.app.storage.VaultDatabase/3.json": "15aa4391e53c157388bdcbc30c55486a474fa5f326a732e8932b040cdb269d24",
+    "composeApp/schemas/com.motovault.app.storage.VaultDatabase/4.json": "125661e3b3ffe826235385fdaa909c1fb46fd88c858b67000c8c61d9e1a2a361",
+    "composeApp/schemas/com.motovault.app.storage.VaultDatabase/5.json": "85cb363d2ed9e496c29d69c25a55e5ae8c31ec671cb7440918f75b12419468e9",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt": "7e2258921d4f62418165c94ec8d3031f5a927617dcf35c870457b0543f3474c6",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/ProtectedDocumentStorage.kt": "8d8daf8979a5d6876b745279b055843e20390a777c67c68f52f124f172d0fde3",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/SecureAssetStore.kt": "3fc0ee5420ff9fe624c9085ceb6d3dba468625944a62b6afead6d125ec0355b5",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/VaultFormatProbe.kt": "beae40c3e5fa849f927ebbb15f1a614a197b0a06b8a771df87220f1ce4304ca0",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt": "84d96367ae28287fce090292104e067be7e9741850445dc3139d3b6e662ca227",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultSettings.kt": "d91e5dcfffc569ac27d7cb6a126bf4fb31aeb28fbb2c72f2e59163b57ed7bfdf",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt": "20a021c77ac9c3726382e31a8552afcd300276147321ef0c6584ffa32b26f43b",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/storage/security/IosAssetCipher.kt": "3d7b6dfaf762b97b0c8c338d4abc169852c1a50ea79df22a7c25064db9cc9253",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/storage/security/IosAssetFiles.kt": "fed14c7ebb3593d648c38c674d2d0d2cd8631fc1723e8eb120ef0ef0f8db2920",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/storage/security/IosStorageProbe.kt": "6835b652e4c57a9eb7d05f903eaf85e8cc9d13ded4e80ca48245ad5e767f60d7",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/storage/security/ProtectedDocumentStorage.ios.kt": "647d71ea6ddd532cf527a84a5746ad6db8a559886d7cfe1b371e2100dd9f1fc7",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/ui/DocumentCamera.kt": "1ac9ec149f0ed0cbd61146d105b4c0d116fbf587cf1cad2adc5015a717f6a4bf",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/ui/DocumentCapture.kt": "12d8868be7039c4e9394ba340044b340e450402dab70d8d82b8dca2d7fab026e",
+    "composeApp/src/iosMain/kotlin/com/motovault/app/ui/VaultStorage.kt": "24331b604e33091d3239bfebdc66e8b83204cef999a3669300e93810a30b2a1c",
+    "composeApp/src/iosTest/kotlin/com/motovault/app/VaultDatabaseTest.kt": "9096c9eedb079281a22546e89787f991ae6176591ba9b203cd656288c180e8a2",
+    "iosApp/MotoVault/AppDelegate.swift": "b95b2194569f97f58b9e2f76b92e7d06dc076aefd0eff91ba2226657bc054572",
+    "iosApp/MotoVault/MotoVault.entitlements": "3bd5621b6410986e2ea9df09e444990679e8f2fe23ccc0e8a1e887be7ceed64d",
+    "iosApp/MotoVault.xcodeproj/project.pbxproj": "56d365d63fa1a962af9fb116fb6cab57831b267954f0975bed36bc539a1955ff"
+  },
+  "artifacts": [
+    {
+      "name": "MotoVault",
+      "bytes": 40512,
+      "sha256": "67f11118ae7a9320f312f17342a75aa78029dd793c6a500e74dc44413056bf4d"
+    },
+    {
+      "name": "MotoVault.debug.dylib",
+      "bytes": 63516608,
+      "sha256": "97f94b8eb5e15cd43ef4f6988c8f5a729369ef08e6604df06ac05a48e701aa6c"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-26T09:40:04+00:00",
+  "updated_at": "2026-10-26T20:28:18+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -1110,13 +1110,37 @@
             "plan",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-26T18:24:54+00:00",
+          "completed_at": "2026-10-26T18:26:52+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-26T18:24:54+00:00",
+              "text": "Trace native document storage and recovery boundaries; define reviewed platform crypto and migration contract before implementation."
+            },
+            {
+              "at": "2026-10-26T18:26:52+00:00",
+              "text": "Reviewed current file, Room/outbox, native reader, provider and recovery boundaries; froze platform crypto, coverage exclusions, key lifecycle and no-loss migration contract."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "plan",
+              "reference": "docs/roadmap/P02-PRIVACY-CONTRACT.md",
+              "summary": "Reviewed current file, Room/outbox, native reader, provider and recovery boundaries; froze platform crypto, coverage exclusions, key lifecycle and no-loss migration contract.",
+              "at": "2026-10-26T18:26:52+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P02-01-review.md",
+              "summary": "Reviewed current file, Room/outbox, native reader, provider and recovery boundaries; froze platform crypto, coverage exclusions, key lifecycle and no-loss migration contract.",
+              "at": "2026-10-26T18:26:52+00:00",
+              "revision": "cdc55e6"
+            }
+          ]
         },
         {
           "id": "P02-02",
@@ -1136,13 +1160,87 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-26T18:26:52+00:00",
+          "completed_at": "2026-10-26T19:42:32+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-26T18:26:52+00:00",
+              "text": "Implement authenticated versioned asset envelope and recoverable staging boundary, then platform key adapters and reader integration."
+            },
+            {
+              "at": "2026-10-26T18:36:46+00:00",
+              "text": "Added versioned AEAD envelope, native file/key adapters, Swift CryptoKit bridge and 9 passing JVM fault/interoperability tests. Swift simulator host build passes. App reader integration, complete migration/recovery and native storage fault verification remain pending; encryption is not activated."
+            },
+            {
+              "at": "2026-10-26T19:06:47+00:00",
+              "text": "Integrated encrypted document readers/writers, verified plaintext retirement and recovery, and isolated native probes. Eleven JVM storage tests plus eight physical Android and eight iOS 27 simulator checks pass. Android root alias and iOS crop metadata defects were fixed. Original hash inventory, owner migration UI and complete native export lifecycle checks remain open."
+            },
+            {
+              "at": "2026-10-26T19:42:32+00:00",
+              "text": "Storage/key adapters and migration API accepted: authenticated original hash inventory, native staging/recovery, temporary-copy lifecycle, Room 4-to-5 preservation and future-format refusal. Fifteen native checks pass on physical Android and iOS 27 simulator; 162 Android and 170 iOS regressions pass. Owner controls and actual OS sharing remain P02-03/04."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P02-02-storage-progress.md",
+              "summary": "Added versioned AEAD envelope, native file/key adapters, Swift CryptoKit bridge and 9 passing JVM fault/interoperability tests. Swift simulator host build passes. App reader integration, complete migration/recovery and native storage fault verification remain pending; encryption is not activated.",
+              "at": "2026-10-26T18:36:46+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P02-02-storage-progress.md",
+              "summary": "Added versioned AEAD envelope, native file/key adapters, Swift CryptoKit bridge and 9 passing JVM fault/interoperability tests. Swift simulator host build passes. App reader integration, complete migration/recovery and native storage fault verification remain pending; encryption is not activated.",
+              "at": "2026-10-26T18:36:46+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P02-02-integrated-storage.md",
+              "summary": "Integrated encrypted document readers/writers, verified plaintext retirement and recovery, and isolated native probes. Eleven JVM storage tests plus eight physical Android and eight iOS 27 simulator checks pass. Android root alias and iOS crop metadata defects were fixed. Original hash inventory, owner migration UI and complete native export lifecycle checks remain open.",
+              "at": "2026-10-26T19:06:47+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P02-02-integrated-storage.md",
+              "summary": "Integrated encrypted document readers/writers, verified plaintext retirement and recovery, and isolated native probes. Eleven JVM storage tests plus eight physical Android and eight iOS 27 simulator checks pass. Android root alias and iOS crop metadata defects were fixed. Original hash inventory, owner migration UI and complete native export lifecycle checks remain open.",
+              "at": "2026-10-26T19:06:47+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/p02/storage/android-native-result.txt",
+              "summary": "Integrated encrypted document readers/writers, verified plaintext retirement and recovery, and isolated native probes. Eleven JVM storage tests plus eight physical Android and eight iOS 27 simulator checks pass. Android root alias and iOS crop metadata defects were fixed. Original hash inventory, owner migration UI and complete native export lifecycle checks remain open.",
+              "at": "2026-10-26T19:06:47+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/p02/storage/ios-native-result.txt",
+              "summary": "Integrated encrypted document readers/writers, verified plaintext retirement and recovery, and isolated native probes. Eleven JVM storage tests plus eight physical Android and eight iOS 27 simulator checks pass. Android root alias and iOS crop metadata defects were fixed. Original hash inventory, owner migration UI and complete native export lifecycle checks remain open.",
+              "at": "2026-10-26T19:06:47+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P02-02-acceptance.md",
+              "summary": "Storage/key adapters and migration API accepted: authenticated original hash inventory, native staging/recovery, temporary-copy lifecycle, Room 4-to-5 preservation and future-format refusal. Fifteen native checks pass on physical Android and iOS 27 simulator; 162 Android and 170 iOS regressions pass. Owner controls and actual OS sharing remain P02-03/04.",
+              "at": "2026-10-26T19:42:32+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P02-02-acceptance.md",
+              "summary": "Storage/key adapters and migration API accepted: authenticated original hash inventory, native staging/recovery, temporary-copy lifecycle, Room 4-to-5 preservation and future-format refusal. Fifteen native checks pass on physical Android and iOS 27 simulator; 162 Android and 170 iOS regressions pass. Owner controls and actual OS sharing remain P02-03/04.",
+              "at": "2026-10-26T19:42:32+00:00",
+              "revision": "cdc55e6"
+            }
+          ]
         },
         {
           "id": "P02-03",
@@ -1163,13 +1261,44 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-26T19:42:32+00:00",
+          "completed_at": "2026-10-26T20:20:22+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-26T19:42:32+00:00",
+              "text": "Privacy prototype prepared alongside the storage contract; begin native system authentication, durable privacy preferences, masking and selected-document isolation from the recorded v3 walkthrough."
+            },
+            {
+              "at": "2026-10-26T20:20:22+00:00",
+              "text": "Implemented native system authentication bridge, PrivacyGate lock and inspection handover, PrivacySheet settings, auto-lock timeout/background lifecycle, and verified all 7 interaction scenarios."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P02-03-prototype.md",
+              "summary": "Privacy prototype prepared alongside the storage contract; begin native system authentication, durable privacy preferences, masking and selected-document isolation from the recorded v3 walkthrough.",
+              "at": "2026-10-26T19:42:32+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/privacy/VaultPrivacySheet.kt",
+              "summary": "Implemented native system authentication bridge, PrivacyGate lock and inspection handover, PrivacySheet settings, auto-lock timeout/background lifecycle, and verified all 7 interaction scenarios.",
+              "at": "2026-10-26T20:20:22+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P02-03-verification.md",
+              "summary": "Implemented native system authentication bridge, PrivacyGate lock and inspection handover, PrivacySheet settings, auto-lock timeout/background lifecycle, and verified all 7 interaction scenarios.",
+              "at": "2026-10-26T20:20:22+00:00",
+              "revision": "cdc55e6"
+            }
+          ]
         },
         {
           "id": "P02-04",
@@ -1189,13 +1318,37 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-26T20:20:36+00:00",
+          "completed_at": "2026-10-26T20:21:54+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-26T20:20:36+00:00",
+              "text": "Protect export, import and temporary-file boundaries with deliberate authentication, transient export copy revocation, and sanitized error reporting."
+            },
+            {
+              "at": "2026-10-26T20:21:54+00:00",
+              "text": "Deliberate authentication added to OpenOriginalAssetButton and PassportExportUi; verified transient file creation, immediate deletion, process start sweep, and sanitized error messages."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCapture.kt",
+              "summary": "Deliberate authentication added to OpenOriginalAssetButton and PassportExportUi; verified transient file creation, immediate deletion, process start sweep, and sanitized error messages.",
+              "at": "2026-10-26T20:21:54+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P02-04-verification.md",
+              "summary": "Deliberate authentication added to OpenOriginalAssetButton and PassportExportUi; verified transient file creation, immediate deletion, process start sweep, and sanitized error messages.",
+              "at": "2026-10-26T20:21:54+00:00",
+              "revision": "cdc55e6"
+            }
+          ]
         },
         {
           "id": "P02-05",
@@ -1219,13 +1372,51 @@
             "ios_device",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
+          "status": "in_review",
+          "owner": "Codex",
+          "started_at": "2026-10-26T20:22:15+00:00",
           "completed_at": null,
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-26T20:22:15+00:00",
+              "text": "Verify privacy and key recovery on physical Android and iPhone."
+            },
+            {
+              "at": "2026-10-26T20:28:18+00:00",
+              "text": "Physical Android verified with 15/15 native checks on Motorola edge 50 fusion; physical iPhone hardware unavailable. Keeping in_review with hardware gate open."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/p02/android-device/motorola-native-result.txt",
+              "summary": "Physical Android verified with 15/15 native checks on Motorola edge 50 fusion; physical iPhone hardware unavailable. Keeping in_review with hardware gate open.",
+              "at": "2026-10-26T20:28:18+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P02-05-acceptance.md",
+              "summary": "Physical Android verified with 15/15 native checks on Motorola edge 50 fusion; physical iPhone hardware unavailable. Keeping in_review with hardware gate open.",
+              "at": "2026-10-26T20:28:18+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P02-03-prototype.md",
+              "summary": "Physical Android verified with 15/15 native checks on Motorola edge 50 fusion; physical iPhone hardware unavailable. Keeping in_review with hardware gate open.",
+              "at": "2026-10-26T20:28:18+00:00",
+              "revision": "cdc55e6"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P02-01-review.md",
+              "summary": "Physical Android verified with 15/15 native checks on Motorola edge 50 fusion; physical iPhone hardware unavailable. Keeping in_review with hardware gate open.",
+              "at": "2026-10-26T20:28:18+00:00",
+              "revision": "cdc55e6"
+            }
+          ]
         }
       ]
     },
@@ -3939,6 +4130,102 @@
       "to": "in_review",
       "note": "Corrected owner-reported Garage stat height mismatch and adjacent v3 details. Final Android four-case measured geometry/text-containment/scaling checks pass; final iOS 27 Pro Max normal/large card geometry and navigation pass, heights 159/212 points. App font-size preference now reaches explicit sp values once; large-keypad and representative screen regressions pass after that change. Eight additional cross-screen/source visual differences are documented and remain open. No full-app parity, physical iPhone, haptics or spoken-accessibility completion claim.",
       "revision": "63198f9"
+    },
+    {
+      "at": "2026-10-26T18:24:54+00:00",
+      "task": "P02-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Trace native document storage and recovery boundaries; define reviewed platform crypto and migration contract before implementation.",
+      "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T18:26:52+00:00",
+      "task": "P02-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Reviewed current file, Room/outbox, native reader, provider and recovery boundaries; froze platform crypto, coverage exclusions, key lifecycle and no-loss migration contract.",
+      "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T18:26:52+00:00",
+      "task": "P02-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement authenticated versioned asset envelope and recoverable staging boundary, then platform key adapters and reader integration.",
+      "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T18:36:46+00:00",
+      "task": "P02-02",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Added versioned AEAD envelope, native file/key adapters, Swift CryptoKit bridge and 9 passing JVM fault/interoperability tests. Swift simulator host build passes. App reader integration, complete migration/recovery and native storage fault verification remain pending; encryption is not activated.",
+      "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T19:06:47+00:00",
+      "task": "P02-02",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Integrated encrypted document readers/writers, verified plaintext retirement and recovery, and isolated native probes. Eleven JVM storage tests plus eight physical Android and eight iOS 27 simulator checks pass. Android root alias and iOS crop metadata defects were fixed. Original hash inventory, owner migration UI and complete native export lifecycle checks remain open.",
+      "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T19:42:32+00:00",
+      "task": "P02-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Storage/key adapters and migration API accepted: authenticated original hash inventory, native staging/recovery, temporary-copy lifecycle, Room 4-to-5 preservation and future-format refusal. Fifteen native checks pass on physical Android and iOS 27 simulator; 162 Android and 170 iOS regressions pass. Owner controls and actual OS sharing remain P02-03/04.",
+      "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T19:42:32+00:00",
+      "task": "P02-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Privacy prototype prepared alongside the storage contract; begin native system authentication, durable privacy preferences, masking and selected-document isolation from the recorded v3 walkthrough.",
+      "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T20:20:22+00:00",
+      "task": "P02-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Implemented native system authentication bridge, PrivacyGate lock and inspection handover, PrivacySheet settings, auto-lock timeout/background lifecycle, and verified all 7 interaction scenarios.",
+      "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T20:20:36+00:00",
+      "task": "P02-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Protect export, import and temporary-file boundaries with deliberate authentication, transient export copy revocation, and sanitized error reporting.",
+      "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T20:21:54+00:00",
+      "task": "P02-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Deliberate authentication added to OpenOriginalAssetButton and PassportExportUi; verified transient file creation, immediate deletion, process start sweep, and sanitized error messages.",
+      "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T20:22:15+00:00",
+      "task": "P02-05",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Verify privacy and key recovery on physical Android and iPhone.",
+      "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T20:28:18+00:00",
+      "task": "P02-05",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Physical Android verified with 15/15 native checks on Motorola edge 50 fusion; physical iPhone hardware unavailable. Keeping in_review with hardware gate open.",
+      "revision": "cdc55e6"
     }
   ]
 }

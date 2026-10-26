@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.motovault.app.storage.security.SecureAssetStoreTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-10-26T19:35:10" hostname="MacBookPro" time="0.065">
+  <properties/>
+  <testcase name="sha256MatchesPublishedStandardVector" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.03"/>
+  <testcase name="cryptoKitSyntheticVectorOpensWithPlatformJce" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.006"/>
+  <testcase name="missingOrWrongKeyRetainsCiphertextWithoutReturningOriginal" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.004"/>
+  <testcase name="newWriteCannotShadowAnImmutableLegacyOriginal" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.001"/>
+  <testcase name="newAssetsAreVerifiedAndNeverOverwritePublishedCiphertext" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.001"/>
+  <testcase name="interruptedAndDiskFullMigrationsRetainReadableOriginalAndCanRetry" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.004"/>
+  <testcase name="inventoryCommitFailurePreservesPlaintextUntilVerifiedRetry" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.002"/>
+  <testcase name="authenticationFailureNeverFallsBackToRetainedPlaintext" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.001"/>
+  <testcase name="interruptedRetirementKeepsBothCopiesAndRetryCompletes" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.002"/>
+  <testcase name="missingCommittedCiphertextCannotExposeAnOldPlaintextCopy" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.001"/>
+  <testcase name="randomNoncesProduceDistinctCiphertextsForSameOriginal" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.0"/>
+  <testcase name="inventoryIsAuthenticatedAndSeparatesMetadataFromAssetCiphertext" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.003"/>
+  <testcase name="assetIdentityAndEveryEnvelopeFieldAreAuthenticated" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.007"/>
+  <testcase name="migrationPreservesOriginalBytesAndRetryDoesNotReencrypt" classname="com.motovault.app.storage.security.SecureAssetStoreTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

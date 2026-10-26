@@ -4,6 +4,14 @@ Decision date: 24 October 2026 (Asia/Dhaka). Baseline: `50eda3a`, Room schema 3.
 Status: implementation contract for P01 onward. This document does not implement
 the new models, encryption, backup, migrations or cloud transport.
 
+P02 implementation update (27 October 2026): the active database is now schema 5,
+with explicit 4 -> 5 migration and an `assetFormatVersion=1` declaration. This
+declares reader/writer support, not completed encryption coverage. Stable logical
+asset IDs resolve to authenticated local files and encrypted original hash
+receipts. Unknown versions fail before owner writes. The P00 observations below
+remain the historical baseline; current bounded migration/runtime evidence is
+recorded in [P02-02 acceptance](evidence/P02-02-acceptance.md).
+
 ## 1. Authoritative current storage
 
 `storage/VaultDatabase.kt` stores JSON payload rows in `vehicle`, `schedule`,

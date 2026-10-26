@@ -1,0 +1,31 @@
+Platform: iOS 27 simulator, existing iPhone 18 Pro Max
+Bundle: com.motovault.app.privacyprobe (separate synthetic test sandbox)
+Probe: runIosStorageProbe via --motovault-storage-probe
+Source base: cdc55e6 plus uncommitted P02 storage/reader/probe changes
+
+PASS 8 native iOS storage checks:
+native-key-provision-and-missing-key-refusal
+native-interrupted-stage-retains-original-and-cleans-stage
+native-durable-migration-original-bytes-and-idempotent-reopen
+native-tamper-refuses-plaintext-fallback
+native-lost-key-retains-files-without-replacement
+native-encrypted-image-display-and-crop-readers
+native-legacy-and-recovery-migration-without-overwrite
+native-encrypted-pdf-import-without-plaintext-file
+
+The synthetic Keychain status at completion was -25300 (item not found), as
+expected after deliberately deleting only the UUID-scoped synthetic test key.
+The default application document key was not deleted by this test.
+
+Build: Debug, arm64, Xcode-managed ad hoc simulator signing with the repository's
+MotoVault.entitlements. No physical-device provisioning or signing is proved.
+The earlier unsigned build correctly failed Keychain access with -34018. Manual
+post-build iOS entitlements did not launch; using Xcode's simulated entitlement
+embedding and signing resolved the test setup without weakening Keychain access.
+
+The image/crop check compares returned dimensions to the saved encrypted image
+bytes. It exposed and verified a fix for the old iOS crop metadata using source
+dimensions instead of cropped dimensions.
+
+No physical iPhone, biometric/credential change, native external viewer/share,
+actual disk-full condition, lock/handover UI or design matrix is verified here.

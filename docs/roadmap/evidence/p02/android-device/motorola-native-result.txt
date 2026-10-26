@@ -1,0 +1,34 @@
+Platform: physical Motorola edge 50 fusion, Android 16 (API 36)
+Device Serial: ZA222M4SWQ
+Product: cuscoi_g
+Model: motorola_edge_50_fusion
+Package: com.motovault.app.privacyprobe (separate synthetic test sandbox)
+Test Package: com.motovault.app.privacyprobe.test
+Runner: com.motovault.app.storage.security.NativeAssetInstrumentation
+Base revision: cdc55e6 plus working P02 privacy delta
+Execution timestamp: 2026-10-27T02:25:30+06:00 (Asia/Dhaka)
+
+INSTRUMENTATION_RESULT: checks=15
+INSTRUMENTATION_RESULT: stream=PASS 15 native storage checks:
+1. native-key-provision-and-missing-key-refusal
+2. native-interrupted-stage-retains-original-and-cleans-stage
+3. native-zero-space-preflight-retains-original
+4. native-durable-migration-original-bytes-and-idempotent-reopen
+5. native-authenticated-sha256-inventory-and-repair
+6. native-redirected-storage-directory-rejected
+7. native-tamper-refuses-plaintext-fallback
+8. native-lost-key-retains-files-without-replacement
+9. native-encrypted-image-display-and-crop-readers
+10. native-export-copy-close-is-idempotent-and-removes-plaintext
+11. native-cold-start-removes-interrupted-export-copy
+12. native-legacy-and-recovery-migration-without-overwrite
+13. native-inventory-revalidates-protected-recovery
+14. native-encrypted-pdf-import-and-no-processing-scratch-leak
+15. native-room4-to5-owner-preservation-and-future-format-refusal
+INSTRUMENTATION_CODE: -1 (Activity.RESULT_OK)
+
+Cleanup:
+- Target synthetic test directories deleted recursively.
+- Synthetic AndroidKeyStore alias com.motovault.synthetic.privacy-probe.* unlinked.
+- Both test and probe APKs cleanly uninstalled post-run.
+- No owner data or production key was accessed or altered.
