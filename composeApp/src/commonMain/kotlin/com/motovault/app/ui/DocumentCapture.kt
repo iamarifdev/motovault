@@ -58,6 +58,8 @@ data class DocumentCrop(val left: Float = 0f, val top: Float = 0f, val right: Fl
     fun checked(): DocumentCrop { require(left >= 0f && top >= 0f && right <= 1f && bottom <= 1f && right - left >= .1f && bottom - top >= .1f) { "Keep a complete, readable area." }; return this }
 }
 expect suspend fun readDocumentAsset(id: String): ByteArray
+/** Explicit owner migration. Logical IDs remain stable; byte-identical originals become ciphertext. */
+expect suspend fun protectDocumentAssets(referenced: Set<String>)
 expect fun removeDocumentAssets(ids: Set<String>)
 fun CapturedDocument.assetIds(): Set<String> = pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() + listOfNotNull(originalPdf)
 fun VaultDocument.assetIds(): Set<String> = pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() + listOfNotNull(originalPdf)

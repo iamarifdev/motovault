@@ -17,7 +17,7 @@ const icons = {
   bell: 'bell', sun: 'sun', search: 'search', check: 'check',
   'share-2': 'share-2', grid: 'layout-grid', 'undo-2': 'undo-2',
   timer: 'timer', 'triangle-alert': 'triangle-alert', 'circle-check': 'circle-check',
-  'help-circle': 'circle-help',
+  'help-circle': 'circle-help', lock: 'lock-keyhole', shield: 'shield-check',
 }
 function shapePath(tag, a) {
   if (tag === 'path') return a.d

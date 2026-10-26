@@ -1630,7 +1630,10 @@ fun DocViewSheet(
     onDismiss: () -> Unit,
     onUpdateReminder: (Boolean) -> Unit,
     onReminderSettings: () -> Unit = {},
-    warningDays: Int = doc.reminderWarningDays ?: 30
+    warningDays: Int = doc.reminderWarningDays ?: 30,
+    privacyEnabled: Boolean = false,
+    onInspect: (() -> Unit)? = null,
+    onOpenPrivacy: (() -> Unit)? = null
 ) {
     val f = currentFmt
     var roadsideMode by remember { mutableStateOf(false) }
@@ -1674,6 +1677,15 @@ fun DocViewSheet(
                 )
             }
         }
+
+        VaultButton(
+            text = if (privacyEnabled) "শুধু এই কাগজ দেখান" else "সুরক্ষা চালু করে কাগজ দেখান",
+            kind = ButtonKind.SECONDARY,
+            full = true,
+            onClick = {
+                if (privacyEnabled) onInspect?.invoke() else onOpenPrivacy?.invoke()
+            }
+        )
 
         VaultSwitch(
             title = "রাস্তায় দেখানোর মোড",

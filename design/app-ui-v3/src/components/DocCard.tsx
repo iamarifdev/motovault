@@ -22,10 +22,10 @@ export function ExpiryChip({ doc }: { doc: VaultDoc }) {
 }
 
 /** Stand-in for the scanned original. The real app shows the saved photo. */
-export function DocArt({ doc, large }: { doc: VaultDoc; large?: boolean }) {
+export function DocArt({ doc, large, accessible = false }: { doc: VaultDoc; large?: boolean; accessible?: boolean }) {
   const f = useFmt()
   return (
-    <div className={`docart kind-${doc.kind}${large ? ' large' : ''}`} aria-hidden>
+    <div className={`docart kind-${doc.kind}${large ? ' large' : ''}`} aria-hidden={!accessible} role={accessible ? 'img' : undefined} aria-label={accessible ? `${docName(doc.kind)}। নম্বর ${doc.number}। নাম ${doc.holder}। ${doc.expiry ? `মেয়াদ ${f.dateFull(doc.expiry)}` : 'মেয়াদ নেই'}। ডেমো কপি।` : undefined}>
       <div className="docart-head"><b>{docName(doc.kind)}</b><small>নমুনা · ডেমো</small></div>
       <div className="docart-chip" />
       <div className="docart-body">

@@ -41,7 +41,7 @@ export function Vault() {
             <motion.button key={d.id} type="button" className={`wallet-card kind-${d.kind}`} style={{ zIndex: i }} onClick={() => { haptic('tick'); open('docView', { id: d.id }) }}
               initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ ...spring.list, delay: stagger(i, 0.06) }} whileTap={{ scale: 0.98 }}>
               <span className="wallet-top"><b>{docName(d.kind)}</b><ExpiryChip doc={d} /></span>
-              <DocArt doc={d} />
+              {settings.privacyEnabled ? <div className="privacy-mask"><ScanLine size={28} aria-hidden /><p>নম্বর ও ছবি লুকানো আছে। খুলতে ট্যাপ করুন।</p></div> : <DocArt doc={d} />}
             </motion.button>
           ))}
         </div>

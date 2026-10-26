@@ -107,7 +107,8 @@ data class VaultState(
     val lastItemPrices: Map<String, Double> = emptyMap(),
     val workshops: List<String> = emptyList(),
     val places: List<String> = emptyList(),
-    val reminderPolicy: ReminderPolicy = ReminderPolicy()
+    val reminderPolicy: ReminderPolicy = ReminderPolicy(),
+    val privacy: com.motovault.app.domain.privacy.VaultPrivacySettings = com.motovault.app.domain.privacy.VaultPrivacySettings()
 ) {
     /** Only linked, matching recorded service can establish certainty for an older schedule. */
     fun confirmedRules() = rules.map { rule ->

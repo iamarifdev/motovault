@@ -17,6 +17,9 @@ import platform.Vision.*
 import platform.darwin.NSObject
 import platform.posix.memcpy
 import kotlin.coroutines.coroutineContext
+import com.motovault.app.storage.security.ProtectedDocumentStorage
+import com.motovault.app.storage.security.assetData
+import com.motovault.app.storage.security.assetBytes
 
 internal const val documentOriginalByteLimit = 32 * 1024 * 1024
 
@@ -57,7 +60,7 @@ internal fun saveData(data: NSData, extension: String, operation: DocumentAssetO
     require(data.length in 1uL..33554432uL) { "Each original must be 32 MB or smaller." }
     val id = recordId() + "." + extension
     operation?.register(id)
-    check(data.writeToFile(assetPath(id), options = NSDataWritingAtomic, error = null)) { "Could not save this original." }
+    ProtectedDocumentStorage.writeNew(id, data.assetBytes())
     return id
 }
 private fun presenter(): UIViewController? {
@@ -112,12 +115,11 @@ private fun processImages(images: List<UIImage>, type: String, operation: Docume
 }
 
 @OptIn(ExperimentalForeignApi::class)
-private fun processPdf(data: NSData, type: String, operation: DocumentAssetOperation): CapturedDocument {
+internal fun processPdf(data: NSData, type: String, operation: DocumentAssetOperation): CapturedDocument {
     val id = saveData(data, "pdf", operation)
-    val bytes = assetPath(id).encodeToByteArray()
-    val url = bytes.usePinned { CFURLCreateFromFileSystemRepresentation(null, it.addressOf(0).reinterpret(), bytes.size.toLong(), false) }
-    requireNotNull(url)
-    val document = try { requireNotNull(CGPDFDocumentCreateWithURL(url)) { "Could not read this PDF." } } finally { CFRelease(url) }
+    val cfData = requireNotNull(CFDataCreate(null, data.bytes?.reinterpret(), data.length.toLong()))
+    val provider = try { requireNotNull(CGDataProviderCreateWithCFData(cfData)) } finally { CFRelease(cfData) }
+    val document = try { requireNotNull(CGPDFDocumentCreateWithProvider(provider)) { "Could not read this PDF." } } finally { CGDataProviderRelease(provider) }
     val images = try {
         val count = CGPDFDocumentGetNumberOfPages(document).toInt()
         require(count in 1..documentPageLimit(type)) { "Choose a PDF with up to ${documentPageLimit(type)} pages." }
@@ -188,36 +190,77 @@ actual fun DocumentImportActions(type: String, backOnly: Boolean, onResult: (Cap
 
 @OptIn(ExperimentalForeignApi::class)
 actual suspend fun readDocumentAsset(id: String): ByteArray = withContext(Dispatchers.Default) {
-    val data = requireNotNull(NSData.dataWithContentsOfFile(assetPath(id))) { "This saved copy is unavailable." }
-    require(data.length in 1uL..33554432uL)
-    ByteArray(data.length.toInt()).also { bytes -> bytes.usePinned { memcpy(it.addressOf(0), data.bytes, data.length) } }
+    ProtectedDocumentStorage.read(id)
 }
+
+actual suspend fun protectDocumentAssets(referenced: Set<String>) = withContext(Dispatchers.Default) { ProtectedDocumentStorage.protectInventory(referenced) }
 
 @Composable
 actual fun OpenOriginalAssetButton(id: String, mimeType: String, label: String) {
     var viewer by remember { mutableStateOf<UIDocumentInteractionController?>(null) }
     var error by remember { mutableStateOf<String?>(null) }
+    var exported by remember { mutableStateOf<DocumentExportCopy?>(null) }
+    fun clearExport(): Boolean {
+        val copy = exported ?: return true
+        val cleared = copy.close()
+        if (cleared) exported = null else error = "Could not remove the temporary copy. Close the viewer and try again."
+        return cleared
+    }
     val delegate = remember {
         object : NSObject(), UIDocumentInteractionControllerDelegateProtocol {
             override fun documentInteractionControllerViewControllerForPreview(controller: UIDocumentInteractionController): UIViewController = requireNotNull(presenter())
+            override fun documentInteractionControllerDidEndPreview(controller: UIDocumentInteractionController) { clearExport(); viewer = null }
         }
     }
+    val scope = rememberCoroutineScope()
+    var busy by remember { mutableStateOf(false) }
+    DisposableEffect(Unit) { onDispose { clearExport() } }
     TextButton(onClick = {
-        runCatching {
-            require(NSFileManager.defaultManager.fileExistsAtPath(assetPath(id)))
-            viewer = UIDocumentInteractionController.interactionControllerWithURL(NSURL.fileURLWithPath(assetPath(id)))
-            viewer?.delegate = delegate
-            check(viewer?.presentPreviewAnimated(true) == true)
-        }.onFailure { error = "Could not open this original. You can still view the saved pages here." }
-    }) { Text(label) }
+        busy = true; error = null
+        scope.launch {
+            val auth = com.motovault.app.domain.privacy.NativeSystemAuth.authenticate("আসল ফাইল খুলুন", "সংবেদনশীল ফাইল দেখতে ফোনের লক দিয়ে যাচাই করুন")
+            if (!auth.isSuccess) {
+                error = auth.message ?: "যাচাই ছাড়া ফাইল খোলা যাবে না।"
+                busy = false
+                return@launch
+            }
+            runCatching {
+                check(clearExport())
+                val copy = createDocumentExportCopy(id)
+                exported = copy
+                viewer = UIDocumentInteractionController.interactionControllerWithURL(NSURL.fileURLWithPath(copy.path))
+                viewer?.delegate = delegate
+                check(viewer?.presentPreviewAnimated(true) == true)
+            }.onFailure { clearExport(); viewer = null; error = "Could not open this original. You can still view the saved pages here." }
+            busy = false
+        }
+    }, enabled = !busy) { Text(label) }
     error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
 }
 
-actual fun removeDocumentAssets(ids: Set<String>) { ids.forEach { id -> runCatching { NSFileManager.defaultManager.removeItemAtPath(assetPath(id), error = null) } } }
+internal class DocumentExportCopy(val path: String) {
+    fun close(): Boolean = !NSFileManager.defaultManager.fileExistsAtPath(path) || NSFileManager.defaultManager.removeItemAtPath(path, null)
+}
+
+internal fun createDocumentExportCopy(id: String): DocumentExportCopy {
+    val data = ProtectedDocumentStorage.read(id).assetData()
+    val caches = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, true).first() as String
+    val directory = "$caches/document-exports"
+    val manager = NSFileManager.defaultManager
+    check(manager.createDirectoryAtPath(directory, true, mapOf(NSFileProtectionKey to NSFileProtectionComplete), null))
+    check(manager.attributesOfItemAtPath(directory, null)?.get(NSFileType) == NSFileTypeDirectory)
+    val copy = DocumentExportCopy("$directory/copy-${NSUUID().UUIDString}.${validateDocumentAssetId(id).substringAfterLast('.')}")
+    try {
+        check(data.writeToFile(copy.path, options = NSDataWritingAtomic or NSDataWritingFileProtectionComplete, error = null))
+        return copy
+    } catch (failure: Throwable) { copy.close(); throw failure }
+}
+
+actual fun removeDocumentAssets(ids: Set<String>) { ProtectedDocumentStorage.discard(ids) }
 
 actual suspend fun adjustDocumentPage(page: DocumentPage, turns: Int, crop: DocumentCrop): DocumentPage = documentAssetOperation { operation -> withContext(Dispatchers.Default) {
     crop.checked()
-    val source = preview(requireNotNull(UIImage(contentsOfFile = assetPath(page.acceptedId ?: page.originalId))), 4096.0)
+    val source = preview(requireNotNull(UIImage(data = ProtectedDocumentStorage.read(page.acceptedId ?: page.originalId).assetData())), 4096.0)
     val width = source.size.useContents { width }; val height = source.size.useContents { height }
     val quarter = ((turns % 4) + 4) % 4
     val targetWidth = if (quarter % 2 == 1) height else width
@@ -234,7 +277,7 @@ actual suspend fun adjustDocumentPage(page: DocumentPage, turns: Int, crop: Docu
     val image = try { UIImage(cGImage = cg) } finally { CGImageRelease(cg) }
     val accepted = saveData(requireNotNull(UIImageJPEGRepresentation(image, .98)), "jpg", operation)
     val small = preview(image)
-    page.copy(acceptedId = accepted, previewId = saveData(requireNotNull(UIImageJPEGRepresentation(small, .96)), "jpg", operation), width = small.size.useContents { width.toInt() }, height = small.size.useContents { height.toInt() })
+    page.copy(acceptedId = accepted, previewId = saveData(requireNotNull(UIImageJPEGRepresentation(small, .96)), "jpg", operation), width = small.size.useContents { this.width.toInt() }, height = small.size.useContents { this.height.toInt() })
 } }
 
 private var orphanRecoveryStarted = false
@@ -268,21 +311,11 @@ actual suspend fun recoverOrphanDocumentAssets(referenced: Set<String>) {
 }
 
 actual suspend fun restoreRecoveredDocumentAsset(id: String): String = withContext(Dispatchers.Default) {
-    validateDocumentAssetId(id)
-    val manager = NSFileManager.defaultManager
-    val directory = documentsDirectory()
-    val recovery = directory.substringBeforeLast('/') + "/documents-recovery"
-    require(manager.attributesOfItemAtPath(recovery, error = null)?.get(NSFileType) == NSFileTypeDirectory) { "Recovery storage is unavailable." }
-    val source = "$recovery/$id"
-    require(manager.attributesOfItemAtPath(source, error = null)?.get(NSFileType) == NSFileTypeRegular) { "This recovered original is unavailable." }
-    val target = assetPath(id)
-    require(manager.contentsOfDirectoryAtPath(directory, error = null)?.contains(id) == false) { "A managed file already uses this name. Both originals are retained." }
-    check(manager.moveItemAtPath(source, target, error = null)) { "Could not restore this original. It remains in recovery storage." }
-    id
+    ProtectedDocumentStorage.restoreRecovery(id)
 }
 
 actual suspend fun recognizeDocument(draft: CapturedDocument): CapturedDocument = withContext(Dispatchers.Default) {
     var failed = false
-    val text = draft.pages.joinToString("\n") { page -> runCatching { recognize(preview(requireNotNull(UIImage(contentsOfFile = assetPath(page.acceptedId ?: page.originalId))))) }.getOrElse { failed = true; "" } }
+    val text = draft.pages.joinToString("\n") { page -> runCatching { recognize(preview(requireNotNull(UIImage(data = ProtectedDocumentStorage.read(page.acceptedId ?: page.originalId).assetData())))) }.getOrElse { failed = true; "" } }
     draft.copy(recognizedText = text.take(30000), readingFailed = failed || text.isBlank())
 }

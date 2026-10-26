@@ -52,7 +52,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.motovault.app.domain.model.ComponentRule
+import com.motovault.app.domain.privacy.*
 import com.motovault.app.storage.activeVaultSession
+import com.motovault.app.ui.privacy.*
 import dev.sky.design.*
 import dev.sky.design.tokens.SkyTokens
 import kotlinx.coroutines.delay
@@ -200,10 +202,108 @@ fun MotoVault() {
         }
     }
 
+    val accessPolicy = remember {
+        VaultAccessPolicy(state.privacy) { Clock.System.now().toEpochMilliseconds() }
+    }
+    var accessMode by remember { mutableStateOf(accessPolicy.mode) }
+    var selectedInspectionDocId by remember { mutableStateOf(accessPolicy.selectedDocumentId) }
+    var privacyAuthMessage by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(state.privacy) {
+        accessPolicy.settingsCommitted(state.privacy)
+        accessMode = accessPolicy.mode
+        selectedInspectionDocId = accessPolicy.selectedDocumentId
+    }
+
+    LaunchedEffect(accessMode, state.privacy.enabled) {
+        if (!state.privacy.enabled || accessMode == VaultAccessMode.LOCKED) return@LaunchedEffect
+        while (isActive) {
+            delay(1000L)
+            accessPolicy.tick()
+            if (accessPolicy.mode != accessMode) {
+                accessMode = accessPolicy.mode
+                selectedInspectionDocId = accessPolicy.selectedDocumentId
+            }
+        }
+    }
+
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_STOP || event == androidx.lifecycle.Lifecycle.Event.ON_PAUSE) {
+                accessPolicy.background()
+                accessMode = accessPolicy.mode
+                selectedInspectionDocId = null
+            } else if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
+                accessPolicy.active(true)
+                accessMode = accessPolicy.mode
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    fun unlockVault() {
+        val request = runCatching { accessPolicy.beginAuthentication(VaultAuthAction.UNLOCK) }.getOrNull()
+        if (request == null) {
+            privacyAuthMessage = "যাচাই শুরু করা যায়নি।"
+            return
+        }
+        scope.launch {
+            val result = NativeSystemAuth.authenticate("MotoVault খুলুন", "আপনার তথ্য দেখতে ফোনের লক দিয়ে যাচাই করুন")
+            val grant = accessPolicy.completeAuthentication(request, result.isSuccess)
+            if (grant != null) {
+                accessMode = accessPolicy.mode
+                selectedInspectionDocId = null
+                privacyAuthMessage = null
+            } else {
+                privacyAuthMessage = result.message ?: "যাচাই সফল হয়নি।"
+            }
+        }
+    }
+
+    fun exitInspection() {
+        val request = runCatching { accessPolicy.beginAuthentication(VaultAuthAction.EXIT_INSPECTION) }.getOrNull()
+        if (request == null) {
+            accessPolicy.lock()
+            accessMode = accessPolicy.mode
+            selectedInspectionDocId = null
+            return
+        }
+        scope.launch {
+            val result = NativeSystemAuth.authenticate("কাগজ বন্ধ করুন", "মূল ভল্টে ফিরতে ফোনের লক দিয়ে যাচাই করুন")
+            val grant = accessPolicy.completeAuthentication(request, result.isSuccess)
+            if (grant != null) {
+                accessMode = accessPolicy.mode
+                selectedInspectionDocId = null
+                privacyAuthMessage = null
+            } else {
+                privacyAuthMessage = result.message ?: "যাচাই বাতিল হয়েছে।"
+            }
+        }
+    }
+
+    fun lockNow() {
+        accessPolicy.lock()
+        accessMode = accessPolicy.mode
+        selectedInspectionDocId = null
+        activeSheet = null
+    }
+
+    fun inspectDocument(docId: String) {
+        accessPolicy.inspect(docId)
+        accessMode = accessPolicy.mode
+        selectedInspectionDocId = accessPolicy.selectedDocumentId
+        activeSheet = null
+    }
+
     val reminderRequest by ReminderNavigation.requests.collectAsState()
     LaunchedEffect(reminderRequest, loading) {
         val payload = reminderRequest ?: return@LaunchedEffect
         if (loading) return@LaunchedEffect
+        if (state.privacy.enabled && accessMode == VaultAccessMode.LOCKED) {
+            return@LaunchedEffect
+        }
         val target = decodeReminderPayload(payload)?.let { reminderTarget(state, it) }
         if (target == null) currentToast = ToastData(message = "এই রিমাইন্ডারের রেকর্ড বদলেছে বা মুছে গেছে। তালিকা দেখে নিন।")
         else if (target.type == "document") {
@@ -234,13 +334,24 @@ fun MotoVault() {
     ) {
         PlatformAppearance(LocalVaultPalette.current.dark)
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(CanvasColor)
-                .safeDrawingPadding(),
-            contentAlignment = Alignment.TopCenter
-        ) {
+        if (state.privacy.enabled && (accessMode == VaultAccessMode.LOCKED || accessMode == VaultAccessMode.INSPECTION)) {
+            val selectedDoc = state.documents.find { it.id == selectedInspectionDocId }
+            PrivacyGate(
+                mode = accessMode,
+                selectedDoc = selectedDoc,
+                onUnlock = { unlockVault() },
+                onExitInspection = { exitInspection() },
+                onLock = { lockNow() },
+                authMessage = privacyAuthMessage
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(CanvasColor)
+                    .safeDrawingPadding(),
+                contentAlignment = Alignment.TopCenter
+            ) {
             Column(
                 modifier = Modifier
                     .widthIn(max = 600.dp)
@@ -328,7 +439,8 @@ fun MotoVault() {
                                         onOpenAddDoc = { activeSheet = ActiveSheet("docAdd") },
                                         onOpenDocView = { doc -> activeSheet = ActiveSheet("docView", doc.id) },
                                         onToggleDocReminders = { enabled -> commit(state.copy(docReminders = enabled)) },
-                                        onReminderSettings = { activeSheet = ActiveSheet("reminders") }
+                                        onReminderSettings = { activeSheet = ActiveSheet("reminders") },
+                                        onOpenPrivacy = { activeSheet = ActiveSheet("privacy") }
                                     )
                                     Tab.HISTORY -> HistoryScreen(
                                         state = state,
@@ -500,10 +612,30 @@ fun MotoVault() {
                                     commit(state.copy(documents = updated))
                                 },
                                 onReminderSettings = { activeSheet = ActiveSheet("reminders", "document" to doc.id) },
-                                warningDays = doc.reminderWarningDays ?: state.reminderPolicy.warningDays
+                                warningDays = doc.reminderWarningDays ?: state.reminderPolicy.warningDays,
+                                privacyEnabled = state.privacy.enabled,
+                                onInspect = { inspectDocument(doc.id) },
+                                onOpenPrivacy = { activeSheet = ActiveSheet("privacy") }
                             )
                         }
                     }
+                    "privacy" -> PrivacySheet(
+                        state = state,
+                        onUpdatePrivacy = { next ->
+                            val request = if (!state.privacy.enabled && next.enabled) {
+                                accessPolicy.beginAuthentication(VaultAuthAction.ENABLE)
+                            } else if (state.privacy.enabled && !next.enabled) {
+                                accessPolicy.beginAuthentication(VaultAuthAction.DISABLE)
+                            } else null
+                            val grant = request?.let { accessPolicy.completeAuthentication(it, true) }
+                            val committed = accessPolicy.settingsCommitted(next, grant)
+                            if (committed) {
+                                commit(state.copy(privacy = next))
+                            }
+                        },
+                        onLockNow = { lockNow() },
+                        onDismiss = { activeSheet = null }
+                    )
                     "paste" -> PasteSheet(
                         onDismiss = { activeSheet = null },
                         onSelectFlow = { flow, payload ->
@@ -513,6 +645,7 @@ fun MotoVault() {
                 }
             }
             }
+        }
         }
     }
 }

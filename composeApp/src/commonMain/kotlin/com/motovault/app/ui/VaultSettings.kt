@@ -16,20 +16,21 @@ data class VaultSettings(
     val lastItemPrices: Map<String, Double> = emptyMap(),
     val workshops: List<String> = emptyList(),
     val places: List<String> = emptyList(),
-    val reminderPolicy: ReminderPolicy = ReminderPolicy()
+    val reminderPolicy: ReminderPolicy = ReminderPolicy(),
+    val privacy: com.motovault.app.domain.privacy.VaultPrivacySettings = com.motovault.app.domain.privacy.VaultPrivacySettings()
 ) {
     fun applyTo(state: VaultState) = state.copy(
         digits = digits, haptics = haptics, reduceMotion = reduceMotion, textScale = textScale,
         brandOverride = brandOverride, serviceReminders = serviceReminders, docReminders = docReminders,
         lastPrices = lastPrices, lastItemPrices = lastItemPrices, workshops = workshops, places = places,
-        reminderPolicy = reminderPolicy
+        reminderPolicy = reminderPolicy, privacy = privacy
     )
 
     companion object {
         fun from(state: VaultState) = VaultSettings(
             state.digits, state.haptics, state.reduceMotion, state.textScale, state.brandOverride,
             state.serviceReminders, state.docReminders, state.lastPrices, state.lastItemPrices,
-            state.workshops, state.places, state.reminderPolicy
+            state.workshops, state.places, state.reminderPolicy, state.privacy
         )
     }
 }

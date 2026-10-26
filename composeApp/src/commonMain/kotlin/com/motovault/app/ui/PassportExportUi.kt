@@ -60,6 +60,14 @@ private fun PassportReview(state: VaultState, dismiss: () -> Unit) {
             val approved = confirmed
             scope.launch {
                 try {
+                    if (snapshot.privacy.enabled) {
+                        val auth = com.motovault.app.domain.privacy.NativeSystemAuth.authenticate("সার্ভিস পাসপোর্ট তৈরি করুন", "সংবেদনশীল তথ্য এক্সপোর্ট করতে ফোনের লক দিয়ে যাচাই করুন")
+                        if (!auth.isSuccess) {
+                            error = auth.message ?: "যাচাই ছাড়া পাসপোর্ট এক্সপোর্ট করা যাবে না।"
+                            busy = false
+                            return@launch
+                        }
+                    }
                     val bundle = ExportServicePassportUseCase().execute(snapshot, reviewed, approved)
                     val result = renderServicePassport(bundle)
                     if (latestState == snapshot) { exported = result; digest = bundle.sha256 }

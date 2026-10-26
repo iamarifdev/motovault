@@ -496,7 +496,8 @@ fun VaultScreen(
     onOpenAddDoc: () -> Unit,
     onOpenDocView: (VaultDocument) -> Unit,
     onToggleDocReminders: (Boolean) -> Unit,
-    onReminderSettings: () -> Unit = {}
+    onReminderSettings: () -> Unit = {},
+    onOpenPrivacy: () -> Unit = {}
 ) {
     val f = currentFmt
     val haptic = currentHaptic
@@ -610,7 +611,22 @@ fun VaultScreen(
                             Text(text = d.title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                             ExpiryChip(doc = d, warningDays = d.reminderWarningDays ?: state.reminderPolicy.warningDays)
                         }
-                        DocArt(doc = d)
+                        if (state.privacy.enabled) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(SurfaceColor2)
+                                    .padding(horizontal = 14.dp, vertical = 18.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                V3Icon(path = "feather_icon/fi_scan-line.svg", description = null, modifier = Modifier.size(24.dp), tint = TextSecondary)
+                                Text("নম্বর ও ছবি লুকানো আছে। খুলতে ট্যাপ করুন।", fontSize = 13.sp, color = TextSecondary)
+                            }
+                        } else {
+                            DocArt(doc = d)
+                        }
                     }
                 }
             }
@@ -1052,6 +1068,36 @@ fun MeScreen(
             )
         }
         VaultButton("অনুমতি, সময় ও পরে জানান", kind = ButtonKind.SECONDARY, full = true, onClick = { onOpenSheet("reminders", null) })
+
+        // Privacy section
+        SectionTitle("গোপনীয়তা")
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(SurfaceColor)
+                .border(1.dp, BorderColor, RoundedCornerShape(16.dp))
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = if (state.privacy.enabled) "অ্যাপ লক চালু" else "কাগজ আপনার নিয়ন্ত্রণে",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = TextPrimary
+            )
+            Text(
+                text = "ফোনের লক, নিজে থেকে লক ও শুধু বেছে নেওয়া কাগজ দেখানো।",
+                fontSize = 13.sp,
+                color = TextSecondary
+            )
+            VaultButton(
+                text = "গোপনীয়তার সেটিংস",
+                kind = ButtonKind.SECONDARY,
+                full = true,
+                onClick = { onOpenSheet("privacy", null) }
+            )
+        }
 
         // New concepts (demo)
         SectionTitle("নতুন ধারণা (ডেমো)")

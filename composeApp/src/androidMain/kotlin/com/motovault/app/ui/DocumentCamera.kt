@@ -95,7 +95,10 @@ actual fun DocumentCamera(modifier: Modifier, captureRequest: Int, onQuality: (C
                     scope.launch { try {
                         val page = withContext(Dispatchers.IO) {
                             val bitmap = previewBitmap(assetFile(id))
-                            try { DocumentPage(id, saveBitmap(bitmap, operation), "image/jpeg", bitmap.width, bitmap.height, "Front") } finally { bitmap.recycle() }
+                            try {
+                                com.motovault.app.storage.security.ProtectedDocumentStorage.migrate(setOf(id))
+                                DocumentPage(id, saveBitmap(bitmap, operation), "image/jpeg", bitmap.width, bitmap.height, "Front")
+                            } finally { bitmap.recycle() }
                         }
                         captured(page)
                         delivered = true

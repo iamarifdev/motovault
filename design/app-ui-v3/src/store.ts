@@ -110,7 +110,7 @@ export const useStore = create<Store>()(
   ),
 )
 
-export type SheetName = 'quickAdd' | 'fuel' | 'service' | 'odometer' | 'docAdd' | 'docView' | 'paste' | 'rule' | 'gaugeDetail' | 'reminders'
+export type SheetName = 'quickAdd' | 'fuel' | 'service' | 'odometer' | 'docAdd' | 'docView' | 'paste' | 'rule' | 'gaugeDetail' | 'reminders' | 'privacy'
 export interface SheetState { name: SheetName; props?: Record<string, unknown> }
 export interface Toast { id: number; text: string; undo?: () => void; tone?: 'ok' | 'warn' }
 

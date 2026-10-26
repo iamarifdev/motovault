@@ -19,6 +19,8 @@ export interface Settings {
   docReminders: boolean
   reminderLeadDays?: number
   reminderMinute?: number
+  privacyEnabled?: boolean
+  privacyTimeoutSeconds?: number
 }
 
 export interface Ride {

@@ -87,6 +87,11 @@ export function Me() {
         <Button full kind="secondary" onClick={() => open('reminders')}>অনুমতি, সময় ও পরে জানান</Button>
       </section>
 
+      <section aria-label="গোপনীয়তা">
+        <SectionTitle>গোপনীয়তা</SectionTitle>
+        <div className="card-stack"><div className="setting"><b>{s.privacyEnabled ? 'অ্যাপ লক চালু' : 'কাগজ আপনার নিয়ন্ত্রণে'}</b><p>ফোনের লক, নিজে থেকে লক ও শুধু বেছে নেওয়া কাগজ দেখানো।</p><Button full kind="secondary" onClick={() => open('privacy')}>গোপনীয়তার সেটিংস</Button></div></div>
+      </section>
+
       <section aria-label="নতুন ধারণা">
         <SectionTitle>নতুন ধারণা (ডেমো)</SectionTitle>
         <div className="card-stack">

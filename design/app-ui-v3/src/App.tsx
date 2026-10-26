@@ -19,6 +19,9 @@ import { DocViewSheet } from './sheets/DocViewSheet'
 import { PasteSheet } from './sheets/PasteSheet'
 import { GaugeDetailSheet } from './sheets/GaugeDetailSheet'
 import { ReminderSheet } from './sheets/ReminderSheet'
+import { PrivacySheet } from './sheets/PrivacySheet'
+import { PrivacyGate } from './components/PrivacyGate'
+import { usePrivacyPreview } from './lib/privacyPreview'
 import type { ItemKey, Tab } from './types'
 import type { ParsedLine } from './lib/smartParse'
 
@@ -63,6 +66,7 @@ function renderSheet(name: string, props: Record<string, unknown> = {}) {
     case 'paste': return <PasteSheet key="paste" />
     case 'gaugeDetail': return <GaugeDetailSheet key={`gauge-${props.id}`} id={props.id as string} />
     case 'reminders': return <ReminderSheet key={`reminders-${props.id ?? 'global'}`} id={props.id as string | undefined} type={props.type as string | undefined} />
+    case 'privacy': return <PrivacySheet key="privacy" />
     default: return null
   }
 }
@@ -79,6 +83,26 @@ function Screen() {
   const tab = useUI((s) => s.tab)
   const sheet = useUI((s) => s.sheet)
   const close = useUI((s) => s.close)
+  const privacyEnabled = useStore((s) => s.settings.privacyEnabled)
+  const timeoutSeconds = useStore((s) => s.settings.privacyTimeoutSeconds ?? 60)
+  const privacyMode = usePrivacyPreview((s) => s.mode)
+  const privacyGeneration = usePrivacyPreview((s) => s.generation)
+
+  useEffect(() => {
+    if (!privacyEnabled) return
+    const hide = () => { if (document.hidden) usePrivacyPreview.getState().lock() }
+    document.addEventListener('visibilitychange', hide)
+    return () => document.removeEventListener('visibilitychange', hide)
+  }, [privacyEnabled])
+
+  useEffect(() => {
+    if (!privacyEnabled || privacyMode !== 'owner') return
+    let timeout = window.setTimeout(() => usePrivacyPreview.getState().lock(), timeoutSeconds * 1000)
+    const active = () => { window.clearTimeout(timeout); timeout = window.setTimeout(() => usePrivacyPreview.getState().lock(), timeoutSeconds * 1000) }
+    window.addEventListener('pointerdown', active)
+    window.addEventListener('keydown', active)
+    return () => { window.clearTimeout(timeout); window.removeEventListener('pointerdown', active); window.removeEventListener('keydown', active) }
+  }, [privacyEnabled, privacyMode, timeoutSeconds])
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => { if (e.key === 'Escape' && useUI.getState().sheet) close() }
@@ -87,16 +111,17 @@ function Screen() {
   }, [close])
 
   if (!ride) return <Onboarding />
+  if (privacyEnabled && privacyMode !== 'owner') return <PrivacyGate key={privacyGeneration} />
   return (
     <>
-      <main className="panels">
+      <main className="panels" aria-hidden={!!sheet} {...(sheet ? { inert: '' as unknown as boolean } : {})}>
         {PANELS.map((p) => (
           <div key={p.id} className={`panel${tab === p.id ? ' on' : ''}`} role="tabpanel" aria-hidden={tab !== p.id} {...(tab === p.id ? {} : { inert: '' as unknown as boolean })}>
             {p.node()}
           </div>
         ))}
       </main>
-      <TabBar />
+      <div aria-hidden={!!sheet} {...(sheet ? { inert: '' as unknown as boolean } : {})}><TabBar /></div>
       <AnimatePresence>{sheet && renderSheet(sheet.name, sheet.props)}</AnimatePresence>
     </>
   )
