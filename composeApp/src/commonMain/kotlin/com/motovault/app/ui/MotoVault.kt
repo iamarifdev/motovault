@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -24,6 +25,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -80,8 +82,8 @@ val worlds = listOf(
 
 enum class Tab(val id: String, val title: String, val icon: String) {
     GARAGE("garage", "গ্যারেজ", "fi_home.svg"),
-    VAULT("vault", "কাগজপত্র", "fi_folder.svg"),
-    HISTORY("history", "ইতিহাস", "fi_clock.svg"),
+    VAULT("vault", "কাগজপত্র", "fi_folder-open.svg"),
+    HISTORY("history", "ইতিহাস", "fi_history.svg"),
     ME("me", "আমি", "fi_user.svg")
 }
 
@@ -526,6 +528,7 @@ private fun VaultBottomNavigation(
     val onBrand = OnBrandColor
     val surface = SurfaceColor
     val line = BorderColor
+    val reducedMotion = isReducedMotion
 
     Column(
         modifier = Modifier
@@ -533,11 +536,22 @@ private fun VaultBottomNavigation(
             .background(surface)
     ) {
         HorizontalDivider(color = line, thickness = 0.5.dp)
+        BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+        val slotWidth = maxWidth / 5
+        val slot = when (selected) {
+            Tab.GARAGE -> 0
+            Tab.VAULT -> 1
+            Tab.HISTORY -> 3
+            Tab.ME -> 4
+        }
+        val markerX by androidx.compose.animation.core.animateDpAsState(
+            targetValue = slotWidth * slot + (slotWidth - 28.dp) / 2,
+            animationSpec = VaultMotion.markerSpring(reducedMotion),
+            label = "tabMarker"
+        )
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(68.dp)
-                .padding(horizontal = 8.dp),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 70.dp)
+                .height(IntrinsicSize.Min),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Tab 1: GARAGE
@@ -569,28 +583,29 @@ private fun VaultBottomNavigation(
                     .fillMaxHeight(),
                 contentAlignment = Alignment.TopCenter
             ) {
-                var pressed by remember { mutableStateOf(false) }
+                val interaction = remember { MutableInteractionSource() }
+                val pressed by interaction.collectIsPressedAsState()
                 val scale by animateFloatAsState(
                     targetValue = if (pressed) 0.92f else 1f,
-                    animationSpec = VaultMotion.pressSpring(),
+                    animationSpec = VaultMotion.pressSpring(reducedMotion),
                     label = "plusScale"
                 )
 
                 Box(
                     modifier = Modifier
-                        .offset(y = (-14).dp)
-                        .size(56.dp)
+                        .offset(y = (-23).dp)
+                        .size(70.dp)
                         .graphicsLayer {
                             scaleX = scale
                             scaleY = scale
                         }
-                        .clip(CircleShape)
-                        .background(surface)
-                        .padding(4.dp)
+                        .background(surface, CircleShape)
+                        .padding(5.dp)
+                        .shadow(8.dp, CircleShape, ambientColor = brand.copy(alpha = 0.45f), spotColor = brand.copy(alpha = 0.45f))
                         .clip(CircleShape)
                         .background(brand)
                         .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
+                            interactionSource = interaction,
                             indication = null
                         ) {
                             haptic.perform(HapticKind.SUCCESS)
@@ -602,11 +617,12 @@ private fun VaultBottomNavigation(
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                    SkySvgIcon(
+                    V3Icon(
                         path = "feather_icon/fi_plus.svg",
                         description = null,
-                        modifier = Modifier.size(28.dp),
-                        tint = onBrand
+                        modifier = Modifier.size(30.dp),
+                        tint = onBrand,
+                        strokeWidth = 2.4f
                     )
                 }
             }
@@ -633,6 +649,9 @@ private fun VaultBottomNavigation(
                 modifier = Modifier.weight(1f)
             )
         }
+        Box(Modifier.align(Alignment.BottomStart).offset(x = markerX, y = (-5).dp)
+            .size(28.dp, 4.dp).background(brand, RoundedCornerShape(4.dp)))
+        }
     }
 }
 
@@ -646,7 +665,7 @@ private fun BottomNavItem(
     val color = if (isSelected) BrandColor else TextTertiary
     Column(
         modifier = modifier
-            .fillMaxHeight()
+            .heightIn(min = 70.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
@@ -659,26 +678,20 @@ private fun BottomNavItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        SkySvgIcon(
+        V3Icon(
             path = "feather_icon/${tab.icon}",
             description = tab.title,
-            modifier = Modifier.size(24.dp),
-            tint = color
+            modifier = Modifier.size(28.dp),
+            tint = color,
+            strokeWidth = if (isSelected) 2.4f else 2f
         )
-        Spacer(Modifier.height(3.dp))
+        Spacer(Modifier.height(2.dp))
         Text(
             text = tab.title,
-            fontSize = 12.sp,
-            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.SemiBold,
             color = color,
-            lineHeight = 14.sp
-        )
-        Spacer(Modifier.height(4.dp))
-        // Marker
-        Box(
-            modifier = Modifier
-                .size(width = 24.dp, height = 3.dp)
-                .background(if (isSelected) BrandColor else Color.Transparent, RoundedCornerShape(2.dp))
+            lineHeight = 20.sp
         )
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -47,7 +48,6 @@ import kotlinx.datetime.LocalDate
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.sky.design.SkySvgIcon
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -156,7 +156,7 @@ fun VaultButton(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             if (icon != null) {
-                SkySvgIcon(
+                V3Icon(
                     path = "feather_icon/$icon",
                     description = null,
                     modifier = Modifier.size(if (size == ButtonSize.SM) 16.dp else 20.dp),
@@ -210,7 +210,7 @@ fun VaultIconButton(
             },
         contentAlignment = Alignment.Center
     ) {
-        SkySvgIcon(
+        V3Icon(
             path = "feather_icon/$icon",
             description = null,
             modifier = Modifier.size(22.dp),
@@ -261,7 +261,7 @@ fun VaultChip(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             if (icon != null) {
-                SkySvgIcon(
+                V3Icon(
                     path = "feather_icon/$icon",
                     description = null,
                     modifier = Modifier.size(16.dp),
@@ -458,9 +458,9 @@ fun Gauge(
     }
 
     val iconName = when (wear.status) {
-        WearStatus.OK -> "fi_check-circle.svg"
-        WearStatus.SOON -> "fi_clock.svg"
-        WearStatus.OVERDUE -> "fi_alert-triangle.svg"
+        WearStatus.OK -> "fi_circle-check.svg"
+        WearStatus.SOON -> "fi_timer.svg"
+        WearStatus.OVERDUE -> "fi_triangle-alert.svg"
         WearStatus.UNKNOWN -> "fi_help-circle.svg"
     }
 
@@ -498,7 +498,7 @@ fun Gauge(
                 haptic.perform(HapticKind.TICK)
                 onClick()
             }
-            .padding(horizontal = 8.dp, vertical = 14.dp),
+            .padding(start = 8.dp, top = 14.dp, end = 8.dp, bottom = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
@@ -507,8 +507,8 @@ fun Gauge(
             contentAlignment = Alignment.Center
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
-                val strokeWidth = 6.dp.toPx()
-                val radius = (size.minDimension - strokeWidth) / 2
+                val strokeWidth = size.minDimension * 6f / 80f
+                val radius = size.minDimension * 32f / 80f
                 val center = Offset(size.width / 2, size.height / 2)
 
                 drawCircle(
@@ -523,25 +523,25 @@ fun Gauge(
                     startAngle = -90f,
                     sweepAngle = animSweep.value * 360f,
                     useCenter = false,
-                    topLeft = Offset(strokeWidth / 2, strokeWidth / 2),
-                    size = Size(size.width - strokeWidth, size.height - strokeWidth),
+                    topLeft = Offset(center.x - radius, center.y - radius),
+                    size = Size(radius * 2, radius * 2),
                     style = Stroke(strokeWidth, cap = StrokeCap.Round)
                 )
             }
 
-            if (wear.status == WearStatus.UNKNOWN) Text("?", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+            if (wear.status == WearStatus.UNKNOWN) Text("?", fontSize = 24.sp, fontWeight = FontWeight.Bold)
             else Row(verticalAlignment = Alignment.CenterVertically) {
                 CountUp(
                     value = wear.life.toDouble(),
                     format = { n -> f.d(kotlin.math.round(n).toInt().toString()) },
-                    style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                    style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
                 )
                 Text(
                     text = "%",
-                    fontSize = 11.sp,
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = TextSecondary,
-                    modifier = Modifier.padding(top = 4.dp, start = 1.dp)
+                    modifier = Modifier.padding(top = 8.dp, start = 1.dp)
                 )
             }
         }
@@ -549,25 +549,29 @@ fun Gauge(
         Text(
             text = partName,
             fontSize = 14.sp,
+            lineHeight = 18.9.sp,
             fontWeight = FontWeight.SemiBold,
             color = TextPrimary,
             textAlign = TextAlign.Center,
             maxLines = Int.MAX_VALUE
         )
 
+        Text("সার্ভিসের ব্যবধান বাকি", fontSize = 13.333.sp, lineHeight = 20.667.sp, color = TextPrimary, textAlign = TextAlign.Center)
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            SkySvgIcon(
+            V3Icon(
                 path = "feather_icon/$iconName",
                 description = null,
-                modifier = Modifier.size(13.dp),
-                tint = arcColor
+                modifier = Modifier.size(14.dp),
+                tint = arcColor,
+                strokeWidth = 2.2f
             )
             Text(
                 text = text,
                 fontSize = 12.sp,
+                lineHeight = 15.6.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = arcColor,
                 textAlign = TextAlign.Center,
@@ -641,7 +645,7 @@ fun ExpiryChip(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        SkySvgIcon(
+        V3Icon(
             path = "feather_icon/$icon",
             description = null,
             modifier = Modifier.size(13.dp),
@@ -782,7 +786,7 @@ fun VaultKeypad(
                             contentAlignment = Alignment.Center
                         ) {
                             if (k == "back") {
-                                SkySvgIcon(
+                                V3Icon(
                                     path = "feather_icon/fi_delete.svg",
                                     description = null,
                                     modifier = Modifier.size(22.dp),
@@ -875,10 +879,14 @@ fun ToastLayer(
 ) {
     AnimatedVisibility(
         visible = message != null,
-        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp)
+        modifier = modifier.fillMaxWidth().padding(horizontal = 12.dp)
     ) {
         if (message != null) {
             val haptic = currentHaptic
+            val dark = LocalVaultPalette.current.dark
+            val toastBackground = if (dark) Color(0xFFE9ECEA) else Color(0xFF181C1A)
+            val toastText = if (dark) Color(0xFF181818) else Color(0xFFF1F2F3)
+            val undoColor = if (dark) Color(0xFF1E47A8) else Color(0xFF8FB6FF)
             val progress = remember { Animatable(1f) }
 
             LaunchedEffect(message) {
@@ -890,48 +898,49 @@ fun ToastLayer(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .shadow(8.dp, RoundedCornerShape(16.dp))
                     .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFF181C1A))
-                    .border(0.5.dp, Color(0xFF353B44), RoundedCornerShape(16.dp))
+                    .background(toastBackground)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                        .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 14.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
                         text = message,
-                        color = Color(0xFFF1F2F3),
-                        fontSize = 14.sp,
+                        color = toastText,
+                        fontSize = 15.sp,
+                        lineHeight = 21.sp,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.weight(1f)
                     )
                     if (onUndo != null) {
-                        Spacer(Modifier.width(8.dp))
                         Row(
                             modifier = Modifier
-                                .clip(RoundedCornerShape(10.dp))
+                                .heightIn(min = 40.dp)
+                                .clip(RoundedCornerShape(12.dp))
                                 .clickable {
                                     haptic.perform(HapticKind.WARNING)
                                     onUndo()
                                     onDismiss()
                                 }
-                                .padding(horizontal = 10.dp, vertical = 6.dp),
+                                .padding(horizontal = 12.dp),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            SkySvgIcon(
-                                path = "feather_icon/fi_rotate-ccw.svg",
+                            V3Icon(
+                                path = "feather_icon/fi_undo-2.svg",
                                 description = null,
-                                modifier = Modifier.size(15.dp),
-                                tint = Color(0xFF8FB6FF)
+                                modifier = Modifier.size(16.dp),
+                                tint = undoColor
                             )
                             Text(
                                 text = "আনডু",
-                                color = Color(0xFF8FB6FF),
-                                fontSize = 14.sp,
+                                color = undoColor,
+                                fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -943,7 +952,7 @@ fun ToastLayer(
                         .align(Alignment.BottomStart)
                         .fillMaxWidth(progress.value)
                         .height(3.dp)
-                        .background(BrandColor)
+                        .background(toastText.copy(alpha = 0.4f))
                 )
             }
         }

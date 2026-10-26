@@ -458,6 +458,73 @@ final class P01DeliveryTests: XCTestCase {
         capture("matrix-reminder-settings")
     }
 
+    func testGarageStatCardGeometry() {
+        app.launch()
+        let odometer = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "ওডোমিটার")).firstMatch
+        let economy = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "জ্বালানি গড়")).firstMatch
+        XCTAssertTrue(odometer.waitForExistence(timeout: 10))
+        for _ in 0..<8 {
+            if odometer.frame.minY > app.frame.height * 0.12 && max(odometer.frame.maxY, economy.frame.maxY) < app.frame.height * 0.84 { break }
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.70))
+                .press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.48)))
+        }
+        XCTAssertTrue(odometer.isHittable && economy.isHittable)
+        XCTAssertEqual(odometer.frame.minY, economy.frame.minY, accuracy: 0.5)
+        XCTAssertEqual(odometer.frame.maxY, economy.frame.maxY, accuracy: 0.5)
+        XCTAssertEqual(odometer.frame.width, economy.frame.width, accuracy: 0.5)
+        XCTAssertGreaterThan(odometer.frame.minY, app.frame.height * 0.12)
+        XCTAssertLessThan(odometer.frame.maxY, app.frame.height * 0.84)
+        capture("garage-stats")
+        let frames = XCTAttachment(string: "odometer=\(odometer.frame)\neconomy=\(economy.frame)\n")
+        frames.name = "garage-stat-bounds"; frames.lifetime = .keepAlways; add(frames)
+        odometer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(control("বন্ধ করুন").waitForExistence(timeout: 5))
+        control("বন্ধ করুন").coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(economy.waitForExistence(timeout: 5))
+        economy.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(control("গত ৩০ দিনের খরচ").waitForExistence(timeout: 5))
+        capture("garage-history")
+    }
+
+    func testV3DetailSurfaces() {
+        app.launch()
+        let odometer = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "ওডোমিটার")).firstMatch
+        XCTAssertTrue(odometer.waitForExistence(timeout: 10))
+        let original = odometer.label
+        capture("v3-home")
+        control("নতুন রেকর্ড যোগ করুন").coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(control("কী যোগ করবেন?").waitForExistence(timeout: 5))
+        capture("v3-quick-add")
+        let fuel = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "তেল ভরা")).firstMatch
+        XCTAssertTrue(fuel.waitForExistence(timeout: 5))
+        fuel.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(control("বন্ধ করুন").waitForExistence(timeout: 5))
+        capture("v3-fuel-sheet")
+        control("বন্ধ করুন").coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        let history = app.buttons.matching(NSPredicate(format: "label == %@", "ইতিহাস")).firstMatch
+        XCTAssertTrue(history.waitForExistence(timeout: 5))
+        history.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        capture("v3-history")
+        control("গ্যারেজ").coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(odometer.waitForExistence(timeout: 5))
+        odometer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(control("বন্ধ করুন").waitForExistence(timeout: 5))
+        capture("v3-odometer-sheet")
+        let increment = control(control("+১০").exists ? "+১০" : "+10")
+        increment.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        control("সেভ করুন").coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        let undo = control("আনডু")
+        XCTAssertTrue(undo.waitForExistence(timeout: 3))
+        capture("v3-saved-toast")
+        undo.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(odometer.waitForExistence(timeout: 5))
+        XCTAssertEqual(odometer.label, original)
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(odometer.waitForExistence(timeout: 10))
+        XCTAssertEqual(odometer.label, original, "Save and Undo survive process restart")
+    }
+
     func testReminderAccessibilityAudit() throws {
         continueAfterFailure = true
         defer { continueAfterFailure = false }

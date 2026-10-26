@@ -35,7 +35,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import dev.sky.design.SkySvgIcon
 import dev.sky.design.tokens.SkyTokens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -154,15 +153,18 @@ fun Sheet(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 20.dp, end = 12.dp, bottom = 8.dp),
+                            .heightIn(min = 56.dp)
+                            .padding(start = 20.dp, end = 8.dp, bottom = 4.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
                             text = title,
-                            fontSize = 22.sp,
+                            fontSize = 24.sp,
+                            lineHeight = 32.4.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = TextPrimary
+                            color = TextPrimary,
+                            modifier = Modifier.weight(1f)
                         )
                         VaultIconButton(
                             icon = "fi_x.svg",
@@ -171,7 +173,7 @@ fun Sheet(
                         )
                     }
 
-                    HorizontalDivider(color = BorderColor, thickness = 0.5.dp)
+                    HorizontalDivider(color = BorderColor, thickness = 1.dp)
 
                     // Scrollable Body
                     Column(
@@ -213,16 +215,16 @@ fun QuickAddSheet(
         onDismiss = onDismiss
     ) {
         val options = listOf(
-            Triple("fi_droplet.svg", "তেল ভরা", "টাকা লিখুন, লিটার নিজেই হবে" to "fuel"),
+            Triple("fi_fuel.svg", "তেল ভরা", "টাকা লিখুন, লিটার নিজেই হবে" to "fuel"),
             Triple("fi_tool.svg", "সার্ভিস", "এক ট্যাপে পার্টস যোগ" to "service"),
-            Triple("fi_activity.svg", "ওডোমিটার", "আনুমানিক কিমি ঠিক করুন" to "odometer"),
+            Triple("fi_gauge.svg", "ওডোমিটার", "আনুমানিক কিমি ঠিক করুন" to "odometer"),
             Triple("fi_file-text.svg", "কাগজ", "স্ক্যান করে মেয়াদ রাখুন" to "docAdd")
         )
 
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             options.chunked(2).forEach { row ->
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     row.forEach { (icon, label, subToGo) ->
@@ -230,6 +232,7 @@ fun QuickAddSheet(
                         Column(
                             modifier = Modifier
                                 .weight(1f)
+                                .fillMaxHeight()
                                 .heightIn(min = 140.dp)
                                 .clip(RoundedCornerShape(16.dp))
                                 .background(SurfaceColor2)
@@ -240,7 +243,7 @@ fun QuickAddSheet(
                                     onSelectFlow(flow)
                                 }
                                 .padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
                             horizontalAlignment = Alignment.Start
                         ) {
                             Box(
@@ -250,15 +253,15 @@ fun QuickAddSheet(
                                     .background(BrandColor),
                                 contentAlignment = Alignment.Center
                             ) {
-                                SkySvgIcon(
+                                V3Icon(
                                     path = "feather_icon/$icon",
                                     description = null,
-                                    modifier = Modifier.size(26.dp),
+                                    modifier = Modifier.size(28.dp),
                                     tint = OnBrandColor
                                 )
                             }
                             Spacer(Modifier.height(2.dp))
-                            Text(text = label, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                            Text(text = label, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                             Text(text = sub, fontSize = 13.sp, color = TextSecondary, lineHeight = 18.sp)
                         }
                     }
@@ -270,8 +273,7 @@ fun QuickAddSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
-                    .border(1.5.dp, BrandLineColor, RoundedCornerShape(16.dp))
-                    .background(BrandTintColor.copy(alpha = 0.3f))
+                    .v3DashedBorder(BrandLineColor, 16.dp)
                     .clickable {
                         haptic.perform(HapticKind.TICK)
                         onDismiss()
@@ -281,10 +283,10 @@ fun QuickAddSheet(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                SkySvgIcon(
-                    path = "feather_icon/fi_zap.svg",
+                V3Icon(
+                    path = "feather_icon/fi_sparkles.svg",
                     description = null,
-                    modifier = Modifier.size(22.dp),
+                    modifier = Modifier.size(20.dp),
                     tint = BrandColor
                 )
                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -456,7 +458,7 @@ fun FuelSheet(
                             fontWeight = FontWeight.SemiBold,
                             color = TextPrimary
                         )
-                        SkySvgIcon(
+                        V3Icon(
                             path = "feather_icon/fi_edit-2.svg",
                             description = null,
                             modifier = Modifier.size(12.dp),
@@ -538,8 +540,8 @@ fun FuelSheet(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    SkySvgIcon(
-                        path = "feather_icon/fi_activity.svg",
+                    V3Icon(
+                        path = "feather_icon/fi_gauge.svg",
                         description = null,
                         modifier = Modifier.size(20.dp),
                         tint = BrandColor
@@ -598,7 +600,7 @@ fun FuelSheet(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            SkySvgIcon(
+            V3Icon(
                 path = "feather_icon/fi_map-pin.svg",
                 description = null,
                 modifier = Modifier.size(18.dp),
@@ -798,7 +800,7 @@ fun ServiceSheet(
                         modifier = Modifier.fillMaxWidth().clickable { keysOpen = false }.padding(vertical = 4.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        SkySvgIcon(
+                        V3Icon(
                             path = "feather_icon/fi_chevron-down.svg",
                             description = "লুকান",
                             modifier = Modifier.size(20.dp),
@@ -1079,8 +1081,8 @@ fun ServiceSheet(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    SkySvgIcon(
-                        path = "feather_icon/fi_activity.svg",
+                    V3Icon(
+                    path = "feather_icon/fi_gauge.svg",
                         description = null,
                         modifier = Modifier.size(20.dp),
                         tint = BrandColor
@@ -1397,7 +1399,7 @@ fun DocAddSheet(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                SkySvgIcon(
+                                V3Icon(
                                     path = "feather_icon/fi_file-text.svg",
                                     description = null,
                                     modifier = Modifier.size(24.dp),
@@ -1408,7 +1410,7 @@ fun DocAddSheet(
                                     Text(text = if (kindInfo.card) "সামনে ও পেছনের ছবি" else "পুরো পৃষ্ঠা", fontSize = 13.sp, color = TextSecondary)
                                 }
                             }
-                            SkySvgIcon(
+                            V3Icon(
                                 path = "feather_icon/fi_chevron-right.svg",
                                 description = null,
                                 modifier = Modifier.size(20.dp),
@@ -1443,7 +1445,7 @@ fun DocAddSheet(
                             .background(if (scanFlash) Color.White else Color(0xFF0D1210)),
                         contentAlignment = Alignment.Center
                     ) {
-                        SkySvgIcon(
+                        V3Icon(
                             path = "feather_icon/fi_camera.svg",
                             description = null,
                             modifier = Modifier.size(44.dp),
@@ -1575,7 +1577,7 @@ fun DocAddSheet(
                         modifier = Modifier.size(72.dp).clip(RoundedCornerShape(24.dp)).background(BrandTintColor),
                         contentAlignment = Alignment.Center
                     ) {
-                        SkySvgIcon(path = "feather_icon/fi_bell.svg", description = null, modifier = Modifier.size(34.dp), tint = BrandColor)
+                        V3Icon(path = "feather_icon/fi_bell.svg", description = null, modifier = Modifier.size(34.dp), tint = BrandColor)
                     }
                     Text("মেয়াদ শেষ হওয়ার ৩০ দিন আগে জানাব?", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
                     Text("সকাল ৯টায় একটি নোটিফিকেশন যাবে। নবায়নের সময় থাকবে।", fontSize = 14.sp, color = TextSecondary, textAlign = TextAlign.Center)
@@ -1752,7 +1754,7 @@ fun PasteSheet(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    SkySvgIcon(path = "feather_icon/fi_droplet.svg", description = null, modifier = Modifier.size(20.dp), tint = BrandColor)
+                    V3Icon(path = "feather_icon/fi_droplet.svg", description = null, modifier = Modifier.size(20.dp), tint = BrandColor)
                     Text("তেলের খরচ ${f.money(parsedAmount!!)} মনে হচ্ছে।", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                 }
                 VaultButton(
@@ -1779,7 +1781,7 @@ fun PasteSheet(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    SkySvgIcon(path = "feather_icon/fi_tool.svg", description = null, modifier = Modifier.size(20.dp), tint = BrandColor)
+                    V3Icon(path = "feather_icon/fi_tool.svg", description = null, modifier = Modifier.size(20.dp), tint = BrandColor)
                     val summary = parsedService.lines.joinToString(", ") { catalogItemOf(it.item)?.short ?: it.item }
                     Text(summary, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                 }

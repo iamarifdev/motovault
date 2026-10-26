@@ -35,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.sky.design.SkySvgIcon
 import kotlinx.datetime.LocalDate
 import motovault.composeapp.generated.resources.Res
 import motovault.composeapp.generated.resources.barlow_condensed
@@ -46,6 +45,7 @@ import org.jetbrains.compose.resources.painterResource
 // 1. GARAGE (HOME) SCREEN
 // ==========================================
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 fun GarageScreen(
     state: VaultState,
     onOpenSheet: (String, Any?) -> Unit,
@@ -81,7 +81,7 @@ fun GarageScreen(
     val brandWorld = worlds.firstOrNull { it.id == ride.brandId } ?: worlds.first()
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp),
+        modifier = Modifier.fillMaxWidth().padding(start = 20.dp, top = 8.dp, end = 20.dp, bottom = 28.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         // Home Header
@@ -95,10 +95,10 @@ fun GarageScreen(
                 Text(
                     text = ride.displayName,
                     fontFamily = FontFamily(Font(Res.font.barlow_condensed)),
-                    fontSize = 38.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.SemiBold,
                     color = TextPrimary,
-                    lineHeight = 40.sp
+                    lineHeight = 37.8.sp
                 )
                 Text(text = "${brandWorld.name} · ${f.d(ride.year.toString())}", fontSize = 13.sp, color = TextSecondary)
             }
@@ -119,11 +119,11 @@ fun GarageScreen(
                     Image(
                         painter = painterResource(model.photo),
                         contentDescription = "বাইকের সেটিংস",
-                        modifier = Modifier.size(46.dp),
+                        modifier = Modifier.requiredSize(66.08.dp),
                         contentScale = ContentScale.Fit
                     )
                 } else {
-                    SkySvgIcon(path = "feather_icon/fi_user.svg", description = "বাইকের সেটিংস", modifier = Modifier.size(24.dp), tint = BrandColor)
+                    V3Icon(path = "feather_icon/fi_user.svg", description = "বাইকের সেটিংস", modifier = Modifier.size(24.dp), tint = BrandColor)
                 }
             }
         }
@@ -138,10 +138,10 @@ fun GarageScreen(
                 WearStatus.UNKNOWN -> Quad(palette.surface, palette.line, palette.text2, "সার্ভিসের তথ্য নিশ্চিত করুন")
             }
             val statusIcon = when (topWear.status) {
-                WearStatus.OVERDUE -> "fi_alert-triangle.svg"
-                WearStatus.SOON -> "fi_clock.svg"
-                WearStatus.OK -> "fi_check-circle.svg"
-                WearStatus.UNKNOWN -> "fi_help-circle.svg"
+                WearStatus.OVERDUE -> "fi_triangle-alert.svg"
+                WearStatus.SOON -> "fi_timer.svg"
+                WearStatus.OK -> "fi_circle-check.svg"
+                WearStatus.UNKNOWN -> "fi_triangle-alert.svg"
             }
             val topItem = catalogItemOf(topWear.rule.id) ?: catalogItemOf(topWear.rule.name.lowercase())
             val partTitle = topWear.rule.name.substringBefore(" ও ").substringBefore(" পরিষ্কার")
@@ -167,12 +167,12 @@ fun GarageScreen(
                             .background(statusColor.copy(alpha = 0.16f)),
                         contentAlignment = Alignment.Center
                     ) {
-                        SkySvgIcon(path = "feather_icon/$statusIcon", description = null, modifier = Modifier.size(26.dp), tint = statusColor)
+                        V3Icon(path = "feather_icon/$statusIcon", description = null, modifier = Modifier.size(26.dp), tint = statusColor, strokeWidth = 2.2f)
                     }
-                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(text = statusLabel, fontSize = 13.sp, color = TextSecondary)
-                        Text(text = partTitle, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                        Text(text = WearCalculator.describeWear(topWear, f), fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = statusColor)
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(text = statusLabel, fontSize = 13.sp, lineHeight = 19.5.sp, color = TextSecondary)
+                        Text(text = partTitle, fontSize = 22.sp, lineHeight = 29.7.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                        Text(text = WearCalculator.describeWear(topWear, f), fontSize = 16.sp, lineHeight = 24.8.sp, fontWeight = FontWeight.SemiBold, color = statusColor)
                     }
                 }
 
@@ -219,9 +219,9 @@ fun GarageScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             val quickActions = listOf(
-                Triple("fi_droplet.svg", "তেল ভরা", "fuel"),
+                Triple("fi_fuel.svg", "তেল ভরা", "fuel"),
                 Triple("fi_tool.svg", "সার্ভিস", "service"),
-                Triple("fi_activity.svg", "কিমি", "odometer"),
+                Triple("fi_gauge.svg", "কিমি", "odometer"),
                 Triple("fi_file-text.svg", "কাগজ", "docAdd")
             )
             quickActions.forEach { (icon, label, sheet) ->
@@ -234,7 +234,7 @@ fun GarageScreen(
                             haptic.perform(HapticKind.TICK)
                             onOpenSheet(sheet, null)
                         }
-                        .padding(vertical = 12.dp, horizontal = 4.dp),
+                         .padding(start = 4.dp, top = 12.dp, end = 4.dp, bottom = 10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -246,7 +246,7 @@ fun GarageScreen(
                             .border(1.dp, BrandLineColor, RoundedCornerShape(16.dp)),
                         contentAlignment = Alignment.Center
                     ) {
-                        SkySvgIcon(path = "feather_icon/$icon", description = null, modifier = Modifier.size(24.dp), tint = BrandColor)
+                        V3Icon(path = "feather_icon/$icon", description = null, modifier = Modifier.size(26.dp), tint = BrandColor)
                     }
                     Text(text = label, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                 }
@@ -261,14 +261,15 @@ fun GarageScreen(
                     .clip(RoundedCornerShape(16.dp))
                     .background(BrandTintColor)
                     .border(1.dp, BrandLineColor, RoundedCornerShape(16.dp))
-                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                    .padding(start = 14.dp, top = 10.dp, end = 6.dp, bottom = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                SkySvgIcon(path = "feather_icon/fi_droplet.svg", description = null, modifier = Modifier.size(20.dp), tint = BrandColor)
+                V3Icon(path = "feather_icon/fi_droplets.svg", description = null, modifier = Modifier.size(20.dp), tint = BrandColor)
                 Text(
                     text = "${f.d(sinceFuelDays.toString())} দিন ধরে তেলের হিসাব নেই।",
                     fontSize = 14.sp,
+                    lineHeight = 19.6.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = TextPrimary,
                     modifier = Modifier.weight(1f)
@@ -289,13 +290,14 @@ fun GarageScreen(
 
         // Stats Row (Odometer & Fuel economy)
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             // Odometer card
             Column(
                 modifier = Modifier
                     .weight(1f)
+                    .fillMaxHeight()
                     .clip(RoundedCornerShape(16.dp))
                     .background(SurfaceColor)
                     .border(1.dp, BorderColor, RoundedCornerShape(16.dp))
@@ -306,35 +308,39 @@ fun GarageScreen(
                     .padding(horizontal = 16.dp, vertical = 14.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                Text(text = "ওডোমিটার", fontSize = 12.sp, color = TextSecondary)
-                Row(verticalAlignment = Alignment.Bottom) {
+                Text(text = "ওডোমিটার", fontSize = 13.sp, lineHeight = 19.5.sp, color = TextSecondary)
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     CountUp(
                         value = ride.odometer,
                         format = { n -> f.n(n.toLong()) },
-                        style = TextStyle(fontSize = 26.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                        modifier = Modifier.alignByBaseline(),
+                        style = TextStyle(fontSize = 30.sp, lineHeight = 37.5.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
                     )
-                    Spacer(Modifier.width(4.dp))
                     Text(
                         text = if (f.digits == Digits.BN) "কিমি" else "km",
-                        fontSize = 13.sp,
+                        fontSize = 13.125.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = TextSecondary,
-                        modifier = Modifier.padding(bottom = 2.dp)
+                        modifier = Modifier.alignByBaseline()
                     )
                 }
                 Text(
                     text = "আজ আনুমানিক ${f.n(estimate.toLong())} · আপডেট",
                     fontSize = 12.sp,
+                    lineHeight = 18.6.sp,
                     color = TextSecondary,
-                    maxLines = 1
+                    modifier = Modifier.heightIn(min = 26.dp).wrapContentHeight(Alignment.CenterVertically)
                 )
-                Text(text = "শেষ নিশ্চিত: ${ride.odometerConfirmedDate ?: "তারিখ জানা নেই"}", fontSize = 12.sp, color = TextSecondary)
+                val confirmedDate = ride.odometerConfirmedDate?.let { runCatching { f.date(LocalDate.parse(it)) }.getOrNull() }
+                Text(text = "শেষ নিশ্চিত: ${confirmedDate ?: "তারিখ জানা নেই"}", fontSize = 12.sp, lineHeight = 18.6.sp, color = TextSecondary,
+                    modifier = Modifier.heightIn(min = 26.dp).wrapContentHeight(Alignment.CenterVertically))
             }
 
             // Economy card
             Column(
                 modifier = Modifier
                     .weight(1f)
+                    .fillMaxHeight()
                     .clip(RoundedCornerShape(16.dp))
                     .background(SurfaceColor)
                     .border(1.dp, BorderColor, RoundedCornerShape(16.dp))
@@ -345,24 +351,24 @@ fun GarageScreen(
                     .padding(horizontal = 16.dp, vertical = 14.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                Text(text = "জ্বালানি গড়", fontSize = 12.sp, color = TextSecondary)
-                Row(verticalAlignment = Alignment.Bottom) {
+                Text(text = "জ্বালানি গড়", fontSize = 13.sp, lineHeight = 19.5.sp, color = TextSecondary)
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     if (economy != null) {
                         CountUp(
                             value = economy,
                             format = { n -> f.d(formatLakh(n, 1)) },
-                            style = TextStyle(fontSize = 26.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                            modifier = Modifier.alignByBaseline(),
+                            style = TextStyle(fontSize = 30.sp, lineHeight = 37.5.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
                         )
                     } else {
-                        Text(text = "--", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                        Text(text = "--", modifier = Modifier.alignByBaseline(), fontSize = 30.sp, lineHeight = 37.5.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
                     }
-                    Spacer(Modifier.width(4.dp))
                     Text(
                         text = if (f.digits == Digits.BN) "কিমি/লি" else "km/L",
-                        fontSize = 13.sp,
+                        fontSize = 13.125.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = TextSecondary,
-                        modifier = Modifier.padding(bottom = 2.dp)
+                        modifier = Modifier.alignByBaseline()
                     )
                 }
                 Box(modifier = Modifier.height(26.dp), contentAlignment = Alignment.CenterStart) {
@@ -372,15 +378,18 @@ fun GarageScreen(
         }
 
         // Gauges Section
+        Column {
         SectionTitle("সার্ভিসের ব্যবধান বাকি")
         Row(
-            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+            modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)
+                .horizontalScroll(rememberScrollState()).padding(top = 2.dp, bottom = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             wears.forEachIndexed { i, wear ->
                 Gauge(
                     wear = wear,
                     index = i,
+                    modifier = Modifier.fillMaxHeight(),
                     onClick = {
                         haptic.perform(HapticKind.TICK)
                         onOpenSheet("gaugeDetail", wear.rule.id)
@@ -388,9 +397,11 @@ fun GarageScreen(
                 )
             }
         }
+        }
 
         // Renewals Section (if any within 30 days)
         if (renewals.isNotEmpty()) {
+            Column {
             SectionTitle("কাগজের মেয়াদ")
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 renewals.forEach { (doc, leftDays) ->
@@ -416,16 +427,17 @@ fun GarageScreen(
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            modifier = Modifier.weight(1f)
                         ) {
-                            SkySvgIcon(
-                                path = if (isExpired) "feather_icon/fi_alert-triangle.svg" else "feather_icon/fi_clock.svg",
+                            V3Icon(
+                                path = if (isExpired) "feather_icon/fi_triangle-alert.svg" else "feather_icon/fi_timer.svg",
                                 description = null,
                                 modifier = Modifier.size(20.dp),
                                 tint = textColor
                             )
-                            Column {
-                                Text(text = doc.title, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                            Column(Modifier.weight(1f)) {
+                                Text(text = doc.title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                                 Text(
                                     text = if (isExpired) "${f.days(-leftDays)} আগে মেয়াদ শেষ" else "মেয়াদ শেষ হতে ${f.days(leftDays)}",
                                     fontSize = 13.sp,
@@ -433,9 +445,10 @@ fun GarageScreen(
                                 )
                             }
                         }
-                        SkySvgIcon(path = "feather_icon/fi_chevron-right.svg", description = null, modifier = Modifier.size(20.dp), tint = TextTertiary)
+                        V3Icon(path = "feather_icon/fi_chevron-right.svg", description = null, modifier = Modifier.size(20.dp), tint = TextTertiary)
                     }
                 }
+            }
             }
         }
 
@@ -444,7 +457,7 @@ fun GarageScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
+                    .height(176.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .background(Brush.radialGradient(listOf(LocalVaultPalette.current.photoWellStart, LocalVaultPalette.current.photoWellEnd)))
                     .border(1.dp, BorderColor, RoundedCornerShape(16.dp)),
@@ -454,11 +467,11 @@ fun GarageScreen(
                     Image(
                         painter = painterResource(model.photo),
                         contentDescription = "${brandWorld.name} ${ride.displayName}",
-                        modifier = Modifier.fillMaxWidth(0.85f).fillMaxHeight(0.9f),
+                        modifier = Modifier.fillMaxWidth(0.8f).widthIn(max = 340.dp).fillMaxHeight(0.9f),
                         contentScale = ContentScale.Fit
                     )
                 } else {
-                    SkySvgIcon(path = "feather_icon/fi_activity.svg", description = null, modifier = Modifier.size(64.dp), tint = BrandColor)
+                    V3Icon(path = "feather_icon/fi_gauge.svg", description = null, modifier = Modifier.size(64.dp), tint = BrandColor)
                 }
             }
             Text(
@@ -560,14 +573,14 @@ fun VaultScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                SkySvgIcon(path = "feather_icon/fi_file-text.svg", description = null, modifier = Modifier.size(36.dp), tint = TextSecondary)
+                V3Icon(path = "feather_icon/fi_scan-line.svg", description = null, modifier = Modifier.size(36.dp), tint = TextSecondary)
                 Text(
                     text = if (sortedDocs.isEmpty()) "প্রথম কাগজটি যোগ করুন। অনুমতি দিলে মেয়াদের আগে জানানো হবে।" else "এই কাগজগুলোর মেয়াদ শেষের তারিখ নেই।",
                     fontSize = 15.sp,
                     color = TextSecondary,
                     textAlign = TextAlign.Center
                 )
-                VaultButton(text = "কাগজ স্ক্যান করুন", icon = "fi_camera.svg", onClick = onOpenAddDoc)
+                VaultButton(text = "কাগজ স্ক্যান করুন", icon = "fi_scan-line.svg", onClick = onOpenAddDoc)
             }
         }
 
@@ -672,17 +685,17 @@ fun HistoryScreen(
                 .background(SurfaceColor)
                 .border(1.dp, BorderColor, RoundedCornerShape(16.dp))
                 .padding(14.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(text = "গত ৩০ দিনের খরচ", fontSize = 12.sp, color = TextSecondary)
                 Text(text = f.money(spend30), fontSize = 17.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
             }
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(text = "চালানো", fontSize = 12.sp, color = TextSecondary)
                 Text(text = f.km(km30), fontSize = 17.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
             }
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(text = "জ্বালানি গড়", fontSize = 12.sp, color = TextSecondary)
                 Text(
                     text = if (avgEconomy != null) "${f.d(formatLakh(avgEconomy, 1))} ${if (f.digits == Digits.BN) "কিমি/লি" else "km/L"}" else "--",
@@ -756,8 +769,8 @@ fun HistoryScreen(
                                     .background(if (log.isFuel) BrandTintColor else HealthyColor.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) {
-                                SkySvgIcon(
-                                    path = if (log.isFuel) "feather_icon/fi_droplet.svg" else "feather_icon/fi_tool.svg",
+                                V3Icon(
+                                    path = if (log.isFuel) "feather_icon/fi_fuel.svg" else "feather_icon/fi_tool.svg",
                                     description = null,
                                     modifier = Modifier.size(22.dp),
                                     tint = if (log.isFuel) BrandColor else HealthyColor
@@ -774,7 +787,7 @@ fun HistoryScreen(
                                 )
                             }
                             Text(text = f.money(log.cost), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                            SkySvgIcon(
+                            V3Icon(
                                 path = "feather_icon/fi_chevron-down.svg",
                                 description = null,
                                 modifier = Modifier.size(18.dp).rotate(rot),
@@ -833,7 +846,7 @@ fun HistoryScreen(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
-                                    SkySvgIcon(path = "feather_icon/fi_trash-2.svg", description = null, modifier = Modifier.size(14.dp), tint = ErrorColor)
+                                    V3Icon(path = "feather_icon/fi_trash-2.svg", description = null, modifier = Modifier.size(14.dp), tint = ErrorColor)
                                     Text("রেকর্ড মুছুন", fontSize = 13.sp, color = ErrorColor, fontWeight = FontWeight.SemiBold)
                                 }
                             }
@@ -891,7 +904,7 @@ fun MeScreen(
                 if (model != null) {
                     Image(painter = painterResource(model.photo), contentDescription = null, modifier = Modifier.size(48.dp), contentScale = ContentScale.Fit)
                 } else {
-                    SkySvgIcon(path = "feather_icon/fi_activity.svg", description = null, modifier = Modifier.size(32.dp), tint = BrandColor)
+                    V3Icon(path = "feather_icon/fi_gauge.svg", description = null, modifier = Modifier.size(32.dp), tint = BrandColor)
                 }
             }
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -1057,7 +1070,7 @@ fun MeScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                SkySvgIcon(path = "feather_icon/fi_share-2.svg", description = null, modifier = Modifier.size(22.dp), tint = BrandColor)
+                V3Icon(path = "feather_icon/fi_share-2.svg", description = null, modifier = Modifier.size(22.dp), tint = BrandColor)
                 Column {
                     Text("শেয়ার বা পেস্ট করে যোগ", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                     Text("বিকাশ, নগদ বা মেকানিকের মেসেজ থেকে খসড়া", fontSize = 13.sp, color = TextSecondary)
@@ -1075,7 +1088,7 @@ fun MeScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                SkySvgIcon(path = "feather_icon/fi_grid.svg", description = null, modifier = Modifier.size(22.dp), tint = BrandColor)
+                V3Icon(path = "feather_icon/fi_grid.svg", description = null, modifier = Modifier.size(22.dp), tint = BrandColor)
                 Column {
                     Text("হোম স্ক্রিন উইজেট", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                     Text("অ্যাপ না খুলেই পরের কাজ আর দুটি বোতাম", fontSize = 13.sp, color = TextSecondary)
@@ -1195,7 +1208,7 @@ fun OnboardingScreen(
                     onClick = onDismiss
                 )
             } else {
-                SkySvgIcon(path = "feather_icon/fi_activity.svg", description = null, modifier = Modifier.size(24.dp), tint = BrandColor)
+                V3Icon(path = "feather_icon/fi_bike.svg", description = null, modifier = Modifier.size(26.dp), tint = BrandColor)
             }
             // Step dots
             Row(modifier = Modifier.weight(1f).padding(horizontal = 14.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -1306,7 +1319,7 @@ fun OnboardingScreen(
                             .padding(horizontal = 14.dp, vertical = 12.dp)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            SkySvgIcon(path = "feather_icon/fi_search.svg", description = null, modifier = Modifier.size(20.dp), tint = TextTertiary)
+                            V3Icon(path = "feather_icon/fi_search.svg", description = null, modifier = Modifier.size(20.dp), tint = TextTertiary)
                             BasicTextField(
                                 value = searchQuery,
                                 onValueChange = { searchQuery = it },

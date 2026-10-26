@@ -16,6 +16,8 @@ def main():
     selection = parser.add_mutually_exclusive_group()
     selection.add_argument('--navigation-only', action='store_true')
     selection.add_argument('--keypad-only', action='store_true')
+    selection.add_argument('--details-only', action='store_true')
+    selection.add_argument('--garage-only', action='store_true')
     args = parser.parse_args()
     selected = p01_ios.validate_device(args.device)
     assert selected['name'] == 'iPhone 18 Pro Max', 'Use the owner-selected Pro Max'
@@ -37,6 +39,10 @@ def main():
         tests = ['testReminderDragDismissDoesNotSave']
     elif args.keypad_only:
         tests = ['testNumericKeypadSafeAreaAndCancel']
+    elif args.details_only:
+        tests = ['testV3DetailSurfaces']
+    elif args.garage_only:
+        tests = ['testGarageStatCardGeometry']
     elif args.case == 'empty':
         tests = ['testEmptyReminderAccessibilityAudit']
     command = ['xcodebuild', 'test-without-building', '-xctestrun',
@@ -55,7 +61,9 @@ def main():
             shutil.copytree(exported, out / 'attachments')
             p00.write_json(out / 'run.json', dict(device=selected, fixture=args.case,
                 synthetic=True, applicationId=p00.APP, host=p01_ios.inspect(),
-                tests=tests, scope=('XCTest numeric keypad bounds and cancellation only. No spoken VoiceOver or physical-device claim.'
+                tests=tests, scope=('Garage stat-card measured geometry, navigation and screenshots. No full-app parity or physical-device claim.'
+                    if args.garage_only else 'V3 icon/geometry/theme screenshots and save/Undo with restart. No full-app parity or physical-device claim.'
+                    if args.details_only else 'XCTest numeric keypad bounds and cancellation only. No spoken VoiceOver or physical-device claim.'
                     if args.keypad_only else 'XCTest automated audits and drag dismissal only. No spoken VoiceOver or physical-device claim.')))
             print(json.dumps({k: summary[k] for k in ['result', 'passedTests', 'failedTests']}, indent=2), flush=True)
 

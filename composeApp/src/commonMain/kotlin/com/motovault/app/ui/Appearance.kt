@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.sp
 import dev.sky.design.*
 import dev.sky.design.SkySvgIcon
@@ -244,7 +246,11 @@ internal fun VaultTheme(
     val dark = appearance.usesDarkPalette(isSystemInDarkTheme())
     val effectiveReducedMotion = systemReducedMotion() || reduceMotion
     val palette = vaultPalette(brandId, dark)
-    val (materialTypography, vaultTypography) = rememberBanglaTypography(textScale)
+    val density = LocalDensity.current
+    val scaledDensity = remember(density, textScale) {
+        Density(density.density, density.fontScale * textScale)
+    }
+    val (materialTypography, vaultTypography) = rememberBanglaTypography(1f)
 
     val baseScheme = if (dark) darkColorScheme() else lightColorScheme()
     val scheme = baseScheme.copy(
@@ -304,6 +310,7 @@ internal fun VaultTheme(
     ) {
         MaterialTheme(colorScheme = scheme, typography = materialTypography) {
             CompositionLocalProvider(
+                LocalDensity provides scaledDensity,
                 LocalVaultPalette provides palette,
                 LocalVaultBrandId provides brandId,
                 LocalVaultTypography provides vaultTypography,
