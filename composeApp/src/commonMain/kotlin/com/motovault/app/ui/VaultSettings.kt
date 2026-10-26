@@ -2,9 +2,16 @@ package com.motovault.app.ui
 
 import kotlinx.serialization.Serializable
 
+@Serializable
+enum class AppLanguage(val code: String, val label: String) {
+    BN("bn", "বাংলা"),
+    EN("en", "English")
+}
+
 /** Preferences are committed with owner records; notification permission remains an OS decision. */
 @Serializable
 data class VaultSettings(
+    val language: AppLanguage = AppLanguage.BN,
     val digits: Digits = Digits.BN,
     val haptics: Boolean = true,
     val reduceMotion: Boolean = false,
@@ -20,7 +27,7 @@ data class VaultSettings(
     val privacy: com.motovault.app.domain.privacy.VaultPrivacySettings = com.motovault.app.domain.privacy.VaultPrivacySettings()
 ) {
     fun applyTo(state: VaultState) = state.copy(
-        digits = digits, haptics = haptics, reduceMotion = reduceMotion, textScale = textScale,
+        language = language, digits = digits, haptics = haptics, reduceMotion = reduceMotion, textScale = textScale,
         brandOverride = brandOverride, serviceReminders = serviceReminders, docReminders = docReminders,
         lastPrices = lastPrices, lastItemPrices = lastItemPrices, workshops = workshops, places = places,
         reminderPolicy = reminderPolicy, privacy = privacy
@@ -28,7 +35,7 @@ data class VaultSettings(
 
     companion object {
         fun from(state: VaultState) = VaultSettings(
-            state.digits, state.haptics, state.reduceMotion, state.textScale, state.brandOverride,
+            state.language, state.digits, state.haptics, state.reduceMotion, state.textScale, state.brandOverride,
             state.serviceReminders, state.docReminders, state.lastPrices, state.lastItemPrices,
             state.workshops, state.places, state.reminderPolicy, state.privacy
         )

@@ -1,0 +1,175 @@
+<resources>
+    <!-- Navigation Tabs -->
+    <string name="nav_garage">গ্যারেজ</string>
+    <string name="nav_vault">কাগজপত্র</string>
+    <string name="nav_records">রেকর্ড</string>
+    <string name="nav_profile">প্রোফাইল</string>
+    <string name="nav_quick_add">যোগ করুন</string>
+
+    <!-- General Actions -->
+    <string name="action_save">সেভ করুন</string>
+    <string name="action_saved">সেভ হয়েছে</string>
+    <string name="action_confirm">নিশ্চিত করুন</string>
+    <string name="action_cancel">বাতিল</string>
+    <string name="action_delete">মুছে ফেলুন</string>
+    <string name="action_edit">এডিট করুন</string>
+    <string name="action_close">বন্ধ করুন</string>
+    <string name="action_back">ফিরে যান</string>
+    <string name="action_undo">আনডু</string>
+    <string name="action_retry">আবার চেষ্টা করুন</string>
+    <string name="action_proceed">এগিয়ে যান</string>
+    <string name="action_done">সম্পন্ন</string>
+    <string name="action_select">নির্বাচন করুন</string>
+    <string name="action_dismiss">বাদ দিন</string>
+    <string name="action_open">খুলুন</string>
+    <string name="action_share">শেয়ার করুন</string>
+    <string name="action_unlock">লক খুলুন</string>
+
+    <!-- Language & Digits -->
+    <string name="settings_language">ভাষা (Language)</string>
+    <string name="settings_language_bn">বাংলা</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_digits">সংখ্যার ধরন</string>
+    <string name="settings_digits_bn">১২৩ বাংলা</string>
+    <string name="settings_digits_en">123 English</string>
+
+    <!-- Settings & Preferences -->
+    <string name="settings_theme">অ্যাপের থিম</string>
+    <string name="settings_theme_system">সিস্টেমের মতো</string>
+    <string name="settings_theme_light">লাইট</string>
+    <string name="settings_theme_dark">ডার্ক</string>
+    <string name="settings_text_size">লেখার সাইজ</string>
+    <string name="settings_haptics">টাচ ভাইব্রেশন (হ্যাপটিক)</string>
+    <string name="settings_haptics_desc">বাটন প্রেস ও সেভ করার সময় হালকা ভাইব্রেশন</string>
+    <string name="settings_reduce_motion">অ্যানিমেশন কমান</string>
+    <string name="settings_reduce_motion_desc">স্ক্রিন ট্রানজিশন ও অ্যানিমেশনের নড়াচড়া কমান</string>
+    <string name="settings_location">বর্তমান লোকেশন</string>
+    <string name="settings_location_desc">তেল ও সার্ভিসের সাথে জিপিএস লোকেশন সেভ করুন</string>
+    <string name="settings_privacy_title">গোপনীয়তা ও অ্যাপ লক</string>
+    <string name="settings_privacy_desc">ফিঙ্গারপ্রিন্ট বা স্ক্রিন লক দিয়ে তথ্য সুরক্ষিত রাখুন</string>
+    <string name="settings_reminder_service">সার্ভিসের নোটিফিকেশন</string>
+    <string name="settings_reminder_service_desc">ইঞ্জিন অয়েল, চেইন ও রেগুলার মেইনটেন্যান্স অ্যালার্ট</string>
+    <string name="settings_reminder_doc">কাগজপত্র নবায়নের রিমাইন্ডার</string>
+    <string name="settings_reminder_doc_desc">মেয়াদ শেষ হওয়ার আগেই সতর্কবার্তা পান</string>
+
+    <!-- Garage Screen -->
+    <string name="garage_title">আমার গ্যারেজ</string>
+    <string name="garage_odometer">ওডোমিটার</string>
+    <string name="garage_last_confirmed">সর্বশেষ যাচাই: %1$s</string>
+    <string name="garage_date_unknown">তারিখ জানা নেই</string>
+    <string name="garage_avg_economy">গড় মাইলেজ</string>
+    <string name="garage_monthly_cost">গত ৩০ দিনের খরচ</string>
+    <string name="garage_total_distance">মোট চালানো</string>
+    <string name="garage_wear_title">যন্ত্রাংশের অবস্থা</string>
+    <string name="garage_next_renewal">পরবর্তী নবায়ন</string>
+    <string name="garage_service_remaining">%1$s বাকি</string>
+    <string name="garage_service_overdue">%1$s পেরিয়ে গেছে</string>
+
+    <!-- Fuel Logging -->
+    <string name="fuel_title">জ্বালানি</string>
+    <string name="fuel_liters">লিটার</string>
+    <string name="fuel_price_per_liter">প্রতি লিটার দর</string>
+    <string name="fuel_total_cost">মোট খরচ</string>
+    <string name="fuel_full_tank">ফুল ট্যাংক করা হয়েছে</string>
+    <string name="fuel_partial_tank">আংশিক তেল ভরা হয়েছে (পরের ফুল ট্যাংকে হিসাব হবে)</string>
+    <string name="fuel_pump_name">পাম্পের নাম (ঐচ্ছিক)</string>
+    <string name="fuel_odometer_prompt">বর্তমান ওডোমিটার</string>
+    <string name="fuel_petrol">পেট্রোল</string>
+    <string name="fuel_octane">অকটেন</string>
+    <string name="fuel_parsed_estimate">তেলের খরচ %1$s মনে হচ্ছে</string>
+
+    <!-- Service Logging -->
+    <string name="service_title">সার্ভিস</string>
+    <string name="service_workshop">গ্যারেজ বা মেকানিক (ঐচ্ছিক)</string>
+    <string name="service_schedule">সার্ভিসের সময়সূচি: %1$s</string>
+    <string name="service_cost">যন্ত্রাংশ ও সার্ভিসের খরচ</string>
+    <string name="service_labor_cost">সার্ভিস চার্জ / মজুরি</string>
+    <string name="service_discount">ছাড় / ডিসকাউন্ট</string>
+    <string name="service_parts_list">যা যা করানো হয়েছে</string>
+    <string name="service_parts_placeholder">যেমন: ইঞ্জিন অয়েল ৯০০ টাকা, ফিল্টার ৩০০ টাকা</string>
+    <string name="service_general">জেনারেল সার্ভিস</string>
+    <string name="service_inspection">চেকআপ / ইন্সপেকশন</string>
+    <string name="service_wash">বাইক ওয়াশ</string>
+    <string name="service_tuning">টিউনিং / অ্যাডজাস্টমেন্ট</string>
+
+    <!-- Odometer Scanning -->
+    <string name="odo_title">ওডোমিটার</string>
+    <string name="odo_scan_prompt">স্ক্যান হচ্ছে… ক্যামেরা স্থির রাখুন</string>
+    <string name="odo_detected">শনাক্ত হয়েছে: %1$s কিমি</string>
+    <string name="odo_manual_entry">নিজে লিখুন</string>
+    <string name="odo_estimated">আনুমানিক</string>
+
+    <!-- Document Vault -->
+    <string name="vault_title">কাগজপত্র</string>
+    <string name="vault_add_doc">ডকুমেন্ট যোগ করুন</string>
+    <string name="vault_locked_mask">নম্বর ও ছবি লুকানো আছে। দেখতে ট্যাপ করুন।</string>
+    <string name="vault_card_front_back">সামনে ও পেছনের ছবি</string>
+    <string name="vault_page_full">পুরো পৃষ্ঠা</string>
+    <string name="vault_doc_number">ডকুমেন্টের নম্বর</string>
+    <string name="vault_doc_holder">মালিকের নাম</string>
+    <string name="vault_doc_expiry">মেয়াদ উত্তীর্ণের তারিখ</string>
+    <string name="vault_doc_no_expiry">মেয়াদ নেই</string>
+    <string name="vault_doc_expired_days">%1$s আগে মেয়াদ শেষ</string>
+    <string name="vault_doc_days_left">%1$s বাকি</string>
+    <string name="vault_doc_valid">মেয়াদ আছে</string>
+    <string name="doc_registration">রেজিস্ট্রেশন সার্টিফিকেট</string>
+    <string name="doc_smart_card">রেজিস্ট্রেশন স্মার্ট কার্ড</string>
+    <string name="doc_tax_token">ট্যাক্স টোকেন</string>
+    <string name="doc_fitness">ফিটনেস সার্টিফিকেট</string>
+    <string name="doc_insurance">ইন্স্যুরেন্স / বিমা</string>
+    <string name="doc_driving_license">ড্রাইভিং লাইসেন্স</string>
+
+    <!-- Roadside Inspection -->
+    <string name="handover_title">পুলিশ চেকিং বা ডকুমেন্ট প্রদর্শন মোড</string>
+    <string name="handover_desc">ফুল ব্রাইটনেস ও পরিষ্কার ভিউ</string>
+    <string name="handover_isolated_badge">নির্বাচিত ডকুমেন্ট · প্রিভিউ</string>
+    <string name="handover_isolated_notice">এই মোডে অন্য কোনো ডকুমেন্ট বা এডিট অপশন দেখা যাবে না।</string>
+    <string name="handover_exit_lock">লক করে ভল্টে ফিরুন</string>
+    <string name="handover_exit_auth">ফোনের লক দিয়ে ফিরুন</string>
+
+    <!-- Privacy & App Lock -->
+    <string name="privacy_title">গোপনীয়তা ও সুরক্ষা</string>
+    <string name="privacy_gate_title">MotoVault লক করা আছে</string>
+    <string name="privacy_gate_subtitle">লক খুলতে ফোনের স্ক্রিন লক বা ফিঙ্গারপ্রিন্ট দিন।</string>
+    <string name="privacy_unlock_button">আনলক করুন</string>
+    <string name="privacy_enabled">অ্যাপ লক চালু</string>
+    <string name="privacy_disabled">অ্যাপ লক বন্ধ</string>
+    <string name="privacy_turn_on">অ্যাপ লক চালু করুন</string>
+    <string name="privacy_turn_off">অ্যাপ লক বন্ধ করুন</string>
+    <string name="privacy_auto_lock_title">অটো-লক সময়</string>
+    <string name="privacy_auto_lock_1m">১ মিনিট</string>
+    <string name="privacy_auto_lock_5m">৫ মিনিট</string>
+    <string name="privacy_auto_lock_15m">১৫ মিনিট</string>
+    <string name="privacy_bg_lock_desc">অ্যাপ মিনিমাইজ বা ব্যাকগ্রাউন্ডে পাঠালে সাথে সাথে লক হবে।</string>
+    <string name="privacy_lock_now">এখন লক করুন</string>
+    <string name="privacy_scope_title">কোন তথ্য সুরক্ষিত থাকবে</string>
+    <string name="privacy_scope_desc">মূল ফাইল, ক্রপ করা ছবি ও সেভ করা ডকুমেন্টস AES-256 দিয়ে সুরক্ষিত থাকবে।</string>
+    <string name="privacy_key_lost_title">সিকিউরিটি কি (Security Key) হারিয়ে গেলে</string>
+    <string name="privacy_key_lost_desc">ফোনের স্ক্রিন লক দিয়ে এনক্রিপ্ট করা ফাইল রিকভার করা সম্ভব নয়। অ্যাপ আনইনস্টল বা অ্যাপ ডেটা ক্লিয়ার করবেন না।</string>
+    <string name="privacy_export_auth_title">আসল ফাইল খুলুন</string>
+    <string name="privacy_export_auth_reason">সংবেদনশীল ফাইল দেখতে ফোনের লক দিয়ে যাচাই করুন</string>
+
+    <!-- Service Passport -->
+    <string name="passport_title">সার্ভিস পাসপোর্ট</string>
+    <string name="passport_verify">পাসপোর্ট যাচাই করুন</string>
+    <string name="passport_export_button">নিশ্চিত করে এক্সপোর্ট করুন</string>
+    <string name="passport_generating">পাসপোর্ট তৈরি হচ্ছে…</string>
+    <string name="passport_owner_name">মালিকের নাম</string>
+    <string name="passport_bike_brand">বাইকের ব্র্যান্ড</string>
+    <string name="passport_bike_model">মডেল</string>
+    <string name="passport_bike_edition">ভ্যারিয়েন্ট (ঐচ্ছিক)</string>
+    <string name="passport_hash_input">ভেরিফিকেশন হ্যাশ কোড বা QR টেক্সট (ঐচ্ছিক)</string>
+    <string name="passport_hash_matched">পাসপোর্টের ডিজিটাল সিগনেচার সফলভাবে যাচাই হয়েছে।</string>
+    <string name="passport_hash_internal">ফাইলের অভ্যন্তরীণ হ্যাশ অক্ষত রয়েছে।</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_step">ধাপ %1$s / %2$s</string>
+    <string name="onboarding_brand_title">কোন বাইক চালান?</string>
+    <string name="onboarding_brand_subtitle">ব্র্যান্ড বেছে নিন। আপনার বাইকের জন্যই সাজবে এই গ্যারেজ।</string>
+    <string name="onboarding_bike_details">বাইকের তথ্য</string>
+    <string name="onboarding_model_year">মডেলের বছর</string>
+    <string name="onboarding_market">বাইকটি কোন দেশের জন্য তৈরি?</string>
+    <string name="onboarding_emission">এমিশন স্ট্যান্ডার্ড (যেমন: BS4, BS6)</string>
+    <string name="onboarding_finish_btn">গ্যারেজ তৈরি করুন</string>
+    <string name="onboarding_change_bike">পরিবর্তন নিশ্চিত করুন</string>
+</resources>

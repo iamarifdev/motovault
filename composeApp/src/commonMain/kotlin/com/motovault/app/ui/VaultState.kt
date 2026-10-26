@@ -96,6 +96,7 @@ data class VaultState(
     val economy: Double? = null,
     val appearance: Appearance = Appearance.SYSTEM,
     val autoLocation: Boolean = false,
+    val language: AppLanguage = AppLanguage.BN,
     val digits: Digits = Digits.BN,
     val haptics: Boolean = true,
     val reduceMotion: Boolean = false,

@@ -1,0 +1,175 @@
+<resources>
+    <!-- Navigation Tabs -->
+    <string name="nav_garage">Garage</string>
+    <string name="nav_vault">Documents</string>
+    <string name="nav_records">Records</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_quick_add">Quick Add</string>
+
+    <!-- General Actions -->
+    <string name="action_save">Save</string>
+    <string name="action_saved">Saved</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_close">Close</string>
+    <string name="action_back">Back</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_proceed">Proceed</string>
+    <string name="action_done">Done</string>
+    <string name="action_select">Select</string>
+    <string name="action_dismiss">Dismiss</string>
+    <string name="action_open">Open</string>
+    <string name="action_share">Share</string>
+    <string name="action_unlock">Unlock with phone lock</string>
+
+    <!-- Language & Digits -->
+    <string name="settings_language">Language</string>
+    <string name="settings_language_bn">বাংলা</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_digits">Number style</string>
+    <string name="settings_digits_bn">১২৩ বাংলা</string>
+    <string name="settings_digits_en">123 English</string>
+
+    <!-- Settings & Preferences -->
+    <string name="settings_theme">App theme</string>
+    <string name="settings_theme_system">System default</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_text_size">Text size</string>
+    <string name="settings_haptics">Touch vibration (Haptic)</string>
+    <string name="settings_haptics_desc">Gentle vibration on button taps and actions</string>
+    <string name="settings_reduce_motion">Reduce motion</string>
+    <string name="settings_reduce_motion_desc">Minimize screen transitions and animations</string>
+    <string name="settings_location">Current location</string>
+    <string name="settings_location_desc">Attach GPS location to fuel and service logs</string>
+    <string name="settings_privacy_title">Privacy &amp; App Lock</string>
+    <string name="settings_privacy_desc">Protect documents with device lock and biometrics</string>
+    <string name="settings_reminder_service">Service reminders</string>
+    <string name="settings_reminder_service_desc">Chain, engine oil and maintenance intervals</string>
+    <string name="settings_reminder_doc">Document renewal reminders</string>
+    <string name="settings_reminder_doc_desc">Advance notice before document expiry</string>
+
+    <!-- Garage Screen -->
+    <string name="garage_title">My Garage</string>
+    <string name="garage_odometer">Odometer</string>
+    <string name="garage_last_confirmed">Last confirmed: %1$s</string>
+    <string name="garage_date_unknown">Unknown date</string>
+    <string name="garage_avg_economy">Average mileage</string>
+    <string name="garage_monthly_cost">Last 30 days expense</string>
+    <string name="garage_total_distance">Total distance</string>
+    <string name="garage_wear_title">Part Wear Status</string>
+    <string name="garage_next_renewal">Next Renewal</string>
+    <string name="garage_service_remaining">%1$s remaining</string>
+    <string name="garage_service_overdue">%1$s overdue</string>
+
+    <!-- Fuel Logging -->
+    <string name="fuel_title">Fuel</string>
+    <string name="fuel_liters">Liters</string>
+    <string name="fuel_price_per_liter">Price per liter</string>
+    <string name="fuel_total_cost">Total cost</string>
+    <string name="fuel_full_tank">Full tank</string>
+    <string name="fuel_partial_tank">Partial fill (mileage calculated on next full tank)</string>
+    <string name="fuel_pump_name">Fuel station name (optional)</string>
+    <string name="fuel_odometer_prompt">Current odometer</string>
+    <string name="fuel_petrol">Petrol</string>
+    <string name="fuel_octane">Octane</string>
+    <string name="fuel_parsed_estimate">Fuel cost appears to be %1$s</string>
+
+    <!-- Service Logging -->
+    <string name="service_title">Service</string>
+    <string name="service_workshop">Workshop / Mechanic (optional)</string>
+    <string name="service_schedule">Schedule: %1$s</string>
+    <string name="service_cost">Parts &amp; service cost</string>
+    <string name="service_labor_cost">Service charge / labor</string>
+    <string name="service_discount">Discount</string>
+    <string name="service_parts_list">Items &amp; work done</string>
+    <string name="service_parts_placeholder">e.g. Engine oil 900 tk, filter 300 tk</string>
+    <string name="service_general">General service</string>
+    <string name="service_inspection">Checkup / Inspection</string>
+    <string name="service_wash">Bike wash</string>
+    <string name="service_tuning">Tuning / Adjustment</string>
+
+    <!-- Odometer Scanning -->
+    <string name="odo_title">Odometer</string>
+    <string name="odo_scan_prompt">Scanning… Keep camera steady</string>
+    <string name="odo_detected">Detected: %1$s km</string>
+    <string name="odo_manual_entry">Type manually</string>
+    <string name="odo_estimated">Estimated</string>
+
+    <!-- Document Vault -->
+    <string name="vault_title">Documents</string>
+    <string name="vault_add_doc">Add Document</string>
+    <string name="vault_locked_mask">Details and images are hidden. Tap to view.</string>
+    <string name="vault_card_front_back">Front and back photos</string>
+    <string name="vault_page_full">Full page</string>
+    <string name="vault_doc_number">Document number</string>
+    <string name="vault_doc_holder">Owner name</string>
+    <string name="vault_doc_expiry">Expiry date</string>
+    <string name="vault_doc_no_expiry">No expiry date</string>
+    <string name="vault_doc_expired_days">Expired %1$s ago</string>
+    <string name="vault_doc_days_left">%1$s remaining</string>
+    <string name="vault_doc_valid">Valid</string>
+    <string name="doc_registration">Registration Certificate</string>
+    <string name="doc_smart_card">Registration Smart Card</string>
+    <string name="doc_tax_token">Tax Token</string>
+    <string name="doc_fitness">Fitness Certificate</string>
+    <string name="doc_insurance">Insurance</string>
+    <string name="doc_driving_license">Driving License</string>
+
+    <!-- Roadside Inspection -->
+    <string name="handover_title">Police Inspection Mode</string>
+    <string name="handover_desc">High brightness and clean display</string>
+    <string name="handover_isolated_badge">Selected document · Preview</string>
+    <string name="handover_isolated_notice">Other documents, edit and share options are hidden in this mode.</string>
+    <string name="handover_exit_lock">Lock and return to vault</string>
+    <string name="handover_exit_auth">Unlock with phone lock</string>
+
+    <!-- Privacy & App Lock -->
+    <string name="privacy_title">Privacy &amp; Security</string>
+    <string name="privacy_gate_title">MotoVault is Locked</string>
+    <string name="privacy_gate_subtitle">Unlock with your phone screen lock or biometrics.</string>
+    <string name="privacy_unlock_button">Unlock</string>
+    <string name="privacy_enabled">App lock is ON</string>
+    <string name="privacy_disabled">App lock is OFF</string>
+    <string name="privacy_turn_on">Turn ON App Lock</string>
+    <string name="privacy_turn_off">Turn OFF App Lock</string>
+    <string name="privacy_auto_lock_title">Auto-lock after</string>
+    <string name="privacy_auto_lock_1m">1 minute</string>
+    <string name="privacy_auto_lock_5m">5 minutes</string>
+    <string name="privacy_auto_lock_15m">15 minutes</string>
+    <string name="privacy_bg_lock_desc">Locks immediately when minimized or sent to background.</string>
+    <string name="privacy_lock_now">Lock Now</string>
+    <string name="privacy_scope_title">What is protected</string>
+    <string name="privacy_scope_desc">Original files, cropped photos and saved documents are encrypted with AES-256.</string>
+    <string name="privacy_key_lost_title">If security key is lost</string>
+    <string name="privacy_key_lost_desc">Encrypted files cannot be restored with screen lock if keys are cleared. Do not clear app data.</string>
+    <string name="privacy_export_auth_title">Open Original File</string>
+    <string name="privacy_export_auth_reason">Verify with phone lock to view sensitive document</string>
+
+    <!-- Service Passport -->
+    <string name="passport_title">Service Passport</string>
+    <string name="passport_verify">Verify Passport</string>
+    <string name="passport_export_button">Confirm &amp; Export</string>
+    <string name="passport_generating">Generating passport…</string>
+    <string name="passport_owner_name">Owner name</string>
+    <string name="passport_bike_brand">Motorcycle brand</string>
+    <string name="passport_bike_model">Model</string>
+    <string name="passport_bike_edition">Variant / Edition (optional)</string>
+    <string name="passport_hash_input">Verification hash code or QR text (optional)</string>
+    <string name="passport_hash_matched">Passport digital signature verified successfully.</string>
+    <string name="passport_hash_internal">File internal hash is intact.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_step">Step %1$s of %2$s</string>
+    <string name="onboarding_brand_title">Which bike do you ride?</string>
+    <string name="onboarding_brand_subtitle">Select your brand to personalize your garage.</string>
+    <string name="onboarding_bike_details">Bike Details</string>
+    <string name="onboarding_model_year">Model Year</string>
+    <string name="onboarding_market">Market specification</string>
+    <string name="onboarding_emission">Emission standard (e.g. BS4, BS6)</string>
+    <string name="onboarding_finish_btn">Create Garage</string>
+    <string name="onboarding_change_bike">Confirm Changes</string>
+</resources>
