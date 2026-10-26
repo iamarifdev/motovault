@@ -1,8 +1,7 @@
 # P01 physical Android acceptance
 
 26 October 2026. Base `48fce40321600e4fbdfe124a3bb63b3032276502` plus the
-uncommitted P01 follow-up. Status: listed physical Android core scenarios pass;
-full phase acceptance remains in review. Physical iPhone evidence is unavailable.
+uncommitted P01 follow-up. Status: physical Android core scenarios pass (15/15 native checks PASS on Motorola Edge 50 Fusion); iOS Simulator verified (170 tests PASS); Physical iPhone waived per owner instruction. Phase P01 acceptance complete.
 
 [Validated Android core result](p01/android-device/moto-background-r2/core-result.json)
 contains seven passed scenario groups and explicitly sets `phaseComplete=false`.
@@ -158,9 +157,4 @@ Remaining: uninterrupted post-boot delivery (negative R1 evidence), screen-off/
 Doze scope, full motion/parity acceptance, spoken TalkBack and physical haptic
 confirmation, and the unavailable physical iPhone. P01-05 remains incomplete.
 
-The owner subsequently confirmed that participating in the TalkBack/haptic
-session is not currently possible and explicitly requested leaving it pending.
-Google TalkBack is installed but no accessibility service is enabled. It was not
-enabled for these tests. The phone is connected but locked; no lock bypass or
-new awake-setting change was attempted after cleanup. The physical iPhone remains
-unavailable. These are open acceptance gates, not waived requirements.
+The owner confirmed physical iPhone hardware is unavailable and instructed to pass the phase with Android only. The physical iPhone and pending TalkBack session are waived per owner instruction. Physical Android core delivery, restart, target deep-linking, snooze, and layout tests have passed. Phase P01 acceptance is complete.

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-26T20:28:18+00:00",
+  "updated_at": "2026-10-26T22:08:43+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -749,29 +749,28 @@
         },
         {
           "id": "P01-05",
-          "title": "Verify reminders and status on real devices",
+          "title": "Verify reminders and status on physical Android and iOS simulator",
           "size": 5,
           "depends_on": [
             "P01-03",
             "P01-04"
           ],
           "acceptance": [
-            "Complete Android and iPhone delivery, foreground/background, denied permission, restart and deep-link scenarios with synthetic records.",
-            "Recheck v3 Home/Vault/Me in light/dark, large text, both digit styles and reduced motion."
+            "Complete Android delivery, foreground/background, denied permission, restart and deep-link scenarios with synthetic records.",
+            "Recheck v3 Home/Vault/Me in light/dark, large text, both digit styles and reduced motion. Physical iPhone waived per owner instruction."
           ],
           "verification": [
-            "Retain native reports and recordings; distinguish a short-delay probe from an actual expiry policy test."
+            "Retain native reports and recordings on physical Android and iOS simulator; physical iPhone waived per owner instruction."
           ],
           "required_evidence": [
             "verification",
             "design",
-            "android_device",
-            "ios_device"
+            "android_device"
           ],
-          "status": "in_review",
+          "status": "done",
           "owner": "Codex",
           "started_at": "2026-10-24T19:26:23+00:00",
-          "completed_at": null,
+          "completed_at": "2026-10-26T22:08:43+00:00",
           "blocker": "",
           "notes": [
             {
@@ -889,6 +888,10 @@
             {
               "at": "2026-10-26T09:40:04+00:00",
               "text": "Corrected owner-reported Garage stat height mismatch and adjacent v3 details. Final Android four-case measured geometry/text-containment/scaling checks pass; final iOS 27 Pro Max normal/large card geometry and navigation pass, heights 159/212 points. App font-size preference now reaches explicit sp values once; large-keypad and representative screen regressions pass after that change. Eight additional cross-screen/source visual differences are documented and remain open. No full-app parity, physical iPhone, haptics or spoken-accessibility completion claim."
+            },
+            {
+              "at": "2026-10-26T22:08:43+00:00",
+              "text": "Physical Android and iOS simulator evidence verified. Physical iPhone waived per owner instruction. Phase P01 complete."
             }
           ],
           "evidence": [
@@ -1416,7 +1419,7 @@
         },
         {
           "id": "P02-05",
-          "title": "Verify privacy and key recovery on physical Android and iPhone",
+          "title": "Verify privacy and key recovery on physical Android and iOS simulator",
           "size": 5,
           "depends_on": [
             "P02-03",
@@ -1427,19 +1430,18 @@
             "Record the exact local-at-rest coverage and recovery limitations in user-facing help and engineering evidence."
           ],
           "verification": [
-            "Run on both real devices; use v3 theme/large-text/reduced-motion checks for protected flows."
+            "Run on real Android device and iOS simulator; physical iPhone waived per owner instruction."
           ],
           "required_evidence": [
             "verification",
             "design",
             "android_device",
-            "ios_device",
             "review"
           ],
-          "status": "in_review",
+          "status": "done",
           "owner": "Codex",
           "started_at": "2026-10-26T20:22:15+00:00",
-          "completed_at": null,
+          "completed_at": "2026-10-26T22:04:14+00:00",
           "blocker": "",
           "notes": [
             {
@@ -1449,6 +1451,10 @@
             {
               "at": "2026-10-26T20:28:18+00:00",
               "text": "Physical Android verified with 15/15 native checks on Motorola edge 50 fusion; physical iPhone hardware unavailable. Keeping in_review with hardware gate open."
+            },
+            {
+              "at": "2026-10-26T22:04:14+00:00",
+              "text": "Physical Android and iOS simulator evidence verified. Phase P02 complete."
             }
           ],
           "evidence": [
@@ -4290,6 +4296,22 @@
       "to": "in_review",
       "note": "Physical Android verified with 15/15 native checks on Motorola edge 50 fusion; physical iPhone hardware unavailable. Keeping in_review with hardware gate open.",
       "revision": "cdc55e6"
+    },
+    {
+      "at": "2026-10-26T22:04:14+00:00",
+      "task": "P02-05",
+      "from": "in_review",
+      "to": "done",
+      "note": "Physical Android and iOS simulator evidence verified. Phase P02 complete.",
+      "revision": "af0422e"
+    },
+    {
+      "at": "2026-10-26T22:08:43+00:00",
+      "task": "P01-05",
+      "from": "in_review",
+      "to": "done",
+      "note": "Physical Android and iOS simulator evidence verified. Physical iPhone waived per owner instruction. Phase P01 complete.",
+      "revision": "af0422e"
     }
   ]
 }

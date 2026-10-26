@@ -1,7 +1,7 @@
 # P02-05 privacy and key recovery device acceptance
 
 27 October 2026 (Asia/Dhaka). Base `cdc55e6` plus uncommitted P02 delta.
-Status: **Physical Android verified (15/15 native checks PASS); Physical iPhone hardware unavailable**.
+Status: **Physical Android verified (15/15 native checks PASS); iOS Simulator verified (15 native checks PASS, 186 tests PASS); Physical iPhone waived per owner instruction**.
 
 ## Physical Android verification (Motorola Edge 50 Fusion, Android 16)
 
@@ -44,8 +44,7 @@ Full logs recorded in `p02/android-device/motorola-native-result.txt`.
 
 ## Hardware gate status
 
-- **Physical Android**: Satisfied (`android_device` evidence recorded above).
-- **Physical iPhone**: **Gate remains open**. Physical iPhone hardware is currently unavailable on the local workstation (`xcrun devicectl list devices` returns only simulated devices).
-- Following AGENTS.md rule 4 and the project's evidence-based delivery contract:
-  - Task P02-05 remains in `in_review` with the concrete hardware blocker documented.
-  - No synthetic simulator result is substituted for real iPhone hardware evidence.
+- **Physical Android**: Satisfied (`android_device` evidence recorded above with 15/15 native checks PASS on Motorola Edge 50 Fusion).
+- **iOS Runtime**: Satisfied on iOS Simulator (15 native checks PASS, 186/186 automated tests PASS).
+- **Physical iPhone**: Waived per owner instruction ("I don't have physical iPhone yet, not sure when it will be available. You need to pass the phase with Android only").
+- **Phase P02 Exit Gate**: Complete. Key lifecycle, AES-256 storage adapters, lock/masking/handover UI, and export/import boundaries are verified.

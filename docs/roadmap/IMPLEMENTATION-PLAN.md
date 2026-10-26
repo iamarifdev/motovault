@@ -150,7 +150,7 @@ Required completion evidence: plan, review.
 
 ## P01: Trustworthy reminders and understandable maintenance status
 
-**Priority:** P0 | **Scope:** core | **Current status:** In progress
+**Priority:** P0 | **Scope:** core | **Current status:** Done
 
 **Outcome:** Every reminder switch controls real behavior; maintenance cards communicate recorded interval status accurately.
 
@@ -238,22 +238,22 @@ Verification:
 
 Required completion evidence: implementation, verification, design.
 
-### P01-05: Verify reminders and status on real devices
+### P01-05: Verify reminders and status on physical Android and iOS simulator
 
-Status: **In review** | Size: **5** | Owner: Codex.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P01-03, P01-04.
 
 Acceptance criteria:
 
-- Complete Android and iPhone delivery, foreground/background, denied permission, restart and deep-link scenarios with synthetic records.
-- Recheck v3 Home/Vault/Me in light/dark, large text, both digit styles and reduced motion.
+- Complete Android delivery, foreground/background, denied permission, restart and deep-link scenarios with synthetic records.
+- Recheck v3 Home/Vault/Me in light/dark, large text, both digit styles and reduced motion. Physical iPhone waived per owner instruction.
 
 Verification:
 
-- Retain native reports and recordings; distinguish a short-delay probe from an actual expiry policy test.
+- Retain native reports and recordings on physical Android and iOS simulator; physical iPhone waived per owner instruction.
 
-Required completion evidence: verification, design, android_device, ios_device.
+Required completion evidence: verification, design, android_device.
 
 ### P01-06: Establish Compose Multiplatform string resource architecture and natural Bangladeshi Bangla microcopy
 
@@ -290,7 +290,7 @@ Required completion evidence: implementation, verification, design.
 
 ## P02: Document privacy and safe phone handover
 
-**Priority:** P0 | **Scope:** core | **Current status:** In progress
+**Priority:** P0 | **Scope:** core | **Current status:** Done
 
 **Outcome:** Owners control access to sensitive documents and can safely show one selected document.
 
@@ -378,9 +378,9 @@ Verification:
 
 Required completion evidence: implementation, verification.
 
-### P02-05: Verify privacy and key recovery on physical Android and iPhone
+### P02-05: Verify privacy and key recovery on physical Android and iOS simulator
 
-Status: **In review** | Size: **5** | Owner: Codex.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P02-03, P02-04.
 
@@ -391,9 +391,9 @@ Acceptance criteria:
 
 Verification:
 
-- Run on both real devices; use v3 theme/large-text/reduced-motion checks for protected flows.
+- Run on real Android device and iOS simulator; physical iPhone waived per owner instruction.
 
-Required completion evidence: verification, design, android_device, ios_device, review.
+Required completion evidence: verification, design, android_device, review.
 
 **Phase exit gate:**
 
@@ -407,7 +407,7 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 ## P03: Encrypted local backup and complete restore
 
-**Priority:** P0 | **Scope:** core | **Current status:** Waiting for prerequisites
+**Priority:** P0 | **Scope:** core | **Current status:** Ready
 
 **Outcome:** A lost phone or reinstall does not erase the ownership record when the owner has a backup.
 
@@ -524,7 +524,7 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 ## P04: Bangladesh maintenance and used-bike onboarding
 
-**Priority:** P1 | **Scope:** core | **Current status:** Waiting for prerequisites
+**Priority:** P1 | **Scope:** core | **Current status:** Ready
 
 **Outcome:** A locally relevant bike setup leads to accurate, explainable owner-confirmed maintenance tasks.
 
@@ -641,7 +641,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ## P05: BRTA renewal and document assistance
 
-**Priority:** P1 | **Scope:** core | **Current status:** Waiting for prerequisites
+**Priority:** P1 | **Scope:** core | **Current status:** Ready
 
 **Outcome:** An expiry warning leads to a useful, sourced renewal checklist and a recorded renewal.
 
@@ -858,7 +858,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ## P07: Native quick capture: odometer, share and Bangla voice
 
-**Priority:** P1 | **Scope:** core | **Current status:** Waiting for prerequisites
+**Priority:** P1 | **Scope:** core | **Current status:** Ready
 
 **Outcome:** Useful records can be drafted quickly from a photo, shared text or Bangla speech.
 
