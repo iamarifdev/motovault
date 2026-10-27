@@ -11,3 +11,6 @@ local.properties
 # Xcode personal workspace state
 xcuserdata/
 *.xcuserstate
+
+.claude/
+.serena/

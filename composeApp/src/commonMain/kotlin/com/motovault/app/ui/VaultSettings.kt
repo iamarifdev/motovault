@@ -24,20 +24,21 @@ data class VaultSettings(
     val workshops: List<String> = emptyList(),
     val places: List<String> = emptyList(),
     val reminderPolicy: ReminderPolicy = ReminderPolicy(),
-    val privacy: com.motovault.app.domain.privacy.VaultPrivacySettings = com.motovault.app.domain.privacy.VaultPrivacySettings()
+    val privacy: com.motovault.app.domain.privacy.VaultPrivacySettings = com.motovault.app.domain.privacy.VaultPrivacySettings(),
+    val lastBackupEpochMillis: Long? = null
 ) {
     fun applyTo(state: VaultState) = state.copy(
         language = language, digits = digits, haptics = haptics, reduceMotion = reduceMotion, textScale = textScale,
         brandOverride = brandOverride, serviceReminders = serviceReminders, docReminders = docReminders,
         lastPrices = lastPrices, lastItemPrices = lastItemPrices, workshops = workshops, places = places,
-        reminderPolicy = reminderPolicy, privacy = privacy
+        reminderPolicy = reminderPolicy, privacy = privacy, lastBackupEpochMillis = lastBackupEpochMillis
     )
 
     companion object {
         fun from(state: VaultState) = VaultSettings(
             state.language, state.digits, state.haptics, state.reduceMotion, state.textScale, state.brandOverride,
             state.serviceReminders, state.docReminders, state.lastPrices, state.lastItemPrices,
-            state.workshops, state.places, state.reminderPolicy, state.privacy
+            state.workshops, state.places, state.reminderPolicy, state.privacy, state.lastBackupEpochMillis
         )
     }
 }

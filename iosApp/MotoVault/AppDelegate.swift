@@ -3,9 +3,10 @@ import UserNotifications
 import ComposeApp
 import CryptoKit
 import Security
+import CommonCrypto
 
 // No key is created during an open operation. Provisioning belongs to a verified fresh-store flow.
-final class DocumentAssetCrypto: NSObject, IosAssetCryptography {
+final class DocumentAssetCrypto: NSObject, IosAssetCryptography, IosBackupCryptoBridge {
     private let service: String
     private let account: String
     private let rootOverride: URL?
@@ -102,13 +103,52 @@ final class DocumentAssetCrypto: NSObject, IosAssetCryptography {
         guard let key = existingKey(), let box = try? AES.GCM.SealedBox(combined: combined) else { return nil }
         return try? AES.GCM.open(box, using: key, authenticating: associatedData)
     }
+
+    func generateRandomBytes(size: Int32) -> Data? {
+        var bytes = Data(count: Int(size))
+        let result = bytes.withUnsafeMutableBytes { SecRandomCopyBytes(kSecRandomDefault, Int(size), $0.baseAddress!) }
+        return result == errSecSuccess ? bytes : nil
+    }
+
+    func deriveKey(passphrase: String, salt: Data, iterations: Int32) -> Data? {
+        var derived = Data(repeating: 0, count: 32)
+        let status = derived.withUnsafeMutableBytes { derivedBytes in
+            salt.withUnsafeBytes { saltBytes in
+                CCKeyDerivationPBKDF(
+                    CCPBKDFAlgorithm(kCCPBKDF2),
+                    passphrase,
+                    passphrase.utf8.count,
+                    saltBytes.baseAddress?.assumingMemoryBound(to: UInt8.self),
+                    salt.count,
+                    CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA256),
+                    UInt32(iterations),
+                    derivedBytes.baseAddress?.assumingMemoryBound(to: UInt8.self),
+                    32
+                )
+            }
+        }
+        return status == kCCSuccess ? derived : nil
+    }
+
+    func encrypt(key: Data, plaintext: Data, aad: Data) -> Data? {
+        let symKey = SymmetricKey(data: key)
+        return try? AES.GCM.seal(plaintext, using: symKey, authenticating: aad).combined
+    }
+
+    func decrypt(key: Data, combined: Data, aad: Data) -> Data? {
+        guard let box = try? AES.GCM.SealedBox(combined: combined) else { return nil }
+        let symKey = SymmetricKey(data: key)
+        return try? AES.GCM.open(box, using: symKey, authenticating: aad)
+    }
 }
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         DocumentAssetCrypto.clearTemporaryCopies()
-        IosDocumentCrypto.shared.provider = DocumentAssetCrypto()
+        let crypto = DocumentAssetCrypto()
+        IosDocumentCrypto.shared.provider = crypto
+        IosBackupCryptoRegistry.shared.bridge = crypto
         // The notification center holds its delegate weakly. UIApplication retains this object.
         UNUserNotificationCenter.current().delegate = self
         #if DEBUG

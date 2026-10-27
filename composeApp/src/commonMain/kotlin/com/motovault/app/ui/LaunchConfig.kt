@@ -5,6 +5,7 @@ object LaunchConfig {
     var initialSheet: String? = null
     var initialOnboarding: Boolean = false
     var initialSeed: Boolean = false
+    var scrollToBottom: Boolean = false
 
     fun applyArgs(args: List<String>) {
         var i = 0
@@ -27,6 +28,9 @@ object LaunchConfig {
                 }
                 "--seed" -> {
                     initialSeed = true
+                }
+                "--scroll-bottom" -> {
+                    scrollToBottom = true
                 }
                 "--none" -> {
                     initialSheet = null

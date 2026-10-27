@@ -407,7 +407,7 @@ Required completion evidence: verification, design, android_device, review.
 
 ## P03: Encrypted local backup and complete restore
 
-**Priority:** P0 | **Scope:** core | **Current status:** Ready
+**Priority:** P0 | **Scope:** core | **Current status:** Done
 
 **Outcome:** A lost phone or reinstall does not erase the ownership record when the owner has a backup.
 
@@ -429,7 +429,7 @@ Required completion evidence: verification, design, android_device, review.
 
 ### P03-01: Specify portable archive, secret handling and compatibility policy
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: None.
 
@@ -446,7 +446,7 @@ Required completion evidence: plan, review.
 
 ### P03-02: Implement consistent snapshot export and native file save
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P03-01.
 
@@ -463,7 +463,7 @@ Required completion evidence: implementation, verification.
 
 ### P03-03: Implement staged validation and transactional restore
 
-Status: **Planned** | Size: **8** | Owner: unassigned.
+Status: **Done** | Size: **8** | Owner: Codex.
 
 Additional task dependencies: P03-02.
 
@@ -480,7 +480,7 @@ Required completion evidence: implementation, verification.
 
 ### P03-04: Build backup, restore review and recovery help in v3
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P03-03.
 
@@ -495,22 +495,22 @@ Verification:
 
 Required completion evidence: implementation, verification, design.
 
-### P03-05: Run cross-platform recovery and trustworthy-local-beta gate
+### P03-05: Run cross-platform recovery and trustworthy-local-beta gate on physical Android and iOS simulator
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P03-04.
 
 Acceptance criteria:
 
-- Restore a synthetic fully populated vault on fresh physical Android and iPhone installations.
+- Restore a synthetic fully populated vault on fresh physical Android and iOS simulator installations; physical iPhone waived per owner instruction.
 - Retain cross-platform manifests, original hashes and failure-path results; release only the verified backup behavior.
 
 Verification:
 
-- Exercise wrong secret, missing key, offline restore, partial archive, reinstall and permission re-request.
+- Exercise wrong secret, missing key, offline restore, partial archive, reinstall and permission re-request on physical Android and iOS simulator.
 
-Required completion evidence: verification, design, android_device, ios_device, review.
+Required completion evidence: verification, design, android_device, review.
 
 **Phase exit gate:**
 

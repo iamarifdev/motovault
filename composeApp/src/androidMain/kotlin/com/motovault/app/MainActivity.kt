@@ -17,6 +17,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         com.motovault.app.ui.vaultContext = applicationContext
         com.motovault.app.ui.cleanDocumentScratchOnProcessStart()
+        intent?.let { itn ->
+            val args = mutableListOf<String>()
+            itn.getStringExtra("tab")?.let { args.addAll(listOf("--tab", it)) }
+            itn.getStringExtra("sheet")?.let { args.addAll(listOf("--sheet", it)) }
+            if (itn.getBooleanExtra("scroll-bottom", false)) args.add("--scroll-bottom")
+            if (args.isNotEmpty()) com.motovault.app.ui.LaunchConfig.applyArgs(args)
+        }
         intent?.getStringExtra("motovault.reminder")?.let(ReminderNavigation::open)
         setContent {
             App()

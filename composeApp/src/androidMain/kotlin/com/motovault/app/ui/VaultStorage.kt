@@ -20,6 +20,7 @@ private fun legacyVault(): String? {
     return vaultContext.getSharedPreferences("motovault", Context.MODE_PRIVATE).getString("vault", null)
 }
 private val database by lazy { buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(vaultContext.applicationContext, "motovault.db")) }
+actual fun activeVaultDatabase(): VaultDatabase = database
 actual suspend fun loadVault(): String? = withContext(Dispatchers.IO) {
     val state = database.vault().read() ?: database.vault().migrate(legacyVault())
     database.vault().prepareLocalSync()

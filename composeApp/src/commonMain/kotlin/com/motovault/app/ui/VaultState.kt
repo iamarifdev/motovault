@@ -17,6 +17,7 @@ import kotlin.random.Random
 
 expect suspend fun loadVault(): String?
 expect suspend fun saveVault(value: String)
+expect fun activeVaultDatabase(): com.motovault.app.storage.VaultDatabase
 typealias VaultSave = (VaultState, (Boolean) -> Unit) -> Unit
 
 fun today() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -109,7 +110,8 @@ data class VaultState(
     val workshops: List<String> = emptyList(),
     val places: List<String> = emptyList(),
     val reminderPolicy: ReminderPolicy = ReminderPolicy(),
-    val privacy: com.motovault.app.domain.privacy.VaultPrivacySettings = com.motovault.app.domain.privacy.VaultPrivacySettings()
+    val privacy: com.motovault.app.domain.privacy.VaultPrivacySettings = com.motovault.app.domain.privacy.VaultPrivacySettings(),
+    val lastBackupEpochMillis: Long? = null
 ) {
     /** Only linked, matching recorded service can establish certainty for an older schedule. */
     fun confirmedRules() = rules.map { rule ->

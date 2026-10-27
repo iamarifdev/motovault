@@ -28,6 +28,7 @@ private fun databasePath(): String {
     return "$directory/motovault.db"
 }
 private val database by lazy { buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(name = databasePath())) }
+actual fun activeVaultDatabase(): VaultDatabase = database
 actual suspend fun loadVault(): String? = withContext(Dispatchers.IO) {
     val state = database.vault().read() ?: database.vault().migrate(legacyVault())
     database.vault().prepareLocalSync()

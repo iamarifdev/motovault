@@ -12,6 +12,10 @@ import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import java.io.ByteArrayOutputStream
 import kotlinx.coroutines.runBlocking
+import com.motovault.app.domain.backup.*
+import com.motovault.app.domain.model.BaselineCertainty
+import com.motovault.app.domain.model.ComponentRule
+import kotlin.experimental.xor
 import androidx.room.Room
 import com.motovault.app.storage.VaultDatabase
 import com.motovault.app.storage.buildVaultDatabase
@@ -164,6 +168,161 @@ class NativeAssetInstrumentation : Instrumentation() {
             val databasePath = File(root, "synthetic-format.db").absolutePath
             runBlocking { verifyVaultFormatMigration(databasePath) { buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(targetContext, databasePath)) } }
             checks += "native-room4-to5-owner-preservation-and-future-format-refusal"
+
+            // --- P03 Encrypted Local Backup & Transactional Restore Suite ---
+            val testRide = Ride(
+                brandId = "yamaha",
+                edition = "Standard",
+                year = 2023,
+                odometer = 12500.0,
+                modelName = "MT-15"
+            )
+            val testRule = ComponentRule(
+                id = "engine-oil",
+                vehicleId = "primary",
+                name = "Engine Oil",
+                specification = "10W40 JASO MA2",
+                intervalKm = 3000.0,
+                intervalDays = 90,
+                baselineCertainty = BaselineCertainty.CONFIRMED
+            )
+            val testLog = RideLog(
+                title = "Engine Oil Change",
+                detail = "Motul 10W40",
+                date = "2026-10-01",
+                odometer = 12000.0,
+                cost = 850.0
+            )
+            val syntheticAssetId = "asset-reg-card.jpg"
+            val syntheticAssetBytes = "SYNTHETIC-RAW-IMAGE-BYTES-12345".encodeToByteArray()
+            val testDoc = VaultDocument(
+                id = "doc-reg",
+                title = "রেজিস্ট্রেশন স্মার্ট কার্ড",
+                number = "DHAKA-METRO-LA-12-3456",
+                holder = "Arif",
+                expiry = "2027-01-01",
+                issued = "2025-01-01",
+                pages = listOf(
+                    DocumentPage(
+                        originalId = syntheticAssetId,
+                        previewId = syntheticAssetId,
+                        mimeType = "image/jpeg",
+                        width = 800,
+                        height = 600,
+                        side = "Front"
+                    )
+                )
+            )
+
+            val vaultState = VaultState(
+                ride = testRide,
+                rules = listOf(testRule),
+                logs = listOf(testLog),
+                documents = listOf(testDoc)
+            )
+
+            val assetStorage = mutableMapOf(syntheticAssetId to syntheticAssetBytes)
+            checks += "native-backup-synthetic-vault-provision"
+
+            val backupPassphrase = "StrongSecretPassword#2026!"
+            val archiveBytes = runBlocking {
+                BackupUseCase.createBackup(
+                    state = vaultState,
+                    vaultRevision = 42,
+                    passphrase = backupPassphrase,
+                    installationId = "android-probe-id",
+                    assetReader = { id -> assetStorage[id] ?: error("Asset not found: $id") }
+                )
+            }
+            check(archiveBytes.isNotEmpty())
+            checks += "native-backup-export-success"
+
+            // Zero plaintext leakage check
+            val archiveStr = archiveBytes.decodeToString()
+            check(!archiveStr.contains("DHAKA-METRO-LA-12-3456"))
+            check(!archiveStr.contains("Engine Oil Change"))
+            check(!archiveStr.contains("Motul 10W40"))
+            check(!archiveStr.contains("SYNTHETIC-RAW-IMAGE-BYTES-12345"))
+            check(!archiveStr.contains("Arif"))
+            checks += "native-backup-zero-plaintext-leakage"
+
+            // Staged validation & preview
+            val preview = runBlocking {
+                RestoreUseCase.validateAndPreview(archiveBytes, backupPassphrase)
+            }
+            check(preview.manifest.formatVersion == 1)
+            check(preview.manifest.summary.bikeDisplayName == "MT-15")
+            check(preview.manifest.summary.odometer == 12500.0)
+            check(preview.manifest.summary.logCount == 1)
+            check(preview.manifest.summary.documentCount == 1)
+            check(preview.validatedAssetCount == 1)
+            checks += "native-backup-staged-validation-preview"
+
+            // Wrong password refusal
+            expectFailure {
+                runBlocking {
+                    RestoreUseCase.validateAndPreview(archiveBytes, "WrongPassword#999")
+                }
+            }
+            checks += "native-backup-wrong-password-refusal"
+
+            // Tampered payload refusal
+            val tamperedPayloadArchive = runBlocking {
+                val entries = MvaZipArchive.read(archiveBytes).toMutableMap()
+                val enc = entries["vault.enc"]!!.copyOf()
+                enc[enc.size - 1] = (enc[enc.size - 1] xor 0xFF.toByte())
+                entries["vault.enc"] = enc
+                MvaZipArchive.write(entries)
+            }
+            expectFailure {
+                runBlocking {
+                    RestoreUseCase.validateAndPreview(tamperedPayloadArchive, backupPassphrase)
+                }
+            }
+            checks += "native-backup-tampered-payload-refusal"
+
+            // Tampered asset refusal
+            val tamperedAssetArchive = runBlocking {
+                val entries = MvaZipArchive.read(archiveBytes).toMutableMap()
+                val assetKey = entries.keys.first { it.startsWith("assets/") }
+                val assetEnc = entries[assetKey]!!.copyOf()
+                assetEnc[assetEnc.size - 1] = (assetEnc[assetEnc.size - 1] xor 0xFF.toByte())
+                entries[assetKey] = assetEnc
+                MvaZipArchive.write(entries)
+            }
+            expectFailure {
+                runBlocking {
+                    RestoreUseCase.validateAndPreview(tamperedAssetArchive, backupPassphrase)
+                }
+            }
+            checks += "native-backup-tampered-asset-refusal"
+
+            // Transactional restore into fresh database
+            val restoredDbPath = File(root, "synthetic-restored.db").absolutePath
+            val restoredDb = buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(targetContext, restoredDbPath))
+            val restoredAssets = mutableMapOf<String, ByteArray>()
+            var restoredStateCaptured: VaultState? = null
+
+            runBlocking {
+                RestoreUseCase.executeRestore(
+                    archiveBytes = archiveBytes,
+                    passphrase = backupPassphrase,
+                    database = restoredDb,
+                    assetWriter = { id, bytes -> restoredAssets[id] = bytes },
+                    onComplete = { nextState -> restoredStateCaptured = nextState }
+                )
+            }
+
+            check(restoredStateCaptured != null)
+            check(restoredStateCaptured?.ride?.modelName == "MT-15")
+            check(restoredStateCaptured?.logs?.size == 1)
+            check(restoredStateCaptured?.documents?.first()?.number == "DHAKA-METRO-LA-12-3456")
+            check(restoredAssets.containsKey(syntheticAssetId))
+            check(restoredAssets[syntheticAssetId]!!.contentEquals(syntheticAssetBytes))
+            val dbState = runBlocking { restoredDb.vault().read() }
+            check(dbState?.ride?.modelName == "MT-15")
+            check(dbState?.documents?.first()?.id == "doc-reg")
+            checks += "native-backup-transactional-restore-success"
 
             results.putString("stream", "PASS ${checks.size} native storage checks: ${checks.joinToString(", ")}\n")
             results.putInt("checks", checks.size)

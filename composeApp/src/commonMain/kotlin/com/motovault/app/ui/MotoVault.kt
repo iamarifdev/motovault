@@ -43,6 +43,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import com.motovault.app.ui.backup.BackupSheet
+import com.motovault.app.ui.backup.BackupSheetTab
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -425,10 +427,16 @@ fun MotoVault() {
                             label = "VaultScreenPage",
                             modifier = Modifier.fillMaxSize()
                         ) { destination ->
+                            val mainScrollState = rememberScrollState()
+                            LaunchedEffect(LaunchConfig.scrollToBottom, destination) {
+                                if (LaunchConfig.scrollToBottom) {
+                                    mainScrollState.scrollTo(mainScrollState.maxValue)
+                                }
+                            }
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .verticalScroll(rememberScrollState())
+                                    .verticalScroll(mainScrollState)
                             ) {
                                 when (destination) {
                                     Tab.GARAGE -> GarageScreen(
@@ -646,6 +654,18 @@ fun MotoVault() {
                             activeSheet = ActiveSheet(flow, payload)
                         },
                         language = state.language
+                    )
+                    "backup", "backup-restore" -> BackupSheet(
+                        state = state,
+                        initialTab = if (sheet.name == "backup-restore" || sheet.props == BackupSheetTab.RESTORE) BackupSheetTab.RESTORE else BackupSheetTab.CREATE,
+                        onDismiss = { activeSheet = null },
+                        onBackupSaved = { timestamp ->
+                            commit(state.copy(lastBackupEpochMillis = timestamp))
+                        },
+                        onRestored = { restoredState ->
+                            activeSheet = null
+                            commit(restoredState)
+                        }
                     )
                 }
             }

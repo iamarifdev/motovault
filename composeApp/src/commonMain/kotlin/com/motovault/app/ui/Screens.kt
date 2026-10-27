@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toLocalDateTime
 import motovault.composeapp.generated.resources.Res
 import motovault.composeapp.generated.resources.barlow_condensed
 import org.jetbrains.compose.resources.Font
@@ -1108,6 +1109,67 @@ fun MeScreen(
                 full = true,
                 onClick = { onOpenSheet("privacy", null) }
             )
+        }
+
+        // Backup section
+        SectionTitle(if (state.language == AppLanguage.EN) "Backup & Restore" else "ব্যাকআপ ও রিস্টোর")
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(SurfaceColor)
+                .border(1.dp, BorderColor, RoundedCornerShape(16.dp))
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            val lastBackupStr = state.lastBackupEpochMillis?.let { millis ->
+                runCatching {
+                    val date = kotlinx.datetime.Instant.fromEpochMilliseconds(millis)
+                        .toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault()).date
+                    if (state.language == AppLanguage.EN) "Last backup: $date"
+                    else "সর্বশেষ ব্যাকআপ: ${f.d(date.toString())}"
+                }.getOrNull()
+            } ?: if (state.language == AppLanguage.EN) "No backup created yet" else "এখনও কোনো ব্যাকআপ নেওয়া হয়নি"
+
+            Text(
+                text = if (state.language == AppLanguage.EN) "Encrypted Local Backup" else "এনক্রিপ্টেড লোকাল ব্যাকআপ",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = TextPrimary
+            )
+            Text(
+                text = lastBackupStr,
+                fontSize = 13.sp,
+                color = if (state.lastBackupEpochMillis != null) BrandColor else TextSecondary
+            )
+            Text(
+                text = if (state.language == AppLanguage.EN)
+                    "Create a portable encrypted backup file or restore your garage from an existing backup."
+                else
+                    "বাইকের রেকর্ড ও কাগজের ফাইল এনক্রিপ্ট করে ব্যাকআপ রাখুন বা পূর্বের ব্যাকআপ ফাইল থেকে রিস্টোর করুন।",
+                fontSize = 12.sp,
+                color = TextSecondary,
+                lineHeight = 16.sp
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                VaultButton(
+                    text = if (state.language == AppLanguage.EN) "Create Backup" else "ব্যাকআপ তৈরি",
+                    kind = ButtonKind.SECONDARY,
+                    full = true,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onOpenSheet("backup", com.motovault.app.ui.backup.BackupSheetTab.CREATE) }
+                )
+                VaultButton(
+                    text = if (state.language == AppLanguage.EN) "Restore" else "রিস্টোর করুন",
+                    kind = ButtonKind.SECONDARY,
+                    full = true,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onOpenSheet("backup", com.motovault.app.ui.backup.BackupSheetTab.RESTORE) }
+                )
+            }
         }
 
         // New concepts (demo)

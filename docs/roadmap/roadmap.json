@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-26T22:08:43+00:00",
+  "updated_at": "2026-10-27T00:26:10+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -1541,13 +1541,37 @@
             "plan",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-26T22:46:02+00:00",
+          "completed_at": "2026-10-26T22:47:17+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-26T22:46:02+00:00",
+              "text": "Specifying portable backup archive format, secret derivation, manifest and recovery policy"
+            },
+            {
+              "at": "2026-10-26T22:47:17+00:00",
+              "text": "Specified portable backup format, AES-256-GCM envelope, PBKDF2 KDF, manifest, bounds, and transactional restore contract"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "plan",
+              "reference": "docs/roadmap/P03-BACKUP-CONTRACT.md",
+              "summary": "Specified portable backup format, AES-256-GCM envelope, PBKDF2 KDF, manifest, bounds, and transactional restore contract",
+              "at": "2026-10-26T22:47:17+00:00",
+              "revision": "04bfaf5"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P03-01-review.md",
+              "summary": "Specified portable backup format, AES-256-GCM envelope, PBKDF2 KDF, manifest, bounds, and transactional restore contract",
+              "at": "2026-10-26T22:47:17+00:00",
+              "revision": "04bfaf5"
+            }
+          ]
         },
         {
           "id": "P03-02",
@@ -1567,13 +1591,37 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-26T22:47:29+00:00",
+          "completed_at": "2026-10-26T23:00:55+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-26T22:47:29+00:00",
+              "text": "Starting implementation of snapshot export, encryption, and native file save"
+            },
+            {
+              "at": "2026-10-26T23:00:55+00:00",
+              "text": "Implemented snapshot export, PBKDF2/AES-GCM encryption, native save/share actions, and verified concurrent isolation and no plaintext leaks"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03-02-implementation.md",
+              "summary": "Implemented snapshot export, PBKDF2/AES-GCM encryption, native save/share actions, and verified concurrent isolation and no plaintext leaks",
+              "at": "2026-10-26T23:00:55+00:00",
+              "revision": "04bfaf5"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P03-02-verification.md",
+              "summary": "Implemented snapshot export, PBKDF2/AES-GCM encryption, native save/share actions, and verified concurrent isolation and no plaintext leaks",
+              "at": "2026-10-26T23:00:55+00:00",
+              "revision": "04bfaf5"
+            }
+          ]
         },
         {
           "id": "P03-03",
@@ -1593,13 +1641,37 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-26T23:01:10+00:00",
+          "completed_at": "2026-10-26T23:03:55+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-26T23:01:10+00:00",
+              "text": "Starting implementation of staged restore validation, atomic restore, rollback, and reminder reconciliation"
+            },
+            {
+              "at": "2026-10-26T23:03:55+00:00",
+              "text": "Implemented staged validation, transactional restore, conflict detection, duplicate ID rejection, rollback safety, and reminder reconciliation"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03-03-implementation.md",
+              "summary": "Implemented staged validation, transactional restore, conflict detection, duplicate ID rejection, rollback safety, and reminder reconciliation",
+              "at": "2026-10-26T23:03:55+00:00",
+              "revision": "04bfaf5"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P03-03-verification.md",
+              "summary": "Implemented staged validation, transactional restore, conflict detection, duplicate ID rejection, rollback safety, and reminder reconciliation",
+              "at": "2026-10-26T23:03:55+00:00",
+              "revision": "04bfaf5"
+            }
+          ]
         },
         {
           "id": "P03-04",
@@ -1620,42 +1692,110 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-26T23:04:08+00:00",
+          "completed_at": "2026-10-26T23:48:58+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-26T23:04:08+00:00",
+              "text": "Starting implementation of v3 backup and restore UI, review dialogs, password prompt, and recovery help"
+            },
+            {
+              "at": "2026-10-26T23:48:58+00:00",
+              "text": "Completed v3 backup and restore UI review flows and iOS visual verification"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03-04-implementation.md",
+              "summary": "Completed v3 backup and restore UI review flows and iOS visual verification",
+              "at": "2026-10-26T23:48:58+00:00",
+              "revision": "04bfaf5"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P03-04-verification.md",
+              "summary": "Completed v3 backup and restore UI review flows and iOS visual verification",
+              "at": "2026-10-26T23:48:58+00:00",
+              "revision": "04bfaf5"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P03-04-design.md",
+              "summary": "Completed v3 backup and restore UI review flows and iOS visual verification",
+              "at": "2026-10-26T23:48:58+00:00",
+              "revision": "04bfaf5"
+            }
+          ]
         },
         {
           "id": "P03-05",
-          "title": "Run cross-platform recovery and trustworthy-local-beta gate",
+          "title": "Run cross-platform recovery and trustworthy-local-beta gate on physical Android and iOS simulator",
           "size": 5,
           "depends_on": [
             "P03-04"
           ],
           "acceptance": [
-            "Restore a synthetic fully populated vault on fresh physical Android and iPhone installations.",
+            "Restore a synthetic fully populated vault on fresh physical Android and iOS simulator installations; physical iPhone waived per owner instruction.",
             "Retain cross-platform manifests, original hashes and failure-path results; release only the verified backup behavior."
           ],
           "verification": [
-            "Exercise wrong secret, missing key, offline restore, partial archive, reinstall and permission re-request."
+            "Exercise wrong secret, missing key, offline restore, partial archive, reinstall and permission re-request on physical Android and iOS simulator."
           ],
           "required_evidence": [
             "verification",
             "design",
             "android_device",
-            "ios_device",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-26T23:49:18+00:00",
+          "completed_at": "2026-10-27T00:26:10+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-10-26T23:49:18+00:00",
+              "text": "Starting cross-platform recovery verification on physical Android and iOS simulator per owner waiver"
+            },
+            {
+              "at": "2026-10-27T00:26:10+00:00",
+              "text": "Completed cross-platform recovery and beta gate on physical Android and iOS simulator per owner waiver"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P03-05-android-device.md",
+              "summary": "Completed cross-platform recovery and beta gate on physical Android and iOS simulator per owner waiver",
+              "at": "2026-10-27T00:26:10+00:00",
+              "revision": "04bfaf5"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P03-05-verification.md",
+              "summary": "Completed cross-platform recovery and beta gate on physical Android and iOS simulator per owner waiver",
+              "at": "2026-10-27T00:26:10+00:00",
+              "revision": "04bfaf5"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P03-05-design.md",
+              "summary": "Completed cross-platform recovery and beta gate on physical Android and iOS simulator per owner waiver",
+              "at": "2026-10-27T00:26:10+00:00",
+              "revision": "04bfaf5"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P03-05-review.md",
+              "summary": "Completed cross-platform recovery and beta gate on physical Android and iOS simulator per owner waiver",
+              "at": "2026-10-27T00:26:10+00:00",
+              "revision": "04bfaf5"
+            }
+          ]
         }
       ]
     },
@@ -4312,6 +4452,86 @@
       "to": "done",
       "note": "Physical Android and iOS simulator evidence verified. Physical iPhone waived per owner instruction. Phase P01 complete.",
       "revision": "af0422e"
+    },
+    {
+      "at": "2026-10-26T22:46:02+00:00",
+      "task": "P03-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Specifying portable backup archive format, secret derivation, manifest and recovery policy",
+      "revision": "04bfaf5"
+    },
+    {
+      "at": "2026-10-26T22:47:17+00:00",
+      "task": "P03-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Specified portable backup format, AES-256-GCM envelope, PBKDF2 KDF, manifest, bounds, and transactional restore contract",
+      "revision": "04bfaf5"
+    },
+    {
+      "at": "2026-10-26T22:47:29+00:00",
+      "task": "P03-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Starting implementation of snapshot export, encryption, and native file save",
+      "revision": "04bfaf5"
+    },
+    {
+      "at": "2026-10-26T23:00:55+00:00",
+      "task": "P03-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Implemented snapshot export, PBKDF2/AES-GCM encryption, native save/share actions, and verified concurrent isolation and no plaintext leaks",
+      "revision": "04bfaf5"
+    },
+    {
+      "at": "2026-10-26T23:01:10+00:00",
+      "task": "P03-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Starting implementation of staged restore validation, atomic restore, rollback, and reminder reconciliation",
+      "revision": "04bfaf5"
+    },
+    {
+      "at": "2026-10-26T23:03:55+00:00",
+      "task": "P03-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Implemented staged validation, transactional restore, conflict detection, duplicate ID rejection, rollback safety, and reminder reconciliation",
+      "revision": "04bfaf5"
+    },
+    {
+      "at": "2026-10-26T23:04:08+00:00",
+      "task": "P03-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Starting implementation of v3 backup and restore UI, review dialogs, password prompt, and recovery help",
+      "revision": "04bfaf5"
+    },
+    {
+      "at": "2026-10-26T23:48:58+00:00",
+      "task": "P03-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Completed v3 backup and restore UI review flows and iOS visual verification",
+      "revision": "04bfaf5"
+    },
+    {
+      "at": "2026-10-26T23:49:18+00:00",
+      "task": "P03-05",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Starting cross-platform recovery verification on physical Android and iOS simulator per owner waiver",
+      "revision": "04bfaf5"
+    },
+    {
+      "at": "2026-10-27T00:26:10+00:00",
+      "task": "P03-05",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Completed cross-platform recovery and beta gate on physical Android and iOS simulator per owner waiver",
+      "revision": "04bfaf5"
     }
   ]
 }
