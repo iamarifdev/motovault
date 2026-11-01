@@ -13,6 +13,27 @@ For every slice, select checks according to the changed behavior:
 
 The iOS testing restriction is iOS 27 iPhone 18 Pro or Pro Max. Verify the running simulator identity before reuse; preserve its data unless a clean-state test is explicitly needed. This restriction does not change the app's deployment target. Cloud, signed builds and publication each need their own evidence and authorization.
 
+## Handoff gate
+
+Before claiming done, run the checks required by the task plus this portable set:
+
+```bash
+rtk run ./gradlew :composeApp:testDebugUnitTest \
+  :composeApp:compileKotlinIosSimulatorArm64 --offline
+rtk run python3 tools/ui_literal_gate.py
+rtk run python3 tools/ui_literal_gate.py --fuel
+rtk run python3 tools/responsibility_gate.py
+rtk run python3 tools/architecture_dependencies.py
+rtk run python3 tools/architecture_package_cycles.py
+rtk run python3 tools/fuel_policy_literals.py
+rtk run python3 -m unittest discover -s tools/tests -p 'test_*.py'
+rtk run python3 tools/roadmap.py check
+```
+
+For changed copy or locale behavior, add an Android/iOS language-switch check;
+a green unit suite does not satisfy that runtime gate. See
+[the shared AI workflow](ai-workflow.md#definition-of-done).
+
 Use [the report template](templates/verification-report.md). Report manual inspection separately from automated evidence. The P03A-05 checks below are lexical ratchets, not semantic proof; keep incomplete validation `in_review` and do not mark a task done to unblock a dependency.
 
 The partial dependency ratchet can be run with `rtk run python3 tools/architecture_dependencies.py`; its fixtures run with `rtk run python3 -m unittest discover -s tools/tests -p test_architecture_dependencies.py`. The baseline records existing exceptions with an owner and removal task. New imports and fully qualified references, including those in string-template expressions, fail, and a resolved entry must be removed from the baseline. This check scans shared domain and application sources only. It does not check cycles, platform source sets, literals or feature-to-feature dependencies, and is not a Kotlin compiler parser. It is not yet a substitute for the P03A-05 gate or manual review.
@@ -26,6 +47,10 @@ Run `rtk run python3 -m unittest discover -s tools/tests -p test_localization_re
 The GitHub Actions workflow `.github/workflows/architecture-checks.yml` runs the portable dependency ratchet, shared package-cycle check, architecture-check fixtures, resource parity checks and roadmap checks on pushes and pull requests. It does not run the configured Gradle project-cycle check: project configuration currently requires the external Sky Design System source, which a clean checkout does not contain. Run the Gradle report and cycle check above in an environment with that source. CI execution and branch protection must be verified in GitHub after the workflow is pushed; the workflow's presence alone does not prove either.
 
 Bangla copy is reviewed against [localization-style.md](localization-style.md).
+`rtk run python3 tools/bangla_copy_lint.py` rejects a small list of known robotic
+regressions (শিগগির, দরকার, পেরিয়ে গেছে, ফুয়েলর, duplicate verbs and similar);
+it is a regression guard, not a complete style checker. Fixtures run with
+`rtk run python3 -m unittest discover -s tools/tests -p test_bangla_copy_lint.py`.
 `rtk run python3 tools/ui_literal_gate.py` ratchets direct string literals supplied to shared UI `Text`, `contentDescription`, `Field`, `VaultButton`, `Primary`, `Eyebrow`, `Heading`, `VaultChip`, `Sheet`, `DocumentNote`, `DocumentCopy` and `DocumentHeading` sinks against `tools/ui-literal-baseline.json`. Each baseline entry records an owner and a removal task; new literals and resolved entries both fail. The expanded P08-05 baseline currently contains 18 path/literal entries (18 occurrences); the fuel pilot remains empty. `--inventory` prints the current inventory. Fixtures run with `rtk run python3 -m unittest discover -s tools/tests -p test_ui_literal_gate.py`. The lexical check does not detect indirect variables, custom text components, every semantics API, native sources or numeric literals, and its literal parsing is not a Kotlin parser. Do not interpret an empty inventory as full localization coverage.
 
 For an informative comparison with the current committed revision, run `rtk run python3 tools/compare_ui_literal_head.py`. It compares path and literal hashes and counts; it does not follow renamed files or prove the changed code contains no other hardcoded text. This comparison is not a stable CI ratchet because HEAD changes after each commit.

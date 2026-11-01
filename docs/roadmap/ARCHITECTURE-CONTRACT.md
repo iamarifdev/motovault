@@ -63,8 +63,12 @@ not a visual redesign and does not change the persisted wire contract.
 - **P04A-06** adds the file/function responsibility ratchet and splits the native
   probe; **P04A-07** verifies the result on Android and iOS and updates this
   contract and the transition exceptions.
+- **P04A-08** establishes app-wide resource-backed copy, stable-ID catalogue
+  presentation, modern Bangla style, the Bangla-copy regression lint and the
+  production-file SRP baseline. P08-05 owns the remaining runtime language-switch
+  evidence.
 
-P04A-01 through P04A-07 are complete. New code must not increase the size or
+P04A-01 through P04A-08 are complete; P08-05 keeps runtime language-switch evidence open. New code must not increase the size or
 import debt tracked in the responsibility baseline. Any temporary exception
 needs an owner and a removal task in the tracker; splitting by line count alone
 is not an acceptable substitute for a coherent responsibility.
@@ -81,7 +85,9 @@ is not an acceptable substitute for a coherent responsibility.
   language branches. Use Compose Multiplatform resources and translated
   placeholders/plurals for shared UI, with platform-native localization for
   OS-owned integration strings. Keep domain failures typed and resolve their
-  messages at the presentation/platform boundary.
+  messages at the presentation/platform boundary. Bangla copy follows
+  [the localization style](../engineering/localization-style.md); a literal
+  translation is a defect. Persist stable IDs/codes, not display labels.
 - Preserve the existing language preference, Bangla digits, input semantics and
   default behavior until explicitly specified and verified. Format localized
   dates, distances, money and numbers separately from canonical stored values.
@@ -91,12 +97,18 @@ is not an acceptable substitute for a coherent responsibility.
   and values; review meaningful literals rather than blindly banning syntax.
   Apply these requirements to new and changed code, and migrate legacy code by
   feature. Record any temporary exceptions, owner and removal task.
+- These are hard gates, not review suggestions: new inline user-facing text,
+  language branches, localized persisted labels, production files over 400 lines
+  or new storage-to-UI imports fail the task. Run the literal, responsibility,
+  dependency, package-cycle, resource-parity, Bangla-copy and roadmap checks before
+  handoff.
 
 ## Required workflow
 
-1. Read `AGENTS.md`, the design contract, this contract, the relevant tracker
-   task and phase mapping. Inspect the current branch, dirty tree, callers,
-   platforms, persistence/backup formats and existing verification evidence.
+1. Read `AGENTS.md`, [the shared AI workflow](../engineering/ai-workflow.md), the
+   design contract, this contract, [the Bangla style](../engineering/localization-style.md)
+   and the relevant tracker task/phase mapping. Inspect the current branch, dirty
+   tree, callers, platforms, persistence/backup formats and existing evidence.
 2. State the responsibility boundary, concrete files, behavior/data contracts,
    dependency changes, design impact and verification plan. Extend the v3
    prototype first for new UI states. Research-only tasks do not require code.
@@ -104,8 +116,9 @@ is not an acceptable substitute for a coherent responsibility.
    and factual note before feature edits. Preserve unrelated work and do not
    claim proposed modules or checks are present before inspecting them.
 4. Implement one bounded slice. Enforce the boundary, SRP, reuse, constants and
-   localization requirements in changed code. Test critical business behavior,
-   error/cancellation paths, state lifetime and durable data changes as relevant.
+   localization requirements in changed code, including modern Bangla copy and
+   stable-ID presentation. Test critical business behavior, error/cancellation
+   paths, state lifetime and durable data changes as relevant.
 5. Verify Android/iOS behavior at the affected scope, including compatibility,
    existing translations and native integration when applicable. Use actual
    available quality commands; until automated gates exist, record explicit

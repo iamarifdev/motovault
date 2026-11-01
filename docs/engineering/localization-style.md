@@ -30,13 +30,14 @@ not literal English syntax and not formal bureaucratic Bangla.
 | শীঘ্রই | শিগগির |
 | ছাড়িয়ে গেছে | পেরিয়ে গেছে |
 | অ্যাপিয়ারেন্স | চেহারা |
-| হ্যাপটিক ফিডব্যাক | টাচ ভাইব্রেশন |
+| টাচ ভাইব্রেশন | হালকা কাঁপুনি |
 | টেক্সট সাইজ | লেখার আকার |
 | পছন্দ ও সতর্কতা | ব্যবহার ও সতর্কতা |
 
 Use English loanwords where Bangladeshi users already say them: সেটিংস, প্রোফাইল,
-নোটিফিকেশন, রিমাইন্ডার, ব্যাকআপ, রিস্টোর, আপডেট, সার্ভিস, ওডোমিটার, হ্যাপটিক.
-Do not translate these into rare formal words just to avoid English.
+নোটিফিকেশন, রিমাইন্ডার, ব্যাকআপ, রিস্টোর, আপডেট, সার্ভিস, ওডোমিটার,
+টাচ ভাইব্রেশন. Do not translate these into rare formal words just to avoid
+English.
 
 ## Numbers and units
 

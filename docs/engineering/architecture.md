@@ -17,17 +17,17 @@ Keep a single authoritative vault writer during migration. Save success, revisio
 
 ## Recorded transition exceptions
 
-These exceptions describe existing code, not permission to add more coupling. They are owned by the P04A implementer, with the named task serving as the removal or verification target. P04A-07 closes the phase only when the remaining entries have evidence or an explicit, tracked exception.
+These exceptions describe existing code, not permission to add more coupling. Each entry names its owner or removal/review task. New entries need an owner and an explicit removal trigger.
 
 | Existing condition | Target task | Reason and limit |
 | --- | --- | --- |
 | Backup restore uses a legacy archive/model staging adapter | P03A-04 | The writer now coordinates restore; complete archive/asset recovery, collision handling and native bridge verification before claiming the backup migration complete. |
-| Remaining large feature files exceed the 400-line review trigger | P04A-02/P04A-04 and the responsibility baseline | Screens, sheets, root primitives and component families are split; the remaining exceptions have owners and re-review triggers in the responsibility baseline. |
-| In-app language handling and resource selection need native compatibility verification | P03A-06 | Preserve current preference, default, digits and runtime switching; no claim that locale handling is already solved. |
+| Language-switch runtime evidence is not yet recorded after the full resource migration | P08-05 | Resource extraction, catalogue IDs and modern Bangla copy are complete; Android/iOS runtime switching, native surfaces and screenshots still need task evidence. |
+| Two test-support files remain over 400 lines | Responsibility baseline | The production files are all under 400; `NativeAssetInstrumentation` and `BackupTest` are test support with documented re-review triggers. |
 | Architecture, literal and localization checks are lexical ratchets, not Kotlin semantic analysis | P03A-05 and P04A-06 | Keep reviewing boundary imports, indirect text and numeric policy manually; P04A-06 adds the file/function responsibility ratchet and extends the boundary check to storage-to-UI edges. |
 | Sky sources are configured from a sibling checkout | P03A-02 review and P03A-05 delivery | Record the input provenance and reproducibility limitation; do not claim a self-contained build. |
 
-P03A-01 establishes the workflow only. P03A-02 through P03A-06 require their own implementation, evidence and status updates. P04A-01 through P04A-07 completed the residual UI and data-boundary cleanup; persisted models now live under `domain/vault` and `domain/model`, and storage has no UI imports.
+P03A-01 establishes the workflow only. P03A-02 through P03A-06 require their own implementation, evidence and status updates. P04A-01 through P04A-08 completed the residual UI and data-boundary cleanup; persisted models now live under `domain/vault` and `domain/model`, storage has no UI imports, and every production file is under 400 lines. P08-05 owns the remaining app-wide copy/runtime verification.
 
 ## File and function responsibility policy
 
