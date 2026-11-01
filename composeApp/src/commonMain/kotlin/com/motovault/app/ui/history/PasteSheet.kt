@@ -57,7 +57,6 @@ fun PasteSheet(
 ) {
     val f = currentFmt
     val haptic = currentHaptic
-    val isEn = language == AppLanguage.EN
     var text by remember { mutableStateOf("") }
     val parsedService = remember(text) { SmartParse.parseServiceText(text) }
     val parsedAmount = remember(text) { SmartParse.parseAmount(text) }

@@ -40,7 +40,6 @@ fun PrivacySheet(
     var successNotice by remember { mutableStateOf<String?>(null) }
     val privacy = state.privacy
 
-    val isEn = state.language == AppLanguage.EN
     val authMessages = rememberAuthMessages()
     val turnOffTitle = appStringResource(Res.string.privacy_turn_off_title)
     val turnOffReason = appStringResource(Res.string.privacy_turn_off_reason)

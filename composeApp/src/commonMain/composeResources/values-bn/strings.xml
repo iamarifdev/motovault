@@ -59,7 +59,7 @@
     <string name="settings_theme_light">লাইট</string>
     <string name="settings_theme_dark">ডার্ক</string>
     <string name="settings_text_size">টেক্সট সাইজ</string>
-    <string name="settings_haptics">হ্যাপটিক ফিডব্যাক</string>
+    <string name="settings_haptics">টাচ ভাইব্রেশন</string>
     <string name="settings_haptics_desc">বাটন চাপলে হালকা ভাইব্রেশন হবে</string>
     <string name="settings_reduce_motion">মোশন কমান</string>
     <string name="settings_reduce_motion_desc">স্ক্রিন ট্রানজিশন ও অ্যানিমেশনের নড়াচড়া কমান</string>
@@ -127,7 +127,7 @@
     <string name="service_workshop">গ্যারেজ/মেকানিক (ঐচ্ছিক)</string>
     <string name="service_schedule">সার্ভিস শিডিউল: %1$s</string>
     <string name="service_cost">পার্টস ও সার্ভিস খরচ</string>
-    <string name="service_labor_cost">সার্ভিস চার্জ</string>
+    <string name="service_labor_cost">সার্ভিস চার্জ / মজুরি</string>
     <string name="service_discount">ডিসকাউন্ট</string>
     <string name="service_parts_list">কী কী কাজ হয়েছে</string>
     <string name="service_parts_placeholder">যেমন: ইঞ্জিন অয়েল ৯০০ টাকা, ফিল্টার ৩০০ টাকা</string>
@@ -323,7 +323,7 @@
     <string name="settings_text_large">বড়</string>
     <string name="settings_text_extra_large">সবচেয়ে বড়</string>
     <string name="settings_preferences">পছন্দ ও সতর্কতা</string>
-    <string name="settings_haptics_title">হ্যাপটিক ফিডব্যাক</string>
+    <string name="settings_haptics_title">টাচ ভাইব্রেশন</string>
     <string name="settings_reduce_motion_title">মোশন কমান</string>
     <string name="settings_auto_location_title">তেল ও সার্ভিসে অটো লোকেশন</string>
     <string name="settings_auto_location_desc">অনুমতি না দিলেও রেকর্ড সেভ হবে</string>
@@ -485,7 +485,7 @@
     <string name="passport_review_title">সার্ভিস পাসপোর্ট রিভিউ করুন</string>
     <string name="passport_owner_guarantee">মালিকের কনফার্মেশন</string>
     <string name="passport_service_count">%1$s সার্ভিস, পুরোনো থেকে নতুন। কনফার্ম করার আগে ইতিহাস দেখে নিন। ফুয়েল, নথির খরচ ও আসল ফাইল বাদ দেওয়া হয়েছে।</string>
-    <string name="passport_registration_hint">কনফার্ম করা রেজিস্ট্রেশনের তথ্য এখানে বসানো হয়েছে। এগুলো এই বাইকের কিনা মিলিয়ে নিন। দরকার হলে বদলান।</string>
+    <string name="passport_registration_hint">কনফার্ম করা রেজিস্ট্রেশনের তথ্য এখানে বসানো হয়েছে। এগুলো এই বাইকের কিনা মিলিয়ে নিন। প্রয়োজন হলে বদলান।</string>
     <string name="passport_registration_field">রেজিস্ট্রেশন (ঐচ্ছিক)</string>
     <string name="passport_chassis_field">চেসিস (ঐচ্ছিক)</string>
     <string name="passport_engine_field">ইঞ্জিন (ঐচ্ছিক)</string>
@@ -509,7 +509,7 @@
     <string name="wallet_device_badge">এই ডিভাইসে</string>
     <string name="wallet_eyebrow">জরুরি কাগজ এক জায়গায়</string>
     <string name="wallet_heading">রাস্তায় বেরোনোর আগে প্রস্তুত থাকুন</string>
-    <string name="wallet_intro">আসল কপি ও দরকারি তথ্য গুছিয়ে রাখুন।</string>
+    <string name="wallet_intro">আসল কপি ও জরুরি তথ্য গুছিয়ে রাখুন।</string>
     <string name="wallet_empty_title">আপনার ডকুমেন্ট এখানে রাখুন</string>
     <string name="wallet_empty_desc">রেজিস্ট্রেশন, ড্রাইভিং লাইসেন্স বা ট্যাক্স টোকেন স্ক্যান করুন। আসল রং ও লেখা অপরিবর্তিত থাকবে।</string>
     <string name="wallet_info_only">শুধু তথ্য আছে। আসল কপি নেই</string>
@@ -588,9 +588,9 @@
     <string name="service_other_day">অন্য দিন</string>
     <string name="service_odometer">ওডোমিটার</string>
     <string name="service_workshop_optional">গ্যারেজ/মেকানিক (ঐচ্ছিক)</string>
-    <string name="service_more_expenses">লেবার, অন্যান্য খরচ বা ডিসকাউন্ট?</string>
-    <string name="service_hide_more">লেবার ও অন্যান্য লুকিয়ে ফেলুন</string>
-    <string name="service_labour">লেবার</string>
+    <string name="service_more_expenses">মজুরি, অন্যান্য খরচ বা ডিসকাউন্ট?</string>
+    <string name="service_hide_more">মজুরি ও অন্যান্য লুকিয়ে ফেলুন</string>
+    <string name="service_labour">মজুরি</string>
     <string name="service_misc">অন্যান্য</string>
     <string name="service_demo_text">ইঞ্জিন অয়েল ৯০০ টাকা, অয়েল ফিল্টার ৩০০ টাকা</string>
     <string name="docflow_title_add">ডকুমেন্ট যোগ করুন</string>
@@ -625,7 +625,7 @@
     <string name="docflow_capturing">ছবি তোলা হচ্ছে…</string>
     <string name="docflow_keep_front">আপাতত সামনের ছবিই রাখুন</string>
     <string name="docflow_use_saved">সেভ করা কপি ব্যবহার করুন</string>
-    <string name="docflow_crop_eyebrow">তথ্য পড়ার আগে</string>
+    <string name="docflow_crop_eyebrow">স্ক্যানের আগে</string>
     <string name="docflow_crop_heading">পরিষ্কার কপি রাখুন।</string>
     <string name="docflow_crop_copy">পুরো কাগজ রাখুন। লেখা ঝাপসা বা ঢাকা পড়লে আবার ছবি তুলুন।</string>
     <string name="docflow_crop_hint">কোণ টেনে পুরো কাগজ ফ্রেমের ভেতরে রাখুন।</string>
@@ -637,14 +637,14 @@
     <string name="docflow_swap_sides">সামনে ও পেছনের ছবি বদলান</string>
     <string name="docflow_add_page">আরেকটি পৃষ্ঠা যোগ করুন</string>
     <string name="docflow_colors_note">রং ও লেখা অপরিবর্তিত থাকবে। আসল ছবিও আলাদা করে রাখা হবে।</string>
-    <string name="docflow_processing">তথ্য পড়া হচ্ছে…</string>
+    <string name="docflow_processing">স্ক্যান করা হচ্ছে…</string>
     <string name="docflow_use_photos">এই ছবিগুলো ব্যবহার করুন →</string>
     <string name="docflow_crop_error">নির্বাচিত কপি তৈরি করা যায়নি।</string>
     <string name="docflow_check_original">আসল ডকুমেন্টের সঙ্গে মিলিয়ে নিন।</string>
     <string name="docflow_confirm_eyebrow">শেষবার যাচাই করুন</string>
     <string name="docflow_confirm_heading">সব তথ্য মিলেছে?</string>
-    <string name="docflow_confirm_copy">আসল ডকুমেন্ট দেখে তথ্য যাচাই করুন। ভুল পড়া তথ্য সংশোধন করুন।</string>
-    <string name="docflow_read_failed">কিছু লেখা পড়া যায়নি। নিজে লিখে সব তথ্য মিলিয়ে নিন। আসল স্ক্যান রাখা আছে।</string>
+    <string name="docflow_confirm_copy">আসল ডকুমেন্ট দেখে তথ্য যাচাই করুন। ভুল স্ক্যান হওয়া তথ্য সংশোধন করুন।</string>
+    <string name="docflow_read_failed">কিছু লেখা স্ক্যান করা যায়নি। নিজে লিখে সব তথ্য মিলিয়ে নিন। আসল স্ক্যান রাখা আছে।</string>
     <string name="docflow_confirm_number">কাগজের নম্বর যাচাই করুন।</string>
     <string name="docflow_confirm_expiry">মেয়াদ শেষের তারিখ যাচাই করুন।</string>
     <string name="docflow_use_scan">স্ক্যান থেকে পাওয়া তথ্য ব্যবহার করুন</string>

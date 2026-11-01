@@ -62,7 +62,6 @@ fun DocViewSheet(
     language: AppLanguage = AppLanguage.BN
 ) {
     val f = currentFmt
-    val isEn = language == AppLanguage.EN
     var roadsideMode by remember { mutableStateOf(false) }
 
     Sheet(

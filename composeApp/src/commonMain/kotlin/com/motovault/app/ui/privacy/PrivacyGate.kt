@@ -36,7 +36,6 @@ internal fun PrivacyGate(
     language: AppLanguage = AppLanguage.BN
 ) {
     val palette = LocalVaultPalette.current
-    val isEn = language == AppLanguage.EN
     Box(
         modifier = Modifier
             .fillMaxSize()
