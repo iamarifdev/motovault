@@ -7,6 +7,7 @@ import { todayISO } from '../lib/dates'
 import { useFmt } from '../lib/bn'
 import { haptic } from '../lib/haptics'
 import { Button, SectionTitle, Segmented, Switch } from '../components/ui'
+import { RECOVERY_ENTRY } from '../sheets/RecoverySheet'
 
 function WidgetPreview() {
   const ride = useStore((s) => s.ride)!
@@ -34,6 +35,7 @@ export function Me() {
   const brand = brandOf(ride.brandId)
   const model = modelOf(ride.modelId)
   const active = s.brandOverride ?? ride.brandId
+  const recovery = RECOVERY_ENTRY[(s as { language?: string }).language === 'en' ? 'en' : 'bn']
 
   return (
     <div className="screen-pad">
@@ -93,6 +95,11 @@ export function Me() {
       <section aria-label="গোপনীয়তা">
         <SectionTitle>গোপনীয়তা</SectionTitle>
         <div className="card-stack"><div className="setting"><b>{s.privacyEnabled ? 'অ্যাপ লক চালু' : 'কাগজ আপনার নিয়ন্ত্রণে'}</b><p>ফোনের লক, নিজে থেকে লক ও শুধু বেছে নেওয়া কাগজ দেখানো।</p><Button full kind="secondary" onClick={() => open('privacy')}>গোপনীয়তার সেটিংস</Button></div></div>
+      </section>
+
+      <section aria-label={recovery.title}>
+        <SectionTitle>{recovery.title}</SectionTitle>
+        <div className="card-stack"><div className="setting"><b>{recovery.heading}</b><p>{recovery.description}</p><Button full kind="secondary" onClick={() => open('recovery')}>{recovery.action}</Button></div></div>
       </section>
 
       <section aria-label="নতুন ধারণা">

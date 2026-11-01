@@ -20,6 +20,7 @@ import { PasteSheet } from './sheets/PasteSheet'
 import { GaugeDetailSheet } from './sheets/GaugeDetailSheet'
 import { ReminderSheet } from './sheets/ReminderSheet'
 import { PrivacySheet } from './sheets/PrivacySheet'
+import { RecoverySheet } from './sheets/RecoverySheet'
 import { PrivacyGate } from './components/PrivacyGate'
 import { usePrivacyPreview } from './lib/privacyPreview'
 import type { ItemKey, Tab } from './types'
@@ -58,7 +59,7 @@ function useStageScale() {
 function renderSheet(name: string, props: Record<string, unknown> = {}) {
   switch (name) {
     case 'quickAdd': return <QuickAddSheet key="quickAdd" />
-    case 'fuel': return <FuelSheet key="fuel" amount={props.amount as number | undefined} />
+    case 'fuel': return <FuelSheet key={`fuel-${props.id ?? 'new'}`} amount={props.amount as number | undefined} existingId={props.id as string | undefined} />
     case 'service': return <ServiceSheet key="service" item={props.item as ItemKey | undefined} rows={props.rows as ParsedLine[] | undefined} />
     case 'odometer': return <OdometerSheet key="odometer" />
     case 'docAdd': return <DocAddSheet key="docAdd" />
@@ -67,6 +68,7 @@ function renderSheet(name: string, props: Record<string, unknown> = {}) {
     case 'gaugeDetail': return <GaugeDetailSheet key={`gauge-${props.id}`} id={props.id as string} />
     case 'reminders': return <ReminderSheet key={`reminders-${props.id ?? 'global'}`} id={props.id as string | undefined} type={props.type as string | undefined} />
     case 'privacy': return <PrivacySheet key="privacy" />
+    case 'recovery': return <RecoverySheet key="recovery" />
     default: return null
   }
 }

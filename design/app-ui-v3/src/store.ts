@@ -14,6 +14,7 @@ interface Store extends AppData {
   settings: Settings
   setSetting: <K extends keyof Settings>(key: K, value: Settings[K]) => void
   addFuel: (v: Omit<FuelLog, 'id' | 'type'>) => string
+  updateFuel: (id: string, v: Omit<FuelLog, 'id' | 'type'>) => void
   addService: (v: Omit<ServiceLog, 'id' | 'type' | 'total' | 'resets'>) => string
   setOdometer: (odo: number) => void
   removeLog: (id: string) => { entry: LogEntry; index: number } | null
@@ -56,6 +57,13 @@ export const useStore = create<Store>()(
         }))
         return entry.id
       },
+
+      updateFuel: (entryId, v) => set((s) => ({
+        logs: s.logs.map((entry) => entry.id === entryId && entry.type === 'fuel' ? { ...entry, ...v } : entry),
+        ride: s.ride && { ...s.ride, odometer: Math.max(s.ride.odometer, v.odo), odometerAt: v.odo >= s.ride.odometer ? v.date : s.ride.odometerAt },
+        lastPrice: { ...s.lastPrice, [v.fuel]: v.price },
+        places: unique(v.place, s.places),
+      })),
 
       addService: (v) => {
         const keys = v.lines.map((l) => l.item).filter((k): k is ItemKey => k !== 'custom')
@@ -110,7 +118,7 @@ export const useStore = create<Store>()(
   ),
 )
 
-export type SheetName = 'quickAdd' | 'fuel' | 'service' | 'odometer' | 'docAdd' | 'docView' | 'paste' | 'rule' | 'gaugeDetail' | 'reminders' | 'privacy'
+export type SheetName = 'quickAdd' | 'fuel' | 'service' | 'odometer' | 'docAdd' | 'docView' | 'paste' | 'rule' | 'gaugeDetail' | 'reminders' | 'privacy' | 'recovery'
 export interface SheetState { name: SheetName; props?: Record<string, unknown> }
 export interface Toast { id: number; text: string; undo?: () => void; tone?: 'ok' | 'warn' }
 

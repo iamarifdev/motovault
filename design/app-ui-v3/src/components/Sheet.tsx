@@ -13,13 +13,14 @@ interface SheetProps {
   /** 'tall' fills 92% like Sky's selection sheet. 'content' hugs its content. */
   detent?: 'content' | 'tall'
   onClose?: () => void
+  closeLabel?: string
 }
 
 /**
  * Bottom sheet with Sky geometry (20 dp corners, 40 x 4 handle, 60 dp toolbar gap).
  * New vs the Kotlin app: the handle really drags, a fast flick dismisses, and the body scrolls under a fixed header.
  */
-export function Sheet({ title, children, footer, detent = 'content', onClose }: SheetProps) {
+export function Sheet({ title, children, footer, detent = 'content', onClose, closeLabel = 'বন্ধ করুন' }: SheetProps) {
   const close = onClose ?? useUI.getState().close
   const controls = useDragControls()
   return (
@@ -38,7 +39,7 @@ export function Sheet({ title, children, footer, detent = 'content', onClose }: 
           <span className="handle" />
           <header className="sheet-head">
             <h2>{title}</h2>
-            <IconButton icon={X} label="বন্ধ করুন" onClick={close} />
+            <IconButton icon={X} label={closeLabel} onClick={close} />
           </header>
         </div>
         <div className="sheet-body">{children}</div>

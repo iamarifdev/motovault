@@ -14,44 +14,63 @@ import { Button, Chip } from '../components/ui'
 import { Keypad, useEntry, useHardwareKeys, useShow } from '../components/entry'
 
 type Field = 'amount' | 'litres' | 'price' | 'odo'
+const MAX_FUEL_LITRES = 100
+const MAX_ODOMETER_KM = 9_999_999
 
 /**
  * Fuel in two taps and one number. Riders think in taka ("৫০০ টাকার তেল"), so taka is the first field and litres follow.
  * Odometer is pre-filled with an estimate, date defaults to today, and "full tank" is on because most fill-ups are full.
  */
-export function FuelSheet({ amount: preset }: { amount?: number }) {
+export function FuelSheet({ amount: preset, existingId }: { amount?: number; existingId?: string }) {
   const ride = useStore((s) => s.ride)!
   const logs = useStore((s) => s.logs)
   const lastPrice = useStore((s) => s.lastPrice)
   const places = useStore((s) => s.places)
   const addFuel = useStore((s) => s.addFuel)
-  const removeLog = useStore((s) => s.removeLog)
+  const updateFuel = useStore((s) => s.updateFuel)
   const { close, showToast } = useUI.getState()
   const f = useFmt()
   const show = useShow()
   const today = todayISO()
 
   const estimate = useMemo(() => estimateOdometer(ride, logs, today), [ride, logs, today])
-  const lastOdo = fuelLogs(logs).at(-1)?.odo ?? 0
+  const existing = fuelLogs(logs).find((entry) => entry.id === existingId)
+  const otherFuel = fuelLogs(logs).filter((entry) => entry.id !== existingId)
+  const lastOdo = otherFuel.at(-1)?.odo ?? 0
+  const latestFuelDate = fuelLogs(logs).reduce((latest, entry) => entry.date > latest ? entry.date : latest, '')
 
-  const [fuel, setFuel] = useState<FuelType>('octane')
+  const [fuel, setFuel] = useState<FuelType>(existing?.fuel ?? 'octane')
   const [mode, setMode] = useState<'taka' | 'litre'>('taka')
-  const [full, setFull] = useState(true)
-  const [dateKey, setDateKey] = useState<'today' | 'yesterday' | 'custom'>('today')
-  const [custom, setCustom] = useState(today)
-  const [place, setPlace] = useState('')
-  const [odoTouched, setOdoTouched] = useState(false)
-  const e = useEntry<Field>({ amount: preset ? String(preset) : '', litres: '', price: String(lastPrice.octane), odo: String(estimate) }, 'amount')
+  const [full, setFull] = useState(existing?.full ?? true)
+  const [dateKey, setDateKey] = useState<'today' | 'yesterday' | 'custom'>(existing ? 'custom' : 'today')
+  const [custom, setCustom] = useState(existing?.date ?? today)
+  const [place, setPlace] = useState(existing?.place ?? '')
+  const [odoTouched, setOdoTouched] = useState(Boolean(existing))
+  const [saveFailed, setSaveFailed] = useState(false)
+  const e = useEntry<Field>({ amount: existing ? String(existing.amount) : preset ? String(preset) : '', litres: existing ? String(existing.liters) : '', price: String(existing?.price ?? lastPrice.octane), odo: String(existing?.odo ?? estimate) }, 'amount')
 
   const date = dateKey === 'today' ? today : dateKey === 'yesterday' ? addDays(today, -1) : custom
   const price = Number(e.vals.price) || 0
-  const taka = mode === 'taka' ? Number(e.vals.amount) || 0 : (Number(e.vals.litres) || 0) * price
-  const liters = mode === 'taka' ? (price > 0 ? taka / price : 0) : Number(e.vals.litres) || 0
+  const unchangedAmount = existing && Number(e.vals.amount) === existing.amount && price === existing.price
+  const unchangedLitres = existing && Number(e.vals.litres) === existing.liters && price === existing.price
+  const taka = mode === 'taka' ? Number(e.vals.amount) || 0 : unchangedLitres ? existing.amount : (Number(e.vals.litres) || 0) * price
+  const liters = mode === 'taka' ? unchangedAmount ? existing.liters : (price > 0 ? taka / price : 0) : Number(e.vals.litres) || 0
   const odo = Number(e.vals.odo) || 0
 
-  const odoError = odo <= lastOdo ? `শেষ জ্বালানির কিমি (${f.n(lastOdo)}) এর চেয়ে বেশি দিন` : null
+  const ordered = [...otherFuel, ...(existing ? [{ ...existing, odo, date }] : [])].sort((a, b) => a.odo - b.odo)
+  const editOrderInvalid = Boolean(existing) && ordered.some((entry, index) => index > 0 && (entry.odo <= ordered[index - 1].odo || entry.date < ordered[index - 1].date))
+  const odoError = existing ? (editOrderInvalid ? 'জ্বালানির কিমি ও তারিখের ক্রম ঠিক করুন' : null) : odo <= lastOdo && lastOdo > 0 ? `শেষ জ্বালানির কিমি (${f.n(lastOdo)}) এর চেয়ে বেশি দিন` : null
   const literWarn = liters > 40 ? 'লিটার অনেক বেশি মনে হচ্ছে, মিলিয়ে নিন' : null
-  const reason = taka <= 0 ? (mode === 'taka' ? 'টাকার পরিমাণ লিখুন' : 'লিটার লিখুন') : price <= 0 ? 'প্রতি লিটারের দাম লিখুন' : odoError ? 'কিমি ঠিক করুন' : null
+  const parsedDate = new Date(`${date}T00:00:00Z`)
+  const dateValid = !Number.isNaN(parsedDate.getTime()) && parsedDate.toISOString().slice(0, 10) === date
+  const reason = taka <= 0 ? (mode === 'taka' ? 'টাকার পরিমাণ লিখুন' : 'লিটার লিখুন')
+    : price <= 0 ? 'প্রতি লিটারের দাম লিখুন'
+      : liters > MAX_FUEL_LITRES ? `লিটার ${f.n(MAX_FUEL_LITRES)}-এর বেশি হতে পারবে না`
+        : odo < 0 || odo > MAX_ODOMETER_KM ? 'সঠিক ওডোমিটার দিন'
+          : odoError ? 'কিমি ঠিক করুন'
+            : !dateValid ? 'সঠিক তারিখ দিন'
+              : date > today ? 'ভবিষ্যতের তারিখ দেওয়া যাবে না'
+                : !existing && latestFuelDate && date < latestFuelDate ? 'শেষ জ্বালানির তারিখ বা তার পরের দিন দিন' : existingId && !existing ? 'রেকর্ডটি আর পাওয়া যাচ্ছে না' : null
 
   useHardwareKeys(e.press)
 
@@ -60,18 +79,25 @@ export function FuelSheet({ amount: preset }: { amount?: number }) {
 
   const save = () => {
     if (reason) { haptic('error'); return }
+    // Synthetic design state; no owner data is written when this fixture is enabled.
+    if (new URLSearchParams(window.location.search).get('fuelSaveFailure') === '1') {
+      setSaveFailed(true); haptic('error'); return
+    }
     const snap = snapshotData()
-    const id = addFuel({ date, odo, amount: Math.round(taka), liters: Math.round(liters * 100) / 100, price, full, fuel, place })
+    const values = { date, odo, amount: existing ? taka : Math.round(taka), liters: existing ? liters : Math.round(liters * 100) / 100, price, full, fuel, place }
+    if (existing) updateFuel(existing.id, values)
+    else addFuel(values)
     haptic('success'); close()
-    showToast(`${f.money(taka)} · ${f.liters(liters)} যোগ হয়েছে`, () => { removeLog(id); restoreData(snap) })
+    showToast(existing ? 'জ্বালানির রেকর্ড ঠিক হয়েছে' : `${f.money(taka)} · ${f.liters(liters)} যোগ হয়েছে`, () => restoreData(snap))
   }
 
   const label = (k: Field) => (e.active === k ? 'active' : '')
   const amountText = mode === 'taka' ? e.vals.amount : e.vals.litres
 
   return (
-    <Sheet title="জ্বালানি" footer={
+    <Sheet title={existing ? 'জ্বালানির রেকর্ড ঠিক করুন' : 'জ্বালানি'} footer={
       <>
+        {saveFailed && <p className="field-msg err" role="alert">সেভ করা যায়নি। তথ্য মুছে যায়নি, আবার চেষ্টা করুন।</p>}
         <Button full disabled={Boolean(reason)} onClick={save}>{reason ?? `${f.money(taka)} সেভ করুন`}</Button>
         <Keypad onKey={e.press} />
       </>
@@ -113,7 +139,7 @@ export function FuelSheet({ amount: preset }: { amount?: number }) {
       <AnimatePresence initial={false}>
         {dateKey === 'custom' && (
           <motion.div key="date" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="clip">
-            <input className="input" type="date" max={today} value={custom} aria-label="তারিখ" onChange={(ev) => setCustom(ev.target.value || today)} />
+            <input className="input" type="date" max={today} value={custom} aria-label="তারিখ" onChange={(ev) => setCustom(ev.target.value)} />
           </motion.div>
         )}
       </AnimatePresence>

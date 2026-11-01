@@ -12,7 +12,7 @@ import { Chip } from '../components/ui'
 
 type Filter = 'all' | 'service' | 'fuel'
 
-function Row({ log, onDelete }: { log: LogEntry; onDelete: () => void }) {
+function Row({ log, onDelete, onEdit }: { log: LogEntry; onDelete: () => void; onEdit: () => void }) {
   const f = useFmt()
   const [openRow, setOpenRow] = useState(false)
   const x = useMotionValue(0)
@@ -41,6 +41,7 @@ function Row({ log, onDelete }: { log: LogEntry; onDelete: () => void }) {
                   <p>{f.money(fuel.price)} প্রতি লিটার · {fuel.fuel === 'octane' ? 'অকটেন' : 'পেট্রোল'}</p>
                   <p>{fuel.full ? 'ট্যাংক পূর্ণ করা হয়েছে' : 'আংশিক, পরের পূর্ণ ট্যাংকে হিসাব হবে'}</p>
                   {fuel.place && <p>{fuel.place}</p>}
+                  <button type="button" className="link" onClick={onEdit}>জ্বালানির রেকর্ড ঠিক করুন</button>
                 </>}
                 {svc && <>
                   {svc.lines.map((l, i) => <p key={i} className="line-p"><span>{l.name}{l.detail ? ` · ${l.detail}` : ''}{l.qty > 1 ? ` × ${f.d(String(l.qty))}` : ''}</span><b>{l.price === null ? 'দাম জানা নেই' : f.money(l.price * l.qty)}</b></p>)}
@@ -63,6 +64,7 @@ export function History() {
   const removeLog = useStore((s) => s.removeLog)
   const restoreLog = useStore((s) => s.restoreLog)
   const showToast = useUI((s) => s.showToast)
+  const open = useUI((s) => s.open)
   const f = useFmt()
   const [filter, setFilter] = useState<Filter>('all')
   const today = todayISO()
@@ -109,7 +111,7 @@ export function History() {
             <AnimatePresence initial={false}>
               {items.map((l) => (
                 <motion.div key={l.id} layout exit={{ opacity: 0, height: 0, transition: { duration: 0.2 } }} transition={spring.list}>
-                  <Row log={l} onDelete={() => del(l.id)} />
+                  <Row log={l} onDelete={() => del(l.id)} onEdit={() => open('fuel', { id: l.id })} />
                 </motion.div>
               ))}
             </AnimatePresence>
