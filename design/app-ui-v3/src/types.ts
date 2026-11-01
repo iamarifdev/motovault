@@ -43,6 +43,10 @@ export interface Rule {
   lastDate: string
   baseline?: 'confirmed' | 'estimate' | 'unknown'
   source?: string
+  action?: 'inspect' | 'clean' | 'lubricate' | 'adjust' | 'replace'
+  sourceRevision?: string
+  sourcePage?: string
+  applicability?: string
   reminder?: boolean
   snoozedUntil?: string
 }

@@ -21,7 +21,7 @@ interface Store extends AppData {
   restoreLog: (entry: LogEntry, index: number) => void
   addDoc: (v: Omit<VaultDoc, 'id'>) => string
   setDocReminder: (id: string, on: boolean) => void
-  completeOnboarding: (v: { brandId: string; modelId: string; name: string; odometer: number; lastServiceKnown: boolean }) => void
+  completeOnboarding: (v: { brandId: string; modelId: string; name: string; odometer: number; lastServiceKnown: boolean; lastServiceKm?: number; lastServiceDate?: string }) => void
   startOnboarding: () => void
   resetDemo: () => void
 }
@@ -101,11 +101,16 @@ export const useStore = create<Store>()(
       addDoc: (v) => { const doc = { ...v, id: id() }; set((s) => ({ docs: [doc, ...s.docs.filter((d) => d.kind !== v.kind)] })); return doc.id },
       setDocReminder: (docId, on) => set((s) => ({ docs: s.docs.map((d) => (d.id === docId ? { ...d, reminder: on } : d)) })),
 
-      completeOnboarding: ({ brandId, modelId, name, odometer, lastServiceKnown }) => {
+      completeOnboarding: ({ brandId, modelId, name, odometer, lastServiceKnown, lastServiceKm, lastServiceDate }) => {
         const today = todayISO()
         const base = emptyData()
         // Setup cannot invent an observed service visit or measured component condition.
-        const rules = seedData(today).rules.map((r) => ({ ...r, lastKm: odometer, lastDate: today, baseline: lastServiceKnown ? 'estimate' as const : 'unknown' as const }))
+        const rules = seedData(today).rules.map((r) => ({
+          ...r,
+          lastKm: lastServiceKnown ? (lastServiceKm ?? 0) : 0,
+          lastDate: lastServiceKnown ? (lastServiceDate ?? today) : today,
+          baseline: lastServiceKnown ? 'estimate' as const : 'unknown' as const,
+        }))
         set({
           ...base, rules,
           ride: { brandId, modelId, name: name || modelOf(modelId)?.name || '', year: new Date().getFullYear() - 2, odometer, odometerAt: today, startedAt: today },

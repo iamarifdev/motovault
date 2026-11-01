@@ -23,6 +23,8 @@ export function Onboarding() {
   const [modelId, setModelId] = useState<string | null>(null)
   const [query, setQuery] = useState('')
   const [knows, setKnows] = useState(false)
+  const [lastKm, setLastKm] = useState('')
+  const [lastDate, setLastDate] = useState('')
   const e = useEntry<'odo'>({ odo: '' }, 'odo')
   const brand = brandId ? brandOf(brandId) : null
   const model = brand?.models.find((m) => m.id === modelId)
@@ -35,7 +37,7 @@ export function Onboarding() {
   const finish = () => {
     if (!brand || !model) return
     haptic('success')
-    complete({ brandId: brand.id, modelId: model.id, name: model.name, odometer: odo, lastServiceKnown: knows })
+    complete({ brandId: brand.id, modelId: model.id, name: model.name, odometer: odo, lastServiceKnown: knows, lastServiceKm: Number(lastKm) || undefined, lastServiceDate: lastDate || undefined })
     setPreview(null)
     useUI.getState().setTab('home')
   }
@@ -101,8 +103,25 @@ export function Onboarding() {
                 <Chip active={!knows} onClick={() => setKnows(false)}>শেষ সার্ভিস মনে নেই</Chip>
                 <Chip active={knows} onClick={() => setKnows(true)}>মোটামুটি মনে আছে</Chip>
               </div>
-              <p className="cap">{knows ? 'অনুমান থেকে শতাংশ দেখানো হবে না। সার্ভিসের তথ্য দিয়ে নিশ্চিত করুন।' : 'শেষ সার্ভিস অজানা থাকবে। সার্ভিস লিখলে ব্যবধানের হিসাব শুরু হবে।'}</p>
-              <Button full disabled={odo <= 0} onClick={finish}>{odo <= 0 ? 'কিমি লিখুন' : 'গ্যারেজ তৈরি করুন'}</Button>
+              <p className="cap">{knows ? 'আসল শেষ সার্ভিসের তথ্য দিন। লিংক করা সার্ভিস নিশ্চিত না করা পর্যন্ত এটি মালিকের অনুমান থাকবে।' : 'শেষ সার্ভিস অজানা থাকবে। সার্ভিস লিখলে ব্যবধানের হিসাব শুরু হবে।'}</p>
+              {knows ? (
+                <div className="trio">
+                  <label className="mini"><small>শেষ সার্ভিসের কিমি</small><input className="input" inputMode="numeric" value={lastKm} onChange={(ev) => setLastKm(ev.target.value.replace(/\D/g, ''))} /></label>
+                  <label className="mini"><small>শেষ সার্ভিসের তারিখ</small><input className="input" type="date" max={new Date().toISOString().slice(0, 10)} value={lastDate} onChange={(ev) => setLastDate(ev.target.value)} /></label>
+                </div>
+              ) : (
+                <div className="setting">
+                  <span>শুরুতে এই বিষয়গুলো দেখে নিন</span>
+                  <ul>
+                    <li>টায়ার ও বাতাসের চাপ</li>
+                    <li>ব্রেক ও ফ্লুইডের মাত্রা</li>
+                    <li>চেইনের ঢিল ও লুব্রিকেন্ট</li>
+                    <li>লাইট, হর্ন ও সুইচ</li>
+                    <li>তেল, কুল্যান্ট ও জ্বালানির লিক</li>
+                  </ul>
+                </div>
+              )}
+              <Button full disabled={odo <= 0 || (knows && (!lastKm || Number(lastKm) > odo || !lastDate))} onClick={finish}>{odo <= 0 ? 'কিমি লিখুন' : knows && Number(lastKm) > odo ? 'শেষ সার্ভিসের কিমি ঠিক করুন' : 'গ্যারেজ তৈরি করুন'}</Button>
               <Keypad onKey={e.press} decimal={false} />
             </>
           )}
