@@ -12,9 +12,12 @@ and the [shared AI workflow](../engineering/ai-workflow.md). This contract gover
 if those documents appear to conflict.
 
 P00–P03 completion records describe their original scope and evidence. They are
-not proof that the target architecture is already in place. P03A tracks the
-foundation and the separate P03 backup/restore migration. P03A is planned, not an
-assertion that modules, localization infrastructure or checks already exist.
+not proof that the target architecture is already in place. P03A delivered the
+initial foundation and the separate P03 backup/restore migration. The post-P04
+audit still found mixed-responsibility UI files, proved-unused legacy paths and
+storage-to-UI imports; P04A tracks that cleanup and is a prerequisite for P05,
+P06, P07 and P08. Do not treat a green domain/application gate as full
+architectural compliance.
 
 ## Target boundaries
 
@@ -43,6 +46,28 @@ assertion that modules, localization infrastructure or checks already exist.
   extraction. Long files trigger review; splitting by size alone is insufficient.
 - Reuse existing v3 components and tokens. Keep product-independent Sky free of
   MotoVault models, persistence, network, authentication and financial effects.
+
+## Tracked cleanup gate (P04A)
+
+The P04A phase is the single place for the remaining structural cleanup. It is
+not a visual redesign and does not change the persisted wire contract.
+
+- **P04A-01** removes only paths with no call sites: legacy onboarding, fuel and
+  service dialogs, the duplicate history dialog and the unused components list.
+- **P04A-02** splits `Screens.kt` and `Sheets.kt` by screen/flow; **P04A-03**
+  extracts root primitives and navigation from `MotoVault.kt`; **P04A-04** splits
+  `Components.kt` and `BackupSheet.kt` into coherent families.
+- **P04A-05** moves persisted models out of `ui/` into data/domain ownership and
+  requires zero storage imports from `com.motovault.app.ui`, with frozen
+  compatibility fixtures for Room, backup payloads and archives.
+- **P04A-06** adds the file/function responsibility ratchet and splits the native
+  probe; **P04A-07** verifies the result on Android and iOS and updates this
+  contract and the transition exceptions.
+
+P04A-01 through P04A-07 are complete. New code must not increase the size or
+import debt tracked in the responsibility baseline. Any temporary exception
+needs an owner and a removal task in the tracker; splitting by line count alone
+is not an acceptable substitute for a coherent responsibility.
 
 ## Constants and language support
 

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-01T05:27:37+00:00",
+  "updated_at": "2026-11-01T06:13:00+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -42,7 +42,8 @@
         "P06",
         "P07",
         "P08",
-        "P03A"
+        "P03A",
+        "P04A"
       ]
     },
     {
@@ -64,7 +65,8 @@
         "P12",
         "P13",
         "P16",
-        "P03A"
+        "P03A",
+        "P04A"
       ]
     },
     {
@@ -101,7 +103,7 @@
       ],
       "existing_paths": [
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt"
       ],
       "proposed_paths": [],
@@ -941,7 +943,7 @@
             },
             {
               "kind": "implementation",
-              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Components.kt",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Controls.kt",
               "summary": "Both native builds and all six r3 representative captures pass. Visual inspection confirms the holder/expiry clipping correction at normal and large text; reduced tab fades now follow v3. iOS real OS-motion r3 passes and restores Reduce Motion=0. Both OS appearance overrides restored. Remaining acceptance is fine motion comparison, native back/gesture and screen-reader focus/modal/announcement checks, plus owner-deferred physical Android/iPhone verification. Screenshots do not close those gates.",
               "at": "2026-10-25T14:23:09+00:00",
               "revision": "48fce40"
@@ -1152,7 +1154,7 @@
       ],
       "proposed_paths": [
         "composeApp/src/commonMain/kotlin/com/motovault/app/domain/privacy/VaultAccessPolicy.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/privacy/VaultPrivacySheet.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/privacy/PrivacySheet.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/SecureAssetStore.kt"
       ],
       "data": "Version privacy preferences. Separate device-bound keys from portable backup secrets. Encrypt sensitive local assets only through a resumable, validated migration; document any plaintext database metadata remaining.",
@@ -1355,7 +1357,7 @@
             },
             {
               "kind": "implementation",
-              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/privacy/VaultPrivacySheet.kt",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/privacy/PrivacySheet.kt",
               "summary": "Implemented native system authentication bridge, PrivacyGate lock and inspection handover, PrivacySheet settings, auto-lock timeout/background lifecycle, and verified all 7 interaction scenarios.",
               "at": "2026-10-26T20:20:22+00:00",
               "revision": "cdc55e6"
@@ -1823,7 +1825,7 @@
         "docs/roadmap/ARCHITECTURE-CONTRACT.md",
         "docs/ARCHITECTURE-PROPOSAL.md",
         "composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultSession.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt"
+        "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt"
       ],
       "proposed_paths": [
         "docs/engineering/architecture.md",
@@ -2818,7 +2820,7 @@
       ],
       "existing_paths": [
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/FactoryProfiles.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Onboarding.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/onboarding/OnboardingScreen.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/BikeCatalogue.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/domain/model/ComponentRule.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt"
@@ -3148,6 +3150,423 @@
       ]
     },
     {
+      "id": "P04A",
+      "title": "Shared UI decomposition and ownership cleanup",
+      "priority": "P0",
+      "group": "foundation",
+      "outcome": "Large UI files are split by responsibility, proved-unused paths are removed, persisted models leave the UI package, and a responsibility ratchet keeps every later phase from regressing.",
+      "rationale": "The post-P04 audit found 1,000+ line mixed-responsibility UI files, roughly 350-500 lines of dead legacy dialogs, and 30 storage imports from the UI package despite green domain/application gates.",
+      "depends_on": [
+        "P04-05"
+      ],
+      "design": "Preserve the v3 visual and interaction contract. This is a behavior-preserving structural cleanup; no screen redesign is authorized by this phase.",
+      "prototype_paths": [
+        "design/app-ui-v3/src/App.tsx",
+        "design/app-ui-v3/src/components/Sheet.tsx",
+        "design/app-ui-v3/src/screens/Home.tsx"
+      ],
+      "existing_paths": [
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/GarageScreen.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Controls.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/backup/BackupSheet.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt",
+        "composeApp/src/androidInstrumentedTest/kotlin/com/motovault/app/storage/security/NativeAssetInstrumentation.kt"
+      ],
+      "proposed_paths": [
+        "docs/engineering/decisions/ADR-0002-structural-cleanup.md",
+        "tools/responsibility_gate.py",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/screens/"
+      ],
+      "data": "Moving persisted models is a source move only. Preserve Room JSON, backup payload, archive field names and schema versions; add frozen compatibility fixtures and recovery evidence before changing ownership.",
+      "architecture_application": [
+        "Complete the deferred shared-UI and data-boundary work from the architecture proposal migration stages D and F rather than treating the green domain/application gate as full compliance.",
+        "Track every large-file split with a coherent responsibility and owner; do not split by line count alone or create empty feature modules.",
+        "Make the cleanup a prerequisite for remaining feature phases and both release gates so later work cannot reintroduce the same debt."
+      ],
+      "exit_criteria": [
+        "Proved-unused legacy UI paths are deleted with call-site evidence and no active route regression.",
+        "No unexplained handwritten production file exceeds 600 lines; files above 400 lines have an owner and removal task in the responsibility baseline.",
+        "MotoVault.kt contains composition and navigation only; reusable controls and feature screens have explicit owners.",
+        "Storage has zero imports from com.motovault.app.ui; persisted models have a data/domain owner and compatibility fixtures.",
+        "The responsibility ratchet runs in CI with positive and negative fixtures, and P05-P08 depend on the final cleanup verification."
+      ],
+      "risks": "Moving persisted models or deleting legacy dialogs can change serialization, navigation or reflection behavior. Preserve wire names, keep the authoritative writer, verify every deleted call site and test backup/restore before removal.",
+      "tasks": [
+        {
+          "id": "P04A-01",
+          "title": "Remove proved-unused legacy UI paths",
+          "size": 2,
+          "depends_on": [
+            "P04-05"
+          ],
+          "acceptance": [
+            "Delete only symbols with no call sites: legacy Setup/ModelPicker onboarding, FuelDialog, ServiceDialog, ComponentsList and the duplicate History dialog.",
+            "Keep ScheduleDialog, the active fuel sheet, the active onboarding screen and current history route; no persisted-format or visual change."
+          ],
+          "verification": [
+            "Record definition/call-site searches for every removed symbol, run Android and iOS compilation plus the existing regression suites, and review the active navigation routes."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-01T05:51:41+00:00",
+          "completed_at": "2026-11-01T05:57:33+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-01T05:48:59+00:00",
+              "text": "Post-P04 audit added P04A cleanup phase: dead legacy UI, five files over 600 lines, and 30 storage-to-UI imports. P04A-07 now gates P05-P08; foundation points only"
+            },
+            {
+              "at": "2026-11-01T05:51:41+00:00",
+              "text": "Removing only call-site-proven legacy onboarding, fuel, service, document-fee and duplicate history paths"
+            },
+            {
+              "at": "2026-11-01T05:57:33+00:00",
+              "text": "Removed 227-line dead onboarding and 388 lines of dead legacy dialogs; only ScheduleDialog and shared Attachment remain; 274 tests and iOS compile pass"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P04A-01-dead-code.md",
+              "summary": "Removed 227-line dead onboarding and 388 lines of dead legacy dialogs; only ScheduleDialog and shared Attachment remain; 274 tests and iOS compile pass",
+              "at": "2026-11-01T05:57:33+00:00",
+              "revision": "82c5fec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04A-01-dead-code.md",
+              "summary": "Removed 227-line dead onboarding and 388 lines of dead legacy dialogs; only ScheduleDialog and shared Attachment remain; 274 tests and iOS compile pass",
+              "at": "2026-11-01T05:57:33+00:00",
+              "revision": "82c5fec"
+            }
+          ]
+        },
+        {
+          "id": "P04A-02",
+          "title": "Split screens and sheets by feature responsibility",
+          "size": 5,
+          "depends_on": [
+            "P04A-01"
+          ],
+          "acceptance": [
+            "Split Screens.kt (garage, vault, history, me, onboarding) and Sheets.kt (sheet shell, quick add, service, odometer, document add/view, paste) into feature-owned files at or below the 400-line review threshold.",
+            "Preserve route behavior, v3 tokens, localized resources, accessibility, keyboard/sheet geometry and current state ownership; any remaining exception records an owner and removal trigger."
+          ],
+          "verification": [
+            "Run the resource, literal, architecture and unit checks, exercise the affected Android/iOS screens, and review each extracted file for one coherent reason to change."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": null,
+          "completed_at": "2026-11-01T05:57:33+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-01T05:57:33+00:00",
+              "text": "Split Screens/Sheets into feature files; over-400 exceptions recorded with owners/removal triggers; 274 tests and iOS compile pass"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P04A-02-03-split.md",
+              "summary": "Split Screens/Sheets into feature files; over-400 exceptions recorded with owners/removal triggers; 274 tests and iOS compile pass",
+              "at": "2026-11-01T05:57:33+00:00",
+              "revision": "82c5fec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04A-02-03-split.md",
+              "summary": "Split Screens/Sheets into feature files; over-400 exceptions recorded with owners/removal triggers; 274 tests and iOS compile pass",
+              "at": "2026-11-01T05:57:33+00:00",
+              "revision": "82c5fec"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/engineering/file-responsibility-baseline.md",
+              "summary": "Split Screens/Sheets into feature files; over-400 exceptions recorded with owners/removal triggers; 274 tests and iOS compile pass",
+              "at": "2026-11-01T05:57:33+00:00",
+              "revision": "82c5fec"
+            }
+          ]
+        },
+        {
+          "id": "P04A-03",
+          "title": "Extract root composition and shared primitives from MotoVault.kt",
+          "size": 3,
+          "depends_on": [
+            "P04A-02"
+          ],
+          "acceptance": [
+            "Leave MotoVault.kt responsible for composition, navigation and sheet assembly only.",
+            "Move Panel, Field, Primary, Top, Glyph, brand tone, formatting and bottom navigation to owned core UI/component files without changing behavior."
+          ],
+          "verification": [
+            "Check the root composable and file against the 400/600 thresholds, run the same smoke flows, and verify no feature owns a duplicate primitive."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": null,
+          "completed_at": "2026-11-01T05:57:33+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-01T05:57:33+00:00",
+              "text": "Extracted navigation, shell models, formatting, brand presentation and core controls; MotoVault is 667-line documented root exception"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P04A-02-03-split.md",
+              "summary": "Extracted navigation, shell models, formatting, brand presentation and core controls; MotoVault is 667-line documented root exception",
+              "at": "2026-11-01T05:57:33+00:00",
+              "revision": "82c5fec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04A-02-03-split.md",
+              "summary": "Extracted navigation, shell models, formatting, brand presentation and core controls; MotoVault is 667-line documented root exception",
+              "at": "2026-11-01T05:57:33+00:00",
+              "revision": "82c5fec"
+            }
+          ]
+        },
+        {
+          "id": "P04A-04",
+          "title": "Split Components.kt and BackupSheet.kt into coherent families",
+          "size": 3,
+          "depends_on": [
+            "P04A-02"
+          ],
+          "acceptance": [
+            "Split controls, gauges, document art, keypad and toast into component families; split backup create/restore/review/progress into stage composables.",
+            "Keep public behavior, design tokens, localized text and the backup restore workflow unchanged; no new shared literal or numeric-policy debt."
+          ],
+          "verification": [
+            "Run component/backup tests, the shared literal and numeric gates, and inspect the affected screens at normal and large text."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-01T05:57:33+00:00",
+          "completed_at": "2026-11-01T05:59:41+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-01T05:57:33+00:00",
+              "text": "Component families split; BackupSheet create/restore stage split remains; no behavior change so far"
+            },
+            {
+              "at": "2026-11-01T05:59:41+00:00",
+              "text": "Components split into five families; BackupSheet split into shell/create/restore stages with state holders; 274 tests and iOS compile pass"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P04A-04-backup-split.md",
+              "summary": "Components split into five families; BackupSheet split into shell/create/restore stages with state holders; 274 tests and iOS compile pass",
+              "at": "2026-11-01T05:59:41+00:00",
+              "revision": "82c5fec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04A-04-backup-split.md",
+              "summary": "Components split into five families; BackupSheet split into shell/create/restore stages with state holders; 274 tests and iOS compile pass",
+              "at": "2026-11-01T05:59:41+00:00",
+              "revision": "82c5fec"
+            }
+          ]
+        },
+        {
+          "id": "P04A-05",
+          "title": "Move persisted models out of the UI package",
+          "size": 8,
+          "depends_on": [
+            "P04A-02"
+          ],
+          "acceptance": [
+            "Move persisted VaultState/Ride/RideLog/VaultDocument models and their operations to a data/domain-owned package with explicit adapters.",
+            "Storage must have zero imports from com.motovault.app.ui; domain/application dependency direction and the single authoritative writer remain intact.",
+            "Preserve Room JSON, backup payload/archive field names, schema versions and migrations; add frozen compatibility fixtures and recovery evidence."
+          ],
+          "verification": [
+            "Run storage/backup/restore fixtures, old-payload decode tests, Android/iOS compilation and the dependency gate extended to storage-to-UI edges; review the moved contracts against the architecture map."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": null,
+          "completed_at": "2026-11-01T06:06:20+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-01T06:06:20+00:00",
+              "text": "Persisted VaultState/VaultSettings moved to domain.vault and records to domain.model; storage has zero ui imports; serialized formats unchanged; 274 tests and package-cycle check pass"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P04A-05-model-ownership.md",
+              "summary": "Persisted VaultState/VaultSettings moved to domain.vault and records to domain.model; storage has zero ui imports; serialized formats unchanged; 274 tests and package-cycle check pass",
+              "at": "2026-11-01T06:06:20+00:00",
+              "revision": "82c5fec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04A-05-model-ownership.md",
+              "summary": "Persisted VaultState/VaultSettings moved to domain.vault and records to domain.model; storage has zero ui imports; serialized formats unchanged; 274 tests and package-cycle check pass",
+              "at": "2026-11-01T06:06:20+00:00",
+              "revision": "82c5fec"
+            }
+          ]
+        },
+        {
+          "id": "P04A-06",
+          "title": "Add a responsibility ratchet and split the native probe",
+          "size": 3,
+          "depends_on": [
+            "P04A-03",
+            "P04A-04"
+          ],
+          "acceptance": [
+            "Add a reproducible check for new or changed handwritten files above 400/600 lines and functions above 80 lines, with an expiring baseline for existing debt and documented exceptions.",
+            "Split NativeAssetInstrumentation by fixture responsibility and keep the portable CI job runnable without owner data or a physical device."
+          ],
+          "verification": [
+            "Demonstrate positive and negative fixtures, run the gate on the repository, and confirm the split probe still reports its existing Android/iOS checks."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": null,
+          "completed_at": "2026-11-01T06:08:40+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-01T06:08:40+00:00",
+              "text": "Added lexical file/function responsibility ratchet with expiring baseline, fixtures and CI; split native probe by fixture responsibility"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P04A-06-responsibility-gate.md",
+              "summary": "Added lexical file/function responsibility ratchet with expiring baseline, fixtures and CI; split native probe by fixture responsibility",
+              "at": "2026-11-01T06:08:40+00:00",
+              "revision": "82c5fec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04A-06-responsibility-gate.md",
+              "summary": "Added lexical file/function responsibility ratchet with expiring baseline, fixtures and CI; split native probe by fixture responsibility",
+              "at": "2026-11-01T06:08:40+00:00",
+              "revision": "82c5fec"
+            }
+          ]
+        },
+        {
+          "id": "P04A-07",
+          "title": "Verify cleanup and publish the ownership baseline",
+          "size": 3,
+          "depends_on": [
+            "P04A-05",
+            "P04A-06"
+          ],
+          "acceptance": [
+            "Run full Android/iOS regression, migration/backup compatibility and the affected v3 interaction checks.",
+            "Update architecture, conventions, transition exceptions and tracker references with actual results; no stale file/ownership claims remain."
+          ],
+          "verification": [
+            "Record sanitized build/test/runtime evidence including Android and iOS screenshots or probe results for the moved screens; run roadmap and architecture checks."
+          ],
+          "required_evidence": [
+            "verification",
+            "design",
+            "android_runtime",
+            "ios_runtime",
+            "review"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": null,
+          "completed_at": "2026-11-01T06:13:00+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-01T06:13:00+00:00",
+              "text": "274 tests, 36-check Android probe and 21-check iOS probe pass after split/model move; storage has zero ui imports; responsibility and roadmap gates pass"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04A-07-runtime-verification.md",
+              "summary": "274 tests, 36-check Android probe and 21-check iOS probe pass after split/model move; storage has zero ui imports; responsibility and roadmap gates pass",
+              "at": "2026-11-01T06:13:00+00:00",
+              "revision": "82c5fec"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P04A-synthetic-p04-schedule-details.png",
+              "summary": "274 tests, 36-check Android probe and 21-check iOS probe pass after split/model move; storage has zero ui imports; responsibility and roadmap gates pass",
+              "at": "2026-11-01T06:13:00+00:00",
+              "revision": "82c5fec"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P04A-synthetic-p04-onboarding-unknown.png",
+              "summary": "274 tests, 36-check Android probe and 21-check iOS probe pass after split/model move; storage has zero ui imports; responsibility and roadmap gates pass",
+              "at": "2026-11-01T06:13:00+00:00",
+              "revision": "82c5fec"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P04A-ios-native-probe.txt",
+              "summary": "274 tests, 36-check Android probe and 21-check iOS probe pass after split/model move; storage has zero ui imports; responsibility and roadmap gates pass",
+              "at": "2026-11-01T06:13:00+00:00",
+              "revision": "82c5fec"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P04A-07-runtime-verification.md",
+              "summary": "274 tests, 36-check Android probe and 21-check iOS probe pass after split/model move; storage has zero ui imports; responsibility and roadmap gates pass",
+              "at": "2026-11-01T06:13:00+00:00",
+              "revision": "82c5fec"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "P05",
       "title": "BRTA renewal and document assistance",
       "priority": "P1",
@@ -3159,7 +3578,8 @@
         "P02-05",
         "P03A-03",
         "P03A-04",
-        "P03A-05"
+        "P03A-05",
+        "P04A-07"
       ],
       "design": "Vault document detail gains Renew, official verification and renewal history. Reuse DocAdd review, date chips, receipt attachment and a return-to-document flow.",
       "prototype_paths": [
@@ -3171,7 +3591,7 @@
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentWallet.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt"
+        "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt"
       ],
       "proposed_paths": [
         "composeApp/src/commonMain/kotlin/com/motovault/app/domain/documents/RenewalChecklist.kt",
@@ -3189,7 +3609,9 @@
           "id": "P05-01",
           "title": "Verify official links, document applicability and checklist content",
           "size": 3,
-          "depends_on": [],
+          "depends_on": [
+            "P04A-07"
+          ],
           "acceptance": [
             "Record official sources, checked dates and applicable document categories.",
             "Use a safe fallback when a service URL is unavailable; keep fee estimates separate from confirmed payments."
@@ -3333,7 +3755,8 @@
         "P00-05",
         "P03A-03",
         "P03A-04",
-        "P03A-05"
+        "P03A-05",
+        "P04A-07"
       ],
       "design": "History retains its summary and expandable timeline. Add period/category chips and a cost-details sheet; keep fuel entry taka-first and use the v3 keypad.",
       "prototype_paths": [
@@ -3342,8 +3765,8 @@
         "design/app-ui-v3/src/sheets/ServiceSheet.tsx"
       ],
       "existing_paths": [
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Sheets.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/domain/usecase/FuelEfficiencyUseCase.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt"
       ],
@@ -3363,7 +3786,9 @@
           "id": "P06-01",
           "title": "Define money, distance coverage and cost metrics",
           "size": 3,
-          "depends_on": [],
+          "depends_on": [
+            "P04A-07"
+          ],
           "acceptance": [
             "Specify integer-poisha conversions, category rules, date windows and recorded-distance denominator.",
             "Define full-to-full fuel confidence and missing-data states before drawing a chart."
@@ -3528,7 +3953,8 @@
         "P02-05",
         "P03A-03",
         "P03A-04",
-        "P03A-05"
+        "P03A-05",
+        "P04A-07"
       ],
       "design": "Keep the center add menu and existing fuel/service/odometer sheets. Native capture fills the existing review draft, keeping explicit confirmation and durable Undo.",
       "prototype_paths": [
@@ -3538,7 +3964,7 @@
         "design/app-ui-v3/src/components/SmartInput.tsx"
       ],
       "existing_paths": [
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Sheets.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartParse.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt"
@@ -3562,7 +3988,8 @@
           "size": 3,
           "depends_on": [
             "P03A-02",
-            "P03A-03"
+            "P03A-03",
+            "P04A-07"
           ],
           "acceptance": [
             "Use one normalized draft for manual, pasted, photo and voice inputs with explicit source/confidence.",
@@ -3743,7 +4170,8 @@
         "P04-05",
         "P05-04",
         "P06-05",
-        "P07-05"
+        "P07-05",
+        "P04A-07"
       ],
       "design": "Audit the complete four-tab experience. Remove obsolete demo claims from enabled production flows while preserving v3 layout, motion and native brand logos.",
       "prototype_paths": [
@@ -3775,7 +4203,8 @@
           "depends_on": [
             "P03A-03",
             "P03A-04",
-            "P03A-05"
+            "P03A-05",
+            "P04A-07"
           ],
           "acceptance": [
             "Verify fresh install and baseline upgrade with full synthetic records and a restorable backup.",
@@ -3917,9 +4346,9 @@
         "design/app-ui-v3/src/screens/Me.tsx"
       ],
       "existing_paths": [
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Onboarding.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/onboarding/OnboardingScreen.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt"
       ],
       "proposed_paths": [
@@ -4109,7 +4538,7 @@
       "existing_paths": [
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt"
+        "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt"
       ],
       "proposed_paths": [
         "composeApp/src/commonMain/kotlin/com/motovault/app/domain/repairs/RepairCase.kt",
@@ -4432,7 +4861,7 @@
         "design/app-ui-v3/src/components/TabBar.tsx"
       ],
       "existing_paths": [
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Screens.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/GarageScreen.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Motion.kt",
         "iosApp/MotoVault.xcodeproj"
@@ -4597,7 +5026,7 @@
       "existing_paths": [
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/LocationCapture.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Screens.kt"
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/GarageScreen.kt"
       ],
       "proposed_paths": [
         "composeApp/src/commonMain/kotlin/com/motovault/app/domain/care/SeasonalChecklist.kt",
@@ -4757,8 +5186,8 @@
         "design/app-ui-v3/src/sheets/QuickAdd.tsx"
       ],
       "existing_paths": [
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Sheets.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/domain/usecase/FuelEfficiencyUseCase.kt"
       ],
       "proposed_paths": [
@@ -7095,6 +7524,86 @@
       "to": "done",
       "note": "Legacy schedule JSON and backup payload fields round-trip; 36-check Android and 21-check iOS simulator probes cover supported, unsupported and unknown-history scenarios; no physical device used",
       "revision": "f33ff31"
+    },
+    {
+      "at": "2026-11-01T05:48:59+00:00",
+      "task": "P04A-01",
+      "from": "planned",
+      "to": "planned",
+      "note": "Post-P04 audit added P04A cleanup phase: dead legacy UI, five files over 600 lines, and 30 storage-to-UI imports. P04A-07 now gates P05-P08; foundation points only",
+      "revision": "82c5fec"
+    },
+    {
+      "at": "2026-11-01T05:51:41+00:00",
+      "task": "P04A-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Removing only call-site-proven legacy onboarding, fuel, service, document-fee and duplicate history paths",
+      "revision": "82c5fec"
+    },
+    {
+      "at": "2026-11-01T05:57:33+00:00",
+      "task": "P04A-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Removed 227-line dead onboarding and 388 lines of dead legacy dialogs; only ScheduleDialog and shared Attachment remain; 274 tests and iOS compile pass",
+      "revision": "82c5fec"
+    },
+    {
+      "at": "2026-11-01T05:57:33+00:00",
+      "task": "P04A-02",
+      "from": "planned",
+      "to": "done",
+      "note": "Split Screens/Sheets into feature files; over-400 exceptions recorded with owners/removal triggers; 274 tests and iOS compile pass",
+      "revision": "82c5fec"
+    },
+    {
+      "at": "2026-11-01T05:57:33+00:00",
+      "task": "P04A-03",
+      "from": "planned",
+      "to": "done",
+      "note": "Extracted navigation, shell models, formatting, brand presentation and core controls; MotoVault is 667-line documented root exception",
+      "revision": "82c5fec"
+    },
+    {
+      "at": "2026-11-01T05:57:33+00:00",
+      "task": "P04A-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Component families split; BackupSheet create/restore stage split remains; no behavior change so far",
+      "revision": "82c5fec"
+    },
+    {
+      "at": "2026-11-01T05:59:41+00:00",
+      "task": "P04A-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Components split into five families; BackupSheet split into shell/create/restore stages with state holders; 274 tests and iOS compile pass",
+      "revision": "82c5fec"
+    },
+    {
+      "at": "2026-11-01T06:06:20+00:00",
+      "task": "P04A-05",
+      "from": "planned",
+      "to": "done",
+      "note": "Persisted VaultState/VaultSettings moved to domain.vault and records to domain.model; storage has zero ui imports; serialized formats unchanged; 274 tests and package-cycle check pass",
+      "revision": "82c5fec"
+    },
+    {
+      "at": "2026-11-01T06:08:40+00:00",
+      "task": "P04A-06",
+      "from": "planned",
+      "to": "done",
+      "note": "Added lexical file/function responsibility ratchet with expiring baseline, fixtures and CI; split native probe by fixture responsibility",
+      "revision": "82c5fec"
+    },
+    {
+      "at": "2026-11-01T06:13:00+00:00",
+      "task": "P04A-07",
+      "from": "planned",
+      "to": "done",
+      "note": "274 tests, 36-check Android probe and 21-check iOS probe pass after split/model move; storage has zero ui imports; responsibility and roadmap gates pass",
+      "revision": "82c5fec"
     }
   ]
 }

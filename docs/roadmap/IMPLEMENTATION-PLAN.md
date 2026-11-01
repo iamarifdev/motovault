@@ -48,7 +48,7 @@ Core beta: P00-P03. Architecture foundation: P03A, completed before P04-P07. Cor
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/App.tsx`, `design/app-ui-v3/src/screens/Home.tsx`, `design/app-ui-v3/src/screens/Me.tsx`, `design/app-ui-v3/src/components/Sheet.tsx`, `design/app-ui-v3/src/lib/motion.ts`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt`.
 - Proposed sources: None.
 
 **Data and migration:** Record current Room schema, persisted defaults, originals/crops/previews, money conversions and the primary vehicle ID. Specify stable bike IDs for new contracts without prematurely migrating every table.
@@ -305,7 +305,7 @@ Required completion evidence: implementation, verification, design.
 
 - Prototype references: `design/app-ui-v3/src/screens/Me.tsx`, `design/app-ui-v3/src/screens/Vault.tsx`, `design/app-ui-v3/src/sheets/DocViewSheet.tsx`.
 - Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentWallet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/InspectionBrightness.kt`, `composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCapture.kt`, `composeApp/src/iosMain/kotlin/com/motovault/app/ui/DocumentCapture.kt`.
-- Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/privacy/VaultAccessPolicy.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/privacy/VaultPrivacySheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/SecureAssetStore.kt`.
+- Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/privacy/VaultAccessPolicy.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/privacy/PrivacySheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/SecureAssetStore.kt`.
 
 **Data and migration:** Version privacy preferences. Separate device-bound keys from portable backup secrets. Encrypt sensitive local assets only through a resumable, validated migration; document any plaintext database metadata remaining.
 
@@ -543,7 +543,7 @@ Required completion evidence: verification, design, android_device, review.
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/components/Sheet.tsx`.
-- Existing native sources: `docs/roadmap/ARCHITECTURE-CONTRACT.md`, `docs/ARCHITECTURE-PROPOSAL.md`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultSession.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt`.
+- Existing native sources: `docs/roadmap/ARCHITECTURE-CONTRACT.md`, `docs/ARCHITECTURE-PROPOSAL.md`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultSession.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`.
 - Proposed sources: `docs/engineering/architecture.md`, `docs/engineering/conventions.md`, `docs/engineering/ai-workflow.md`, `tools/quality/`.
 
 **Data and migration:** Preserve current Room/JSON/archive formats and one authoritative writer. Any persisted-format change requires compatibility fixtures and recoverable migration.
@@ -682,7 +682,7 @@ Required completion evidence: implementation, verification, android_runtime, ios
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/screens/Onboarding.tsx`, `design/app-ui-v3/src/screens/Home.tsx`, `design/app-ui-v3/src/sheets/ServiceSheet.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/FactoryProfiles.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/Onboarding.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/BikeCatalogue.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/model/ComponentRule.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/FactoryProfiles.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/onboarding/OnboardingScreen.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/BikeCatalogue.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/model/ComponentRule.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/maintenance/MaintenanceAction.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/maintenance/ScheduleDetailsSheet.kt`.
 
 **Data and migration:** Add action type, source/manual revision, applicability and baseline certainty with compatible defaults. A catalogue entry does not automatically become a manual-backed schedule.
@@ -797,6 +797,166 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Risks and decisions:** Do not copy a European or Indian interval into a Bangladesh model by name alone. Local-condition adjustments require a cited manual/dealer basis or an explicit owner setting.
 
+<a id="p04a"></a>
+
+## P04A: Shared UI decomposition and ownership cleanup
+
+**Priority:** P0 | **Scope:** foundation | **Current status:** Done
+
+**Outcome:** Large UI files are split by responsibility, proved-unused paths are removed, persisted models leave the UI package, and a responsibility ratchet keeps every later phase from regressing.
+
+**Why now:** The post-P04 audit found 1,000+ line mixed-responsibility UI files, roughly 350-500 lines of dead legacy dialogs, and 30 storage imports from the UI package despite green domain/application gates.
+
+**Entry dependencies:** P04-05.
+
+**V3 placement and interaction:** Preserve the v3 visual and interaction contract. This is a behavior-preserving structural cleanup; no screen redesign is authorized by this phase.
+
+**Implementation map:**
+
+- Prototype references: `design/app-ui-v3/src/App.tsx`, `design/app-ui-v3/src/components/Sheet.tsx`, `design/app-ui-v3/src/screens/Home.tsx`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/GarageScreen.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Controls.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/backup/BackupSheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`, `composeApp/src/androidInstrumentedTest/kotlin/com/motovault/app/storage/security/NativeAssetInstrumentation.kt`.
+- Proposed sources: `docs/engineering/decisions/ADR-0002-structural-cleanup.md`, `tools/responsibility_gate.py`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/screens/`.
+
+**Data and migration:** Moving persisted models is a source move only. Preserve Room JSON, backup payload, archive field names and schema versions; add frozen compatibility fixtures and recovery evidence before changing ownership.
+
+**Architecture application:**
+
+- Complete the deferred shared-UI and data-boundary work from the architecture proposal migration stages D and F rather than treating the green domain/application gate as full compliance.
+- Track every large-file split with a coherent responsibility and owner; do not split by line count alone or create empty feature modules.
+- Make the cleanup a prerequisite for remaining feature phases and both release gates so later work cannot reintroduce the same debt.
+
+**Tasks:**
+
+### P04A-01: Remove proved-unused legacy UI paths
+
+Status: **Done** | Size: **2** | Owner: Codex.
+
+Additional task dependencies: P04-05.
+
+Acceptance criteria:
+
+- Delete only symbols with no call sites: legacy Setup/ModelPicker onboarding, FuelDialog, ServiceDialog, ComponentsList and the duplicate History dialog.
+- Keep ScheduleDialog, the active fuel sheet, the active onboarding screen and current history route; no persisted-format or visual change.
+
+Verification:
+
+- Record definition/call-site searches for every removed symbol, run Android and iOS compilation plus the existing regression suites, and review the active navigation routes.
+
+Required completion evidence: implementation, verification.
+
+### P04A-02: Split screens and sheets by feature responsibility
+
+Status: **Done** | Size: **5** | Owner: Codex.
+
+Additional task dependencies: P04A-01.
+
+Acceptance criteria:
+
+- Split Screens.kt (garage, vault, history, me, onboarding) and Sheets.kt (sheet shell, quick add, service, odometer, document add/view, paste) into feature-owned files at or below the 400-line review threshold.
+- Preserve route behavior, v3 tokens, localized resources, accessibility, keyboard/sheet geometry and current state ownership; any remaining exception records an owner and removal trigger.
+
+Verification:
+
+- Run the resource, literal, architecture and unit checks, exercise the affected Android/iOS screens, and review each extracted file for one coherent reason to change.
+
+Required completion evidence: implementation, verification.
+
+### P04A-03: Extract root composition and shared primitives from MotoVault.kt
+
+Status: **Done** | Size: **3** | Owner: Codex.
+
+Additional task dependencies: P04A-02.
+
+Acceptance criteria:
+
+- Leave MotoVault.kt responsible for composition, navigation and sheet assembly only.
+- Move Panel, Field, Primary, Top, Glyph, brand tone, formatting and bottom navigation to owned core UI/component files without changing behavior.
+
+Verification:
+
+- Check the root composable and file against the 400/600 thresholds, run the same smoke flows, and verify no feature owns a duplicate primitive.
+
+Required completion evidence: implementation, verification.
+
+### P04A-04: Split Components.kt and BackupSheet.kt into coherent families
+
+Status: **Done** | Size: **3** | Owner: Codex.
+
+Additional task dependencies: P04A-02.
+
+Acceptance criteria:
+
+- Split controls, gauges, document art, keypad and toast into component families; split backup create/restore/review/progress into stage composables.
+- Keep public behavior, design tokens, localized text and the backup restore workflow unchanged; no new shared literal or numeric-policy debt.
+
+Verification:
+
+- Run component/backup tests, the shared literal and numeric gates, and inspect the affected screens at normal and large text.
+
+Required completion evidence: implementation, verification.
+
+### P04A-05: Move persisted models out of the UI package
+
+Status: **Done** | Size: **8** | Owner: Codex.
+
+Additional task dependencies: P04A-02.
+
+Acceptance criteria:
+
+- Move persisted VaultState/Ride/RideLog/VaultDocument models and their operations to a data/domain-owned package with explicit adapters.
+- Storage must have zero imports from com.motovault.app.ui; domain/application dependency direction and the single authoritative writer remain intact.
+- Preserve Room JSON, backup payload/archive field names, schema versions and migrations; add frozen compatibility fixtures and recovery evidence.
+
+Verification:
+
+- Run storage/backup/restore fixtures, old-payload decode tests, Android/iOS compilation and the dependency gate extended to storage-to-UI edges; review the moved contracts against the architecture map.
+
+Required completion evidence: implementation, verification.
+
+### P04A-06: Add a responsibility ratchet and split the native probe
+
+Status: **Done** | Size: **3** | Owner: Codex.
+
+Additional task dependencies: P04A-03, P04A-04.
+
+Acceptance criteria:
+
+- Add a reproducible check for new or changed handwritten files above 400/600 lines and functions above 80 lines, with an expiring baseline for existing debt and documented exceptions.
+- Split NativeAssetInstrumentation by fixture responsibility and keep the portable CI job runnable without owner data or a physical device.
+
+Verification:
+
+- Demonstrate positive and negative fixtures, run the gate on the repository, and confirm the split probe still reports its existing Android/iOS checks.
+
+Required completion evidence: implementation, verification.
+
+### P04A-07: Verify cleanup and publish the ownership baseline
+
+Status: **Done** | Size: **3** | Owner: Codex.
+
+Additional task dependencies: P04A-05, P04A-06.
+
+Acceptance criteria:
+
+- Run full Android/iOS regression, migration/backup compatibility and the affected v3 interaction checks.
+- Update architecture, conventions, transition exceptions and tracker references with actual results; no stale file/ownership claims remain.
+
+Verification:
+
+- Record sanitized build/test/runtime evidence including Android and iOS screenshots or probe results for the moved screens; run roadmap and architecture checks.
+
+Required completion evidence: verification, design, android_runtime, ios_runtime, review.
+
+**Phase exit gate:**
+
+- Proved-unused legacy UI paths are deleted with call-site evidence and no active route regression.
+- No unexplained handwritten production file exceeds 600 lines; files above 400 lines have an owner and removal task in the responsibility baseline.
+- MotoVault.kt contains composition and navigation only; reusable controls and feature screens have explicit owners.
+- Storage has zero imports from com.motovault.app.ui; persisted models have a data/domain owner and compatibility fixtures.
+- The responsibility ratchet runs in CI with positive and negative fixtures, and P05-P08 depend on the final cleanup verification.
+
+**Risks and decisions:** Moving persisted models or deleting legacy dialogs can change serialization, navigation or reflection behavior. Preserve wire names, keep the authoritative writer, verify every deleted call site and test backup/restore before removal.
+
 <a id="p05"></a>
 
 ## P05: BRTA renewal and document assistance
@@ -807,14 +967,14 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Why now:** Document storage is already present; guided action closes the practical ownership loop.
 
-**Entry dependencies:** P01-05, P02-05, P03A-03, P03A-04, P03A-05.
+**Entry dependencies:** P01-05, P02-05, P03A-03, P03A-04, P03A-05, P04A-07.
 
 **V3 placement and interaction:** Vault document detail gains Renew, official verification and renewal history. Reuse DocAdd review, date chips, receipt attachment and a return-to-document flow.
 
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/screens/Vault.tsx`, `design/app-ui-v3/src/sheets/DocAddSheet.tsx`, `design/app-ui-v3/src/sheets/DocViewSheet.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentWallet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentWallet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/documents/RenewalChecklist.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/documents/RenewalSheet.kt`.
 
 **Data and migration:** Keep person-level licence documents separate from bike ownership scope. Append renewal events and receipts; preserve prior originals and expiry history instead of overwriting the only copy.
@@ -830,7 +990,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: None.
+Additional task dependencies: P04A-07.
 
 Acceptance criteria:
 
@@ -918,14 +1078,14 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Why now:** Extends the existing 30-day total into practical decisions for cost-conscious owners.
 
-**Entry dependencies:** P00-04, P00-05, P03A-03, P03A-04, P03A-05.
+**Entry dependencies:** P00-04, P00-05, P03A-03, P03A-04, P03A-05, P04A-07.
 
 **V3 placement and interaction:** History retains its summary and expandable timeline. Add period/category chips and a cost-details sheet; keep fuel entry taka-first and use the v3 keypad.
 
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/screens/History.tsx`, `design/app-ui-v3/src/sheets/FuelSheet.tsx`, `design/app-ui-v3/src/sheets/ServiceSheet.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/Sheets.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/usecase/FuelEfficiencyUseCase.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/usecase/FuelEfficiencyUseCase.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/costs/OwnershipCostUseCase.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/costs/CostInsightsSheet.kt`.
 
 **Data and migration:** Add parking/toll/other expenses and budget targets as bike-scoped-compatible records. Convert legacy money explicitly to poisha; document rounding, record coverage and date boundaries.
@@ -941,7 +1101,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: None.
+Additional task dependencies: P04A-07.
 
 Acceptance criteria:
 
@@ -1050,14 +1210,14 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Why now:** Reduces the effort needed to maintain a useful ownership history.
 
-**Entry dependencies:** P01-05, P02-05, P03A-03, P03A-04, P03A-05.
+**Entry dependencies:** P01-05, P02-05, P03A-03, P03A-04, P03A-05, P04A-07.
 
 **V3 placement and interaction:** Keep the center add menu and existing fuel/service/odometer sheets. Native capture fills the existing review draft, keeping explicit confirmation and durable Undo.
 
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/sheets/OdometerSheet.tsx`, `design/app-ui-v3/src/sheets/PasteSheet.tsx`, `design/app-ui-v3/src/sheets/ServiceSheet.tsx`, `design/app-ui-v3/src/components/SmartInput.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/Sheets.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartParse.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartParse.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/QuickEntryDraft.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/OdometerCapture.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/VoiceEntry.kt`.
 
 **Data and migration:** Persist only confirmed records. Draft source/confidence is bounded metadata; images/audio retention is explicit. Share targets must select the intended bike and cannot bypass a locked vault.
@@ -1073,7 +1233,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P03A-02, P03A-03.
+Additional task dependencies: P03A-02, P03A-03, P04A-07.
 
 Acceptance criteria:
 
@@ -1186,7 +1346,7 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 **Why now:** Release confidence is a separate deliverable from completing feature code.
 
-**Entry dependencies:** P03-05, P04-05, P05-04, P06-05, P07-05.
+**Entry dependencies:** P03-05, P04-05, P05-04, P06-05, P07-05, P04A-07.
 
 **V3 placement and interaction:** Audit the complete four-tab experience. Remove obsolete demo claims from enabled production flows while preserving v3 layout, motion and native brand logos.
 
@@ -1209,7 +1369,7 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P03A-03, P03A-04, P03A-05.
+Additional task dependencies: P03A-03, P03A-04, P03A-05, P04A-07.
 
 Acceptance criteria:
 
@@ -1299,7 +1459,7 @@ Required completion evidence: verification, android_device, ios_device, review.
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/screens/Home.tsx`, `design/app-ui-v3/src/screens/Onboarding.tsx`, `design/app-ui-v3/src/screens/Me.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/Onboarding.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultDatabase.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/onboarding/OnboardingScreen.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/garage/BikeOwnership.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/BikeSwitcherSheet.kt`.
 
 **Data and migration:** Migrate primary into a stable bike ID. Scope schedules/logs/assets/reminders/expenses by bike and licences by owner; preserve old single-bike backups and active-bike preference.
@@ -1431,7 +1591,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/sheets/ServiceSheet.tsx`, `design/app-ui-v3/src/screens/History.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/repairs/RepairCase.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/repairs/RepairDetailsSheet.kt`.
 
 **Data and migration:** Add owner-managed contacts, quotations, repair cases and warranty dates linked to bike/service/part IDs. Distinguish quoted cost from actual paid expense.
@@ -1659,7 +1819,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/screens/Me.tsx`, `design/app-ui-v3/src/components/TabBar.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/Screens.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/Motion.kt`, `iosApp/MotoVault.xcodeproj`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/GarageScreen.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/Motion.kt`, `iosApp/MotoVault.xcodeproj`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/widgets/WidgetSnapshot.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/widgets/WidgetSetupSheet.kt`.
 
 **Data and migration:** Publish a minimal, non-sensitive durable snapshot for the chosen bike. Never expose document IDs or decrypted vault data; stale snapshot time is explicit.
@@ -1772,7 +1932,7 @@ Required completion evidence: verification, design, android_device, ios_device.
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/screens/Home.tsx`, `design/app-ui-v3/src/screens/Me.tsx`, `design/app-ui-v3/src/components/Sheet.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/LocationCapture.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/Screens.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/LocationCapture.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/GarageScreen.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/care/SeasonalChecklist.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/help/BreakdownHelpSheet.kt`.
 
 **Data and migration:** Store selected region, content source/version and owner-chosen contacts. Use optional foreground location only; freshness/expiry are part of any cached weather item.
@@ -1885,7 +2045,7 @@ Required completion evidence: verification, design, android_device, ios_device, 
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/screens/History.tsx`, `design/app-ui-v3/src/screens/Me.tsx`, `design/app-ui-v3/src/sheets/QuickAdd.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/Sheets.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/usecase/FuelEfficiencyUseCase.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/usecase/FuelEfficiencyUseCase.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/work/WorkLedger.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/work/WorkSummarySheet.kt`.
 
 **Data and migration:** Add work shifts, earnings, deductions, work-distance attribution and owner-defined maintenance allowance. Keep actual expenses separate from estimates and prevent double subtraction.

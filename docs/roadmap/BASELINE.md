@@ -13,7 +13,7 @@ remains unchanged.
 | --- | --- | --- |
 | Production entrypoint | `composeApp/src/commonMain/kotlin/com/motovault/app/App.kt` calls `ui.MotoVault()` | Work in the production package, not the removed staging package |
 | V3 design | `design/app-ui-v3/src/`, tokens, README and current commit | Preserve four tabs, quick-add, typography, sheets, keypad, motion and native brand-logo exception |
-| Durable local state | `storage/VaultDatabase.kt`, `VaultSession.kt`, `ui/VaultState.kt` | Migrate existing Room/legacy data and coordinate writes/Undo/side effects |
+| Durable local state | `storage/VaultDatabase.kt`, `VaultSession.kt`, `domain/vault/VaultState.kt` | Migrate existing Room/legacy data and coordinate writes/Undo/side effects |
 | Documents | `ui/DocumentFlow.kt`, `DocumentCapture.kt`, native adapters | Extend capture/import/review/originals; do not rebuild a vault as if none exists |
 | Service and fuel | Itemized visits, receipts, full/partial fills, economy, GPS labels | Extend costs and capture while preserving existing semantics |
 | Document renewals | Shared/native `ui/RenewalReminders.kt` | Preserve identity/consumption/restart safeguards while fixing settings wiring |

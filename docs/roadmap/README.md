@@ -15,9 +15,12 @@ For maintenance of P03 and all work from P04 onward, use the shared
 [architecture and AI delivery contract](ARCHITECTURE-CONTRACT.md), the
 [architecture proposal](../ARCHITECTURE-PROPOSAL.md), and the applicable
 phase-specific architecture application in the tracker or implementation plan.
-The P03A foundation is planned work; target modules and automated checks are not
-assumed to exist. Existing P03 completion evidence is preserved, while P03A-04
-tracks the separate backup/restore architecture migration.
+P03A is complete. P04A is the tracked post-P04 cleanup phase: it removes proved-unused
+legacy paths, splits the remaining large UI files by responsibility, moves persisted
+models out of the UI package and adds a responsibility ratchet. Target modules and
+checks are still not assumed to exist beyond the tasks that have completed.
+Existing P03 completion evidence is preserved, while P03A-04 tracks the separate
+backup/restore architecture migration.
 
 P00 deliverables: [baseline captures and verification](evidence/P00-04-verification.md),
 [local comparison index](evidence/p00/index.html), [data/migration contract](DATA-MIGRATION-CONTRACT.md)
@@ -31,6 +34,7 @@ actual task status; captured product defects remain open in later phases.
 | Foundation | P00 | Reproducible fixtures, design contract, migration strategy and tracker |
 | Trustworthy local beta | P01-P03 | Real reminders, protected documents, encrypted backup and complete restore |
 | Production architecture foundation | P03A | Shared workflow, dependency boundaries, localization, fuel pilot, backup adaptation and quality gates |
+| Architecture cleanup | P04A | Remove dead legacy UI, split large screens/sheets, complete data/UI ownership and add a responsibility ratchet |
 | Core ownership release | P04-P08 | Bangladesh maintenance, renewal assistance, cost insights, native capture and release evidence |
 | Additional ownership | P09-P13, P16 | Multiple bikes, workshops/warranties, handover pack, real widgets and seasonal/breakdown help |
 | Optional rider mode | P14 | Recorded work earnings and cost attribution, separately piloted |
@@ -40,9 +44,12 @@ Phase numbering is the preferred reading/delivery order, not a requirement to
 idle independent work. Task dependencies define what can start. The core release
 does not wait for later ownership or optional modules. Release phases produce
 verified candidates and rollout decisions; publication is a separate action.
-P03A sits between P03 and P04. All P03A tasks must complete before work starts
-on P04–P07, including their research and definition tasks. P08 and the core
-release milestone also require P03A evidence.
+P03A sits between P03 and P04. P04A follows P04 and is a prerequisite for P05,
+P06, P07 and P08, so the cleanup is not deferred behind the remaining feature
+work. P08 and both release milestones also require P03A and P04A evidence. The
+cleanup phase was added after the post-P04 audit found residual large UI files,
+dead legacy paths and storage-to-UI imports; this is recorded as an intentional
+scope change in the tracker.
 
 No calendar promises are assigned before implementation baselines and initial
 slices are measured. Relative sizes 1/2/3/5/8 help split work and compare scope;
