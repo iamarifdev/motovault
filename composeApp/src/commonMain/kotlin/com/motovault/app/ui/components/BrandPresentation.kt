@@ -81,18 +81,6 @@ import org.jetbrains.compose.resources.painterResource
 import kotlin.math.roundToLong
 
 
-fun brandToneName(brandId: String): String = when (brandId) {
-    "cfmoto" -> "নীলাভ সবুজ"
-    "yamaha" -> "পারফরম্যান্স নীল"
-    "honda" -> "হোন্ডা লাল"
-    "suzuki" -> "স্পোর্টি নীল"
-    "bajaj" -> "পালসার নীল"
-    "tvs" -> "রেসিং লাল"
-    "hero" -> "হিরো লাল"
-    "enfield" -> "ঐতিহ্যের সোনালি"
-    else -> "রেসিং কমলা"
-}
-
 fun componentSuffix(rule: ComponentRule): String {
     val knownSuffix = listOf("air_filter", "spark_plug", "brake_pads", "brake_fluid", "chain", "oil", "coolant")
         .firstOrNull { rule.id.endsWith("_$it") }
@@ -111,17 +99,17 @@ fun componentSuffix(rule: ComponentRule): String {
 @Composable
 fun componentLabel(rule: ComponentRule): String {
     rule.catalogueId?.let(BangladeshServiceCatalogue::find)?.let { item ->
-        return if (currentResourceLanguage() == AppLanguage.EN) item.labelEn else item.labelBn
+        return catalogueLabel(item.id)
     }
     val suffix = componentSuffix(rule)
     val bengaliName = when (suffix) {
-        "chain" -> "চেইন পরিষ্কার ও লুব্রিকেন্ট"
-        "oil" -> "ইঞ্জিন অয়েল ও অয়েল ফিল্টার"
-        "air_filter" -> "এয়ার ফিল্টার"
-        "spark_plug" -> "স্পার্ক প্লাগ"
-        "brake_pads" -> "সামনে ও পেছনের ব্রেক প্যাড"
-        "coolant" -> "ইঞ্জিন কুল্যান্ট"
-        "brake_fluid" -> "ব্রেক ফ্লুইড (DOT 4)"
+        "chain" -> appStringResource(Res.string.component_chain)
+        "oil" -> appStringResource(Res.string.component_oil)
+        "air_filter" -> appStringResource(Res.string.component_air_filter)
+        "spark_plug" -> appStringResource(Res.string.component_spark_plug)
+        "brake_pads" -> appStringResource(Res.string.component_brake_pads)
+        "coolant" -> appStringResource(Res.string.component_coolant)
+        "brake_fluid" -> appStringResource(Res.string.component_brake_fluid)
         else -> null
     }
     return bengaliName ?: rule.name

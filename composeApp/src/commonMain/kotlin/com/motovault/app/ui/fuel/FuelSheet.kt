@@ -180,78 +180,17 @@ internal fun FuelSheet(
         }
     ) {
         editError?.let { Text(text = it, color = ErrorColor, fontSize = 13.sp) }
-        // Amount Hero Card
-        val activeField = entry.activeField
-        val isAmountActive = activeField == "amount" || activeField == "litres"
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(if (isAmountActive) BrandTintColor else SurfaceColor2)
-                .border(2.dp, if (isAmountActive) BrandColor else BorderColor, RoundedCornerShape(16.dp))
-                .clickable { entry.setActive(if (mode == FuelEntryMode.AMOUNT) "amount" else "litres") }
-                .padding(horizontal = 16.dp, vertical = 14.dp)
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = if (mode == FuelEntryMode.AMOUNT) appStringResource(Res.string.fuel_amount_question) else appStringResource(Res.string.fuel_litres_question),
-                    fontSize = 13.sp,
-                    color = TextSecondary
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    if (mode == FuelEntryMode.AMOUNT) {
-                        Text(appStringResource(Res.string.fuel_currency_symbol), fontSize = 28.sp, fontWeight = FontWeight.SemiBold, color = TextSecondary)
-                    }
-                    val displayText = if (mode == FuelEntryMode.AMOUNT) entry.values["amount"].orEmpty() else entry.values["litres"].orEmpty()
-                    Text(
-                        text = f.editableNumber(displayText),
-                        fontSize = 38.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = if (displayText.isEmpty()) TextTertiary else TextPrimary
-                    )
-                    if (mode == FuelEntryMode.LITRES) {
-                        Text(appStringResource(Res.string.fuel_liters), fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = TextSecondary)
-                    }
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                    text = appStringResource(Res.string.fuel_approximate_value, if (mode == FuelEntryMode.AMOUNT) litresText else moneyText),
-                        fontSize = 14.sp,
-                        color = TextSecondary
-                    )
-                    // Editable price pill
-                    Row(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(999.dp))
-                            .background(if (activeField == "price") BrandTintColor else SurfaceColor)
-                            .border(1.5.dp, if (activeField == "price") BrandColor else BorderColor, RoundedCornerShape(999.dp))
-                            .clickable { entry.setActive("price") }
-                            .padding(horizontal = 10.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                        text = priceText,
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = TextPrimary
-                        )
-                        V3Icon(
-                            path = "feather_icon/fi_edit-2.svg",
-                            description = null,
-                            modifier = Modifier.size(12.dp),
-                            tint = TextSecondary
-                        )
-                    }
-                }
-            }
-        }
+        val amountDisplayText = if (mode == FuelEntryMode.AMOUNT) entry.values["amount"].orEmpty() else entry.values["litres"].orEmpty()
+        FuelAmountHero(
+            mode = mode,
+            displayText = amountDisplayText,
+            amountActive = entry.activeField == "amount" || entry.activeField == "litres",
+            priceActive = entry.activeField == "price",
+            priceText = priceText,
+            secondaryText = if (mode == FuelEntryMode.AMOUNT) litresText else moneyText,
+            onActivate = { entry.setActive(if (mode == FuelEntryMode.AMOUNT) "amount" else "litres") },
+            onPrice = { entry.setActive("price") }
+        )
 
         // Mode & Fuel chips
         Row(
@@ -305,6 +244,7 @@ internal fun FuelSheet(
         }
 
         // Odometer Row
+        val activeField = entry.activeField
         val isOdoActive = activeField == "odo"
         Box(
             modifier = Modifier
@@ -360,8 +300,9 @@ internal fun FuelSheet(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 listOf(10, 50, 100).forEach { bump ->
+                    val bumpLabel = "+${f.d(bump.toString())}"
                     VaultChip(
-                        text = "+${f.d(bump.toString())}",
+                        text = bumpLabel,
                         onClick = {
                             entry.set("odo", (odoVal + bump).toInt().toString())
                             odoTouched = true

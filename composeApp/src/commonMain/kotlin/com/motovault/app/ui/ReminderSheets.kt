@@ -10,6 +10,7 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import kotlinx.datetime.*
+import motovault.composeapp.generated.resources.*
 
 @Composable
 private fun ReminderAction(text: String, onClick: () -> Unit) = VaultButton(text, onClick, kind = ButtonKind.SECONDARY, full = true)
@@ -20,26 +21,26 @@ internal fun ReminderAccessPanel(access: ReminderAccess, fingerprint: Any? = nul
     LaunchedEffect(fingerprint) { if (fingerprint != null) access.refresh() }
     Panel(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         DocumentNote(when {
-            access.busy -> "নোটিফিকেশনের অনুমতি যাচাই হচ্ছে"
-            !access.allowed -> "ফোনের সেটিংসে নোটিফিকেশনের অনুমতি নেই"
-            access.enabled -> "ফোনে জানানোর অনুমতি আছে"
-            else -> "ফোনে জানানো বন্ধ আছে"
+            access.busy -> appStringResource(Res.string.reminder_checking_permission)
+            !access.allowed -> appStringResource(Res.string.reminder_permission_missing)
+            access.enabled -> appStringResource(Res.string.reminder_permission_granted)
+            else -> appStringResource(Res.string.reminder_notifications_off)
         })
-        DocumentCopy("অ্যাপের ভেতরে তারিখ দেখা যাবে। ফোনের সময় বদলালে রিমাইন্ডারও স্থানীয় সময় অনুসরণ করবে।")
+        DocumentCopy(appStringResource(Res.string.reminder_in_app_note))
         if (!access.busy) {
-            ReminderAction(if (access.enabled && access.allowed) "ফোনে জানানো বন্ধ করুন" else "ফোনে জানানোর অনুমতি দিন") {
+            ReminderAction(appStringResource(if (access.enabled && access.allowed) Res.string.reminder_disable else Res.string.reminder_enable)) {
                 if (access.enabled && access.allowed) access.disable() else access.request()
             }
             if (!access.allowed) {
-                DocumentLink("নোটিফিকেশন সেটিংস খুলুন", access.settings)
-                DocumentCopy("ফোনের Settings > Notifications > MotoVault থেকেও অনুমতি দিতে পারবেন।")
+                DocumentLink(appStringResource(Res.string.reminder_open_settings), access.settings)
+                DocumentCopy(appStringResource(Res.string.reminder_settings_hint))
             }
-            DocumentLink("অনুমতি আবার যাচাই করুন", access.refresh)
+            DocumentLink(appStringResource(Res.string.reminder_recheck), access.refresh)
         }
-        if (access.failed) DocumentNote("রিমাইন্ডার আপডেট করা যায়নি। আগের তথ্য রাখা আছে। আবার চেষ্টা করুন।")
+        if (access.failed) DocumentNote(appStringResource(Res.string.reminder_update_failed))
         else if (!access.busy && access.enabled && access.allowed) {
-            DocumentCopy("${f.n(access.plans.size.toLong())}টি রিমাইন্ডার নির্ধারিত আছে।")
-            access.plans.minByOrNull { it.localDateTime() }?.let { DocumentCopy("পরের সময়: ${f.d(it.localDateTime().toString().replace('T', ' '))}") }
+            DocumentCopy(appStringResource(Res.string.reminder_count, f.n(access.plans.size.toLong())))
+            access.plans.minByOrNull { it.localDateTime() }?.let { DocumentCopy(appStringResource(Res.string.reminder_next, f.d(it.localDateTime().toString().replace('T', ' ')))) }
         }
     }
 }
@@ -69,53 +70,53 @@ internal fun ReminderSettingsSheet(
         persist(if (doc != null) state.copy(documents = state.documents.map { if (it.id == doc.id) it.copy(reminderSnoozedUntil = until) else it })
             else state.copy(rules = state.rules.map { if (it.id == rule?.id) it.copy(reminderSnoozedUntil = until) else it }))
     }
-    Sheet("রিমাইন্ডার", onDismiss = onDismiss, footer = {
-        if (failed) Text("সেভ হয়নি। আগের তথ্য রাখা আছে। আবার চেষ্টা করুন।", color = ErrorColor, fontSize = 14.sp,
+    Sheet(appStringResource(Res.string.reminder_title), onDismiss = onDismiss, footer = {
+        if (failed) Text(appStringResource(Res.string.reminder_save_failed), color = ErrorColor, fontSize = 14.sp,
             modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
-        if (saved) Text("রিমাইন্ডারের সময় সেভ হয়েছে", fontSize = 14.sp,
+        if (saved) Text(appStringResource(Res.string.reminder_saved), fontSize = 14.sp,
             modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
-        if (id == null) VaultButton(if (saving) "সেভ হচ্ছে" else "সেভ করুন", onClick = { persist(state.copy(reminderPolicy = ReminderPolicy(lead, minute))) }, full = true, enabled = !saving)
-        else VaultButton("ফিরে যান", onClick = onDismiss, full = true, kind = ButtonKind.SECONDARY)
+        if (id == null) VaultButton(appStringResource(if (saving) Res.string.reminder_saving else Res.string.reminder_save), onClick = { persist(state.copy(reminderPolicy = ReminderPolicy(lead, minute))) }, full = true, enabled = !saving)
+        else VaultButton(appStringResource(Res.string.reminder_back), onClick = onDismiss, full = true, kind = ButtonKind.SECONDARY)
     }) {
         ReminderAccessPanel(access, state)
         if (id != null) {
             Column(Modifier.fillMaxWidth().heightIn(min = 44.dp).semantics(mergeDescendants = true) {}, verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            if (doc == null && rule == null) DocumentNote("এই রেকর্ড বদলেছে বা মুছে গেছে। তালিকা দেখে নিন।")
+            if (doc == null && rule == null) DocumentNote(appStringResource(Res.string.reminder_record_gone))
             else {
                 DocumentNote(doc?.title ?: rule!!.name)
-                if (doc != null && !state.docReminders) DocumentCopy("কাগজের রিমাইন্ডার আমি পাতায় বন্ধ আছে।")
-                if (rule != null && !state.serviceReminders) DocumentCopy("সার্ভিসের রিমাইন্ডার আমি পাতায় বন্ধ আছে।")
-                if (rule != null && rule.baselineCertainty != com.motovault.app.domain.model.BaselineCertainty.CONFIRMED) DocumentCopy("শেষ সার্ভিস নিশ্চিত নয়। সার্ভিসের তথ্য দিলে সময় নির্ধারণ করা যাবে।")
-                if (doc != null) DocumentCopy(if (doc.expiry.isBlank()) "মেয়াদ নেই। মেয়াদের রিমাইন্ডার নেই।" else "মেয়াদ: ${doc.expiry}")
+                if (doc != null && !state.docReminders) DocumentCopy(appStringResource(Res.string.reminder_doc_off))
+                if (rule != null && !state.serviceReminders) DocumentCopy(appStringResource(Res.string.reminder_service_off))
+                if (rule != null && rule.baselineCertainty != com.motovault.app.domain.model.BaselineCertainty.CONFIRMED) DocumentCopy(appStringResource(Res.string.reminder_baseline_uncertain))
+                if (doc != null) DocumentCopy(if (doc.expiry.isBlank()) appStringResource(Res.string.reminder_no_expiry) else appStringResource(Res.string.reminder_expiry, doc.expiry))
                 val enabled = doc?.reminder ?: rule!!.reminder
-                VaultSwitch("এই রেকর্ডের রিমাইন্ডার", checked = enabled, onCheckedChange = { value ->
+                VaultSwitch(appStringResource(Res.string.reminder_record_toggle), checked = enabled, onCheckedChange = { value ->
                     persist(if (doc != null) state.copy(documents = state.documents.map { if (it.id == doc.id) it.copy(reminder = value) else it })
                     else state.copy(rules = state.rules.map { if (it.id == rule!!.id) it.copy(reminder = value) else it }))
                 })
                 if (doc != null && doc.expiry.isNotBlank()) {
-                    DocumentNote("মেয়াদের কত দিন আগে")
-                    VaultSegmented(listOf(30 to "৩০ দিন", 14 to "১৪ দিন", 7 to "৭ দিন"), doc.reminderWarningDays ?: state.reminderPolicy.warningDays, onSelect = { value ->
+                    DocumentNote(appStringResource(Res.string.reminder_lead_days))
+                    VaultSegmented(listOf(30 to appStringResource(Res.string.reminder_days_30), 14 to appStringResource(Res.string.reminder_days_14), 7 to appStringResource(Res.string.reminder_days_7)), doc.reminderWarningDays ?: state.reminderPolicy.warningDays, onSelect = { value ->
                         persist(state.copy(documents = state.documents.map { if (it.id == doc.id) it.copy(reminderWarningDays = value) else it }))
                     })
                 }
-                DocumentCopy("পরে জানানো সার্ভিস বা নবায়ন সম্পন্ন করে না।")
-                (doc?.reminderSnoozedUntil ?: rule?.reminderSnoozedUntil)?.let { DocumentNote("পরে জানাবেন: ${f.d(it.replace('T', ' '))}") }
+                DocumentCopy(appStringResource(Res.string.reminder_snooze_note))
+                (doc?.reminderSnoozedUntil ?: rule?.reminderSnoozedUntil)?.let { DocumentNote(appStringResource(Res.string.reminder_snoozed_until, f.d(it.replace('T', ' ')))) }
                 if ((doc != null && doc.expiry.isNotBlank()) || rule?.baselineCertainty == com.motovault.app.domain.model.BaselineCertainty.CONFIRMED) {
-                    ReminderAction("আগামীকাল সকাল ৯টা") { snooze(1) }
-                    ReminderAction("৭ দিন পরে সকাল ৯টা") { snooze(7) }
+                    ReminderAction(appStringResource(Res.string.reminder_tomorrow_9)) { snooze(1) }
+                    ReminderAction(appStringResource(Res.string.reminder_in_7_days_9)) { snooze(7) }
                 }
             }
             }
         } else {
             Column(Modifier.semantics(mergeDescendants = true) {}, verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                DocumentNote("মেয়াদের কত দিন আগে")
-                VaultSegmented(listOf(30 to "৩০ দিন", 14 to "১৪ দিন", 7 to "৭ দিন"), lead, onSelect = { lead = it })
+                DocumentNote(appStringResource(Res.string.reminder_lead_days))
+                VaultSegmented(listOf(30 to appStringResource(Res.string.reminder_days_30), 14 to appStringResource(Res.string.reminder_days_14), 7 to appStringResource(Res.string.reminder_days_7)), lead, onSelect = { lead = it })
             }
             Column(Modifier.semantics(mergeDescendants = true) {}, verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                DocumentNote("ফোনের স্থানীয় সময়")
-                VaultSegmented(listOf(540 to "সকাল ৯টা", 1080 to "সন্ধ্যা ৬টা"), minute, onSelect = { minute = it })
-                DocumentCopy("এখন: ${f.n(lead.toLong())} দিন আগে, ${f.n((minute / 60).toLong())}:${f.d((minute % 60).toString().padStart(2, '0'))}")
-                if (state.documents.isEmpty() && state.rules.isEmpty()) DocumentNote("কাগজ বা সার্ভিসের সময়সূচি যোগ করলে এখানে দেখা যাবে।")
+                DocumentNote(appStringResource(Res.string.reminder_local_time))
+                VaultSegmented(listOf(540 to appStringResource(Res.string.reminder_morning_9), 1080 to appStringResource(Res.string.reminder_evening_6)), minute, onSelect = { minute = it })
+                DocumentCopy(appStringResource(Res.string.reminder_current_summary, f.n(lead.toLong()), "${f.n((minute / 60).toLong())}:${f.d((minute % 60).toString().padStart(2, '0'))}"))
+                if (state.documents.isEmpty() && state.rules.isEmpty()) DocumentNote(appStringResource(Res.string.reminder_empty))
             }
             state.documents.forEach { ReminderAction(it.title) { onOpen("document", it.id) } }
             state.rules.forEach { ReminderAction(it.name) { onOpen("service", it.id) } }

@@ -71,7 +71,7 @@ fun DocViewSheet(
         detent = SheetDetent.TALL,
         footer = {
             VaultButton(
-                text = if (isEn) "Back" else "ফিরে যান",
+                text = appStringResource(Res.string.action_back),
                 kind = ButtonKind.SECONDARY,
                 full = true,
                 icon = "fi_sun.svg",
@@ -97,7 +97,7 @@ fun DocViewSheet(
                 ExpiryChip(doc = doc, warningDays = warningDays)
                 val expiryDate = runCatching { LocalDate.parse(doc.expiry) }.getOrNull()
                 Text(
-                    text = if (doc.expiry.isBlank()) (if (isEn) "No expiry" else "মেয়াদ নেই") else (if (isEn) "Expires: " else "মেয়াদ শেষ: ") + if (expiryDate != null) f.dateFull(expiryDate) else doc.expiry,
+                    text = if (doc.expiry.isBlank()) appStringResource(Res.string.vault_doc_no_expiry) else appStringResource(Res.string.vault_expiry_summary, if (expiryDate != null) f.dateFull(expiryDate) else doc.expiry),
                     fontSize = 13.sp,
                     color = if (roadsideMode) Color(0xFF3A3A3A) else TextSecondary,
                     fontWeight = FontWeight.SemiBold
@@ -106,7 +106,7 @@ fun DocViewSheet(
         }
 
         VaultButton(
-            text = if (privacyEnabled) (if (isEn) "Show this document only" else "শুধু এই ডকুমেন্ট দেখান") else (if (isEn) "Enable protection & show document" else "সুরক্ষা চালু করে ডকুমেন্ট দেখান"),
+            text = appStringResource(if (privacyEnabled) Res.string.docview_show_only else Res.string.docview_enable_show),
             kind = ButtonKind.SECONDARY,
             full = true,
             onClick = {
@@ -115,17 +115,17 @@ fun DocViewSheet(
         )
 
         VaultSwitch(
-            title = if (isEn) "Police check mode" else "পুলিশ বা ট্রাফিক চেকিং মোড",
-            subtitle = if (isEn) "Full brightness and clear display" else "ফুল ব্রাইটনেস ও পরিষ্কার ভিউ",
+            title = appStringResource(Res.string.docview_police_mode),
+            subtitle = appStringResource(Res.string.docview_police_desc),
             checked = roadsideMode,
             onCheckedChange = { roadsideMode = it }
         )
 
         if (doc.expiry.isNotBlank()) VaultSwitch(
-            title = if (isEn) "Renewal reminder" else "এই ডকুমেন্টের রিমাইন্ডার",
+            title = appStringResource(Res.string.docview_renewal_reminder),
             checked = doc.reminder,
             onCheckedChange = { onUpdateReminder(it) }
         )
-        VaultButton(if (isEn) "Reminder settings & snooze" else "অনুমতি, সময় ও পরে জানান", onClick = onReminderSettings, full = true, kind = ButtonKind.SECONDARY)
+        VaultButton(appStringResource(Res.string.vault_reminder_action), onClick = onReminderSettings, full = true, kind = ButtonKind.SECONDARY)
     }
 }

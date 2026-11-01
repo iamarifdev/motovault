@@ -5,7 +5,7 @@ import com.motovault.app.domain.model.FuelDefaults
 
 // These values are legacy archive defaults, not presentation strings.
 private const val DEFAULT_SERVICE_ACTION = "replace"
-private const val DEFAULT_SERVICE_UNIT = "টি"
+private const val DEFAULT_SERVICE_UNIT = ""
 
 @Serializable
 data class BackupOilMetadata(

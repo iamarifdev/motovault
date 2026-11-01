@@ -1,6 +1,8 @@
 @file:JvmName("AndroidDocumentCapture")
 package com.motovault.app.ui
 
+import motovault.composeapp.generated.resources.*
+
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
@@ -208,8 +210,8 @@ actual fun DocumentImportActions(type: String, backOnly: Boolean, onResult: (Cap
     val images = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris -> if (uris.isNotEmpty()) import { operation -> require(!backOnly || uris.size == 1) { "Choose one back photo." }; processImages(uris, type, operation) } }
     val pdf = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri -> if (uri != null) import { operation -> processPdf(uri, type, operation) } }
     Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
-        DocumentSecondary(if (backOnly && isCardDocument(type)) "পেছনের ছবি যোগ করুন" else if (backOnly) "পৃষ্ঠার ছবি যোগ করুন" else "ছবি যোগ করুন", Modifier.weight(1f), enabled = !busy) { images.launch("image/*") }
-        if (!backOnly) DocumentSecondary("PDF যোগ করুন", Modifier.weight(1f), enabled = !busy) { pdf.launch("application/pdf") }
+        DocumentSecondary(if (backOnly && isCardDocument(type)) appStringResource(Res.string.capture_add_back) else if (backOnly) appStringResource(Res.string.capture_add_page) else appStringResource(Res.string.capture_add_photo), Modifier.weight(1f), enabled = !busy) { images.launch("image/*") }
+        if (!backOnly) DocumentSecondary(appStringResource(Res.string.capture_add_pdf), Modifier.weight(1f), enabled = !busy) { pdf.launch("application/pdf") }
     }
     if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
 }
@@ -309,15 +311,19 @@ actual fun OpenOriginalAssetButton(id: String, mimeType: String, label: String) 
         return cleared
     }
     val viewer = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { clearExport(); busy = false }
+    val authMessages = rememberAuthMessages()
+    val openTitle = appStringResource(Res.string.capture_open_original_title)
+    val openReason = appStringResource(Res.string.capture_open_original_reason)
+    val openRequired = appStringResource(Res.string.capture_open_original_required)
     DisposableEffect(Unit) { onDispose { clearExport() } }
     TextButton(onClick = {
         busy = true; error = null
         scope.launch {
             var pending: DocumentExportCopy? = null
             try {
-                val auth = com.motovault.app.domain.privacy.NativeSystemAuth.authenticate("আসল ফাইল খুলুন", "সংবেদনশীল ফাইল দেখতে ফোনের লক দিয়ে যাচাই করুন")
+                val auth = com.motovault.app.domain.privacy.NativeSystemAuth.authenticate(openTitle, openReason)
                 if (!auth.isSuccess) {
-                    error = auth.message ?: "যাচাই ছাড়া ফাইল খোলা যাবে না।"
+                    error = authMessages.forStatus(auth.status)
                     busy = false
                     return@launch
                 }

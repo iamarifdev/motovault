@@ -131,119 +131,10 @@ internal fun BackupCreateContent(
 ) {
     val haptic = currentHaptic
     val scope = rememberCoroutineScope()
-                // Info Card
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(BrandTintColor)
-                        .border(1.dp, BrandLineColor, RoundedCornerShape(14.dp))
-                        .padding(14.dp)
-                ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            V3Icon("feather_icon/fi_shield.svg", null, modifier = Modifier.size(18.dp), tint = BrandColor)
-                            Text(appStringResource(Res.string.backup_secure_title), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                        }
-                        Text(
-                            text = appStringResource(Res.string.backup_secure_description),
-                            fontSize = 12.sp,
-                            color = TextSecondary,
-                            lineHeight = 18.sp
-                        )
-                    }
-                }
-
-                // Summary of data being backed up
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(SurfaceColor)
-                        .border(1.dp, BorderColor, RoundedCornerShape(14.dp))
-                        .padding(14.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(appStringResource(Res.string.backup_includes), fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextSecondary)
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(appStringResource(Res.string.backup_bike_label), fontSize = 13.sp, color = TextPrimary)
-                        Text(state.ride?.displayName ?: appStringResource(Res.string.backup_no_bike), fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                    }
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(appStringResource(Res.string.backup_odometer_label), fontSize = 13.sp, color = TextPrimary)
-                        Text(f.km(state.ride?.odometer ?: 0.0), fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                    }
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(appStringResource(Res.string.backup_records_label), fontSize = 13.sp, color = TextPrimary)
-                        Text(appPluralStringResource(Res.plurals.backup_record_count, state.logs.size, f.n(state.logs.size.toLong())), fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                    }
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(appStringResource(Res.string.backup_documents_label), fontSize = 13.sp, color = TextPrimary)
-                        Text(appPluralStringResource(Res.plurals.backup_document_count, state.documents.size, f.n(state.documents.size.toLong())), fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                    }
-                }
+                BackupCreateSummary(state, f)
 
                 if (ui.generatedArchive == null) {
-                    // Password Inputs
-                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(createPasswordLabel, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(SurfaceColor2)
-                                .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp))
-                                .padding(horizontal = 14.dp, vertical = 12.dp)
-                        ) {
-                            BasicTextField(
-                                value = ui.password,
-                                onValueChange = { ui.password = it; ui.createError = null },
-                                textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
-                                cursorBrush = SolidColor(BrandColor),
-                                visualTransformation = if (ui.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                                modifier = Modifier.fillMaxWidth().semantics { contentDescription = createPasswordLabel }
-                            )
-                        }
-                    }
-
-                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(confirmPasswordLabel, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(SurfaceColor2)
-                                .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp))
-                                .padding(horizontal = 14.dp, vertical = 12.dp)
-                        ) {
-                            BasicTextField(
-                                value = ui.confirmPassword,
-                                onValueChange = { ui.confirmPassword = it; ui.createError = null },
-                                textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
-                                cursorBrush = SolidColor(BrandColor),
-                                visualTransformation = if (ui.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                                modifier = Modifier.fillMaxWidth().semantics { contentDescription = confirmPasswordLabel }
-                            )
-                        }
-                    }
-
-                    Row(
-                        modifier = Modifier.clickable { ui.passwordVisible = !ui.passwordVisible },
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Text(
-                            text = appStringResource(if (ui.passwordVisible) Res.string.backup_hide_password else Res.string.backup_show_password),
-                            fontSize = 12.sp,
-                            color = BrandColor,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
+                    BackupPasswordSection(ui, createPasswordLabel, confirmPasswordLabel)
 
                     // Security Warning Card
                     Box(
@@ -268,10 +159,6 @@ internal fun BackupCreateContent(
                         }
                     }
 
-                    // Error text if any
-                    ui.createError?.let {
-                        Text(text = backupErrorText(it), fontSize = 13.sp, color = ErrorColor, fontWeight = FontWeight.Medium)
-                    }
 
                     // Action Button or Progress
                     if (ui.isExporting) {

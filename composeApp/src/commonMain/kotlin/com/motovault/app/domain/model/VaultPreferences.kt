@@ -4,22 +4,18 @@ import com.motovault.app.domain.privacy.VaultPrivacySettings
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class Appearance(val label: String) {
-    SYSTEM("ডিভাইসের মতো"),
-    LIGHT("লাইট"),
-    DARK("ডার্ক")
+enum class Appearance {
+    SYSTEM, LIGHT, DARK
 }
 
 @Serializable
-enum class AppLanguage(val code: String, val label: String) {
-    BN("bn", "বাংলা"),
-    EN("en", "English")
+enum class AppLanguage(val code: String) {
+    BN("bn"), EN("en")
 }
 
 @Serializable
-enum class Digits(val label: String) {
-    BN("১২৩ বাংলা"),
-    EN("123 English")
+enum class Digits {
+    BN, EN
 }
 
 @Serializable
@@ -31,11 +27,11 @@ data class ReminderPolicy(val warningDays: Int = 30, val minuteOfDay: Int = 540)
 }
 
 @Serializable
-enum class RideMarket(val label: String) {
-    UNKNOWN("Not sure / other market"), INDIA("India"), EUROPE("Europe / UK"), BANGLADESH("Bangladesh")
+enum class RideMarket {
+    UNKNOWN, INDIA, EUROPE, BANGLADESH
 }
 
 @Serializable
-enum class RideEmission(val label: String) {
-    UNKNOWN("Not confirmed"), BS4("BS4"), BS6("BS6"), EURO4("Euro 4"), EURO5("Euro 5"), EURO5_PLUS("Euro 5+")
+enum class RideEmission {
+    UNKNOWN, BS4, BS6, EURO4, EURO5, EURO5_PLUS
 }

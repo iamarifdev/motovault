@@ -129,5 +129,5 @@ internal fun ScheduleDialog(state: VaultState, existing: ComponentRule?, onDismi
 internal fun Attachment(value: String, description: String) {
     val bitmap = remember(value) { runCatching { Base64.decode(value).decodeToImageBitmap() }.getOrNull() }
     if (bitmap != null) Image(bitmap, description, Modifier.fillMaxWidth().heightIn(max = 280.dp), contentScale = ContentScale.Fit)
-    else Text("ছবিটি দেখানো যায়নি।", color = WarningColor, fontSize = 12.sp)
+    else Text(appStringResource(Res.string.image_preview_failed), color = WarningColor, fontSize = 12.sp)
 }

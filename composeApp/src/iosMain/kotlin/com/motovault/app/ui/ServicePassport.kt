@@ -1,6 +1,8 @@
 @file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
 package com.motovault.app.ui
 
+import motovault.composeapp.generated.resources.*
+
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
@@ -110,7 +112,7 @@ actual fun PassportNativeActions(export: PassportExport, onError: (String) -> Un
             viewer?.delegate = delegate
             check(viewer?.presentPreviewAnimated(true) == true)
         }.onFailure { onError("Could not open this PDF.") }
-    }) { Text("PDF দেখুন") }
+    }) { Text(appStringResource(Res.string.passport_open_pdf)) }
     TextButton(onClick = {
         runCatching {
             val presenter = requireNotNull(passportPresenter())
@@ -119,7 +121,7 @@ actual fun PassportNativeActions(export: PassportExport, onError: (String) -> Un
             sheet.popoverPresentationController?.sourceRect = CGRectMake(0.0,0.0,1.0,1.0)
             presenter.presentViewController(sheet,true,null)
         }.onFailure { onError("Could not open sharing. Use Save to Files in the share sheet to keep both files.") }
-    }) { Text("PDF ও JSON ফাইলে রাখুন বা শেয়ার করুন") }
+    }) { Text(appStringResource(Res.string.passport_share_desc)) }
 }
 
 @Composable
@@ -151,5 +153,5 @@ actual fun PassportVerificationImport(onRead: (String) -> Unit, onError: (String
         val picker = UIDocumentPickerViewController(documentTypes = listOf("public.json"), inMode = UIDocumentPickerMode.UIDocumentPickerModeImport)
         picker.delegate = delegate; picker.allowsMultipleSelection = false
         passportPresenter()?.presentViewController(picker,true,null) ?: error("Could not open the JSON picker.")
-    }) { Text("যাচাইয়ের JSON যোগ করুন") }
+    }) { Text(appStringResource(Res.string.passport_import_json)) }
 }

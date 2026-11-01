@@ -226,7 +226,7 @@ fun HistoryScreen(
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
                                             Text(
-                                                text = l.displayNameBn + (l.detail?.let { " · $it" } ?: "") + if (l.quantity > 1) " × ${f.d(l.quantity.toInt().toString())}" else "",
+                                                text = serviceLineLabel(l) + (l.detail?.let { " · $it" } ?: "") + if (l.quantity > 1) " × ${f.d(l.quantity.toInt().toString())}" else "",
                                                 fontSize = 13.sp,
                                                 color = TextSecondary
                                             )

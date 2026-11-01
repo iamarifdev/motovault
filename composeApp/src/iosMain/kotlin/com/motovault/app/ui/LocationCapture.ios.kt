@@ -2,6 +2,8 @@
 
 package com.motovault.app.ui
 
+import motovault.composeapp.generated.resources.*
+
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -80,6 +82,6 @@ actual fun LocationCaptureButton(requestKey: Int, enabled: Boolean, onCaptured: 
     }
     LaunchedEffect(requestKey) { if (requestKey > 0 && enabled) requestLocationOnce() }
     OutlinedButton(onClick = { requestLocationOnce() }, enabled = enabled && !busy) {
-        Text(if (busy) "লোকেশন খোঁজা হচ্ছে · Finding location…" else "জিপিএস দিয়ে লোকেশন যোগ করুন · Add GPS location")
+        Text(if (busy) appStringResource(Res.string.location_searching) else appStringResource(Res.string.location_add_gps))
     }
 }

@@ -61,23 +61,26 @@ fun PasteSheet(
     var text by remember { mutableStateOf("") }
     val parsedService = remember(text) { SmartParse.parseServiceText(text) }
     val parsedAmount = remember(text) { SmartParse.parseAmount(text) }
+    val catalogShort = CATALOG_ITEMS.associate { it.key to appStringResource(it.shortLabel) }
+    val exampleBkash = appStringResource(Res.string.paste_example_bkash)
+    val exampleMechanic = appStringResource(Res.string.paste_example_mechanic)
     val isFuel = parsedAmount != null && SmartParse.FUEL_WORDS.containsMatchIn(text) && parsedService.lines.isEmpty()
     val hasService = parsedService.lines.isNotEmpty()
 
     Sheet(
-        title = if (isEn) "Quick Add from SMS" else "মেসেজ থেকে খরচ যোগ",
+        title = appStringResource(Res.string.paste_title),
         onDismiss = onDismiss
     ) {
-        Text(if (isEn) "Paste bKash, Nagad or mechanic's message here. No messages are read automatically without your consent." else "বিকাশ, নগদ বা মেকানিকের পাঠানো মেসেজ এখানে দিন। আপনার অনুমতি ছাড়া স্বয়ংক্রিয়ভাবে কোনো মেসেজ পড়া হয় না।", color = TextSecondary, fontSize = 14.sp)
+        Text(appStringResource(Res.string.paste_desc), color = TextSecondary, fontSize = 14.sp)
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             VaultChip(
-                text = if (isEn) "bKash / Nagad SMS" else "নগদ/বিকাশ মেসেজ",
-                onClick = { text = "Payment Tk 500.00 to Padma Filling Station successful. TrxID 9K3L2M. Balance Tk 2,140.50" }
+                text = appStringResource(Res.string.paste_bkash),
+                onClick = { text = exampleBkash }
             )
             VaultChip(
-                text = if (isEn) "Mechanic message" else "মেকানিকের মেসেজ",
-                onClick = { text = "ভাই আপনার বাইকের ইঞ্জিন অয়েল ৯০০ টাকা, অয়েল ফিল্টার ২৫০ টাকা, চেইন লুব ১৫০ টাকা" }
+                text = appStringResource(Res.string.paste_mechanic),
+                onClick = { text = exampleMechanic }
             )
         }
 
@@ -96,7 +99,7 @@ fun PasteSheet(
                 textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
                 cursorBrush = SolidColor(BrandColor),
                 decorationBox = { inner ->
-                    if (text.isEmpty()) Text("এখানে পেস্ট করুন", fontSize = 15.sp, color = TextTertiary)
+                    if (text.isEmpty()) Text(appStringResource(Res.string.paste_placeholder), fontSize = 15.sp, color = TextTertiary)
                     inner()
                 }
             )
@@ -115,10 +118,10 @@ fun PasteSheet(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     V3Icon(path = "feather_icon/fi_droplet.svg", description = null, modifier = Modifier.size(20.dp), tint = BrandColor)
-                    Text("তেলের খরচ ${f.money(parsedAmount!!)} মনে হচ্ছে।", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                    Text(appStringResource(Res.string.paste_fuel_detected, f.money(parsedAmount!!)), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                 }
                 VaultButton(
-                    text = "তেল ভরা খুলুন",
+                    text = appStringResource(Res.string.paste_open_fuel),
                     size = ButtonSize.SM,
                     onClick = {
                         haptic.perform(HapticKind.SUCCESS)
@@ -142,11 +145,11 @@ fun PasteSheet(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     V3Icon(path = "feather_icon/fi_tool.svg", description = null, modifier = Modifier.size(20.dp), tint = BrandColor)
-                    val summary = parsedService.lines.joinToString(", ") { catalogItemOf(it.item)?.short ?: it.item }
+                    val summary = parsedService.lines.joinToString(", ") { catalogShort[it.item] ?: it.item }
                     Text(summary, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                 }
                 VaultButton(
-                    text = "সার্ভিস খুলুন",
+                    text = appStringResource(Res.string.paste_open_service),
                     size = ButtonSize.SM,
                     onClick = {
                         haptic.perform(HapticKind.SUCCESS)

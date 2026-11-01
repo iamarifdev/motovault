@@ -1,5 +1,7 @@
 package com.motovault.app.ui
 
+import motovault.composeapp.generated.resources.*
+
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -103,6 +105,6 @@ actual fun LocationCaptureButton(requestKey: Int, enabled: Boolean, onCaptured: 
     }
     LaunchedEffect(requestKey) { if (requestKey > 0 && enabled) requestPermissionOrFix() }
     OutlinedButton(onClick = { requestPermissionOrFix() }, enabled = enabled && !busy) {
-        Text(if (busy) "লোকেশন খোঁজা হচ্ছে · Finding location…" else "জিপিএস দিয়ে লোকেশন যোগ করুন · Add GPS location")
+        Text(if (busy) appStringResource(Res.string.location_searching) else appStringResource(Res.string.location_add_gps))
     }
 }

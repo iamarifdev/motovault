@@ -1,62 +1,24 @@
 package com.motovault.app.ui
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.selected
-import androidx.compose.ui.semantics.semantics
 import com.motovault.app.ui.backup.BackupSheet
 import com.motovault.app.ui.fuel.FuelSheet
 import com.motovault.app.ui.backup.BackupSheetTab
 import com.motovault.app.ui.backup.RecoverySheet
 import com.motovault.app.application.VaultRecovery
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import com.motovault.app.domain.model.ComponentRule
 import com.motovault.app.domain.privacy.*
 import com.motovault.app.application.VaultWriter
 import com.motovault.app.application.VaultError
@@ -65,23 +27,15 @@ import com.motovault.app.application.fuel.FuelEntryEditor
 import com.motovault.app.application.VaultBackupRestorer
 import com.motovault.app.ui.privacy.*
 import dev.sky.design.*
-import dev.sky.design.tokens.SkyTokens
-import kotlinx.coroutines.delay
 import com.motovault.app.application.fuel.FuelWorkflow
 import com.motovault.app.application.fuel.FuelSaveOutcome
 import com.motovault.app.application.VaultBackupOperations
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
 import motovault.composeapp.generated.resources.*
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.Font
-import org.jetbrains.compose.resources.painterResource
-import kotlin.math.roundToLong
 
-
-private enum class FuelCreateError { SAVE_FAILED, CONFLICT }
 
 @Composable
 internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBackupRestorer, fuelEntry: FuelEntryBuilder<VaultState>, fuelEditor: FuelEntryEditor<VaultState>, recovery: VaultRecovery, backupOperations: VaultBackupOperations<VaultState>) {
@@ -92,7 +46,6 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
     val revision = snapshot.revision
     val storageError = snapshot.error
     val loading = snapshot.loading
-
     var tab by remember {
         mutableStateOf(
             when (LaunchConfig.initialTab?.lowercase()) {
@@ -116,7 +69,7 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
 
     val scope = rememberCoroutineScope()
     val fuelWorkflow = remember(session, fuelEntry, fuelEditor) { FuelWorkflow(session, fuelEntry, fuelEditor) }
-
+    val text = vaultUiText(); val authMessages = rememberAuthMessages()
     fun commit(next: VaultState, onDone: ((Boolean) -> Unit)? = null) {
         session.commit(next, revision) { ok ->
             if (scope.isActive) {
@@ -130,7 +83,7 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
             val canRetry = session.snapshots.value.revision == savedRevision
             currentToast = if (ok) null else ToastData(
                 id = "undo_failed_${Clock.System.now().toEpochMilliseconds()}",
-                message = if (canRetry) "ফিরিয়ে আনা যায়নি। আবার চেষ্টা করুন।" else "আরেকটি পরিবর্তন হয়েছে। রেকর্ড দেখে নিন।",
+                message = if (canRetry) text.undoFailedRetry else text.undoFailedChanged,
                 undoAction = if (canRetry) { { undo(savedRevision) } } else null
             )
         }
@@ -180,18 +133,18 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
     fun unlockVault() {
         val request = runCatching { accessPolicy.beginAuthentication(VaultAuthAction.UNLOCK) }.getOrNull()
         if (request == null) {
-            privacyAuthMessage = "যাচাই শুরু করা যায়নি।"
+            privacyAuthMessage = text.privacyStartFailed
             return
         }
         scope.launch {
-            val result = NativeSystemAuth.authenticate("MotoVault খুলুন", "আপনার তথ্য দেখতে ফোনের লক দিয়ে যাচাই করুন")
+            val result = NativeSystemAuth.authenticate(text.unlockTitle, text.unlockReason)
             val grant = accessPolicy.completeAuthentication(request, result.isSuccess)
             if (grant != null) {
                 accessMode = accessPolicy.mode
                 selectedInspectionDocId = null
                 privacyAuthMessage = null
             } else {
-                privacyAuthMessage = result.message ?: "যাচাই সফল হয়নি।"
+                privacyAuthMessage = authMessages.forStatus(result.status)
             }
         }
     }
@@ -205,14 +158,14 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
             return
         }
         scope.launch {
-            val result = NativeSystemAuth.authenticate("কাগজ বন্ধ করুন", "মূল ভল্টে ফিরতে ফোনের লক দিয়ে যাচাই করুন")
+            val result = NativeSystemAuth.authenticate(text.exitTitle, text.exitReason)
             val grant = accessPolicy.completeAuthentication(request, result.isSuccess)
             if (grant != null) {
                 accessMode = accessPolicy.mode
                 selectedInspectionDocId = null
                 privacyAuthMessage = null
             } else {
-                privacyAuthMessage = result.message ?: "যাচাই বাতিল হয়েছে।"
+                privacyAuthMessage = authMessages.forStatus(result.status)
             }
         }
     }
@@ -239,7 +192,7 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
             return@LaunchedEffect
         }
         val target = decodeReminderPayload(payload)?.let { reminderTarget(state, it) }
-        if (target == null) currentToast = ToastData(message = "এই রিমাইন্ডারের রেকর্ড বদলেছে বা মুছে গেছে। তালিকা দেখে নিন।")
+        if (target == null) currentToast = ToastData(message = text.reminderGone)
         else if (target.type == "document") {
             tab = Tab.VAULT
             activeSheet = ActiveSheet("docView", target.id)
@@ -266,7 +219,8 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
         appearance = state.appearance,
         reduceMotion = state.reduceMotion,
         textScale = state.textScale,
-        digits = state.digits
+        digits = state.digits,
+        language = state.language
     ) {
         PlatformAppearance(LocalVaultPalette.current.dark)
 
@@ -320,7 +274,7 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
                             val today = today()
                             val ride = Ride(
                                 brandId = result.brandId,
-                                edition = result.modelName.ifBlank { "নিজের সেটআপ" },
+                                edition = result.modelName.ifBlank { text.defaultEdition },
                                 year = result.year,
                                 odometer = result.odometer,
                                 modelId = result.modelId,
@@ -350,84 +304,21 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
                         }
                     )
                 } else {
-                    // Screen pages
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
-                    ) {
-                        val reducedMotion = isReducedMotion
-                        AnimatedContent(
-                            targetState = tab,
-                            transitionSpec = {
-                                fadeIn(VaultMotion.pageTween(reducedMotion)) togetherWith fadeOut(VaultMotion.pageTween(reducedMotion))
-                            },
-                            label = "VaultScreenPage",
-                            modifier = Modifier.fillMaxSize()
-                        ) { destination ->
-                            val mainScrollState = rememberScrollState()
-                            LaunchedEffect(LaunchConfig.scrollToBottom, destination) {
-                                if (LaunchConfig.scrollToBottom) {
-                                    mainScrollState.scrollTo(mainScrollState.maxValue)
-                                }
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .verticalScroll(mainScrollState)
-                            ) {
-                                when (destination) {
-                                    Tab.GARAGE -> GarageScreen(
-                                        state = state,
-                                        onOpenSheet = { name, payload -> activeSheet = ActiveSheet(name, payload) },
-                                        onSwitchTab = { nextTab -> tab = nextTab },
-                                        onOpenServiceForItem = { itemKey -> activeSheet = ActiveSheet("service", itemKey) }
-                                    )
-                                    Tab.VAULT -> VaultScreen(
-                                        state = state,
-                                        onOpenAddDoc = { activeSheet = ActiveSheet("docAdd") },
-                                        onOpenDocView = { doc -> activeSheet = ActiveSheet("docView", doc.id) },
-                                        onToggleDocReminders = { enabled -> commit(state.copy(docReminders = enabled)) },
-                                        onReminderSettings = { activeSheet = ActiveSheet("reminders") },
-                                        onOpenPrivacy = { activeSheet = ActiveSheet("privacy") }
-                                    )
-                                    Tab.HISTORY -> HistoryScreen(
-                                        state = state,
-                                        onEditFuel = { log ->
-                                            fuelEditError = null
-                                            activeSheet = ActiveSheet("fuelEdit", FuelEditTarget(log, revision))
-                                        },
-                                        onDeleteLog = { log ->
-                                            val next = runCatching { state.deleteLog(log) }.getOrNull()
-                                            if (next != null) {
-                                                commit(next) { ok ->
-                                                    if (ok) {
-                                                        currentToast = ToastData(
-                                                            id = "del_${log.id}",
-                                                            message = "রেকর্ড মোছা হয়েছে",
-                                                            undoAction = {
-                                                                undo(revision + 1)
-                                                            }
-                                                        )
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    )
-                                    Tab.ME -> MeScreen(
-                                        state = state,
-                                        onUpdateState = { next -> commit(next) },
-                                        onStartOnboarding = { editingRide = true },
-                                        onResetDemo = {
-                                            val seeded = VaultState.seedData(today())
-                                            commit(seeded)
-                                        },
-                                        onOpenSheet = { name, payload -> activeSheet = ActiveSheet(name, payload) }
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    VaultTabContent(
+                        tab = tab,
+                        state = state,
+                        revision = revision,
+                        reducedMotion = isReducedMotion,
+                        recordDeletedMessage = text.recordDeleted,
+                        onSheet = { activeSheet = it },
+                        onSwitchTab = { tab = it },
+                        onCommit = { next, done -> commit(next, done) },
+                        onEditFuel = { log -> fuelEditError = null; activeSheet = ActiveSheet("fuelEdit", FuelEditTarget(log, revision)) },
+                        onUndo = { undo(it) },
+                        onToast = { currentToast = it },
+                        onStartOnboarding = { editingRide = true },
+                        onResetDemo = { commit(VaultState.seedData(today())) }
+                    )
 
                     // Bottom Navigation Bar with Center "+" Button
                     VaultBottomNavigation(
@@ -450,218 +341,31 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
                 )
             }
 
-            // Sheets Orchestration
-            if (!loading && (state.ride != null || activeSheet?.name == "paste" || activeSheet?.name == "quickAdd")) {
-                activeSheet?.let { sheet ->
-                when (sheet.name) {
-                    "gaugeDetail" -> GaugeDetailSheet(state, sheet.props as? String,
-                        onDismiss = { activeSheet = null }, onOpen = { name, id ->
-                            activeSheet = if (name == "serviceReminder") ActiveSheet("reminders", "service" to id)
-                                else ActiveSheet(name, id)
-                        })
-                    "schedule" -> state.rules.firstOrNull { it.id == sheet.props as? String }?.let { rule ->
-                        ScheduleDialog(state, rule, onDismiss = { activeSheet = null },
-                            onSave = { next, done -> commit(next, done) })
-                    }
-                    "reminders" -> {
-                        val target = sheet.props as? Pair<*, *>
-                        ReminderSettingsSheet(state, target?.first as? String, target?.second as? String,
-                            onDismiss = { activeSheet = null },
-                            onOpen = { type, id -> activeSheet = ActiveSheet("reminders", type to id) },
-                            onSave = { next, done -> commit(next, done) })
-                    }
-                    "quickAdd" -> QuickAddSheet(
-                        onDismiss = { activeSheet = null },
-                        onSelectFlow = { flow -> activeSheet = ActiveSheet(flow) }
-                    )
-                    "fuel" -> state.fuelScreenInput(today())?.let { fuelInput ->
-                        val failureText = when (fuelCreateError) {
-                            FuelCreateError.SAVE_FAILED -> appStringResource(Res.string.fuel_create_save_failed)
-                            FuelCreateError.CONFLICT -> appStringResource(Res.string.fuel_create_conflict)
-                            null -> null
-                        }
-                        FuelSheet(
-                        input = fuelInput,
-                        editError = failureText,
-                        initialAmount = (sheet.props as? Number)?.toDouble(),
-                        onDismiss = { activeSheet = null; fuelCreateError = null },
-                        onSave = { request, msg, onDone ->
-                            fuelWorkflow.create(request, revision) { outcome ->
-                                if (scope.isActive && outcome == FuelSaveOutcome.SAVED) {
-                                    fuelCreateError = null
-                                    currentToast = ToastData(
-                                        id = "fuel_${Clock.System.now().toEpochMilliseconds()}",
-                                        message = msg,
-                                        undoAction = {
-                                            undo(revision + 1)
-                                        }
-                                    )
-                                    onDone()
-                                    activeSheet = null
-                                } else if (scope.isActive) fuelCreateError = when (outcome) {
-                                    FuelSaveOutcome.CONFLICT, FuelSaveOutcome.INVALID -> FuelCreateError.CONFLICT
-                                    else -> FuelCreateError.SAVE_FAILED
-                                }
-                            }
-                        }
-                    ) }
-                    "fuelEdit" -> {
-                        val target = sheet.props as? FuelEditTarget
-                        if (target != null) {
-                            val conflictText = appStringResource(Res.string.fuel_edit_conflict)
-                            val failureText = appStringResource(Res.string.fuel_edit_save_failed)
-                            state.fuelScreenInput(today())?.let { fuelInput -> FuelSheet(
-                                input = fuelInput, existing = target.record.fuelExistingEntry(), editError = fuelEditError,
-                                onDismiss = { activeSheet = null; fuelEditError = null },
-                                onSave = { _, _, _ -> },
-                                onEdit = { request, message ->
-                                    fuelWorkflow.edit(request, target.revision) { outcome ->
-                                            if (scope.isActive) {
-                                                if (outcome == FuelSaveOutcome.SAVED) {
-                                                    currentToast = ToastData(id = "fuel_edit_${request.id}", message = message, undoAction = { undo(target.revision + 1) })
-                                                    activeSheet = null
-                                                    fuelEditError = null
-                                                } else fuelEditError = if (outcome == FuelSaveOutcome.FAILED) failureText else conflictText
-                                            }
-                                    }
-                                }
-                            ) }
-                        }
-                    }
-                    "service" -> {
-                        val itemKey = sheet.props as? String
-                        val parsedRows = (sheet.props as? List<*>)?.filterIsInstance<ParsedLine>()
-                        ServiceSheet(
-                            state = state,
-                            initialItemKey = itemKey,
-                            initialRows = parsedRows,
-                            onDismiss = { activeSheet = null },
-                            onSave = { nextState, msg, onDone ->
-                                commit(nextState) { ok ->
-                                    if (ok) {
-                                        currentToast = ToastData(
-                                            id = "svc_${Clock.System.now().toEpochMilliseconds()}",
-                                            message = msg,
-                                            undoAction = {
-                                                undo(revision + 1)
-                                            }
-                                        )
-                                        onDone()
-                                        activeSheet = null
-                                    }
-                                }
-                            }
-                        )
-                    }
-                    "odometer" -> OdometerSheet(
-                        state = state,
-                        onDismiss = { activeSheet = null },
-                        onSave = { nextState, msg, onDone ->
-                            commit(nextState) { ok ->
-                                if (ok) {
-                                    currentToast = ToastData(
-                                        id = "odo_${Clock.System.now().toEpochMilliseconds()}",
-                                        message = msg,
-                                        undoAction = {
-                                            undo(revision + 1)
-                                        }
-                                    )
-                                    onDone()
-                                    activeSheet = null
-                                }
-                            }
-                        }
-                    )
-                    "docAdd" -> DocAddSheet(
-                        state = state,
-                        onDismiss = { activeSheet = null },
-                        onSave = { nextState, msg, onDone ->
-                            commit(nextState) { ok ->
-                                if (ok) {
-                                    currentToast = ToastData(
-                                        id = "doc_${Clock.System.now().toEpochMilliseconds()}",
-                                        message = msg,
-                                        undoAction = {
-                                            undo(revision + 1)
-                                        }
-                                    )
-                                    onDone()
-                                    activeSheet = null
-                                }
-                            }
-                        }
-                    )
-                    "docView" -> {
-                        val docId = sheet.props as? String
-                        val doc = state.documents.firstOrNull { it.id == docId }
-                        if (doc != null) {
-                            DocViewSheet(
-                                doc = doc,
-                                onDismiss = { activeSheet = null },
-                                onUpdateReminder = { enabled ->
-                                    val updated = state.documents.map { if (it.id == doc.id) it.copy(reminder = enabled) else it }
-                                    commit(state.copy(documents = updated))
-                                },
-                                onReminderSettings = { activeSheet = ActiveSheet("reminders", "document" to doc.id) },
-                                warningDays = doc.reminderWarningDays ?: state.reminderPolicy.warningDays,
-                                privacyEnabled = state.privacy.enabled,
-                                onInspect = { inspectDocument(doc.id) },
-                                onOpenPrivacy = { activeSheet = ActiveSheet("privacy") },
-                                language = state.language
-                            )
-                        }
-                    }
-                    "privacy" -> PrivacySheet(
-                        state = state,
-                        onUpdatePrivacy = { next ->
-                            val request = if (!state.privacy.enabled && next.enabled) {
-                                accessPolicy.beginAuthentication(VaultAuthAction.ENABLE)
-                            } else if (state.privacy.enabled && !next.enabled) {
-                                accessPolicy.beginAuthentication(VaultAuthAction.DISABLE)
-                            } else null
-                            val grant = request?.let { accessPolicy.completeAuthentication(it, true) }
-                            val committed = accessPolicy.settingsCommitted(next, grant)
-                            if (committed) {
-                                commit(state.copy(privacy = next))
-                            }
-                        },
-                        onLockNow = { lockNow() },
-                        onDismiss = { activeSheet = null }
-                    )
-                    "paste" -> PasteSheet(
-                        onDismiss = { activeSheet = null },
-                        onSelectFlow = { flow, payload ->
-                            activeSheet = ActiveSheet(flow, payload)
-                        },
-                        language = state.language
-                    )
-                    "backup", "backup-restore" -> BackupSheet(
-                        state = state,
-                        stateRevision = revision,
-                        backupOperations = backupOperations,
-                        vaultRevision = { session.snapshots.value.revision },
-                        initialTab = if (sheet.name == "backup-restore" || sheet.props == BackupSheetTab.RESTORE) BackupSheetTab.RESTORE else BackupSheetTab.CREATE,
-                        onDismiss = { activeSheet = null },
-                        onBackupSaved = { timestamp ->
-                            commit(state.copy(lastBackupEpochMillis = timestamp))
-                        },
-                        onRestore = { archive, password, expectedRevision, completed ->
-                            backupRestore.restore(archive, password, expectedRevision) { result ->
-                                completed(result)
-                                if (result.isSuccess) {
-                                    activeSheet = null
-                                    currentToast = null
-                                    restoreSuccessVisible = true
-                                }
-                            }
-                        }
-                    )
-                    "recovery" -> RecoverySheet(recovery, revision = { session.snapshots.value.revision }, onDismiss = { activeSheet = null })
-                }
+            VaultSheetHost(
+                activeSheet = activeSheet,
+                state = state,
+                revision = revision,
+                loading = loading,
+                backupOperations = backupOperations,
+                session = session,
+                backupRestore = backupRestore,
+                recovery = recovery,
+                fuelWorkflow = fuelWorkflow,
+                accessPolicy = accessPolicy,
+                fuelCreateError = fuelCreateError,
+                fuelEditError = fuelEditError,
+                onSheet = { activeSheet = it },
+                onCommit = { next, done -> commit(next, done) },
+                onUndo = { undo(it) },
+                onFuelCreateError = { fuelCreateError = it },
+                onFuelEditError = { fuelEditError = it },
+                onToast = { currentToast = it },
+                onRestoreSuccess = { restoreSuccessVisible = true },
+                onInspect = { inspectDocument(it) },
+                onLockNow = { lockNow() }
+            )
             }
             }
         }
         }
     }
-    }
-}

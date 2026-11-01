@@ -81,132 +81,15 @@ fun GarageScreen(
         modifier = Modifier.fillMaxWidth().padding(start = 20.dp, top = 8.dp, end = 20.dp, bottom = 28.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // Home Header
-        Row(
-            modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(text = "আমার গ্যারেজ", fontSize = 13.sp, color = TextSecondary)
-                Text(
-                    text = ride.displayName,
-                    fontFamily = FontFamily(Font(Res.font.barlow_condensed)),
-                    fontSize = 36.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = TextPrimary,
-                    lineHeight = 37.8.sp
-                )
-                Text(text = "${brandWorld.name} · ${f.d(ride.year.toString())}", fontSize = 13.sp, color = TextSecondary)
-            }
-            // Avatar Button to Bike Settings / Me tab
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(CircleShape)
-                    .background(Brush.radialGradient(listOf(LocalVaultPalette.current.photoWellStart, LocalVaultPalette.current.photoWellEnd)))
-                    .border(1.5.dp, BrandLineColor, CircleShape)
-                    .clickable {
-                        haptic.perform(HapticKind.TICK)
-                        onSwitchTab(Tab.ME)
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                if (model != null) {
-                    Image(
-                        painter = painterResource(model.photo),
-                        contentDescription = "বাইকের সেটিংস",
-                        modifier = Modifier.requiredSize(66.08.dp),
-                        contentScale = ContentScale.Fit
-                    )
-                } else {
-                    V3Icon(path = "feather_icon/fi_user.svg", description = "বাইকের সেটিংস", modifier = Modifier.size(24.dp), tint = BrandColor)
-                }
-            }
+        GarageHeaderSection(ride, brandWorld, model) {
+            haptic.perform(HapticKind.TICK)
+            onSwitchTab(Tab.ME)
         }
 
-        // Hero "Next Up" Card
         if (topWear != null) {
-            val palette = LocalVaultPalette.current
-            val (statusBg, statusBorder, statusColor, statusLabel) = when (topWear.status) {
-                WearStatus.OVERDUE -> Quad(palette.err.copy(alpha = 0.09f), palette.err.copy(alpha = 0.4f), palette.err, "এখনই দরকার")
-                WearStatus.SOON -> Quad(palette.warn.copy(alpha = 0.09f), palette.warn.copy(alpha = 0.4f), palette.warn, "শিগগির দরকার")
-                WearStatus.OK -> Quad(palette.ok.copy(alpha = 0.08f), palette.ok.copy(alpha = 0.35f), palette.ok, "ব্যবধান বাকি · পরের কাজ")
-                WearStatus.UNKNOWN -> Quad(palette.surface, palette.line, palette.text2, "সার্ভিসের তথ্য নিশ্চিত করুন")
-            }
-            val statusIcon = when (topWear.status) {
-                WearStatus.OVERDUE -> "fi_triangle-alert.svg"
-                WearStatus.SOON -> "fi_timer.svg"
-                WearStatus.OK -> "fi_circle-check.svg"
-                WearStatus.UNKNOWN -> "fi_triangle-alert.svg"
-            }
-            val topItem = catalogItemOf(topWear.rule.id) ?: catalogItemOf(topWear.rule.name.lowercase())
-            val partTitle = topWear.rule.name.substringBefore(" ও ").substringBefore(" পরিষ্কার")
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(statusBg)
-                    .border(1.5.dp, statusBorder, RoundedCornerShape(16.dp))
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(14.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(52.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(statusColor.copy(alpha = 0.16f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        V3Icon(path = "feather_icon/$statusIcon", description = null, modifier = Modifier.size(26.dp), tint = statusColor, strokeWidth = 2.2f)
-                    }
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(text = statusLabel, fontSize = 13.sp, lineHeight = 19.5.sp, color = TextSecondary)
-                        Text(text = partTitle, fontSize = 22.sp, lineHeight = 29.7.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                        Text(text = WearCalculator.describeWear(topWear, f), fontSize = 16.sp, lineHeight = 24.8.sp, fontWeight = FontWeight.SemiBold, color = statusColor)
-                    }
-                }
-
-                // Meter progress bar
-                if (topWear.status != WearStatus.UNKNOWN) Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(statusColor.copy(alpha = 0.18f))
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(topWear.used.toFloat().coerceIn(0f, 1f))
-                            .fillMaxHeight()
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(statusColor)
-                    )
-                }
-
-                val lastDateParsed = runCatching { LocalDate.fromEpochDays(topWear.rule.lastServicedEpochDays.toInt()) }.getOrNull()
-                val lastDateStr = if (lastDateParsed != null) f.date(lastDateParsed) else ""
-                Text(
-                    text = if (topWear.status == WearStatus.UNKNOWN) "অজানা তথ্য থেকে শতাংশ দেখানো হয় না" else "শেষ নিশ্চিত সার্ভিস: $lastDateStr · ${f.km(topWear.rule.lastServicedOdometerKm)}",
-                    fontSize = 13.sp,
-                    color = TextSecondary
-                )
-
-                VaultButton(
-                    text = "${topItem?.short ?: "সার্ভিস"} লিখুন",
-                    icon = "fi_tool.svg",
-                    full = true,
-                    onClick = {
-                        haptic.perform(HapticKind.TICK)
-                        onOpenServiceForItem(topWear.rule.id)
-                    }
-                )
+            GarageHeroSection(topWear) {
+                haptic.perform(HapticKind.TICK)
+                onOpenServiceForItem(topWear.rule.id)
             }
         }
 
@@ -216,10 +99,10 @@ fun GarageScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             val quickActions = listOf(
-                Triple("fi_fuel.svg", "তেল ভরা", "fuel"),
-                Triple("fi_tool.svg", "সার্ভিস", "service"),
-                Triple("fi_gauge.svg", "কিমি", "odometer"),
-                Triple("fi_file-text.svg", "কাগজ", "docAdd")
+                Triple("fi_fuel.svg", appStringResource(Res.string.garage_quick_fuel), "fuel"),
+                Triple("fi_tool.svg", appStringResource(Res.string.garage_quick_service), "service"),
+                Triple("fi_gauge.svg", appStringResource(Res.string.garage_quick_km), "odometer"),
+                Triple("fi_file-text.svg", appStringResource(Res.string.garage_quick_document), "docAdd")
             )
             quickActions.forEach { (icon, label, sheet) ->
                 Column(
@@ -264,7 +147,7 @@ fun GarageScreen(
             ) {
                 V3Icon(path = "feather_icon/fi_droplets.svg", description = null, modifier = Modifier.size(20.dp), tint = BrandColor)
                 Text(
-                    text = "${f.d(sinceFuelDays.toString())} দিন ধরে তেলের হিসাব নেই।",
+                    text = appStringResource(Res.string.garage_since_fuel, f.d(sinceFuelDays.toString())),
                     fontSize = 14.sp,
                     lineHeight = 19.6.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -272,111 +155,31 @@ fun GarageScreen(
                     modifier = Modifier.weight(1f)
                 )
                 VaultButton(
-                    text = "যোগ করুন",
+                    text = appStringResource(Res.string.garage_add),
                     size = ButtonSize.SM,
                     kind = ButtonKind.SECONDARY,
                     onClick = { onOpenSheet("fuel", null) }
                 )
                 VaultIconButton(
                     icon = "fi_x.svg",
-                    label = "লুকান",
+                    label = appStringResource(Res.string.garage_hide),
                     onClick = { nudgeHidden = true }
                 )
             }
         }
 
-        // Stats Row (Odometer & Fuel economy)
-        Row(
-            modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            // Odometer card
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(SurfaceColor)
-                    .border(1.dp, BorderColor, RoundedCornerShape(16.dp))
-                    .clickable {
-                        haptic.perform(HapticKind.TICK)
-                        onOpenSheet("odometer", null)
-                    }
-                    .padding(horizontal = 16.dp, vertical = 14.dp),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                Text(text = "ওডোমিটার", fontSize = 13.sp, lineHeight = 19.5.sp, color = TextSecondary)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    CountUp(
-                        value = ride.odometer,
-                        format = { n -> f.n(n.toLong()) },
-                        modifier = Modifier.alignByBaseline(),
-                        style = TextStyle(fontSize = 30.sp, lineHeight = 37.5.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                    )
-                    Text(
-                        text = if (f.digits == Digits.BN) "কিমি" else "km",
-                        fontSize = 13.125.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary,
-                        modifier = Modifier.alignByBaseline()
-                    )
-                }
-                Text(
-                    text = "আজ আনুমানিক ${f.n(estimate.toLong())} · আপডেট",
-                    fontSize = 12.sp,
-                    lineHeight = 18.6.sp,
-                    color = TextSecondary,
-                    modifier = Modifier.heightIn(min = 26.dp).wrapContentHeight(Alignment.CenterVertically)
-                )
-                val confirmedDate = ride.odometerConfirmedDate?.let { runCatching { f.date(LocalDate.parse(it)) }.getOrNull() }
-                Text(text = "শেষ নিশ্চিত: ${confirmedDate ?: "তারিখ জানা নেই"}", fontSize = 12.sp, lineHeight = 18.6.sp, color = TextSecondary,
-                    modifier = Modifier.heightIn(min = 26.dp).wrapContentHeight(Alignment.CenterVertically))
-            }
-
-            // Economy card
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(SurfaceColor)
-                    .border(1.dp, BorderColor, RoundedCornerShape(16.dp))
-                    .clickable {
-                        haptic.perform(HapticKind.TICK)
-                        onSwitchTab(Tab.HISTORY)
-                    }
-                    .padding(horizontal = 16.dp, vertical = 14.dp),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                Text(text = "জ্বালানি গড়", fontSize = 13.sp, lineHeight = 19.5.sp, color = TextSecondary)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    if (economy != null) {
-                        CountUp(
-                            value = economy,
-                            format = { n -> f.d(formatLakh(n, 1)) },
-                            modifier = Modifier.alignByBaseline(),
-                            style = TextStyle(fontSize = 30.sp, lineHeight = 37.5.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                        )
-                    } else {
-                        Text(text = "--", modifier = Modifier.alignByBaseline(), fontSize = 30.sp, lineHeight = 37.5.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                    }
-                    Text(
-                        text = if (f.digits == Digits.BN) "কিমি/লি" else "km/L",
-                        fontSize = 13.125.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary,
-                        modifier = Modifier.alignByBaseline()
-                    )
-                }
-                Box(modifier = Modifier.height(26.dp), contentAlignment = Alignment.CenterStart) {
-                    Spark(values = series.takeLast(6))
-                }
-            }
-        }
+        GarageStatsSection(
+            ride = ride,
+            economy = economy,
+            series = series,
+            estimate = estimate,
+            onOdometer = { onOpenSheet("odometer", null) },
+            onHistory = { onSwitchTab(Tab.HISTORY) }
+        )
 
         // Gauges Section
         Column {
-        SectionTitle("সার্ভিসের ব্যবধান বাকি")
+        SectionTitle(appStringResource(Res.string.garage_service_interval_remaining))
         Row(
             modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)
                 .horizontalScroll(rememberScrollState()).padding(top = 2.dp, bottom = 8.dp),
@@ -399,7 +202,7 @@ fun GarageScreen(
         // Renewals Section (if any within 30 days)
         if (renewals.isNotEmpty()) {
             Column {
-            SectionTitle("কাগজের মেয়াদ")
+            SectionTitle(appStringResource(Res.string.garage_doc_expiry))
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 renewals.forEach { (doc, leftDays) ->
                     val isExpired = leftDays < 0
@@ -436,7 +239,8 @@ fun GarageScreen(
                             Column(Modifier.weight(1f)) {
                                 Text(text = doc.title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                                 Text(
-                                    text = if (isExpired) "${f.days(-leftDays)} আগে মেয়াদ শেষ" else "মেয়াদ শেষ হতে ${f.days(leftDays)}",
+                                    text = if (isExpired) appStringResource(Res.string.garage_expired_ago, f.days(-leftDays))
+                                    else appStringResource(Res.string.garage_expires_in, f.days(leftDays)),
                                     fontSize = 13.sp,
                                     color = textColor
                                 )
@@ -449,37 +253,8 @@ fun GarageScreen(
             }
         }
 
-        // Bike Card
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(176.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Brush.radialGradient(listOf(LocalVaultPalette.current.photoWellStart, LocalVaultPalette.current.photoWellEnd)))
-                    .border(1.dp, BorderColor, RoundedCornerShape(16.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                if (model != null) {
-                    Image(
-                        painter = painterResource(model.photo),
-                        contentDescription = "${brandWorld.name} ${ride.displayName}",
-                        modifier = Modifier.fillMaxWidth(0.8f).widthIn(max = 340.dp).fillMaxHeight(0.9f),
-                        contentScale = ContentScale.Fit
-                    )
-                } else {
-                    V3Icon(path = "feather_icon/fi_gauge.svg", description = null, modifier = Modifier.size(64.dp), tint = BrandColor)
-                }
-            }
-            Text(
-                text = "নমুনা ছবি · রঙ ও যন্ত্রাংশে পার্থক্য থাকতে পারে",
-                fontSize = 12.sp,
-                color = TextSecondary,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        GarageBikeCardSection(ride, brandWorld, model)
     }
 }
 
-private data class Quad<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
+internal data class Quad<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)

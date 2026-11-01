@@ -1,6 +1,8 @@
 @file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
 package com.motovault.app.ui
 
+import motovault.composeapp.generated.resources.*
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -180,7 +182,7 @@ actual fun DocumentImportActions(type: String, backOnly: Boolean, onResult: (Cap
             }
         }
     }
-    DocumentSecondary(if (backOnly && isCardDocument(type)) "পেছনের ছবি যোগ করুন" else if (backOnly) "পৃষ্ঠার ছবি যোগ করুন" else "ছবি বা PDF যোগ করুন", Modifier.fillMaxWidth(), !busy) {
+    DocumentSecondary(if (backOnly && isCardDocument(type)) appStringResource(Res.string.capture_add_back) else if (backOnly) appStringResource(Res.string.capture_add_page) else appStringResource(Res.string.capture_add_photo_pdf), Modifier.fillMaxWidth(), !busy) {
         val picker = UIDocumentPickerViewController(documentTypes = if (backOnly) listOf("public.image") else listOf("public.image", "com.adobe.pdf"), inMode = UIDocumentPickerMode.UIDocumentPickerModeImport)
         picker.allowsMultipleSelection = !backOnly; picker.delegate = delegate
         presenter()?.presentViewController(picker, true, null) ?: error("Could not open the file picker.")
@@ -215,12 +217,16 @@ actual fun OpenOriginalAssetButton(id: String, mimeType: String, label: String) 
     val scope = rememberCoroutineScope()
     var busy by remember { mutableStateOf(false) }
     DisposableEffect(Unit) { onDispose { clearExport() } }
+    val authMessages = rememberAuthMessages()
+    val openTitle = appStringResource(Res.string.capture_open_original_title)
+    val openReason = appStringResource(Res.string.capture_open_original_reason)
+    val openRequired = appStringResource(Res.string.capture_open_original_required)
     TextButton(onClick = {
         busy = true; error = null
         scope.launch {
-            val auth = com.motovault.app.domain.privacy.NativeSystemAuth.authenticate("আসল ফাইল খুলুন", "সংবেদনশীল ফাইল দেখতে ফোনের লক দিয়ে যাচাই করুন")
+            val auth = com.motovault.app.domain.privacy.NativeSystemAuth.authenticate(openTitle, openReason)
             if (!auth.isSuccess) {
-                error = auth.message ?: "যাচাই ছাড়া ফাইল খোলা যাবে না।"
+                error = authMessages.forStatus(auth.status)
                 busy = false
                 return@launch
             }

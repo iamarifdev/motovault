@@ -48,7 +48,7 @@ internal expect fun localizedMonthName(language: AppLanguage, monthIndex: Int): 
 
 internal fun reminderDate(plan: RenewalReminder, target: ReminderTarget): String {
     val date = LocalDate.parse(plan.expiry)
-    val format = Fmt(target.digits)
+    val format = Fmt(target.digits, target.language, "", "", "")
     return "${format.d(date.dayOfMonth.toString())} ${localizedMonthName(target.language, date.monthNumber - 1)} ${format.d(date.year.toString())}"
 }
 

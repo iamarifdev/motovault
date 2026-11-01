@@ -1,5 +1,7 @@
 package com.motovault.app.ui
 
+import motovault.composeapp.generated.resources.*
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
@@ -101,12 +103,17 @@ fun Gauge(
         }
     }
 
+    val wearDescription = "$partName, " + if (wear.status == WearStatus.UNKNOWN) {
+        appStringResource(Res.string.gauge_unknown_baseline)
+    } else {
+        appStringResource(Res.string.gauge_interval_left, f.n(wear.life.toLong()), text)
+    }
     Column(
         modifier = modifier
             .width(124.dp)
             .semantics(mergeDescendants = true) {
                 role = Role.Button
-                contentDescription = "$partName, " + if (wear.status == WearStatus.UNKNOWN) "আগের সার্ভিস নিশ্চিত নয়" else "সার্ভিসের ব্যবধান ${f.n(wear.life.toLong())} শতাংশ বাকি, $text"
+                contentDescription = wearDescription
             }
             .clip(RoundedCornerShape(16.dp))
             .background(if (wear.status == WearStatus.OVERDUE) palette.err.copy(alpha = 0.07f) else SurfaceColor)
@@ -177,7 +184,7 @@ fun Gauge(
             maxLines = Int.MAX_VALUE
         )
 
-        Text("সার্ভিসের ব্যবধান বাকি", fontSize = 13.333.sp, lineHeight = 20.667.sp, color = TextPrimary, textAlign = TextAlign.Center)
+        Text(appStringResource(Res.string.gauge_interval_label), fontSize = 13.333.sp, lineHeight = 20.667.sp, color = TextPrimary, textAlign = TextAlign.Center)
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)

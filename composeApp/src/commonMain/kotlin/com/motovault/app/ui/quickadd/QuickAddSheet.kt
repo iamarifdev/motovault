@@ -56,14 +56,14 @@ fun QuickAddSheet(
 ) {
     val haptic = currentHaptic
     Sheet(
-        title = "কী যোগ করবেন?",
+        title = appStringResource(Res.string.quickadd_title),
         onDismiss = onDismiss
     ) {
         val options = listOf(
-            Triple("fi_fuel.svg", "তেল ভরা", "টাকা লিখুন, লিটার নিজেই হবে" to "fuel"),
-            Triple("fi_tool.svg", "সার্ভিস", "এক ট্যাপে পার্টস যোগ" to "service"),
-            Triple("fi_gauge.svg", "ওডোমিটার", "আনুমানিক কিমি ঠিক করুন" to "odometer"),
-            Triple("fi_file-text.svg", "কাগজ", "স্ক্যান করে মেয়াদ রাখুন" to "docAdd")
+            Triple("fi_fuel.svg", appStringResource(Res.string.quickadd_fuel), appStringResource(Res.string.quickadd_fuel_desc) to "fuel"),
+            Triple("fi_tool.svg", appStringResource(Res.string.quickadd_service), appStringResource(Res.string.quickadd_service_desc) to "service"),
+            Triple("fi_gauge.svg", appStringResource(Res.string.quickadd_odometer), appStringResource(Res.string.quickadd_odometer_desc) to "odometer"),
+            Triple("fi_file-text.svg", appStringResource(Res.string.quickadd_document), appStringResource(Res.string.quickadd_document_desc) to "docAdd")
         )
 
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -135,8 +135,8 @@ fun QuickAddSheet(
                     tint = BrandColor
                 )
                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text(text = "লিখে বা পেস্ট করে সাজান", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                    Text(text = "মেকানিকের মেসেজ, বিকাশ বা নগদের টেক্সট", fontSize = 12.sp, color = TextSecondary)
+                    Text(text = appStringResource(Res.string.quickadd_paste_title), fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                    Text(text = appStringResource(Res.string.quickadd_paste_desc), fontSize = 12.sp, color = TextSecondary)
                 }
             }
         }

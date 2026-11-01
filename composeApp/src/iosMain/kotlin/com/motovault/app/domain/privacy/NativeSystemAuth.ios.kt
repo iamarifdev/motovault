@@ -47,10 +47,10 @@ actual object NativeSystemAuth {
         probeResult?.let { return it }
         val status = availability()
         if (status == SystemAuthStatus.NO_CREDENTIALS) {
-            return SystemAuthResult(SystemAuthStatus.NO_CREDENTIALS, "ফোনে স্ক্রিন লক নেই। ফোনের সেটিংসে PIN বা পাসকোড দিন। আগের তথ্য রাখা আছে।")
+            return SystemAuthResult(SystemAuthStatus.NO_CREDENTIALS)
         }
         if (status == SystemAuthStatus.LOCKED_OUT) {
-            return SystemAuthResult(SystemAuthStatus.LOCKED_OUT, "বায়োমেট্রিক আপাতত বন্ধ। ফোনের পাসকোড ব্যবহার করুন।")
+            return SystemAuthResult(SystemAuthStatus.LOCKED_OUT)
         }
 
         return withContext(Dispatchers.Main) {
@@ -63,13 +63,13 @@ actual object NativeSystemAuth {
                     } else {
                         when (nsError?.code) {
                             LAErrorUserCancel, LAErrorSystemCancel, LAErrorAppCancel ->
-                                continuation.resume(SystemAuthResult(SystemAuthStatus.CANCELLED, "যাচাই বাতিল হয়েছে।"))
+                                continuation.resume(SystemAuthResult(SystemAuthStatus.CANCELLED))
                             LAErrorPasscodeNotSet ->
-                                continuation.resume(SystemAuthResult(SystemAuthStatus.NO_CREDENTIALS, "ফোনে স্ক্রিন লক নেই। ফোনের সেটিংসে PIN বা পাসকোড দিন। আগের তথ্য রাখা আছে।"))
+                                continuation.resume(SystemAuthResult(SystemAuthStatus.NO_CREDENTIALS))
                             LAErrorBiometryLockout ->
-                                continuation.resume(SystemAuthResult(SystemAuthStatus.LOCKED_OUT, "বায়োমেট্রিক আপাতত বন্ধ। ফোনের পাসকোড ব্যবহার করুন।"))
+                                continuation.resume(SystemAuthResult(SystemAuthStatus.LOCKED_OUT))
                             else ->
-                                continuation.resume(SystemAuthResult(SystemAuthStatus.FAILED, nsError?.localizedDescription ?: "যাচাই ব্যর্থ হয়েছে।"))
+                                continuation.resume(SystemAuthResult(SystemAuthStatus.FAILED))
                         }
                     }
                 }

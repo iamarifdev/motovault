@@ -1,5 +1,6 @@
 package com.motovault.app.ui.privacy
 
+import motovault.composeapp.generated.resources.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -51,9 +52,10 @@ internal fun PrivacyGate(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            val secureCopyDescription = selectedDoc?.let { appStringResource(Res.string.privacy_secure_copy, it.title) }.orEmpty()
             if (mode == VaultAccessMode.INSPECTION && selectedDoc != null) {
                 Text(
-                    text = if (isEn) "Selected document · Preview" else "নির্বাচিত ডকুমেন্ট · প্রিভিউ",
+                    text = appStringResource(Res.string.privacy_preview_badge),
                     fontSize = 13.sp,
                     color = BrandColor,
                     fontWeight = FontWeight.SemiBold
@@ -77,7 +79,7 @@ internal fun PrivacyGate(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.semantics {
-                            contentDescription = if (isEn) "${selectedDoc.title} selected secure copy" else "${selectedDoc.title} এর নির্বাচিত সুরক্ষিত কপি"
+                            contentDescription = secureCopyDescription
                         }
                     ) {
                         DocArt(doc = selectedDoc, large = true)
@@ -85,7 +87,7 @@ internal fun PrivacyGate(
                 }
 
                 Text(
-                    text = if (isEn) "Other documents, edit and share options are hidden in this mode." else "এই মোডে অন্য কোনো ডকুমেন্ট বা এডিট অপশন দেখা যাবে না।",
+                    text = appStringResource(Res.string.privacy_other_hidden),
                     fontSize = 14.sp,
                     color = TextSecondary,
                     textAlign = TextAlign.Center
@@ -101,14 +103,14 @@ internal fun PrivacyGate(
                 }
 
                 VaultButton(
-                    text = if (isEn) "Unlock with phone lock" else "ফোনের লক দিয়ে ফিরুন",
+                    text = appStringResource(Res.string.privacy_unlock_return),
                     kind = ButtonKind.PRIMARY,
                     full = true,
                     onClick = onExitInspection
                 )
 
                 VaultButton(
-                    text = if (isEn) "Lock and return to vault" else "লক করে ভল্টে ফিরুন",
+                    text = appStringResource(Res.string.privacy_lock_return),
                     kind = ButtonKind.SECONDARY,
                     full = true,
                     onClick = onLock
@@ -116,13 +118,13 @@ internal fun PrivacyGate(
             } else {
                 V3Icon(
                     path = "feather_icon/fi_lock.svg",
-                    description = if (isEn) "Lock" else "লক",
+                    description = appStringResource(Res.string.privacy_lock_icon),
                     modifier = Modifier.size(48.dp),
                     tint = BrandColor
                 )
 
                 Text(
-                    text = if (isEn) "MotoVault is locked" else "MotoVault লক করা আছে",
+                    text = appStringResource(Res.string.privacy_gate_title),
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextPrimary,
@@ -130,7 +132,7 @@ internal fun PrivacyGate(
                 )
 
                 Text(
-                    text = if (isEn) "Unlock with your phone screen lock or biometrics." else "লক খুলতে ফোনের স্ক্রিন লক বা ফিঙ্গারপ্রিন্ট দিন।",
+                    text = appStringResource(Res.string.privacy_gate_subtitle),
                     fontSize = 15.sp,
                     color = TextSecondary,
                     textAlign = TextAlign.Center
@@ -156,7 +158,7 @@ internal fun PrivacyGate(
                 }
 
                 VaultButton(
-                    text = if (isEn) "Unlock" else "আনলক করুন",
+                    text = appStringResource(Res.string.privacy_unlock_button),
                     kind = ButtonKind.PRIMARY,
                     full = true,
                     onClick = onUnlock
@@ -178,12 +180,12 @@ internal fun PrivacyGate(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(if (isEn) "Cannot open files?" else "ফাইল খুলছে না?", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                        Text(appStringResource(Res.string.privacy_cannot_open), fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                         Text(if (helpExpanded) "▲" else "▼", fontSize = 12.sp, color = TextSecondary)
                     }
                     if (helpExpanded) {
                         Text(
-                            text = if (isEn) "Do not uninstall or clear app data. If security keys are cleared, encrypted files cannot be restored with screen lock." else "অ্যাপ আনইনস্টল বা অ্যাপ ডেটা ক্লিয়ার করবেন না। সিকিউরিটি কি হারিয়ে গেলে ফোনের স্ক্রিন লক দিয়ে এনক্রিপ্ট করা ফাইল রিকভার করা সম্ভব নয়।",
+                            text = appStringResource(Res.string.privacy_key_warning),
                             fontSize = 13.sp,
                             color = TextSecondary,
                             lineHeight = 18.sp
@@ -192,7 +194,7 @@ internal fun PrivacyGate(
                 }
 
                 Text(
-                    text = if (isEn) "Protected with device PIN, passcode or biometrics." else "ফোনের PIN, পাসকোড বা বায়োমেট্রিক দিয়ে সুরক্ষিত।",
+                    text = appStringResource(Res.string.privacy_protected_device),
                     fontSize = 12.sp,
                     color = TextSecondary,
                     textAlign = TextAlign.Center

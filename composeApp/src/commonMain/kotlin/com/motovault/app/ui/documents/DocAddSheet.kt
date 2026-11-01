@@ -65,13 +65,19 @@ fun DocAddSheet(
     var expiry by remember { mutableStateOf("") }
     var checked by remember { mutableStateOf(false) }
     var scanFlash by remember { mutableStateOf(false) }
+    val selectedDocName = docDisplayName(selectedKind)
+    val savedMessage = appStringResource(Res.string.doc_add_saved, selectedDocName)
+    val savedReminderMessage = appStringResource(Res.string.doc_add_saved_reminder, selectedDocName)
+    val sampleLicence = appStringResource(Res.string.doc_add_sample_licence)
+    val sampleRegistration = appStringResource(Res.string.doc_add_sample_registration)
+    val sampleHolder = appStringResource(Res.string.doc_add_sample_holder)
 
     Sheet(
         title = when (step) {
-            1 -> "কোন কাগজ?"
-            2 -> "কাগজ স্ক্যান"
-            3 -> "তথ্য মিলিয়ে নিন"
-            else -> "মনে করিয়ে দেব?"
+            1 -> appStringResource(Res.string.doc_add_type_title)
+            2 -> appStringResource(Res.string.doc_add_scan_title)
+            3 -> appStringResource(Res.string.doc_add_review_title)
+            else -> appStringResource(Res.string.doc_add_remind_title)
         },
         onDismiss = onDismiss,
         detent = SheetDetent.TALL
@@ -106,8 +112,8 @@ fun DocAddSheet(
                                     tint = BrandColor
                                 )
                                 Column {
-                                    Text(text = kindInfo.bn, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                                    Text(text = if (kindInfo.card) "সামনে ও পেছনের ছবি" else "পুরো পৃষ্ঠা", fontSize = 13.sp, color = TextSecondary)
+                                    Text(text = appStringResource(kindInfo.resource), fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                                    Text(text = if (kindInfo.card) appStringResource(Res.string.doc_add_card_sides) else appStringResource(Res.string.doc_add_full_page), fontSize = 13.sp, color = TextSecondary)
                                 }
                             }
                             V3Icon(
@@ -120,14 +126,14 @@ fun DocAddSheet(
                     }
                     TextButton(
                         onClick = {
-                            number = if (selectedKind == "licence") "DL-1990-123456" else "ঢাকা মেট্রো-হ ১১-২২৩৪"
-                            holder = "মো. রাফিদ হাসান"
+                            number = if (selectedKind == "licence") sampleLicence else sampleRegistration
+                            holder = sampleHolder
                             expiry = LocalDate.fromEpochDays(today.toEpochDays() + 365).toString()
                             step = 3
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(if (state.language == AppLanguage.EN) "Type manually without scan" else "স্ক্যান ছাড়া নিজে লিখুন", color = BrandColor, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                        Text(appStringResource(Res.string.doc_add_manual), color = BrandColor, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
@@ -159,10 +165,10 @@ fun DocAddSheet(
                                 .background(Color.White.copy(alpha = 0.16f))
                                 .padding(horizontal = 14.dp, vertical = 6.dp)
                         ) {
-                            Text("কাগজ সমতল জায়গায় রাখুন", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                            Text(appStringResource(Res.string.doc_add_scan_hint), color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                         }
                     }
-                    Text(text = "ডেমো: আসল অ্যাপে এখানে লাইভ ক্যামেরা দেখাবে", fontSize = 13.sp, color = TextSecondary)
+                    Text(text = appStringResource(Res.string.doc_add_demo_note), fontSize = 13.sp, color = TextSecondary)
                     // Shutter button
                     Box(
                         modifier = Modifier
@@ -172,8 +178,8 @@ fun DocAddSheet(
                             .clickable {
                                 haptic.perform(HapticKind.SUCCESS)
                                 scanFlash = true
-                                number = if (selectedKind == "licence") "DL-1990-123456" else "ঢাকা মেট্রো-হ ১১-২২৩৪"
-                                holder = "মো. রাফিদ হাসান"
+                                number = if (selectedKind == "licence") sampleLicence else sampleRegistration
+                                holder = sampleHolder
                                 expiry = LocalDate.fromEpochDays(today.toEpochDays() + 730).toString()
                                 step = 3
                             },
@@ -186,18 +192,18 @@ fun DocAddSheet(
             3 -> {
                 // Review
                 val reason = when {
-                    number.isBlank() -> "কাগজের নম্বর লিখুন"
-                    holder.isBlank() -> "মালিকের নাম লিখুন"
-                    expiry.isBlank() -> "মেয়াদ শেষের তারিখ দিন"
-                    !checked -> "আসল কাগজের সঙ্গে মিলিয়ে টিক দিন"
+                    number.isBlank() -> appStringResource(Res.string.doc_add_error_number)
+                    holder.isBlank() -> appStringResource(Res.string.doc_add_error_holder)
+                    expiry.isBlank() -> appStringResource(Res.string.doc_add_error_expiry)
+                    !checked -> appStringResource(Res.string.doc_add_error_confirm)
                     else -> null
                 }
 
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("স্ক্যান থেকে যা পাওয়া গেছে তা দেখুন। ভুল থাকলে বদলান।", color = TextSecondary, fontSize = 14.sp)
+                    Text(appStringResource(Res.string.doc_add_review_intro), color = TextSecondary, fontSize = 14.sp)
 
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text("কাগজের নম্বর", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        Text(appStringResource(Res.string.doc_add_number), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                         Box(
                             modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(SurfaceColor2)
                                 .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp)).padding(14.dp)
@@ -207,7 +213,7 @@ fun DocAddSheet(
                     }
 
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text("মালিকের নাম", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        Text(appStringResource(Res.string.doc_add_holder), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                         Box(
                             modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(SurfaceColor2)
                                 .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp)).padding(14.dp)
@@ -217,7 +223,7 @@ fun DocAddSheet(
                     }
 
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text("মেয়াদ শেষের তারিখ", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        Text(appStringResource(Res.string.doc_add_expiry), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                         Box(
                             modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(SurfaceColor2)
                                 .border(1.5.dp, WarningColor, RoundedCornerShape(12.dp)).padding(14.dp)
@@ -230,7 +236,7 @@ fun DocAddSheet(
                         listOf(1, 2, 5).forEach { y ->
                             val targetDate = LocalDate.fromEpochDays(today.toEpochDays() + 365 * y).toString()
                             VaultChip(
-                                text = "${f.d(y.toString())} বছর পর",
+                                text = appStringResource(Res.string.doc_add_years_later, f.d(y.toString())),
                                 active = expiry == targetDate,
                                 onClick = { expiry = targetDate }
                             )
@@ -252,11 +258,11 @@ fun DocAddSheet(
                         ) {
                             if (checked) Text("✓", color = OnBrandColor, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                         }
-                        Text("আসল কাগজ দেখে তথ্য মিলিয়ে নিয়েছি", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        Text(appStringResource(Res.string.doc_add_confirm), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                     }
 
                     VaultButton(
-                        text = reason ?: "কাগজপত্রে সেভ করুন",
+                        text = reason ?: appStringResource(Res.string.doc_add_save),
                         full = true,
                         enabled = reason == null,
                         onClick = {
@@ -279,16 +285,16 @@ fun DocAddSheet(
                     ) {
                         V3Icon(path = "feather_icon/fi_bell.svg", description = null, modifier = Modifier.size(34.dp), tint = BrandColor)
                     }
-                    Text(if (state.language == AppLanguage.EN) "Get reminder 30 days before expiry?" else "মেয়াদ শেষ হওয়ার ৩০ দিন আগে রিমাইন্ডার চান?", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
-                    Text(if (state.language == AppLanguage.EN) "You will receive a notification at 9 AM with renewal instructions." else "সকাল ৯টায় একটি নোটিফিকেশন পাবেন। নবায়নের জন্য যথেষ্ট সময় থাকবে।", fontSize = 14.sp, color = TextSecondary, textAlign = TextAlign.Center)
+                    Text(appStringResource(Res.string.doc_add_reminder_prompt), fontSize = 20.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
+                    Text(appStringResource(Res.string.doc_add_reminder_desc), fontSize = 14.sp, color = TextSecondary, textAlign = TextAlign.Center)
                     Spacer(Modifier.height(8.dp))
                     VaultButton(
-                        text = if (state.language == AppLanguage.EN) "Yes, remind me" else "হ্যাঁ, রিমাইন্ডার দিন",
+                        text = appStringResource(Res.string.doc_add_reminder_yes),
                         full = true,
                         icon = "fi_bell.svg",
                         onClick = {
                             val newDoc = VaultDocument(
-                                title = docNameBn(selectedKind),
+                                title = selectedDocName,
                                 number = number.trim(),
                                 holder = holder.trim(),
                                 expiry = expiry.trim(),
@@ -296,17 +302,17 @@ fun DocAddSheet(
                                 reminder = true
                             )
                             val next = state.copy(documents = listOf(newDoc) + state.documents.filterNot { it.kind == selectedKind })
-                            val toastMsg = "${docNameBn(selectedKind)} সেভ হয়েছে · ফোনের অনুমতি থাকলে জানানো হবে"
+                            val toastMsg = savedReminderMessage
                             onSave(next, toastMsg) {}
                         }
                     )
                     VaultButton(
-                        text = "এখন নয়",
+                        text = appStringResource(Res.string.doc_add_not_now),
                         kind = ButtonKind.GHOST,
                         full = true,
                         onClick = {
                             val newDoc = VaultDocument(
-                                title = docNameBn(selectedKind),
+                                title = selectedDocName,
                                 number = number.trim(),
                                 holder = holder.trim(),
                                 expiry = expiry.trim(),
@@ -314,7 +320,7 @@ fun DocAddSheet(
                                 reminder = false
                             )
                             val next = state.copy(documents = listOf(newDoc) + state.documents.filterNot { it.kind == selectedKind })
-                            val toastMsg = "${docNameBn(selectedKind)} সেভ হয়েছে"
+                            val toastMsg = savedMessage
                             onSave(next, toastMsg) {}
                         }
                     )

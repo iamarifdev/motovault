@@ -1,5 +1,7 @@
 package com.motovault.app.ui
 
+import motovault.composeapp.generated.resources.*
+
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -234,6 +236,7 @@ internal fun VaultTheme(
     reduceMotion: Boolean = false,
     textScale: Float = 1.0f,
     digits: Digits = Digits.BN,
+    language: AppLanguage = AppLanguage.BN,
     content: @Composable () -> Unit
 ) {
     val dark = appearance.usesDarkPalette(isSystemInDarkTheme())
@@ -308,7 +311,7 @@ internal fun VaultTheme(
                 LocalVaultBrandId provides brandId,
                 LocalVaultTypography provides vaultTypography,
                 LocalReducedMotion provides effectiveReducedMotion,
-                LocalFmt provides Fmt(digits),
+                LocalFmt provides Fmt(digits, language, appStringResource(Res.string.unit_km), appStringResource(Res.string.unit_litre), appStringResource(Res.string.unit_days)),
                 LocalContentColor provides palette.text
             ) {
                 content()
@@ -320,7 +323,7 @@ internal fun VaultTheme(
 @Composable
 internal fun AppearanceButton(onClick: () -> Unit) {
     IconButton(onClick = onClick) {
-        SkySvgIcon("feather_icon/fi_sun.svg", "থিম বা অবস্থান বদলান", Modifier.size(20.dp), LocalVaultPalette.current.text2)
+        SkySvgIcon("feather_icon/fi_sun.svg", appStringResource(Res.string.appearance_change_desc), Modifier.size(20.dp), LocalVaultPalette.current.text2)
     }
 }
 

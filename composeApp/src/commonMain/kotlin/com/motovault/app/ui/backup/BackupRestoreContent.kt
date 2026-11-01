@@ -130,97 +130,8 @@ internal fun BackupRestoreContent(
     val haptic = currentHaptic
     val scope = rememberCoroutineScope()
 
-                // Info
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(BrandTintColor)
-                        .border(1.dp, BrandLineColor, RoundedCornerShape(14.dp))
-                        .padding(14.dp)
-                ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(appStringResource(Res.string.restore_intro_title), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                        Text(
-                            text = appStringResource(Res.string.restore_intro_description),
-                            fontSize = 12.sp,
-                            color = TextSecondary,
-                            lineHeight = 18.sp
-                        )
-                    }
-                }
-
-                // File Picker Card
-                if (ui.pickedFileBytes == null) {
-                    BackupFilePicker(
-                        onFileSelected = { bytes, name ->
-                            ui.pickedFileBytes = bytes
-                            ui.pickedFileName = name
-                            ui.restoreError = null
-                            ui.restorePreview = null
-                            haptic.perform(HapticKind.TICK)
-                        },
-                        onError = {
-                            ui.restoreError = BackupSheetError.OPEN_FAILED
-                            haptic.perform(HapticKind.WARNING)
-                        }
-                    ) { openPicker ->
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(SurfaceColor)
-                                .border(1.5.dp, BorderStrongColor, RoundedCornerShape(14.dp))
-                                .clickable { openPicker() }
-                                .padding(24.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                V3Icon("feather_icon/fi_upload-cloud.svg", null, modifier = Modifier.size(32.dp), tint = BrandColor)
-                                Text(appStringResource(Res.string.restore_choose_file), fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                                Text(appStringResource(Res.string.restore_choose_source), fontSize = 12.sp, color = TextSecondary)
-                            }
-                        }
-                    }
-                } else {
-                    // File Chosen Summary
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(SurfaceColor)
-                            .border(1.dp, BorderColor, RoundedCornerShape(14.dp))
-                            .padding(14.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(ui.pickedFileName, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                            Text(appStringResource(Res.string.backup_size_kib, f.n(((ui.pickedFileBytes?.size ?: 0) / BYTES_PER_KIB).coerceAtLeast(1).toLong())), fontSize = 12.sp, color = TextSecondary)
-                        }
-                        BackupFilePicker(
-                            onFileSelected = { bytes, name ->
-                                if (ui.isRestoring || ui.isValidating) return@BackupFilePicker
-                                ui.pickedFileBytes = bytes
-                                ui.pickedFileName = name
-                                ui.restorePreview = null
-                                ui.reviewedInputs = null
-                                ui.restoreError = null
-                            },
-                            onError = { ui.restoreError = BackupSheetError.OPEN_FAILED }
-                        ) { openPicker ->
-                            VaultButton(
-                                text = appStringResource(Res.string.restore_change_file),
-                                kind = ButtonKind.SECONDARY,
-                                size = ButtonSize.SM,
-                                enabled = !busy,
-                                onClick = { if (!ui.isRestoring && !ui.isValidating) openPicker() }
-                            )
-                        }
-                    }
+                BackupRestoreIntro()
+                BackupRestoreFileSection(ui, busy, f)
 
                     if (ui.restorePreview == null) {
                         // Enter Password to Validate
@@ -446,7 +357,6 @@ internal fun BackupRestoreContent(
                             }
                         }
                     }
-                }
 
                 // Error Display for Restore
                 ui.restoreError?.let {

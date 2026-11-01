@@ -69,21 +69,21 @@ fun OdometerSheet(
     var camDone by remember { mutableStateOf(false) }
 
     val odoVal = parseNum(entry.values["odo"] ?: "") ?: 0.0
-    val badError = if (odoVal < ride.odometer) "বর্তমান কিমির (${f.n(ride.odometer.toLong())}) চেয়ে কম হতে পারে না" else null
+    val badError = if (odoVal < ride.odometer) appStringResource(Res.string.odo_error_below_current, f.n(ride.odometer.toLong())) else null
+    val savedMessage = appStringResource(Res.string.odo_saved, f.km(odoVal))
 
     Sheet(
-        title = "ওডোমিটার",
+        title = appStringResource(Res.string.odo_title),
         onDismiss = onDismiss,
         footer = {
             VaultButton(
-                text = if (badError != null) "কিমি ঠিক করুন" else if (touched) "সেভ করুন" else "ঠিক আছে, সেভ করুন",
+                text = if (badError != null) appStringResource(Res.string.odo_fix) else if (touched) appStringResource(Res.string.odo_save) else appStringResource(Res.string.odo_ok_save),
                 onClick = {
                     if (badError != null) {
                         haptic.perform(HapticKind.ERROR)
                     } else {
                         val next = state.copy(ride = ride.copy(odometer = odoVal, odometerConfirmedDate = today.toString()))
-                        val toastMsg = "ওডোমিটার ${f.km(odoVal)} করা হয়েছে"
-                        onSave(next, toastMsg) {}
+                        onSave(next, savedMessage) {}
                     }
                 },
                 full = true,
@@ -106,7 +106,7 @@ fun OdometerSheet(
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
-                text = if (touched) "আপনার লেখা কিমি" else "আজ আনুমানিক",
+                text = if (touched) appStringResource(Res.string.odo_typed) else appStringResource(Res.string.odo_today_estimate),
                 fontSize = 13.sp,
                 color = TextSecondary
             )
@@ -118,14 +118,14 @@ fun OdometerSheet(
                 )
                 Spacer(Modifier.width(6.dp))
                 Text(
-                    text = if (f.digits == Digits.BN) "কিমি" else "km",
+                    text = appStringResource(Res.string.garage_unit_km),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = TextSecondary
                 )
             }
             Text(
-                text = "বর্তমান ওডোমিটার: ${f.km(ride.odometer)}",
+                text = appStringResource(Res.string.odo_current, f.km(ride.odometer)),
                 fontSize = 13.sp,
                 color = TextSecondary
             )
@@ -150,7 +150,7 @@ fun OdometerSheet(
                 )
             }
             VaultChip(
-                text = "আনুমানিক",
+                text = appStringResource(Res.string.odo_estimated),
                 onClick = {
                     entry.set("odo", estimate.toInt().toString())
                     touched = false
@@ -160,7 +160,7 @@ fun OdometerSheet(
 
         // LCD photo recognition simulated demo
         VaultButton(
-            text = "ডিসপ্লের ছবি তুলে পড়ুন (ডেমো)",
+            text = appStringResource(Res.string.odo_scan_demo),
             kind = ButtonKind.SECONDARY,
             icon = "fi_camera.svg",
             full = true,
@@ -202,20 +202,20 @@ fun OdometerSheet(
                 }
                 if (!camDone) {
                     Text(
-                        text = if (state.language == AppLanguage.EN) "Scanning… Keep camera steady" else "স্ক্যান হচ্ছে… ক্যামেরা স্থির রাখুন",
+                        text = appStringResource(Res.string.odo_scan_prompt),
                         color = Color.White,
                         fontSize = 14.sp
                     )
                 } else {
                     Text(
-                        text = "${if (state.language == AppLanguage.EN) "Detected: " else "শনাক্ত হয়েছে: "}${f.n((estimate + 3).toLong())} ${if (state.language == AppLanguage.EN) "km" else "কিমি"}",
+                        text = appStringResource(Res.string.odo_detected, f.n((estimate + 3).toLong())),
                         color = Color.White,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         VaultButton(
-                            text = if (state.language == AppLanguage.EN) "Confirm" else "ঠিক আছে",
+                            text = appStringResource(Res.string.odo_confirm),
                             size = ButtonSize.SM,
                             onClick = {
                                 entry.set("odo", (estimate.toInt() + 3).toString())
@@ -224,7 +224,7 @@ fun OdometerSheet(
                             }
                         )
                         VaultButton(
-                            text = if (state.language == AppLanguage.EN) "Type manually" else "নিজে লিখুন",
+                            text = appStringResource(Res.string.odo_manual_entry),
                             kind = ButtonKind.SECONDARY,
                             size = ButtonSize.SM,
                             onClick = { camScanning = false }

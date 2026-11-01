@@ -103,13 +103,13 @@ fun OnboardingScreen(
             if (step > 0) {
                 VaultIconButton(
                     icon = "fi_arrow-left.svg",
-                    label = "পেছনে",
+                    label = appStringResource(Res.string.action_back),
                     onClick = { step -= 1 }
                 )
             } else if (onDismiss != null) {
                 VaultIconButton(
                     icon = "fi_arrow-left.svg",
-                    label = "ফিরে যান",
+                    label = appStringResource(Res.string.action_back),
                     onClick = onDismiss
                 )
             } else {
@@ -132,7 +132,7 @@ fun OnboardingScreen(
                 if (onDismiss != null) {
                     VaultIconButton(
                         icon = "fi_x.svg",
-                        label = "বন্ধ করুন",
+                        label = appStringResource(Res.string.action_close),
                         onClick = onDismiss
                     )
                 }
@@ -140,165 +140,22 @@ fun OnboardingScreen(
         }
 
         when (step) {
-            0 -> {
-                // Step 0: "কোন বাইক চালান?"
-                // EXCEPTION: uses bike brand logos aligning prototype!
-                Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    Text(text = "কোন বাইক চালান?", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                    Text(text = "ব্র্যান্ড বেছে নিন। অ্যাপের রঙ আপনার বাইকের সঙ্গে মিলবে।", fontSize = 15.sp, color = TextSecondary)
-
-                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                        worlds.chunked(3).forEach { row ->
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                row.forEach { w ->
-                                    val isSelected = selectedBrandId == w.id
-                                    val count = BikeCatalogue.forBrand(w.id).size
-                                    Column(
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .clip(RoundedCornerShape(16.dp))
-                                            .background(if (isSelected) BrandTintColor else SurfaceColor)
-                                            .border(1.5.dp, if (isSelected) BrandColor else BorderColor, RoundedCornerShape(16.dp))
-                                            .clickable {
-                                                haptic.perform(HapticKind.TICK)
-                                                selectedBrandId = w.id
-                                                step = 1
-                                            }
-                                            .padding(vertical = 14.dp, horizontal = 6.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                                    ) {
-                                        // Brand vector logo (honoring user exception)
-                                        Image(
-                                            painter = painterResource(w.logo()),
-                                            contentDescription = w.name,
-                                            modifier = Modifier.width(52.dp).height(28.dp),
-                                            contentScale = ContentScale.Fit,
-                                            colorFilter = ColorFilter.tint(if (isSelected) BrandColor else TextPrimary)
-                                        )
-                                        Spacer(Modifier.height(2.dp))
-                                        Text(text = w.name, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                                        Text(text = "${f.d(count.toString())}টি মডেল", fontSize = 12.sp, color = TextSecondary)
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    Spacer(Modifier.weight(1f))
-                    if (onDismiss != null) {
-                        VaultButton(
-                            text = "বাতিল করুন",
-                            kind = ButtonKind.SECONDARY,
-                            onClick = onDismiss,
-                            full = true
-                        )
-                    }
-                    Text(
-                        text = "আপনার সব তথ্য এই ফোনেই থাকবে। কোনো অ্যাকাউন্ট লাগবে না।",
-                        fontSize = 13.sp,
-                        color = TextSecondary,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)
-                    )
-                }
-            }
-            1 -> {
-                // Step 1: "{Brand} এর কোনটি?"
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
-                ) {
-                    Text(text = "${selectedBrand?.name ?: ""} এর কোনটি?", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-
-                    // Search box
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(SurfaceColor2)
-                            .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp))
-                            .padding(horizontal = 14.dp, vertical = 12.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            V3Icon(path = "feather_icon/fi_search.svg", description = null, modifier = Modifier.size(20.dp), tint = TextTertiary)
-                            BasicTextField(
-                                value = searchQuery,
-                                onValueChange = { searchQuery = it },
-                                textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
-                                cursorBrush = SolidColor(BrandColor),
-                                decorationBox = { inner ->
-                                    if (searchQuery.isEmpty()) Text("মডেলের নাম খুঁজুন", fontSize = 15.sp, color = TextTertiary)
-                                    inner()
-                                }
-                            )
-                        }
-                    }
-
-                    // Model list
-                    Column(
-                        modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        filteredModels.forEach { m ->
-                            val isSelected = selectedModelId == m.id
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(16.dp))
-                                    .background(if (isSelected) BrandTintColor else SurfaceColor)
-                                    .border(1.5.dp, if (isSelected) BrandColor else BorderColor, RoundedCornerShape(16.dp))
-                                    .clickable {
-                                        haptic.perform(HapticKind.TICK)
-                                        selectedModelId = m.id
-                                    }
-                                    .padding(8.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(14.dp)
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(width = 104.dp, height = 68.dp)
-                                        .clip(RoundedCornerShape(12.dp))
-                                        .background(Brush.radialGradient(listOf(LocalVaultPalette.current.photoWellStart, LocalVaultPalette.current.photoWellEnd))),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Image(painter = painterResource(m.photo), contentDescription = null, modifier = Modifier.size(60.dp), contentScale = ContentScale.Fit)
-                                }
-                                Text(text = m.name, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary, modifier = Modifier.weight(1f))
-                                if (isSelected) {
-                                    Box(
-                                        modifier = Modifier.size(30.dp).clip(CircleShape).background(BrandColor),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text("✓", color = OnBrandColor, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    TextButton(
-                        onClick = {
-                            selectedModelId = brandModels.firstOrNull()?.id
-                            step = 2
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("আমার মডেল তালিকায় নেই", color = BrandColor, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
-                    }
-
-                    VaultButton(
-                        text = if (selectedModelId != null) "${brandModels.firstOrNull { it.id == selectedModelId }?.name ?: ""} নিয়ে এগিয়ে যান" else "মডেল বেছে নিন",
-                        full = true,
-                        enabled = selectedModelId != null,
-                        onClick = { step = 2 }
-                    )
-                }
-            }
+            0 -> OnboardingBrandStep(
+                selectedBrandId = selectedBrandId,
+                onSelectBrand = { selectedBrandId = it; step = 1 },
+                onDismiss = onDismiss
+            )
+            1 -> OnboardingModelStep(
+                selectedBrand = selectedBrand,
+                brandModels = brandModels,
+                filteredModels = filteredModels,
+                selectedModelId = selectedModelId,
+                searchQuery = searchQuery,
+                onSearch = { searchQuery = it },
+                onSelectModel = { selectedModelId = it },
+                onNext = { step = 2 },
+                onManual = { selectedModelId = brandModels.firstOrNull()?.id; step = 2 }
+            )
             2 -> {
                 var baselineKnown by remember { mutableStateOf(false) }
                 var lastServiceKm by remember { mutableStateOf("") }
@@ -317,7 +174,7 @@ fun OnboardingScreen(
                 val baselineDateValue = runCatching { LocalDate.parse(lastServiceDate) }.getOrNull()
                 val baselineDateValid = !baselineKnown || (baselineDateValue != null && baselineDateValue <= today())
                 Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(text = "এখন ওডোমিটারে কত?", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                    Text(text = appStringResource(Res.string.onboarding_odometer_title), fontSize = 26.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
                     Box(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), contentAlignment = Alignment.Center) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             val text = odoEntry.values["odo"].orEmpty()
@@ -327,7 +184,7 @@ fun OnboardingScreen(
                                 color = if (text.isEmpty()) TextTertiary else TextPrimary
                             )
                             Spacer(Modifier.width(8.dp))
-                            Text(text = if (f.digits == Digits.BN) "কিমি" else "km", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = TextSecondary)
+                            Text(text = appStringResource(Res.string.onboarding_unit_km), fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = TextSecondary)
                         }
                     }
                     Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {

@@ -51,17 +51,17 @@ actual object NativeSystemAuth {
         probeResult?.let { return it }
         val status = availability()
         if (status == SystemAuthStatus.NO_CREDENTIALS) {
-            return SystemAuthResult(SystemAuthStatus.NO_CREDENTIALS, "ফোনে স্ক্রিন লক নেই। ফোনের সেটিংসে PIN বা পাসকোড দিন। আগের তথ্য রাখা আছে।")
+            return SystemAuthResult(SystemAuthStatus.NO_CREDENTIALS)
         }
         if (status == SystemAuthStatus.LOCKED_OUT) {
-            return SystemAuthResult(SystemAuthStatus.LOCKED_OUT, "বায়োমেট্রিক আপাতত বন্ধ। ফোনের PIN বা পাসকোড ব্যবহার করুন।")
+            return SystemAuthResult(SystemAuthStatus.LOCKED_OUT)
         }
 
         val activity = currentMainActivity
         if (activity == null) {
             // If no foreground activity (e.g. testing / probe), check availability
             return if (status == SystemAuthStatus.AVAILABLE) SystemAuthResult(SystemAuthStatus.SUCCESS)
-            else SystemAuthResult(status, "যাচাই সম্পন্ন করা যায়নি।")
+            else SystemAuthResult(status)
         }
 
         return withContext(Dispatchers.Main) {
@@ -82,8 +82,8 @@ actual object NativeSystemAuth {
                         @Suppress("DEPRECATION")
                         builder.setDeviceCredentialAllowed(true)
                     } else {
-                        builder.setNegativeButton("বাতিল করুন", activity.mainExecutor) { _, _ ->
-                            if (continuation.isActive) continuation.resume(SystemAuthResult(SystemAuthStatus.CANCELLED, "যাচাই বাতিল হয়েছে।"))
+                        builder.setNegativeButton(activity.getString(android.R.string.cancel), activity.mainExecutor) { _, _ ->
+                            if (continuation.isActive) continuation.resume(SystemAuthResult(SystemAuthStatus.CANCELLED))
                         }
                     }
 
@@ -103,14 +103,14 @@ actual object NativeSystemAuth {
                                 when (errorCode) {
                                     BiometricPrompt.BIOMETRIC_ERROR_USER_CANCELED,
                                     BiometricPrompt.BIOMETRIC_ERROR_CANCELED ->
-                                        continuation.resume(SystemAuthResult(SystemAuthStatus.CANCELLED, "যাচাই বাতিল হয়েছে।"))
+                                        continuation.resume(SystemAuthResult(SystemAuthStatus.CANCELLED))
                                     BiometricPrompt.BIOMETRIC_ERROR_LOCKOUT,
                                     BiometricPrompt.BIOMETRIC_ERROR_LOCKOUT_PERMANENT ->
-                                        continuation.resume(SystemAuthResult(SystemAuthStatus.LOCKED_OUT, "বায়োমেট্রিক আপাতত বন্ধ। ফোনের PIN বা পাসকোড ব্যবহার করুন।"))
+                                        continuation.resume(SystemAuthResult(SystemAuthStatus.LOCKED_OUT))
                                     BiometricPrompt.BIOMETRIC_ERROR_NO_DEVICE_CREDENTIAL ->
-                                        continuation.resume(SystemAuthResult(SystemAuthStatus.NO_CREDENTIALS, "ফোনে স্ক্রিন লক নেই। ফোনের সেটিংসে PIN বা পাসকোড দিন। আগের তথ্য রাখা আছে।"))
+                                        continuation.resume(SystemAuthResult(SystemAuthStatus.NO_CREDENTIALS))
                                     else ->
-                                        continuation.resume(SystemAuthResult(SystemAuthStatus.FAILED, errString?.toString() ?: "যাচাই ব্যর্থ হয়েছে।"))
+                                        continuation.resume(SystemAuthResult(SystemAuthStatus.FAILED))
                                 }
                             }
                         }

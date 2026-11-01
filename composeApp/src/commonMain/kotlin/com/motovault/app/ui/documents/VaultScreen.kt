@@ -67,10 +67,10 @@ fun VaultScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "কাগজপত্র", fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+            Text(text = appStringResource(Res.string.nav_vault), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
             VaultIconButton(
                 icon = "fi_plus.svg",
-                label = "কাগজ যোগ করুন",
+                label = appStringResource(Res.string.vault_add_document),
                 tone = IconTone.TINT,
                 onClick = onOpenAddDoc
             )
@@ -98,7 +98,7 @@ fun VaultScreen(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Text(text = "পরের নবায়ন", fontSize = 13.sp, color = TextSecondary)
+                Text(text = appStringResource(Res.string.vault_next_renewal), fontSize = 13.sp, color = TextSecondary)
                 Text(text = nextRenewal.title, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -107,7 +107,7 @@ fun VaultScreen(
                 ) {
                     val expDate = runCatching { LocalDate.parse(nextRenewal.expiry) }.getOrNull()
                     Text(
-                        text = "মেয়াদ শেষ: " + if (expDate != null) f.dateFull(expDate) else nextRenewal.expiry,
+                        text = appStringResource(Res.string.vault_expiry_summary, if (expDate != null) f.dateFull(expDate) else nextRenewal.expiry),
                         fontSize = 13.sp,
                         color = TextSecondary
                     )
@@ -127,18 +127,18 @@ fun VaultScreen(
             ) {
                 V3Icon(path = "feather_icon/fi_scan-line.svg", description = null, modifier = Modifier.size(36.dp), tint = TextSecondary)
                 Text(
-                    text = if (sortedDocs.isEmpty()) "প্রথম কাগজটি যোগ করুন। অনুমতি দিলে মেয়াদের আগে জানানো হবে।" else "এই কাগজগুলোর মেয়াদ শেষের তারিখ নেই।",
+                    text = if (sortedDocs.isEmpty()) appStringResource(Res.string.vault_empty_add_first) else appStringResource(Res.string.vault_no_expiry_dates),
                     fontSize = 15.sp,
                     color = TextSecondary,
                     textAlign = TextAlign.Center
                 )
-                VaultButton(text = "কাগজ স্ক্যান করুন", icon = "fi_scan-line.svg", onClick = onOpenAddDoc)
+                VaultButton(text = appStringResource(Res.string.vault_scan_document), icon = "fi_scan-line.svg", onClick = onOpenAddDoc)
             }
         }
 
         // Wallet Stack of All Documents
         if (sortedDocs.isNotEmpty()) {
-            SectionTitle("সব কাগজ")
+            SectionTitle(appStringResource(Res.string.vault_all_documents))
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 sortedDocs.forEach { d ->
                     Column(
@@ -173,7 +173,7 @@ fun VaultScreen(
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 V3Icon(path = "feather_icon/fi_scan-line.svg", description = null, modifier = Modifier.size(24.dp), tint = TextSecondary)
-                                Text("নম্বর ও ছবি লুকানো আছে। খুলতে ট্যাপ করুন।", fontSize = 13.sp, color = TextSecondary)
+                                Text(appStringResource(Res.string.vault_hidden_hint), fontSize = 13.sp, color = TextSecondary)
                             }
                         } else {
                             DocArt(doc = d)
@@ -184,17 +184,17 @@ fun VaultScreen(
         }
 
         VaultSwitch(
-            title = "মেয়াদের আগে জানান",
-            subtitle = "${f.n(state.reminderPolicy.warningDays.toLong())} দিন আগে এবং মেয়াদের দিন। ফোনের অনুমতি প্রয়োজন।",
+            title = appStringResource(Res.string.vault_reminder_title),
+            subtitle = appStringResource(Res.string.vault_reminder_desc, f.n(state.reminderPolicy.warningDays.toLong())),
             checked = state.docReminders,
             onCheckedChange = onToggleDocReminders
         )
         ReminderAccessPanel(rememberReminderAccess(), state)
-        VaultButton("অনুমতি, সময় ও পরে জানান", onClick = onReminderSettings, full = true, kind = ButtonKind.SECONDARY)
+        VaultButton(appStringResource(Res.string.vault_reminder_action), onClick = onReminderSettings, full = true, kind = ButtonKind.SECONDARY)
 
         if (sortedDocs.isNotEmpty()) {
             VaultButton(
-                text = "রাস্তায় দেখানোর মোড",
+                text = appStringResource(Res.string.vault_inspection_mode),
                 kind = ButtonKind.GHOST,
                 full = true,
                 onClick = { onOpenDocView(sortedDocs.first()) }

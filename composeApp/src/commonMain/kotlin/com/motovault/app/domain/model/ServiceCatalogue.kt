@@ -6,36 +6,33 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ServiceCatalogueItem(
     val id: String,
-    val labelBn: String,
-    val labelEn: String,
-    val unitBn: String = "টি",
     val action: String = "replace"
 )
 
 object BangladeshServiceCatalogue {
     val items = listOf(
-        ServiceCatalogueItem("engine_oil", "ইঞ্জিন অয়েল", "Engine oil", "লিটার", "replace"),
-        ServiceCatalogueItem("oil_filter", "অয়েল ফিল্টার", "Oil filter", action = "replace"),
-        ServiceCatalogueItem("air_filter", "এয়ার ফিল্টার", "Air filter", action = "replace"),
-        ServiceCatalogueItem("spark_plug", "স্পার্ক প্লাগ", "Spark plug", action = "replace"),
-        ServiceCatalogueItem("chain_sprocket", "চেইন ও স্প্রকেট", "Chain & sprocket", action = "replace"),
-        ServiceCatalogueItem("brake_pad", "ব্রেক প্যাড / শু", "Brake pad / shoe", action = "replace"),
-        ServiceCatalogueItem("brake_fluid", "ব্রেক ফ্লুইড", "Brake fluid", "মিলি", "replace"),
-        ServiceCatalogueItem("coolant", "কুল্যান্ট", "Coolant", "মিলি", "replace"),
-        ServiceCatalogueItem("clutch_cable", "ক্লাচ কেবল", "Clutch cable", action = "replace"),
-        ServiceCatalogueItem("tyre", "টায়ার", "Tyre", action = "replace"),
-        ServiceCatalogueItem("battery", "ব্যাটারি", "Battery", action = "replace"),
-        ServiceCatalogueItem("chain_lube", "চেইন লুব্রিকেন্ট", "Chain lubrication", "বার", "lubricate"),
-        ServiceCatalogueItem("chain_adjust", "চেইন অ্যাডজাস্ট", "Chain adjustment", "বার", "adjust"),
-        ServiceCatalogueItem("brake_hose", "ব্রেক হোজ", "Brake hose", "টি", "replace"),
-        ServiceCatalogueItem("fork_oil", "ফর্ক অয়েল", "Front fork oil", "লিটার", "replace"),
-        ServiceCatalogueItem("valve_clearance", "ভালভ ক্লিয়ারেন্স", "Valve clearance", "বার", "inspect"),
-        ServiceCatalogueItem("tyre_brake_inspect", "টায়ার ও ব্রেক পরীক্ষা", "Tyre and brake inspection", "বার", "inspect"),
-        ServiceCatalogueItem("first_service", "প্রথম সার্ভিস", "First service", "বার", "inspect"),
-        ServiceCatalogueItem("general_service", "সাধারণ সার্ভিস", "General service", "বার", "service"),
-        ServiceCatalogueItem("inspection", "পরীক্ষা", "Inspection", "বার", "inspect"),
-        ServiceCatalogueItem("cleaning", "পরিষ্কার", "Cleaning", "বার", "clean"),
-        ServiceCatalogueItem("adjustment", "অ্যাডজাস্টমেন্ট", "Adjustment", "বার", "adjust")
+        ServiceCatalogueItem("engine_oil"),
+        ServiceCatalogueItem("oil_filter"),
+        ServiceCatalogueItem("air_filter"),
+        ServiceCatalogueItem("spark_plug"),
+        ServiceCatalogueItem("chain_sprocket"),
+        ServiceCatalogueItem("brake_pad"),
+        ServiceCatalogueItem("brake_fluid"),
+        ServiceCatalogueItem("coolant"),
+        ServiceCatalogueItem("clutch_cable"),
+        ServiceCatalogueItem("tyre"),
+        ServiceCatalogueItem("battery"),
+        ServiceCatalogueItem("chain_lube", "lubricate"),
+        ServiceCatalogueItem("chain_adjust", "adjust"),
+        ServiceCatalogueItem("brake_hose"),
+        ServiceCatalogueItem("fork_oil"),
+        ServiceCatalogueItem("valve_clearance", "inspect"),
+        ServiceCatalogueItem("tyre_brake_inspect", "inspect"),
+        ServiceCatalogueItem("first_service", "inspect"),
+        ServiceCatalogueItem("general_service", "service"),
+        ServiceCatalogueItem("inspection", "inspect"),
+        ServiceCatalogueItem("cleaning", "clean"),
+        ServiceCatalogueItem("adjustment", "adjust")
     )
     fun find(id: String) = items.firstOrNull { it.id == id }
 
@@ -101,14 +98,14 @@ data class ServiceLineItem(
     val customName: String = "",
     val action: String = "replace",
     val quantity: Double = 1.0,
-    val unitBn: String = "টি",
+    val unitBn: String = "",
     val unitPricePoisha: Int? = null,
     val scheduleId: String? = null,
     val resetsScheduleBaseline: Boolean = false,
     val oil: EngineOilMetadata? = null,
     val detail: String? = null
 ) {
-    val displayNameBn: String get() = BangladeshServiceCatalogue.find(catalogueId.orEmpty())?.labelBn ?: customName
+    val displayName: String get() = customName.ifBlank { catalogueId.orEmpty() }
     val lineTotalPoisha: Int? get() {
         val price = unitPricePoisha ?: return null
         if (!quantity.isFinite() || quantity <= 0) return null

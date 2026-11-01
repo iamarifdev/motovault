@@ -20,7 +20,7 @@ internal fun VaultState.saveQuickService(log: RideLog, selectedRuleId: String?):
     linked.forEach { rule ->
         if (confirmed[rule.id]?.baselineCertainty == BaselineCertainty.CONFIRMED) {
             require(log.odometer >= rule.lastServicedOdometerKm && date.toEpochDays() >= rule.lastServicedEpochDays) {
-                "সার্ভিসের কিমি ও তারিখ আগের নিশ্চিত সার্ভিসের পরে দিন।"
+                "service_baseline_invalid"
             }
         }
     }

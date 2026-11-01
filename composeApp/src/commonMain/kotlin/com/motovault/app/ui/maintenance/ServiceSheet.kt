@@ -74,15 +74,15 @@ fun ServiceSheet(
     val selectedRule = state.rules.firstOrNull { it.id == initialItemKey }
     val initialCatalogueKey = selectedRule?.let { BangladeshServiceCatalogue.itemForScheduleName(it.name).id } ?: initialItemKey
     var saveIssue by remember { mutableStateOf<String?>(null) }
-
+    val catalogLabels = CATALOG_ITEMS.associate { it.key to appStringResource(it.label) }; val catalogShorts = CATALOG_ITEMS.associate { it.key to appStringResource(it.shortLabel) }; val baselineOrder = appStringResource(Res.string.service_baseline_order)
     val rows = remember {
         mutableStateListOf<ServiceRowState>().apply {
             if (initialRows != null && initialRows.isNotEmpty()) {
                 initialRows.forEachIndexed { i, p ->
-                    add(ServiceRowState("$i-${p.item}", p.item, catalogItemOf(p.item)?.bn ?: p.item, p.qty))
+                    add(ServiceRowState("$i-${p.item}", p.item, catalogLabels[p.item] ?: p.item, p.qty))
                 }
             } else if (initialCatalogueKey != null) {
-                add(ServiceRowState("0-$initialCatalogueKey", initialCatalogueKey, catalogItemOf(initialCatalogueKey)?.bn ?: initialCatalogueKey, 1.0))
+                add(ServiceRowState("0-$initialCatalogueKey", initialCatalogueKey, catalogLabels[initialCatalogueKey] ?: initialCatalogueKey, 1.0))
             }
         }
     }
@@ -126,15 +126,18 @@ fun ServiceSheet(
     val total = maxOf(0.0, subtotal + labour + misc - discount)
     val unknownPrices = rows.count { parseNum(entry.values["p:${it.uid}"] ?: "") == null }
     val odoVal = parseNum(entry.values["odo"] ?: "") ?: 0.0
+    val serviceAddedMessage = appStringResource(Res.string.service_added, f.money(total))
+    val serviceSaveError = appStringResource(Res.string.service_save_error)
+    val demoServiceText = appStringResource(Res.string.service_demo_text)
 
     val reason = when {
-        rows.isEmpty() -> "কী কী করালেন বেছে নিন"
-        odoVal <= 0 -> "কিমি লিখুন"
+        rows.isEmpty() -> appStringResource(Res.string.service_error_no_rows)
+        odoVal <= 0 -> appStringResource(Res.string.service_error_km)
         else -> null
     }
 
     Sheet(
-        title = "সার্ভিস",
+        title = appStringResource(Res.string.service_title),
         onDismiss = onDismiss,
         detent = SheetDetent.TALL,
         footer = {
@@ -144,7 +147,7 @@ fun ServiceSheet(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "মোট" + if (unknownPrices > 0) " · ${f.d(unknownPrices.toString())}টির দাম জানা নেই" else "",
+                    text = appStringResource(Res.string.service_total) + if (unknownPrices > 0) appStringResource(Res.string.service_unknown_prices, f.d(unknownPrices.toString())) else "",
                     fontSize = 14.sp,
                     color = TextSecondary
                 )
@@ -156,7 +159,7 @@ fun ServiceSheet(
                 )
             }
             VaultButton(
-                text = reason ?: "সার্ভিস সেভ করুন",
+                text = reason ?: appStringResource(Res.string.service_save),
                 onClick = {
                     if (reason != null) {
                         haptic.perform(HapticKind.ERROR)
@@ -174,7 +177,7 @@ fun ServiceSheet(
                         }
                         val newLog = RideLog(
                             title = "Service",
-                            detail = if (rows.size > 1) "${rows[0].name} ও আরও ${f.d((rows.size - 1).toString())}টি" else rows[0].name,
+                            detail = rows.joinToString(", ") { it.name },
                             date = date.toString(),
                             odometer = odoVal,
                             kind = "service",
@@ -193,14 +196,14 @@ fun ServiceSheet(
                         }
                         val updatedWorkshops = if (workshop.isNotBlank()) listOf(workshop.trim()) + state.workshops.filterNot { it == workshop.trim() } else state.workshops
                         val recorded = runCatching { state.saveQuickService(newLog, selectedRule?.id) }.getOrElse {
-                            saveIssue = it.message ?: "সার্ভিসের তথ্য ঠিক করুন।"
+                            saveIssue = if (it.message == "service_baseline_invalid") baselineOrder else it.message ?: serviceSaveError
                             return@VaultButton
                         }
                         val next = recorded.copy(
                             lastItemPrices = updatedPrices,
                             workshops = updatedWorkshops.take(6)
                         )
-                        val toastMsg = "সার্ভিস যোগ হয়েছে · ${f.money(total)}"
+                        val toastMsg = serviceAddedMessage
                         onSave(next, toastMsg) {}
                     }
                 },
@@ -216,7 +219,7 @@ fun ServiceSheet(
                     ) {
                         V3Icon(
                             path = "feather_icon/fi_chevron-down.svg",
-                            description = "লুকান",
+                            description = appStringResource(Res.string.service_hide),
                             modifier = Modifier.size(20.dp),
                             tint = TextTertiary
                         )
@@ -227,16 +230,16 @@ fun ServiceSheet(
         }
     ) {
         // Top action row
-        selectedRule?.let { Text("সময়সূচি: ${it.name}", fontSize = 14.sp, color = TextPrimary) }
+        selectedRule?.let { Text(appStringResource(Res.string.service_schedule_selected, it.name), fontSize = 14.sp, color = TextPrimary) }
         saveIssue?.let { Text(it, color = ErrorColor, fontSize = 14.sp) }
-        Text("মিল থাকা সময়সূচির শেষ সার্ভিস এই কিমি ও তারিখে আপডেট হবে।", fontSize = 13.sp, color = TextSecondary)
+        Text(appStringResource(Res.string.service_schedule_update), fontSize = 13.sp, color = TextSecondary)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             if (lastService != null) {
                 VaultButton(
-                    text = "আগের সার্ভিসের মতো",
+                    text = appStringResource(Res.string.service_like_previous),
                     kind = ButtonKind.SECONDARY,
                     size = ButtonSize.SM,
                     icon = "fi_copy.svg",
@@ -245,7 +248,7 @@ fun ServiceSheet(
                         rows.clear()
                         lastService.serviceLines.forEachIndexed { i, l ->
                             val itemKey = l.catalogueId ?: "custom"
-                            val r = ServiceRowState("$i-$itemKey", itemKey, l.displayNameBn, l.quantity, l.detail)
+                            val r = ServiceRowState("$i-$itemKey", itemKey, catalogLabels[itemKey] ?: l.displayName, l.quantity, l.detail)
                             rows.add(r)
                             l.unitPricePoisha?.let { entry.set("p:${r.uid}", (it / 100).toString()) }
                         }
@@ -254,7 +257,7 @@ fun ServiceSheet(
                 )
             }
             VaultButton(
-                text = "লিখে বা বলে সাজান",
+                text = appStringResource(Res.string.service_type_or_speak),
                 kind = ButtonKind.SECONDARY,
                 size = ButtonSize.SM,
                 icon = "fi_zap.svg",
@@ -262,71 +265,29 @@ fun ServiceSheet(
             )
         }
 
-        // Smart Text / Voice Input
-        AnimatedVisibility(visible = smartOpen) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(SurfaceColor2)
-                    .border(1.dp, BorderColor, RoundedCornerShape(12.dp))
-                    .padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 64.dp)
-                ) {
-                    BasicTextField(
-                        value = smartText,
-                        onValueChange = { smartText = it },
-                        textStyle = TextStyle(fontSize = 14.sp, color = TextPrimary),
-                        cursorBrush = SolidColor(BrandColor),
-                        decorationBox = { inner ->
-                            if (smartText.isEmpty()) {
-                                Text("যেমন: ইঞ্জিন অয়েল ৯০০ টাকা, ফিল্টার ৩০০ টাকা", fontSize = 14.sp, color = TextTertiary)
-                            }
-                            inner()
-                        }
-                    )
+        val smartParsed = remember(smartText) { SmartParse.parseServiceText(smartText) }
+        ServiceSmartInput(
+            open = smartOpen,
+            text = smartText,
+            parsedCount = smartParsed.lines.size,
+            onTextChange = { smartText = it },
+            onAdd = {
+                haptic.perform(HapticKind.SUCCESS)
+                val baseIndex = rows.size
+                smartParsed.lines.forEachIndexed { i, p ->
+                    val r = ServiceRowState("${baseIndex + i}-${p.item}", p.item, catalogLabels[p.item] ?: p.item, p.qty)
+                    rows.add(r)
+                    val pr = p.price ?: state.lastItemPrices[p.item]
+                    if (pr != null) entry.set("p:${r.uid}", pr.toInt().toString())
                 }
-                val parsed = remember(smartText) { SmartParse.parseServiceText(smartText) }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    VaultButton(
-                        text = "ডেমো ভয়েস",
-                        kind = ButtonKind.SECONDARY,
-                        size = ButtonSize.SM,
-                        icon = "fi_mic.svg",
-                        onClick = { smartText = "ইঞ্জিন অয়েল ৯০০ টাকা, অয়েল ফিল্টার ৩০০ টাকা" }
-                    )
-                    VaultButton(
-                        text = "যোগ করুন (${f.d(parsed.lines.size.toString())})",
-                        size = ButtonSize.SM,
-                        enabled = parsed.lines.isNotEmpty(),
-                        onClick = {
-                            haptic.perform(HapticKind.SUCCESS)
-                            val baseIndex = rows.size
-                            parsed.lines.forEachIndexed { i, p ->
-                                val r = ServiceRowState("${baseIndex + i}-${p.item}", p.item, catalogItemOf(p.item)?.bn ?: p.item, p.qty)
-                                rows.add(r)
-                                val pr = p.price ?: state.lastItemPrices[p.item]
-                                if (pr != null) entry.set("p:${r.uid}", pr.toInt().toString())
-                            }
-                            smartOpen = false
-                            smartText = ""
-                        }
-                    )
-                }
-            }
-        }
+                smartOpen = false
+                smartText = ""
+            },
+            onClose = { smartOpen = false; smartText = "" }
+        )
 
         // Service items chips grid
-        Text(text = "কী করালেন", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+        Text(text = appStringResource(Res.string.service_what_done), fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
         Row(
             modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -335,7 +296,7 @@ fun ServiceSheet(
                 val active = rows.any { it.itemKey == item.key }
                 val lastPrice = state.lastItemPrices[item.key]
                 VaultChip(
-                    text = item.short,
+                    text = catalogShorts[item.key] ?: item.key,
                     active = active,
                     hint = lastPrice?.let { f.money(it) },
                     onClick = {
@@ -343,7 +304,7 @@ fun ServiceSheet(
                         if (existingIndex >= 0) {
                             rows.removeAt(existingIndex)
                         } else {
-                            val r = ServiceRowState("${rows.size}-${item.key}", item.key, item.bn, 1.0)
+                            val r = ServiceRowState("${rows.size}-${item.key}", item.key, catalogLabels[item.key] ?: item.key, 1.0)
                             rows.add(r)
                             val p = state.lastItemPrices[item.key]
                             if (p != null) entry.set("p:${r.uid}", p.toInt().toString())
@@ -355,192 +316,24 @@ fun ServiceSheet(
             }
         }
 
-        // Added lines list
-        if (rows.isNotEmpty()) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                rows.forEach { r ->
-                    val isPriceActive = entry.activeField == "p:${r.uid}" && keysOpen
-                    val pVal = parseNum(entry.values["p:${r.uid}"] ?: "")
+        ServiceLinesEditor(
+            rows = rows,
+            entry = entry,
+            f = f,
+            onPrice = { entry.setActive(it); keysOpen = true },
+            onRemove = { rows.remove(it) }
+        )
 
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(SurfaceColor2)
-                            .border(1.dp, BorderColor, RoundedCornerShape(14.dp))
-                            .padding(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(text = r.name, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary, modifier = Modifier.weight(1f))
-                            // Stepper
-                            Row(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(999.dp))
-                                    .background(SurfaceColor)
-                                    .border(1.dp, BorderColor, RoundedCornerShape(999.dp)),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Box(
-                                    modifier = Modifier.size(34.dp).clickable {
-                                        if (r.qty > 1) {
-                                            haptic.perform(HapticKind.TICK)
-                                            r.qty -= 1
-                                        }
-                                    },
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text("-", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                                }
-                                Text(
-                                    text = f.d(r.qty.toInt().toString()),
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier.padding(horizontal = 4.dp)
-                                )
-                                Box(
-                                    modifier = Modifier.size(34.dp).clickable {
-                                        if (r.qty < 20) {
-                                            haptic.perform(HapticKind.TICK)
-                                            r.qty += 1
-                                        }
-                                    },
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text("+", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                                }
-                            }
-                            Spacer(Modifier.width(8.dp))
-                            // Price button
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(if (isPriceActive) BrandTintColor else SurfaceColor)
-                                    .border(2.dp, if (isPriceActive) BrandColor else BorderColor, RoundedCornerShape(10.dp))
-                                    .clickable {
-                                        entry.setActive("p:${r.uid}")
-                                        keysOpen = true
-                                    }
-                                    .padding(horizontal = 12.dp, vertical = 8.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = if (pVal == null) "দাম?" else f.money(pVal * r.qty),
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = if (pVal == null) BrandColor else TextPrimary
-                                )
-                            }
-                            Spacer(Modifier.width(4.dp))
-                            VaultIconButton(
-                                icon = "fi_trash-2.svg",
-                                label = "বাদ দিন",
-                                onClick = { rows.remove(r) }
-                            )
-                        }
+        ServiceDateOdometerSection(
+            dateKey = dateKey,
+            onDate = { dateKey = it },
+            odoVal = odoVal,
+            odoActive = entry.activeField == "odo" && keysOpen,
+            onOdo = { entry.setActive("odo"); keysOpen = true },
+            f = f
+        )
 
-                        // Viscosity chips if engine oil
-                        if (r.itemKey == "engine_oil") {
-                            Row(
-                                modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                VISCOSITY_GRADES.forEach { visc ->
-                                    VaultChip(
-                                        text = visc,
-                                        active = r.detail == visc,
-                                        onClick = { r.detail = if (r.detail == visc) null else visc }
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Date selection
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            VaultChip(text = "আজ", active = dateKey == "today", onClick = { dateKey = "today" })
-            VaultChip(text = "গতকাল", active = dateKey == "yesterday", onClick = { dateKey = "yesterday" })
-            VaultChip(text = "অন্য দিন", active = dateKey == "custom", onClick = { dateKey = "custom" })
-        }
-
-        // Odometer row
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(if (entry.activeField == "odo" && keysOpen) BrandTintColor else SurfaceColor)
-                .border(2.dp, if (entry.activeField == "odo" && keysOpen) BrandColor else BorderColor, RoundedCornerShape(16.dp))
-                .clickable {
-                    entry.setActive("odo")
-                    keysOpen = true
-                }
-                .padding(horizontal = 14.dp, vertical = 12.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    V3Icon(
-                    path = "feather_icon/fi_gauge.svg",
-                        description = null,
-                        modifier = Modifier.size(20.dp),
-                        tint = BrandColor
-                    )
-                    Column {
-                        Text(text = "ওডোমিটার", fontSize = 12.sp, color = TextSecondary)
-                        Text(text = "${f.n(odoVal.toLong())} ${if (f.digits == Digits.BN) "কিমি" else "km"}", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                    }
-                }
-            }
-        }
-
-        // Workshop input
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            state.workshops.take(2).forEach { w ->
-                VaultChip(text = w, active = workshop == w, onClick = { workshop = if (workshop == w) "" else w })
-            }
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(SurfaceColor2)
-                .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp))
-                .padding(horizontal = 14.dp, vertical = 14.dp)
-        ) {
-            BasicTextField(
-                value = workshop,
-                onValueChange = { workshop = it },
-                textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
-                cursorBrush = SolidColor(BrandColor),
-                decorationBox = { inner ->
-                    if (workshop.isEmpty()) {
-                        Text("ওয়ার্কশপ বা মেকানিক (ঐচ্ছিক)", fontSize = 15.sp, color = TextTertiary)
-                    }
-                    inner()
-                }
-            )
-        }
+        ServiceWorkshopField(workshop, state.workshops, { workshop = it })
 
         // More toggle for Labour, Misc, Discount
         TextButton(
@@ -548,7 +341,7 @@ fun ServiceSheet(
             contentPadding = PaddingValues(0.dp)
         ) {
             Text(
-                text = if (moreOpen) "শ্রম ও অন্যান্য লুকান" else "শ্রম, অন্যান্য খরচ বা ছাড় আছে?",
+                text = if (moreOpen) appStringResource(Res.string.service_hide_more) else appStringResource(Res.string.service_more_expenses),
                 color = BrandColor,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 15.sp
@@ -560,7 +353,7 @@ fun ServiceSheet(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                listOf("labour" to "শ্রম", "misc" to "অন্যান্য", "discount" to "ছাড়").forEach { (k, label) ->
+                listOf("labour" to appStringResource(Res.string.service_labour), "misc" to appStringResource(Res.string.service_misc), "discount" to appStringResource(Res.string.service_discount)).forEach { (k, label) ->
                     val isActive = entry.activeField == k && keysOpen
                     val v = parseNum(entry.values[k] ?: "")
                     Column(

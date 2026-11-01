@@ -1,5 +1,10 @@
 package com.motovault.app.ui
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+import motovault.composeapp.generated.resources.*
+
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -109,5 +114,5 @@ actual fun DocumentCamera(modifier: Modifier, captureRequest: Int, onQuality: (C
         }
     }
     if (permitted) AndroidView(factory = { preview }, modifier = modifier)
-    else Box(modifier, contentAlignment = Alignment.Center) { Text(if (denied) "ক্যামেরার অনুমতি নেই। আগে রাখা কপি ব্যবহার করুন অথবা সেটিংসে অনুমতি দিন।" else "কাগজ স্ক্যান করতে ক্যামেরার অনুমতি দিন।", color = androidx.compose.ui.graphics.Color.White) }
+    else Box(modifier, contentAlignment = Alignment.Center) { Text(if (denied) appStringResource(Res.string.camera_denied) else appStringResource(Res.string.camera_scan_prompt), fontSize = 12.sp, color = Color.White, textAlign = TextAlign.Center) }
 }

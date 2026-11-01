@@ -48,17 +48,13 @@ fun formatLakh(value: Double, dec: Int = 0): String {
     return "$whole.$frac"
 }
 
-val MONTHS_BN = listOf(
-    "জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন",
-    "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"
-)
-
-val MONTHS_EN = listOf(
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-)
-
-class Fmt(val digits: Digits) {
+class Fmt(
+    val digits: Digits,
+    val language: AppLanguage = AppLanguage.BN,
+    val kmUnit: String = "",
+    val litreUnit: String = "",
+    val dayUnit: String = ""
+) {
     fun d(s: String): String = if (digits == Digits.BN) toBn(s) else toAscii(s)
 
     fun n(x: Long): String = d(formatLakh(x))
@@ -79,29 +75,26 @@ class Fmt(val digits: Digits) {
 
     fun money(x: Double): String = "৳" + d(formatLakh(kotlin.math.round(x).toLong()))
 
-    fun km(x: Double): String = d(formatLakh(kotlin.math.round(x).toLong())) + if (digits == Digits.BN) " কিমি" else " km"
+    fun km(x: Double): String = d(formatLakh(kotlin.math.round(x).toLong())) + " " + kmUnit
 
-    fun liters(x: Double): String = d(formatLakh(x, 2)) + if (digits == Digits.BN) " লিটার" else " L"
+    fun liters(x: Double): String = d(formatLakh(x, 2)) + " " + litreUnit
 
-    fun days(x: Int): String = d(x.toString()) + if (digits == Digits.BN) " দিন" else " days"
+    fun days(x: Int): String = d(x.toString()) + " " + dayUnit
 
     fun date(d: LocalDate): String {
-        val months = if (digits == Digits.BN) MONTHS_BN else MONTHS_EN
-        return "${d(d.dayOfMonth.toString())} ${months[d.monthNumber - 1]}"
+        return "${d(d.dayOfMonth.toString())} ${localizedMonthName(language, d.monthNumber - 1)}"
     }
 
     fun dateFull(d: LocalDate): String {
-        val months = if (digits == Digits.BN) MONTHS_BN else MONTHS_EN
-        return "${d(d.dayOfMonth.toString())} ${months[d.monthNumber - 1]} ${d(d.year.toString())}"
+        return "${d(d.dayOfMonth.toString())} ${localizedMonthName(language, d.monthNumber - 1)} ${d(d.year.toString())}"
     }
 
     fun month(d: LocalDate): String {
-        val months = if (digits == Digits.BN) MONTHS_BN else MONTHS_EN
-        return "${months[d.monthNumber - 1]} ${d(d.year.toString())}"
+        return "${localizedMonthName(language, d.monthNumber - 1)} ${d(d.year.toString())}"
     }
 }
 
-val LocalFmt = staticCompositionLocalOf { Fmt(Digits.BN) }
+val LocalFmt = staticCompositionLocalOf { Fmt(Digits.BN, AppLanguage.BN, "", "", "") }
 
 val currentFmt: Fmt
     @Composable get() = LocalFmt.current

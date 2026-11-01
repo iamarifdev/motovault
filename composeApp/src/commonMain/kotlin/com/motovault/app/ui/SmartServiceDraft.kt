@@ -47,7 +47,7 @@ object SmartServiceDraftParser {
                 ?.takeIf { it.isFinite() && it > 0 && it <= 10000 } ?: 1.0
             suggestions += SmartServiceSuggestion(source, ServiceLineItem(
                 catalogueId = item.id, action = item.action, quantity = quantity,
-                unitBn = item.unitBn, unitPricePoisha = amount,
+                unitBn = "", unitPricePoisha = amount,
                 oil = if (item.id == "engine_oil") EngineOilMetadata("mineral", purchaseBasis = "bottle") else null
             ))
         }

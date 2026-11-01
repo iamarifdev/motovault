@@ -1,5 +1,7 @@
 package com.motovault.app.ui
 
+import motovault.composeapp.generated.resources.*
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
@@ -70,10 +72,10 @@ fun ExpiryChip(
     val days = doc.daysRemaining
 
     val (icon, text, color) = when {
-        days == null -> Triple("fi_file-text.svg", if (doc.expiry.isBlank()) "মেয়াদ নেই" else "তারিখ যাচাই করুন", palette.text2)
-        days < 0 -> Triple("fi_alert-triangle.svg", "${f.days(-days)} আগে শেষ", palette.err)
-        days <= warningDays -> Triple("fi_clock.svg", "${f.days(days)} বাকি", palette.warn)
-        else -> Triple("fi_check-circle.svg", "মেয়াদ আছে", palette.ok)
+        days == null -> Triple("fi_file-text.svg", appStringResource(if (doc.expiry.isBlank()) Res.string.vault_doc_no_expiry else Res.string.vault_doc_date_invalid), palette.text2)
+        days < 0 -> Triple("fi_alert-triangle.svg", appStringResource(Res.string.vault_doc_expired_days, f.days(-days)), palette.err)
+        days <= warningDays -> Triple("fi_clock.svg", appStringResource(Res.string.vault_doc_days_left, f.days(days)), palette.warn)
+        else -> Triple("fi_check-circle.svg", appStringResource(Res.string.vault_doc_valid), palette.ok)
     }
 
     Row(
@@ -135,13 +137,13 @@ fun DocArt(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = docNameBn(kind),
+                    text = docDisplayName(kind),
                     fontSize = if (large) 16.sp else 13.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
                 Text(
-                    text = "নমুনা · ডেমো",
+                    text = appStringResource(Res.string.doc_art_sample),
                     fontSize = 11.sp,
                     color = Color.White.copy(alpha = 0.85f)
                 )
@@ -157,9 +159,9 @@ fun DocArt(
 
             val expiryDate = runCatching { LocalDate.parse(doc.expiry) }.getOrNull()
             val fields = listOf(
-                "নম্বর" to doc.number,
-                "নাম" to doc.holder,
-                "মেয়াদ" to (expiryDate?.let(f::dateFull) ?: doc.expiry.ifBlank { "মেয়াদ নেই" })
+                appStringResource(Res.string.doc_art_number) to doc.number,
+                appStringResource(Res.string.doc_art_name) to doc.holder,
+                appStringResource(Res.string.doc_art_expiry) to (expiryDate?.let(f::dateFull) ?: doc.expiry.ifBlank { appStringResource(Res.string.vault_doc_no_expiry) })
             )
             Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
                 fields.forEach { (label, value) ->

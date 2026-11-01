@@ -139,7 +139,7 @@ class ItemizedServiceTest {
         val event = state.logServiceVisit(listOf(ServiceLineItem("inspection", action = "inspect", scheduleId = null)))
         assertEquals(before, event.rules)
         assertTrue(event.logs.single().scheduleIds.isEmpty())
-        assertEquals("পরীক্ষা", event.logs.single().title)
+        assertEquals("inspection", event.logs.single().title) // stable catalogue id; the UI resolves the label
         assertTrue(event.deleteLog(event.logs.single()).logs.isEmpty())
     }
 

@@ -1,5 +1,8 @@
 package com.motovault.app.ui
 
+import androidx.compose.runtime.Composable
+import motovault.composeapp.generated.resources.*
+
 import com.motovault.app.domain.model.ComponentRule
 import com.motovault.app.domain.model.BaselineCertainty
 import kotlinx.datetime.LocalDate
@@ -68,28 +71,30 @@ object WearCalculator {
      * Resolves the overdue bug: says how far overdue a part is, or how much is left.
      * The old app printed "0 km / 30 দিন বাকি" under "সময় পেরিয়েছে".
      */
+    @Composable
     fun describeWear(w: Wear, f: Fmt): String {
-        if (w.status == WearStatus.UNKNOWN) return "আগের সার্ভিস নিশ্চিত নয়"
+        if (w.status == WearStatus.UNKNOWN) return appStringResource(Res.string.wear_unknown)
         if (w.status == WearStatus.OVERDUE) {
             val overdueKm = if (w.remainingKm != null && w.remainingKm < 0) -w.remainingKm else 0.0
             val overdueDays = if (w.remainingDays != null && w.remainingDays < 0) -w.remainingDays else 0
             return if (w.limit == "km" || (overdueKm > 0 && overdueDays == 0)) {
-                "${f.km(overdueKm)} পেরিয়েছে"
+                appStringResource(Res.string.wear_overdue_km, f.km(overdueKm))
             } else {
-                "${f.days(overdueDays)} পেরিয়েছে"
+                appStringResource(Res.string.wear_overdue_days, f.days(overdueDays))
             }
         }
         val parts = mutableListOf<String>()
         if (w.remainingKm != null) parts.add(f.km(w.remainingKm.coerceAtLeast(0.0)))
         if (w.remainingDays != null) parts.add(f.days(w.remainingDays.coerceAtLeast(0)))
-        return parts.joinToString(" বা ") + " বাকি"
+        return appStringResource(Res.string.wear_remaining, parts.joinToString(appStringResource(Res.string.wear_or)))
     }
 
+    @Composable
     fun statusLabel(s: WearStatus): String = when (s) {
-        WearStatus.OVERDUE -> "সার্ভিস দরকার"
-        WearStatus.SOON -> "শিগগির"
-        WearStatus.OK -> "সময় বাকি"
-        WearStatus.UNKNOWN -> "তথ্য নিশ্চিত করুন"
+        WearStatus.OVERDUE -> appStringResource(Res.string.wear_status_overdue)
+        WearStatus.SOON -> appStringResource(Res.string.wear_status_soon)
+        WearStatus.OK -> appStringResource(Res.string.wear_status_ok)
+        WearStatus.UNKNOWN -> appStringResource(Res.string.wear_status_unknown)
     }
 
     fun economySeries(logs: List<RideLog>): List<Double> {

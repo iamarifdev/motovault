@@ -83,7 +83,7 @@ class ExportServicePassportUseCase {
                 passportNumber(if (log.serviceLines.isNotEmpty()) (log.serviceTotalPoisha?.div(100.0) ?: 0.0) else log.cost),
                 log.workshop, log.notes, log.componentId,
                 items = log.serviceLines.map { line -> PassportServiceItem(
-                    line.catalogueId, line.displayNameBn, line.action, passportNumber(line.quantity), line.unitBn,
+                    line.catalogueId, line.displayName, line.action, passportNumber(line.quantity), line.unitBn,
                     line.unitPricePoisha, line.lineTotalPoisha, line.oil
                 ) },
                 labourPoisha = log.serviceLabourPoisha, miscellaneousPoisha = log.serviceMiscellaneousPoisha,

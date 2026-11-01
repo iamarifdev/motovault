@@ -147,9 +147,9 @@ data class VaultState(
             val beforeDiscount = lines.sumOf { it.lineTotalPoisha!!.toLong() } + labourPoisha + miscellaneousPoisha
             require(discountPoisha.toLong() <= beforeDiscount) { "Discount cannot be greater than the service amount." }
         }
-        val title = lines.first().displayNameBn.let { first -> if (lines.size == 1) first else "$first +${lines.size - 1}" }
+        val title = lines.first().displayName.let { first -> if (lines.size == 1) first else "$first +${lines.size - 1}" }
         val log = RideLog(
-            title = title, detail = "পরিষেবার রেকর্ড", date = date.toString(), odometer = odometer,
+            title = title, detail = "", date = date.toString(), odometer = odometer,
             kind = "service", cost = total?.div(100.0) ?: 0.0, workshop = workshop.trim(), notes = notes.trim(),
             componentId = scheduleIds.firstOrNull(), serviceLines = lines, serviceLabourPoisha = labourPoisha,
             serviceMiscellaneousPoisha = miscellaneousPoisha, serviceDiscountPoisha = discountPoisha,
