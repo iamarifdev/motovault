@@ -152,6 +152,32 @@ class RoadmapIntegrityTest(unittest.TestCase):
         for path, content in first.items():
             self.assertEqual((self.root / path).read_text(), content)
 
+    def test_phase_architecture_is_validated_and_visible_in_plan_and_show(self):
+        self.data["phases"][1]["architecture_application"] = ["Keep business rules independent of UI."]
+        roadmap.validate(self.data, self.root)
+        self.assertIn("Keep business rules independent of UI.", roadmap.render_plan(self.data))
+        result = self.cli("show", "P01-01")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout)["architecture_application"],
+                         ["Keep business rules independent of UI."])
+        self.data["phases"][1]["architecture_application"] = [""]
+        with self.assertRaisesRegex(ValueError, "architecture application"):
+            roadmap.validate(self.data, self.root)
+
+    def test_future_phase_requires_architecture_application(self):
+        self.data["phases"].append(phase("P18", [task("P18-01")]))
+        with self.assertRaisesRegex(ValueError, "P18: architecture application is required"):
+            roadmap.validate(self.data, self.root)
+        self.data["phases"][-1]["architecture_application"] = ["Define feature boundaries."]
+        roadmap.validate(self.data, self.root)
+
+    def test_lettered_phase_requires_architecture_application(self):
+        self.data["phases"].append(phase("P03A", [task("P03A-01")]))
+        with self.assertRaisesRegex(ValueError, "P03A: architecture application is required"):
+            roadmap.validate(self.data, self.root)
+        self.data["phases"][-1]["architecture_application"] = ["Protect existing vault records."]
+        roadmap.validate(self.data, self.root)
+
     def cli(self, *args):
         (self.root / "tools").mkdir(exist_ok=True)
         shutil.copyfile(MODULE, self.root / "tools/roadmap.py")

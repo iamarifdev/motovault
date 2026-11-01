@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-27T00:26:10+00:00",
+  "updated_at": "2026-11-01T03:50:10+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -41,7 +41,8 @@
         "P05",
         "P06",
         "P07",
-        "P08"
+        "P08",
+        "P03A"
       ]
     },
     {
@@ -62,7 +63,8 @@
         "P11",
         "P12",
         "P13",
-        "P16"
+        "P16",
+        "P03A"
       ]
     },
     {
@@ -1797,6 +1799,1002 @@
             }
           ]
         }
+      ],
+      "architecture_application": [
+        "Preserve completed P03 evidence; P03A-04 separately moves backup and restore behind application contracts, with encrypted archive, asset and recovery compatibility fixtures.",
+        "Localize backup and recovery presentation; retain one coordinated, recoverable restore and native file/crypto adapters."
+      ]
+    },
+    {
+      "id": "P03A",
+      "title": "Production architecture and model-independent delivery foundation",
+      "priority": "P0",
+      "group": "foundation",
+      "outcome": "Remaining features use explicit boundaries, shared AI rules, localization and verified data-safe migrations.",
+      "rationale": "The existing application has useful shared controls and a durable coordinator but mixes UI, domain and infrastructure ownership.",
+      "depends_on": [
+        "P03-05"
+      ],
+      "design": "Preserve the v3 design contract; new states are prototyped before native implementation.",
+      "prototype_paths": [
+        "design/app-ui-v3/src/components/Sheet.tsx"
+      ],
+      "existing_paths": [
+        "docs/roadmap/ARCHITECTURE-CONTRACT.md",
+        "docs/ARCHITECTURE-PROPOSAL.md",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultSession.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt"
+      ],
+      "proposed_paths": [
+        "docs/engineering/architecture.md",
+        "docs/engineering/conventions.md",
+        "docs/engineering/ai-workflow.md",
+        "tools/quality/"
+      ],
+      "data": "Preserve current Room/JSON/archive formats and one authoritative writer. Any persisted-format change requires compatibility fixtures and recoverable migration.",
+      "architecture_application": [
+        "Deliver the shared model-independent workflow, core contracts, localized resource foundation, pilot and quality gates incrementally; verify P03 backup modernization separately.",
+        "Keep the target module map and executable gate status honest: planned work becomes a requirement only when its dependency and evidence have been satisfied."
+      ],
+      "exit_criteria": [
+        "All six P03A tasks meet their own acceptance and evidence gates, including the pilot, P03 compatibility and real quality checks.",
+        "Core and expanded release gates include P03A without altering completed historical P03 status or its evidence."
+      ],
+      "risks": "Lifecycle changes, localization APIs and serialized-model moves can change runtime behavior or lose data. Pilot and preserve recovery evidence before broad migration.",
+      "tasks": [
+        {
+          "id": "P03A-01",
+          "title": "Establish shared architecture conventions and AI workflow",
+          "size": 3,
+          "depends_on": [],
+          "acceptance": [
+            "Publish one canonical architecture, SRP, constants, localization and verification workflow with thin assistant entry points.",
+            "Record phase-specific ownership, transitional exceptions and evidence requirements without claiming planned tooling exists."
+          ],
+          "verification": [
+            "Review Codex, Claude and Gemini entry points for consistent references and execute the documented tracker workflow."
+          ],
+          "required_evidence": [
+            "plan",
+            "review"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-27T10:40:21+00:00",
+          "completed_at": "2026-10-27T10:41:22+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-10-27T10:29:50+00:00",
+              "text": "Architecture-aligned-P03-to-P16-added-P03A-foundation-and-release-gates"
+            },
+            {
+              "at": "2026-10-27T10:39:16+00:00",
+              "text": "Renamed-P17-to-P03A-and-gated-P04-to-P07-on-complete-foundation"
+            },
+            {
+              "at": "2026-10-27T10:39:32+00:00",
+              "text": "Recorded-P03A-as-required-completed-foundation-before-P04-to-P07"
+            },
+            {
+              "at": "2026-10-27T10:40:21+00:00",
+              "text": "Define-shared-contract-and-verify-assistant-entrypoints"
+            },
+            {
+              "at": "2026-10-27T10:41:22+00:00",
+              "text": "Shared-workflow-and-entrypoints-reviewed"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "plan",
+              "reference": "docs/roadmap/evidence/P03A-01-workflow-review.md",
+              "summary": "Shared-workflow-and-entrypoints-reviewed",
+              "at": "2026-10-27T10:41:22+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P03A-01-workflow-review.md",
+              "summary": "Shared-workflow-and-entrypoints-reviewed",
+              "at": "2026-10-27T10:41:22+00:00",
+              "revision": "860c3ec"
+            }
+          ]
+        },
+        {
+          "id": "P03A-02",
+          "title": "Extract initial domain and application boundaries around the vault coordinator",
+          "size": 8,
+          "depends_on": [
+            "P03A-01"
+          ],
+          "acceptance": [
+            "Introduce explicit contracts and a composition root; migrated domain/application code has no UI or concrete storage/native imports.",
+            "Preserve one authoritative writer, revision conflicts, durable Undo and compatibility with current persisted data."
+          ],
+          "verification": [
+            "Run boundary, coordinator, migration and recovery regression checks and Android/iOS build checks."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-27T10:41:37+00:00",
+          "completed_at": "2026-10-27T11:15:37+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-10-27T10:41:37+00:00",
+              "text": "Extract-vault-boundaries-preserving-durable-writes"
+            },
+            {
+              "at": "2026-10-27T10:47:38+00:00",
+              "text": "Coordinator-boundary-with-focused-platform-regressions-and-documented-ios-backup-gap"
+            },
+            {
+              "at": "2026-10-27T10:57:58+00:00",
+              "text": "Reopened-after-finding-direct-backup-restore-database-write"
+            },
+            {
+              "at": "2026-10-27T11:15:37+00:00",
+              "text": "Coordinated-restore-and-stale-write-tests-pass-backup-collision-remains-P03A-04"
+            },
+            {
+              "at": "2026-10-27T11:42:55+00:00",
+              "text": "Ordinary-write-cancellation-publishes-durable-result-android-and-ios-tests-pass"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03A-02-coordinator-boundary.md",
+              "summary": "Coordinator-boundary-with-focused-platform-regressions-and-documented-ios-backup-gap",
+              "at": "2026-10-27T10:47:38+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P03A-02-coordinator-boundary.md",
+              "summary": "Coordinator-boundary-with-focused-platform-regressions-and-documented-ios-backup-gap",
+              "at": "2026-10-27T10:47:38+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03A-02-coordinator-boundary.md",
+              "summary": "Coordinated-restore-and-stale-write-tests-pass-backup-collision-remains-P03A-04",
+              "at": "2026-10-27T11:15:37+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P03A-02-coordinator-boundary.md",
+              "summary": "Coordinated-restore-and-stale-write-tests-pass-backup-collision-remains-P03A-04",
+              "at": "2026-10-27T11:15:37+00:00",
+              "revision": "860c3ec"
+            }
+          ]
+        },
+        {
+          "id": "P03A-03",
+          "title": "Migrate fuel entry as the first vertical feature slice",
+          "size": 8,
+          "depends_on": [
+            "P03A-02",
+            "P03A-06"
+          ],
+          "acceptance": [
+            "Move fuel presentation/state, business workflow and data interaction behind the agreed boundaries, named policy and localized resources.",
+            "Preserve fuel save/edit, economy calculation, conflicts, draft behavior, failure and revision-bound Undo.",
+            "Preserve existing fuel and money semantics and serialized values; defer the broader P06-01 money and distance contract to that phase."
+          ],
+          "verification": [
+            "Run targeted business/state and storage tests plus Android and iOS runtime checks in Bangla and English."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "android_runtime",
+            "ios_runtime"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-27T11:59:16+00:00",
+          "completed_at": "2026-11-01T03:50:05+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-10-27T10:30:22+00:00",
+              "text": "Fuel-pilot-precedes-remaining-feature-implementation-and-P06-01-remains-independent"
+            },
+            {
+              "at": "2026-10-27T10:30:58+00:00",
+              "text": "Gate-capture-parsing-and-workshop-model-implementation-on-foundation-and-pilot"
+            },
+            {
+              "at": "2026-10-27T11:59:16+00:00",
+              "text": "Trace-active-fuel-create-and-edit-paths-before-extracting-feature-workflow"
+            },
+            {
+              "at": "2026-10-27T11:59:30+00:00",
+              "text": "Active-history-has-no-fuel-edit-entry-legacy-edit-dialog-has-no-callers"
+            },
+            {
+              "at": "2026-10-27T12:01:09+00:00",
+              "text": "Fuel-calculation-rules-extracted-android-and-ios-tests-pass-save-and-edit-boundaries-open"
+            },
+            {
+              "at": "2026-10-27T12:03:58+00:00",
+              "text": "Fuel-request-adapter-aligns-derived-economy-with-reload-android-and-ios-tests-pass-runtime-open"
+            },
+            {
+              "at": "2026-10-27T12:07:34+00:00",
+              "text": "Fuel-validation-rules-and-prototype-limit-state-tested-native-runtime-and-edit-open"
+            },
+            {
+              "at": "2026-10-27T12:10:30+00:00",
+              "text": "Prototype-fuel-edit-and-undo-observed-timeline-rule-tested-native-edit-open"
+            },
+            {
+              "at": "2026-10-27T12:12:58+00:00",
+              "text": "Fuel-edit-adapter-preserves-legacy-metadata-and-validates-order-ui-and-durable-undo-open"
+            },
+            {
+              "at": "2026-10-27T17:36:09+00:00",
+              "text": "Synthetic-android-edit-and-undo-ui-passed-durable-and-ios-runtime-open"
+            },
+            {
+              "at": "2026-10-27T17:42:16+00:00",
+              "text": "Android-room-edit-reopen-stale-revision-and-undo-pass-seed-guard-tested"
+            },
+            {
+              "at": "2026-10-27T17:47:39+00:00",
+              "text": "Ios-synthetic-bangla-edit-undo-and-reopen-passed-english-and-boundaries-open"
+            },
+            {
+              "at": "2026-10-28T07:16:28+00:00",
+              "text": "Fuel-presentation-moved-to-feature-package-android-edit-undo-probe-and-platform-compiles-pass-boundary-ios-ui-open"
+            },
+            {
+              "at": "2026-10-28T07:18:03+00:00",
+              "text": "Fuel-screen-uses-feature-input-and-legacy-adapter-focused-tests-and-platform-compiles-pass-native-runtime-open"
+            },
+            {
+              "at": "2026-10-28T07:20:05+00:00",
+              "text": "Fuel-input-adapter-android-synthetic-edit-undo-and-separate-room-probe-pass-ios-ui-and-end-to-end-open"
+            },
+            {
+              "at": "2026-10-28T07:22:15+00:00",
+              "text": "Android-synthetic-fuel-ui-edit-and-undo-verified-through-real-coordinator-and-fresh-room-connections"
+            },
+            {
+              "at": "2026-10-28T13:35:52+00:00",
+              "text": "Ios27-synthetic-bangla-fuel-edit-undo-and-relaunch-pass-after-feature-input-mapping-english-and-failure-open"
+            },
+            {
+              "at": "2026-10-28T13:41:48+00:00",
+              "text": "Fuel-create-failure-keeps-draft-and-localized-error-android-synthetic-writer-failure-passes-33-checks-ios-open"
+            },
+            {
+              "at": "2026-10-28T13:46:36+00:00",
+              "text": "Fuel-application-workflow-centralizes-revision-and-save-outcomes-focused-tests-and-33-android-probe-checks-pass-ios-ui-open"
+            },
+            {
+              "at": "2026-10-28T13:50:25+00:00",
+              "text": "Fuel-draft-state-owner-extracted-focused-tests-both-platform-compiles-and-33-android-probe-checks-pass-ios-ui-open"
+            },
+            {
+              "at": "2026-10-28T13:54:44+00:00",
+              "text": "Ios27-synthetic-bangla-edit-undo-and-relaunch-pass-after-workflow-and-draft-extraction-english-failure-open"
+            },
+            {
+              "at": "2026-10-31T13:43:06+00:00",
+              "text": "Verify English fuel edit, undo and relaunch using the isolated iOS simulator privacy probe"
+            },
+            {
+              "at": "2026-10-31T13:53:30+00:00",
+              "text": "Isolated iOS simulator English fuel edit, undo and unique-record relaunch pass; legacy Records localization and failure paths remain open"
+            },
+            {
+              "at": "2026-10-31T13:54:36+00:00",
+              "text": "Localize fuel Records presentation and navigation with language-specific resources, preserving stored data and independent digit preference"
+            },
+            {
+              "at": "2026-11-01T03:50:05+00:00",
+              "text": "Fuel slice boundaries, workflow, draft, failure and Undo verified on Android emulator and iOS simulator in Bangla and English; no physical device used"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03A-03-fuel-progress.md",
+              "summary": "Active-history-has-no-fuel-edit-entry-legacy-edit-dialog-has-no-callers",
+              "at": "2026-10-27T11:59:30+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P03A-03-fuel-progress.md",
+              "summary": "Synthetic-android-edit-and-undo-ui-passed-durable-and-ios-runtime-open",
+              "at": "2026-10-27T17:36:09+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P03A-03-fuel-progress.md",
+              "summary": "Ios-synthetic-bangla-edit-undo-and-reopen-passed-english-and-boundaries-open",
+              "at": "2026-10-27T17:47:39+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P03A-03-fuel-progress.md",
+              "summary": "Isolated iOS simulator English fuel edit, undo and unique-record relaunch pass; legacy Records localization and failure paths remain open",
+              "at": "2026-10-31T13:53:30+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03A-03-verification.md",
+              "summary": "Fuel slice boundaries, workflow, draft, failure and Undo verified on Android emulator and iOS simulator in Bangla and English; no physical device used",
+              "at": "2026-11-01T03:50:05+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P03A-03-verification.md",
+              "summary": "Fuel slice boundaries, workflow, draft, failure and Undo verified on Android emulator and iOS simulator in Bangla and English; no physical device used",
+              "at": "2026-11-01T03:50:05+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P03A-current-android-synthetic-fuel-edit-footer.png",
+              "summary": "Fuel slice boundaries, workflow, draft, failure and Undo verified on Android emulator and iOS simulator in Bangla and English; no physical device used",
+              "at": "2026-11-01T03:50:05+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P03A-03-ios-fuel-english-reopened.png",
+              "summary": "Fuel slice boundaries, workflow, draft, failure and Undo verified on Android emulator and iOS simulator in Bangla and English; no physical device used",
+              "at": "2026-11-01T03:50:05+00:00",
+              "revision": "860c3ec"
+            }
+          ]
+        },
+        {
+          "id": "P03A-04",
+          "title": "Bring P03 backup and restore into the target boundaries",
+          "size": 8,
+          "depends_on": [
+            "P03A-02",
+            "P03A-06"
+          ],
+          "acceptance": [
+            "Separate backup/restore workflow from UI, database and crypto/file implementations; ensure archives created by the current application can be restored correctly.",
+            "Preserve staged validation, original assets, device-bound keys and recoverable durable replacement; localize backup/restore messages."
+          ],
+          "verification": [
+            "Verify current-format archive round trips and interrupted/failed restore fixtures plus Android and iOS backup/restore runtime behavior. Historical released-archive compatibility is not required before the first release."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "android_runtime",
+            "ios_runtime"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-27T17:51:43+00:00",
+          "completed_at": "2026-11-01T03:50:08+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-10-27T10:47:39+00:00",
+              "text": "Unfiltered-ios-tests-report-backup-crypto-bridge-uninitialized-in-native-test-runner"
+            },
+            {
+              "at": "2026-10-27T10:57:58+00:00",
+              "text": "Backup-restore-direct-database-write-bypasses-session-and-requires-safe-recovery"
+            },
+            {
+              "at": "2026-10-27T11:15:37+00:00",
+              "text": "Different-content-asset-ID-collisions-are-refused-and-require-safe-restoration-design"
+            },
+            {
+              "at": "2026-10-27T17:51:43+00:00",
+              "text": "Trace-archive-boundaries-and-preserve-compatibility-before-refactoring"
+            },
+            {
+              "at": "2026-10-27T17:52:25+00:00",
+              "text": "Backup-asset-read-cancellation-propagates-android-unit-test-passes-restore-boundary-open"
+            },
+            {
+              "at": "2026-10-27T17:53:59+00:00",
+              "text": "Duplicate-zip-entry-rejected-android-and-ios-targeted-tests-pass-recovery-still-open"
+            },
+            {
+              "at": "2026-10-27T17:55:55+00:00",
+              "text": "Backup-digest-injected-android-backup-and-staging-tests-pass-ios-compiles-ui-model-boundary-open"
+            },
+            {
+              "at": "2026-10-27T17:57:00+00:00",
+              "text": "Restore-preview-current-vault-summary-extracted-android-tests-pass-ios-compiles"
+            },
+            {
+              "at": "2026-10-27T17:58:41+00:00",
+              "text": "Backup-snapshot-extracted-inventory-mismatch-rejected-android-tests-and-ios-compilation-pass"
+            },
+            {
+              "at": "2026-10-27T18:00:05+00:00",
+              "text": "Backup-progress-typed-and-localized-resource-and-android-tests-pass-native-ui-evidence-open"
+            },
+            {
+              "at": "2026-10-27T18:00:58+00:00",
+              "text": "Duplicate-manifest-asset-ids-and-paths-rejected-android-tests-pass-ios-compiles"
+            },
+            {
+              "at": "2026-10-27T18:01:56+00:00",
+              "text": "Backup-selected-errors-localized-and-cancellation-preserved-ui-language-refresh-and-runtime-open"
+            },
+            {
+              "at": "2026-10-27T18:02:54+00:00",
+              "text": "Backup-errors-use-typed-state-and-localized-picker-failures-both-platforms-compile-runtime-open"
+            },
+            {
+              "at": "2026-10-27T18:03:54+00:00",
+              "text": "Synthetic-staging-cancellation-cleans-owned-file-and-preserves-existing-file-native-crash-recovery-open"
+            },
+            {
+              "at": "2026-10-27T18:05:14+00:00",
+              "text": "Asset-id-collision-remapping-synthetic-unit-tests-pass-native-recovery-and-reference-coverage-open"
+            },
+            {
+              "at": "2026-10-27T18:07:51+00:00",
+              "text": "Android-synthetic-collision-remap-encrypted-assets-room-reopen-passes-28-probe-checks-ios-open"
+            },
+            {
+              "at": "2026-10-27T18:09:16+00:00",
+              "text": "Restore-preserves-replaced-assets-after-undo-expiry-android-ios-coordinator-tests-pass-encrypted-recovery-open"
+            },
+            {
+              "at": "2026-10-27T18:11:08+00:00",
+              "text": "Android-coordinated-collision-restore-followup-save-and-room-reopen-pass-durable-recovery-open"
+            },
+            {
+              "at": "2026-10-28T06:15:04+00:00",
+              "text": "Schema6-recovery-transaction-prototype-compiles-partial-probe-pass-migration-rerun-blocked-by-approval-review-limit"
+            },
+            {
+              "at": "2026-10-28T06:16:56+00:00",
+              "text": "Android-synthetic-schema4-to6-and-recovery-transaction-reopen-pass-privacy-and-integration-open"
+            },
+            {
+              "at": "2026-10-28T06:19:46+00:00",
+              "text": "Recovery-prototype-uses-authenticated-encrypted-blob-android-native-tests-pass-production-wiring-open"
+            },
+            {
+              "at": "2026-10-28T06:22:49+00:00",
+              "text": "Coordinated-restore-writes-verified-encrypted-snapshot-and-protects-recovery-assets-runtime-gates-open"
+            },
+            {
+              "at": "2026-10-28T06:24:28+00:00",
+              "text": "Recovery-snapshot-service-extracted-android-native-reference-and-reopen-checks-pass-ios-runtime-open"
+            },
+            {
+              "at": "2026-10-28T06:25:48+00:00",
+              "text": "Android-synthetic-recovery-verification-and-key-loss-fail-closed-probe-pass"
+            },
+            {
+              "at": "2026-10-28T06:27:49+00:00",
+              "text": "Recovery-write-verifies-existing-snapshots-before-key-creation-android-key-loss-probe-passes"
+            },
+            {
+              "at": "2026-10-28T06:29:00+00:00",
+              "text": "Android-synthetic-coordinator-recovery-store-collision-and-reopen-integration-passes"
+            },
+            {
+              "at": "2026-10-28T06:35:00+00:00",
+              "text": "Ios-signed-isolated-simulator-recovery-snapshot-reopen-and-tamper-checks-pass-full-restore-open"
+            },
+            {
+              "at": "2026-10-28T06:36:54+00:00",
+              "text": "Coordinated-snapshot-recovery-backend-and-missing-original-refusal-pass-android-probe-ui-open"
+            },
+            {
+              "at": "2026-10-28T06:40:10+00:00",
+              "text": "Recovery-prototype-list-empty-confirm-failure-success-reviewed-loading-stale-native-open"
+            },
+            {
+              "at": "2026-10-28T06:42:04+00:00",
+              "text": "Recovery-prototype-checking-cancel-stale-key-unavailable-states-observed-english-native-open"
+            },
+            {
+              "at": "2026-10-28T06:44:18+00:00",
+              "text": "Authenticated-recovery-summary-catalog-added-android-native-and-shared-timestamp-tests-pass-native-ui-open"
+            },
+            {
+              "at": "2026-10-28T06:47:50+00:00",
+              "text": "Native-recovery-sheet-and-revision-confirmation-compile-both-platforms-runtime-and-accessibility-open"
+            },
+            {
+              "at": "2026-10-28T06:52:30+00:00",
+              "text": "Android-synthetic-recovery-ui-success-conflict-and-busy-back-pass-30-probe-checks"
+            },
+            {
+              "at": "2026-10-28T06:55:56+00:00",
+              "text": "Android-synthetic-recovery-screen-through-coordinator-encrypted-Room-reopen-passes-31-checks-assets-and-iOS-UI-open"
+            },
+            {
+              "at": "2026-10-28T07:01:09+00:00",
+              "text": "Backup-create-overview-password-and-counts-localized-resource-parity-and-both-platform-compiles-pass-runtime-open"
+            },
+            {
+              "at": "2026-10-28T07:02:37+00:00",
+              "text": "Restore-selection-preview-warning-and-confirmation-localized-resource-parity-and-platform-compiles-pass-runtime-open"
+            },
+            {
+              "at": "2026-10-28T07:03:37+00:00",
+              "text": "Backup-share-no-longer-claims-saved-localized-native-actions-compile-iOS-save-detection-and-runtime-open"
+            },
+            {
+              "at": "2026-10-28T07:05:01+00:00",
+              "text": "Native-backup-errors-typed-and-visible-share-failure-localized-platform-compiles-pass-failure-runtime-open"
+            },
+            {
+              "at": "2026-10-28T07:06:12+00:00",
+              "text": "Restore-confirmation-bound-to-reviewed-file-password-revision-focused-android-test-and-ios-compile-pass-native-race-test-open"
+            },
+            {
+              "at": "2026-10-28T07:07:10+00:00",
+              "text": "Backup-busy-state-disables-dismissal-tabs-and-inputs-both-platform-compilation-pass-native-UI-regression-open"
+            },
+            {
+              "at": "2026-10-28T07:08:23+00:00",
+              "text": "Restore-bounds-untrusted-KDF-iterations-17-android-backup-tests-and-ios-compile-pass-historical-compatibility-open"
+            },
+            {
+              "at": "2026-10-28T07:09:39+00:00",
+              "text": "Restore-preview-derived-from-authenticated-payload-tampered-summary-android-test-passes-ios-compiles-native-UI-open"
+            },
+            {
+              "at": "2026-10-28T07:13:18+00:00",
+              "text": "Android-synthetic-backup-create-restore-entry-English-Bangla-ui-pass-32-probe-checks-picker-and-ios-open"
+            },
+            {
+              "at": "2026-10-28T14:00:03+00:00",
+              "text": "Backup-create-preview-injected-contract-and-adapter-android-tests-ios-compiles-and-33-probe-checks-pass-ui-integration-open"
+            },
+            {
+              "at": "2026-10-28T14:01:08+00:00",
+              "text": "Backup-screen-binds-rendered-state-to-matching-revision-platform-compiles-and-resource-parity-pass-ui-race-test-open"
+            },
+            {
+              "at": "2026-10-28T14:01:41+00:00",
+              "text": "Backup-adapter-synthetic-asset-reader-and-cancellation-tests-pass-native-ui-flow-remains-open"
+            },
+            {
+              "at": "2026-10-28T14:05:03+00:00",
+              "text": "Backup-archive-work-moved-off-caller-thread-progress-context-and-cancellation-android-tests-pass-ios-runtime-open"
+            },
+            {
+              "at": "2026-10-28T20:27:08+00:00",
+              "text": "Android-synthetic-backup-create-button-visible-but-accessibility-activation-test-fails-runtime-flow-open"
+            },
+            {
+              "at": "2026-10-28T20:27:30+00:00",
+              "text": "Android-standard-isolated-probe-passes-33-checks-focused-backup-create-UI-remains-open"
+            },
+            {
+              "at": "2026-10-28T20:39:53+00:00",
+              "text": "Ios27-isolated-native-backup-adapter-create-preview-wrong-password-pass-full-restore-and-legacy-model-boundary-open"
+            },
+            {
+              "at": "2026-10-28T20:49:19+00:00",
+              "text": "Begin-frozen-synthetic-archive-compatibility-fixtures-before-backup-model-extraction"
+            },
+            {
+              "at": "2026-10-28T20:54:39+00:00",
+              "text": "Backup-document-model-extracted-frozen-synthetic-payload-tests-android-33-ios-19-pass-three-ui-imports-remain"
+            },
+            {
+              "at": "2026-10-28T20:59:58+00:00",
+              "text": "Backup-preferences-extracted-compatibility-tests-and-android-33-ios-19-synthetic-probes-pass-two-ui-imports-remain"
+            },
+            {
+              "at": "2026-10-28T21:04:29+00:00",
+              "text": "Begin-ride-and-log-archive-model-extraction-with-compatibility-and-restore-verification"
+            },
+            {
+              "at": "2026-10-28T21:09:42+00:00",
+              "text": "Ride-and-log-archive-models-extracted-zero-domain-ui-import-exceptions-synthetic-android-and-ios-probes-pass-historical-and-full-ios-restore-open"
+            },
+            {
+              "at": "2026-10-28T21:11:43+00:00",
+              "text": "Extend-isolated-ios-simulator-probe-to-exercise-synthetic-staged-restore-and-room-reopen"
+            },
+            {
+              "at": "2026-10-28T21:16:34+00:00",
+              "text": "Ios27-iphone18-pro-max-synthetic-backup-staged-collision-ride-log-room-reopen-pass-20-ui-screen-observed-full-coordinated-restore-open"
+            },
+            {
+              "at": "2026-10-28T21:22:03+00:00",
+              "text": "Begin-isolated-synthetic-physical-motorola-android16-backup-restore-probe"
+            },
+            {
+              "at": "2026-10-28T21:24:07+00:00",
+              "text": "Physical-motorola-edge-50-fusion-android16-isolated-synthetic-probe-passes-33-checks-ui-creation-and-ios-device-open"
+            },
+            {
+              "at": "2026-10-28T21:28:12+00:00",
+              "text": "Owner-confirmed-pre-release-no-deployed-owner-data-or-historical-archive-compatibility-required-current-format-and-platform-verification-retained"
+            },
+            {
+              "at": "2026-10-28T21:29:50+00:00",
+              "text": "Continue-current-format-ui-backup-and-coordinated-ios-restore-verification"
+            },
+            {
+              "at": "2026-10-28T21:37:01+00:00",
+              "text": "Ios-synthetic-failed-and-successful-coordinated-restore-recovery-pass-20-android-ui-accessibility-creation-remains-open"
+            },
+            {
+              "at": "2026-10-28T21:38:48+00:00",
+              "text": "Investigate-synthetic-android-scroll-accessibility-tree-and-current-format-ui-roundtrip"
+            },
+            {
+              "at": "2026-10-29T09:59:08+00:00",
+              "text": "Refreshed-accessibility-containers-android-emulator-and-motorola-synthetic-creation-pass-34-picker-save-open"
+            },
+            {
+              "at": "2026-10-29T10:09:51+00:00",
+              "text": "Owner-screenshot-shows-picker-SAVE-test-updated-build-passes-rerun-interrupted-save-unverified"
+            },
+            {
+              "at": "2026-10-31T13:07:43+00:00",
+              "text": "Android emulator synthetic backup creation and system picker save confirmation passed; UI restore remains open"
+            },
+            {
+              "at": "2026-10-31T13:08:54+00:00",
+              "text": "Android emulator 34 synthetic checks pass; unfiltered iOS tests have 13 backup bridge initialization failures"
+            },
+            {
+              "at": "2026-10-31T13:19:17+00:00",
+              "text": "Real shared Swift crypto bridge enables all 251 iOS simulator tests; Android tests and iOS app build pass; UI restore remains open"
+            },
+            {
+              "at": "2026-10-31T13:20:12+00:00",
+              "text": "Add isolated Android UI backup and restore round trip through the system picker, coordinated writer, encrypted recovery snapshot, and Room reopen"
+            },
+            {
+              "at": "2026-10-31T13:32:09+00:00",
+              "text": "Android emulator asset-free UI backup and system-picker restore pass through coordinated Room writer and encrypted recovery; iOS UI and asset coverage remain open"
+            },
+            {
+              "at": "2026-10-31T13:32:54+00:00",
+              "text": "Exercise document-containing UI restore with isolated encrypted files and a collision, preserving existing originals and recovery snapshots"
+            },
+            {
+              "at": "2026-10-31T13:39:03+00:00",
+              "text": "Android simulator document archive UI restore preserves colliding originals and encrypted recovery; rollback tests pass both platforms; toast reliability and iOS UI remain open"
+            },
+            {
+              "at": "2026-11-01T03:50:08+00:00",
+              "text": "Backup and restore workflows separated behind application/domain contracts; UI-driven Android archive save and restore plus iOS native archive/recovery probes passed on simulators; no physical device used"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03A-04-backup-progress.md",
+              "summary": "Backup-asset-read-cancellation-propagates-android-unit-test-passes-restore-boundary-open",
+              "at": "2026-10-27T17:52:25+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P03A-04-backup-progress.md",
+              "summary": "Android emulator synthetic backup creation and system picker save confirmation passed; UI restore remains open",
+              "at": "2026-10-31T13:07:43+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P03A-04-backup-progress.md",
+              "summary": "Real shared Swift crypto bridge enables all 251 iOS simulator tests; Android tests and iOS app build pass; UI restore remains open",
+              "at": "2026-10-31T13:19:17+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P03A-04-backup-progress.md",
+              "summary": "Android emulator asset-free UI backup and system-picker restore pass through coordinated Room writer and encrypted recovery; iOS UI and asset coverage remain open",
+              "at": "2026-10-31T13:32:09+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P03A-04-backup-progress.md",
+              "summary": "Android simulator document archive UI restore preserves colliding originals and encrypted recovery; rollback tests pass both platforms; toast reliability and iOS UI remain open",
+              "at": "2026-10-31T13:39:03+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03A-04-verification.md",
+              "summary": "Backup and restore workflows separated behind application/domain contracts; UI-driven Android archive save and restore plus iOS native archive/recovery probes passed on simulators; no physical device used",
+              "at": "2026-11-01T03:50:08+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P03A-04-verification.md",
+              "summary": "Backup and restore workflows separated behind application/domain contracts; UI-driven Android archive save and restore plus iOS native archive/recovery probes passed on simulators; no physical device used",
+              "at": "2026-11-01T03:50:08+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P03A-current-android-synthetic-backup-created.png",
+              "summary": "Backup and restore workflows separated behind application/domain contracts; UI-driven Android archive save and restore plus iOS native archive/recovery probes passed on simulators; no physical device used",
+              "at": "2026-11-01T03:50:08+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P03A-04-ios-native-probe-current.txt",
+              "summary": "Backup and restore workflows separated behind application/domain contracts; UI-driven Android archive save and restore plus iOS native archive/recovery probes passed on simulators; no physical device used",
+              "at": "2026-11-01T03:50:08+00:00",
+              "revision": "860c3ec"
+            }
+          ]
+        },
+        {
+          "id": "P03A-05",
+          "title": "Add executable architecture, constants and localization quality gates",
+          "size": 5,
+          "depends_on": [
+            "P03A-02",
+            "P03A-06"
+          ],
+          "acceptance": [
+            "Add reproducible checks for dependency direction, cycles, scoped literal/resource rules and translation keys/placeholders, with a ratcheted legacy baseline.",
+            "Document commands, approved exceptions and CI integration without blocking on legacy debt outside changed scope."
+          ],
+          "verification": [
+            "Demonstrate positive and negative fixtures for each check and run the documented checks in the repository."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-27T17:47:57+00:00",
+          "completed_at": "2026-11-01T03:50:10+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-10-27T17:47:57+00:00",
+              "text": "Implement-executable-architecture-and-localization-gates-incrementally"
+            },
+            {
+              "at": "2026-10-27T17:48:20+00:00",
+              "text": "Initial-import-inventory-and-positive-negative-fixtures-pass-backup-has-eleven-existing-imports-full-gate-open"
+            },
+            {
+              "at": "2026-10-27T17:49:01+00:00",
+              "text": "Import-ratchet-rejects-new-and-resolved-exceptions-fixtures-pass-other-gates-remain-open"
+            },
+            {
+              "at": "2026-10-27T17:49:36+00:00",
+              "text": "Qualified-reference-check-added-comments-and-literals-masked-template-expression-and-other-gates-open"
+            },
+            {
+              "at": "2026-10-27T17:50:45+00:00",
+              "text": "Configured-gradle-cross-project-cycle-check-and-negative-fixtures-pass-package-cycles-open"
+            },
+            {
+              "at": "2026-10-27T17:51:25+00:00",
+              "text": "Translation-key-placeholder-and-plural-negative-fixtures-pass-native-resource-coverage-remains-limited"
+            },
+            {
+              "at": "2026-10-28T06:56:42+00:00",
+              "text": "Dependency-ratchet-inspects-nested-string-template-code-fixtures-pass-scoped-literal-and-CI-gates-open"
+            },
+            {
+              "at": "2026-10-28T06:57:38+00:00",
+              "text": "Portable-GitHub-workflow-added-local-checks-pass-remote-run-and-Gradle-cycle-integration-open"
+            },
+            {
+              "at": "2026-10-28T06:58:57+00:00",
+              "text": "Shared-UI-direct-literal-inventory-and-fixtures-added-223-occurrences-baseline-review-and-enforcement-open"
+            },
+            {
+              "at": "2026-10-28T06:59:43+00:00",
+              "text": "Direct-UI-literal-inventory-compared-with-HEAD-no-new-occurrences-ten-removed-owner-baseline-still-open"
+            },
+            {
+              "at": "2026-10-28T13:43:26+00:00",
+              "text": "Fuel-ui-direct-literal-pilot-enforced-with-empty-baseline-and-positive-negative-fixtures-broader-gates-open"
+            },
+            {
+              "at": "2026-10-31T13:39:41+00:00",
+              "text": "Add portable package cycle checks for migrated domain and application code and fail closed when their source directories are missing"
+            },
+            {
+              "at": "2026-10-31T13:41:58+00:00",
+              "text": "Shared domain and application package-cycle and fuel numeric-policy gates pass with fixtures; broader literal baseline and CI execution remain open"
+            },
+            {
+              "at": "2026-11-01T03:50:10+00:00",
+              "text": "Dependency, package-cycle, scoped literal, numeric-policy and localization gates enforced with reviewed baselines, fixtures, documentation and CI; all 46 tool tests and roadmap check passed"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03A-05-quality-gates-progress.md",
+              "summary": "Shared domain and application package-cycle and fuel numeric-policy gates pass with fixtures; broader literal baseline and CI execution remain open",
+              "at": "2026-10-31T13:41:58+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P03A-05-quality-gates-progress.md",
+              "summary": "Shared domain and application package-cycle and fuel numeric-policy gates pass with fixtures; broader literal baseline and CI execution remain open",
+              "at": "2026-10-31T13:41:58+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03A-05-verification.md",
+              "summary": "Dependency, package-cycle, scoped literal, numeric-policy and localization gates enforced with reviewed baselines, fixtures, documentation and CI; all 46 tool tests and roadmap check passed",
+              "at": "2026-11-01T03:50:10+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P03A-05-verification.md",
+              "summary": "Dependency, package-cycle, scoped literal, numeric-policy and localization gates enforced with reviewed baselines, fixtures, documentation and CI; all 46 tool tests and roadmap check passed",
+              "at": "2026-11-01T03:50:10+00:00",
+              "revision": "860c3ec"
+            }
+          ]
+        },
+        {
+          "id": "P03A-06",
+          "title": "Establish shared localization and named-policy foundation",
+          "size": 5,
+          "depends_on": [
+            "P03A-01"
+          ],
+          "acceptance": [
+            "Choose the existing product default and implement resource-backed Bangla/English strings, plurals, named values and locale-aware formatting for the pilot.",
+            "Preserve persisted language preference, Bangla input/digits and canonical numeric values; cover native integration text at its platform boundary."
+          ],
+          "verification": [
+            "Test translation keys/placeholders, fallback and language switching; verify representative output on Android and iOS."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "android_runtime",
+            "ios_runtime"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-10-27T10:41:38+00:00",
+          "completed_at": "2026-10-27T11:58:57+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-10-27T10:41:38+00:00",
+              "text": "Implement-localization-foundation-preserving-current-preferences"
+            },
+            {
+              "at": "2026-10-27T10:55:23+00:00",
+              "text": "Android-probe-title-switch-and-persistence-observed-ios-and-complete-locale-coverage-open"
+            },
+            {
+              "at": "2026-10-27T10:59:26+00:00",
+              "text": "Isolated-ios-simulator-shows-English-fuel-title-after-restart-remaining-locale-coverage-open"
+            },
+            {
+              "at": "2026-10-27T11:02:53+00:00",
+              "text": "Resource-lookup-recomposition-narrowed-and-legacy-fuel-defaults-named-current-runtime-retest-pending"
+            },
+            {
+              "at": "2026-10-27T11:20:59+00:00",
+              "text": "Android-English-fuel-form-and-Bangla-digits-observed-native-reminders-and-ios-recheck-open"
+            },
+            {
+              "at": "2026-10-27T11:21:42+00:00",
+              "text": "English-fuel-form-observed-on-isolated-ios-simulator-native-text-and-fallback-still-open"
+            },
+            {
+              "at": "2026-10-27T11:24:26+00:00",
+              "text": "Fuel-decimal-input-display-preserved-unit-tests-pass-runtime-recheck-open"
+            },
+            {
+              "at": "2026-10-27T11:36:09+00:00",
+              "text": "Android-native-notification-language-and-digit-probe-passed-ios-runtime-and-legacy-month-resources-open"
+            },
+            {
+              "at": "2026-10-27T11:39:12+00:00",
+              "text": "Android-channel-and-platform-month-localization-tested-ios-native-probe-pending"
+            },
+            {
+              "at": "2026-10-27T11:40:50+00:00",
+              "text": "Isolated-ios-reminder-resource-assertions-passed-later-synthetic-key-provision-failed"
+            },
+            {
+              "at": "2026-10-27T11:45:19+00:00",
+              "text": "Android-compose-plural-and-unsupported-locale-fallback-probe-passed-ios-probe-pending"
+            },
+            {
+              "at": "2026-10-27T11:46:49+00:00",
+              "text": "Ios-simulator-plural-and-fallback-assertions-passed-later-keychain-probe-failed"
+            },
+            {
+              "at": "2026-10-27T11:49:10+00:00",
+              "text": "Android-history-plural-count-observed-ios-visual-and-fuel-filter-check-open"
+            },
+            {
+              "at": "2026-10-27T11:51:01+00:00",
+              "text": "Ios-synthetic-history-count-observed-bangla-english-and-fuel-filter-visual-checks-open"
+            },
+            {
+              "at": "2026-10-27T11:52:42+00:00",
+              "text": "Isolated-ios-english-fuel-filter-count-observed-with-bangla-digits"
+            },
+            {
+              "at": "2026-10-27T11:55:53+00:00",
+              "text": "Storage-failures-typed-and-localized-unit-tests-pass-runtime-failure-state-open"
+            },
+            {
+              "at": "2026-10-27T11:58:53+00:00",
+              "text": "Resource-parity-formatting-fallback-and-switch-checks-passed-android-and-ios-runtime-observed"
+            },
+            {
+              "at": "2026-10-27T11:58:57+00:00",
+              "text": "Scoped-localization-foundation-verified-pilot-and-backup-follow-up-remain-in-P03A-03-and-P03A-04"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P03A-06-localization-progress.md",
+              "summary": "Android-probe-title-switch-and-persistence-observed-ios-and-complete-locale-coverage-open",
+              "at": "2026-10-27T10:55:23+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P03A-06-localization-progress.md",
+              "summary": "Android-probe-title-switch-and-persistence-observed-ios-and-complete-locale-coverage-open",
+              "at": "2026-10-27T10:55:23+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P03A-06-localization-progress.md",
+              "summary": "Isolated-ios-simulator-shows-English-fuel-title-after-restart-remaining-locale-coverage-open",
+              "at": "2026-10-27T10:59:26+00:00",
+              "revision": "860c3ec"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P03A-06-localization-progress.md",
+              "summary": "Resource-parity-formatting-fallback-and-switch-checks-passed-android-and-ios-runtime-observed",
+              "at": "2026-10-27T11:58:53+00:00",
+              "revision": "860c3ec"
+            }
+          ]
+        }
       ]
     },
     {
@@ -1807,7 +2805,10 @@
       "outcome": "A locally relevant bike setup leads to accurate, explainable owner-confirmed maintenance tasks.",
       "rationale": "Daily commuters and used-bike owners need the right schedule and an honest starting baseline.",
       "depends_on": [
-        "P01-05"
+        "P01-05",
+        "P03A-03",
+        "P03A-04",
+        "P03A-05"
       ],
       "design": "Extend the three-input onboarding with progressive detail only when needed. Keep native brand logos; put schedule provenance and edit actions inside gauge/service sheets.",
       "prototype_paths": [
@@ -1863,14 +2864,18 @@
           "title": "Model distinct maintenance actions and source-backed schedules",
           "size": 5,
           "depends_on": [
-            "P04-01"
+            "P04-01",
+            "P03A-02",
+            "P03A-03"
           ],
           "acceptance": [
             "Separate inspection, cleaning, lubrication, adjustment and replacement.",
-            "Service resets affect selected actions only; preserve custom rules and historical logs during migration."
+            "Service resets affect selected actions only; preserve custom rules and historical logs during migration.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts."
           ],
           "verification": [
-            "Test running-in, whichever-limit-first, unsupported model, rule edits and mixed-action service visits."
+            "Test running-in, whichever-limit-first, unsupported model, rule edits and mixed-action service visits.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract."
           ],
           "required_evidence": [
             "implementation",
@@ -1889,14 +2894,21 @@
           "title": "Add unknown-history and used-bike starting states",
           "size": 3,
           "depends_on": [
-            "P04-02"
+            "P04-02",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Let owners choose known last service or unknown baseline without faking a service record.",
-            "Suggest an initial inspection checklist; keep unknown state until the owner records a real action."
+            "Suggest an initial inspection checklist; keep unknown state until the owner records a real action.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Check fresh and migrated users, odometer bounds, skipped setup and returning to complete a baseline."
+            "Check fresh and migrated users, odometer bounds, skipped setup and returning to complete a baseline.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -1930,14 +2942,21 @@
           "size": 3,
           "depends_on": [
             "P04-02",
-            "P04-03"
+            "P04-03",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Show source/manual or owner-defined label, next due basis and editable intervals in the details sheet.",
-            "Keep the fast service flow and support recording several actual actions in one visit."
+            "Keep the fast service flow and support recording several actual actions in one visit.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Compare against v3 service chips, Home urgency order, large text and both digit styles."
+            "Compare against v3 service chips, Home urgency order, large text and both digit styles.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -1981,6 +3000,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Maintenance owns schedule rules, provenance and unknown-history policy in domain/application; garage/onboarding and maintenance state owners render reusable v3 UI.",
+        "Use source-backed named intervals and units, resource-backed labels and old-schedule migration fixtures."
       ]
     },
     {
@@ -1992,7 +3015,10 @@
       "rationale": "Document storage is already present; guided action closes the practical ownership loop.",
       "depends_on": [
         "P01-05",
-        "P02-05"
+        "P02-05",
+        "P03A-03",
+        "P03A-04",
+        "P03A-05"
       ],
       "design": "Vault document detail gains Renew, official verification and renewal history. Reuse DocAdd review, date chips, receipt attachment and a return-to-document flow.",
       "prototype_paths": [
@@ -2047,14 +3073,18 @@
           "title": "Implement renewal events, fee links and original preservation",
           "size": 5,
           "depends_on": [
-            "P05-01"
+            "P05-01",
+            "P03A-02",
+            "P03A-03"
           ],
           "acceptance": [
             "Save previous/new expiry, payment receipt, actual fee and document revision as one reviewed event.",
-            "A failed save or Undo cannot leave a fee, file or reminder inconsistent with the document."
+            "A failed save or Undo cannot leave a fee, file or reminder inconsistent with the document.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts."
           ],
           "verification": [
-            "Test old document import, missing date, duplicate renewal, cancellation, asset recovery and backup round-trip."
+            "Test old document import, missing date, duplicate renewal, cancellation, asset recovery and backup round-trip.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract."
           ],
           "required_evidence": [
             "implementation",
@@ -2073,14 +3103,21 @@
           "title": "Build renewal checklist and deliberate official-verification actions",
           "size": 3,
           "depends_on": [
-            "P05-02"
+            "P05-02",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Show checklist progress, source date and return to the exact document.",
-            "Use the native browser/share boundary deliberately; require owner action before uploading a certificate."
+            "Use the native browser/share boundary deliberately; require owner action before uploading a certificate.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Exercise offline/unavailable links, dark/large-text layouts, privacy lock and screen-reader navigation."
+            "Exercise offline/unavailable links, dark/large-text layouts, privacy lock and screen-reader navigation.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -2137,6 +3174,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Documents owns renewal events and checklist state; official-link launch and reminders use native ports; ledger fee operations use application contracts without feature UI dependencies.",
+        "Preserve document originals and localized renewal/notification text through saves, Undo and recovery."
       ]
     },
     {
@@ -2148,7 +3189,10 @@
       "rationale": "Extends the existing 30-day total into practical decisions for cost-conscious owners.",
       "depends_on": [
         "P00-04",
-        "P00-05"
+        "P00-05",
+        "P03A-03",
+        "P03A-04",
+        "P03A-05"
       ],
       "design": "History retains its summary and expandable timeline. Add period/category chips and a cost-details sheet; keep fuel entry taka-first and use the v3 keypad.",
       "prototype_paths": [
@@ -2203,14 +3247,18 @@
           "title": "Implement expenses, budgets and pure cost calculations",
           "size": 5,
           "depends_on": [
-            "P06-01"
+            "P06-01",
+            "P03A-02",
+            "P03A-03"
           ],
           "acceptance": [
             "Support fuel/service/renewal/parking/toll/custom expenses and owner-entered budgets.",
-            "Preserve existing logs; prevent renewal double counting and isolate calculations from UI."
+            "Preserve existing logs; prevent renewal double counting and isolate calculations from UI.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts."
           ],
           "verification": [
-            "Test rounding, refunds/corrections policy, month boundaries, duplicate IDs and incomplete distance history."
+            "Test rounding, refunds/corrections policy, month boundaries, duplicate IDs and incomplete distance history.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract."
           ],
           "required_evidence": [
             "implementation",
@@ -2229,14 +3277,21 @@
           "title": "Add fuel price provenance and incomplete-cycle explanations",
           "size": 3,
           "depends_on": [
-            "P06-02"
+            "P06-02",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Ask for confirmation of a first price; retain effective date and manually editable remembered values.",
-            "Explain insufficient mileage data and avoid silently treating every fill as a completed cycle."
+            "Explain insufficient mileage data and avoid silently treating every fill as a completed cycle.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Test price changes, decimal/digit inputs, partial fills, missed fills and editing an old fill."
+            "Test price changes, decimal/digit inputs, partial fills, missed fills and editing an old fill.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -2257,14 +3312,21 @@
           "size": 3,
           "depends_on": [
             "P06-02",
-            "P06-03"
+            "P06-03",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Extend existing History cards and timeline with accessible period/category controls.",
-            "Use common keypad/date chips, clear coverage labels and optional maintenance allowance."
+            "Use common keypad/date chips, clear coverage labels and optional maintenance allowance.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Reconcile visible totals to fixture records; check both digit styles, themes and large text."
+            "Reconcile visible totals to fixture records; check both digit styles, themes and large text.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -2307,6 +3369,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Ledger owns money, fuel and cost domain rules with typed units and explicit rounding. P06-01 defines their contract before implementation; P03A-03 pilots fuel state and save flows.",
+        "Use localized amounts and explanations only for display; maintain compatible legacy conversions, atomic commits, correction and Undo."
       ]
     },
     {
@@ -2318,7 +3384,10 @@
       "rationale": "Reduces the effort needed to maintain a useful ownership history.",
       "depends_on": [
         "P01-05",
-        "P02-05"
+        "P02-05",
+        "P03A-03",
+        "P03A-04",
+        "P03A-05"
       ],
       "design": "Keep the center add menu and existing fuel/service/odometer sheets. Native capture fills the existing review draft, keeping explicit confirmation and durable Undo.",
       "prototype_paths": [
@@ -2350,13 +3419,18 @@
           "id": "P07-01",
           "title": "Define reviewed drafts and unify numeric/text parsing",
           "size": 3,
-          "depends_on": [],
+          "depends_on": [
+            "P03A-02",
+            "P03A-03"
+          ],
           "acceptance": [
             "Use one normalized draft for manual, pasted, photo and voice inputs with explicit source/confidence.",
-            "Accept supported digit sets; distinguish expense from odometer numbers and detect duplicate shared messages."
+            "Accept supported digit sets; distinguish expense from odometer numbers and detect duplicate shared messages.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts."
           ],
           "verification": [
-            "Test real-language synthetic messages, ambiguous totals, malformed amounts and invalid odometer regressions."
+            "Test real-language synthetic messages, ambiguous totals, malformed amounts and invalid odometer regressions.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract."
           ],
           "required_evidence": [
             "implementation",
@@ -2375,14 +3449,21 @@
           "title": "Implement odometer camera OCR with review and fallback",
           "size": 5,
           "depends_on": [
-            "P07-01"
+            "P07-01",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Recognize odometer candidates and show image/candidate review before applying to the sheet.",
-            "Camera denial, blur, glare and no result preserve a usable manual flow."
+            "Camera denial, blur, glare and no result preserve a usable manual flow.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Run a synthetic printed-display corpus and physical-camera checks; reject implausible readings."
+            "Run a synthetic printed-display corpus and physical-camera checks; reject implausible readings.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -2404,14 +3485,21 @@
           "title": "Implement Android and iOS share-to-draft entry",
           "size": 5,
           "depends_on": [
-            "P07-01"
+            "P07-01",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Accept explicitly shared text through native targets, validate payload limits and route to a locked/reviewable draft.",
-            "Do not read the SMS inbox or clipboard automatically."
+            "Do not read the SMS inbox or clipboard automatically.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Test cold/warm start, locked app, duplicate share, unsupported payload and share cancellation on both devices."
+            "Test cold/warm start, locked app, duplicate share, unsupported payload and share cancellation on both devices.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -2433,14 +3521,21 @@
           "title": "Implement Bangla voice drafting with clear processing choice",
           "size": 5,
           "depends_on": [
-            "P07-01"
+            "P07-01",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Show start/stop/cancel and processing/offline availability; obtain native mic permission only when used.",
-            "Review transcript and parsed fields; do not retain raw audio by default."
+            "Review transcript and parsed fields; do not retain raw audio by default.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Check bn-BD examples, noisy input, provider/network failure, permission denial and stopping after backgrounding."
+            "Check bn-BD examples, noisy input, provider/network failure, permission denial and stopping after backgrounding.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -2489,6 +3584,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Capture creates reviewed feature drafts; camera, share, voice and permissions sit behind narrow host/native boundaries and never directly write the vault.",
+        "Keep parsing rules, locale-aware numeric entry, privacy and permission/error messages testable and localized on both platforms."
       ]
     },
     {
@@ -2532,10 +3631,15 @@
           "id": "P08-01",
           "title": "Run core regression, migration and design matrix",
           "size": 5,
-          "depends_on": [],
+          "depends_on": [
+            "P03A-03",
+            "P03A-04",
+            "P03A-05"
+          ],
           "acceptance": [
             "Verify fresh install and baseline upgrade with full synthetic records and a restorable backup.",
-            "Cover all four tabs, sheets, both digit styles, nine brand accents, light/dark and 1.0/1.3 text scales; record motion separately."
+            "Cover all four tabs, sheets, both digit styles, nine brand accents, light/dark and 1.0/1.3 text scales; record motion separately.",
+            "Verify P03A foundation, pilot, backup migration and quality-gate evidence along with phase-specific architecture and localization requirements."
           ],
           "verification": [
             "Run the focused shared/platform suites plus Android/iOS builds and inspect native screenshots/recordings."
@@ -2649,6 +3753,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "The core release includes P03A foundation, pilot, P03 backup adaptation and automated architecture/localization gates; independently preserve all product, design and physical-device gates.",
+        "Review changed-feature module boundaries, single writer, migration/recovery, constants and Bangla/English behavior against actual recorded evidence."
       ]
     },
     {
@@ -2714,14 +3822,18 @@
           "title": "Implement bike-scoped persistence and backward-compatible backups",
           "size": 8,
           "depends_on": [
-            "P09-01"
+            "P09-01",
+            "P03A-02",
+            "P03A-03"
           ],
           "acceptance": [
             "Migrate existing data transactionally and retain all historical records and asset bytes.",
-            "Update backup versions, import/restore and cost/reminder queries to require correct bike scope."
+            "Update backup versions, import/restore and cost/reminder queries to require correct bike scope.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts."
           ],
           "verification": [
-            "Test interrupted migration, old archive restore, no cross-bike queries and foreign-key/asset invariants."
+            "Test interrupted migration, old archive restore, no cross-bike queries and foreign-key/asset invariants.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract."
           ],
           "required_evidence": [
             "implementation",
@@ -2740,14 +3852,21 @@
           "title": "Build bike switcher, add and archive in v3",
           "size": 3,
           "depends_on": [
-            "P09-02"
+            "P09-02",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Open a recognizable bike-selector sheet from the Home header; preserve selection across restarts.",
-            "Adding does not replace history; archiving has a clear reversible state and inactive-bike visibility."
+            "Adding does not replace history; archiving has a clear reversible state and inactive-bike visibility.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Check per-bike brand accents/logos, focus, large text and no misleading empty state while switching."
+            "Check per-bike brand accents/logos, focus, large text and no misleading empty state while switching.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -2767,14 +3886,21 @@
           "title": "Scope capture, notifications, privacy and Undo to a bike",
           "size": 5,
           "depends_on": [
-            "P09-03"
+            "P09-03",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Deep links and share drafts identify the intended bike even if another is active.",
-            "A delayed save, notification or Undo cannot mutate the newly selected bike."
+            "A delayed save, notification or Undo cannot mutate the newly selected bike.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Race bike switching against async capture/save/notification; check locked and archived targets."
+            "Race bike switching against async capture/save/notification; check locked and archived targets.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -2817,6 +3943,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Garage owns bike identity/switching, application coordinates bike-scoped commands, and storage provides migration/compatibility behind contracts; features do not import garage UI.",
+        "Preserve cross-bike isolation in state, reminders, assets, backup and Undo, with migration and restore fixtures."
       ]
     },
     {
@@ -2856,13 +3986,18 @@
           "id": "P10-01",
           "title": "Model workshops, repair cases, quotations and warranty links",
           "size": 3,
-          "depends_on": [],
+          "depends_on": [
+            "P03A-02",
+            "P03A-03"
+          ],
           "acceptance": [
             "Link recurring issues and parts warranties to actual visits; keep contacts owner-managed.",
-            "Separate quotation, approved work and paid expense states."
+            "Separate quotation, approved work and paid expense states.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts."
           ],
           "verification": [
-            "Test repeated repairs, expired warranty, duplicate workshop names and migrated free-text workshop fields."
+            "Test repeated repairs, expired warranty, duplicate workshop names and migrated free-text workshop fields.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract."
           ],
           "required_evidence": [
             "implementation",
@@ -2881,14 +4016,21 @@
           "title": "Implement contact and repair/warranty flows in v3",
           "size": 5,
           "depends_on": [
-            "P10-01"
+            "P10-01",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Extend the current service sheet with optional detail sections and a recent-workshop chooser.",
-            "Show repair timeline, receipt and warranty reminder actions in History."
+            "Show repair timeline, receipt and warranty reminder actions in History.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Exercise quote-to-service, edits, cancelled work, contact call action and no attachment leak when locked."
+            "Exercise quote-to-service, edits, cancelled work, contact call action and no attachment leak when locked.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -2908,14 +4050,21 @@
           "title": "Connect expenses, warranty reminders and portable records",
           "size": 3,
           "depends_on": [
-            "P10-02"
+            "P10-02",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Only actual paid work contributes to costs; service/reminder links survive edits and Undo.",
-            "Backup/restore includes contacts, cases, warranties and referenced assets."
+            "Backup/restore includes contacts, cases, warranties and referenced assets.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Check no duplicate expense/reminder and cross-bike isolation after restore."
+            "Check no duplicate expense/reminder and cross-bike isolation after restore.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -2957,6 +4106,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Workshop/repair functionality has a cohesive feature boundary and application contracts for ledger, reminders and portable records; shared domain types do not import feature UI.",
+        "Use named warranty policy values, localized controls and privacy-preserving contact storage with compatible recovery."
       ]
     },
     {
@@ -3023,14 +4176,21 @@
           "title": "Extend passport export and verification without breaking old versions",
           "size": 5,
           "depends_on": [
-            "P11-01"
+            "P11-01",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Generate reviewed PDF/data with stable canonical encoding and clear provenance.",
-            "Verify supported old passports and detect tampering; do not label a recomputed self-digest as third-party authentication."
+            "Verify supported old passports and detect tampering; do not label a recomputed self-digest as third-party authentication.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Use independent golden digests, version fixtures, unknown fields, altered PDF/data and redaction-leak checks."
+            "Use independent golden digests, version fixtures, unknown fields, altered PDF/data and redaction-leak checks.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -3049,14 +4209,21 @@
           "title": "Build handover selection, preview and sourced checklist",
           "size": 3,
           "depends_on": [
-            "P11-02"
+            "P11-02",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Reuse v3 sheets and native sharing with explicit selected-bike and recipient-visible preview.",
-            "Show source freshness and working official links; share/cancel never changes ownership records."
+            "Show source freshness and working official links; share/cancel never changes ownership records.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Check long histories, page layout, large text, offline checklist and export cleanup on both platforms."
+            "Check long histories, page layout, large text, offline checklist and export cleanup on both platforms.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -3100,6 +4267,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Handover selection and export are feature presentation plus application orchestration and native export adapters; preserve existing passport and backup contracts.",
+        "Use resource-backed output labels and explicit privacy defaults; verify format compatibility and buyer-readable native output."
       ]
     },
     {
@@ -3166,14 +4337,21 @@
           "title": "Implement Android widget and iOS widget extension",
           "size": 8,
           "depends_on": [
-            "P12-01"
+            "P12-01",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Implement actual host widgets with reviewed entitlements and minimal shared storage.",
-            "Update after durable relevant changes and handle OS refresh limits."
+            "Update after durable relevant changes and handle OS refresh limits.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Install/add/remove widgets and test process death, reboot, locked device and stale data on physical devices."
+            "Install/add/remove widgets and test process death, reboot, locked device and stale data on physical devices.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -3194,14 +4372,21 @@
           "title": "Connect widget setup and quick actions to v3",
           "size": 3,
           "depends_on": [
-            "P12-02"
+            "P12-02",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Replace preview-only wording with truthful setup, availability and selected-bike controls.",
-            "Fuel and odometer actions open the corresponding sheet after any required unlock."
+            "Fuel and odometer actions open the corresponding sheet after any required unlock.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Inspect widget typography, contrast, theme variants and native deep-link focus."
+            "Inspect widget typography, contrast, theme variants and native deep-link focus.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -3244,6 +4429,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Keep widget rendering, lifecycle and deep links in Android/iOS adapters; provide a minimal immutable projection through an application contract, not direct UI/Room access.",
+        "Localize widget and accessibility text; validate privacy, stale-state refresh, lifecycle and platform behavior."
       ]
     },
     {
@@ -3310,14 +4499,21 @@
           "title": "Implement offline care checklist and bounded optional weather access",
           "size": 3,
           "depends_on": [
-            "P13-01"
+            "P13-01",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Show region, last update and expired-cache state; no precise background location is needed.",
-            "Follow source terms and use an external official link if no supported feed is available."
+            "Follow source terms and use an external official link if no supported feed is available.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Test offline, stale cache, unavailable source and dismissing/re-enabling a card."
+            "Test offline, stale cache, unavailable source and dismissing/re-enabling a card.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -3336,14 +4532,21 @@
           "title": "Build breakdown contacts and deliberate location sharing in v3",
           "size": 3,
           "depends_on": [
-            "P13-02"
+            "P13-02",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Keep contacts available offline; open native call/share actions deliberately.",
-            "Show location accuracy/time and editable text; denial or no GPS still allows help."
+            "Show location accuracy/time and editable text; denial or no GPS still allows help.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Test no network, no location, timeout, locked app and share cancellation on both physical devices."
+            "Test no network, no location, timeout, locked app and share cancellation on both physical devices.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -3389,6 +4592,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Seasonal care policies and sourced content belong to their feature; weather, dialing and location sharing use optional permission-aware native/external ports.",
+        "Use named thresholds, localized help and consent text; ensure offline behavior and no implicit location sharing."
       ]
     },
     {
@@ -3455,14 +4662,18 @@
           "title": "Implement opt-in work ledger and reconciled summaries",
           "size": 5,
           "depends_on": [
-            "P14-01"
+            "P14-01",
+            "P03A-02",
+            "P03A-03"
           ],
           "acceptance": [
             "Store money in poisha, scope to bike/shift and support corrections.",
-            "Do not double-count fuel/service expenses or treat a budget allowance as cash paid."
+            "Do not double-count fuel/service expenses or treat a budget allowance as cash paid.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts."
           ],
           "verification": [
-            "Test mixed use, payout deductions, no mileage, backdated corrections and backup/restore."
+            "Test mixed use, payout deductions, no mileage, backdated corrections and backup/restore.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract."
           ],
           "required_evidence": [
             "implementation",
@@ -3481,14 +4692,21 @@
           "title": "Build optional work entry and reports in v3",
           "size": 3,
           "depends_on": [
-            "P14-02"
+            "P14-02",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Reuse keypad, date chips, quick-add and History summaries.",
-            "Disabling Work mode preserves records and removes routine entry clutter."
+            "Disabling Work mode preserves records and removes routine entry clutter.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Run no-work, mixed-work and incomplete-shift flows with both digit styles and large text."
+            "Run no-work, mixed-work and incomplete-shift flows with both digit styles and large text.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -3532,6 +4750,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Keep opt-in work ledger accounting in a dedicated feature and domain/application rules, using shared money policy without importing other feature presentation.",
+        "Use typed monetary values and localized summaries; verify privacy, opt-in state and backup compatibility."
       ]
     },
     {
@@ -3599,14 +4821,18 @@
           "title": "Implement staged backend isolation and publication contract",
           "size": 8,
           "depends_on": [
-            "P15-01"
+            "P15-01",
+            "P03A-02",
+            "P03A-03"
           ],
           "acceptance": [
             "Use private immutable encrypted objects, owner-scoped authorization and atomic revision-checked publication.",
-            "Keep privileged service credentials out of app builds; make receipt/idempotency checks enforceable server-side."
+            "Keep privileged service credentials out of app builds; make receipt/idempotency checks enforceable server-side.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts."
           ],
           "verification": [
-            "Run account A/B denial tests, cross-owner object paths, duplicate operation IDs and concurrent revision conflicts in the selected staging project."
+            "Run account A/B denial tests, cross-owner object paths, duplicate operation IDs and concurrent revision conflicts in the selected staging project.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract."
           ],
           "required_evidence": [
             "implementation",
@@ -3627,14 +4853,18 @@
           "title": "Implement encrypted uploader, retries and account lifecycle",
           "size": 5,
           "depends_on": [
-            "P15-02"
+            "P15-02",
+            "P03A-02",
+            "P03A-03"
           ],
           "acceptance": [
             "Freeze a durable revision, encrypt and upload all referenced assets before publishing its manifest.",
-            "Stop jobs on logout/switch and retain newer queued revisions when acknowledging an older upload."
+            "Stop jobs on logout/switch and retain newer queued revisions when acknowledging an older upload.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts."
           ],
           "verification": [
-            "Test network loss, token expiry, cancellation, process death, stale revisions, quota and account switch."
+            "Test network loss, token expiry, cancellation, process death, stale revisions, quota and account switch.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract."
           ],
           "required_evidence": [
             "implementation",
@@ -3654,14 +4884,21 @@
           "title": "Build truthful connection, backup status and restore selection",
           "size": 3,
           "depends_on": [
-            "P15-03"
+            "P15-03",
+            "P03A-02",
+            "P03A-06",
+            "P03A-03"
           ],
           "acceptance": [
             "Show disconnected/pending/running/failed/last-success states based on confirmed transport results.",
-            "Use existing restore preview and explicit account/vault/secret review; no connected badge from configuration alone."
+            "Use existing restore preview and explicit account/vault/secret review; no connected badge from configuration alone.",
+            "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
+            "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Exercise offline/error/auth/conflict and accessible progress without blocking local record entry."
+            "Exercise offline/error/auth/conflict and accessible progress without blocking local record entry.",
+            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
+            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
           ],
           "required_evidence": [
             "implementation",
@@ -3732,6 +4969,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Cloud backup consumes the existing versioned local archive through application contracts; encryption, account, network and storage implementations remain adapters.",
+        "Preserve local-first operation, key separation, retry/cancellation behavior and truthful localized statuses; retain staging and explicit production enablement gates."
       ]
     },
     {
@@ -3776,7 +5017,8 @@
           "depends_on": [],
           "acceptance": [
             "Upgrade from baseline and core release with multiple bikes, repair records, handover exports and all asset types.",
-            "Recheck design, accessibility, widgets, reminders and privacy on both physical platforms."
+            "Recheck design, accessibility, widgets, reminders and privacy on both physical platforms.",
+            "Verify P03A controls and expanded-phase architecture, migration, constants and localization evidence."
           ],
           "verification": [
             "Run shared/platform suites and retain independent cost totals, archive hashes and native recordings."
@@ -3849,6 +5091,10 @@
           "notes": [],
           "evidence": []
         }
+      ],
+      "architecture_application": [
+        "Expanded release verifies the completed P03A architecture controls and phase-specific boundaries in addition to the existing migration, platform and release evidence.",
+        "Record remaining exceptions with ownership and retirement work; release never implies optional cloud/rider enablement."
       ]
     }
   ],
@@ -4532,6 +5778,1126 @@
       "to": "done",
       "note": "Completed cross-platform recovery and beta gate on physical Android and iOS simulator per owner waiver",
       "revision": "04bfaf5"
+    },
+    {
+      "at": "2026-10-27T10:29:50+00:00",
+      "task": "P03A-01",
+      "from": "planned",
+      "to": "planned",
+      "note": "Architecture-aligned-P03-to-P16-added-P03A-foundation-and-release-gates",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:30:22+00:00",
+      "task": "P03A-03",
+      "from": "planned",
+      "to": "planned",
+      "note": "Fuel-pilot-precedes-remaining-feature-implementation-and-P06-01-remains-independent",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:30:58+00:00",
+      "task": "P03A-03",
+      "from": "planned",
+      "to": "planned",
+      "note": "Gate-capture-parsing-and-workshop-model-implementation-on-foundation-and-pilot",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:39:16+00:00",
+      "task": "P03A-01",
+      "from": "planned",
+      "to": "planned",
+      "note": "Renamed-P17-to-P03A-and-gated-P04-to-P07-on-complete-foundation",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:39:32+00:00",
+      "task": "P03A-01",
+      "from": "planned",
+      "to": "planned",
+      "note": "Recorded-P03A-as-required-completed-foundation-before-P04-to-P07",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:40:21+00:00",
+      "task": "P03A-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Define-shared-contract-and-verify-assistant-entrypoints",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:41:22+00:00",
+      "task": "P03A-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Shared-workflow-and-entrypoints-reviewed",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:41:37+00:00",
+      "task": "P03A-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Extract-vault-boundaries-preserving-durable-writes",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:41:38+00:00",
+      "task": "P03A-06",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement-localization-foundation-preserving-current-preferences",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:47:38+00:00",
+      "task": "P03A-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Coordinator-boundary-with-focused-platform-regressions-and-documented-ios-backup-gap",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:47:39+00:00",
+      "task": "P03A-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "Unfiltered-ios-tests-report-backup-crypto-bridge-uninitialized-in-native-test-runner",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:55:23+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-probe-title-switch-and-persistence-observed-ios-and-complete-locale-coverage-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:57:58+00:00",
+      "task": "P03A-02",
+      "from": "done",
+      "to": "in_progress",
+      "note": "Reopened-after-finding-direct-backup-restore-database-write",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:57:58+00:00",
+      "task": "P03A-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "Backup-restore-direct-database-write-bypasses-session-and-requires-safe-recovery",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T10:59:26+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Isolated-ios-simulator-shows-English-fuel-title-after-restart-remaining-locale-coverage-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:02:53+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Resource-lookup-recomposition-narrowed-and-legacy-fuel-defaults-named-current-runtime-retest-pending",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:15:37+00:00",
+      "task": "P03A-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Coordinated-restore-and-stale-write-tests-pass-backup-collision-remains-P03A-04",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:15:37+00:00",
+      "task": "P03A-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "Different-content-asset-ID-collisions-are-refused-and-require-safe-restoration-design",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:20:59+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-English-fuel-form-and-Bangla-digits-observed-native-reminders-and-ios-recheck-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:21:42+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "English-fuel-form-observed-on-isolated-ios-simulator-native-text-and-fallback-still-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:24:26+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-decimal-input-display-preserved-unit-tests-pass-runtime-recheck-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:36:09+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-native-notification-language-and-digit-probe-passed-ios-runtime-and-legacy-month-resources-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:39:12+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-channel-and-platform-month-localization-tested-ios-native-probe-pending",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:40:50+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Isolated-ios-reminder-resource-assertions-passed-later-synthetic-key-provision-failed",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:42:55+00:00",
+      "task": "P03A-02",
+      "from": "done",
+      "to": "done",
+      "note": "Ordinary-write-cancellation-publishes-durable-result-android-and-ios-tests-pass",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:45:19+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-compose-plural-and-unsupported-locale-fallback-probe-passed-ios-probe-pending",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:46:49+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Ios-simulator-plural-and-fallback-assertions-passed-later-keychain-probe-failed",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:49:10+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-history-plural-count-observed-ios-visual-and-fuel-filter-check-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:51:01+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Ios-synthetic-history-count-observed-bangla-english-and-fuel-filter-visual-checks-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:52:42+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Isolated-ios-english-fuel-filter-count-observed-with-bangla-digits",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:55:53+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Storage-failures-typed-and-localized-unit-tests-pass-runtime-failure-state-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:58:53+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Resource-parity-formatting-fallback-and-switch-checks-passed-android-and-ios-runtime-observed",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:58:57+00:00",
+      "task": "P03A-06",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Scoped-localization-foundation-verified-pilot-and-backup-follow-up-remain-in-P03A-03-and-P03A-04",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:59:16+00:00",
+      "task": "P03A-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Trace-active-fuel-create-and-edit-paths-before-extracting-feature-workflow",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T11:59:30+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Active-history-has-no-fuel-edit-entry-legacy-edit-dialog-has-no-callers",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T12:01:09+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-calculation-rules-extracted-android-and-ios-tests-pass-save-and-edit-boundaries-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T12:03:58+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-request-adapter-aligns-derived-economy-with-reload-android-and-ios-tests-pass-runtime-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T12:07:34+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-validation-rules-and-prototype-limit-state-tested-native-runtime-and-edit-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T12:10:30+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Prototype-fuel-edit-and-undo-observed-timeline-rule-tested-native-edit-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T12:12:58+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-edit-adapter-preserves-legacy-metadata-and-validates-order-ui-and-durable-undo-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:36:09+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Synthetic-android-edit-and-undo-ui-passed-durable-and-ios-runtime-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:42:16+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-room-edit-reopen-stale-revision-and-undo-pass-seed-guard-tested",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:47:39+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Ios-synthetic-bangla-edit-undo-and-reopen-passed-english-and-boundaries-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:47:57+00:00",
+      "task": "P03A-05",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement-executable-architecture-and-localization-gates-incrementally",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:48:20+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Initial-import-inventory-and-positive-negative-fixtures-pass-backup-has-eleven-existing-imports-full-gate-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:49:01+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Import-ratchet-rejects-new-and-resolved-exceptions-fixtures-pass-other-gates-remain-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:49:36+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Qualified-reference-check-added-comments-and-literals-masked-template-expression-and-other-gates-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:50:45+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Configured-gradle-cross-project-cycle-check-and-negative-fixtures-pass-package-cycles-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:51:25+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Translation-key-placeholder-and-plural-negative-fixtures-pass-native-resource-coverage-remains-limited",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:51:43+00:00",
+      "task": "P03A-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Trace-archive-boundaries-and-preserve-compatibility-before-refactoring",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:52:25+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-asset-read-cancellation-propagates-android-unit-test-passes-restore-boundary-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:53:59+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Duplicate-zip-entry-rejected-android-and-ios-targeted-tests-pass-recovery-still-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:55:55+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-digest-injected-android-backup-and-staging-tests-pass-ios-compiles-ui-model-boundary-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:57:00+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Restore-preview-current-vault-summary-extracted-android-tests-pass-ios-compiles",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T17:58:41+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-snapshot-extracted-inventory-mismatch-rejected-android-tests-and-ios-compilation-pass",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T18:00:05+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-progress-typed-and-localized-resource-and-android-tests-pass-native-ui-evidence-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T18:00:58+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Duplicate-manifest-asset-ids-and-paths-rejected-android-tests-pass-ios-compiles",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T18:01:56+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-selected-errors-localized-and-cancellation-preserved-ui-language-refresh-and-runtime-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T18:02:54+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-errors-use-typed-state-and-localized-picker-failures-both-platforms-compile-runtime-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T18:03:54+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Synthetic-staging-cancellation-cleans-owned-file-and-preserves-existing-file-native-crash-recovery-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T18:05:14+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Asset-id-collision-remapping-synthetic-unit-tests-pass-native-recovery-and-reference-coverage-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T18:07:51+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-synthetic-collision-remap-encrypted-assets-room-reopen-passes-28-probe-checks-ios-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T18:09:16+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Restore-preserves-replaced-assets-after-undo-expiry-android-ios-coordinator-tests-pass-encrypted-recovery-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-27T18:11:08+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-coordinated-collision-restore-followup-save-and-room-reopen-pass-durable-recovery-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:15:04+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Schema6-recovery-transaction-prototype-compiles-partial-probe-pass-migration-rerun-blocked-by-approval-review-limit",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:16:56+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-synthetic-schema4-to6-and-recovery-transaction-reopen-pass-privacy-and-integration-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:19:46+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Recovery-prototype-uses-authenticated-encrypted-blob-android-native-tests-pass-production-wiring-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:22:49+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Coordinated-restore-writes-verified-encrypted-snapshot-and-protects-recovery-assets-runtime-gates-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:24:28+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Recovery-snapshot-service-extracted-android-native-reference-and-reopen-checks-pass-ios-runtime-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:25:48+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-synthetic-recovery-verification-and-key-loss-fail-closed-probe-pass",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:27:49+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Recovery-write-verifies-existing-snapshots-before-key-creation-android-key-loss-probe-passes",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:29:00+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-synthetic-coordinator-recovery-store-collision-and-reopen-integration-passes",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:35:00+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Ios-signed-isolated-simulator-recovery-snapshot-reopen-and-tamper-checks-pass-full-restore-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:36:54+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Coordinated-snapshot-recovery-backend-and-missing-original-refusal-pass-android-probe-ui-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:40:10+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Recovery-prototype-list-empty-confirm-failure-success-reviewed-loading-stale-native-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:42:04+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Recovery-prototype-checking-cancel-stale-key-unavailable-states-observed-english-native-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:44:18+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Authenticated-recovery-summary-catalog-added-android-native-and-shared-timestamp-tests-pass-native-ui-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:47:50+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Native-recovery-sheet-and-revision-confirmation-compile-both-platforms-runtime-and-accessibility-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:52:30+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-synthetic-recovery-ui-success-conflict-and-busy-back-pass-30-probe-checks",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:55:56+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-synthetic-recovery-screen-through-coordinator-encrypted-Room-reopen-passes-31-checks-assets-and-iOS-UI-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:56:42+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Dependency-ratchet-inspects-nested-string-template-code-fixtures-pass-scoped-literal-and-CI-gates-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:57:38+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Portable-GitHub-workflow-added-local-checks-pass-remote-run-and-Gradle-cycle-integration-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:58:57+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Shared-UI-direct-literal-inventory-and-fixtures-added-223-occurrences-baseline-review-and-enforcement-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T06:59:43+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Direct-UI-literal-inventory-compared-with-HEAD-no-new-occurrences-ten-removed-owner-baseline-still-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:01:09+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-create-overview-password-and-counts-localized-resource-parity-and-both-platform-compiles-pass-runtime-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:02:37+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Restore-selection-preview-warning-and-confirmation-localized-resource-parity-and-platform-compiles-pass-runtime-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:03:37+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-share-no-longer-claims-saved-localized-native-actions-compile-iOS-save-detection-and-runtime-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:05:01+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Native-backup-errors-typed-and-visible-share-failure-localized-platform-compiles-pass-failure-runtime-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:06:12+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Restore-confirmation-bound-to-reviewed-file-password-revision-focused-android-test-and-ios-compile-pass-native-race-test-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:07:10+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-busy-state-disables-dismissal-tabs-and-inputs-both-platform-compilation-pass-native-UI-regression-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:08:23+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Restore-bounds-untrusted-KDF-iterations-17-android-backup-tests-and-ios-compile-pass-historical-compatibility-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:09:39+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Restore-preview-derived-from-authenticated-payload-tampered-summary-android-test-passes-ios-compiles-native-UI-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:13:18+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-synthetic-backup-create-restore-entry-English-Bangla-ui-pass-32-probe-checks-picker-and-ios-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:16:28+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-presentation-moved-to-feature-package-android-edit-undo-probe-and-platform-compiles-pass-boundary-ios-ui-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:18:03+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-screen-uses-feature-input-and-legacy-adapter-focused-tests-and-platform-compiles-pass-native-runtime-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:20:05+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-input-adapter-android-synthetic-edit-undo-and-separate-room-probe-pass-ios-ui-and-end-to-end-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T07:22:15+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-synthetic-fuel-ui-edit-and-undo-verified-through-real-coordinator-and-fresh-room-connections",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T13:35:52+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Ios27-synthetic-bangla-fuel-edit-undo-and-relaunch-pass-after-feature-input-mapping-english-and-failure-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T13:41:48+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-create-failure-keeps-draft-and-localized-error-android-synthetic-writer-failure-passes-33-checks-ios-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T13:43:26+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-ui-direct-literal-pilot-enforced-with-empty-baseline-and-positive-negative-fixtures-broader-gates-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T13:46:36+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-application-workflow-centralizes-revision-and-save-outcomes-focused-tests-and-33-android-probe-checks-pass-ios-ui-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T13:50:25+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Fuel-draft-state-owner-extracted-focused-tests-both-platform-compiles-and-33-android-probe-checks-pass-ios-ui-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T13:54:44+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Ios27-synthetic-bangla-edit-undo-and-relaunch-pass-after-workflow-and-draft-extraction-english-failure-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T14:00:03+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-create-preview-injected-contract-and-adapter-android-tests-ios-compiles-and-33-probe-checks-pass-ui-integration-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T14:01:08+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-screen-binds-rendered-state-to-matching-revision-platform-compiles-and-resource-parity-pass-ui-race-test-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T14:01:41+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-adapter-synthetic-asset-reader-and-cancellation-tests-pass-native-ui-flow-remains-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T14:05:03+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-archive-work-moved-off-caller-thread-progress-context-and-cancellation-android-tests-pass-ios-runtime-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T20:27:08+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-synthetic-backup-create-button-visible-but-accessibility-activation-test-fails-runtime-flow-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T20:27:30+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android-standard-isolated-probe-passes-33-checks-focused-backup-create-UI-remains-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T20:39:53+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Ios27-isolated-native-backup-adapter-create-preview-wrong-password-pass-full-restore-and-legacy-model-boundary-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T20:49:19+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Begin-frozen-synthetic-archive-compatibility-fixtures-before-backup-model-extraction",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T20:54:39+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-document-model-extracted-frozen-synthetic-payload-tests-android-33-ios-19-pass-three-ui-imports-remain",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T20:59:58+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Backup-preferences-extracted-compatibility-tests-and-android-33-ios-19-synthetic-probes-pass-two-ui-imports-remain",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T21:04:29+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Begin-ride-and-log-archive-model-extraction-with-compatibility-and-restore-verification",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T21:09:42+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Ride-and-log-archive-models-extracted-zero-domain-ui-import-exceptions-synthetic-android-and-ios-probes-pass-historical-and-full-ios-restore-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T21:11:43+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Extend-isolated-ios-simulator-probe-to-exercise-synthetic-staged-restore-and-room-reopen",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T21:16:34+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Ios27-iphone18-pro-max-synthetic-backup-staged-collision-ride-log-room-reopen-pass-20-ui-screen-observed-full-coordinated-restore-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T21:22:03+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Begin-isolated-synthetic-physical-motorola-android16-backup-restore-probe",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T21:24:07+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Physical-motorola-edge-50-fusion-android16-isolated-synthetic-probe-passes-33-checks-ui-creation-and-ios-device-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T21:28:12+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Owner-confirmed-pre-release-no-deployed-owner-data-or-historical-archive-compatibility-required-current-format-and-platform-verification-retained",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T21:29:50+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Continue-current-format-ui-backup-and-coordinated-ios-restore-verification",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T21:37:01+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Ios-synthetic-failed-and-successful-coordinated-restore-recovery-pass-20-android-ui-accessibility-creation-remains-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-28T21:38:48+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Investigate-synthetic-android-scroll-accessibility-tree-and-current-format-ui-roundtrip",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-29T09:59:08+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Refreshed-accessibility-containers-android-emulator-and-motorola-synthetic-creation-pass-34-picker-save-open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-29T10:09:51+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Owner-screenshot-shows-picker-SAVE-test-updated-build-passes-rerun-interrupted-save-unverified",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:07:43+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android emulator synthetic backup creation and system picker save confirmation passed; UI restore remains open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:08:54+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android emulator 34 synthetic checks pass; unfiltered iOS tests have 13 backup bridge initialization failures",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:19:17+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Real shared Swift crypto bridge enables all 251 iOS simulator tests; Android tests and iOS app build pass; UI restore remains open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:20:12+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Add isolated Android UI backup and restore round trip through the system picker, coordinated writer, encrypted recovery snapshot, and Room reopen",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:32:09+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android emulator asset-free UI backup and system-picker restore pass through coordinated Room writer and encrypted recovery; iOS UI and asset coverage remain open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:32:54+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Exercise document-containing UI restore with isolated encrypted files and a collision, preserving existing originals and recovery snapshots",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:39:03+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Android simulator document archive UI restore preserves colliding originals and encrypted recovery; rollback tests pass both platforms; toast reliability and iOS UI remain open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:39:41+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Add portable package cycle checks for migrated domain and application code and fail closed when their source directories are missing",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:41:58+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Shared domain and application package-cycle and fuel numeric-policy gates pass with fixtures; broader literal baseline and CI execution remain open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:43:06+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Verify English fuel edit, undo and relaunch using the isolated iOS simulator privacy probe",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:53:30+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Isolated iOS simulator English fuel edit, undo and unique-record relaunch pass; legacy Records localization and failure paths remain open",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-10-31T13:54:36+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Localize fuel Records presentation and navigation with language-specific resources, preserving stored data and independent digit preference",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-11-01T03:50:05+00:00",
+      "task": "P03A-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Fuel slice boundaries, workflow, draft, failure and Undo verified on Android emulator and iOS simulator in Bangla and English; no physical device used",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-11-01T03:50:08+00:00",
+      "task": "P03A-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Backup and restore workflows separated behind application/domain contracts; UI-driven Android archive save and restore plus iOS native archive/recovery probes passed on simulators; no physical device used",
+      "revision": "860c3ec"
+    },
+    {
+      "at": "2026-11-01T03:50:10+00:00",
+      "task": "P03A-05",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Dependency, package-cycle, scoped literal, numeric-policy and localization gates enforced with reviewed baselines, fixtures, documentation and CI; all 46 tool tests and roadmap check passed",
+      "revision": "860c3ec"
     }
   ]
 }

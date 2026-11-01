@@ -4,7 +4,7 @@
 
 This plan implements the crucial and additional Bangladesh ownership features while extending `design/app-ui-v3/`. It authorizes planning; it does not claim those features are implemented.
 
-Read [the design contract](DESIGN-CONTRACT.md), [baseline findings](BASELINE.md), [progress](PROGRESS.md) and [tracking instructions](README.md) together.
+Read [the design contract](DESIGN-CONTRACT.md), [architecture contract](ARCHITECTURE-CONTRACT.md), [baseline findings](BASELINE.md), [progress](PROGRESS.md) and [tracking instructions](README.md) together.
 
 ## Priorities and delivery order
 
@@ -15,11 +15,12 @@ Read [the design contract](DESIGN-CONTRACT.md), [baseline findings](BASELINE.md)
 
 Order follows dependency and risk. Independent tasks with satisfied prerequisites can run concurrently. Finish one vertical slice before widening scope. Size points 1/2/3/5/8 are relative complexity, not person-days; re-estimate after the phase's first design and technical slice.
 
-Core beta: P00-P03. Core release: P00-P08. Expanded ownership release: P09-P13 plus P16. Optional P14/P15 each have their own enablement gate.
+Core beta: P00-P03. Architecture foundation: P03A, completed before P04-P07. Core release: P00-P08 plus P03A. Expanded ownership release: P09-P13 plus P16. Optional P14/P15 each have their own enablement gate.
 
 ## Cross-cutting implementation rules
 
-- Use commonMain/domain for pure rules, storage for Room/repositories and transactional migrations, ui for feature composables, androidMain/iosMain for OS services. Keep skyDesignSystem free of MotoVault models, auth, persistence, location and financial effects.
+- Apply the architecture contract to P03 maintenance and P04 onward: feature ownership, inward dependencies, lifecycle state owners and one authoritative vault writer. P03A tracks incremental foundation work; do not assume target modules already exist.
+- Use named, owner-scoped policy values and design tokens; put user-facing text in localized resources. Preserve default language and stored formats, and validate both platforms against the pinned toolchain.
 - Existing paths below are verified starting points. Proposed paths are design targets and can be refined with evidence before editing. Extend a focused feature file instead of expanding Screens.kt indefinitely; avoid unrelated refactors.
 - Every data change needs backward-compatible decoding, stable IDs, asset ownership, transaction/rollback behavior and an old-data fixture. Future bike-scoping must be accounted for in each new model.
 - Keep local operations usable without an account. Save without optional camera/mic/GPS access; confirm all OCR, voice, paste and mileage estimates before durable writes.
@@ -425,6 +426,11 @@ Required completion evidence: verification, design, android_device, review.
 
 **Data and migration:** Define a portable, versioned authenticated archive containing records, original assets, crops, settings and a manifest. Never export device keys. Regenerable previews may be omitted only if restore recreates them. Restore stages and validates before one durable replacement.
 
+**Architecture application:**
+
+- Preserve completed P03 evidence; P03A-04 separately moves backup and restore behind application contracts, with encrypted archive, asset and recovery compatibility fixtures.
+- Localize backup and recovery presentation; retain one coordinated, recoverable restore and native file/crypto adapters.
+
 **Tasks:**
 
 ### P03-01: Specify portable archive, secret handling and compatibility policy
@@ -520,6 +526,145 @@ Required completion evidence: verification, design, android_device, review.
 
 **Risks and decisions:** Backup-file loss and secret loss are separate failures. Choose a recoverability model explicitly; do not promise recovery without a recovery method.
 
+<a id="p03a"></a>
+
+## P03A: Production architecture and model-independent delivery foundation
+
+**Priority:** P0 | **Scope:** foundation | **Current status:** Done
+
+**Outcome:** Remaining features use explicit boundaries, shared AI rules, localization and verified data-safe migrations.
+
+**Why now:** The existing application has useful shared controls and a durable coordinator but mixes UI, domain and infrastructure ownership.
+
+**Entry dependencies:** P03-05.
+
+**V3 placement and interaction:** Preserve the v3 design contract; new states are prototyped before native implementation.
+
+**Implementation map:**
+
+- Prototype references: `design/app-ui-v3/src/components/Sheet.tsx`.
+- Existing native sources: `docs/roadmap/ARCHITECTURE-CONTRACT.md`, `docs/ARCHITECTURE-PROPOSAL.md`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/VaultSession.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultState.kt`.
+- Proposed sources: `docs/engineering/architecture.md`, `docs/engineering/conventions.md`, `docs/engineering/ai-workflow.md`, `tools/quality/`.
+
+**Data and migration:** Preserve current Room/JSON/archive formats and one authoritative writer. Any persisted-format change requires compatibility fixtures and recoverable migration.
+
+**Architecture application:**
+
+- Deliver the shared model-independent workflow, core contracts, localized resource foundation, pilot and quality gates incrementally; verify P03 backup modernization separately.
+- Keep the target module map and executable gate status honest: planned work becomes a requirement only when its dependency and evidence have been satisfied.
+
+**Tasks:**
+
+### P03A-01: Establish shared architecture conventions and AI workflow
+
+Status: **Done** | Size: **3** | Owner: Codex.
+
+Additional task dependencies: None.
+
+Acceptance criteria:
+
+- Publish one canonical architecture, SRP, constants, localization and verification workflow with thin assistant entry points.
+- Record phase-specific ownership, transitional exceptions and evidence requirements without claiming planned tooling exists.
+
+Verification:
+
+- Review Codex, Claude and Gemini entry points for consistent references and execute the documented tracker workflow.
+
+Required completion evidence: plan, review.
+
+### P03A-02: Extract initial domain and application boundaries around the vault coordinator
+
+Status: **Done** | Size: **8** | Owner: Codex.
+
+Additional task dependencies: P03A-01.
+
+Acceptance criteria:
+
+- Introduce explicit contracts and a composition root; migrated domain/application code has no UI or concrete storage/native imports.
+- Preserve one authoritative writer, revision conflicts, durable Undo and compatibility with current persisted data.
+
+Verification:
+
+- Run boundary, coordinator, migration and recovery regression checks and Android/iOS build checks.
+
+Required completion evidence: implementation, verification.
+
+### P03A-03: Migrate fuel entry as the first vertical feature slice
+
+Status: **Done** | Size: **8** | Owner: Codex.
+
+Additional task dependencies: P03A-02, P03A-06.
+
+Acceptance criteria:
+
+- Move fuel presentation/state, business workflow and data interaction behind the agreed boundaries, named policy and localized resources.
+- Preserve fuel save/edit, economy calculation, conflicts, draft behavior, failure and revision-bound Undo.
+- Preserve existing fuel and money semantics and serialized values; defer the broader P06-01 money and distance contract to that phase.
+
+Verification:
+
+- Run targeted business/state and storage tests plus Android and iOS runtime checks in Bangla and English.
+
+Required completion evidence: implementation, verification, android_runtime, ios_runtime.
+
+### P03A-04: Bring P03 backup and restore into the target boundaries
+
+Status: **Done** | Size: **8** | Owner: Codex.
+
+Additional task dependencies: P03A-02, P03A-06.
+
+Acceptance criteria:
+
+- Separate backup/restore workflow from UI, database and crypto/file implementations; ensure archives created by the current application can be restored correctly.
+- Preserve staged validation, original assets, device-bound keys and recoverable durable replacement; localize backup/restore messages.
+
+Verification:
+
+- Verify current-format archive round trips and interrupted/failed restore fixtures plus Android and iOS backup/restore runtime behavior. Historical released-archive compatibility is not required before the first release.
+
+Required completion evidence: implementation, verification, android_runtime, ios_runtime.
+
+### P03A-05: Add executable architecture, constants and localization quality gates
+
+Status: **Done** | Size: **5** | Owner: Codex.
+
+Additional task dependencies: P03A-02, P03A-06.
+
+Acceptance criteria:
+
+- Add reproducible checks for dependency direction, cycles, scoped literal/resource rules and translation keys/placeholders, with a ratcheted legacy baseline.
+- Document commands, approved exceptions and CI integration without blocking on legacy debt outside changed scope.
+
+Verification:
+
+- Demonstrate positive and negative fixtures for each check and run the documented checks in the repository.
+
+Required completion evidence: implementation, verification.
+
+### P03A-06: Establish shared localization and named-policy foundation
+
+Status: **Done** | Size: **5** | Owner: Codex.
+
+Additional task dependencies: P03A-01.
+
+Acceptance criteria:
+
+- Choose the existing product default and implement resource-backed Bangla/English strings, plurals, named values and locale-aware formatting for the pilot.
+- Preserve persisted language preference, Bangla input/digits and canonical numeric values; cover native integration text at its platform boundary.
+
+Verification:
+
+- Test translation keys/placeholders, fallback and language switching; verify representative output on Android and iOS.
+
+Required completion evidence: implementation, verification, android_runtime, ios_runtime.
+
+**Phase exit gate:**
+
+- All six P03A tasks meet their own acceptance and evidence gates, including the pilot, P03 compatibility and real quality checks.
+- Core and expanded release gates include P03A without altering completed historical P03 status or its evidence.
+
+**Risks and decisions:** Lifecycle changes, localization APIs and serialized-model moves can change runtime behavior or lose data. Pilot and preserve recovery evidence before broad migration.
+
 <a id="p04"></a>
 
 ## P04: Bangladesh maintenance and used-bike onboarding
@@ -530,7 +675,7 @@ Required completion evidence: verification, design, android_device, review.
 
 **Why now:** Daily commuters and used-bike owners need the right schedule and an honest starting baseline.
 
-**Entry dependencies:** P01-05.
+**Entry dependencies:** P01-05, P03A-03, P03A-04, P03A-05.
 
 **V3 placement and interaction:** Extend the three-input onboarding with progressive detail only when needed. Keep native brand logos; put schedule provenance and edit actions inside gauge/service sheets.
 
@@ -541,6 +686,11 @@ Required completion evidence: verification, design, android_device, review.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/maintenance/MaintenanceAction.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/maintenance/ScheduleDetailsSheet.kt`.
 
 **Data and migration:** Add action type, source/manual revision, applicability and baseline certainty with compatible defaults. A catalogue entry does not automatically become a manual-backed schedule.
+
+**Architecture application:**
+
+- Maintenance owns schedule rules, provenance and unknown-history policy in domain/application; garage/onboarding and maintenance state owners render reusable v3 UI.
+- Use source-backed named intervals and units, resource-backed labels and old-schedule migration fixtures.
 
 **Tasks:**
 
@@ -565,16 +715,18 @@ Required completion evidence: research, review.
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P04-01.
+Additional task dependencies: P04-01, P03A-02, P03A-03.
 
 Acceptance criteria:
 
 - Separate inspection, cleaning, lubrication, adjustment and replacement.
 - Service resets affect selected actions only; preserve custom rules and historical logs during migration.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
 
 Verification:
 
 - Test running-in, whichever-limit-first, unsupported model, rule edits and mixed-action service visits.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 
 Required completion evidence: implementation, verification.
 
@@ -582,16 +734,20 @@ Required completion evidence: implementation, verification.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P04-02.
+Additional task dependencies: P04-02, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Let owners choose known last service or unknown baseline without faking a service record.
 - Suggest an initial inspection checklist; keep unknown state until the owner records a real action.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Check fresh and migrated users, odometer bounds, skipped setup and returning to complete a baseline.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design.
 
@@ -599,16 +755,20 @@ Required completion evidence: implementation, verification, design.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P04-02, P04-03.
+Additional task dependencies: P04-02, P04-03, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Show source/manual or owner-defined label, next due basis and editable intervals in the details sheet.
 - Keep the fast service flow and support recording several actual actions in one visit.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Compare against v3 service chips, Home urgency order, large text and both digit styles.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design.
 
@@ -647,7 +807,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Why now:** Document storage is already present; guided action closes the practical ownership loop.
 
-**Entry dependencies:** P01-05, P02-05.
+**Entry dependencies:** P01-05, P02-05, P03A-03, P03A-04, P03A-05.
 
 **V3 placement and interaction:** Vault document detail gains Renew, official verification and renewal history. Reuse DocAdd review, date chips, receipt attachment and a return-to-document flow.
 
@@ -658,6 +818,11 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/documents/RenewalChecklist.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/documents/RenewalSheet.kt`.
 
 **Data and migration:** Keep person-level licence documents separate from bike ownership scope. Append renewal events and receipts; preserve prior originals and expiry history instead of overwriting the only copy.
+
+**Architecture application:**
+
+- Documents owns renewal events and checklist state; official-link launch and reminders use native ports; ledger fee operations use application contracts without feature UI dependencies.
+- Preserve document originals and localized renewal/notification text through saves, Undo and recovery.
 
 **Tasks:**
 
@@ -682,16 +847,18 @@ Required completion evidence: research, review.
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P05-01.
+Additional task dependencies: P05-01, P03A-02, P03A-03.
 
 Acceptance criteria:
 
 - Save previous/new expiry, payment receipt, actual fee and document revision as one reviewed event.
 - A failed save or Undo cannot leave a fee, file or reminder inconsistent with the document.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
 
 Verification:
 
 - Test old document import, missing date, duplicate renewal, cancellation, asset recovery and backup round-trip.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 
 Required completion evidence: implementation, verification.
 
@@ -699,16 +866,20 @@ Required completion evidence: implementation, verification.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P05-02.
+Additional task dependencies: P05-02, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Show checklist progress, source date and return to the exact document.
 - Use the native browser/share boundary deliberately; require owner action before uploading a certificate.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Exercise offline/unavailable links, dark/large-text layouts, privacy lock and screen-reader navigation.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design.
 
@@ -747,7 +918,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Why now:** Extends the existing 30-day total into practical decisions for cost-conscious owners.
 
-**Entry dependencies:** P00-04, P00-05.
+**Entry dependencies:** P00-04, P00-05, P03A-03, P03A-04, P03A-05.
 
 **V3 placement and interaction:** History retains its summary and expandable timeline. Add period/category chips and a cost-details sheet; keep fuel entry taka-first and use the v3 keypad.
 
@@ -758,6 +929,11 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/costs/OwnershipCostUseCase.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/costs/CostInsightsSheet.kt`.
 
 **Data and migration:** Add parking/toll/other expenses and budget targets as bike-scoped-compatible records. Convert legacy money explicitly to poisha; document rounding, record coverage and date boundaries.
+
+**Architecture application:**
+
+- Ledger owns money, fuel and cost domain rules with typed units and explicit rounding. P06-01 defines their contract before implementation; P03A-03 pilots fuel state and save flows.
+- Use localized amounts and explanations only for display; maintain compatible legacy conversions, atomic commits, correction and Undo.
 
 **Tasks:**
 
@@ -782,16 +958,18 @@ Required completion evidence: plan, review.
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P06-01.
+Additional task dependencies: P06-01, P03A-02, P03A-03.
 
 Acceptance criteria:
 
 - Support fuel/service/renewal/parking/toll/custom expenses and owner-entered budgets.
 - Preserve existing logs; prevent renewal double counting and isolate calculations from UI.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
 
 Verification:
 
 - Test rounding, refunds/corrections policy, month boundaries, duplicate IDs and incomplete distance history.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 
 Required completion evidence: implementation, verification.
 
@@ -799,16 +977,20 @@ Required completion evidence: implementation, verification.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P06-02.
+Additional task dependencies: P06-02, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Ask for confirmation of a first price; retain effective date and manually editable remembered values.
 - Explain insufficient mileage data and avoid silently treating every fill as a completed cycle.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Test price changes, decimal/digit inputs, partial fills, missed fills and editing an old fill.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design.
 
@@ -816,16 +998,20 @@ Required completion evidence: implementation, verification, design.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P06-02, P06-03.
+Additional task dependencies: P06-02, P06-03, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Extend existing History cards and timeline with accessible period/category controls.
 - Use common keypad/date chips, clear coverage labels and optional maintenance allowance.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Reconcile visible totals to fixture records; check both digit styles, themes and large text.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design.
 
@@ -864,7 +1050,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Why now:** Reduces the effort needed to maintain a useful ownership history.
 
-**Entry dependencies:** P01-05, P02-05.
+**Entry dependencies:** P01-05, P02-05, P03A-03, P03A-04, P03A-05.
 
 **V3 placement and interaction:** Keep the center add menu and existing fuel/service/odometer sheets. Native capture fills the existing review draft, keeping explicit confirmation and durable Undo.
 
@@ -876,22 +1062,29 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Data and migration:** Persist only confirmed records. Draft source/confidence is bounded metadata; images/audio retention is explicit. Share targets must select the intended bike and cannot bypass a locked vault.
 
+**Architecture application:**
+
+- Capture creates reviewed feature drafts; camera, share, voice and permissions sit behind narrow host/native boundaries and never directly write the vault.
+- Keep parsing rules, locale-aware numeric entry, privacy and permission/error messages testable and localized on both platforms.
+
 **Tasks:**
 
 ### P07-01: Define reviewed drafts and unify numeric/text parsing
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: None.
+Additional task dependencies: P03A-02, P03A-03.
 
 Acceptance criteria:
 
 - Use one normalized draft for manual, pasted, photo and voice inputs with explicit source/confidence.
 - Accept supported digit sets; distinguish expense from odometer numbers and detect duplicate shared messages.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
 
 Verification:
 
 - Test real-language synthetic messages, ambiguous totals, malformed amounts and invalid odometer regressions.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 
 Required completion evidence: implementation, verification.
 
@@ -899,16 +1092,20 @@ Required completion evidence: implementation, verification.
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P07-01.
+Additional task dependencies: P07-01, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Recognize odometer candidates and show image/candidate review before applying to the sheet.
 - Camera denial, blur, glare and no result preserve a usable manual flow.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Run a synthetic printed-display corpus and physical-camera checks; reject implausible readings.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design, android_device, ios_device.
 
@@ -916,16 +1113,20 @@ Required completion evidence: implementation, verification, design, android_devi
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P07-01.
+Additional task dependencies: P07-01, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Accept explicitly shared text through native targets, validate payload limits and route to a locked/reviewable draft.
 - Do not read the SMS inbox or clipboard automatically.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Test cold/warm start, locked app, duplicate share, unsupported payload and share cancellation on both devices.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design, android_device, ios_device.
 
@@ -933,16 +1134,20 @@ Required completion evidence: implementation, verification, design, android_devi
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P07-01.
+Additional task dependencies: P07-01, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Show start/stop/cancel and processing/offline availability; obtain native mic permission only when used.
 - Review transcript and parsed fields; do not retain raw audio by default.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Check bn-BD examples, noisy input, provider/network failure, permission denial and stopping after backgrounding.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design, android_device, ios_device, review.
 
@@ -993,18 +1198,24 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 **Data and migration:** Freeze a supported schema and backup version; validate upgrade from the committed baseline and retain rollback/recovery instructions.
 
+**Architecture application:**
+
+- The core release includes P03A foundation, pilot, P03 backup adaptation and automated architecture/localization gates; independently preserve all product, design and physical-device gates.
+- Review changed-feature module boundaries, single writer, migration/recovery, constants and Bangla/English behavior against actual recorded evidence.
+
 **Tasks:**
 
 ### P08-01: Run core regression, migration and design matrix
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: None.
+Additional task dependencies: P03A-03, P03A-04, P03A-05.
 
 Acceptance criteria:
 
 - Verify fresh install and baseline upgrade with full synthetic records and a restorable backup.
 - Cover all four tabs, sheets, both digit styles, nine brand accents, light/dark and 1.0/1.3 text scales; record motion separately.
+- Verify P03A foundation, pilot, backup migration and quality-gate evidence along with phase-specific architecture and localization requirements.
 
 Verification:
 
@@ -1093,6 +1304,11 @@ Required completion evidence: verification, android_device, ios_device, review.
 
 **Data and migration:** Migrate primary into a stable bike ID. Scope schedules/logs/assets/reminders/expenses by bike and licences by owner; preserve old single-bike backups and active-bike preference.
 
+**Architecture application:**
+
+- Garage owns bike identity/switching, application coordinates bike-scoped commands, and storage provides migration/compatibility behind contracts; features do not import garage UI.
+- Preserve cross-bike isolation in state, reminders, assets, backup and Undo, with migration and restore fixtures.
+
 **Tasks:**
 
 ### P09-01: Finalize garage ownership model and migration fixtures
@@ -1116,16 +1332,18 @@ Required completion evidence: plan, review.
 
 Status: **Planned** | Size: **8** | Owner: unassigned.
 
-Additional task dependencies: P09-01.
+Additional task dependencies: P09-01, P03A-02, P03A-03.
 
 Acceptance criteria:
 
 - Migrate existing data transactionally and retain all historical records and asset bytes.
 - Update backup versions, import/restore and cost/reminder queries to require correct bike scope.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
 
 Verification:
 
 - Test interrupted migration, old archive restore, no cross-bike queries and foreign-key/asset invariants.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 
 Required completion evidence: implementation, verification.
 
@@ -1133,16 +1351,20 @@ Required completion evidence: implementation, verification.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P09-02.
+Additional task dependencies: P09-02, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Open a recognizable bike-selector sheet from the Home header; preserve selection across restarts.
 - Adding does not replace history; archiving has a clear reversible state and inactive-bike visibility.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Check per-bike brand accents/logos, focus, large text and no misleading empty state while switching.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design.
 
@@ -1150,16 +1372,20 @@ Required completion evidence: implementation, verification, design.
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P09-03.
+Additional task dependencies: P09-03, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Deep links and share drafts identify the intended bike even if another is active.
 - A delayed save, notification or Undo cannot mutate the newly selected bike.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Race bike switching against async capture/save/notification; check locked and archived targets.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification.
 
@@ -1210,22 +1436,29 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Data and migration:** Add owner-managed contacts, quotations, repair cases and warranty dates linked to bike/service/part IDs. Distinguish quoted cost from actual paid expense.
 
+**Architecture application:**
+
+- Workshop/repair functionality has a cohesive feature boundary and application contracts for ledger, reminders and portable records; shared domain types do not import feature UI.
+- Use named warranty policy values, localized controls and privacy-preserving contact storage with compatible recovery.
+
 **Tasks:**
 
 ### P10-01: Model workshops, repair cases, quotations and warranty links
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: None.
+Additional task dependencies: P03A-02, P03A-03.
 
 Acceptance criteria:
 
 - Link recurring issues and parts warranties to actual visits; keep contacts owner-managed.
 - Separate quotation, approved work and paid expense states.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
 
 Verification:
 
 - Test repeated repairs, expired warranty, duplicate workshop names and migrated free-text workshop fields.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 
 Required completion evidence: implementation, verification.
 
@@ -1233,16 +1466,20 @@ Required completion evidence: implementation, verification.
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P10-01.
+Additional task dependencies: P10-01, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Extend the current service sheet with optional detail sections and a recent-workshop chooser.
 - Show repair timeline, receipt and warranty reminder actions in History.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Exercise quote-to-service, edits, cancelled work, contact call action and no attachment leak when locked.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design.
 
@@ -1250,16 +1487,20 @@ Required completion evidence: implementation, verification, design.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P10-02.
+Additional task dependencies: P10-02, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Only actual paid work contributes to costs; service/reminder links survive edits and Undo.
 - Backup/restore includes contacts, cases, warranties and referenced assets.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Check no duplicate expense/reminder and cross-bike isolation after restore.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification.
 
@@ -1310,6 +1551,11 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Data and migration:** Version the export separately from backup. Export selected records with provenance, history gaps, generated date and optional redaction; do not transfer the seller account, local keys or private documents by default.
 
+**Architecture application:**
+
+- Handover selection and export are feature presentation plus application orchestration and native export adapters; preserve existing passport and backup contracts.
+- Use resource-backed output labels and explicit privacy defaults; verify format compatibility and buyer-readable native output.
+
 **Tasks:**
 
 ### P11-01: Define selective pack, provenance and privacy defaults
@@ -1333,16 +1579,20 @@ Required completion evidence: plan, review.
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P11-01.
+Additional task dependencies: P11-01, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Generate reviewed PDF/data with stable canonical encoding and clear provenance.
 - Verify supported old passports and detect tampering; do not label a recomputed self-digest as third-party authentication.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Use independent golden digests, version fixtures, unknown fields, altered PDF/data and redaction-leak checks.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification.
 
@@ -1350,16 +1600,20 @@ Required completion evidence: implementation, verification.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P11-02.
+Additional task dependencies: P11-02, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Reuse v3 sheets and native sharing with explicit selected-bike and recipient-visible preview.
 - Show source freshness and working official links; share/cancel never changes ownership records.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Check long histories, page layout, large text, offline checklist and export cleanup on both platforms.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design.
 
@@ -1410,6 +1664,11 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Data and migration:** Publish a minimal, non-sensitive durable snapshot for the chosen bike. Never expose document IDs or decrypted vault data; stale snapshot time is explicit.
 
+**Architecture application:**
+
+- Keep widget rendering, lifecycle and deep links in Android/iOS adapters; provide a minimal immutable projection through an application contract, not direct UI/Room access.
+- Localize widget and accessibility text; validate privacy, stale-state refresh, lifecycle and platform behavior.
+
 **Tasks:**
 
 ### P12-01: Define minimal widget snapshot and deep-link contract
@@ -1433,16 +1692,20 @@ Required completion evidence: plan, review.
 
 Status: **Planned** | Size: **8** | Owner: unassigned.
 
-Additional task dependencies: P12-01.
+Additional task dependencies: P12-01, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Implement actual host widgets with reviewed entitlements and minimal shared storage.
 - Update after durable relevant changes and handle OS refresh limits.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Install/add/remove widgets and test process death, reboot, locked device and stale data on physical devices.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, android_device, ios_device.
 
@@ -1450,16 +1713,20 @@ Required completion evidence: implementation, verification, android_device, ios_
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P12-02.
+Additional task dependencies: P12-02, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Replace preview-only wording with truthful setup, availability and selected-bike controls.
 - Fuel and odometer actions open the corresponding sheet after any required unlock.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Inspect widget typography, contrast, theme variants and native deep-link focus.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design.
 
@@ -1510,6 +1777,11 @@ Required completion evidence: verification, design, android_device, ios_device.
 
 **Data and migration:** Store selected region, content source/version and owner-chosen contacts. Use optional foreground location only; freshness/expiry are part of any cached weather item.
 
+**Architecture application:**
+
+- Seasonal care policies and sourced content belong to their feature; weather, dialing and location sharing use optional permission-aware native/external ports.
+- Use named thresholds, localized help and consent text; ensure offline behavior and no implicit location sharing.
+
 **Tasks:**
 
 ### P13-01: Review seasonal content, sources and help boundaries
@@ -1533,16 +1805,20 @@ Required completion evidence: research, review.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P13-01.
+Additional task dependencies: P13-01, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Show region, last update and expired-cache state; no precise background location is needed.
 - Follow source terms and use an external official link if no supported feed is available.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Test offline, stale cache, unavailable source and dismissing/re-enabling a card.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification.
 
@@ -1550,16 +1826,20 @@ Required completion evidence: implementation, verification.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P13-02.
+Additional task dependencies: P13-02, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Keep contacts available offline; open native call/share actions deliberately.
 - Show location accuracy/time and editable text; denial or no GPS still allows help.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Test no network, no location, timeout, locked app and share cancellation on both physical devices.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design, android_device, ios_device.
 
@@ -1610,6 +1890,11 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 **Data and migration:** Add work shifts, earnings, deductions, work-distance attribution and owner-defined maintenance allowance. Keep actual expenses separate from estimates and prevent double subtraction.
 
+**Architecture application:**
+
+- Keep opt-in work ledger accounting in a dedicated feature and domain/application rules, using shared money policy without importing other feature presentation.
+- Use typed monetary values and localized summaries; verify privacy, opt-in state and backup compatibility.
+
 **Tasks:**
 
 ### P14-01: Validate rider workflow and define accounting boundaries
@@ -1633,16 +1918,18 @@ Required completion evidence: research, plan, review.
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P14-01.
+Additional task dependencies: P14-01, P03A-02, P03A-03.
 
 Acceptance criteria:
 
 - Store money in poisha, scope to bike/shift and support corrections.
 - Do not double-count fuel/service expenses or treat a budget allowance as cash paid.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
 
 Verification:
 
 - Test mixed use, payout deductions, no mileage, backdated corrections and backup/restore.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 
 Required completion evidence: implementation, verification.
 
@@ -1650,16 +1937,20 @@ Required completion evidence: implementation, verification.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P14-02.
+Additional task dependencies: P14-02, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Reuse keypad, date chips, quick-add and History summaries.
 - Disabling Work mode preserves records and removes routine entry clutter.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Run no-work, mixed-work and incomplete-shift flows with both digit styles and large text.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design.
 
@@ -1710,6 +2001,11 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Data and migration:** Reuse the portable encrypted manifest with immutable objects, account-to-vault binding, authenticated publication and remote revision preconditions. Device restore creates a reviewed local state; do not silently multi-writer merge ciphertext.
 
+**Architecture application:**
+
+- Cloud backup consumes the existing versioned local archive through application contracts; encryption, account, network and storage implementations remain adapters.
+- Preserve local-first operation, key separation, retry/cancellation behavior and truthful localized statuses; retain staging and explicit production enablement gates.
+
 **Tasks:**
 
 ### P15-01: Select provider/account model and review cloud recovery design
@@ -1733,16 +2029,18 @@ Required completion evidence: plan, review.
 
 Status: **Planned** | Size: **8** | Owner: unassigned.
 
-Additional task dependencies: P15-01.
+Additional task dependencies: P15-01, P03A-02, P03A-03.
 
 Acceptance criteria:
 
 - Use private immutable encrypted objects, owner-scoped authorization and atomic revision-checked publication.
 - Keep privileged service credentials out of app builds; make receipt/idempotency checks enforceable server-side.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
 
 Verification:
 
 - Run account A/B denial tests, cross-owner object paths, duplicate operation IDs and concurrent revision conflicts in the selected staging project.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 
 Required completion evidence: implementation, verification, cloud, review.
 
@@ -1750,16 +2048,18 @@ Required completion evidence: implementation, verification, cloud, review.
 
 Status: **Planned** | Size: **5** | Owner: unassigned.
 
-Additional task dependencies: P15-02.
+Additional task dependencies: P15-02, P03A-02, P03A-03.
 
 Acceptance criteria:
 
 - Freeze a durable revision, encrypt and upload all referenced assets before publishing its manifest.
 - Stop jobs on logout/switch and retain newer queued revisions when acknowledging an older upload.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
 
 Verification:
 
 - Test network loss, token expiry, cancellation, process death, stale revisions, quota and account switch.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 
 Required completion evidence: implementation, verification, cloud.
 
@@ -1767,16 +2067,20 @@ Required completion evidence: implementation, verification, cloud.
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P15-03.
+Additional task dependencies: P15-03, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
 - Show disconnected/pending/running/failed/last-success states based on confirmed transport results.
 - Use existing restore preview and explicit account/vault/secret review; no connected badge from configuration alone.
+- Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
+- New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
 - Exercise offline/error/auth/conflict and accessible progress without blocking local record entry.
+- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
+- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
 Required completion evidence: implementation, verification, design.
 
@@ -1844,6 +2148,11 @@ Required completion evidence: verification, cloud, review.
 
 **Data and migration:** Document the complete supported upgrade/backup matrix, retention policy and model/manual content versions; old records and passport formats remain readable as promised.
 
+**Architecture application:**
+
+- Expanded release verifies the completed P03A architecture controls and phase-specific boundaries in addition to the existing migration, platform and release evidence.
+- Record remaining exceptions with ownership and retirement work; release never implies optional cloud/rider enablement.
+
 **Tasks:**
 
 ### P16-01: Run expanded migration, backup and v3 regression matrix
@@ -1856,6 +2165,7 @@ Acceptance criteria:
 
 - Upgrade from baseline and core release with multiple bikes, repair records, handover exports and all asset types.
 - Recheck design, accessibility, widgets, reminders and privacy on both physical platforms.
+- Verify P03A controls and expanded-phase architecture, migration, constants and localization evidence.
 
 Verification:
 

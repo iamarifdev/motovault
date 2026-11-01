@@ -8,6 +8,7 @@ import copy
 import datetime as dt
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 import tempfile
@@ -70,6 +71,12 @@ def validate(data: dict, root: Path = ROOT) -> None:
     for phase in data["phases"]:
         if not phase["tasks"] or not phase["exit_criteria"]:
             raise ValueError(f"{phase['id']}: phase needs tasks and an exit gate")
+        architecture = phase.get("architecture_application", [])
+        if not isinstance(architecture, list) or any(not isinstance(item, str) or not item.strip() for item in architecture):
+            raise ValueError(f"{phase['id']}: architecture application must be a list of non-empty strings")
+        phase_number = re.fullmatch(r"P(\d+)[A-Z]?", phase["id"])
+        if phase_number and int(phase_number.group(1)) >= 3 and not architecture:
+            raise ValueError(f"{phase['id']}: architecture application is required from P03 onward")
         if phase["priority"] not in {"P0", "P1", "P2", "P3"}:
             raise ValueError(f"{phase['id']}: invalid priority")
         for path in phase["existing_paths"] + phase["prototype_paths"]:
@@ -169,7 +176,7 @@ def render_board(data: dict) -> str:
              f"Last tracker update: {local_time(data['updated_at'])}. Baseline: `{data['baseline']['commit']}` on `{data['baseline']['branch']}`.", "",
              f"Product delivery: **{percent}%** ({done}/{total} relative scope points). Foundation planning is reported separately.", "",
              "Only `done` tasks count. Partial work, a completed build and elapsed time do not increase delivery progress. Points measure scope, not hours, value or release readiness. Deferred scope stays visible in the denominator.", "",
-             "[Implementation plan](IMPLEMENTATION-PLAN.md) | [Design contract](DESIGN-CONTRACT.md) | [Tracking guide](README.md)", "",
+             "[Implementation plan](IMPLEMENTATION-PLAN.md) | [Design contract](DESIGN-CONTRACT.md) | [Architecture contract](ARCHITECTURE-CONTRACT.md) | [Tracking guide](README.md)", "",
              "## Release milestones", "", "| Milestone | Scope | Done tasks | Gate |", "| --- | --- | --- | --- |"]
     for milestone in data["milestones"]:
         included = [t for p in phases if p["id"] in milestone["phases"] for t in p["tasks"]]
@@ -205,16 +212,17 @@ def render_board(data: dict) -> str:
 def render_plan(data: dict) -> str:
     lines = ["# MotoVault phase-by-phase implementation plan", "", "<!-- Generated from roadmap.json by tools/roadmap.py. -->", "",
              "This plan implements the crucial and additional Bangladesh ownership features while extending `design/app-ui-v3/`. It authorizes planning; it does not claim those features are implemented.", "",
-             "Read [the design contract](DESIGN-CONTRACT.md), [baseline findings](BASELINE.md), [progress](PROGRESS.md) and [tracking instructions](README.md) together.", "",
+             "Read [the design contract](DESIGN-CONTRACT.md), [architecture contract](ARCHITECTURE-CONTRACT.md), [baseline findings](BASELINE.md), [progress](PROGRESS.md) and [tracking instructions](README.md) together.", "",
              "## Priorities and delivery order", "",
              "- **P0:** foundation, trustworthy reminders, document privacy, recoverable local backup.",
              "- **P1:** Bangladesh maintenance, renewal help, cost insights and quick capture needed for the core release.",
              "- **P2:** multi-bike ownership, workshops, resale, widgets and seasonal/breakdown help.",
              "- **P3:** optional professional-rider mode and cloud backup. These do not block the core release.", "",
              "Order follows dependency and risk. Independent tasks with satisfied prerequisites can run concurrently. Finish one vertical slice before widening scope. Size points 1/2/3/5/8 are relative complexity, not person-days; re-estimate after the phase's first design and technical slice.", "",
-             "Core beta: P00-P03. Core release: P00-P08. Expanded ownership release: P09-P13 plus P16. Optional P14/P15 each have their own enablement gate.", "",
+             "Core beta: P00-P03. Architecture foundation: P03A, completed before P04-P07. Core release: P00-P08 plus P03A. Expanded ownership release: P09-P13 plus P16. Optional P14/P15 each have their own enablement gate.", "",
              "## Cross-cutting implementation rules", "",
-             "- Use commonMain/domain for pure rules, storage for Room/repositories and transactional migrations, ui for feature composables, androidMain/iosMain for OS services. Keep skyDesignSystem free of MotoVault models, auth, persistence, location and financial effects.",
+             "- Apply the architecture contract to P03 maintenance and P04 onward: feature ownership, inward dependencies, lifecycle state owners and one authoritative vault writer. P03A tracks incremental foundation work; do not assume target modules already exist.",
+             "- Use named, owner-scoped policy values and design tokens; put user-facing text in localized resources. Preserve default language and stored formats, and validate both platforms against the pinned toolchain.",
              "- Existing paths below are verified starting points. Proposed paths are design targets and can be refined with evidence before editing. Extend a focused feature file instead of expanding Screens.kt indefinitely; avoid unrelated refactors.",
              "- Every data change needs backward-compatible decoding, stable IDs, asset ownership, transaction/rollback behavior and an old-data fixture. Future bike-scoping must be accounted for in each new model.",
              "- Keep local operations usable without an account. Save without optional camera/mic/GPS access; confirm all OCR, voice, paste and mileage estimates before durable writes.",
@@ -232,7 +240,10 @@ def render_plan(data: dict) -> str:
         for label, key in [("Prototype references", "prototype_paths"), ("Existing native sources", "existing_paths"), ("Proposed sources", "proposed_paths")]:
             refs = ", ".join(f"`{path}`" for path in p[key]) or "None"
             lines.append(f"- {label}: {refs}.")
-        lines += ["", f"**Data and migration:** {p['data']}", "", "**Tasks:**", ""]
+        lines += ["", f"**Data and migration:** {p['data']}", ""]
+        if p.get("architecture_application"):
+            lines += ["**Architecture application:**", ""] + [f"- {item}" for item in p["architecture_application"]] + [""]
+        lines += ["**Tasks:**", ""]
         for t in p["tasks"]:
             lines += [f"### {t['id']}: {t['title']}", "", f"Status: **{LABELS[t['status']]}** | Size: **{t['size']}** | Owner: {t['owner'] or 'unassigned'}.", "",
                       f"Additional task dependencies: {', '.join(t['depends_on']) or 'None'}.", "", "Acceptance criteria:", ""]
@@ -348,7 +359,8 @@ def main() -> int:
             if args.task not in tasks(data):
                 raise ValueError(f"Unknown task: {args.task}")
             phase, task = tasks(data)[args.task]
-            print(json.dumps({"phase": phase["id"], "prerequisites": dependencies(phase, task), **task}, ensure_ascii=False, indent=2))
+            print(json.dumps({"phase": phase["id"], "architecture_application": phase.get("architecture_application", []),
+                              "prerequisites": dependencies(phase, task), **task}, ensure_ascii=False, indent=2))
         elif args.command == "next":
             for phase, task in ready_tasks(data):
                 print(f"{task['id']} [{phase['priority']}, {task['size']} points] {task['title']}")
