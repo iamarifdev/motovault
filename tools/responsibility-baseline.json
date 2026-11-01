@@ -8,69 +8,6 @@
       "justification": "Test-only probe entry; split by fixture responsibility."
     },
     {
-      "path": "commonMain/kotlin/com/motovault/app/ui/MotoVault.kt",
-      "lines": 667,
-      "owner": "Codex",
-      "removal_task": "P04A-03",
-      "justification": "Root composition; extract remaining sheet assembly before the next root change."
-    },
-    {
-      "path": "commonMain/kotlin/com/motovault/app/ui/backup/BackupCreateContent.kt",
-      "lines": 404,
-      "owner": "Codex",
-      "removal_task": "P04A-04",
-      "justification": "Backup stage split; re-review on next backup change."
-    },
-    {
-      "path": "commonMain/kotlin/com/motovault/app/ui/backup/BackupRestoreContent.kt",
-      "lines": 465,
-      "owner": "Codex",
-      "removal_task": "P04A-04",
-      "justification": "Backup stage split; re-review on next backup change."
-    },
-    {
-      "path": "commonMain/kotlin/com/motovault/app/ui/components/Controls.kt",
-      "lines": 445,
-      "owner": "Codex",
-      "removal_task": "P04A-04",
-      "justification": "Shared control family; split only when the control API changes."
-    },
-    {
-      "path": "commonMain/kotlin/com/motovault/app/ui/fuel/FuelSheet.kt",
-      "lines": 420,
-      "owner": "Codex",
-      "removal_task": "P04A-04",
-      "justification": "Fuel sheet; extract sections on the next fuel change."
-    },
-    {
-      "path": "commonMain/kotlin/com/motovault/app/ui/garage/GarageScreen.kt",
-      "lines": 485,
-      "owner": "Codex",
-      "removal_task": "P04A-02",
-      "justification": "Feature composition; extract sections on the next feature change."
-    },
-    {
-      "path": "commonMain/kotlin/com/motovault/app/ui/maintenance/ServiceSheet.kt",
-      "lines": 586,
-      "owner": "Codex",
-      "removal_task": "P04A-02",
-      "justification": "Feature composition; extract sections on the next feature change."
-    },
-    {
-      "path": "commonMain/kotlin/com/motovault/app/ui/onboarding/OnboardingScreen.kt",
-      "lines": 422,
-      "owner": "Codex",
-      "removal_task": "P04A-02",
-      "justification": "Feature composition; extract sections on the next feature change."
-    },
-    {
-      "path": "commonMain/kotlin/com/motovault/app/ui/settings/MeScreen.kt",
-      "lines": 440,
-      "owner": "Codex",
-      "removal_task": "P04A-02",
-      "justification": "Feature composition; extract sections on the next feature change."
-    },
-    {
       "path": "commonTest/kotlin/com/motovault/app/domain/backup/BackupTest.kt",
       "lines": 583,
       "owner": "Codex",
@@ -98,7 +35,7 @@
     {
       "path": "commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt",
       "function": "DocumentCaptureFlow",
-      "lines": 108,
+      "lines": 109,
       "owner": "Codex",
       "removal_task": "P04A-03",
       "justification": "Existing function exceeds the 80-line review trigger; extract a coherent section on the next change."

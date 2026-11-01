@@ -17,7 +17,22 @@ ROOT = PROJECT / "composeApp/src/commonMain/kotlin/com/motovault/app/ui"
 BASELINE = PROJECT / "tools/ui-literal-baseline.json"
 PILOT_ROOT = ROOT / "fuel"
 PILOT_BASELINE = PROJECT / "tools/ui-fuel-literal-baseline.json"
-SINK = re.compile(r"\b(?:Text\s*\((?:\s*text\s*=)?|contentDescription\s*=)")
+SINK = re.compile(
+    r"\b(?:"
+    r"Text\s*\((?:(?:\s*)text\s*=)?"
+    r"|contentDescription\s*="
+    r"|Field\s*\((?:(?:\s*)label\s*=)?"
+    r"|VaultButton\s*\((?:(?:\s*)text\s*=)?"
+    r"|Primary\s*\((?:(?:\s*)text\s*=)?"
+    r"|Eyebrow\s*\("
+    r"|Heading\s*\("
+    r"|VaultChip\s*\((?:(?:\s*)text\s*=)?"
+    r"|Sheet\s*\((?:(?:\s*)title\s*=)?"
+    r"|DocumentNote\s*\("
+    r"|DocumentCopy\s*\("
+    r"|DocumentHeading\s*\("
+    r")"
+)
 
 
 def first_literal(text, index):
