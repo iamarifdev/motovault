@@ -1,0 +1,1248 @@
+[
+  {
+    "path": "Components.kt",
+    "sha256": "0cbd62360ac1a774ce9996cf841fc7502536fe37827b2dafc20adb2fb17815ba",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Components.kt",
+    "sha256": "15c5e748338b7ecd1296c700d6863dad8091e354a9dfa475fbb4bffba89d225f",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Components.kt",
+    "sha256": "178787ec32bf37c7db770172b8a45b33b9f2342abf2853e9f911b45191033287",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Components.kt",
+    "sha256": "7299b59de0b5dad3b622afc3bdf57544e505249c77a6d4254bd14b1fc9a4ade8",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Components.kt",
+    "sha256": "8023ef9ccaa0201031e2499c9cd0c540469ee40cce4b25314b62671d74294c8e",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Components.kt",
+    "sha256": "aae8bbcde3fba4cd9c3423d6f894dd67997cd58dc943ca18b93ea0e218496af9",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "DocumentFlow.kt",
+    "sha256": "288b16f1d5c970698e00d5b20701de987c44bb6a74009f32f2eab647528fec09",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentFlow.kt",
+    "sha256": "2cec30d54aacb5dad7915f4d0ea6f98782bb6bcfea7c05fe134ae36d2a49904d",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentFlow.kt",
+    "sha256": "3186f2539d437cb45837e8877c180a3c1e0b504c0dd12f31dae26fb2889b9ec0",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentFlow.kt",
+    "sha256": "5e604d8c065273737feac5eaf7475383ce98cf77ed4391f9eefc567a5795d41d",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentFlow.kt",
+    "sha256": "6491601d40a1237415b1f3b6e1040d741ff6c73a1dc56103db391314feed4452",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentFlow.kt",
+    "sha256": "a420fe3b4dc5a830f29e4309050a2d33604f2bd1b7d1cb2a3f969dd42f6ae336",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentFlow.kt",
+    "sha256": "bd394682df33cdb8096809e0fb7edc49908a1068b4df89ac98ba07a407e81722",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentFlow.kt",
+    "sha256": "e6d726cf8d2611a9232809043449ada288e633e03113d83425bef045fda980b3",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentFlow.kt",
+    "sha256": "f5e18ffdce524a7d8df88884e0722f088e721f81a63bfa4dbed400f3793897bd",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentWallet.kt",
+    "sha256": "2b6da1f60d6f66677de021549edff863140c1ed1677f9a88f9a0a4abeccc8cd1",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentWallet.kt",
+    "sha256": "2dcacac0efe66a96274999512fda5a77a5db771b690d5834fb02dee5fd9ed558",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentWallet.kt",
+    "sha256": "7297d2085ea0adffc396d546235c67b5cb031150ab4a66a5c72794841e9176b3",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "DocumentWallet.kt",
+    "sha256": "c9fb4c984c4f8211ece8ca65dc557f667e78f728cdcdc0937b4041ad2c1243bb",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P05-03"
+  },
+  {
+    "path": "GaugeDetailSheet.kt",
+    "sha256": "95e7ed582ff56e9649710c31dd76b221620b926c7c93d310e5cf5b708a5cd22e",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "GaugeDetailSheet.kt",
+    "sha256": "d813a0712ef01dfdccd5e7f5a058bb1bb5f5de19c0230a03a85cc4294457fab0",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "016eae812f14b27b5672236fce9cb115661282637330bcdc1c29a050c95d55e9",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "02e77ccd4a6c7a43502d44c4ec22de3d4178579e1c7689a1affb858809d68ae7",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "0ba77e1a09c472a8cc056f8f4169997e6d1fee603d35db308dd5c875156c7fe9",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "0d7794a06db87e1b850fd0e130aabeaaf8326a256e8eb4437a8ad8cae4de8ea2",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "120cc8c7796485ce42746aedb38708c7cc0019eccdad5aea630e748eb85c0fe6",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "12208955a41a5589dbd5d44fec1d0df2314aa7ed4e0276eb754ab6695e5711ea",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "1966cd13f1edd0b40c920588081a12d362d784d425c5572b3b552863ad93ebb3",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "21df40c7a1263113bbae67231c7eed5adb7a6864f827e2041601122b36e091d0",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "21f73dc46026946918f56fc902e83baae4a671cd41d51f5807eed19cc180bbc3",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "290c72246d5fae6dbaed7a2ec3effd9bb65522b90293a199b54c94aa7369c37d",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "3a2d777c6d35b3172c76e4ee86101beb19c2620cef6b9bd2a47630ab3859deb1",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "3cbacfdfa68ff1d5d7490da0f4ff186a2e29986f3645d17d3901ee15604ef4d2",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "470ed400a8a32d3ad0045d4f4b5f51ac2ddb8ce6f7159ea2b98e0147983fdb24",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "53ae5a4b9d30e7f8243527ad13333fcfb365519e34c133c25a2c769406fafde1",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "6b66a01175c8c8e6733d88095e2084b37634a7a56ed9b348071029b0c7d091a8",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "7027ee2f38a3b910d485c9aac6abe9fced7fcea55ece47d625db98bc2f35bbe5",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "807982fa97e24e5d77ae63bc852f16330325148bc74274fa6f6ac6afc237f6c4",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "95a4f14249c4ccc75cc9c104c38566e0d1a473375feb161da180df73a0299577",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "9fec867d436e5d12933fbf437684708641b868d118eb531414a2de9810b27c51",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "a854b7903cc373efd8ebc68b2e1e90b102898271315064fcaf7d3966fd7da772",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "aa993993bd3a98b5b65df549875e30e1170e0a820fa66cea40e3ca669df7a3c5",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "ab6031634b873e43a513bfb329209eb764db8f32b4882c1127b152f981696f2a",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "acee335f58c80fabfe3bc9c304c99a171b6b4901568e2933030f63ae4e73fa57",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "cb9594c86f858cfab56d24ac4bd3ba13a177187c2b8e4fcb7daaef19eab5d533",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "cba5d142217fe6a2658e2a262f83e48326bc3186405f0655fb2adf27c4ae98c6",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "cead5df60a421a8e9baa92f8d97e006a9353b622e6937b942e9e3e610761a052",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "d95e18985baf453907a5fa7e77ad581421ea715dc8107c56f863bd23a865753a",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "dc0985dcd98a012ed9d21e05b634ecb8bc8acd3c270be002b38a6f1a11f2e84f",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "e24448309a7a35bb64af26ea3d0507429e0593db7b25dfc1a2adbd8cd2c166ae",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "ee4fe63dada5a49eb5b7bb7b5072466833b664b1e01710e34aa0c301113dc597",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Onboarding.kt",
+    "sha256": "ef95f7107ca620b2f09aba1172113f57f5297e23a59207bbfda3a5d5ecddf6cc",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "0475ee9d08e4fd40a14b9f4a5d1d47357836b0cb598bd773870ad4b3baeb00e0",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "090053a4d7686390ee5c12c25017ab33527dde5aed58e8607f4894bbb88cf342",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "09b6bd249837d43fbcec54d44a074d97ef3de6cc53474919a610d0e83171b91a",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "0f994e0105bcc34b130e17f1a713f9397088c7e3d3d348b136a5322578ceb140",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "14312bc320b3946fd8771640205e540fe4508a6913b5f8f9509896cab1769e02",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "19ad529f58eaa2644338cbb9cf711546ad78b4abd6841328c423c76d50eb282e",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "1a0a92e2bdf111bc79a689c8ff7b1a8d7cce9951eef80961a472a678cf67bef8",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "1feac8931f208863d9daaea517ea125e6bc8c8d74c77197fab5aed79eb827b1d",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "216a68b54208c6c001102d3a1bfc3291dd5a4ed9a1e50af59e4d012103ea0428",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "237cdf815ef53a35cef0124bd0613571666efca54eda32520e520d3b0f199231",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "264f25d07fa17676003968c632bcc11d2657d6143457dcc4f9e2d0533afbceb7",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "2931ec6305b1a68e7bfc4af58c2fd3b0a924e77bb3749139bf3d5c344995e3fb",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "2db778a36f387e88c20c3c2938b42b717485573ec133f3a42cef8f78d54ec114",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "32ac597914e326e106d44eaa10ee3e38717a726e41ef3e323214f03a3fe8b348",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "37f579b1d4077f54220dff0938ffc6dca54de89a7b3dc7f9b31d543eb52f7a2c",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "390a0d45cf02d8a8bf53eead8b10d0b633c1b3d4bba61fa3982e2f76c9f0bcda",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "3a71e5b068d7deabdbf81371a3eee7dd5ddf0035d305429d21434ecf4201c54a",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "5282d50b4a8bc268b8f0a4c596ad213fa9256dc8bbd75e9bee7b851186d65118",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "574f9c3d0e6ac9f1de4c4294b698cfba5bcc802880c5367d0d103e5642c5b3cd",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "5d2adc0767e948efe5eed6dc90d52b9186218e5c09e450dfa60a2ac7f998c4d7",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "62730e88b6cb5b5f8287a50b01818ff53a9a2519762470552511416af4bf9943",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "6c1b16645dea17f3526a36bd4af81fdff46ff1199f8fe033bc37b6203f917fd3",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "819d9236c8df68c0fb6a0001457abccdeaaa6bf0a23860af33ae427e56a77e89",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "8e1f7e708bbe261472a92dff017c3e793e0ab97968c6996127c55c488c9ae19d",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "9057d31483d434fb442f08e53f168492ecdc548bfb0206df468298daea2efcd8",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "93031bcf0f7082f0db6d833732e49b815e3b050395012f240a3fbc9db2efc257",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "966acc8afce052795c5791d97d0f43ae207bf7c2705f82e59eb867740941c5c7",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "9ce1401e78125b9e84740267bba63a6d91098b01e35bad09e4af7703d7a5bccd",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "9f679c7f21ba85bcacaddea55cf2c16590ab9c3da38781c1a5d186b24c4f9b19",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "a273906ae3b60f6f9440f0e690b1e8e644d6566030f252e4e64c96cb75b5098f",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "a8ed63353cb11b8aca779dddaa8331be56a00b139635cb4f0529b10acb42f1c1",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "ac7fe4580e6a48786178cebcbf4337d4e2ed11a5a5c60f55f76dfac8e81d69ab",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "aea35782845916db1f649cd5202c8db2fefdd745b796c9f6ba00f5eb6acc4a41",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "afcee16c3799dcca0867ee9d930e3d47de0184647f7469a84670474094e4d09b",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "b02de853aeddd0768cc15150e7876199dc1f2b1bd0ad24780f36353f4decad9a",
+    "count": 2,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "b113afd0ee265aa8398be370bd260df9800969feefec98bf98d29b69f1cd1e8c",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "b9aa0a9cf0363de8597ddf2eef85dbb2171a00b059e469f270be44d76605578a",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "cbc012d436ac1dc9e4f28d826a987b6decf48784d70ebc1a9c91a7b91b3ebf54",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "ce064f52c1c6cd19856bfd72d1336b2bcf6ecca2318d67e210cc34690ff3777b",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "d010259ca5f9e9069269f81019d2902ee8432a0b1297c65777ff08cc1777aef1",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "d187861c0011d79f7291b05b5daf2704251d2d7d998e1ea79f67e306c5e33e23",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "d47cf28fa6d72f9a1233e17616eb4ed4168e321292ff2b5c3e7cb328ccf7948e",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "d97fd70f01dfb61865de61d56e35e0a5216d2f4b90188813250916c3f22cf320",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "de24433d1c512189e374d8fb7d521d77bf0daed785375604da786af1586f4027",
+    "count": 2,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "e9039c730474bc8173b459e8575b90ef8b66d10d6f1f3287b7b9805e555f1570",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "f37a23f6b381fd935fc5d8e2a6379656c3295ef81fd8308837077f411b539690",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "f886ae7a0e07b4892eae702d9eefeb5bf6f02e5f15ed7152f86ae718c2ec08bd",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "fa5b8feea039311c3a48038f00c5dae4a68be5677d9868ea3058439535b88e3e",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "OwnershipForms.kt",
+    "sha256": "fceff1c18ff6b1d6a50869568a66c7ca170667d50ff07e88e562c7a6dcf3bbfe",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "PassportExportUi.kt",
+    "sha256": "0426a968efc6b056413ca166b15cc7844877d077a479f91db57d5e8bc1e3332c",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P11-02"
+  },
+  {
+    "path": "PassportExportUi.kt",
+    "sha256": "18ca624f21df4898cf8b4d62115debb188a8bcefe50baecdf68e4c5d782e08d3",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P11-02"
+  },
+  {
+    "path": "PassportExportUi.kt",
+    "sha256": "1db26dad93387f6f8c95b8cd7770697c47b8a04e0ec67bb2ca7511ff5f08c701",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P11-02"
+  },
+  {
+    "path": "PassportExportUi.kt",
+    "sha256": "25810741859cfe0dc80bd7e3f18e303e5332197701c0a05de31e2db054232cf7",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P11-02"
+  },
+  {
+    "path": "PassportExportUi.kt",
+    "sha256": "444d8f4d2ad1c25d8183d15e45555e6897389a175510a51cd17f255d69b22b6b",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P11-02"
+  },
+  {
+    "path": "PassportExportUi.kt",
+    "sha256": "8ae678eb7803a9e3962391985fb487620bf240c8e514971708ace8808a204ada",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P11-02"
+  },
+  {
+    "path": "PassportExportUi.kt",
+    "sha256": "c85084105a8fcf2a6995b6ccfbc276c1a4096919fa39392c180e62660513617f",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P11-02"
+  },
+  {
+    "path": "PassportExportUi.kt",
+    "sha256": "d5c868c76e403acadd243bc7c0b8b200f44cc526a3d1922dee78c4cf594d0f3a",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P11-02"
+  },
+  {
+    "path": "PassportExportUi.kt",
+    "sha256": "e7ab2d9a83a3dc17f5716aeec19d3ec0649b9247da4f84c3243388efc6ffc90f",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P11-02"
+  },
+  {
+    "path": "PassportExportUi.kt",
+    "sha256": "eb8502bdc8a15461f9e104350d751fda157b1b5f07e212641822f3daa1b1a911",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P11-02"
+  },
+  {
+    "path": "ReminderSheets.kt",
+    "sha256": "76939509fc58446666da68e60346f64189320df9cd0067f911fe243280242c70",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "ReminderSheets.kt",
+    "sha256": "923c9a470f1085a66fd6f4c88901398c567faa4268718ab1528a9d09dff1c668",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "0895147ed22f4735025e256ef50b5c54753c81157bcbd21ecc0bfd98b8335cb6",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "146ba5ad00f6381bc0f72c3bdd79463481a1e52f3dcb94522aa1279a72830ee4",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "1d5f8d633073ec4307d3389b554df482e8ec8fefbf67c22bac0ca703031acccc",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "1e03e31ecf9a579b91005046d19061d0f85356d9c9d07e8ef72cbf2df22b79d4",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "350cd27cc33247df22d25855fd6d838ba9552f9fc707f367e886d99bbd272335",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "44676c3c75acce91f1985aa2838cb53cb37c8d32723f0eb074ce86ebafa9e7ed",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "4e4d59cb987804c29dd36c62b443c6cd2ee95974b72fb7e34b7d6de912ea16da",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "55941cee043c604e6a25240bbc201f919fb2f332a2115fa4ac60763a87483507",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "58c5d3cf919bab1fd29ae0f6e1f8440060322dda44eea6b9c2b9cce0ae47815e",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "6301603bd0274065a417114dc62116541fae925d440c73ead16c585bc1b891a2",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "68031c24c4a315ac9ddc9cf438cfc9160e20b3eb5d09672a02e25443f35d805a",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "728df2787124b74cfc1abefc291ba4617dcc07a246d4117a7544582b3dfd4c0f",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "87c450869c5b9bc7899a25af10a3598f76209f8e5585b0b07ee4cd8393ca8992",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "8b0c8e6a7895ed6b5102851e12ac281290bb91c724685e22950057b5d3d774bf",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "8b12c5b22136d191a55433e23215a1da172528e178d241d9537520fad5c41b53",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "8b64ddb1ae3ab57ce815dacf6e9a14afc07244d8d2fb5ac759c7e81660420e41",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "8c6c7167cb11e193c4e9f4f91a66a4914210ec2632068c65ffdd4aa34e88b60a",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "8e20364195061e41c8b089a03036be172648d2a7e8d7346719e0c2c343dd9144",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "91864911df01949aa031a3e1e3cc39b9540d5e78352f96a9d639fc651763e3b1",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "935c72fa76a1bcde7fde1061c20990f1adae3402603e905b5c295e1e4a07b722",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "9b124a9edb0db48d9aea2f625acf062765b9d142eb6f407149221be752688d60",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "9c7bc58cc398e94599e88a357030d6c734ec3ee735d3bea4019972fd283b2d1e",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "9e87b51fb7a5a06aaf88e5f36361761da01267009a977352d999baa64ad8d573",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "a341d117d7fe117d2f4e367fbb433e42ff42dcf0ff664f7c3718fc8858390834",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "b3de7b47c554afc790fe99373900eb2ecd02ad7618477dfb64ab2ab307374448",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "b538fd487d7590cabc14f9a94d20d124b621ed2ebe4e0c437c6b00b561f55efc",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "b600e6b1cd73337980a87063a28cdbc965cbc81e955d1eedb8d4c6e47c5d39f4",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "bddfd4587e05c83128610b57e666dabe783b4f1083c51382f1b492edb90ec594",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "bf805bf10d264a849b58420b97bb8b3a569f02661df91ed0e8df5b3958274458",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "c310f1cee6c044ef4af7818418d7d2d22723bc41b9d72fb50631f3cdca271bd9",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "c71873d84276bb1df1f48215956753aff55f048e335fd4114e148e0e0cc642e5",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "c90910a7ca9dbc64b7f6eebd5f0555c53fe9d2144791758a1b37d60d53f65063",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "d0d874d102e8822fcd4e7e6d07a5ad432c9b54bff26f3d1f976b921275238e19",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "d17ed8acef6b26bea265f7aea4f5e712be57ba307a160ff9ecae9db96714cb8a",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "d4086e782ed9f7e96af172c916293717c347b43a8167ef9ce7123137d2d48410",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "d58778235a1af63206d431355cc4d35ab243b2656e111f7ad64ec15ff08d4ef0",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "d6871a12703bc0fc259b0e4879111268e876f680288b78e00e31c21ccef970ef",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "e44a63e35133174f192eb51188dadcc996d4a2fadbbac28897abed30438df057",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "e44fa261cdcefd771326d791ba4b736ad48bbf6c2cf055628a5f9863faab081b",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Screens.kt",
+    "sha256": "e5b8eb1e088d2edc65b0b0059d051691be967f19206da760d0902d9d8f301940",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "0933fb667296882d8c45abca58ac52e01c8db6f19e626b30de88f0f4ed143ec5",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "1ecccad1194f659b4299177894b12eb5cea21b067bb347359f2c5af2ad2e6d00",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "27de9a04b7ce6a892b89dcbed6016b64eeb0eaf99d4b50650cff4cd09fa6ffbc",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "32642df13ec08a195d640ac3d5dcad1e7217ade49ff94bbe0735cbe90cefa637",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "388261d4482e2d31df75c7c9b64b78e3644e5351a61920cd6cbf87e22ff4f8a7",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "44676c3c75acce91f1985aa2838cb53cb37c8d32723f0eb074ce86ebafa9e7ed",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "4e4d59cb987804c29dd36c62b443c6cd2ee95974b72fb7e34b7d6de912ea16da",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "5167f22726577b6f7b4099172047af7342616ebbdbf3dfe83faa2ca09895faf9",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "5e8919d65dbbbda0017e18ea2c7fe0e80a644aef3e3a2738efc0a5631a34243c",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "7297d2085ea0adffc396d546235c67b5cb031150ab4a66a5c72794841e9176b3",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "7a59a87f5ffa4640b9f5e945d424b472fbe8eed9f8cdb6494301030f65efce30",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "8ef11d8b70e662762261f4d0e6b1fb2b1de5621b03d8a69f28a9848befb77fee",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "9555be81392eb2286b4b035c1539dd845ce7044337eafe45387a5a963d641b7c",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "9d76f0da08341a61777c0627371f12830096186a52fe1fd728100fbdb1dcdee8",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "b2f13f025e670dcf0c2c70f958d2ad708d77c8000015c6a7d312bf8d5744c1cf",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "b696fb4fb5adea11ae37add8d58894cc0301cc36d25e301e1f7bce66fb7d259a",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "bc50c532099b2bf4b736d99e9885af44f1c2a48efe275fca43294bc8f39dd48c",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "bf6f1f406085311ee5384fca100152badd46a80f913c1f8e9db74e574bb76053",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "d24b1ec0ab199a788b490d9d22c3f9222a527fe2f067df96ec91b95fafb47c61",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "daccc5563fe4c62fc97c10081b6ff9ad7c39620cadf02cc2b27513b4ee88de11",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "e03708b51fcc26582fd5cc8bccaad78f755f6552a6753001ebb90d7e57165484",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "f29387eefd4cf719a83e36067b7dab6dc8c28df72c626c9cbd54f6702c274a6b",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "f680b3402e68a816baf064437efe4e0c75b4aeb54210f0fb9c24ccf5dda596b9",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "Sheets.kt",
+    "sha256": "fdcd7453bad63738089d065e73695cb9166fe04f2e4b0b827e84f2d646ec3215",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P04-04"
+  },
+  {
+    "path": "privacy/VaultPrivacySheet.kt",
+    "sha256": "943f748e7b34ce92d2f4c0e9f8986f4d880c20cc5714edb5007050b81f8bf25a",
+    "count": 1,
+    "owner": "Codex",
+    "removal_task": "P09-04"
+  }
+]

@@ -1,0 +1,36 @@
+name: Architecture checks
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  portable-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check dependency ratchet
+        run: python3 tools/architecture_dependencies.py
+      - name: Check shared package cycles
+        run: python3 tools/architecture_package_cycles.py
+      - name: Test architecture checks
+        run: python3 -m unittest discover -s tools/tests -p 'test_architecture_*.py'
+      - name: Test UI literal inventory
+        run: python3 -m unittest discover -s tools/tests -p 'test_ui_literal_gate.py'
+      - name: Check shared UI direct literals
+        run: python3 tools/ui_literal_gate.py
+      - name: Check fuel UI direct literals
+        run: python3 tools/ui_literal_gate.py --fuel
+      - name: Check fuel domain policy values
+        run: python3 tools/fuel_policy_literals.py
+      - name: Test fuel domain policy gate
+        run: python3 -m unittest discover -s tools/tests -p 'test_fuel_policy_literals.py'
+      - name: Check translation resources and fixtures
+        run: python3 -m unittest discover -s tools/tests -p 'test_localization_resources.py'
+      - name: Check roadmap and fixtures
+        run: |
+          python3 tools/roadmap.py check
+          python3 -m unittest discover -s tools/tests -p 'test_roadmap.py'

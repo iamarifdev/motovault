@@ -6,6 +6,12 @@ The tracked feature roadmap is in `docs/roadmap/README.md`. Its source of truth 
 `docs/roadmap/roadmap.json`; generated views are `PROGRESS.md` and
 `IMPLEMENTATION-PLAN.md` in that directory.
 
+For P03 maintenance and all work from P04 onward, read
+`docs/roadmap/ARCHITECTURE-CONTRACT.md` and the applicable phase's architecture
+requirements in the tracker before planning or editing. Use the same contract for
+Codex, Claude, Gemini and human contributors. The P03A foundation is incremental:
+the target module layout and quality gates are not yet all implemented.
+
 When implementing a roadmap feature:
 
 1. Read the design contract and the task with `rtk run python3 tools/roadmap.py show TASK-ID`.
