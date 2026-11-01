@@ -1289,16 +1289,34 @@ fun MeScreen(
 // ==========================================
 // 5. ONBOARDING (3 STEPS) SCREEN
 // ==========================================
+data class OnboardingResult(
+    val brandId: String,
+    val modelId: String,
+    val modelName: String,
+    val odometer: Double,
+    val baselineKm: Double?,
+    val baselineDate: LocalDate,
+    val year: Int,
+    val market: RideMarket,
+    val modelCode: String,
+    val factoryProfileId: String?,
+    val baselineCertainty: com.motovault.app.domain.model.BaselineCertainty
+)
+
 @Composable
 fun OnboardingScreen(
     onDismiss: (() -> Unit)? = null,
-    onComplete: (brandId: String, modelId: String, name: String, odometer: Double, knowsLastService: Boolean) -> Unit
+    onComplete: (OnboardingResult) -> Unit,
+    initialStep: Int = 0,
+    initialBrandId: String? = null,
+    initialModelId: String? = null,
+    initialModelCode: String = ""
 ) {
     val f = currentFmt
     val haptic = currentHaptic
-    var step by remember { mutableStateOf(0) } // 0: Brand, 1: Model, 2: Odometer
-    var selectedBrandId by remember { mutableStateOf<String?>(null) }
-    var selectedModelId by remember { mutableStateOf<String?>(null) }
+    var step by remember { mutableStateOf(initialStep.coerceIn(0, 2)) } // 0: Brand, 1: Model, 2: Odometer
+    var selectedBrandId by remember { mutableStateOf(initialBrandId) }
+    var selectedModelId by remember { mutableStateOf(initialModelId) }
     var searchQuery by remember { mutableStateOf("") }
     var knowsLastService by remember { mutableStateOf(false) }
 
@@ -1530,62 +1548,120 @@ fun OnboardingScreen(
                 }
             }
             2 -> {
-                // Step 2: "এখন ওডোমিটারে কত?"
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
-                ) {
+                var baselineKnown by remember { mutableStateOf(false) }
+                var lastServiceKm by remember { mutableStateOf("") }
+                var lastServiceDate by remember { mutableStateOf(today().toString()) }
+                var year by remember { mutableStateOf("2023") }
+                var market by remember { mutableStateOf(RideMarket.BANGLADESH) }
+                var modelCode by remember { mutableStateOf(initialModelCode) }
+                var useManual by remember { mutableStateOf(false) }
+                val modelHasProfiles = selectedModelId != null && FactoryProfiles.profiles.any { it.modelId == selectedModelId }
+                val profile = FactoryProfiles.available(selectedModelId, year.toIntOrNull(), market).firstOrNull {
+                    modelCode.trim().uppercase() in it.modelCodes
+                }
+                LaunchedEffect(profile?.id) { useManual = profile != null }
+                val lastKm = lastServiceKm.toDoubleOrNull()
+                val baselineValid = !baselineKnown || (lastKm != null && lastKm >= 0.0 && lastKm <= odoVal)
+                val baselineDateValue = runCatching { LocalDate.parse(lastServiceDate) }.getOrNull()
+                val baselineDateValid = !baselineKnown || (baselineDateValue != null && baselineDateValue <= today())
+                Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(text = "এখন ওডোমিটারে কত?", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-
-                    Box(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
+                    Box(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), contentAlignment = Alignment.Center) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             val text = odoEntry.values["odo"].orEmpty()
                             Text(
                                 text = if (text.isEmpty()) f.d("0") else f.d(formatLakh(text.toDoubleOrNull() ?: 0.0)),
-                                fontSize = 44.sp,
-                                fontWeight = FontWeight.Bold,
+                                fontSize = 44.sp, fontWeight = FontWeight.Bold,
                                 color = if (text.isEmpty()) TextTertiary else TextPrimary
                             )
                             Spacer(Modifier.width(8.dp))
                             Text(text = if (f.digits == Digits.BN) "কিমি" else "km", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = TextSecondary)
                         }
                     }
-
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        VaultChip(text = "শেষ সার্ভিস মনে নেই", active = !knowsLastService, onClick = { knowsLastService = false })
-                        VaultChip(text = "মোটামুটি মনে আছে", active = knowsLastService, onClick = { knowsLastService = true })
+                    Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            VaultChip(text = appStringResource(Res.string.onboarding_baseline_unknown), active = !baselineKnown, onClick = { baselineKnown = false })
+                            VaultChip(text = appStringResource(Res.string.onboarding_baseline_known), active = baselineKnown, onClick = { baselineKnown = true })
+                        }
+                        Text(
+                            text = appStringResource(if (baselineKnown) Res.string.onboarding_baseline_known_hint else Res.string.onboarding_baseline_unknown_hint),
+                            fontSize = 13.sp, color = TextSecondary, lineHeight = 18.sp
+                        )
+                        if (baselineKnown) {
+                            Field(appStringResource(Res.string.onboarding_last_service_km), lastServiceKm, { lastServiceKm = it }, numeric = true)
+                            Field(appStringResource(Res.string.onboarding_last_service_date), lastServiceDate, { lastServiceDate = it })
+                            if (!baselineValid) Text(appStringResource(Res.string.onboarding_baseline_invalid), color = WarningColor, fontSize = 12.sp)
+                        } else {
+                            Panel {
+                                Text(appStringResource(Res.string.onboarding_first_inspection_title), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                listOf(
+                                    Res.string.onboarding_first_inspection_tyres,
+                                    Res.string.onboarding_first_inspection_brakes,
+                                    Res.string.onboarding_first_inspection_chain,
+                                    Res.string.onboarding_first_inspection_lights,
+                                    Res.string.onboarding_first_inspection_leaks
+                                ).forEach { item ->
+                                    val line = "• ${appStringResource(item)}"
+                                    Text(line, color = TextSecondary, fontSize = 12.sp)
+                                }
+                            }
+                        }
+                        if (modelHasProfiles) {
+                            Text(appStringResource(Res.string.onboarding_manual_section), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                            Field(appStringResource(Res.string.onboarding_model_year), year, { year = it }, numeric = true)
+                            Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                RideMarket.entries.forEach { option ->
+                                    VaultChip(
+                                        text = when (option) {
+                                            RideMarket.UNKNOWN -> appStringResource(Res.string.onboarding_market) + "?"
+                                            RideMarket.INDIA -> "India"
+                                            RideMarket.EUROPE -> "Europe"
+                                            RideMarket.BANGLADESH -> "Bangladesh"
+                                        },
+                                        active = market == option,
+                                        onClick = { market = option }
+                                    )
+                                }
+                            }
+                            Field(appStringResource(Res.string.onboarding_model_code), modelCode, { modelCode = it.take(30) })
+                            if (profile != null) {
+                                val manualLine = "${profile.title} · ${profile.applicability}"
+                                Text(manualLine, color = TextSecondary, fontSize = 11.sp, lineHeight = 16.sp)
+                                val uri = LocalUriHandler.current
+                                TextButton(onClick = { uri.openUri(profile.manualUrl) }) { Text(appStringResource(Res.string.schedule_manual_open), color = BrandColor) }
+                                Row(Modifier.fillMaxWidth().clickable { useManual = !useManual }, verticalAlignment = Alignment.CenterVertically) {
+                                    Checkbox(useManual, onCheckedChange = { useManual = it })
+                                    Text(appStringResource(Res.string.onboarding_manual_toggle), fontSize = 12.sp)
+                                }
+                            } else {
+                                Text(appStringResource(Res.string.onboarding_manual_unavailable), color = TextSecondary, fontSize = 12.sp)
+                            }
+                        }
                     }
-
-                    Text(
-                        text = if (knowsLastService) "অনুমান থেকে শতাংশ দেখানো হবে না। সার্ভিসের তথ্য দিয়ে নিশ্চিত করুন।"
-                               else "শেষ সার্ভিস অজানা থাকবে। সার্ভিস লিখলে ব্যবধানের হিসাব শুরু হবে।",
-                        fontSize = 13.sp,
-                        color = TextSecondary,
-                        lineHeight = 18.sp
-                    )
-
-                    Spacer(Modifier.weight(1f))
-
                     VaultButton(
-                        text = if (odoVal <= 0) "কিমি লিখুন" else "গ্যারেজ তৈরি করুন",
+                        text = if (odoVal <= 0) appStringResource(Res.string.onboarding_odometer_required) else appStringResource(Res.string.onboarding_finish_btn),
                         full = true,
-                        enabled = odoVal > 0,
+                        enabled = odoVal > 0 && baselineValid && baselineDateValid && (!useManual || profile != null),
                         onClick = {
                             haptic.perform(HapticKind.SUCCESS)
                             val chosenModel = brandModels.firstOrNull { it.id == selectedModelId }
                             onComplete(
-                                selectedBrandId ?: "yamaha",
-                                selectedModelId ?: "yamaha-r15-v4",
-                                chosenModel?.name ?: "R15 V4",
-                                odoVal,
-                                knowsLastService
+                                OnboardingResult(
+                                    brandId = selectedBrandId ?: "yamaha",
+                                    modelId = selectedModelId ?: "yamaha-r15-v4",
+                                    modelName = chosenModel?.name ?: "R15 V4",
+                                    odometer = odoVal,
+                                    baselineKm = if (baselineKnown) lastKm else null,
+                                    baselineDate = baselineDateValue ?: today(),
+                                    year = year.toIntOrNull() ?: 2023,
+                                    market = market,
+                                    modelCode = modelCode.trim().uppercase(),
+                                    factoryProfileId = profile?.id?.takeIf { useManual },
+                                    baselineCertainty = if (baselineKnown) com.motovault.app.domain.model.BaselineCertainty.OWNER_ESTIMATE else com.motovault.app.domain.model.BaselineCertainty.UNKNOWN
+                                )
                             )
                         }
                     )
-
                     VaultKeypad(onKey = odoEntry::press, decimal = false)
                 }
             }

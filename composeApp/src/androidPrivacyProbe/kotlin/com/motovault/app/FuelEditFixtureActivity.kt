@@ -32,6 +32,7 @@ class FuelEditFixtureActivity : ComponentActivity() {
     private lateinit var root: File
     private lateinit var database: VaultDatabase
     private lateinit var fuelId: String
+    private lateinit var writer: VaultCoordinator<VaultState>
     private fun openDatabase() = buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(this, File(root, "vault.db").absolutePath))
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +49,7 @@ class FuelEditFixtureActivity : ComponentActivity() {
         root = File(cacheDir, "synthetic-fuel-${UUID.randomUUID()}").apply { check(mkdirs()) }
         database = openDatabase()
         runBlocking { database.vault().replace(initial) }
-        val writer = VaultCoordinator(
+        writer = VaultCoordinator(
             scope = scope, initialState = initial,
             restore = { requireNotNull(database.vault().read()) }, write = {
                 if (failWrites) error("Synthetic write failure")
@@ -64,6 +65,13 @@ class FuelEditFixtureActivity : ComponentActivity() {
             override fun restore(recoveryId: String, expectedRevision: Long, completed: (Result<Unit>) -> Unit) = completed(Result.failure(IllegalStateException()))
         }
         setContent { MotoVault(writer, restorer, FuelEntryAdapter, FuelEntryAdapter, recovery, syntheticBackupOperations) }
+    }
+
+    /** Test fallback when the transient toast is not exposed by accessibility. */
+    fun undoLast(): Boolean = runBlocking {
+        val done = kotlinx.coroutines.CompletableDeferred<Boolean>()
+        writer.undo(writer.snapshots.value.revision) { done.complete(it) }
+        done.await()
     }
 
     /** Uses a fresh database connection after the coordinator has reported success. */

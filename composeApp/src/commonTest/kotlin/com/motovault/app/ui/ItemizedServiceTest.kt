@@ -124,7 +124,9 @@ class ItemizedServiceTest {
     @Test
     fun aServiceLineCannotResetAnUnrelatedSchedule() {
         val state = state()
-        val chain = state.rules.first { BangladeshServiceCatalogue.scheduleNameMatchesItem(it.name, "chain_sprocket") }
+        val chain = state.rules.first {
+            it.action == com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE && it.name.contains("chain", ignoreCase = true)
+        }
         assertFailsWith<IllegalArgumentException> {
             state.logServiceVisit(listOf(ServiceLineItem("engine_oil", scheduleId = chain.id, resetsScheduleBaseline = true, oil = EngineOilMetadata("mineral", purchaseBasis = "bottle"))))
         }
@@ -218,5 +220,24 @@ class ItemizedServiceTest {
             corrected.replaceFuelLog(old.id, 4200.0, 5.0, 700.0,
                 kotlinx.datetime.LocalDate.parse("2026-01-02"), true, null, "")
         }
+    }
+
+    @Test
+    fun mixedActionVisitResetsOnlyLinkedActionSchedules() {
+        val ride = Ride("yamaha", "BD", 2023, 6000.0, "yamaha-r15-v4", "R15 V4", market = RideMarket.BANGLADESH,
+            emission = RideEmission.BS6, modelCode = "YZF155-A", factoryProfileId = "yamaha-r15-v4-2023-bd-155")
+        val initial = VaultState.create(ride, 1000.0)
+        val lube = initial.rules.first { it.action == com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE }
+        val oil = initial.rules.first { it.name == "Engine oil" }
+        val adjust = initial.rules.first { it.action == com.motovault.app.domain.maintenance.MaintenanceAction.ADJUST }
+        val event = initial.logServiceVisit(listOf(
+            ServiceLineItem("chain_lube", action = "lubricate", scheduleId = lube.id, resetsScheduleBaseline = true),
+            ServiceLineItem("engine_oil", action = "replace", scheduleId = oil.id, resetsScheduleBaseline = true,
+                oil = EngineOilMetadata("mineral", purchaseBasis = "bottle"))
+        ), odometer = 5000.0)
+        assertEquals(5000.0, event.rules.first { it.id == lube.id }.lastServicedOdometerKm)
+        assertEquals(5000.0, event.rules.first { it.id == oil.id }.lastServicedOdometerKm)
+        assertEquals(adjust, event.rules.first { it.id == adjust.id })
+        assertEquals(setOf(lube.id, oil.id), event.logs.single().scheduleIds.toSet())
     }
 }

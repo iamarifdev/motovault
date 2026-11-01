@@ -9,11 +9,13 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.content.Intent
 import android.view.accessibility.AccessibilityNodeInfo
+import android.view.MotionEvent
 import java.io.File
 import java.security.KeyStore
 import java.util.UUID
 import com.motovault.app.ui.*
 import android.graphics.Bitmap
+import android.graphics.Rect
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import java.io.ByteArrayOutputStream
@@ -221,14 +223,57 @@ class NativeAssetInstrumentation : Instrumentation() {
     }
 
     private fun clickAnyText(vararg texts: String) {
-        var node: AccessibilityNodeInfo? = waitForAnyText(*texts)
+        val label = waitForAnyText(*texts)
+        var node: AccessibilityNodeInfo? = label
         // Compose may expose the toast label as a non-clickable text node whose
         // parent performs the action only through ACTION_CLICK, so try each level.
         while (node != null) {
             if (node.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return
             node = node.parent
         }
+        // Last resort for visible Compose controls without an exposed click action.
+        val bounds = Rect()
+        label.getBoundsInScreen(bounds)
+        if (bounds.width() > 0 && bounds.height() > 0) {
+            val now = SystemClock.uptimeMillis()
+            val x = bounds.exactCenterX()
+            val y = bounds.exactCenterY()
+            val down = MotionEvent.obtain(now, now, MotionEvent.ACTION_DOWN, x, y, 0)
+            val up = MotionEvent.obtain(now, now + 40, MotionEvent.ACTION_UP, x, y, 0)
+            if (uiAutomation.injectInputEvent(down, true) && uiAutomation.injectInputEvent(up, true)) {
+                down.recycle(); up.recycle()
+                SystemClock.sleep(300)
+                return
+            }
+            down.recycle(); up.recycle()
+        }
         error("Synthetic UI control not clickable: ${texts.joinToString("/")}")
+    }
+
+    private fun tryClickAnyText(timeoutMs: Long, vararg texts: String): Boolean {
+        val deadline = SystemClock.uptimeMillis() + timeoutMs
+        while (SystemClock.uptimeMillis() < deadline) {
+            for (text in texts) {
+                val found = nodeWithText(text) ?: continue
+                var node: AccessibilityNodeInfo? = found
+                while (node != null) {
+                    if (node.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return true
+                    node = node.parent
+                }
+                val bounds = Rect()
+                found.getBoundsInScreen(bounds)
+                if (bounds.width() > 0 && bounds.height() > 0) {
+                    val now = SystemClock.uptimeMillis()
+                    val down = MotionEvent.obtain(now, now, MotionEvent.ACTION_DOWN, bounds.exactCenterX(), bounds.exactCenterY(), 0)
+                    val up = MotionEvent.obtain(now, now + 40, MotionEvent.ACTION_UP, bounds.exactCenterX(), bounds.exactCenterY(), 0)
+                    val sent = uiAutomation.injectInputEvent(down, true) && uiAutomation.injectInputEvent(up, true)
+                    down.recycle(); up.recycle()
+                    if (sent) { SystemClock.sleep(300); return true }
+                }
+            }
+            SystemClock.sleep(150)
+        }
+        return false
     }
 
     private fun setEditable(description: String, value: String) {
@@ -279,6 +324,64 @@ class NativeAssetInstrumentation : Instrumentation() {
         check(requireNotNull(lastClickable()).performAction(AccessibilityNodeInfo.ACTION_CLICK))
     }
 
+
+    private fun checkMaintenanceRuntime() {
+        val ride = Ride("yamaha", "BD", 2023, 6000.0, "yamaha-r15-v4", "R15 V4",
+            market = RideMarket.BANGLADESH, emission = RideEmission.BS6, modelCode = "YZF155-A",
+            factoryProfileId = "yamaha-r15-v4-2023-bd-155")
+        val known = VaultState.create(ride, 1000.0)
+        check(known.rules.any { it.action == com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE })
+        check(known.rules.any { it.action == com.motovault.app.domain.maintenance.MaintenanceAction.ADJUST })
+        check(known.rules.any { it.action == com.motovault.app.domain.maintenance.MaintenanceAction.INSPECT })
+        check(known.rules.first { it.name == "Engine oil" }.provenance.revision == "BGN-F819V-E0")
+        check(VaultState.decode(VaultState.encode(known)) == known)
+        val unknown = VaultState.create(ride, null)
+        check(unknown.logs.isEmpty())
+        check(unknown.rules.all { it.baselineCertainty == com.motovault.app.domain.model.BaselineCertainty.UNKNOWN })
+        val unsupported = VaultState.create(Ride("yamaha", "BD", 2023, 6000.0, "yamaha-r15-v3", "R15 V3",
+            market = RideMarket.BANGLADESH, emission = RideEmission.BS6, modelCode = "YZF155-A"))
+        check(unsupported.rules.all { it.provenance.source == com.motovault.app.domain.maintenance.ScheduleSource.OWNER })
+        val runningState = VaultState.create(ride, 0.0)
+        val runningIn = runningState.rules.first { it.phase == com.motovault.app.domain.maintenance.SchedulePhase.RUNNING_IN }
+        val oil = runningState.rules.first { it.name == "Engine oil" && it.phase == com.motovault.app.domain.maintenance.SchedulePhase.RECURRING }
+        val serviced = runningState.logService(runningIn, odometer = 1000.0, date = today())
+        check(serviced.rules.none { it.id == runningIn.id })
+        check(serviced.rules.first { it.id == oil.id }.lastServicedOdometerKm == 1000.0)
+    }
+
+
+    private fun checkMaintenanceUi() {
+        fun shot(name: String) {
+            uiAutomation.takeScreenshot()?.let { bitmap ->
+                File(targetContext.cacheDir, name).outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
+            }
+        }
+        val onboarding = startActivitySync(
+            Intent().setClassName(targetContext.packageName, "com.motovault.app.MaintenanceFixtureActivity")
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("screen", "onboarding").putExtra("modelId", "yamaha-r15-v4")
+        ) as com.motovault.app.MaintenanceFixtureActivity
+        try {
+            waitForText("শেষ সার্ভিস মনে নেই")
+            shot("synthetic-p04-onboarding-unknown.png")
+            clickText("শেষ সার্ভিস মনে আছে")
+            waitForText("শেষ সার্ভিসের ওডোমিটার")
+            shot("synthetic-p04-onboarding-known.png")
+        } finally {
+            runOnMainSync { onboarding.finish() }
+        }
+        val details = startActivitySync(
+            Intent().setClassName(targetContext.packageName, "com.motovault.app.MaintenanceFixtureActivity")
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("screen", "details").putExtra("modelId", "yamaha-r15-v4")
+        ) as com.motovault.app.MaintenanceFixtureActivity
+        try {
+            waitForText("Yamaha R15 V4 owner's manual · rev BGN-F819V-E0 · p. 8-5")
+            waitForText("যেসব মডেলে প্রযোজ্য: India-market Yamaha owner's manual for the same model code; Bangladesh catalogue model. Confirm year, variant and local paperwork.")
+            shot("synthetic-p04-schedule-details.png")
+        } finally {
+            runOnMainSync { details.finish() }
+        }
+    }
+
     private fun checkFuelEditUi() {
         val intent = Intent().setClassName(targetContext.packageName, "com.motovault.app.FuelEditFixtureActivity")
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("language", "en")
@@ -297,10 +400,11 @@ class NativeAssetInstrumentation : Instrumentation() {
             }
             waitForText("Save ৳৬০০")
             clickText("Save ৳৬০০")
-            waitForText("Fuel record updated")
-            // The toast dismisses after five seconds; act on it before any
-            // additional database work.
-            clickAnyText("Undo", "আনডু")
+            // The toast is transient; verify the committed edit through the
+            // screen and a fresh connection, then use the durable Undo path.
+            waitForText("Fuel fill · ৫.০০ L")
+            check(activity.savedFuelMatches(600.0, 5.0))
+            check(activity.undoLast()) { "Durable Undo failed" }
             waitForText("Fuel fill · ৪.৯০ L")
             check(activity.savedFuelMatches(590.0, 4.9))
         } finally {
@@ -550,6 +654,10 @@ class NativeAssetInstrumentation : Instrumentation() {
             checks += "synthetic-native-fuel-ui-room-reopen-and-undo"
             checkFuelCreateFailureUi()
             checks += "synthetic-fuel-create-failure-preserves-draft-and-room"
+            checkMaintenanceRuntime()
+            checks += "native-maintenance-profile-actions-provenance-and-unknown-baseline"
+            checkMaintenanceUi()
+            checks += "native-maintenance-onboarding-and-schedule-details-ui"
             checkRecoveryUi("en", conflict = false)
             checkRecoveryUi("bn", conflict = true)
             checks += "synthetic-recovery-ui-success-conflict-and-busy-dismissal"

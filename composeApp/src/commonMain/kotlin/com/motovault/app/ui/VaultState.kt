@@ -194,7 +194,8 @@ data class VaultState(
             require(line.unitPricePoisha == null || line.lineTotalPoisha != null) { "This quantity and price are too large to calculate safely." }
             if (line.catalogueId == "engine_oil") require(line.oil?.isValid() == true) { "Choose an oil type and purchase basis, then check pack and quantity values." }
             else require(line.oil == null) { "Oil details can only be attached to an engine-oil item." }
-            require(!line.resetsScheduleBaseline || line.action in setOf("replace", "service")) { "Inspection, cleaning, and adjustment do not reset a service baseline." }
+            val linkedAction = com.motovault.app.domain.maintenance.MaintenanceAction.fromCode(line.action)
+            require(!line.resetsScheduleBaseline || linkedAction != null) { "Choose a maintenance action before linking a schedule." }
             require(line.scheduleId == null || line.resetsScheduleBaseline) { "Link a schedule only when this item sets its baseline." }
         }
         val scheduleIds = lines.filter { it.resetsScheduleBaseline }.mapNotNull { it.scheduleId }.distinct()
@@ -202,8 +203,11 @@ data class VaultState(
         require(linkedRules.size == scheduleIds.size) { "One linked schedule no longer exists." }
         lines.filter { it.scheduleId != null }.forEach { line ->
             val linkedRule = linkedRules.first { it.id == line.scheduleId }
-            require(line.catalogueId != null && BangladeshServiceCatalogue.scheduleNameMatchesItem(linkedRule.name, line.catalogueId)) {
+            require(line.catalogueId != null && BangladeshServiceCatalogue.scheduleMatchesItem(linkedRule.catalogueId, linkedRule.name, line.catalogueId)) {
                 "Link a schedule to the matching service item."
+            }
+            require(com.motovault.app.domain.maintenance.MaintenanceAction.fromCode(line.action) == linkedRule.action) {
+                "The linked schedule must use the same action as this service line."
             }
         }
         linkedRules.forEach { rule ->
@@ -403,16 +407,42 @@ data class VaultState(
         }.getOrNull()
         fun encode(state: VaultState) = json.encodeToString(serializer(), state)
 
-        fun create(ride: Ride, baseline: Double = ride.odometer, baselineDate: LocalDate = today()): VaultState {
+        fun create(
+            ride: Ride,
+            baseline: Double? = ride.odometer,
+            baselineDate: LocalDate = today(),
+            baselineCertainty: com.motovault.app.domain.model.BaselineCertainty? = null
+        ): VaultState {
             FactoryProfiles.validate(ride)
             require(ride.odometer.isFinite() && ride.odometer in 0.0..9999999.0)
-            require(baseline.isFinite() && baseline in 0.0..ride.odometer) { "Last service mileage cannot exceed current mileage." }
+            require(baseline == null || (baseline.isFinite() && baseline in 0.0..ride.odometer)) {
+                "Last service mileage cannot exceed current mileage."
+            }
             require(baselineDate <= today()) { "Baseline date cannot be in the future." }
-            require(ride.factoryProfileId == null || baseline >= 1000) { "Use the recurring manual schedule after the 1,000 km running-in service. Before that, set an owner reminder for the first service." }
             require(ride.modelId == null || BikeCatalogue.find(ride.modelId)?.brandId == ride.brandId) { "Choose a model from the selected brand." }
-            val examples = listOf(Triple("Chain", 500.0, 30), Triple("Engine oil", 3000.0, 180), Triple("Air filter", 5000.0, 180))
-            return VaultState(ride = ride, rules = FactoryProfiles.find(ride.factoryProfileId)?.rules(baseline, baselineDate) ?: examples.map { (name, km, days) ->
-                ComponentRule(recordId(), "primary", name, "Owner-defined example. Confirm against your manual.", km, days, baseline, baselineDate.toEpochDays().toLong())
+            val certainty = baselineCertainty ?: if (baseline == null) {
+                com.motovault.app.domain.model.BaselineCertainty.UNKNOWN
+            } else {
+                com.motovault.app.domain.model.BaselineCertainty.CONFIRMED
+            }
+            val examples = listOf(
+                Triple("Chain lubrication", 500.0, 30),
+                Triple("Engine oil", 3000.0, 180),
+                Triple("Air filter", 5000.0, 180)
+            )
+            return VaultState(ride = ride, rules = FactoryProfiles.find(ride.factoryProfileId)?.rules(baseline, baselineDate, certainty) ?: examples.map { (name, km, days) ->
+                ComponentRule(recordId(), "primary", name, "Owner-defined example. Confirm against your manual.", km, days,
+                    baseline ?: 0.0, if (baseline == null) 0L else baselineDate.toEpochDays().toLong(),
+                    baselineCertainty = certainty,
+                    action = when (name) {
+                        "Chain lubrication" -> com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE
+                        else -> com.motovault.app.domain.maintenance.MaintenanceAction.REPLACE
+                    },
+                    provenance = com.motovault.app.domain.maintenance.ScheduleProvenance(
+                        source = com.motovault.app.domain.maintenance.ScheduleSource.OWNER,
+                        label = "Owner-defined example"
+                    )
+                )
             })
         }
 

@@ -141,7 +141,11 @@ fun componentSuffix(rule: ComponentRule): String {
     }
 }
 
+@Composable
 fun componentLabel(rule: ComponentRule): String {
+    rule.catalogueId?.let(BangladeshServiceCatalogue::find)?.let { item ->
+        return if (currentResourceLanguage() == AppLanguage.EN) item.labelEn else item.labelBn
+    }
     val suffix = componentSuffix(rule)
     val bengaliName = when (suffix) {
         "chain" -> "চেইন পরিষ্কার ও লুব্রিকেন্ট"
@@ -403,29 +407,30 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
                 } else if (state.ride == null || editingRide) {
                     OnboardingScreen(
                         onDismiss = if (state.ride != null) { { editingRide = false } } else null,
-                        onComplete = { brandId, modelId, name, odometer, knowsLastService ->
+                        onComplete = { result ->
                             val today = today()
-                            val seeded = VaultState.seedData(today)
-                            val rules = seeded.rules.map { rule ->
-                                rule.copy(
-                                    lastServicedOdometerKm = odometer,
-                                    lastServicedEpochDays = today.toEpochDays().toLong(),
-                                    baselineCertainty = if (knowsLastService) com.motovault.app.domain.model.BaselineCertainty.OWNER_ESTIMATE else com.motovault.app.domain.model.BaselineCertainty.UNKNOWN
-                                )
-                            }
                             val ride = Ride(
-                                brandId = brandId,
-                                modelId = modelId,
-                                year = today.year - 2,
-                                odometer = odometer,
-                                edition = name,
+                                brandId = result.brandId,
+                                edition = result.modelName.ifBlank { "নিজের সেটআপ" },
+                                year = result.year,
+                                odometer = result.odometer,
+                                modelId = result.modelId,
+                                modelName = result.modelName,
+                                market = result.market,
+                                emission = RideEmission.UNKNOWN,
+                                modelCode = result.modelCode,
+                                factoryProfileId = result.factoryProfileId,
                                 odometerConfirmedDate = today.toString()
                             )
-                            val nextState = state.copy(
-                                ride = ride,
-                                rules = rules,
-                                logs = emptyList(),
-                                documents = state.documents
+                            val created = VaultState.create(ride, result.baselineKm, result.baselineDate, result.baselineCertainty)
+                            val nextState = created.copy(
+                                documents = state.documents,
+                                appearance = state.appearance,
+                                language = state.language,
+                                digits = state.digits,
+                                haptics = state.haptics,
+                                reduceMotion = state.reduceMotion,
+                                textScale = state.textScale
                             )
                             commit(nextState) { ok ->
                                 if (ok) {
@@ -545,6 +550,10 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
                             activeSheet = if (name == "serviceReminder") ActiveSheet("reminders", "service" to id)
                                 else ActiveSheet(name, id)
                         })
+                    "schedule" -> state.rules.firstOrNull { it.id == sheet.props as? String }?.let { rule ->
+                        ScheduleDialog(state, rule, onDismiss = { activeSheet = null },
+                            onSave = { next, done -> commit(next, done) })
+                    }
                     "reminders" -> {
                         val target = sheet.props as? Pair<*, *>
                         ReminderSettingsSheet(state, target?.first as? String, target?.second as? String,

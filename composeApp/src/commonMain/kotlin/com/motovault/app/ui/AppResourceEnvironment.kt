@@ -19,6 +19,9 @@ internal fun AppResourceEnvironment(language: AppLanguage, content: @Composable 
 
 private val LocalResourceLanguage = staticCompositionLocalOf { AppLanguage.BN }
 
+@Composable
+internal fun currentResourceLanguage(): AppLanguage = LocalResourceLanguage.current
+
 /** Refresh only the resource lookup when language changes; retain screen and sheet state. */
 @Composable
 internal fun appStringResource(resource: StringResource, vararg args: Any): String {

@@ -25,6 +25,13 @@ object BangladeshServiceCatalogue {
         ServiceCatalogueItem("clutch_cable", "ক্লাচ কেবল", "Clutch cable", action = "replace"),
         ServiceCatalogueItem("tyre", "টায়ার", "Tyre", action = "replace"),
         ServiceCatalogueItem("battery", "ব্যাটারি", "Battery", action = "replace"),
+        ServiceCatalogueItem("chain_lube", "চেইন লুব্রিকেন্ট", "Chain lubrication", "বার", "lubricate"),
+        ServiceCatalogueItem("chain_adjust", "চেইন অ্যাডজাস্ট", "Chain adjustment", "বার", "adjust"),
+        ServiceCatalogueItem("brake_hose", "ব্রেক হোজ", "Brake hose", "টি", "replace"),
+        ServiceCatalogueItem("fork_oil", "ফর্ক অয়েল", "Front fork oil", "লিটার", "replace"),
+        ServiceCatalogueItem("valve_clearance", "ভালভ ক্লিয়ারেন্স", "Valve clearance", "বার", "inspect"),
+        ServiceCatalogueItem("tyre_brake_inspect", "টায়ার ও ব্রেক পরীক্ষা", "Tyre and brake inspection", "বার", "inspect"),
+        ServiceCatalogueItem("first_service", "প্রথম সার্ভিস", "First service", "বার", "inspect"),
         ServiceCatalogueItem("general_service", "সাধারণ সার্ভিস", "General service", "বার", "service"),
         ServiceCatalogueItem("inspection", "পরীক্ষা", "Inspection", "বার", "inspect"),
         ServiceCatalogueItem("cleaning", "পরিষ্কার", "Cleaning", "বার", "clean"),
@@ -35,6 +42,13 @@ object BangladeshServiceCatalogue {
     fun itemForScheduleName(name: String): ServiceCatalogueItem {
         val normalized = name.lowercase().replace("\u09af\u09bc", "\u09df")
         val id = when {
+            "chain lubrication" in normalized || "চেইন লুব্রিকেন্ট" in normalized -> "chain_lube"
+            "chain adjustment" in normalized || "চেইন অ্যাডজাস্ট" in normalized -> "chain_adjust"
+            "brake hose" in normalized || "ব্রেক হোজ" in normalized -> "brake_hose"
+            "fork oil" in normalized || "ফর্ক অয়েল" in normalized -> "fork_oil"
+            "valve clearance" in normalized || "ভালভ ক্লিয়ারেন্স" in normalized -> "valve_clearance"
+            "tyres, brakes" in normalized || "tyre and brake" in normalized -> "tyre_brake_inspect"
+            "first service" in normalized || "প্রথম সার্ভিস" in normalized -> "first_service"
             "chain" in normalized || "চেইন" in normalized -> "chain_sprocket"
             "oil filter" in normalized || "অয়েল ফিল্টার" in normalized -> "oil_filter"
             "brake fluid" in normalized || "ব্রেক ফ্লুইড" in normalized -> "brake_fluid"
@@ -53,6 +67,10 @@ object BangladeshServiceCatalogue {
 
     fun scheduleNameMatchesItem(name: String, itemId: String): Boolean =
         itemId != "general_service" && itemForScheduleName(name).id == itemId
+
+    /** Prefer the persisted catalogue link; fall back to the legacy name heuristic. */
+    fun scheduleMatchesItem(ruleCatalogueId: String?, ruleName: String, itemId: String): Boolean =
+        ruleCatalogueId?.let { it == itemId } ?: scheduleNameMatchesItem(ruleName, itemId)
 }
 
 @Serializable

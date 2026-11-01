@@ -12,6 +12,8 @@ import androidx.compose.runtime.*
 import kotlinx.serialization.json.Json
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
+import motovault.composeapp.generated.resources.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -83,11 +85,27 @@ internal fun ComponentsList(state: VaultState, onDismiss: () -> Unit, onSelect: 
         Text("নিজের সার্ভিস সূচি। দূরত্ব বা সময়, যেটি আগে হয়।", color = TextSecondary, fontSize = 13.sp)
         state.rules.forEach { rule ->
             val health = CalculateWearUseCase().execute(rule, state.ride!!.odometer, today().toEpochDays().toLong())
+            val actionText = appStringResource(when (rule.action) {
+                com.motovault.app.domain.maintenance.MaintenanceAction.INSPECT -> Res.string.action_inspect
+                com.motovault.app.domain.maintenance.MaintenanceAction.CLEAN -> Res.string.action_clean
+                com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE -> Res.string.action_lubricate
+                com.motovault.app.domain.maintenance.MaintenanceAction.ADJUST -> Res.string.action_adjust
+                com.motovault.app.domain.maintenance.MaintenanceAction.REPLACE -> Res.string.action_replace
+            })
+            val sourceText = when (rule.provenance.source) {
+                com.motovault.app.domain.maintenance.ScheduleSource.MANUAL -> appStringResource(Res.string.schedule_source_manual)
+                com.motovault.app.domain.maintenance.ScheduleSource.DEALER -> appStringResource(Res.string.schedule_source_dealer)
+                com.motovault.app.domain.maintenance.ScheduleSource.OWNER -> appStringResource(Res.string.schedule_source_owner)
+            }
             Panel(onClick = { onSelect(rule) }) {
-                Text(componentLabel(rule), fontWeight = FontWeight.Bold)
-                Text("${if (rule.intervalKm > 0) "${rule.intervalKm.toInt()} কিমি" else "দূরত্বের সীমা নেই"} / ${if (rule.intervalDays > 0) "${rule.intervalDays} দিন" else "সময়ের সীমা নেই"}", color = TextSecondary, fontSize = 12.sp)
-                Text("শেষ সার্ভিস: ${LocalDate.fromEpochDays(rule.lastServicedEpochDays.toInt())} · ${rule.lastServicedOdometerKm.toInt()} কিমি", color = TextSecondary, fontSize = 11.sp)
-                Text(if (health.wearPercentage >= 100) "সময় পেরিয়েছে ↗" else if (health.wearPercentage >= 75) "শিগগির সার্ভিস করুন ↗" else "ঠিক আছে ↗", color = if (health.wearPercentage >= 75) WarningColor else HealthyColor, fontSize = 11.sp)
+                val scheduleTitle = "${componentLabel(rule)} · $actionText"
+                Text(scheduleTitle, fontWeight = FontWeight.Bold)
+                Text(sourceText, color = TextSecondary, fontSize = 11.sp)
+                Text("${if (rule.intervalKm > 0) "${rule.intervalKm.toInt()} কিমি" else appStringResource(Res.string.schedule_no_distance_limit)} / ${if (rule.intervalDays > 0) "${rule.intervalDays} দিন" else appStringResource(Res.string.schedule_no_time_limit)}", color = TextSecondary, fontSize = 12.sp)
+                if (rule.baselineCertainty != com.motovault.app.domain.model.BaselineCertainty.CONFIRMED) {
+                    Text(appStringResource(Res.string.schedule_unknown_baseline), color = WarningColor, fontSize = 11.sp)
+                } else Text("শেষ সার্ভিস: ${LocalDate.fromEpochDays(rule.lastServicedEpochDays.toInt())} · ${rule.lastServicedOdometerKm.toInt()} কিমি", color = TextSecondary, fontSize = 11.sp)
+                Text(if (health.wearPercentage >= 100) "সময় পেরিয়েছে ↗" else if (health.wearPercentage >= 75) "শিগগির সার্ভিস করুন ↗" else "ঠিক আছে ↗", color = if (health.wearPercentage >= 75) WarningColor else HealthyColor, fontSize = 11.sp)
             }
         }
         Primary("যন্ত্রাংশ যোগ করুন", "add", onClick = onAdd)
@@ -101,13 +119,26 @@ internal fun ServiceDialog(state: VaultState, initial: ComponentRule?, onDismiss
             ?: initial?.let { BangladeshServiceCatalogue.itemForScheduleName(it.name) }
             ?: BangladeshServiceCatalogue.items.first { it.id == "general_service" }
     }
-    val initialScheduleId = remember(initial?.id, existing?.id) { existing?.serviceLines?.firstOrNull()?.scheduleId.orEmpty().ifBlank { initial?.id?.takeIf { BangladeshServiceCatalogue.scheduleNameMatchesItem(initial.name, initialItem.id) }.orEmpty() } }
     val initialItemId = existing?.serviceLines?.firstOrNull()?.let { it.catalogueId ?: "custom_item" } ?: initialItem.id
     var itemId by remember(initial?.id, existing?.id) { mutableStateOf(initialItemId) }
     var itemExpanded by remember { mutableStateOf(false) }
     var customName by remember(existing?.id) { mutableStateOf(existing?.serviceLines?.firstOrNull { it.catalogueId == null }?.customName.orEmpty()) }
-    var action by remember(initial?.id, existing?.id) { mutableStateOf(existing?.serviceLines?.firstOrNull()?.action ?: if (initialItem.id == "chain_sprocket") "service" else initialItem.action) }
+    var action by remember(initial?.id, existing?.id) {
+        mutableStateOf(
+            existing?.serviceLines?.firstOrNull()?.action
+                ?: initial?.action?.name?.lowercase()
+                ?: initialItem.action
+        )
+    }
     var actionExpanded by remember { mutableStateOf(false) }
+    val initialScheduleId = remember(initial?.id, existing?.id) {
+        existing?.serviceLines?.firstOrNull()?.scheduleId.orEmpty().ifBlank {
+            initial?.takeIf { rule ->
+                rule.action.name.equals(action, ignoreCase = true) &&
+                    BangladeshServiceCatalogue.scheduleMatchesItem(rule.catalogueId, rule.name, initialItem.id)
+            }?.id.orEmpty()
+        }
+    }
     var scheduleId by remember(initial?.id, existing?.id) { mutableStateOf(initialScheduleId) }
     var scheduleExpanded by remember { mutableStateOf(false) }
     var quantity by remember { mutableStateOf("1") }
@@ -157,7 +188,11 @@ internal fun ServiceDialog(state: VaultState, initial: ComponentRule?, onDismiss
     val quantityValue = quantity.toDoubleOrNull()
     val day = runCatching { LocalDate.parse(date) }.getOrNull()
     val selectedItem = BangladeshServiceCatalogue.find(itemId) ?: BangladeshServiceCatalogue.items.first()
-    val matchingSchedules = state.rules.filter { BangladeshServiceCatalogue.scheduleNameMatchesItem(it.name, itemId) }
+    val selectedAction = com.motovault.app.domain.maintenance.MaintenanceAction.fromCode(action)
+    val matchingSchedules = state.rules.filter { rule ->
+        (selectedAction == null || rule.action == selectedAction) &&
+            BangladeshServiceCatalogue.scheduleMatchesItem(rule.catalogueId, rule.name, itemId)
+    }
     fun optionalIntIsValid(value: String) = value.isBlank() || value.toIntOrNull()?.let { it > 0 } == true
     fun optionalDoubleIsValid(value: String) = value.isBlank() || value.toDoubleOrNull()?.let { it.isFinite() && it > 0 } == true
     val oilNumbersValid = optionalIntIsValid(packMl) && optionalDoubleIsValid(boughtQuantity) && optionalIntIsValid(usedMl)
@@ -172,8 +207,8 @@ internal fun ServiceDialog(state: VaultState, initial: ComponentRule?, onDismiss
         action = action, quantity = quantityValue ?: 1.0,
         unitBn = if (itemId == "custom_item") "টি" else if (itemId == "engine_oil") if (purchaseBasis == "bottle") "বোতল" else "লিটার" else selectedItem.unitBn,
         unitPricePoisha = unitPoisha,
-        scheduleId = scheduleId.takeIf { it.isNotBlank() && action in setOf("replace", "service") },
-        resetsScheduleBaseline = scheduleId.isNotBlank() && action in setOf("replace", "service"), oil = currentOil
+        scheduleId = scheduleId.takeIf { it.isNotBlank() && matchingSchedules.any { rule -> rule.id == it } },
+        resetsScheduleBaseline = scheduleId.isNotBlank() && matchingSchedules.any { rule -> rule.id == scheduleId }, oil = currentOil
     )
     val computedTotal = serviceTotalPoisha(lines, labourPoisha, miscPoisha, discountPoisha)
     Sheet(if (existing == null) "এক ভিজিটে সব কাজ লিখুন" else "সার্ভিস রেকর্ড ঠিক করুন", onDismiss) {
@@ -203,16 +238,24 @@ internal fun ServiceDialog(state: VaultState, initial: ComponentRule?, onDismiss
         }
         if (itemId == "custom_item") Field("আইটেমের নাম", customName, { customName = it.take(60) })
         Box {
-            OutlinedButton(onClick = { actionExpanded = true }, modifier = Modifier.fillMaxWidth()) { Text(when (action) { "replace" -> "বদলানো"; "service" -> "সার্ভিস করা"; "inspect" -> "পরীক্ষা"; "clean" -> "পরিষ্কার"; else -> "অ্যাডজাস্ট" }) }
+            OutlinedButton(onClick = { actionExpanded = true }, modifier = Modifier.fillMaxWidth()) { Text(when (action) { "replace" -> "বদলানো"; "service" -> "সার্ভিস করা"; "lubricate" -> "লুব্রিকেট"; "inspect" -> "পরীক্ষা"; "clean" -> "পরিষ্কার"; else -> "অ্যাডজাস্ট" }) }
             DropdownMenu(actionExpanded, onDismissRequest = { actionExpanded = false }) {
-                listOf("replace" to "বদলানো", "service" to "সার্ভিস করা", "inspect" to "পরীক্ষা", "clean" to "পরিষ্কার", "adjust" to "অ্যাডজাস্ট").forEach { (key, label) -> DropdownMenuItem(text = { Text(label) }, onClick = { action = key; if (key !in setOf("replace", "service")) scheduleId = ""; actionExpanded = false }) }
+                listOf("replace" to "বদলানো", "service" to "সার্ভিস করা", "lubricate" to "লুব্রিকেট", "inspect" to "পরীক্ষা", "clean" to "পরিষ্কার", "adjust" to "অ্যাডজাস্ট").forEach { (key, label) ->
+                    DropdownMenuItem(text = { Text(label) }, onClick = {
+                        action = key
+                        if (matchingSchedules.none { it.id == scheduleId }) scheduleId = ""
+                        actionExpanded = false
+                    })
+                }
             }
         }
-        if (action in setOf("replace", "service")) Box {
+        if (selectedAction != null) Box {
             OutlinedButton(onClick = { scheduleExpanded = true }, enabled = matchingSchedules.isNotEmpty(), modifier = Modifier.fillMaxWidth()) { Text(if (scheduleId.isBlank()) "মিল থাকা রিমাইন্ডার নেই" else state.rules.firstOrNull { it.id == scheduleId }?.name ?: "রিমাইন্ডার বাছাই করুন") }
             DropdownMenu(scheduleExpanded, onDismissRequest = { scheduleExpanded = false }) {
                 DropdownMenuItem(text = { Text("কোনো রিমাইন্ডার নয়") }, onClick = { scheduleId = ""; scheduleExpanded = false })
-                matchingSchedules.forEach { rule -> DropdownMenuItem(text = { Text(rule.name) }, onClick = { scheduleId = rule.id; scheduleExpanded = false }) }
+                matchingSchedules.forEach { rule ->
+                    DropdownMenuItem(text = { Text(rule.name) }, onClick = { scheduleId = rule.id; scheduleExpanded = false })
+                }
             }
         }
         Field("পরিমাণ", quantity, { quantity = it }, true)
@@ -333,18 +376,84 @@ internal fun ScheduleDialog(state: VaultState, existing: ComponentRule?, onDismi
     val intervalDays = days.toIntOrNull()
     val odo = odometer.toDoubleOrNull()
     val day = runCatching { LocalDate.parse(date) }.getOrNull()
-    Sheet(if (existing == null) "যন্ত্রাংশ যোগ করুন।" else "সার্ভিসের ব্যবধান বদলান।", onDismiss) {
-        Eyebrow("নিজের সার্ভিস সূচি")
-        Text("ম্যানুয়াল বা মেকানিকের পরামর্শ মেনে চলুন। দূরত্ব বা সময়ের অন্তত একটি সীমা দিন।", color = TextSecondary, fontSize = 13.sp)
-        Field("যন্ত্রাংশের নাম", name, { name = it.take(40) })
-        Field("কত কিমি পরপর (বন্ধ রাখতে 0)", km, { km = it }, true)
-        Field("কত দিন পরপর (বন্ধ রাখতে 0)", days, { days = it }, true)
-        Field("শেষ সার্ভিসের সময় ওডোমিটার", odometer, { odometer = it }, true)
-        Field("শেষ সার্ভিসের তারিখ (YYYY-MM-DD)", date, { date = it })
+    val f = currentFmt
+    val ownerSourceLabel = appStringResource(Res.string.schedule_source_owner)
+    val ownerDefinedText = appStringResource(Res.string.schedule_owner_defined)
+    val saveFailedText = appStringResource(Res.string.schedule_save_failed)
+    val preview = existing?.copy(intervalKm = distance ?: existing.intervalKm, intervalDays = intervalDays ?: existing.intervalDays)
+    val wear = preview?.let { WearCalculator.wearOf(it, state.ride!!.odometer, today().toEpochDays().toLong()) }
+    val actionLabel = appStringResource(when (existing?.action ?: com.motovault.app.domain.maintenance.MaintenanceAction.REPLACE) {
+        com.motovault.app.domain.maintenance.MaintenanceAction.INSPECT -> Res.string.action_inspect
+        com.motovault.app.domain.maintenance.MaintenanceAction.CLEAN -> Res.string.action_clean
+        com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE -> Res.string.action_lubricate
+        com.motovault.app.domain.maintenance.MaintenanceAction.ADJUST -> Res.string.action_adjust
+        com.motovault.app.domain.maintenance.MaintenanceAction.REPLACE -> Res.string.action_replace
+    })
+    val nextDue = when {
+        wear == null || existing == null -> null
+        wear.status == WearStatus.UNKNOWN -> appStringResource(Res.string.schedule_unknown_baseline)
+        else -> buildList {
+            wear.remainingKm?.let { add(appStringResource(Res.string.schedule_distance_km).substringBefore(" (") + " " + f.km(it.coerceAtLeast(0.0))) }
+            wear.remainingDays?.let { add(appStringResource(Res.string.schedule_time_days).substringBefore(" (") + " " + f.days(it.coerceAtLeast(0))) }
+        }.joinToString(" · ").ifBlank { appStringResource(Res.string.schedule_known_baseline) }
+    }
+    Sheet(appStringResource(Res.string.schedule_details_title), onDismiss) {
+        Eyebrow(actionLabel)
+        Text(if (existing?.provenance?.isManualBacked == true) existing.provenance.displayReference else ownerDefinedText, color = TextSecondary, fontSize = 12.sp, lineHeight = 17.sp)
+        existing?.provenance?.let { provenance ->
+            if (provenance.isManualBacked) {
+                val applicabilityLine = "${appStringResource(Res.string.schedule_applicability)}: ${provenance.applicability}"
+                Text(applicabilityLine, color = TextSecondary, fontSize = 11.sp, lineHeight = 16.sp)
+                val uri = LocalUriHandler.current
+                TextButton(onClick = { provenance.url.takeIf { it.isNotBlank() }?.let(uri::openUri) }) {
+                    Text(appStringResource(Res.string.schedule_manual_open), color = BrandColor)
+                }
+            }
+        }
+        nextDue?.let { due ->
+            val dueLine = "${appStringResource(Res.string.schedule_next_due)}: $due"
+            Text(dueLine, fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = TextPrimary)
+        }
+        Text(
+            text = if (existing?.baselineCertainty == com.motovault.app.domain.model.BaselineCertainty.CONFIRMED) {
+                appStringResource(Res.string.schedule_known_baseline)
+            } else appStringResource(Res.string.schedule_unknown_baseline),
+            color = TextSecondary, fontSize = 12.sp
+        )
+        Field(appStringResource(Res.string.schedule_name), name, { name = it.take(40) })
+        Field(appStringResource(Res.string.schedule_distance_km), km, { km = it }, true)
+        Field(appStringResource(Res.string.schedule_time_days), days, { days = it }, true)
+        Field(appStringResource(Res.string.onboarding_last_service_km), odometer, { odometer = it }, true)
+        Field(appStringResource(Res.string.onboarding_last_service_date), date, { date = it })
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
-        Primary("সূচি সেভ করুন", "check", enabled = distance != null && intervalDays != null && odo != null && day != null && name.isNotBlank()) {
-            runCatching { state.saveSchedule(ComponentRule(existing?.id ?: recordId(), "primary", name.trim(), "নিজের সার্ভিস সূচি", distance!!, intervalDays!!, odo!!, day!!.toEpochDays().toLong())) }.onSuccess {
-                onSave(it) { saved -> if (saved) onDismiss() else error = "সেভ করা যায়নি। আগের রেকর্ড অপরিবর্তিত আছে।" }
+        Primary(appStringResource(Res.string.schedule_edit_intervals), "check", enabled = distance != null && intervalDays != null && odo != null && day != null && name.isNotBlank()) {
+            val adjusted = existing != null && (distance != existing.intervalKm || intervalDays != existing.intervalDays)
+            val provenance = when {
+                existing == null -> com.motovault.app.domain.maintenance.ScheduleProvenance(
+                    source = com.motovault.app.domain.maintenance.ScheduleSource.OWNER,
+                    label = ownerSourceLabel
+                )
+                adjusted && existing.provenance.isManualBacked -> existing.provenance.copy(
+                    source = com.motovault.app.domain.maintenance.ScheduleSource.OWNER,
+                    label = "Owner-adjusted: ${existing.provenance.label}"
+                )
+                else -> existing.provenance
+            }
+            val rule = ComponentRule(
+                existing?.id ?: recordId(), "primary", name.trim(),
+                if (provenance.isManualBacked) provenance.displayReference else ownerDefinedText,
+                distance!!, intervalDays!!, odo!!, day!!.toEpochDays().toLong(),
+                baselineCertainty = if (existing?.baselineCertainty == com.motovault.app.domain.model.BaselineCertainty.UNKNOWN) {
+                    com.motovault.app.domain.model.BaselineCertainty.OWNER_ESTIMATE
+                } else com.motovault.app.domain.model.BaselineCertainty.CONFIRMED,
+                action = existing?.action ?: com.motovault.app.domain.maintenance.MaintenanceAction.REPLACE,
+                provenance = provenance,
+                phase = existing?.phase ?: com.motovault.app.domain.maintenance.SchedulePhase.RECURRING,
+                oneTime = existing?.oneTime ?: false,
+                catalogueId = existing?.catalogueId
+            )
+            runCatching { state.saveSchedule(rule) }.onSuccess {
+                onSave(it) { saved -> if (saved) onDismiss() else error = saveFailedText }
             }.onFailure { error = it.message }
         }
     }
@@ -378,7 +487,7 @@ internal fun History(state: VaultState, filter: String, onAppearance: () -> Unit
                 Text(if (log.isFuel) "${log.fuelLiters ?: "?"} L · ${if (log.fullTank) "ট্যাংক পূর্ণ" else "আংশিক জ্বালানি"}" else log.title, fontWeight = FontWeight.Bold, fontSize = 13.sp)
                 Text("${log.date} · ${grouped(log.odometer.toInt())} km · ${if (log.serviceLines.isNotEmpty()) log.serviceTotalPoisha?.let { "৳${formatPoisha(it)}" } ?: "দাম জানা নেই" else "৳${log.cost}"}", color = TextSecondary, fontSize = 11.sp)
                 log.serviceLines.forEach { line ->
-                    val actionBn = when (line.action) { "replace" -> "বদল"; "service" -> "সার্ভিস"; "inspect" -> "পরীক্ষা"; "clean" -> "পরিষ্কার"; else -> "অ্যাডজাস্ট" }
+                    val actionBn = when (line.action) { "replace" -> "বদল"; "service" -> "সার্ভিস"; "lubricate" -> "লুব্রিকেট"; "inspect" -> "পরীক্ষা"; "clean" -> "পরিষ্কার"; else -> "অ্যাডজাস্ট" }
                     Text("  ${line.displayNameBn} · $actionBn · ${line.quantity} ${line.unitBn} · ${line.lineTotalPoisha?.let { "৳${formatPoisha(it)}" } ?: "দাম জানা নেই"}", color = TextSecondary, fontSize = 11.sp)
                     line.oil?.let { oil ->
                         val oilTypeBn = when (oil.baseType) { "semi_synthetic" -> "সেমি-সিনথেটিক"; "full_synthetic" -> "ফুল সিনথেটিক"; else -> "মিনারেল" }

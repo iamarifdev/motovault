@@ -1,5 +1,11 @@
 package com.motovault.app.domain.backup
 
+import com.motovault.app.domain.maintenance.MaintenanceAction
+import com.motovault.app.domain.maintenance.SchedulePhase
+import com.motovault.app.domain.maintenance.ScheduleProvenance
+import com.motovault.app.domain.maintenance.ScheduleSource
+import com.motovault.app.domain.model.BaselineCertainty
+import com.motovault.app.domain.model.ComponentRule
 import com.motovault.app.storage.backupSnapshot
 import com.motovault.app.ui.AppLanguage
 import com.motovault.app.ui.Digits
@@ -13,6 +19,7 @@ import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /** Synthetic V1 wire payloads; these must not be regenerated from the models under test. */
@@ -75,5 +82,39 @@ class BackupPayloadCompatibilityTest {
         assertTrue(log.id.contains('-'))
         assertTrue(log.fullTank)
         assertEquals(emptyList(), log.serviceLines)
+    }
+
+    @Test
+    fun p04ActionAndProvenanceFieldsRoundTripThroughBackupPayload() {
+        val rule = ComponentRule(
+            "rule-1", "primary", "Engine oil", "manual reference", 5000.0, 0, 1000.0, 120L,
+            baselineCertainty = BaselineCertainty.CONFIRMED,
+            action = MaintenanceAction.REPLACE,
+            provenance = ScheduleProvenance(ScheduleSource.MANUAL, "Yamaha R15 V4 owner's manual",
+                "https://library.ymcapps.net/library/om/contents/pdf/10/BGN-F819V-E0_02.pdf", "BGN-F819V-E0", "8-5",
+                "India-market manual; Bangladesh model"),
+            phase = SchedulePhase.RUNNING_IN, oneTime = true, catalogueId = "engine_oil"
+        )
+        val state = VaultState(ride = Ride("yamaha", "BD", 2023, 1000.0, "yamaha-r15-v4", "R15 V4"), rules = listOf(rule))
+        val payload = state.backupSnapshot().payload
+        val decoded = json.decodeFromString<VaultExportPayload>(json.encodeToString(payload)).rules.single()
+        assertEquals(MaintenanceAction.REPLACE, decoded.action)
+        assertEquals(ScheduleSource.MANUAL, decoded.provenance.source)
+        assertEquals("BGN-F819V-E0", decoded.provenance.revision)
+        assertEquals(SchedulePhase.RUNNING_IN, decoded.phase)
+        assertTrue(decoded.oneTime)
+        assertEquals("engine_oil", decoded.catalogueId)
+    }
+
+    @Test
+    fun preP04RuleWirePayloadUsesSafeActionDefaults() {
+        val rule = json.decodeFromString<ComponentRule>(
+            """{"id":"old","vehicleId":"primary","name":"Old rule","specification":"frozen","intervalKm":500.0,"intervalDays":30,"baselineCertainty":"CONFIRMED"}"""
+        )
+        assertEquals(MaintenanceAction.REPLACE, rule.action)
+        assertEquals(ScheduleSource.OWNER, rule.provenance.source)
+        assertEquals(SchedulePhase.RECURRING, rule.phase)
+        assertFalse(rule.oneTime)
+        assertNull(rule.catalogueId)
     }
 }

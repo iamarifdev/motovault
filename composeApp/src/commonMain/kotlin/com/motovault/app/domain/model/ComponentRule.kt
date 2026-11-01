@@ -1,5 +1,8 @@
 package com.motovault.app.domain.model
 
+import com.motovault.app.domain.maintenance.MaintenanceAction
+import com.motovault.app.domain.maintenance.SchedulePhase
+import com.motovault.app.domain.maintenance.ScheduleProvenance
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -24,7 +27,13 @@ data class ComponentRule(
     val isCritical: Boolean = true,
     val reminder: Boolean = true,
     val reminderSnoozedUntil: String? = null,
-    val baselineCertainty: BaselineCertainty = BaselineCertainty.UNKNOWN
+    val baselineCertainty: BaselineCertainty = BaselineCertainty.UNKNOWN,
+    /** Persisted with defaults so pre-P04 schedule JSON stays readable. */
+    val action: MaintenanceAction = MaintenanceAction.REPLACE,
+    val provenance: ScheduleProvenance = ScheduleProvenance(),
+    val phase: SchedulePhase = SchedulePhase.RECURRING,
+    val oneTime: Boolean = false,
+    val catalogueId: String? = null
 ) {
     fun calculateWearPercentage(currentOdometerKm: Double, currentEpochDays: Long): Int {
         val deltaDistance = (currentOdometerKm - lastServicedOdometerKm).coerceAtLeast(0.0)

@@ -133,20 +133,6 @@
     "removal_task": "P05-03"
   },
   {
-    "path": "GaugeDetailSheet.kt",
-    "sha256": "95e7ed582ff56e9649710c31dd76b221620b926c7c93d310e5cf5b708a5cd22e",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P04-04"
-  },
-  {
-    "path": "GaugeDetailSheet.kt",
-    "sha256": "d813a0712ef01dfdccd5e7f5a058bb1bb5f5de19c0230a03a85cc4294457fab0",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P04-04"
-  },
-  {
     "path": "Onboarding.kt",
     "sha256": "016eae812f14b27b5672236fce9cb115661282637330bcdc1c29a050c95d55e9",
     "count": 1,
@@ -639,13 +625,6 @@
   {
     "path": "OwnershipForms.kt",
     "sha256": "d010259ca5f9e9069269f81019d2902ee8432a0b1297c65777ff08cc1777aef1",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P04-04"
-  },
-  {
-    "path": "OwnershipForms.kt",
-    "sha256": "d187861c0011d79f7291b05b5daf2704251d2d7d998e1ea79f67e306c5e33e23",
     "count": 1,
     "owner": "Codex",
     "removal_task": "P04-04"
