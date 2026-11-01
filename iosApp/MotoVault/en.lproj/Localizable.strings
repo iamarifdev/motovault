@@ -1,0 +1,4 @@
+"reminder_service_title" = "Service reminder";
+"reminder_document_title" = "Document reminder";
+"reminder_service_message" = "%1$s · Check the recorded service interval.";
+"reminder_document_message" = "%1$s · Expires: %2$s";

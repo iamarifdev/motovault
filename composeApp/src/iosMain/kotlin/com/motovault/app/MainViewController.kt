@@ -9,6 +9,7 @@ import kotlin.experimental.ExperimentalNativeApi
 import kotlin.native.Platform
 import platform.UIKit.UIViewController
 import platform.Foundation.NSProcessInfo
+import platform.Foundation.NSBundle
 import com.motovault.app.ui.LaunchConfig
 
 /** The host owns UIKit chrome; Compose keeps the device trait for System mode. */
@@ -16,7 +17,8 @@ import com.motovault.app.ui.LaunchConfig
 fun MainViewController(onDarkAppearance: (Boolean) -> Unit): UIViewController {
     IosHostAppearance.onChange = onDarkAppearance
     val rawArgs = NSProcessInfo.processInfo.arguments.mapNotNull { it as? String }
-    LaunchConfig.applyArgs(rawArgs)
+    val isolatedProbe = Platform.isDebugBinary && NSBundle.mainBundle.bundleIdentifier == "com.motovault.app.privacyprobe"
+    LaunchConfig.applyArgs(rawArgs, allowSyntheticSeed = isolatedProbe)
     return ComposeUIViewController(configure = {
         if (Platform.isDebugBinary) {
             accessibilitySyncOptions = AccessibilitySyncOptions.Always(debugLogger = null)

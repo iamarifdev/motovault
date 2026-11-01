@@ -16,6 +16,11 @@ import platform.CoreGraphics.CGRectMake
 import platform.Foundation.*
 import platform.UIKit.*
 import platform.darwin.NSObject
+import com.motovault.app.ui.appStringResource
+import motovault.composeapp.generated.resources.Res
+import motovault.composeapp.generated.resources.backup_save_or_share
+
+private const val BACKUP_READ_BUFFER_BYTES = 16384uL
 
 private fun iosPresenter(): UIViewController? {
     var root = UIApplication.sharedApplication.keyWindow?.rootViewController
@@ -29,9 +34,8 @@ actual fun BackupNativeActions(
     suggestedFilename: String,
     onSaved: () -> Unit,
     onShareOpened: () -> Unit,
-    onError: (String) -> Unit
+    onError: (BackupNativeFailure) -> Unit
 ) {
-    val savedState by rememberUpdatedState(onSaved)
     val shareState by rememberUpdatedState(onShareOpened)
     val errorState by rememberUpdatedState(onError)
 
@@ -40,7 +44,7 @@ actual fun BackupNativeActions(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         VaultButton(
-            text = "ফাইলে সেভ বা শেয়ার করুন",
+            text = appStringResource(Res.string.backup_save_or_share),
             kind = ButtonKind.PRIMARY,
             full = true,
             modifier = Modifier.fillMaxWidth(),
@@ -49,20 +53,15 @@ actual fun BackupNativeActions(
                     val presenter = requireNotNull(iosPresenter()) { "Presenter view is unavailable." }
                     val tempPath = NSTemporaryDirectory() + suggestedFilename
                     val fileUrl = NSURL.fileURLWithPath(tempPath)
-                    archiveBytes.toNSData().writeToURL(fileUrl, atomically = true)
+                    check(archiveBytes.toNSData().writeToURL(fileUrl, atomically = true)) { "Could not prepare backup file." }
 
                     val activitySheet = UIActivityViewController(listOf(fileUrl), null)
                     activitySheet.popoverPresentationController?.sourceView = presenter.view
                     activitySheet.popoverPresentationController?.sourceRect = CGRectMake(0.0, 0.0, 1.0, 1.0)
-                    activitySheet.completionWithItemsHandler = { _, completed, _, _ ->
-                        if (completed) {
-                            savedState()
-                        }
-                    }
                     presenter.presentViewController(activitySheet, animated = true, completion = null)
                     shareState()
                 }.onFailure {
-                    errorState("শেয়ার শীট খুলতে ব্যর্থ হয়েছে: ${it.message}")
+                    errorState(BackupNativeFailure.SHARE)
                 }
             }
         )
@@ -72,7 +71,7 @@ actual fun BackupNativeActions(
 @Composable
 actual fun BackupFilePicker(
     onFileSelected: (ByteArray, String) -> Unit,
-    onError: (String) -> Unit,
+    onError: () -> Unit,
     content: @Composable (openPicker: () -> Unit) -> Unit
 ) {
     val onSelectedState by rememberUpdatedState(onFileSelected)
@@ -91,10 +90,10 @@ actual fun BackupFilePicker(
                         val accumulated = NSMutableData()
                         try {
                             while (true) {
-                                val chunk = handle.readDataOfLength(16384uL)
+                                val chunk = handle.readDataOfLength(BACKUP_READ_BUFFER_BYTES)
                                 if (chunk.length == 0uL) break
                                 require(accumulated.length + chunk.length <= MvaZipArchive.DEFAULT_MAX_TOTAL_BYTES.toULong()) {
-                                    "File exceeds maximum allowed size (150 MB)."
+                                    "Backup exceeds size limit."
                                 }
                                 accumulated.appendData(chunk)
                             }
@@ -109,7 +108,7 @@ actual fun BackupFilePicker(
                     val filename = url.lastPathComponent ?: "backup.mva"
                     onSelectedState(data.toByteArray(), filename)
                 }.onFailure {
-                    onErrorState("ফাইল পড়তে ব্যর্থ হয়েছে: ${it.message}")
+                    onErrorState()
                 }
             }
         }
@@ -127,7 +126,7 @@ actual fun BackupFilePicker(
             picker.popoverPresentationController?.sourceRect = CGRectMake(0.0, 0.0, 1.0, 1.0)
             presenter.presentViewController(picker, animated = true, completion = null)
         }.onFailure {
-            onErrorState("ফাইল বাছাইকারী খুলতে ব্যর্থ হয়েছে: ${it.message}")
+            onErrorState()
         }
     }
 }

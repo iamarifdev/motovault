@@ -1,0 +1,8 @@
+<resources>
+    <string name="reminder_service_title">Service reminder</string>
+    <string name="reminder_document_title">Document reminder</string>
+    <string name="reminder_service_message">%1$s · Check the recorded service interval.</string>
+    <string name="reminder_document_message">%1$s · Expires: %2$s</string>
+    <string name="reminder_channel_name">Document and service reminders</string>
+    <string name="reminder_channel_description">Document expiry and service reminders</string>
+</resources>

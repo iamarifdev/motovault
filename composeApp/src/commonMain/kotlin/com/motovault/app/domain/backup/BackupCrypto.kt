@@ -2,7 +2,7 @@ package com.motovault.app.domain.backup
 
 expect object BackupCrypto {
     fun generateRandomBytes(size: Int): ByteArray
-    fun deriveKey(passphrase: String, salt: ByteArray, iterations: Int = 100_000): ByteArray
+    fun deriveKey(passphrase: String, salt: ByteArray, iterations: Int = BACKUP_KDF_ITERATIONS): ByteArray
     fun encrypt(key: ByteArray, plaintext: ByteArray, aad: ByteArray): ByteArray
     fun decrypt(key: ByteArray, combined: ByteArray, aad: ByteArray): ByteArray
 }

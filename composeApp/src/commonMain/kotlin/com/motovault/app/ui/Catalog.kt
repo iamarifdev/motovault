@@ -3,7 +3,6 @@ package com.motovault.app.ui
 import androidx.compose.runtime.Composable
 import motovault.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
 
 data class ServiceCatalogItem(
     val key: String,
@@ -55,5 +54,5 @@ fun docNameBn(kindOrTitle: String): String = docKindInfo(kindOrTitle).bn
 @Composable
 fun docDisplayName(kindOrTitle: String): String {
     val res = documentResourceOf(kindOrTitle)
-    return if (res != null) stringResource(res) else docNameBn(kindOrTitle)
+    return if (res != null) appStringResource(res) else docNameBn(kindOrTitle)
 }

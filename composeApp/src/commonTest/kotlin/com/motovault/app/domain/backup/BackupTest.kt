@@ -1,15 +1,56 @@
 package com.motovault.app.domain.backup
 
+import com.motovault.app.storage.backupSnapshot
+import com.motovault.app.storage.backupRideDisplayName
+
 import com.motovault.app.domain.model.BaselineCertainty
 import com.motovault.app.domain.model.ComponentRule
 import com.motovault.app.storage.security.documentSha256
+import com.motovault.app.storage.backupCurrentSummary
 import com.motovault.app.ui.*
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.*
 
 class BackupTest {
+    @BeforeTest
+    fun initializeCrypto() = initializeBackupTestCrypto()
+
+    @Test
+    fun testCryptoInteroperabilityVectors() {
+        assertEquals(
+            "5ec02b91a4b59c6f59dd5fbe4ca649ece4fa8568cdb8ba36cf41426e8805522b",
+            BackupCrypto.deriveKey("password", "salt".encodeToByteArray(), 10_000).toHex()
+        )
+        // AES-256-GCM, all-zero key and nonce, empty plaintext and AAD.
+        val combined = ("000000000000000000000000" + "530f8afbc74536b9a963b4f1c4cb738b").hexToByteArray()
+        assertContentEquals(byteArrayOf(), BackupCrypto.decrypt(ByteArray(32), combined, byteArrayOf()))
+        assertFails { BackupCrypto.decrypt(ByteArray(32), combined, byteArrayOf(1)) }
+    }
+
+    @Test
+    fun testBackupRejectsSnapshotWithMissingAssetReferences() = runBlocking {
+        val page = DocumentPage("original", "preview", "image/jpeg", 100, 100, "Front")
+        val doc = VaultDocument(id = "doc", title = "Test", number = "1", holder = "A", expiry = "2027-01-01", pages = listOf(page))
+        val snapshot = VaultState(documents = listOf(doc)).backupSnapshot().copy(assetIds = emptySet())
+        assertFailsWith<IllegalArgumentException> {
+            BackupUseCase.createBackup(::documentSha256, snapshot, 1, "ValidPassword", assetReader = { error("must not read") })
+        }
+        Unit
+    }
+
+    @Test
+    fun testCancelledAssetReadPreservesCancellation() = runBlocking {
+        val page = DocumentPage("original", "preview", "image/jpeg", 100, 100, "Front")
+        val doc = VaultDocument(id = "doc", title = "Test", number = "1", holder = "A", expiry = "2027-01-01", pages = listOf(page))
+        val cancellation = CancellationException("cancelled")
+        val thrown = assertFailsWith<CancellationException> {
+            BackupUseCase.createBackup(::documentSha256, VaultState(documents = listOf(doc)).backupSnapshot(), 1, "ValidPassword", assetReader = { throw cancellation })
+        }
+        assertSame(cancellation, thrown)
+    }
 
     @Test
     fun testMvaZipArchiveRoundtrip() {
@@ -37,6 +78,18 @@ class BackupTest {
         assertFailsWith<IllegalArgumentException> {
             MvaZipArchive.write(mapOf("/absolute.txt" to byteArrayOf(1, 2, 3)))
         }
+    }
+
+    @Test
+    fun testMvaZipArchiveRejectsDuplicateEntries() {
+        val name = "manifest.json"
+        val firstPayload = byteArrayOf(1)
+        val first = MvaZipArchive.write(mapOf(name to firstPayload))
+        val second = MvaZipArchive.write(mapOf(name to byteArrayOf(2)))
+        val firstLocalEntrySize = 30 + name.encodeToByteArray().size + firstPayload.size
+        val duplicated = first.copyOfRange(0, firstLocalEntrySize) + second
+        val error = assertFailsWith<IllegalArgumentException> { MvaZipArchive.read(duplicated) }
+        assertTrue(error.message.orEmpty().contains("duplicate entry"))
     }
 
     @Test
@@ -139,18 +192,22 @@ class BackupTest {
             )
 
             val password = "StrongPassword2026!"
-            val archiveBytes = BackupUseCase.createBackup(
-                state = vaultState,
+            val progressEvents = mutableListOf<BackupProgress>()
+            val archiveBytes = BackupUseCase.createBackup(::documentSha256, 
+                snapshot = vaultState.backupSnapshot(),
                 vaultRevision = 42,
                 passphrase = password,
                 installationId = "test-device-uuid",
-                assetReader = { id -> assetStorage[id] ?: error("Asset not found: $id") }
+                assetReader = { id -> assetStorage[id] ?: error("Asset not found: $id") },
+                progress = { _, status -> progressEvents += status }
             )
 
             assertTrue(archiveBytes.isNotEmpty())
+            assertEquals(BackupProgress(BackupProgressStage.READY), progressEvents.last())
+            assertEquals(listOf(BackupProgress(BackupProgressStage.ENCRYPTED_ASSETS, 1, 2), BackupProgress(BackupProgressStage.ENCRYPTED_ASSETS, 2, 2)), progressEvents.filter { it.stage == BackupProgressStage.ENCRYPTED_ASSETS })
 
             // Validate and preview backup
-            val preview = RestoreUseCase.validateAndPreview(archiveBytes, password)
+            val preview = RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, archiveBytes, password)
             assertEquals("MT-15", preview.manifest.summary.bikeDisplayName)
             assertEquals(12500.0, preview.manifest.summary.odometer)
             assertEquals(1, preview.manifest.summary.logCount)
@@ -159,13 +216,13 @@ class BackupTest {
             assertEquals(42L, preview.manifest.vaultRevision)
 
             // Decrypted payload check
-            assertEquals("MT-15", preview.payload.ride?.displayName)
+            assertEquals("MT-15", preview.payload.ride?.let(::backupRideDisplayName))
             assertEquals(1, preview.payload.documents.size)
             assertEquals("tax-token-2026", preview.payload.documents.first().id)
 
             // Wrong password fails validation
             assertFailsWith<BackupSecurityException> {
-                RestoreUseCase.validateAndPreview(archiveBytes, "WrongPassword!")
+                RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, archiveBytes, "WrongPassword!")
             }
         }
     }
@@ -195,8 +252,8 @@ class BackupTest {
             val state = VaultState(documents = listOf(docWithMissingAsset))
 
             assertFailsWith<IllegalStateException> {
-                BackupUseCase.createBackup(
-                    state = state,
+                BackupUseCase.createBackup(::documentSha256, 
+                    snapshot = state.backupSnapshot(),
                     vaultRevision = 1,
                     passphrase = "ValidPassword123",
                     assetReader = { id -> error("Asset $id not found") }
@@ -254,8 +311,8 @@ class BackupTest {
                 "reg_prev_1" to "THUMBNAIL-PIXELS".encodeToByteArray()
             )
 
-            val archiveBytes = BackupUseCase.createBackup(
-                state = state,
+            val archiveBytes = BackupUseCase.createBackup(::documentSha256, 
+                snapshot = state.backupSnapshot(),
                 vaultRevision = 10,
                 passphrase = "UltraStrongPassword123",
                 assetReader = { assets[it] ?: error("Asset missing") }
@@ -281,8 +338,8 @@ class BackupTest {
             )
             val frozenState = VaultState(ride = initialRide)
 
-            val archive = BackupUseCase.createBackup(
-                state = frozenState,
+            val archive = BackupUseCase.createBackup(::documentSha256, 
+                snapshot = frozenState.backupSnapshot(),
                 vaultRevision = 5,
                 passphrase = "Password2026!",
                 assetReader = { error("No assets") }
@@ -293,7 +350,7 @@ class BackupTest {
             )
             assertNotEquals(frozenState.ride?.odometer, mutatedState.ride?.odometer)
 
-            val preview = RestoreUseCase.validateAndPreview(archive, "Password2026!")
+            val preview = RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, archive, "Password2026!")
             assertEquals(10000.0, preview.manifest.summary.odometer)
             assertEquals(10000.0, preview.payload.ride?.odometer)
         }
@@ -340,8 +397,8 @@ class BackupTest {
                 )
             )
 
-            val archive = BackupUseCase.createBackup(
-                state = backupState,
+            val archive = BackupUseCase.createBackup(::documentSha256, 
+                snapshot = backupState.backupSnapshot(),
                 vaultRevision = 1,
                 passphrase = "Password2026!",
                 assetReader = { error("No assets") }
@@ -353,7 +410,7 @@ class BackupTest {
                 logs = listOf(RideLog("Current", "Old", "2025-01-01", 500.0))
             )
 
-            val preview = RestoreUseCase.validateAndPreview(archive, "Password2026!", currentState = currentTargetState)
+            val preview = RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, archive, "Password2026!", currentState = currentTargetState.backupCurrentSummary())
             assertNotNull(preview.conflicts)
             assertEquals("CB150R", preview.conflicts!!.currentBikeDisplayName)
             assertEquals("MT-15", preview.conflicts!!.incomingBikeDisplayName)
@@ -375,15 +432,15 @@ class BackupTest {
                 logs = listOf(duplicateLog1, duplicateLog2)
             )
 
-            val archive = BackupUseCase.createBackup(
-                state = stateWithDuplicates,
+            val archive = BackupUseCase.createBackup(::documentSha256, 
+                snapshot = stateWithDuplicates.backupSnapshot(),
                 vaultRevision = 1,
                 passphrase = "Password2026!",
                 assetReader = { error("No assets") }
             )
 
             val ex = assertFailsWith<IllegalArgumentException> {
-                RestoreUseCase.validateAndPreview(archive, "Password2026!")
+                RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, archive, "Password2026!")
             }
             assertTrue(ex.message!!.contains("duplicate ledger IDs"))
         }
@@ -407,8 +464,8 @@ class BackupTest {
                 )
             )
 
-            val archive = BackupUseCase.createBackup(
-                state = state,
+            val archive = BackupUseCase.createBackup(::documentSha256, 
+                snapshot = state.backupSnapshot(),
                 vaultRevision = 1,
                 passphrase = "Password2026!",
                 assetReader = { validAssetBytes }
@@ -424,9 +481,57 @@ class BackupTest {
             val tamperedArchive = MvaZipArchive.write(entries)
 
             val ex = assertFailsWith<IllegalArgumentException> {
-                RestoreUseCase.validateAndPreview(tamperedArchive, "Password2026!")
+                RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, tamperedArchive, "Password2026!")
             }
             assertTrue(ex.message!!.contains("SHA-256 verification failed"))
+        }
+    }
+
+    @Test
+    fun testRestoreRejectsDuplicateManifestAssets() = runBlocking {
+        val page = DocumentPage("original", "original", "image/jpeg", 100, 100, "Front")
+        val doc = VaultDocument(id = "doc", title = "Test", number = "1", holder = "A", expiry = "2027-01-01", pages = listOf(page))
+        val archive = BackupUseCase.createBackup(::documentSha256, VaultState(documents = listOf(doc)).backupSnapshot(), 1, "ValidPassword", assetReader = { byteArrayOf(1, 2, 3) })
+        val entries = MvaZipArchive.read(archive).toMutableMap()
+        val manifest = Json.decodeFromString<BackupManifest>(entries.getValue("manifest.json").decodeToString())
+        val original = manifest.assets.single()
+        for ((duplicate, expected) in listOf(original to "duplicate asset IDs", original.copy(assetId = "different") to "duplicate asset paths")) {
+            entries["manifest.json"] = Json.encodeToString(manifest.copy(assets = listOf(original, duplicate))).encodeToByteArray()
+            val error = assertFailsWith<IllegalArgumentException> {
+                RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, MvaZipArchive.write(entries), "ValidPassword")
+            }
+            assertTrue(error.message.orEmpty().contains(expected))
+        }
+    }
+
+    @Test
+    fun testPreviewUsesAuthenticatedPayloadInsteadOfManifestSummary() = runBlocking {
+        val state = VaultState(ride = Ride("honda", "Std", 2020, 8000.0, modelName = "Verified"))
+        val archive = BackupUseCase.createBackup(::documentSha256, state.backupSnapshot(), 1, "ValidPassword", assetReader = { error("No assets") })
+        val entries = MvaZipArchive.read(archive).toMutableMap()
+        val manifest = Json.decodeFromString<BackupManifest>(entries.getValue("manifest.json").decodeToString())
+        val falseSummary = manifest.summary.copy(bikeDisplayName = "Misleading", odometer = 1.0, logCount = 99, documentCount = 99)
+        entries["manifest.json"] = Json.encodeToString(manifest.copy(summary = falseSummary)).encodeToByteArray()
+        val preview = RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, MvaZipArchive.write(entries), "ValidPassword", state.backupCurrentSummary())
+        assertEquals("Verified", preview.verifiedSummary.bikeDisplayName)
+        assertEquals(8000.0, preview.verifiedSummary.odometer)
+        assertEquals(0, preview.verifiedSummary.logCount)
+        assertEquals(0, preview.verifiedSummary.documentCount)
+        assertEquals("Verified", preview.conflicts?.incomingBikeDisplayName)
+        assertEquals(0, preview.conflicts?.incomingLogCount)
+    }
+
+    @Test
+    fun testRestoreRejectsUnboundedKeyDerivationBeforeCrypto() = runBlocking {
+        val archive = BackupUseCase.createBackup(::documentSha256, VaultState().backupSnapshot(), 1, "ValidPassword", assetReader = { error("No assets") })
+        val entries = MvaZipArchive.read(archive).toMutableMap()
+        val manifest = Json.decodeFromString<BackupManifest>(entries.getValue("manifest.json").decodeToString())
+        for (iterations in listOf(-1, 0, MAX_RESTORE_KDF_ITERATIONS + 1, Int.MAX_VALUE)) {
+            entries["manifest.json"] = Json.encodeToString(manifest.copy(kdf = manifest.kdf.copy(iterations = iterations))).encodeToByteArray()
+            val error = assertFailsWith<IllegalArgumentException> {
+                RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, MvaZipArchive.write(entries), "ValidPassword")
+            }
+            assertTrue(error.message.orEmpty().contains("key derivation work"))
         }
     }
 
@@ -467,7 +572,7 @@ class BackupTest {
                 )
             )
 
-            val preview = RestoreUseCase.validateAndPreview(zip, "Password2026!")
+            val preview = RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, zip, "Password2026!")
             assertEquals("Honda", preview.manifest.summary.bikeDisplayName)
             assertEquals(8000.0, preview.payload.ride?.odometer)
             // Defaulted fields verified:

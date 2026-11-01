@@ -5,9 +5,11 @@ object LaunchConfig {
     var initialSheet: String? = null
     var initialOnboarding: Boolean = false
     var initialSeed: Boolean = false
+        private set
     var scrollToBottom: Boolean = false
 
-    fun applyArgs(args: List<String>) {
+    fun applyArgs(args: List<String>, allowSyntheticSeed: Boolean = false) {
+        initialSeed = false
         var i = 0
         while (i < args.size) {
             when (args[i]) {
@@ -27,7 +29,7 @@ object LaunchConfig {
                     initialOnboarding = true
                 }
                 "--seed" -> {
-                    initialSeed = true
+                    initialSeed = allowSyntheticSeed
                 }
                 "--scroll-bottom" -> {
                     scrollToBottom = true
@@ -39,4 +41,6 @@ object LaunchConfig {
             i++
         }
     }
+
+    fun consumeSeed(): Boolean = initialSeed.also { initialSeed = false }
 }

@@ -1,4 +1,21 @@
 <resources>
+    <string name="fuel_price_unknown">দাম রেকর্ড করা নেই</string>
+    <string name="fuel_edit_title">জ্বালানির রেকর্ড ঠিক করুন</string>
+    <string name="fuel_edit_saved">জ্বালানির রেকর্ড ঠিক হয়েছে</string>
+    <string name="fuel_edit_action">জ্বালানির রেকর্ড ঠিক করুন</string>
+    <string name="fuel_edit_conflict">অন্য একটি পরিবর্তন সেভ হয়েছে। শিট বন্ধ করে রেকর্ডটি দেখুন।</string>
+    <string name="fuel_edit_save_failed">সেভ করা যায়নি। আগের রেকর্ড অপরিবর্তিত আছে।</string>
+    <string name="fuel_create_save_failed">সেভ করা যায়নি। তথ্য মুছে যায়নি, আবার চেষ্টা করুন।</string>
+    <string name="fuel_create_conflict">আপনার তথ্য বদলেছে। আবার দেখে চেষ্টা করুন।</string>
+    <string name="fuel_record_missing">জ্বালানির রেকর্ডটি আর পাওয়া যাচ্ছে না</string>
+    <string name="fuel_timeline_conflict">জ্বালানির তারিখ ও কিমির ক্রম ঠিক করুন</string>
+    <string name="fuel_litres_too_high">লিটার %1$s-এর বেশি হতে পারবে না</string>
+    <string name="fuel_invalid_odometer">সঠিক ওডোমিটার দিন</string>
+    <string name="fuel_invalid_date">সঠিক তারিখ দিন</string>
+    <string name="fuel_future_date">ভবিষ্যতের তারিখ দেওয়া যাবে না</string>
+    <string name="fuel_date_before_last">শেষ জ্বালানির তারিখ বা তার পরের দিন দিন</string>
+    <string name="storage_save_failed">এই ডিভাইসে সেভ করা যায়নি। আগের রেকর্ড অপরিবর্তিত আছে।</string>
+    <string name="storage_restore_failed">এই ডিভাইসে আপনার রেকর্ড খোলা যায়নি। আবার চেষ্টা করুন।</string>
     <!-- Navigation Tabs -->
     <string name="nav_garage">গ্যারেজ</string>
     <string name="nav_vault">কাগজপত্র</string>
@@ -24,6 +41,9 @@
     <string name="action_open">খুলুন</string>
     <string name="action_share">শেয়ার করুন</string>
     <string name="action_unlock">লক খুলুন</string>
+    <string name="backup_revalidate">আবার ব্যাকআপ যাচাই করুন।</string>
+    <string name="backup_revision_changed">রেকর্ড বদলেছে। আবার ব্যাকআপ যাচাই করুন।</string>
+    <string name="backup_restore_failed">রিস্টোর সম্পন্ন হয়নি। ব্যাকআপ দেখে আবার চেষ্টা করুন।</string>
 
     <!-- Language & Digits -->
     <string name="settings_language">ভাষা (Language)</string>
@@ -77,6 +97,30 @@
     <string name="fuel_petrol">পেট্রোল</string>
     <string name="fuel_octane">অকটেন</string>
     <string name="fuel_parsed_estimate">তেলের খরচ %1$s মনে হচ্ছে</string>
+    <string name="fuel_enter_amount">টাকার পরিমাণ লিখুন</string>
+    <string name="fuel_enter_litres">লিটার লিখুন</string>
+    <string name="fuel_enter_price">প্রতি লিটারের দাম লিখুন</string>
+    <string name="fuel_fix_odometer">কিমি ঠিক করুন</string>
+    <string name="fuel_odometer_above_previous">শেষ জ্বালানির কিমি (%1$s) এর চেয়ে বেশি দিন</string>
+    <string name="fuel_save_amount">%1$s সেভ করুন</string>
+    <string name="fuel_added">%1$s · %2$s যোগ হয়েছে</string>
+    <string name="fuel_amount_question">কত টাকার তেল?</string>
+    <string name="fuel_litres_question">কত লিটার?</string>
+    <string name="fuel_currency_symbol">৳</string>
+    <string name="fuel_money_value">৳%1$s</string>
+    <string name="fuel_litres_value">%1$s লিটার</string>
+    <string name="fuel_distance_value">%1$s কিমি</string>
+    <string name="fuel_price_value">%1$s/লি</string>
+    <string name="fuel_approximate_value">≈ %1$s</string>
+    <string name="fuel_by_amount">টাকা ধরে</string>
+    <string name="fuel_by_litres">লিটার ধরে</string>
+    <string name="fuel_full_chip">ফুল ট্যাংক</string>
+    <string name="fuel_partial_chip">আংশিক ভরেছি</string>
+    <string name="date_today">আজ</string>
+    <string name="date_yesterday">গতকাল</string>
+    <string name="date_other">অন্য দিন</string>
+    <string name="keypad_backspace">মুছুন</string>
+    <string name="keypad_decimal">দশমিক</string>
 
     <!-- Service Logging -->
     <string name="service_title">সার্ভিস</string>
@@ -176,4 +220,41 @@
     <string name="onboarding_emission">এমিশন স্ট্যান্ডার্ড (যেমন: BS4, BS6)</string>
     <string name="onboarding_finish_btn">গ্যারেজ তৈরি করুন</string>
     <string name="onboarding_change_bike">পরিবর্তন নিশ্চিত করুন</string>
+    <string name="backup_progress_preparing">ভল্টের তথ্য প্রস্তুত করা হচ্ছে…</string>
+    <string name="backup_progress_checking">কাগজপত্রের মূল ফাইল যাচাই করা হচ্ছে…</string>
+    <string name="backup_progress_key">এনক্রিপশন কি তৈরি করা হচ্ছে…</string>
+    <string name="backup_progress_encrypting_assets">কাগজপত্রের মূল ফাইল এনক্রিপ্ট করা হচ্ছে…</string>
+    <string name="backup_progress_encrypted_assets">%2$sটি ফাইলের মধ্যে %1$sটি এনক্রিপ্ট হয়েছে…</string>
+    <string name="backup_progress_encrypting_vault">ভল্টের তথ্য এনক্রিপ্ট করা হচ্ছে…</string>
+    <string name="backup_progress_writing">ব্যাকআপ ফাইল তৈরি করা হচ্ছে…</string>
+    <string name="backup_progress_ready">ব্যাকআপ প্রস্তুত।</string>
+    <string name="backup_password_minimum">পাসওয়ার্ড কমপক্ষে %1$s অক্ষরের হতে হবে।</string>
+    <string name="backup_password_mismatch">দুটি পাসওয়ার্ড একই হতে হবে।</string>
+    <string name="backup_create_failed">ব্যাকআপ তৈরি করা যায়নি। কাগজপত্রের ফাইল আছে কি না দেখে আবার চেষ্টা করুন।</string>
+    <string name="backup_password_required">ব্যাকআপের পাসওয়ার্ড দিন।</string>
+    <string name="backup_password_or_file_invalid">পাসওয়ার্ড ভুল অথবা ব্যাকআপ খোলা যাচ্ছে না।</string>
+    <string name="backup_validation_failed">ব্যাকআপ যাচাই করা যায়নি। ফাইলটি দেখে আবার চেষ্টা করুন।</string>
+    <string name="backup_save_file_failed">ব্যাকআপ ফাইল সেভ করা যায়নি। আবার চেষ্টা করুন।</string>
+    <string name="backup_open_file_failed">ব্যাকআপ ফাইল খোলা যায়নি। আবার চেষ্টা করুন।</string>
+    <string name="recovery_entry">আগের ভল্ট দেখুন</string>
+    <string name="recovery_title">আগের ভল্ট</string>
+    <string name="recovery_description">রিস্টোরের আগে সেভ থাকা ভল্ট দেখুন।</string>
+    <string name="recovery_loading">সেভ থাকা ভল্ট যাচাই করা হচ্ছে…</string>
+    <string name="recovery_empty">আগের কোনো ভল্ট নেই।</string>
+    <string name="recovery_load_failed">সেভ থাকা ভল্ট খোলা যায়নি। আপনার তথ্য মুছে ফেলা হয়নি।</string>
+    <string name="recovery_retry">আবার চেষ্টা করুন</string>
+    <string name="recovery_unknown_date">তারিখ পাওয়া যায়নি</string>
+    <string name="recovery_unknown_bike">মোটরসাইকেল</string>
+    <string name="recovery_counts">রেকর্ড: %1$s · কাগজ: %2$s</string>
+    <string name="recovery_review">ভল্টটি দেখুন</string>
+    <string name="recovery_confirm_title">এই ভল্টে ফিরে যাবেন?</string>
+    <string name="recovery_confirm_body">এখনকার ভল্টটি আগে সেভ হবে। এর কাগজগুলোও সংরক্ষিত থাকবে।</string>
+    <string name="recovery_device_notice">এই রিকভারি শুধু এই ডিভাইসে কাজ করে। ফোনের নিরাপত্তা কি হারালে এটি খোলা যাবে না।</string>
+    <string name="recovery_confirm">ফিরে যান</string>
+    <string name="recovery_cancel">বাতিল</string>
+    <string name="recovery_saving">ভল্ট রিস্টোর করা হচ্ছে…</string>
+    <string name="recovery_stale">আপনার বর্তমান তথ্য বদলেছে। আবার দেখে নিশ্চিত করুন।</string>
+    <string name="recovery_failed">ভল্টটি রিস্টোর করা যায়নি। আপনার বর্তমান তথ্য বদলায়নি।</string>
+    <string name="recovery_success">আগের ভল্টে ফিরে গেছেন।</string>
+    <string name="recovery_back">তালিকায় ফিরুন</string>
 </resources>

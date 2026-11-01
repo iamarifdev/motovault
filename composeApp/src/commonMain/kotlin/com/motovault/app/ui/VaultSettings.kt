@@ -1,6 +1,7 @@
 package com.motovault.app.ui
 
 import kotlinx.serialization.Serializable
+import com.motovault.app.domain.model.FuelDefaults
 
 @Serializable
 enum class AppLanguage(val code: String, val label: String) {
@@ -19,7 +20,7 @@ data class VaultSettings(
     val brandOverride: String? = null,
     val serviceReminders: Boolean = true,
     val docReminders: Boolean = true,
-    val lastPrices: Map<String, Double> = mapOf("octane" to 120.0, "petrol" to 115.0),
+    val lastPrices: Map<String, Double> = FuelDefaults.legacyPrices(),
     val lastItemPrices: Map<String, Double> = emptyMap(),
     val workshops: List<String> = emptyList(),
     val places: List<String> = emptyList(),

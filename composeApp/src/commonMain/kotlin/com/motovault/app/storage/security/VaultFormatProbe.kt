@@ -16,6 +16,7 @@ internal suspend fun verifyVaultFormatMigration(path: String, open: () -> VaultD
     // Reconstruct the exact previous meta shape and Room identity after seeding synthetic rows.
     BundledSQLiteDriver().open(path).use { connection ->
         connection.execSQL("ALTER TABLE vault_meta DROP COLUMN assetFormatVersion")
+        connection.execSQL("DROP TABLE restore_recovery")
         connection.execSQL("UPDATE room_master_table SET identity_hash = 'c1132b50953dd810ad66179e86703edd' WHERE id = 42")
         connection.execSQL("PRAGMA user_version = 4")
     }
@@ -41,7 +42,7 @@ internal suspend fun verifyVaultFormatMigration(path: String, open: () -> VaultD
     BundledSQLiteDriver().open(path).use { connection ->
         connection.prepare("SELECT payload FROM document WHERE id = 'synthetic-document'").use { query -> check(query.step()); check(query.getText(0) == preservedPayload) }
         connection.execSQL("UPDATE vault_meta SET assetFormatVersion = 1 WHERE id = 1")
-        connection.execSQL("PRAGMA user_version = 6")
+        connection.execSQL("PRAGMA user_version = 7")
     }
     // Current Room must refuse an unsupported future schema without a destructive fallback.
     val future = open()
@@ -51,7 +52,7 @@ internal suspend fun verifyVaultFormatMigration(path: String, open: () -> VaultD
         check(refused)
     } finally { future.close() }
     BundledSQLiteDriver().open(path).use { connection ->
-        connection.prepare("PRAGMA user_version").use { query -> check(query.step()); check(query.getLong(0) == 6L) }
+        connection.prepare("PRAGMA user_version").use { query -> check(query.step()); check(query.getLong(0) == 7L) }
         connection.prepare("SELECT payload FROM document WHERE id = 'synthetic-document'").use { query -> check(query.step()); check(query.getText(0) == preservedPayload) }
     }
 }

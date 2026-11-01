@@ -1,0 +1,10 @@
+<resources>
+    <plurals name="fuel_entry_count">
+        <item quantity="one">%1$sটি জ্বালানির রেকর্ড</item>
+        <item quantity="other">%1$sটি জ্বালানির রেকর্ড</item>
+    </plurals>
+    <plurals name="history_record_count">
+        <item quantity="one">%1$sটি রেকর্ড</item>
+        <item quantity="other">%1$sটি রেকর্ড</item>
+    </plurals>
+</resources>

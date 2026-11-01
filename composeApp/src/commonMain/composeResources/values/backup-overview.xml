@@ -1,0 +1,51 @@
+<resources>
+    <string name="backup_sheet_title">Backup and restore</string>
+    <string name="backup_tab_create">Create backup</string>
+    <string name="backup_tab_restore">Restore</string>
+    <string name="backup_secure_title">Secure encrypted backup</string>
+    <string name="backup_secure_description">Your motorcycle records and document files will be saved in a protected, portable file. You can keep it on Google Drive, a USB drive, or other storage.</string>
+    <string name="backup_includes">Your backup includes:</string>
+    <string name="backup_bike_label">Motorcycle:</string>
+    <string name="backup_no_bike">No motorcycle</string>
+    <string name="backup_odometer_label">Current odometer:</string>
+    <string name="backup_records_label">Service and fuel records:</string>
+    <string name="backup_documents_label">Document images and files:</string>
+    <string name="backup_password_label">Backup password (at least %1$s characters)</string>
+    <string name="backup_confirm_password_label">Confirm password</string>
+    <string name="backup_show_password">Show password</string>
+    <string name="backup_hide_password">Hide password</string>
+    <string name="backup_password_warning">Keep this password safe. If you forget it, the backup cannot be recovered.</string>
+    <string name="backup_create_button">Create backup</string>
+    <string name="restore_intro_title">Restore from a backup</string>
+    <string name="restore_intro_description">Choose a MotoVault backup file (.mva) to restore your motorcycle and document records.</string>
+    <string name="restore_choose_file">Choose a backup file (.mva)</string>
+    <string name="restore_choose_source">Select a file from Google Drive or your phone</string>
+    <string name="restore_change_file">Change</string>
+    <string name="restore_enter_password">Enter the backup password</string>
+    <string name="restore_validating">Checking backup…</string>
+    <string name="restore_validate">Check backup</string>
+    <string name="restore_preview_title">Backup details:</string>
+    <string name="restore_odometer">Odometer:</string>
+    <string name="restore_record_count_label">Records:</string>
+    <string name="restore_document_count_label">Documents:</string>
+    <string name="restore_document_files">%1$s (%2$s)</string>
+    <string name="restore_backup_date">Backup date:</string>
+    <string name="restore_replace_title">Warning: current records will be replaced</string>
+    <string name="restore_replace_description">Restoring replaces your current motorcycle, service records and documents with the data in this backup.</string>
+    <string name="restore_progress">Restoring records and files…</string>
+    <string name="restore_confirm">Confirm restore</string>
+    <string name="restore_success">Restore completed successfully.</string>
+    <string name="backup_size_kib">%1$s KiB</string>
+    <string name="backup_ready_title">Encrypted backup ready</string>
+    <string name="backup_ready_size">File size: %1$s. Save it somewhere safe.</string>
+    <string name="backup_saved">Backup file saved.</string>
+    <string name="backup_save_file">Save to files</string>
+    <string name="backup_share">Share</string>
+    <string name="backup_save_or_share">Save or share</string>
+    <string name="backup_share_chooser">Share MotoVault backup</string>
+    <string name="backup_share_failed">Could not open the share sheet. Try again.</string>
+    <string name="backup_snapshot_changed">Your records changed. Review them and try creating the backup again.</string>
+    <plurals name="backup_record_count"><item quantity="one">%1$s record</item><item quantity="other">%1$s records</item></plurals>
+    <plurals name="backup_document_count"><item quantity="one">%1$s document</item><item quantity="other">%1$s documents</item></plurals>
+    <plurals name="backup_file_count"><item quantity="one">%1$s file</item><item quantity="other">%1$s files</item></plurals>
+</resources>

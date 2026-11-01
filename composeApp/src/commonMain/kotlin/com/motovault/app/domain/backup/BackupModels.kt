@@ -1,16 +1,12 @@
 package com.motovault.app.domain.backup
 
 import com.motovault.app.domain.model.ComponentRule
-import com.motovault.app.ui.Ride
-import com.motovault.app.ui.RideLog
-import com.motovault.app.ui.VaultDocument
-import com.motovault.app.ui.VaultSettings
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class BackupKdfParams(
     val algorithm: String = "PBKDF2-HMAC-SHA256",
-    val iterations: Int = 100_000,
+    val iterations: Int = BACKUP_KDF_ITERATIONS,
     val saltHex: String
 )
 
@@ -55,11 +51,11 @@ data class BackupManifest(
 @Serializable
 data class VaultExportPayload(
     val version: Int = 1,
-    val ride: Ride? = null,
+    val ride: BackupRide? = null,
     val rules: List<ComponentRule> = emptyList(),
-    val logs: List<RideLog> = emptyList(),
-    val documents: List<VaultDocument> = emptyList(),
-    val preferences: VaultSettings = VaultSettings(),
+    val logs: List<BackupLog> = emptyList(),
+    val documents: List<BackupDocument> = emptyList(),
+    val preferences: BackupPreferences = BackupPreferences(),
     val appearance: String = "SYSTEM",
     val autoLocation: Boolean = false,
     val legacyImported: Boolean = false
@@ -67,7 +63,7 @@ data class VaultExportPayload(
 
 data class BackupConflictSummary(
     val currentBikeDisplayName: String?,
-    val incomingBikeDisplayName: String,
+    val incomingBikeDisplayName: String?,
     val currentOdometer: Double?,
     val incomingOdometer: Double,
     val currentLogCount: Int,
@@ -77,9 +73,31 @@ data class BackupConflictSummary(
     val bikeMatches: Boolean
 )
 
+/** Only the current values needed to compare an incoming archive. */
+data class BackupCurrentSummary(
+    val bikeBrandId: String?,
+    val bikeDisplayName: String?,
+    val odometer: Double?,
+    val logCount: Int,
+    val documentCount: Int
+)
+
+/** Frozen export payload and metadata supplied by the legacy-state adapter. */
+data class BackupSnapshot(
+    val payload: VaultExportPayload,
+    val assetIds: Set<String>,
+    val bikeDisplayName: String,
+    val odometer: Double
+)
+
+enum class BackupProgressStage { PREPARING, CHECKING_ASSETS, DERIVING_KEY, ENCRYPTING_ASSETS, ENCRYPTED_ASSETS, ENCRYPTING_VAULT, WRITING_ARCHIVE, READY }
+
+data class BackupProgress(val stage: BackupProgressStage, val completed: Int = 0, val total: Int = 0)
+
 data class BackupPreview(
     val manifest: BackupManifest,
     val payload: VaultExportPayload,
+    val verifiedSummary: BackupCurrentSummary,
     val validatedAssetCount: Int,
     val totalAssetBytes: Long,
     val conflicts: BackupConflictSummary? = null

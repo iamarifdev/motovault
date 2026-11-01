@@ -1,94 +1,31 @@
 package com.motovault.app.storage
 
-import com.motovault.app.ui.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.motovault.app.application.VaultCoordinator
+import com.motovault.app.application.VaultWriter
+import com.motovault.app.ui.VaultDocument
+import com.motovault.app.ui.VaultState
+import com.motovault.app.ui.assetIds
+import kotlinx.coroutines.CoroutineScope
 
-internal data class VaultSnapshot(
-    val state: VaultState = VaultState(), val loading: Boolean = true,
-    val saving: Boolean = false, val restorationFailed: Boolean = false,
-    val error: String? = null, val revision: Long = 0
-)
-
-/** One owner for the durable vault across UI recreation. Calls run on the UI dispatcher. */
+/** Compatibility adapter while persisted models remain in the UI package. */
 internal class VaultSession(
-    private val scope: CoroutineScope,
+    scope: CoroutineScope,
     restore: suspend () -> VaultState,
-    private val write: suspend (VaultState) -> Unit,
-    private val cleanup: (Set<String>) -> Unit,
+    write: suspend (VaultState) -> Unit,
+    cleanup: (Set<String>) -> Unit,
     recover: suspend (Set<String>) -> Unit,
-    private val reconcile: suspend (List<VaultDocument>) -> Unit = {}
-) {
-    private val current = MutableStateFlow(VaultSnapshot())
-    val snapshots = current.asStateFlow()
-    private var undoState: VaultState? = null
-
-    /** The inverse belongs to one committed revision; later writes invalidate it. */
-    fun undo(expectedRevision: Long, completed: (Boolean) -> Unit) {
-        val inverse = undoState
-        if (inverse == null || current.value.revision != expectedRevision) {
-            completed(false)
-            return
-        }
-        commit(inverse, expectedRevision, completed)
-    }
-
-    init {
-        scope.launch(start = CoroutineStart.UNDISPATCHED) {
-            try {
-                val state = restore()
-                try { recover(state.documents.flatMap { it.assetIds() }.toSet()) }
-                catch (cancelled: CancellationException) { throw cancelled }
-                catch (_: Exception) { /* Cleanup failure must not block intact owner records. */ }
-                current.value = VaultSnapshot(state = state, loading = false)
-                try { reconcile(state.documents) }
-                catch (cancelled: CancellationException) { throw cancelled }
-                catch (_: Exception) { /* Reminders never invalidate restored records. */ }
-            } catch (cancelled: CancellationException) { throw cancelled }
-            catch (failure: Exception) {
-                current.value = VaultSnapshot(loading = false, restorationFailed = true, error = failure.message)
-            }
-        }
-    }
-
-    fun commit(next: VaultState, expectedRevision: Long, completed: (Boolean) -> Unit) {
-        val before = current.value
-        if (before.loading || before.restorationFailed || before.saving || before.revision != expectedRevision) {
-            completed(false)
-            return
-        }
-        // Register ownership before launching, so a recreated UI immediately observes the pending save.
-        current.value = before.copy(saving = true)
-        scope.launch(start = CoroutineStart.UNDISPATCHED) {
-            try {
-                write(next)
-            } catch (cancelled: CancellationException) { throw cancelled }
-            catch (_: Exception) {
-                current.value = before.copy(error = "Could not save on this device. Your previous records are unchanged.")
-                completed(false)
-                return@launch
-            }
-            val retained = (before.state.documents + next.documents).flatMap { it.assetIds() }.toSet()
-            val removed = undoState?.documents.orEmpty().flatMap { it.assetIds() }.toSet() - retained
-            undoState = before.state
-            current.value = before.copy(state = next, saving = false, error = null, revision = before.revision + 1)
-            runCatching { cleanup(removed) }
-            completed(true)
-            try { reconcile(next.documents) }
-            catch (cancelled: CancellationException) { throw cancelled }
-            catch (_: Exception) { /* Reminder failure never changes a successful save. */ }
-        }
-    }
-}
-
-internal val activeVaultSession by lazy {
-    VaultSession(
-        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
-        restore = { VaultState.restore() },
-        write = { saveVault(VaultState.encode(it)) },
-        cleanup = ::removeDocumentAssets,
-        recover = ::recoverOrphanDocumentAssets,
-        reconcile = ::reconcileRenewalReminders
-    )
-}
+    reconcile: suspend (List<VaultDocument>) -> Unit = {},
+    writePrepared: suspend (VaultState, VaultState) -> Unit = { _, next -> write(next) },
+    recoveryAssetIds: suspend () -> Set<String> = { emptySet() }
+) : VaultWriter<VaultState> by VaultCoordinator(
+    scope = scope,
+    initialState = VaultState(),
+    restore = restore,
+    write = write,
+    assetIds = { state -> state.documents.flatMap { it.assetIds() }.toSet() },
+    cleanup = cleanup,
+    recover = recover,
+    reconcile = { state -> reconcile(state.documents) },
+    writePrepared = writePrepared,
+    recoveryAssetIds = recoveryAssetIds
+)

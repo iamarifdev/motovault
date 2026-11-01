@@ -61,12 +61,12 @@ class ReminderPlanTest {
 
     @Test fun snoozedExpiryMessageKeepsItsActualDateAndChosenDigits() {
         val request = RenewalReminder("synthetic", "document", "2026-10-20", "2026-10-25", "expiry")
-        val bn = reminderMessage(request, ReminderTarget("document", "document", "Owner title", Digits.BN))
+        val bn = reminderDate(request, ReminderTarget("document", "document", "Owner title", Digits.BN))
         assertTrue(bn.contains("২০ অক্টোবর ২০২৬"))
         assertFalse(bn.contains("today"))
-        val en = reminderMessage(request, ReminderTarget("document", "document", "Owner title", Digits.EN))
+        val en = reminderDate(request, ReminderTarget("document", "document", "Owner title", Digits.EN, AppLanguage.EN))
         assertTrue(en.contains("20 October 2026"))
-        assertTrue(en.startsWith("Owner title"))
+        assertEquals("২০ October ২০২৬", reminderDate(request, ReminderTarget("document", "document", "Owner title", Digits.BN, AppLanguage.EN)))
     }
 
     @Test fun tomorrowSnoozeOfAnOverdueServiceSurvivesRestartWithoutDailyReplay() {

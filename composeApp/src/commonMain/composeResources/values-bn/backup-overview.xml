@@ -1,0 +1,51 @@
+<resources>
+    <string name="backup_sheet_title">ব্যাকআপ ও রিস্টোর</string>
+    <string name="backup_tab_create">ব্যাকআপ তৈরি</string>
+    <string name="backup_tab_restore">রিস্টোর</string>
+    <string name="backup_secure_title">নিরাপদ ও এনক্রিপ্টেড ব্যাকআপ</string>
+    <string name="backup_secure_description">আপনার বাইকের রেকর্ড ও সমস্ত কাগজের ছবি একটি সুরক্ষিত ফাইলে পোর্টেবল আকারে সংরক্ষিত হবে। ফাইলটি গুগল ড্রাইভ, পেনড্রাইভ বা মেমোরিতে রাখতে পারবেন।</string>
+    <string name="backup_includes">ব্যাকআপে অন্তর্ভুক্ত থাকবে:</string>
+    <string name="backup_bike_label">বাইক:</string>
+    <string name="backup_no_bike">বাইক নেই</string>
+    <string name="backup_odometer_label">বর্তমান ওডোমিটার:</string>
+    <string name="backup_records_label">সার্ভিস ও তেলের রেকর্ড:</string>
+    <string name="backup_documents_label">কাগজপত্রের ছবি ও ফাইল:</string>
+    <string name="backup_password_label">ব্যাকআপের পাসওয়ার্ড (কমপক্ষে %1$s অক্ষর)</string>
+    <string name="backup_confirm_password_label">পাসওয়ার্ড নিশ্চিত করুন</string>
+    <string name="backup_show_password">পাসওয়ার্ড দেখুন</string>
+    <string name="backup_hide_password">পাসওয়ার্ড লুকান</string>
+    <string name="backup_password_warning">জরুরি সতর্কতা: এই পাসওয়ার্ডটি মনে রাখুন। পাসওয়ার্ড ভুলে গেলে ব্যাকআপ থেকে কোনো ডেটাই পুনরুদ্ধার করা সম্ভব হবে না।</string>
+    <string name="backup_create_button">ব্যাকআপ তৈরি করুন</string>
+    <string name="restore_intro_title">ব্যাকআপ ফাইল থেকে রিস্টোর</string>
+    <string name="restore_intro_description">পূর্বে তৈরি করা MotoVault ব্যাকআপ ফাইল (.mva) নির্বাচন করে আপনার বাইক ও কাগজের তথ্য ফিরিয়ে আনুন।</string>
+    <string name="restore_choose_file">ব্যাকআপ ফাইল (.mva) নির্বাচন করুন</string>
+    <string name="restore_choose_source">গুগল ড্রাইভ বা ফোন থেকে ফাইলটি বেছে নিন</string>
+    <string name="restore_change_file">বদলান</string>
+    <string name="restore_enter_password">ব্যাকআপের পাসওয়ার্ড দিন</string>
+    <string name="restore_validating">ব্যাকআপ যাচাই করা হচ্ছে…</string>
+    <string name="restore_validate">ব্যাকআপ যাচাই করুন</string>
+    <string name="restore_preview_title">ব্যাকআপ ফাইলের বিবরণ:</string>
+    <string name="restore_odometer">ওডোমিটার:</string>
+    <string name="restore_record_count_label">রেকর্ড সংখ্যা:</string>
+    <string name="restore_document_count_label">কাগজ সংখ্যা:</string>
+    <string name="restore_document_files">%1$s (%2$s)</string>
+    <string name="restore_backup_date">ব্যাকআপের তারিখ:</string>
+    <string name="restore_replace_title">সতর্কতা: বর্তমান তথ্য প্রতিস্থাপিত হবে</string>
+    <string name="restore_replace_description">রিস্টোর সম্পন্ন হলে আপনার বর্তমান অ্যাপের বাইক, সার্ভিস রেকর্ড ও কাগজপত্র এই ব্যাকআপের ডেটা দিয়ে প্রতিস্থাপন করা হবে।</string>
+    <string name="restore_progress">তথ্য ও ফাইল রিস্টোর হচ্ছে…</string>
+    <string name="restore_confirm">রিস্টোর নিশ্চিত করুন</string>
+    <string name="restore_success">তথ্য সফলভাবে রিস্টোর সম্পন্ন হয়েছে।</string>
+    <string name="backup_size_kib">%1$s কিবিবাইট</string>
+    <string name="backup_ready_title">এনক্রিপ্টেড ব্যাকআপ প্রস্তুত!</string>
+    <string name="backup_ready_size">ফাইলের আকার: %1$s। ফাইলটি সুরক্ষিত কোথাও সেভ করুন।</string>
+    <string name="backup_saved">ব্যাকআপ ফাইল সেভ হয়েছে।</string>
+    <string name="backup_save_file">ফাইলে সেভ করুন</string>
+    <string name="backup_share">শেয়ার করুন</string>
+    <string name="backup_save_or_share">ফাইলে সেভ বা শেয়ার করুন</string>
+    <string name="backup_share_chooser">MotoVault ব্যাকআপ পাঠান</string>
+    <string name="backup_share_failed">শেয়ার করার পর্দা খোলা যায়নি। আবার চেষ্টা করুন।</string>
+    <string name="backup_snapshot_changed">আপনার তথ্য বদলেছে। দেখে আবার ব্যাকআপ তৈরি করুন।</string>
+    <plurals name="backup_record_count"><item quantity="other">%1$sটি রেকর্ড</item></plurals>
+    <plurals name="backup_document_count"><item quantity="other">%1$sটি ডকুমেন্ট</item></plurals>
+    <plurals name="backup_file_count"><item quantity="other">%1$sটি ফাইল</item></plurals>
+</resources>

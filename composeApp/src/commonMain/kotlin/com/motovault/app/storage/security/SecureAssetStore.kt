@@ -6,6 +6,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 internal const val MAX_PRIVATE_ASSET_BYTES = 32 * 1024 * 1024
+internal class RestoreAssetCollision : IllegalStateException("An existing document uses this ID with different content.")
 private val envelopeHeader = byteArrayOf(77, 86, 65, 1, 1) // MVA, format 1, local key 1
 private const val GCM_OVERHEAD = 12 + 16
 
@@ -51,12 +52,42 @@ internal class AssetEnvelope(private val cipher: AssetCipher, private val purpos
     companion object { const val maximumEnvelopeBytes = MAX_PRIVATE_ASSET_BYTES + 5 + GCM_OVERHEAD }
 }
 
+/** Recovery records use a separate authenticated purpose from document files. */
+internal class RecoverySnapshotCipher(private val cipher: AssetCipher) {
+    private val envelope = AssetEnvelope(cipher, "restore-snapshot/v1\u0000")
+    fun seal(id: String, plaintext: ByteArray): ByteArray = envelope.seal(id, plaintext)
+    fun open(id: String, ciphertext: ByteArray): ByteArray = envelope.open(id, ciphertext)
+}
+
 /**
  * Encrypted publication is the per-file commit point. IDs and owner references stay stable.
  * Original bytes remain immutable in authenticated ciphertext. Plaintext is retired only after
  * verified durable publication. Interrupted publication leaves the plaintext original intact.
  */
 internal class SecureAssetStore(private val files: AssetFiles, private val envelope: AssetEnvelope) {
+    fun contains(id: String): Boolean {
+        validateDocumentAssetId(id)
+        return files.originalExists(id) || files.encryptedExists(id)
+    }
+
+    /** Reuse an identical original; refuse to overwrite any different existing bytes. */
+    fun stageRestore(id: String, plaintext: ByteArray): Boolean {
+        validateDocumentAssetId(id)
+        val hasOriginal = files.originalExists(id)
+        val hasEncrypted = files.encryptedExists(id)
+        if (hasOriginal || hasEncrypted) {
+            val original = if (hasOriginal) files.readOriginal(id, MAX_PRIVATE_ASSET_BYTES) else null
+            val protected = if (hasEncrypted) envelope.open(id, files.readEncrypted(id, AssetEnvelope.maximumEnvelopeBytes)) else null
+            check(original == null || protected == null || original.contentEquals(protected)) {
+                "Protected and original documents differ. Both copies are retained."
+            }
+            if (!(original ?: requireNotNull(protected)).contentEquals(plaintext)) throw RestoreAssetCollision()
+            return false
+        }
+        writeNew(id, plaintext)
+        return true
+    }
+
     fun read(id: String): ByteArray {
         validateDocumentAssetId(id)
         // Never catch authentication/key failures and fall back to an older plaintext original.

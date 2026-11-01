@@ -37,8 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDateTime
-import motovault.composeapp.generated.resources.Res
-import motovault.composeapp.generated.resources.barlow_condensed
+import motovault.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
@@ -656,10 +655,13 @@ fun VaultScreen(
 // ==========================================
 // 3. HISTORY SCREEN
 // ==========================================
+private const val HISTORY_SUMMARY_DAYS = 30
+
 @Composable
 fun HistoryScreen(
     state: VaultState,
-    onDeleteLog: (RideLog) -> Unit
+    onDeleteLog: (RideLog) -> Unit,
+    onEditFuel: (RideLog) -> Unit
 ) {
     val f = currentFmt
     val haptic = currentHaptic
@@ -676,7 +678,7 @@ fun HistoryScreen(
         filteredLogs.groupBy { it.date.take(7) }.toList()
     }
 
-    val thirtyDaysAgo = remember(today) { LocalDate.fromEpochDays(today.toEpochDays() - 30).toString() }
+    val thirtyDaysAgo = remember(today) { LocalDate.fromEpochDays(today.toEpochDays() - HISTORY_SUMMARY_DAYS).toString() }
     val recentLogs = remember(state.logs, thirtyDaysAgo) { state.logs.filter { it.date >= thirtyDaysAgo } }
     val spend30 = remember(recentLogs) { recentLogs.sumOf { it.cost } }
     val km30 = remember(recentLogs) {
@@ -692,7 +694,7 @@ fun HistoryScreen(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(text = if (state.language == AppLanguage.EN) "Records" else "রেকর্ড", fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+        Text(text = appStringResource(Res.string.history_title), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
 
         // 3-stat summary banner
         Row(
@@ -705,17 +707,17 @@ fun HistoryScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(text = "গত ৩০ দিনের খরচ", fontSize = 12.sp, color = TextSecondary)
+                Text(text = appStringResource(Res.string.history_spend, f.d(HISTORY_SUMMARY_DAYS.toString())), fontSize = 12.sp, color = TextSecondary)
                 Text(text = f.money(spend30), fontSize = 17.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(text = "চালানো", fontSize = 12.sp, color = TextSecondary)
-                Text(text = f.km(km30), fontSize = 17.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                Text(text = appStringResource(Res.string.history_distance_label), fontSize = 12.sp, color = TextSecondary)
+                Text(text = appStringResource(Res.string.history_distance, f.n(km30)), fontSize = 17.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(text = "জ্বালানি গড়", fontSize = 12.sp, color = TextSecondary)
+                Text(text = appStringResource(Res.string.history_economy_label), fontSize = 12.sp, color = TextSecondary)
                 Text(
-                    text = if (avgEconomy != null) "${f.d(formatLakh(avgEconomy, 1))} ${if (f.digits == Digits.BN) "কিমি/লি" else "km/L"}" else "--",
+                    text = if (avgEconomy != null) appStringResource(Res.string.history_economy, f.n(avgEconomy, 1)) else "--",
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextPrimary
@@ -730,11 +732,11 @@ fun HistoryScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                VaultChip(text = "সব", active = filter == "all", onClick = { filter = "all" })
-                VaultChip(text = "সার্ভিস", active = filter == "service", onClick = { filter = "service" })
-                VaultChip(text = "জ্বালানি", active = filter == "fuel", onClick = { filter = "fuel" })
+                VaultChip(text = appStringResource(Res.string.history_all), active = filter == "all", onClick = { filter = "all" })
+                VaultChip(text = appStringResource(Res.string.history_service), active = filter == "service", onClick = { filter = "service" })
+                VaultChip(text = appStringResource(Res.string.history_fuel), active = filter == "fuel", onClick = { filter = "fuel" })
             }
-            Text(text = "${f.d(filteredLogs.size.toString())}টি রেকর্ড", fontSize = 13.sp, color = TextSecondary)
+            Text(text = appPluralStringResource(Res.plurals.history_record_count, filteredLogs.size, f.d(filteredLogs.size.toString())), fontSize = 13.sp, color = TextSecondary)
         }
 
         if (groups.isEmpty()) {
@@ -746,13 +748,14 @@ fun HistoryScreen(
                     .padding(32.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "এখনও কিছু নেই। নিচের + চাপুন।", fontSize = 15.sp, color = TextSecondary)
+                Text(text = appStringResource(Res.string.history_empty), fontSize = 15.sp, color = TextSecondary)
             }
         }
 
         groups.forEach { (yearMonth, items) ->
             val monthDate = runCatching { LocalDate.parse("$yearMonth-01") }.getOrNull()
-            val monthLabel = if (monthDate != null) f.month(monthDate) else yearMonth
+            val monthLabel = if (monthDate != null) appStringResource(Res.string.history_month_year,
+                localizedMonthName(state.language, monthDate.monthNumber - 1), f.d(monthDate.year.toString())) else yearMonth
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(text = monthLabel, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextSecondary)
@@ -795,10 +798,15 @@ fun HistoryScreen(
                             }
                             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                 val logDate = runCatching { LocalDate.parse(log.date) }.getOrNull()
-                                val title = if (log.isFuel) "তেল ভরা · ${f.liters(log.fuelLiters ?: 0.0)}" else log.detail.ifBlank { "সার্ভিস" }
+                                val title = if (log.isFuel) appStringResource(Res.string.history_fuel_title,
+                                    appStringResource(Res.string.fuel_litres_value, f.n(log.fuelLiters ?: 0.0, 2)))
+                                    else log.detail.ifBlank { appStringResource(Res.string.history_service) }
+                                val dateLabel = if (logDate != null) appStringResource(Res.string.history_day_month,
+                                    f.d(logDate.dayOfMonth.toString()), localizedMonthName(state.language, logDate.monthNumber - 1)) else log.date
                                 Text(text = title, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                                 Text(
-                                    text = "${if (logDate != null) f.date(logDate) else log.date} · ${f.km(log.odometer)}",
+                                    text = appStringResource(Res.string.history_row_subtitle, dateLabel,
+                                        appStringResource(Res.string.history_distance, f.n(log.odometer))),
                                     fontSize = 13.sp,
                                     color = TextSecondary
                                 )
@@ -821,8 +829,9 @@ fun HistoryScreen(
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
                                 if (log.isFuel) {
-                                    log.fuelPrice?.let { Text("${f.money(it)} ${if (state.language == AppLanguage.EN) "per liter" else "প্রতি লিটার"} · ${if (log.fuelType == "petrol") (if (state.language == AppLanguage.EN) "Petrol" else "পেট্রোল") else (if (state.language == AppLanguage.EN) "Octane" else "অকটেন")}", fontSize = 13.sp, color = TextSecondary) }
-                                    Text(if (log.fullTank) (if (state.language == AppLanguage.EN) "Full tank" else "ফুল ট্যাংক করা হয়েছে") else (if (state.language == AppLanguage.EN) "Partial fill (mileage calculated on next full tank)" else "আংশিক তেল ভরা হয়েছে (পরের ফুল ট্যাংকে হিসাব হবে)"), fontSize = 13.sp, color = TextSecondary)
+                                    log.fuelPrice?.let { Text(appStringResource(Res.string.history_price_fuel, f.money(it),
+                                        appStringResource(if (log.fuelType == "petrol") Res.string.history_fuel_petrol else Res.string.history_fuel_octane)), fontSize = 13.sp, color = TextSecondary) }
+                                    Text(appStringResource(if (log.fullTank) Res.string.history_full_tank else Res.string.history_partial_tank), fontSize = 13.sp, color = TextSecondary)
                                     if (log.locationLabel.isNotBlank()) Text(log.locationLabel, fontSize = 13.sp, color = TextSecondary)
                                 } else {
                                     log.serviceLines.forEach { l ->
@@ -836,7 +845,7 @@ fun HistoryScreen(
                                                 color = TextSecondary
                                             )
                                             Text(
-                                                text = l.unitPricePoisha?.let { f.money(it / 100.0 * l.quantity) } ?: (if (state.language == AppLanguage.EN) "Price unknown" else "দাম জানা নেই"),
+                                                text = l.unitPricePoisha?.let { f.money(it / 100.0 * l.quantity) } ?: appStringResource(Res.string.history_price_unknown),
                                                 fontSize = 13.sp,
                                                 fontWeight = FontWeight.SemiBold,
                                                 color = TextPrimary
@@ -845,26 +854,31 @@ fun HistoryScreen(
                                     }
                                     log.serviceLabourPoisha?.takeIf { it > 0 }?.let {
                                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                            Text(if (state.language == AppLanguage.EN) "Service charge / labor" else "সার্ভিস চার্জ / মজুরি", fontSize = 13.sp, color = TextSecondary)
+                                            Text(appStringResource(Res.string.history_labour), fontSize = 13.sp, color = TextSecondary)
                                             Text(f.money(it / 100.0), fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                                         }
                                     }
                                     log.serviceDiscountPoisha?.takeIf { it > 0 }?.let {
                                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                            Text(if (state.language == AppLanguage.EN) "Discount" else "ছাড় / ডিসকাউন্ট", fontSize = 13.sp, color = TextSecondary)
+                                            Text(appStringResource(Res.string.history_discount), fontSize = 13.sp, color = TextSecondary)
                                             Text("−${f.money(it / 100.0)}", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                                         }
                                     }
                                     if (log.workshop.isNotBlank()) Text(log.workshop, fontSize = 13.sp, color = TextSecondary)
                                 }
 
+                                if (log.isFuel) {
+                                    TextButton(onClick = { onEditFuel(log) }, contentPadding = PaddingValues(0.dp)) {
+                                        Text(appStringResource(Res.string.fuel_edit_action), fontSize = 13.sp)
+                                    }
+                                }
                                 Row(
                                     modifier = Modifier.clickable { onDeleteLog(log) }.padding(vertical = 4.dp),
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
                                     V3Icon(path = "feather_icon/fi_trash-2.svg", description = null, modifier = Modifier.size(14.dp), tint = ErrorColor)
-                                    Text("রেকর্ড মুছুন", fontSize = 13.sp, color = ErrorColor, fontWeight = FontWeight.SemiBold)
+                                    Text(appStringResource(Res.string.history_delete), fontSize = 13.sp, color = ErrorColor, fontWeight = FontWeight.SemiBold)
                                 }
                             }
                         }
@@ -1170,6 +1184,8 @@ fun MeScreen(
                     onClick = { onOpenSheet("backup", com.motovault.app.ui.backup.BackupSheetTab.RESTORE) }
                 )
             }
+            VaultButton(text = appStringResource(Res.string.recovery_entry), kind = ButtonKind.SECONDARY, full = true,
+                onClick = { onOpenSheet("recovery", null) })
         }
 
         // New concepts (demo)

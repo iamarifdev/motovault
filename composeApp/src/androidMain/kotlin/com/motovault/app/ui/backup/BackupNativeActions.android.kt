@@ -21,6 +21,13 @@ import com.motovault.app.ui.ButtonKind
 import com.motovault.app.ui.VaultButton
 import java.io.ByteArrayOutputStream
 import java.io.File
+import com.motovault.app.ui.appStringResource
+import motovault.composeapp.generated.resources.Res
+import motovault.composeapp.generated.resources.backup_save_file
+import motovault.composeapp.generated.resources.backup_share
+import motovault.composeapp.generated.resources.backup_share_chooser
+
+private const val BACKUP_READ_BUFFER_BYTES = 16 * 1024
 
 @Composable
 actual fun BackupNativeActions(
@@ -28,12 +35,13 @@ actual fun BackupNativeActions(
     suggestedFilename: String,
     onSaved: () -> Unit,
     onShareOpened: () -> Unit,
-    onError: (String) -> Unit
+    onError: (BackupNativeFailure) -> Unit
 ) {
     val context = LocalContext.current
     val savedState by rememberUpdatedState(onSaved)
     val shareState by rememberUpdatedState(onShareOpened)
     val errorState by rememberUpdatedState(onError)
+    val shareChooser = appStringResource(Res.string.backup_share_chooser)
 
     val saveLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/octet-stream")
@@ -48,7 +56,7 @@ actual fun BackupNativeActions(
                 }
                 savedState()
             }.onFailure {
-                errorState("ব্যাকআপ ফাইল সেভ করতে ব্যর্থ: ${it.message}")
+                errorState(BackupNativeFailure.SAVE)
             }
         }
         // If destination is null, user cancelled; do not call savedState()
@@ -59,16 +67,16 @@ actual fun BackupNativeActions(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         VaultButton(
-            text = "ফাইলে সেভ করুন",
+            text = appStringResource(Res.string.backup_save_file),
             kind = ButtonKind.PRIMARY,
             full = true,
             modifier = Modifier.weight(1f),
             onClick = {
-                saveLauncher.launch(suggestedFilename)
+                runCatching { saveLauncher.launch(suggestedFilename) }.onFailure { errorState(BackupNativeFailure.SAVE) }
             }
         )
         VaultButton(
-            text = "শেয়ার করুন",
+            text = appStringResource(Res.string.backup_share),
             kind = ButtonKind.SECONDARY,
             full = true,
             modifier = Modifier.weight(1f),
@@ -90,10 +98,10 @@ actual fun BackupNativeActions(
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         clipData = ClipData.newUri(context.contentResolver, "MotoVault Backup", uri)
                     }
-                    context.startActivity(Intent.createChooser(shareIntent, "MotoVault ব্যাকআপ পাঠান"))
+                    context.startActivity(Intent.createChooser(shareIntent, shareChooser))
                     shareState()
                 }.onFailure {
-                    errorState("শেয়ার করতে সমস্যা হয়েছে: ${it.message}")
+                    errorState(BackupNativeFailure.SHARE)
                 }
             }
         )
@@ -103,7 +111,7 @@ actual fun BackupNativeActions(
 @Composable
 actual fun BackupFilePicker(
     onFileSelected: (ByteArray, String) -> Unit,
-    onError: (String) -> Unit,
+    onError: () -> Unit,
     content: @Composable (openPicker: () -> Unit) -> Unit
 ) {
     val context = LocalContext.current
@@ -125,26 +133,26 @@ actual fun BackupFilePicker(
 
                 val output = ByteArrayOutputStream()
                 requireNotNull(context.contentResolver.openInputStream(uri)) {
-                    "ফাইল খুলতে ব্যর্থ হয়েছে।"
+                    "Could not open backup file."
                 }.use { input ->
-                    val buf = ByteArray(16384)
+                    val buf = ByteArray(BACKUP_READ_BUFFER_BYTES)
                     var total = 0L
                     while (true) {
                         val read = input.read(buf)
                         if (read < 0) break
                         total += read
                         require(total <= MvaZipArchive.DEFAULT_MAX_TOTAL_BYTES) {
-                            "ব্যাকআপ ফাইলটি সীমার চেয়ে বড় (সর্বোচ্চ ১৫০ মেগাবাইট)।"
+                            "Backup exceeds size limit."
                         }
                         output.write(buf, 0, read)
                     }
                 }
                 onSelectedState(output.toByteArray(), displayName)
             }.onFailure {
-                onErrorState("ফাইল লোড করতে ব্যর্থ: ${it.message}")
+                onErrorState()
             }
         }
     }
 
-    content { pickerLauncher.launch("*/*") }
+    content { runCatching { pickerLauncher.launch("*/*") }.onFailure { onErrorState() } }
 }

@@ -97,7 +97,7 @@ final class DocumentAssetCrypto: NSObject, IosAssetCryptography, IosBackupCrypto
         return try? AES.GCM.seal(plaintext, using: key, authenticating: associatedData).combined
     }
 
-    func sha256(data: Data) -> Data { Data(SHA256.hash(data: data)) }
+    func sha256(data: Data) -> Data { BackupCryptoPrimitives.sha256(data) }
 
     func open(combined: Data, associatedData: Data) -> Data? {
         guard let key = existingKey(), let box = try? AES.GCM.SealedBox(combined: combined) else { return nil }
@@ -111,34 +111,15 @@ final class DocumentAssetCrypto: NSObject, IosAssetCryptography, IosBackupCrypto
     }
 
     func deriveKey(passphrase: String, salt: Data, iterations: Int32) -> Data? {
-        var derived = Data(repeating: 0, count: 32)
-        let status = derived.withUnsafeMutableBytes { derivedBytes in
-            salt.withUnsafeBytes { saltBytes in
-                CCKeyDerivationPBKDF(
-                    CCPBKDFAlgorithm(kCCPBKDF2),
-                    passphrase,
-                    passphrase.utf8.count,
-                    saltBytes.baseAddress?.assumingMemoryBound(to: UInt8.self),
-                    salt.count,
-                    CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA256),
-                    UInt32(iterations),
-                    derivedBytes.baseAddress?.assumingMemoryBound(to: UInt8.self),
-                    32
-                )
-            }
-        }
-        return status == kCCSuccess ? derived : nil
+        BackupCryptoPrimitives.deriveKey(passphrase: passphrase, salt: salt, iterations: iterations)
     }
 
     func encrypt(key: Data, plaintext: Data, aad: Data) -> Data? {
-        let symKey = SymmetricKey(data: key)
-        return try? AES.GCM.seal(plaintext, using: symKey, authenticating: aad).combined
+        BackupCryptoPrimitives.encrypt(key: key, plaintext: plaintext, aad: aad)
     }
 
     func decrypt(key: Data, combined: Data, aad: Data) -> Data? {
-        guard let box = try? AES.GCM.SealedBox(combined: combined) else { return nil }
-        let symKey = SymmetricKey(data: key)
-        return try? AES.GCM.open(box, using: symKey, authenticating: aad)
+        BackupCryptoPrimitives.decrypt(key: key, combined: combined, aad: aad)
     }
 }
 

@@ -44,7 +44,10 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import com.motovault.app.ui.backup.BackupSheet
+import com.motovault.app.ui.fuel.FuelSheet
 import com.motovault.app.ui.backup.BackupSheetTab
+import com.motovault.app.ui.backup.RecoverySheet
+import com.motovault.app.application.VaultRecovery
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -55,11 +58,18 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.motovault.app.domain.model.ComponentRule
 import com.motovault.app.domain.privacy.*
-import com.motovault.app.storage.activeVaultSession
+import com.motovault.app.application.VaultWriter
+import com.motovault.app.application.VaultError
+import com.motovault.app.application.fuel.FuelEntryBuilder
+import com.motovault.app.application.fuel.FuelEntryEditor
+import com.motovault.app.application.VaultBackupRestorer
 import com.motovault.app.ui.privacy.*
 import dev.sky.design.*
 import dev.sky.design.tokens.SkyTokens
 import kotlinx.coroutines.delay
+import com.motovault.app.application.fuel.FuelWorkflow
+import com.motovault.app.application.fuel.FuelSaveOutcome
+import com.motovault.app.application.VaultBackupOperations
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -97,6 +107,8 @@ data class ActiveSheet(
     val name: String,
     val props: Any? = null
 )
+
+private data class FuelEditTarget(val record: RideLog, val revision: Long)
 
 fun bengaliDigits(value: Int): String = value.toString().map { digit ->
     if (digit in '0'..'9') ('০'.code + digit.code - '0'.code).toChar() else digit
@@ -156,9 +168,10 @@ fun BrandWorld.logo(): DrawableResource = when (id) {
     else -> Res.drawable.logo_enfield
 }
 
+private enum class FuelCreateError { SAVE_FAILED, CONFLICT }
+
 @Composable
-fun MotoVault() {
-    val session = remember { activeVaultSession }
+internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBackupRestorer, fuelEntry: FuelEntryBuilder<VaultState>, fuelEditor: FuelEntryEditor<VaultState>, recovery: VaultRecovery, backupOperations: VaultBackupOperations<VaultState>) {
     val snapshot by session.snapshots.collectAsState()
     val state = snapshot.state
     // Refresh actual OS permission and committed requests when returning from system settings.
@@ -184,8 +197,12 @@ fun MotoVault() {
         )
     }
     var currentToast by remember { mutableStateOf<ToastData?>(null) }
+    var restoreSuccessVisible by remember { mutableStateOf(false) }
+    var fuelEditError by remember { mutableStateOf<String?>(null) }
+    var fuelCreateError by remember { mutableStateOf<FuelCreateError?>(null) }
 
     val scope = rememberCoroutineScope()
+    val fuelWorkflow = remember(session, fuelEntry, fuelEditor) { FuelWorkflow(session, fuelEntry, fuelEditor) }
 
     fun commit(next: VaultState, onDone: ((Boolean) -> Unit)? = null) {
         session.commit(next, revision) { ok ->
@@ -321,7 +338,7 @@ fun MotoVault() {
     }
 
     LaunchedEffect(LaunchConfig.initialSeed, loading) {
-        if (LaunchConfig.initialSeed && !loading) {
+        if (LaunchConfig.initialSeed && !loading && LaunchConfig.consumeSeed()) {
             val seeded = VaultState.seedData(today())
             commit(seeded)
         }
@@ -329,6 +346,8 @@ fun MotoVault() {
 
     val activeBrandId = state.brandOverride ?: state.ride?.brandId ?: "yamaha"
 
+    AppResourceEnvironment(state.language) {
+    val restoreSuccessMessage = appStringResource(Res.string.restore_success)
     VaultTheme(
         brandId = activeBrandId,
         appearance = state.appearance,
@@ -365,7 +384,10 @@ fun MotoVault() {
             ) {
                 storageError?.let {
                     Text(
-                        text = it,
+                        text = appStringResource(when (it) {
+                            VaultError.SAVE_FAILED -> Res.string.storage_save_failed
+                            VaultError.RESTORE_FAILED -> Res.string.storage_restore_failed
+                        }),
                         color = ErrorColor,
                         modifier = Modifier.fillMaxWidth().padding(16.dp),
                         fontSize = 13.sp
@@ -376,6 +398,8 @@ fun MotoVault() {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator(color = BrandColor)
                     }
+                } else if (snapshot.restorationFailed) {
+                    // Keep the failure visible; an unreadable vault is not an empty new vault.
                 } else if (state.ride == null || editingRide) {
                     OnboardingScreen(
                         onDismiss = if (state.ride != null) { { editingRide = false } } else null,
@@ -455,6 +479,10 @@ fun MotoVault() {
                                     )
                                     Tab.HISTORY -> HistoryScreen(
                                         state = state,
+                                        onEditFuel = { log ->
+                                            fuelEditError = null
+                                            activeSheet = ActiveSheet("fuelEdit", FuelEditTarget(log, revision))
+                                        },
                                         onDeleteLog = { log ->
                                             val next = runCatching { state.deleteLog(log) }.getOrNull()
                                             if (next != null) {
@@ -503,8 +531,8 @@ fun MotoVault() {
                     .padding(bottom = 90.dp)
             ) {
                 ToastLayer(
-                    toast = currentToast,
-                    onDismiss = { currentToast = null }
+                    toast = if (restoreSuccessVisible) ToastData(message = restoreSuccessMessage) else currentToast,
+                    onDismiss = { restoreSuccessVisible = false; currentToast = null }
                 )
             }
 
@@ -528,13 +556,21 @@ fun MotoVault() {
                         onDismiss = { activeSheet = null },
                         onSelectFlow = { flow -> activeSheet = ActiveSheet(flow) }
                     )
-                    "fuel" -> FuelSheet(
-                        state = state,
+                    "fuel" -> state.fuelScreenInput(today())?.let { fuelInput ->
+                        val failureText = when (fuelCreateError) {
+                            FuelCreateError.SAVE_FAILED -> appStringResource(Res.string.fuel_create_save_failed)
+                            FuelCreateError.CONFLICT -> appStringResource(Res.string.fuel_create_conflict)
+                            null -> null
+                        }
+                        FuelSheet(
+                        input = fuelInput,
+                        editError = failureText,
                         initialAmount = (sheet.props as? Number)?.toDouble(),
-                        onDismiss = { activeSheet = null },
-                        onSave = { nextState, msg, onDone ->
-                            commit(nextState) { ok ->
-                                if (ok) {
+                        onDismiss = { activeSheet = null; fuelCreateError = null },
+                        onSave = { request, msg, onDone ->
+                            fuelWorkflow.create(request, revision) { outcome ->
+                                if (scope.isActive && outcome == FuelSaveOutcome.SAVED) {
+                                    fuelCreateError = null
                                     currentToast = ToastData(
                                         id = "fuel_${Clock.System.now().toEpochMilliseconds()}",
                                         message = msg,
@@ -544,10 +580,36 @@ fun MotoVault() {
                                     )
                                     onDone()
                                     activeSheet = null
+                                } else if (scope.isActive) fuelCreateError = when (outcome) {
+                                    FuelSaveOutcome.CONFLICT, FuelSaveOutcome.INVALID -> FuelCreateError.CONFLICT
+                                    else -> FuelCreateError.SAVE_FAILED
                                 }
                             }
                         }
-                    )
+                    ) }
+                    "fuelEdit" -> {
+                        val target = sheet.props as? FuelEditTarget
+                        if (target != null) {
+                            val conflictText = appStringResource(Res.string.fuel_edit_conflict)
+                            val failureText = appStringResource(Res.string.fuel_edit_save_failed)
+                            state.fuelScreenInput(today())?.let { fuelInput -> FuelSheet(
+                                input = fuelInput, existing = target.record.fuelExistingEntry(), editError = fuelEditError,
+                                onDismiss = { activeSheet = null; fuelEditError = null },
+                                onSave = { _, _, _ -> },
+                                onEdit = { request, message ->
+                                    fuelWorkflow.edit(request, target.revision) { outcome ->
+                                            if (scope.isActive) {
+                                                if (outcome == FuelSaveOutcome.SAVED) {
+                                                    currentToast = ToastData(id = "fuel_edit_${request.id}", message = message, undoAction = { undo(target.revision + 1) })
+                                                    activeSheet = null
+                                                    fuelEditError = null
+                                                } else fuelEditError = if (outcome == FuelSaveOutcome.FAILED) failureText else conflictText
+                                            }
+                                    }
+                                }
+                            ) }
+                        }
+                    }
                     "service" -> {
                         val itemKey = sheet.props as? String
                         val parsedRows = (sheet.props as? List<*>)?.filterIsInstance<ParsedLine>()
@@ -657,21 +719,32 @@ fun MotoVault() {
                     )
                     "backup", "backup-restore" -> BackupSheet(
                         state = state,
+                        stateRevision = revision,
+                        backupOperations = backupOperations,
+                        vaultRevision = { session.snapshots.value.revision },
                         initialTab = if (sheet.name == "backup-restore" || sheet.props == BackupSheetTab.RESTORE) BackupSheetTab.RESTORE else BackupSheetTab.CREATE,
                         onDismiss = { activeSheet = null },
                         onBackupSaved = { timestamp ->
                             commit(state.copy(lastBackupEpochMillis = timestamp))
                         },
-                        onRestored = { restoredState ->
-                            activeSheet = null
-                            commit(restoredState)
+                        onRestore = { archive, password, expectedRevision, completed ->
+                            backupRestore.restore(archive, password, expectedRevision) { result ->
+                                completed(result)
+                                if (result.isSuccess) {
+                                    activeSheet = null
+                                    currentToast = null
+                                    restoreSuccessVisible = true
+                                }
+                            }
                         }
                     )
+                    "recovery" -> RecoverySheet(recovery, revision = { session.snapshots.value.revision }, onDismiss = { activeSheet = null })
                 }
             }
             }
         }
         }
+    }
     }
 }
 
@@ -687,6 +760,7 @@ private fun VaultBottomNavigation(
     val surface = SurfaceColor
     val line = BorderColor
     val reducedMotion = isReducedMotion
+    val addRecordDescription = appStringResource(Res.string.nav_add_record)
 
     Column(
         modifier = Modifier
@@ -771,7 +845,7 @@ private fun VaultBottomNavigation(
                         }
                         .semantics {
                             role = Role.Button
-                            contentDescription = "নতুন রেকর্ড যোগ করুন"
+                            contentDescription = addRecordDescription
                         },
                     contentAlignment = Alignment.Center
                 ) {
@@ -821,6 +895,12 @@ private fun BottomNavItem(
     modifier: Modifier = Modifier
 ) {
     val color = if (isSelected) BrandColor else TextTertiary
+    val title = appStringResource(when (tab) {
+        Tab.GARAGE -> Res.string.nav_garage
+        Tab.VAULT -> Res.string.nav_vault
+        Tab.HISTORY -> Res.string.nav_records
+        Tab.ME -> Res.string.nav_profile
+    })
     Column(
         modifier = modifier
             .heightIn(min = 70.dp)
@@ -838,14 +918,14 @@ private fun BottomNavItem(
     ) {
         V3Icon(
             path = "feather_icon/${tab.icon}",
-            description = tab.title,
+            description = title,
             modifier = Modifier.size(28.dp),
             tint = color,
             strokeWidth = if (isSelected) 2.4f else 2f
         )
         Spacer(Modifier.height(2.dp))
         Text(
-            text = tab.title,
+            text = title,
             fontSize = 13.sp,
             fontWeight = FontWeight.SemiBold,
             color = color,

@@ -50,6 +50,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import motovault.composeapp.generated.resources.Res
+import motovault.composeapp.generated.resources.keypad_backspace
+import motovault.composeapp.generated.resources.keypad_decimal
+import motovault.composeapp.generated.resources.action_undo
 
 private val VaultPosition = SemanticsPropertyKey<Rect>("VaultPosition")
 
@@ -292,7 +296,8 @@ fun <T> VaultSegmented(
     selected: T,
     onSelect: (T) -> Unit,
     modifier: Modifier = Modifier,
-    label: String = ""
+    label: String = "",
+    enabled: Boolean = true
 ) {
     val haptic = currentHaptic
     Row(
@@ -314,7 +319,7 @@ fun <T> VaultSegmented(
                     .clip(RoundedCornerShape(10.dp))
                     .background(if (isSelected) SurfaceColor else Color.Transparent)
                     .then(if (isSelected) Modifier.border(0.5.dp, BorderColor, RoundedCornerShape(10.dp)) else Modifier)
-                    .selectable(selected = isSelected, role = Role.RadioButton) {
+                    .selectable(selected = isSelected, enabled = enabled, role = Role.RadioButton) {
                         if (!isSelected) {
                             haptic.perform(HapticKind.TICK)
                             onSelect(value)
@@ -744,6 +749,8 @@ fun VaultKeypad(
 ) {
     val f = currentFmt
     val haptic = currentHaptic
+    val backspaceLabel = appStringResource(Res.string.keypad_backspace)
+    val decimalLabel = appStringResource(Res.string.keypad_decimal)
     val keys = listOf(
         "1", "2", "3",
         "4", "5", "6",
@@ -779,8 +786,8 @@ fun VaultKeypad(
                                 .semantics {
                                     role = Role.Button
                                     when (k) {
-                                        "back" -> contentDescription = "মুছুন"
-                                        "." -> contentDescription = "দশমিক"
+                                        "back" -> contentDescription = backspaceLabel
+                                        "." -> contentDescription = decimalLabel
                                     }
                                 },
                             contentAlignment = Alignment.Center
@@ -938,7 +945,7 @@ fun ToastLayer(
                                 tint = undoColor
                             )
                             Text(
-                                text = "আনডু",
+                                text = appStringResource(Res.string.action_undo),
                                 color = undoColor,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold

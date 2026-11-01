@@ -1,8 +1,14 @@
 package com.motovault.app.storage.security
 
+import com.motovault.app.storage.backupSnapshot
+import com.motovault.app.storage.backupRideDisplayName
+
 import android.app.Activity
 import android.app.Instrumentation
 import android.os.Bundle
+import android.os.SystemClock
+import android.content.Intent
+import android.view.accessibility.AccessibilityNodeInfo
 import java.io.File
 import java.security.KeyStore
 import java.util.UUID
@@ -19,16 +25,517 @@ import kotlin.experimental.xor
 import androidx.room.Room
 import com.motovault.app.storage.VaultDatabase
 import com.motovault.app.storage.buildVaultDatabase
+import com.motovault.app.storage.BackupRestoreStaging
+import com.motovault.app.storage.StagedRestore
+import com.motovault.app.storage.RecoverySnapshotStore
+import com.motovault.app.storage.CoordinatedRecovery
+import com.motovault.app.storage.FuelEntryAdapter
+import com.motovault.app.storage.VaultSession
+import com.motovault.app.application.fuel.FuelEditRequest
+import kotlinx.datetime.LocalDate
+import com.motovault.app.application.PreparedVaultChange
+import com.motovault.app.application.VaultCoordinator
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.first
+import java.util.Locale
+import org.jetbrains.compose.resources.getPluralString
+import org.jetbrains.compose.resources.getString
+import motovault.composeapp.generated.resources.Res
+import motovault.composeapp.generated.resources.fuel_entry_count
+import motovault.composeapp.generated.resources.fuel_title
+import motovault.composeapp.generated.resources.history_record_count
 
 /** No owner database, production key alias or primary app installation is used by this probe. */
 class NativeAssetInstrumentation : Instrumentation() {
-    override fun onCreate(arguments: Bundle?) { super.onCreate(arguments); start() }
+    private var backupOnly = false
+    private var pickerOnly = false
+    private var roundTripOnly = false
+    private var historyLocaleOnly = false
+    private fun checkRestoreRecoveryTransaction(root: File) = runBlocking {
+        val path = File(root, "synthetic-restore-recovery.db").absolutePath
+        val recoveryAlias = "motovault-recovery-probe-${UUID.randomUUID()}"
+        AndroidAssetKey.load(true, recoveryAlias)
+        try {
+        val cipher = RecoverySnapshotCipher(AndroidAssetCipher { AndroidAssetKey.load(false, recoveryAlias) })
+        val recoveryId = "synthetic-recovery.pdf"
+        fun open() = buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(targetContext, path))
+        var db = open()
+        val original = VaultState(ride = Ride("test", "Synthetic", 2020, 1000.0, modelName = "Original"),
+            documents = listOf(VaultDocument("Synthetic", "1", "Synthetic", "2030-01-01", id = "recovery-doc",
+                pages = listOf(DocumentPage("recovery-original.jpg", "recovery-preview.jpg", "image/jpeg", 10, 10, "Front")))))
+        val replacement = VaultState(ride = Ride("test", "Synthetic", 2021, 2000.0, modelName = "Restored"))
+        db.vault().replace(original)
+        val previous = VaultState.encode(requireNotNull(db.vault().read()))
+        val sealed = cipher.seal(recoveryId, previous.encodeToByteArray())
+        var staleRejected = false
+        try { db.vault().replaceWithRecovery(replacement, recoveryId, "stale", sealed) }
+        catch (_: IllegalStateException) { staleRejected = true }
+        check(staleRejected && db.vault().restoreRecoveryRows().isEmpty())
+        check(db.vault().read()?.ride?.modelName == "Original")
+        val badVerifier = RecoverySnapshotStore(db.vault(), { recoveryId }, cipher::seal, { _, _ -> byteArrayOf(0) })
+        var verificationRejected = false
+        try { badVerifier.replace(requireNotNull(db.vault().read()), replacement) }
+        catch (_: IllegalStateException) { verificationRejected = true }
+        check(verificationRejected && db.vault().restoreRecoveryRows().isEmpty())
+        check(db.vault().read()?.ride?.modelName == "Original")
+        val snapshots = RecoverySnapshotStore(db.vault(), { recoveryId }, cipher::seal, cipher::open)
+        snapshots.replace(requireNotNull(db.vault().read()), replacement)
+        check(db.vault().read()?.ride?.modelName == "Restored")
+        check(snapshots.referencedAssets() == setOf("recovery-original.jpg", "recovery-preview.jpg"))
+        val summary = snapshots.summaries().single()
+        check(summary.id == recoveryId && summary.createdAtEpochMillis == null)
+        check(summary.bikeName == "Original" && summary.documentCount == 1 && summary.recordCount == 0)
+        check(!db.vault().restoreRecoveryRows().single().payload.decodeToString().contains("Original"))
+        check(VaultState.decode(cipher.open(recoveryId, db.vault().restoreRecoveryRows().single().payload).decodeToString())?.ride?.modelName == "Original")
+        try {
+            val nextPrevious = VaultState.encode(requireNotNull(db.vault().read()))
+            db.vault().replaceWithRecovery(original, recoveryId, nextPrevious, cipher.seal(recoveryId, nextPrevious.encodeToByteArray()))
+            error("Duplicate recovery ID was accepted")
+        } catch (_: android.database.sqlite.SQLiteConstraintException) {
+            // The existing recovery record must not be overwritten.
+        } catch (_: androidx.sqlite.SQLiteException) {
+            // Bundled SQLite reports a constraint error through this type.
+        }
+        check(db.vault().read()?.ride?.modelName == "Restored")
+        db.close()
+        db = open()
+        check(db.vault().read()?.ride?.modelName == "Restored")
+        check(VaultState.decode(cipher.open(recoveryId, db.vault().restoreRecoveryRows().single().payload).decodeToString())?.ride?.modelName == "Original")
+        check(RecoverySnapshotStore(db.vault(), { recoveryId }, cipher::seal, cipher::open).referencedAssets() == setOf("recovery-original.jpg", "recovery-preview.jpg"))
+        val savedBlob = db.vault().restoreRecoveryRows().single().payload.copyOf()
+        KeyStore.getInstance("AndroidKeyStore").apply { load(null); deleteEntry(recoveryAlias) }
+        var unavailableRejected = false
+        try { RecoverySnapshotStore(db.vault(), { recoveryId }, cipher::seal, cipher::open).referencedAssets() }
+        catch (_: Exception) { unavailableRejected = true }
+        check(unavailableRejected)
+        check(db.vault().restoreRecoveryRows().single().payload.contentEquals(savedBlob))
+        check(db.vault().read()?.ride?.modelName == "Restored")
+        var attemptedKeyCreation = false
+        val failClosedStore = RecoverySnapshotStore(db.vault(), { "next-recovery.pdf" },
+            seal = { id, bytes ->
+                attemptedKeyCreation = true
+                RecoverySnapshotCipher(AndroidAssetCipher { AndroidAssetKey.load(true, recoveryAlias) }).seal(id, bytes)
+            }, open = cipher::open)
+        var replacementRejected = false
+        try { failClosedStore.replace(requireNotNull(db.vault().read()), original) }
+        catch (_: Exception) { replacementRejected = true }
+        check(replacementRejected && !attemptedKeyCreation)
+        check(db.vault().read()?.ride?.modelName == "Restored")
+        check(db.vault().restoreRecoveryRows().single().payload.contentEquals(savedBlob))
+        db.close()
+        } finally {
+            KeyStore.getInstance("AndroidKeyStore").apply { load(null); deleteEntry(recoveryAlias) }
+        }
+    }
+
+    private fun checkDurableFuelEdit(root: File) = runBlocking {
+        val path = File(root, "synthetic-fuel-edit.db").absolutePath
+        fun open() = buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(targetContext, path))
+        var database = open()
+        try {
+            val previous = RideLog("Fuel fill-up", "legacy detail", "2020-01-01", 1000.0, id = "fuel-first", kind = "fuel", liters = 5.0, cost = 590.0, fuelPrice = null, notes = "synthetic note")
+            val original = VaultState(ride = Ride("test", "Synthetic", 2020, 1000.0), logs = listOf(previous),
+                documents = listOf(VaultDocument("Synthetic document", "TEST", "Synthetic", "2030-01-01", id = "synthetic-doc")))
+            database.vault().replace(original)
+            val baseline = requireNotNull(database.vault().read())
+            val writer = VaultSession(this, restore = { requireNotNull(database.vault().read()) }, write = { database.vault().replace(it) }, cleanup = {}, recover = {})
+            writer.snapshots.first { !it.loading }
+            val request = FuelEditRequest(previous.id, 600.0, 5.0, null, 1000.0, LocalDate(2020, 1, 1), true, "octane", "", null)
+            val changed = FuelEntryAdapter.edit(writer.snapshots.value.state, request)
+            val saved = CompletableDeferred<Boolean>()
+            writer.commit(changed, 0) { saved.complete(it) }
+            check(saved.await())
+            database.close()
+            database = open()
+            val reopened = requireNotNull(database.vault().read())
+            check(reopened.logs.single().cost == 600.0)
+            check(reopened.logs.single().id == previous.id && reopened.logs.single().notes == previous.notes && reopened.logs.single().fuelPrice == null)
+            check(reopened.documents == baseline.documents)
+            val stale = CompletableDeferred<Boolean>()
+            writer.commit(baseline, 0) { stale.complete(it) }
+            check(!stale.await())
+            check(database.vault().read()?.logs?.single()?.cost == 600.0)
+            val undone = CompletableDeferred<Boolean>()
+            writer.undo(1) { undone.complete(it) }
+            check(undone.await())
+            database.close()
+            database = open()
+            check(database.vault().read() == baseline)
+        } finally {
+            database.close()
+        }
+    }
+
+    private fun nodeWithText(text: String): AccessibilityNodeInfo? {
+        fun find(node: AccessibilityNodeInfo?): AccessibilityNodeInfo? {
+            if (node == null) return null
+            node.refresh()
+            if (node.text?.toString() == text || node.contentDescription?.toString() == text) return node
+            val indices = if (text == "আনডু") (node.childCount - 1 downTo 0) else (0 until node.childCount)
+            for (index in indices) find(node.getChild(index))?.let { return it }
+            return null
+        }
+        return find(uiAutomation.rootInActiveWindow)
+    }
+
+    private fun waitForAnyText(vararg texts: String): AccessibilityNodeInfo {
+        repeat(80) {
+            for (text in texts) nodeWithText(text)?.let { return it }
+            SystemClock.sleep(250)
+        }
+        val root = uiAutomation.rootInActiveWindow
+        if (root?.packageName?.toString() != targetContext.packageName) {
+            error("Synthetic UI is not active; foreground package=${root?.packageName}")
+        }
+        fun describe(node: AccessibilityNodeInfo?, depth: Int): List<String> {
+            if (node == null || depth > 20) return emptyList()
+            val current = listOfNotNull(node.text?.toString(), node.contentDescription?.toString())
+            return current + (0 until node.childCount).flatMap { describe(node.getChild(it), depth + 1) }
+        }
+        val visible = describe(root, 0)
+        error("Synthetic UI label not found: ${texts.joinToString("/")}; root=$root; matching=$visible")
+    }
+
+    private fun waitForText(text: String): AccessibilityNodeInfo {
+        repeat(80) {
+            nodeWithText(text)?.let { return it }
+            SystemClock.sleep(250)
+        }
+        val root = uiAutomation.rootInActiveWindow
+        if (root?.packageName?.toString() != targetContext.packageName) {
+            error("Synthetic UI is not active; foreground package=${root?.packageName}")
+        }
+        fun describe(node: AccessibilityNodeInfo?, depth: Int): List<String> {
+            if (node == null || depth > 20) return emptyList()
+            val current = listOfNotNull(node.text?.toString(), node.contentDescription?.toString())
+            return current + (0 until node.childCount).flatMap { describe(node.getChild(it), depth + 1) }
+        }
+        val visible = describe(root, 0)
+        error("Synthetic UI label not found: $text; root=$root; matching=$visible")
+    }
+
+    private fun clickText(text: String) {
+        var node: AccessibilityNodeInfo? = waitForText(text)
+        while (node != null && !node.isClickable) node = node.parent
+        check(node?.performAction(AccessibilityNodeInfo.ACTION_CLICK) == true) { "Synthetic UI control not clickable: $text" }
+    }
+
+    private fun clickAnyText(vararg texts: String) {
+        var node: AccessibilityNodeInfo? = waitForAnyText(*texts)
+        // Compose may expose the toast label as a non-clickable text node whose
+        // parent performs the action only through ACTION_CLICK, so try each level.
+        while (node != null) {
+            if (node.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return
+            node = node.parent
+        }
+        error("Synthetic UI control not clickable: ${texts.joinToString("/")}")
+    }
+
+    private fun setEditable(description: String, value: String) {
+        fun find(node: AccessibilityNodeInfo?): AccessibilityNodeInfo? {
+            if (node == null) return null
+            if (node.isEditable && node.contentDescription?.toString()?.startsWith(description) == true) return node
+            for (index in 0 until node.childCount) find(node.getChild(index))?.let { return it }
+            return null
+        }
+        var target: AccessibilityNodeInfo? = null
+        for (attempt in 0 until 80) {
+            target = find(uiAutomation.rootInActiveWindow)
+            if (target != null) break
+            SystemClock.sleep(250)
+        }
+        val field = requireNotNull(target) { "Synthetic password field not found: $description" }
+        field.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SHOW_ON_SCREEN.id)
+        val args = Bundle().apply { putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, value) }
+        check(field.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args))
+        SystemClock.sleep(500)
+    }
+
+    private fun scrollSheetForward() {
+        fun scrollables(node: AccessibilityNodeInfo?): List<AccessibilityNodeInfo> {
+            if (node == null) return emptyList()
+            return (0 until node.childCount).flatMap { scrollables(node.getChild(it)) } + if (node.isScrollable) listOf(node) else emptyList()
+        }
+        val scrollable = scrollables(uiAutomation.rootInActiveWindow).firstOrNull() ?: error("Synthetic sheet is not scrollable")
+        check(scrollable.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD))
+        SystemClock.sleep(500)
+    }
+
+    private fun clickLastText(text: String) {
+        fun collect(node: AccessibilityNodeInfo?): List<AccessibilityNodeInfo> {
+            if (node == null) return emptyList()
+            node.refresh()
+            val found = if (node.text?.toString() == text || node.contentDescription?.toString() == text) listOf(node) else emptyList()
+            return found + (0 until node.childCount).flatMap { collect(node.getChild(it)) }
+        }
+        fun lastClickable(): AccessibilityNodeInfo? = collect(uiAutomation.rootInActiveWindow).asReversed().firstNotNullOfOrNull { found ->
+            var node: AccessibilityNodeInfo? = found
+            while (node != null && !node.isClickable) node = node.parent
+            node
+        }
+        val initial = requireNotNull(lastClickable()) { "Synthetic control not clickable: $text" }
+        initial.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SHOW_ON_SCREEN.id)
+        SystemClock.sleep(500)
+        check(requireNotNull(lastClickable()).performAction(AccessibilityNodeInfo.ACTION_CLICK))
+    }
+
+    private fun checkFuelEditUi() {
+        val intent = Intent().setClassName(targetContext.packageName, "com.motovault.app.FuelEditFixtureActivity")
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("language", "en")
+        val activity = startActivitySync(intent) as com.motovault.app.FuelEditFixtureActivity
+        try {
+            clickText("Fuel fill · ৪.৯০ L")
+            clickText("Edit fuel record")
+            waitForText("How much did you spend?")
+            waitForText("≈ ৪.৯০ L")
+            clickText("৬")
+            clickText("০")
+            clickText("০")
+            waitForText("৬০০")
+            uiAutomation.takeScreenshot()?.let { bitmap ->
+                File(targetContext.cacheDir, "synthetic-fuel-edit-footer.png").outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
+            }
+            waitForText("Save ৳৬০০")
+            clickText("Save ৳৬০০")
+            waitForText("Fuel record updated")
+            // The toast dismisses after five seconds; act on it before any
+            // additional database work.
+            clickAnyText("Undo", "আনডু")
+            waitForText("Fuel fill · ৪.৯০ L")
+            check(activity.savedFuelMatches(590.0, 4.9))
+        } finally {
+            runOnMainSync { activity.finish() }
+        }
+    }
+
+    private fun checkFuelCreateFailureUi() {
+        val intent = Intent().setClassName(targetContext.packageName, "com.motovault.app.FuelEditFixtureActivity")
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("language", "en").putExtra("failWrites", true)
+        val activity = startActivitySync(intent) as com.motovault.app.FuelEditFixtureActivity
+        try {
+            val before = activity.savedFuelCount()
+            waitForText("How much did you spend?")
+            clickText("৬")
+            waitForText("≈ ০.০৫ L")
+            clickText("০")
+            waitForText("≈ ০.৫০ L")
+            clickText("০")
+            waitForText("৬০০")
+            clickText("Save ৳৬০০")
+            waitForText("Could not save. Your draft is still here. Try again.")
+            waitForText("Save ৳৬০০")
+            check(activity.savedFuelCount() == before)
+        } finally {
+            runOnMainSync { activity.finish() }
+        }
+    }
+
+    private fun checkHistoryLocale(language: String, digits: String) {
+        val intent = Intent().setClassName(targetContext.packageName, "com.motovault.app.FuelEditFixtureActivity")
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("language", language).putExtra("digits", digits)
+        val activity = startActivitySync(intent)
+        try {
+            val date = LocalDate.fromEpochDays(today().toEpochDays() - 11)
+            val formatter = Fmt(if (digits == "en") Digits.EN else Digits.BN)
+            val month = java.text.DateFormatSymbols.getInstance(Locale.forLanguageTag(language)).months[date.monthNumber - 1]
+            val unit = if (language == "en") "km" else "কিমি"
+            waitForText("${formatter.d(date.dayOfMonth.toString())} $month · ${formatter.n(12340L)} $unit")
+            if (language == "en") {
+                waitForText("Cost, last ৩০ days")
+                waitForText("Fuel fill · ৪.৯০ L")
+                waitForText("Fuel economy")
+                waitForText("Documents")
+            } else {
+                waitForText("গত 30 দিনের খরচ")
+                waitForText("তেল ভরা · 4.90 লিটার")
+                waitForText("জ্বালানি গড়")
+                waitForText("কাগজপত্র")
+            }
+            uiAutomation.takeScreenshot()?.let { bitmap ->
+                File(targetContext.cacheDir, "synthetic-history-$language-$digits.png").outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
+            }
+        } finally { runOnMainSync { activity.finish() } }
+    }
+
+    private fun checkRecoveryUi(language: String, conflict: Boolean) {
+        val intent = Intent().setClassName(targetContext.packageName, "com.motovault.app.RecoveryFixtureActivity")
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("language", language).putExtra("conflict", conflict)
+        val activity = startActivitySync(intent)
+        try {
+            val english = language == "en"
+            waitForText("Demo Bike")
+            clickText(if (english) "Review vault" else "ভল্টটি দেখুন")
+            waitForText(if (english) "Return to this vault?" else "এই ভল্টে ফিরে যাবেন?")
+            clickText(if (english) "Return to vault" else "ফিরে যান")
+            val progress = if (english) "Restoring the vault…" else "ভল্ট রিস্টোর করা হচ্ছে…"
+            waitForText(progress)
+            check(uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK))
+            waitForText(progress)
+            val outcome = if (conflict) {
+                if (english) "Your current records changed. Review the vault again before continuing."
+                else "আপনার বর্তমান তথ্য বদলেছে। আবার দেখে নিশ্চিত করুন।"
+            } else {
+                if (english) "The previous vault is restored." else "আগের ভল্টে ফিরে গেছেন।"
+            }
+            waitForText(outcome)
+            uiAutomation.takeScreenshot()?.let { bitmap ->
+                File(targetContext.cacheDir, "synthetic-recovery-$language.png").outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
+            }
+        } finally {
+            runOnMainSync { activity.finish() }
+        }
+    }
+
+    private fun checkDurableRecoveryUi() {
+        val intent = Intent().setClassName(targetContext.packageName, "com.motovault.app.RecoveryDurableFixtureActivity")
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val activity = startActivitySync(intent) as com.motovault.app.RecoveryDurableFixtureActivity
+        try {
+            waitForText("Previous Bike")
+            clickText("Review vault")
+            clickText("Return to vault")
+            waitForText("The previous vault is restored.")
+            check(activity.verifyReopened())
+        } finally {
+            runOnMainSync { activity.finish() }
+        }
+    }
+
+    private fun checkBackupLocalizationUi(language: String) {
+        val intent = Intent().setClassName(targetContext.packageName, "com.motovault.app.RecoveryFixtureActivity")
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("language", language).putExtra("sheet", "backup")
+        val activity = startActivitySync(intent)
+        try {
+            val english = language == "en"
+            waitForText(if (english) "Backup and restore" else "ব্যাকআপ ও রিস্টোর")
+            waitForText(if (english) "Secure encrypted backup" else "নিরাপদ ও এনক্রিপ্টেড ব্যাকআপ")
+            clickText(if (english) "Restore" else "রিস্টোর")
+            waitForText(if (english) "Restore from a backup" else "ব্যাকআপ ফাইল থেকে রিস্টোর")
+            waitForText(if (english) "Choose a backup file (.mva)" else "ব্যাকআপ ফাইল (.mva) নির্বাচন করুন")
+            uiAutomation.takeScreenshot()?.let { bitmap ->
+                File(targetContext.cacheDir, "synthetic-backup-$language.png").outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
+            }
+        } finally {
+            runOnMainSync { activity.finish() }
+        }
+    }
+
+    private fun checkBackupCreateUi() {
+        val intent = Intent().setClassName(targetContext.packageName, "com.motovault.app.RecoveryFixtureActivity")
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("language", "en").putExtra("sheet", "backup")
+        val activity = startActivitySync(intent)
+        try {
+            waitForText("Secure encrypted backup")
+            setEditable("Backup password (at least", "synthetic-passphrase")
+            setEditable("Confirm password", "synthetic-passphrase")
+            scrollSheetForward()
+            uiAutomation.takeScreenshot()?.let { bitmap ->
+                File(targetContext.cacheDir, "synthetic-backup-create-before.png").outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
+            }
+            clickLastText("Create backup")
+            waitForText("Encrypted backup ready")
+            uiAutomation.takeScreenshot()?.let { bitmap ->
+                File(targetContext.cacheDir, "synthetic-backup-created.png").outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
+            }
+            if (pickerOnly) {
+                clickText("Save to files")
+                clickText("SAVE")
+                waitForText("Backup file saved.")
+            }
+        } finally {
+            runOnMainSync { activity.finish() }
+        }
+    }
+
+    private fun setPickerFilename(name: String) {
+        waitForText("SAVE")
+        fun find(node: AccessibilityNodeInfo?): AccessibilityNodeInfo? {
+            if (node == null) return null
+            if (node.isEditable && node.packageName?.toString() == "com.google.android.documentsui") return node
+            for (index in 0 until node.childCount) find(node.getChild(index))?.let { return it }
+            return null
+        }
+        var field: AccessibilityNodeInfo? = null
+        repeat(80) {
+            if (field == null) {
+                field = find(uiAutomation.rootInActiveWindow)
+                if (field == null) SystemClock.sleep(250)
+            }
+        }
+        val args = Bundle().apply { putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, name) }
+        check(requireNotNull(field) { "System picker filename field not found" }.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args))
+    }
+
+    private fun checkBackupRoundTripUi() {
+        val intent = Intent().setClassName(targetContext.packageName, "com.motovault.app.BackupRoundTripFixtureActivity")
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val activity = startActivitySync(intent) as com.motovault.app.BackupRoundTripFixtureActivity
+        val filename = "motovault-synthetic-${UUID.randomUUID()}.mva"
+        try {
+            waitForText("Secure encrypted backup")
+            setEditable("Backup password (at least", "synthetic-passphrase")
+            setEditable("Confirm password", "synthetic-passphrase")
+            scrollSheetForward()
+            clickLastText("Create backup")
+            waitForText("Encrypted backup ready")
+            clickText("Save to files")
+            setPickerFilename(filename)
+            clickText("SAVE")
+            waitForText("Backup file saved.")
+            val changed = CompletableDeferred<Boolean>()
+            runOnMainSync { activity.replaceSyntheticCurrent { changed.complete(it) } }
+            check(runBlocking { changed.await() })
+            check(activity.isCurrentBike())
+            clickText("Restore")
+            clickText("Choose a backup file (.mva)")
+            clickText(filename)
+            setEditable("Enter the backup password", "synthetic-passphrase")
+            clickLastText("Check backup")
+            waitForText("Confirm restore")
+            clickText("Confirm restore")
+            waitForText("KTM Archive Bike")
+            check(activity.verifyReopened())
+        } finally {
+            runOnMainSync { activity.finish() }
+        }
+    }
+
+    override fun onCreate(arguments: Bundle?) {
+        super.onCreate(arguments)
+        backupOnly = arguments?.getString("onlyBackup") == "true"
+        pickerOnly = arguments?.getString("onlyPicker") == "true"
+        roundTripOnly = arguments?.getString("onlyRoundTrip") == "true"
+        historyLocaleOnly = arguments?.getString("onlyHistoryLocale") == "true"
+        start()
+    }
 
     override fun onStart() {
+        if (backupOnly || pickerOnly || roundTripOnly || historyLocaleOnly) {
+            val result = Bundle()
+            try {
+                when {
+                    historyLocaleOnly -> { checkHistoryLocale("en", "bn"); checkHistoryLocale("bn", "en") }
+                    roundTripOnly -> checkBackupRoundTripUi()
+                    else -> checkBackupCreateUi()
+                }
+                result.putString("stream", when {
+                    historyLocaleOnly -> "PASS synthetic history language and digit combinations\n"
+                    roundTripOnly -> "PASS synthetic backup UI restore and Room reopen\n"
+                    else -> "PASS synthetic backup creation UI\n"
+                })
+                finish(Activity.RESULT_OK, result)
+            } catch (failure: Throwable) {
+                val testName = when { historyLocaleOnly -> "history language and digits"; roundTripOnly -> "backup UI restore"; else -> "backup creation UI" }
+                result.putString("stream", "FAIL synthetic $testName: ${failure.stackTraceToString()}\n")
+                finish(Activity.RESULT_CANCELED, result)
+            }
+            return
+        }
         val results = Bundle()
         val id = UUID.randomUUID().toString()
         val root = File(targetContext.filesDir.canonicalFile, "synthetic-privacy-probe-$id")
         val alias = "com.motovault.synthetic.privacy-probe.$id"
+        val backupAlias = "$alias.backup"
         val checks = mutableListOf<String>()
         var resultCode = Activity.RESULT_CANCELED
         var owned: DocumentAssetOperation? = null
@@ -38,6 +545,53 @@ class NativeAssetInstrumentation : Instrumentation() {
         try {
             check(targetContext.packageName.endsWith(".privacyprobe")) { "Probe package required" }
             vaultContext = targetContext.applicationContext
+            check(root.mkdirs())
+            checkFuelEditUi()
+            checks += "synthetic-native-fuel-ui-room-reopen-and-undo"
+            checkFuelCreateFailureUi()
+            checks += "synthetic-fuel-create-failure-preserves-draft-and-room"
+            checkRecoveryUi("en", conflict = false)
+            checkRecoveryUi("bn", conflict = true)
+            checks += "synthetic-recovery-ui-success-conflict-and-busy-dismissal"
+            checkDurableRecoveryUi()
+            checks += "synthetic-recovery-ui-encrypted-room-reopen"
+            checkBackupLocalizationUi("en")
+            checkBackupLocalizationUi("bn")
+            checks += "synthetic-backup-create-restore-localization-ui"
+            checkBackupCreateUi()
+            checks += "synthetic-backup-ui-to-injected-create-adapter"
+            val reminder = RenewalReminder("synthetic", "document", "2026-10-20", "2026-10-25", "expiry")
+            val englishTarget = ReminderTarget("document", "document", "Owner title", Digits.BN, AppLanguage.EN)
+            val englishNotification = renewalNotification(targetContext, reminder, englishTarget)
+            check(englishNotification.extras.getCharSequence(android.app.Notification.EXTRA_TITLE).toString() == "Document reminder")
+            check(englishNotification.extras.getCharSequence(android.app.Notification.EXTRA_TEXT).toString().contains("২০ October ২০২৬"))
+            val notificationManager = targetContext.getSystemService(android.app.NotificationManager::class.java)
+            check(notificationManager.getNotificationChannel(englishNotification.channelId).name.toString() == "Document and service reminders")
+            val banglaTarget = englishTarget.copy(language = AppLanguage.BN, digits = Digits.EN)
+            val banglaNotification = renewalNotification(targetContext, reminder, banglaTarget)
+            check(banglaNotification.extras.getCharSequence(android.app.Notification.EXTRA_TITLE).toString() == "কাগজের রিমাইন্ডার")
+            check(banglaNotification.extras.getCharSequence(android.app.Notification.EXTRA_TEXT).toString().contains("20 অক্টোবর 2026"))
+            check(notificationManager.getNotificationChannel(banglaNotification.channelId).name.toString() == "কাগজ ও সার্ভিসের রিমাইন্ডার")
+            checks += "native-reminder-language-and-digit-preferences"
+            val previousLocale = Locale.getDefault()
+            try {
+                Locale.setDefault(Locale.ENGLISH)
+                check(runBlocking { getPluralString(Res.plurals.fuel_entry_count, 1, "1") } == "1 fuel entry")
+                check(runBlocking { getPluralString(Res.plurals.fuel_entry_count, 2, "2") } == "2 fuel entries")
+                check(runBlocking { getPluralString(Res.plurals.history_record_count, 1, "১") } == "১ record")
+                check(runBlocking { getPluralString(Res.plurals.history_record_count, 2, "২") } == "২ records")
+                Locale.setDefault(Locale.forLanguageTag("bn"))
+                check(runBlocking { getPluralString(Res.plurals.fuel_entry_count, 2, "২") } == "২টি জ্বালানির রেকর্ড")
+                Locale.setDefault(Locale.FRENCH)
+                check(runBlocking { getString(Res.string.fuel_title) } == "Fuel")
+            } finally {
+                Locale.setDefault(previousLocale)
+            }
+            checks += "native-compose-plural-and-fallback"
+            checkDurableFuelEdit(root)
+            checkRestoreRecoveryTransaction(root)
+            checks += "native-restore-recovery-transaction-and-reopen"
+            checks += "native-fuel-edit-reopen-stale-conflict-and-undo"
             owned = DocumentAssetOperation()
             val originals = File(root, "documents").apply { check(mkdirs()) }
             val encrypted = File(root, "documents-protected")
@@ -218,7 +772,9 @@ class NativeAssetInstrumentation : Instrumentation() {
                 ride = testRide,
                 rules = listOf(testRule),
                 logs = listOf(testLog),
-                documents = listOf(testDoc)
+                documents = listOf(testDoc),
+                language = AppLanguage.EN, digits = Digits.EN, haptics = false, reduceMotion = true,
+                reminderPolicy = ReminderPolicy(warningDays = 14, minuteOfDay = 600)
             )
 
             val assetStorage = mutableMapOf(syntheticAssetId to syntheticAssetBytes)
@@ -226,8 +782,8 @@ class NativeAssetInstrumentation : Instrumentation() {
 
             val backupPassphrase = "StrongSecretPassword#2026!"
             val archiveBytes = runBlocking {
-                BackupUseCase.createBackup(
-                    state = vaultState,
+                BackupUseCase.createBackup(::documentSha256, 
+                    snapshot = vaultState.backupSnapshot(),
                     vaultRevision = 42,
                     passphrase = backupPassphrase,
                     installationId = "android-probe-id",
@@ -248,7 +804,7 @@ class NativeAssetInstrumentation : Instrumentation() {
 
             // Staged validation & preview
             val preview = runBlocking {
-                RestoreUseCase.validateAndPreview(archiveBytes, backupPassphrase)
+                RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, archiveBytes, backupPassphrase)
             }
             check(preview.manifest.formatVersion == 1)
             check(preview.manifest.summary.bikeDisplayName == "MT-15")
@@ -261,7 +817,7 @@ class NativeAssetInstrumentation : Instrumentation() {
             // Wrong password refusal
             expectFailure {
                 runBlocking {
-                    RestoreUseCase.validateAndPreview(archiveBytes, "WrongPassword#999")
+                    RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, archiveBytes, "WrongPassword#999")
                 }
             }
             checks += "native-backup-wrong-password-refusal"
@@ -276,7 +832,7 @@ class NativeAssetInstrumentation : Instrumentation() {
             }
             expectFailure {
                 runBlocking {
-                    RestoreUseCase.validateAndPreview(tamperedPayloadArchive, backupPassphrase)
+                    RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, tamperedPayloadArchive, backupPassphrase)
                 }
             }
             checks += "native-backup-tampered-payload-refusal"
@@ -292,7 +848,7 @@ class NativeAssetInstrumentation : Instrumentation() {
             }
             expectFailure {
                 runBlocking {
-                    RestoreUseCase.validateAndPreview(tamperedAssetArchive, backupPassphrase)
+                    RestoreUseCase.validateAndPreview(::documentSha256, ::backupRideDisplayName, tamperedAssetArchive, backupPassphrase)
                 }
             }
             checks += "native-backup-tampered-asset-refusal"
@@ -300,39 +856,149 @@ class NativeAssetInstrumentation : Instrumentation() {
             // Transactional restore into fresh database
             val restoredDbPath = File(root, "synthetic-restored.db").absolutePath
             val restoredDb = buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(targetContext, restoredDbPath))
-            val restoredAssets = mutableMapOf<String, ByteArray>()
+            val restoredAssetDirectory = File(root, "restored-protected")
+            AndroidAssetKey.load(true, backupAlias)
+            val restoredStore = SecureAssetStore(
+                AndroidAssetFiles(File(root, "restored-originals"), restoredAssetDirectory),
+                AssetEnvelope(AndroidAssetCipher { AndroidAssetKey.load(false, backupAlias) })
+            )
             var restoredStateCaptured: VaultState? = null
 
             runBlocking {
-                RestoreUseCase.executeRestore(
-                    archiveBytes = archiveBytes,
-                    passphrase = backupPassphrase,
-                    database = restoredDb,
-                    assetWriter = { id, bytes -> restoredAssets[id] = bytes },
-                    onComplete = { nextState -> restoredStateCaptured = nextState }
+                val coordinator = VaultCoordinator(
+                    scope = this,
+                    initialState = VaultState(),
+                    restore = { restoredDb.vault().read() ?: VaultState() },
+                    write = { restoredDb.vault().replace(it) },
+                    assetIds = { state -> state.documents.flatMap { it.assetIds() }.toSet() },
+                    cleanup = {}, recover = {}, reconcile = {}
                 )
+                coordinator.snapshots.first { !it.loading }
+                val completed = CompletableDeferred<Result<Unit>>()
+                coordinator.commitPrepared(0, prepare = {
+                    val staged = BackupRestoreStaging.prepare(
+                        archiveBytes = archiveBytes,
+                        passphrase = backupPassphrase,
+                        assetWriter = { id, bytes -> restoredStore.stageRestore(id, bytes) },
+                        discardAssets = { ids -> ids.forEach { id -> File(restoredAssetDirectory, "$id.mva").delete() } }
+                    )
+                    restoredStateCaptured = staged.state
+                    PreparedVaultChange(staged.state) { staged.createdAssets.forEach { id -> File(restoredAssetDirectory, "$id.mva").delete() } }
+                }) { completed.complete(it) }
+                completed.await().getOrThrow()
             }
 
             check(restoredStateCaptured != null)
             check(restoredStateCaptured?.ride?.modelName == "MT-15")
             check(restoredStateCaptured?.logs?.size == 1)
             check(restoredStateCaptured?.documents?.first()?.number == "DHAKA-METRO-LA-12-3456")
-            check(restoredAssets.containsKey(syntheticAssetId))
-            check(restoredAssets[syntheticAssetId]!!.contentEquals(syntheticAssetBytes))
+            check(restoredStore.read(syntheticAssetId).contentEquals(syntheticAssetBytes))
+            check(!restoredStore.stageRestore(syntheticAssetId, syntheticAssetBytes))
+            expectFailure { restoredStore.stageRestore(syntheticAssetId, "different synthetic bytes".encodeToByteArray()) }
+            check(restoredStore.read(syntheticAssetId).contentEquals(syntheticAssetBytes))
             val dbState = runBlocking { restoredDb.vault().read() }
             check(dbState?.ride?.modelName == "MT-15")
             check(dbState?.documents?.first()?.id == "doc-reg")
+            check(dbState?.language == vaultState.language && dbState.digits == vaultState.digits)
+            check(dbState?.haptics == false && dbState.reduceMotion && dbState.reminderPolicy == vaultState.reminderPolicy)
             checks += "native-backup-transactional-restore-success"
+
+            val incomingBytes = "different synthetic incoming original".encodeToByteArray()
+            val collidingArchive = runBlocking {
+                BackupUseCase.createBackup(::documentSha256, vaultState.backupSnapshot(), 43, backupPassphrase, assetReader = { incomingBytes })
+            }
+            val remappedId = "synthetic-restore-remapped.jpg"
+            val collisionRecoveryId = "collision-recovery.pdf"
+            val recoveryCipher = RecoverySnapshotCipher(AndroidAssetCipher { AndroidAssetKey.load(false, backupAlias) })
+            val recoveryStore = RecoverySnapshotStore(restoredDb.vault(), { collisionRecoveryId }, recoveryCipher::seal, recoveryCipher::open)
+            val collisionStage = runBlocking {
+                val coordinator = VaultCoordinator(
+                    scope = this, initialState = VaultState(),
+                    restore = { restoredDb.vault().read() ?: VaultState() },
+                    write = { restoredDb.vault().replace(it) },
+                    assetIds = { state -> state.documents.flatMap { it.assetIds() }.toSet() },
+                    cleanup = { ids -> ids.forEach { id -> File(restoredAssetDirectory, "$id.mva").delete() } },
+                    recover = {}, reconcile = {},
+                    writePrepared = recoveryStore::replace,
+                    recoveryAssetIds = recoveryStore::referencedAssets
+                )
+                coordinator.snapshots.first { !it.loading }
+                var captured: StagedRestore? = null
+                val completed = CompletableDeferred<Result<Unit>>()
+                coordinator.commitPrepared(0, prepare = {
+                    val staged = BackupRestoreStaging.prepare(
+                        collidingArchive, backupPassphrase,
+                        assetWriter = { id, bytes -> restoredStore.stageRestore(id, bytes) },
+                        discardAssets = { ids -> ids.forEach { id -> File(restoredAssetDirectory, "$id.mva").delete() } },
+                        newAssetId = { remappedId }
+                    )
+                    captured = staged
+                    PreparedVaultChange(staged.state, preservePreviousAssets = true) {
+                        staged.createdAssets.forEach { id -> File(restoredAssetDirectory, "$id.mva").delete() }
+                    }
+                }) { completed.complete(it) }
+                completed.await().getOrThrow()
+                val nextCommit = CompletableDeferred<Boolean>()
+                coordinator.commit(coordinator.snapshots.value.state, 1) { nextCommit.complete(it) }
+                check(nextCommit.await())
+                requireNotNull(captured)
+            }
+            check(collisionStage.createdAssets == setOf(remappedId))
+            val remappedPage = collisionStage.state.documents.single().pages.single()
+            check(remappedPage.originalId == remappedId && remappedPage.previewId == remappedId)
+            check(restoredStore.read(syntheticAssetId).contentEquals(syntheticAssetBytes))
+            check(restoredStore.read(remappedId).contentEquals(incomingBytes))
+            restoredDb.close()
+            val reopened = buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(targetContext, restoredDbPath))
+            val persistedPage = runBlocking { reopened.vault().read()!!.documents.single().pages.single() }
+            check(persistedPage.originalId == remappedId && persistedPage.previewId == remappedId)
+            val recoveredSnapshot = runBlocking { reopened.vault().restoreRecoveryRows().single() }
+            check(recoveredSnapshot.id == collisionRecoveryId)
+            val priorState = requireNotNull(VaultState.decode(recoveryCipher.open(recoveredSnapshot.id, recoveredSnapshot.payload).decodeToString()))
+            check(priorState.documents.single().pages.single().originalId == syntheticAssetId)
+            check(runBlocking { RecoverySnapshotStore(reopened.vault(), { collisionRecoveryId }, recoveryCipher::seal, recoveryCipher::open).referencedAssets() } == setOf(syntheticAssetId))
+            check(restoredStore.read(syntheticAssetId).contentEquals(syntheticAssetBytes))
+            check(restoredStore.read(remappedId).contentEquals(incomingBytes))
+            runBlocking {
+                val snapshots = RecoverySnapshotStore(reopened.vault(), { "recovered-current.pdf" }, recoveryCipher::seal, recoveryCipher::open)
+                val writer = VaultCoordinator(
+                    scope = this, initialState = VaultState(),
+                    restore = { reopened.vault().read() ?: VaultState() },
+                    write = { reopened.vault().replace(it) },
+                    assetIds = { state -> state.documents.flatMap { it.assetIds() }.toSet() },
+                    cleanup = { ids -> ids.forEach { id -> File(restoredAssetDirectory, "$id.mva").delete() } },
+                    recover = {}, reconcile = {}, writePrepared = snapshots::replace,
+                    recoveryAssetIds = snapshots::referencedAssets
+                )
+                writer.snapshots.first { !it.loading }
+                val missing = CompletableDeferred<Result<Unit>>()
+                CoordinatedRecovery(writer, snapshots) { error("synthetic missing original") }
+                    .restore(collisionRecoveryId, 0) { missing.complete(it) }
+                check(missing.await().isFailure)
+                check(reopened.vault().read()!!.documents.single().pages.single().originalId == remappedId)
+                check(reopened.vault().restoreRecoveryRows().size == 1)
+                val result = CompletableDeferred<Result<Unit>>()
+                CoordinatedRecovery(writer, snapshots) { id -> restoredStore.read(id) }
+                    .restore(collisionRecoveryId, 0) { result.complete(it) }
+                result.await().getOrThrow()
+                check(reopened.vault().read()!!.documents.single().pages.single().originalId == syntheticAssetId)
+                check(reopened.vault().restoreRecoveryRows().size == 2)
+                check(snapshots.referencedAssets() == setOf(syntheticAssetId, remappedId))
+                check(restoredStore.read(remappedId).contentEquals(incomingBytes))
+            }
+            reopened.close()
+            checks += "native-backup-collision-remap-reopen"
 
             results.putString("stream", "PASS ${checks.size} native storage checks: ${checks.joinToString(", ")}\n")
             results.putInt("checks", checks.size)
             resultCode = Activity.RESULT_OK
         } catch (failure: Throwable) {
-            results.putString("stream", "FAIL native storage probe after ${checks.size} checks (${failure::class.simpleName})\n")
+            results.putString("stream", "FAIL native storage probe after ${checks.size} checks: ${failure.stackTraceToString()}\n")
         } finally {
             // Only the UUID directory and alias allocated by this synthetic test are removed.
             root.deleteRecursively()
             runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null); deleteEntry(alias) } }
+            runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null); deleteEntry(backupAlias) } }
             runCatching { owned?.rollback(); removeDocumentAssets(extraAssets) }
             exportCopies.forEach { runCatching { it.close() } }
             for (name in listOf("documents-recovery", "documents-recovery-protected")) {

@@ -1,0 +1,26 @@
+<resources>
+    <string name="nav_add_record">নতুন রেকর্ড যোগ করুন</string>
+    <string name="history_title">রেকর্ড</string>
+    <string name="history_spend">গত %1$s দিনের খরচ</string>
+    <string name="history_distance_label">চালানো</string>
+    <string name="history_economy_label">জ্বালানি গড়</string>
+    <string name="history_all">সব</string>
+    <string name="history_service">সার্ভিস</string>
+    <string name="history_fuel">জ্বালানি</string>
+    <string name="history_empty">এখনও কিছু নেই। নিচের + চাপুন।</string>
+    <string name="history_distance">%1$s কিমি</string>
+    <string name="history_economy">%1$s কিমি/লি</string>
+    <string name="history_day_month">%1$s %2$s</string>
+    <string name="history_month_year">%1$s %2$s</string>
+    <string name="history_row_subtitle">%1$s · %2$s</string>
+    <string name="history_fuel_title">তেল ভরা · %1$s</string>
+    <string name="history_price_fuel">%1$s প্রতি লিটার · %2$s</string>
+    <string name="history_fuel_octane">অকটেন</string>
+    <string name="history_fuel_petrol">পেট্রোল</string>
+    <string name="history_full_tank">ফুল ট্যাংক করা হয়েছে</string>
+    <string name="history_partial_tank">আংশিক তেল ভরা হয়েছে (পরের ফুল ট্যাংকে হিসাব হবে)</string>
+    <string name="history_price_unknown">দাম জানা নেই</string>
+    <string name="history_labour">সার্ভিস চার্জ / মজুরি</string>
+    <string name="history_discount">ছাড় / ডিসকাউন্ট</string>
+    <string name="history_delete">রেকর্ড মুছুন</string>
+</resources>

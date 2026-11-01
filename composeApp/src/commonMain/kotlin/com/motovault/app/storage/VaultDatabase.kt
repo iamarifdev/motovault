@@ -22,6 +22,9 @@ data class LedgerRow(@PrimaryKey val id: String, val position: Int, val payload:
 data class DocumentRow(@PrimaryKey val id: String, val position: Int, val payload: String)
 @Entity(tableName = "asset_reference", primaryKeys = ["documentId", "assetId"])
 data class AssetReferenceRow(val documentId: String, val assetId: String)
+/** Previous vault records retained when a backup restore replaces the active vault. */
+@Entity(tableName = "restore_recovery")
+data class RestoreRecoveryRow(@PrimaryKey val id: String, val payload: ByteArray)
 @Entity(tableName = "vault_meta")
 data class VaultMetaRow(
     @PrimaryKey val id: Int = 1,
@@ -34,6 +37,8 @@ data class VaultMetaRow(
 
 @Dao
 abstract class VaultDao {
+    @Query("SELECT * FROM restore_recovery ORDER BY id") abstract suspend fun restoreRecoveryRows(): List<RestoreRecoveryRow>
+    @Insert abstract suspend fun insertRestoreRecovery(row: RestoreRecoveryRow)
     @Query("SELECT * FROM sync_outbox WHERE id = 1") abstract suspend fun pendingSync(): SyncOutboxRow?
     @Insert(onConflict = OnConflictStrategy.REPLACE) abstract suspend fun putPendingSync(row: SyncOutboxRow)
     @Query("SELECT * FROM vault_meta WHERE id = 1") abstract suspend fun meta(): VaultMetaRow?
@@ -89,6 +94,17 @@ abstract class VaultDao {
         putPendingSync(LocalSyncProtocol.next(previousSync, previousState, state, recordId()))
     }
 
+    /** Recovery snapshot and replacement share one Room transaction. */
+    @Transaction
+    open suspend fun replaceWithRecovery(state: VaultState, recoveryId: String, expectedPrevious: String, sealedPrevious: ByteArray) {
+        require(recoveryId.isNotBlank()) { "Recovery ID is required." }
+        val previous = requireNotNull(read()) { "No active vault is available for recovery." }
+        check(VaultState.encode(previous) == expectedPrevious) { "Vault changed while preparing recovery." }
+        require(sealedPrevious.isNotEmpty()) { "Encrypted recovery snapshot is required." }
+        insertRestoreRecovery(RestoreRecoveryRow(recoveryId, sealedPrevious))
+        replace(state)
+    }
+
     @Transaction
     open suspend fun prepareLocalSync() {
         if (pendingSync() != null) return
@@ -122,7 +138,7 @@ abstract class VaultDao {
     }
 }
 
-@Database(entities = [VehicleRow::class, ScheduleRow::class, LedgerRow::class, DocumentRow::class, AssetReferenceRow::class, VaultMetaRow::class, SyncOutboxRow::class], version = 5, exportSchema = true)
+@Database(entities = [VehicleRow::class, ScheduleRow::class, LedgerRow::class, DocumentRow::class, AssetReferenceRow::class, VaultMetaRow::class, SyncOutboxRow::class, RestoreRecoveryRow::class], version = 6, exportSchema = true)
 @ConstructedBy(VaultDatabaseConstructor::class)
 abstract class VaultDatabase : RoomDatabase() { abstract fun vault(): VaultDao }
 
@@ -132,7 +148,7 @@ expect object VaultDatabaseConstructor : RoomDatabaseConstructor<VaultDatabase> 
 }
 
 fun buildVaultDatabase(builder: RoomDatabase.Builder<VaultDatabase>): VaultDatabase = builder
-    .addMigrations(VaultMigration1To2, VaultMigration2To3, VaultMigration3To4, VaultMigration4To5)
+    .addMigrations(VaultMigration1To2, VaultMigration2To3, VaultMigration3To4, VaultMigration4To5, VaultMigration5To6)
     .setDriver(BundledSQLiteDriver()).setQueryCoroutineContext(Dispatchers.IO).build()
 
 object VaultMigration1To2 : Migration(1, 2) {
@@ -167,5 +183,11 @@ object VaultMigration3To4 : Migration(3, 4) {
 object VaultMigration4To5 : Migration(4, 5) {
     override fun migrate(connection: SQLiteConnection) {
         connection.execSQL("ALTER TABLE `vault_meta` ADD COLUMN `assetFormatVersion` INTEGER NOT NULL DEFAULT 1")
+    }
+}
+
+object VaultMigration5To6 : Migration(5, 6) {
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `restore_recovery` (`id` TEXT NOT NULL, `payload` BLOB NOT NULL, PRIMARY KEY(`id`))")
     }
 }

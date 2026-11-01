@@ -1,4 +1,21 @@
 <resources>
+    <string name="fuel_price_unknown">Price not recorded</string>
+    <string name="fuel_edit_title">Edit fuel record</string>
+    <string name="fuel_edit_saved">Fuel record updated</string>
+    <string name="fuel_edit_action">Edit fuel record</string>
+    <string name="fuel_edit_conflict">Another change was saved. Close this sheet and review the record.</string>
+    <string name="fuel_edit_save_failed">Could not save. Your previous record is unchanged.</string>
+    <string name="fuel_create_save_failed">Could not save. Your draft is still here. Try again.</string>
+    <string name="fuel_create_conflict">Your records changed. Review the draft before trying again.</string>
+    <string name="fuel_record_missing">This fuel record is no longer available</string>
+    <string name="fuel_timeline_conflict">Check the order of fuel dates and odometer readings</string>
+    <string name="fuel_litres_too_high">Enter no more than %1$s litres</string>
+    <string name="fuel_invalid_odometer">Enter a valid odometer reading</string>
+    <string name="fuel_invalid_date">Enter a valid date</string>
+    <string name="fuel_future_date">The date cannot be in the future</string>
+    <string name="fuel_date_before_last">Choose the last fill date or a later date</string>
+    <string name="storage_save_failed">Could not save on this device. Your previous records are unchanged.</string>
+    <string name="storage_restore_failed">Could not open your records on this device. Please try again.</string>
     <!-- Navigation Tabs -->
     <string name="nav_garage">Garage</string>
     <string name="nav_vault">Documents</string>
@@ -24,6 +41,9 @@
     <string name="action_open">Open</string>
     <string name="action_share">Share</string>
     <string name="action_unlock">Unlock with phone lock</string>
+    <string name="backup_revalidate">Check the backup again.</string>
+    <string name="backup_revision_changed">Records changed. Check the backup again.</string>
+    <string name="backup_restore_failed">Restore failed. Check the backup and try again.</string>
 
     <!-- Language & Digits -->
     <string name="settings_language">Language</string>
@@ -77,6 +97,30 @@
     <string name="fuel_petrol">Petrol</string>
     <string name="fuel_octane">Octane</string>
     <string name="fuel_parsed_estimate">Fuel cost appears to be %1$s</string>
+    <string name="fuel_enter_amount">Enter the amount</string>
+    <string name="fuel_enter_litres">Enter the litres</string>
+    <string name="fuel_enter_price">Enter the price per litre</string>
+    <string name="fuel_fix_odometer">Correct the odometer</string>
+    <string name="fuel_odometer_above_previous">Enter more than the last fuel reading (%1$s km)</string>
+    <string name="fuel_save_amount">Save %1$s</string>
+    <string name="fuel_added">%1$s · %2$s added</string>
+    <string name="fuel_amount_question">How much did you spend?</string>
+    <string name="fuel_litres_question">How many litres?</string>
+    <string name="fuel_currency_symbol">৳</string>
+    <string name="fuel_money_value">৳%1$s</string>
+    <string name="fuel_litres_value">%1$s L</string>
+    <string name="fuel_distance_value">%1$s km</string>
+    <string name="fuel_price_value">%1$s/L</string>
+    <string name="fuel_approximate_value">≈ %1$s</string>
+    <string name="fuel_by_amount">By amount</string>
+    <string name="fuel_by_litres">By litres</string>
+    <string name="fuel_full_chip">Full tank</string>
+    <string name="fuel_partial_chip">Partial fill</string>
+    <string name="date_today">Today</string>
+    <string name="date_yesterday">Yesterday</string>
+    <string name="date_other">Another day</string>
+    <string name="keypad_backspace">Delete</string>
+    <string name="keypad_decimal">Decimal point</string>
 
     <!-- Service Logging -->
     <string name="service_title">Service</string>
@@ -176,4 +220,41 @@
     <string name="onboarding_emission">Emission standard (e.g. BS4, BS6)</string>
     <string name="onboarding_finish_btn">Create Garage</string>
     <string name="onboarding_change_bike">Confirm Changes</string>
+    <string name="backup_progress_preparing">Preparing vault snapshot…</string>
+    <string name="backup_progress_checking">Checking document originals…</string>
+    <string name="backup_progress_key">Deriving encryption key…</string>
+    <string name="backup_progress_encrypting_assets">Encrypting document originals…</string>
+    <string name="backup_progress_encrypted_assets">Encrypted %1$s of %2$s documents…</string>
+    <string name="backup_progress_encrypting_vault">Encrypting vault database…</string>
+    <string name="backup_progress_writing">Writing archive bundle…</string>
+    <string name="backup_progress_ready">Backup ready.</string>
+    <string name="backup_password_minimum">Password must be at least %1$s characters.</string>
+    <string name="backup_password_mismatch">The passwords must match.</string>
+    <string name="backup_create_failed">Could not create the backup. Check that your documents are available and try again.</string>
+    <string name="backup_password_required">Enter the backup password.</string>
+    <string name="backup_password_or_file_invalid">The password is incorrect or the backup cannot be unlocked.</string>
+    <string name="backup_validation_failed">Could not verify this backup. Check the file and try again.</string>
+    <string name="backup_save_file_failed">Could not save the backup file. Try again.</string>
+    <string name="backup_open_file_failed">Could not open the backup file. Try again.</string>
+    <string name="recovery_entry">View previous vaults</string>
+    <string name="recovery_title">Previous vaults</string>
+    <string name="recovery_description">Review vaults saved before a restore.</string>
+    <string name="recovery_loading">Checking saved vaults…</string>
+    <string name="recovery_empty">No previous vaults yet.</string>
+    <string name="recovery_load_failed">Could not open the saved vaults. Your records have not been deleted.</string>
+    <string name="recovery_retry">Try again</string>
+    <string name="recovery_unknown_date">Date unavailable</string>
+    <string name="recovery_unknown_bike">Motorcycle</string>
+    <string name="recovery_counts">Records: %1$s · Documents: %2$s</string>
+    <string name="recovery_review">Review vault</string>
+    <string name="recovery_confirm_title">Return to this vault?</string>
+    <string name="recovery_confirm_body">Your current vault will be saved first. Its documents will be retained.</string>
+    <string name="recovery_device_notice">This recovery works only on this device. It cannot be opened if the device security key is lost.</string>
+    <string name="recovery_confirm">Return to vault</string>
+    <string name="recovery_cancel">Cancel</string>
+    <string name="recovery_saving">Restoring the vault…</string>
+    <string name="recovery_stale">Your current records changed. Review the vault again before continuing.</string>
+    <string name="recovery_failed">Could not restore this vault. Your current records are unchanged.</string>
+    <string name="recovery_success">The previous vault is restored.</string>
+    <string name="recovery_back">Back to list</string>
 </resources>

@@ -42,7 +42,7 @@ private suspend fun delivered(): List<UNNotification> = suspendCancellableCorout
 }
 private suspend fun add(plan: RenewalReminder, target: ReminderTarget, now: LocalDateTime) {
     val content = UNMutableNotificationContent().apply {
-        setTitle(reminderHeading(plan))
+        setTitle(reminderHeading(plan, target))
         setBody(reminderMessage(plan, target))
         setUserInfo(mapOf("motovault.reminder" to reminderPayload(plan)))
         setSound(UNNotificationSound.defaultSound())

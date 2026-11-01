@@ -1,0 +1,26 @@
+<resources>
+    <string name="nav_add_record">Add a record</string>
+    <string name="history_title">Records</string>
+    <string name="history_spend">Cost, last %1$s days</string>
+    <string name="history_distance_label">Distance</string>
+    <string name="history_economy_label">Fuel economy</string>
+    <string name="history_all">All</string>
+    <string name="history_service">Service</string>
+    <string name="history_fuel">Fuel</string>
+    <string name="history_empty">No records yet. Tap + to add one.</string>
+    <string name="history_distance">%1$s km</string>
+    <string name="history_economy">%1$s km/L</string>
+    <string name="history_day_month">%1$s %2$s</string>
+    <string name="history_month_year">%1$s %2$s</string>
+    <string name="history_row_subtitle">%1$s · %2$s</string>
+    <string name="history_fuel_title">Fuel fill · %1$s</string>
+    <string name="history_price_fuel">%1$s per litre · %2$s</string>
+    <string name="history_fuel_octane">Octane</string>
+    <string name="history_fuel_petrol">Petrol</string>
+    <string name="history_full_tank">Full tank</string>
+    <string name="history_partial_tank">Partial fill (mileage calculated on next full tank)</string>
+    <string name="history_price_unknown">Price unknown</string>
+    <string name="history_labour">Service charge / labour</string>
+    <string name="history_discount">Discount</string>
+    <string name="history_delete">Delete record</string>
+</resources>

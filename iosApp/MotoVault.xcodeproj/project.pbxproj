@@ -8,17 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		A10000000000000000000008 /* MotoVault/AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000005 /* MotoVault/AppDelegate.swift */; };
+		A10000000000000000000091 /* BackupCryptoPrimitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000092 /* BackupCryptoPrimitives.swift */; };
 		A10000000000000000000014 /* MotoVault/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000009 /* MotoVault/Assets.xcassets */; };
 		A10000000000000000000016 /* MotoVault/PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000015 /* MotoVault/PrivacyInfo.xcprivacy */; };
+		C10000000000000000000025 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000024 /* Localizable.strings */; };
 		B10000000000000000000004 /* MotoVaultUITests/OwnerFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000002 /* MotoVaultUITests/OwnerFlowTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A10000000000000000000005 /* MotoVault/AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVault/AppDelegate.swift; sourceTree = "<group>"; };
+		A10000000000000000000092 /* BackupCryptoPrimitives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVault/BackupCryptoPrimitives.swift; sourceTree = "<group>"; };
 		A10000000000000000000006 /* MotoVault/Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MotoVault/Info.plist; sourceTree = "<group>"; };
 		A10000000000000000000007 /* MotoVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = MotoVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10000000000000000000009 /* MotoVault/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MotoVault/Assets.xcassets; sourceTree = "<group>"; };
 		A10000000000000000000015 /* MotoVault/PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MotoVault/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		C10000000000000000000026 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = MotoVault/en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C10000000000000000000027 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = MotoVault/bn.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B10000000000000000000002 /* MotoVaultUITests/OwnerFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVaultUITests/OwnerFlowTests.swift; sourceTree = "<group>"; };
 		B10000000000000000000003 /* MotoVaultUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = MotoVaultUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -46,8 +51,10 @@
 			isa = PBXGroup;
 			children = (
 				A10000000000000000000005 /* MotoVault/AppDelegate.swift */,
+				A10000000000000000000092 /* BackupCryptoPrimitives.swift */,
 				A10000000000000000000006 /* MotoVault/Info.plist */,
 				A10000000000000000000009 /* MotoVault/Assets.xcassets */,
+				C10000000000000000000024 /* Localizable.strings */,
 				B10000000000000000000002 /* MotoVaultUITests/OwnerFlowTests.swift */,
 				A10000000000000000000003 /* Products */,
 				809912C0307FCDD9006BBC49 /* Recovered References */,
@@ -113,6 +120,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				bn,
 				Base,
 			);
 			mainGroup = A10000000000000000000002;
@@ -133,10 +141,23 @@
 			files = (
 				A10000000000000000000014 /* MotoVault/Assets.xcassets in Resources */,
 				A10000000000000000000016 /* MotoVault/PrivacyInfo.xcprivacy in Resources */,
+				C10000000000000000000025 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C10000000000000000000024 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C10000000000000000000026 /* en */,
+				C10000000000000000000027 /* bn */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		A10000000000000000000010 /* Build Kotlin framework and resources */ = {
@@ -162,6 +183,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000000000000000000008 /* MotoVault/AppDelegate.swift in Sources */,
+				A10000000000000000000091 /* BackupCryptoPrimitives.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

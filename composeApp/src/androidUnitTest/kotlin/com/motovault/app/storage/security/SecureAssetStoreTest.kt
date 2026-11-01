@@ -9,6 +9,18 @@ class SecureAssetStoreTest {
     private val key = KeyGenerator.getInstance("AES").apply { init(256) }.generateKey()
     private val envelope = AssetEnvelope(AndroidAssetCipher { key })
 
+    @Test fun recoverySnapshotIsAuthenticatedAndSeparatedFromDocumentEnvelopes() {
+        val cipher = RecoverySnapshotCipher(AndroidAssetCipher { key })
+        val id = "recovery.pdf"
+        val sealed = cipher.seal(id, original)
+        assertFalse(sealed.contentEquals(original))
+        assertContentEquals(original, cipher.open(id, sealed))
+        assertFails { cipher.open("other.pdf", sealed) }
+        assertFails { envelope.open(id, sealed) }
+        val tampered = sealed.copyOf().apply { this[lastIndex] = (last().toInt() xor 1).toByte() }
+        assertFails { cipher.open(id, tampered) }
+    }
+
     private class MemoryFiles(val original: ByteArray) : AssetFiles {
         var published: ByteArray? = null
         var staged: ByteArray? = null
@@ -120,6 +132,29 @@ class SecureAssetStoreTest {
         assertFails { SecureAssetStore(files, envelope).writeNew("synthetic.pdf", "different".encodeToByteArray()) }
         assertNull(files.published)
         assertContentEquals(original, files.original)
+    }
+
+    @Test fun restoreReusesIdenticalOriginalAndRefusesDifferentContent() {
+        val files = MemoryFiles(original)
+        val store = SecureAssetStore(files, envelope)
+        assertFalse(store.stageRestore("synthetic.pdf", original))
+        assertNull(files.published)
+        assertFails { store.stageRestore("synthetic.pdf", "different".encodeToByteArray()) }
+        assertContentEquals(original, files.original)
+        store.migrate("synthetic.pdf")
+        val encrypted = requireNotNull(files.published).copyOf()
+        assertFalse(store.stageRestore("synthetic.pdf", original))
+        assertFails { store.stageRestore("synthetic.pdf", "different".encodeToByteArray()) }
+        assertContentEquals(encrypted, files.published)
+        assertContentEquals(original, store.read("synthetic.pdf"))
+    }
+
+    @Test fun restoreStagesNewAssetWithoutChangingOriginalOwnerAsset() {
+        val files = MemoryFiles(original).apply { originalPresent = false }
+        val store = SecureAssetStore(files, envelope)
+        assertTrue(store.stageRestore("synthetic.pdf", original))
+        assertContentEquals(original, store.read("synthetic.pdf"))
+        assertFalse(store.stageRestore("synthetic.pdf", original))
     }
 
     @Test fun cryptoKitSyntheticVectorOpensWithPlatformJce() {

@@ -36,9 +36,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import dev.sky.design.tokens.SkyTokens
+import com.motovault.app.domain.model.FuelDefaults
+import com.motovault.app.domain.fuel.FuelEntryIssue
+import com.motovault.app.domain.fuel.FuelEntryMode
+import com.motovault.app.domain.fuel.FuelEntryRules
+import com.motovault.app.domain.fuel.MAX_FUEL_LITRES
+import com.motovault.app.application.fuel.FuelEntryRequest
+import com.motovault.app.application.fuel.FuelEditRequest
+import com.motovault.app.domain.fuel.FuelTimelineEntry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import motovault.composeapp.generated.resources.*
 
 enum class SheetDetent {
     CONTENT,
@@ -51,6 +60,7 @@ fun Sheet(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     detent: SheetDetent = SheetDetent.CONTENT,
+    dismissEnabled: Boolean = true,
     footer: (@Composable () -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -69,7 +79,7 @@ fun Sheet(
     }
 
     fun dismiss() {
-        if (closing) return
+        if (closing || !dismissEnabled) return
         closing = true
         scope.launch {
             if (!reducedMotion) {
@@ -108,9 +118,10 @@ fun Sheet(
                     .then(if (detent == SheetDetent.TALL) Modifier.fillMaxHeight(0.92f) else Modifier)
                     .offset(y = offsetY.value.dp)
                     .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                    .pointerInput(Unit) {
+                    .pointerInput(dismissEnabled) {
                         detectDragGestures(
                             onDragEnd = {
+                                if (!dismissEnabled) return@detectDragGestures
                                 if (offsetY.value > 120f) {
                                     haptic.perform(HapticKind.TICK)
                                     dismiss()
@@ -119,7 +130,7 @@ fun Sheet(
                                 }
                             },
                             onDrag = { _, dragAmount ->
-                                if (dragAmount.y > 0 || offsetY.value > 0) {
+                                if (dismissEnabled && (dragAmount.y > 0 || offsetY.value > 0)) {
                                     scope.launch { offsetY.snapTo((offsetY.value + dragAmount.y * 0.7f).coerceAtLeast(0f)) }
                                 }
                             }
@@ -166,11 +177,13 @@ fun Sheet(
                             color = TextPrimary,
                             modifier = Modifier.weight(1f)
                         )
-                        VaultIconButton(
-                            icon = "fi_x.svg",
-                            label = "বন্ধ করুন",
-                            onClick = { dismiss() }
-                        )
+                        if (dismissEnabled) {
+                            VaultIconButton(
+                                icon = "fi_x.svg",
+                                label = appStringResource(Res.string.action_close),
+                                onClick = { dismiss() }
+                            )
+                        }
                     }
 
                     HorizontalDivider(color = BorderColor, thickness = 1.dp)
@@ -294,343 +307,6 @@ fun QuickAddSheet(
                     Text(text = "মেকানিকের মেসেজ, বিকাশ বা নগদের টেক্সট", fontSize = 12.sp, color = TextSecondary)
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun FuelSheet(
-    state: VaultState,
-    initialAmount: Double? = null,
-    onDismiss: () -> Unit,
-    onSave: (VaultState, String, () -> Unit) -> Unit
-) {
-    val ride = state.ride ?: return
-    val f = currentFmt
-    val haptic = currentHaptic
-    val today = today()
-    val estimate = remember(ride, state.logs) { WearCalculator.estimateOdometer(ride, state.logs, today) }
-    val lastOdo = remember { state.logs.filter { it.isFuel }.maxOfOrNull { it.odometer } ?: 0.0 }
-    val lastOctanePrice = state.lastPrices["octane"] ?: 120.0
-
-    var fuelType by remember { mutableStateOf("octane") }
-    var mode by remember { mutableStateOf("taka") } // "taka" or "litre"
-    var fullTank by remember { mutableStateOf(true) }
-    var dateKey by remember { mutableStateOf("today") } // "today", "yesterday", "custom"
-    var customDate by remember { mutableStateOf(today.toString()) }
-    var place by remember { mutableStateOf("") }
-    var odoTouched by remember { mutableStateOf(false) }
-
-    val entry = rememberNumberEntry(
-        initialValues = mapOf(
-            "amount" to (initialAmount?.let { kotlin.math.round(it).toInt().toString() } ?: ""),
-            "litres" to "",
-            "price" to kotlin.math.round(lastOctanePrice).toInt().toString(),
-            "odo" to kotlin.math.round(estimate).toInt().toString()
-        ),
-        firstField = "amount"
-    )
-
-    val price = parseNum(entry.values["price"] ?: "") ?: lastOctanePrice
-    val amountVal = parseNum(entry.values["amount"] ?: "") ?: 0.0
-    val litresVal = parseNum(entry.values["litres"] ?: "") ?: 0.0
-    val odoVal = parseNum(entry.values["odo"] ?: "") ?: 0.0
-
-    val calculatedTaka = if (mode == "taka") amountVal else litresVal * price
-    val calculatedLitres = if (mode == "taka") (if (price > 0) amountVal / price else 0.0) else litresVal
-
-    val date = when (dateKey) {
-        "yesterday" -> LocalDate.fromEpochDays(today.toEpochDays() - 1)
-        "custom" -> runCatching { LocalDate.parse(customDate) }.getOrDefault(today)
-        else -> today
-    }
-
-    val odoError = if (odoVal <= lastOdo && lastOdo > 0) "শেষ জ্বালানির কিমি (${f.n(lastOdo.toLong())}) এর চেয়ে বেশি দিন" else null
-    val reason = when {
-        calculatedTaka <= 0 -> if (mode == "taka") "টাকার পরিমাণ লিখুন" else "লিটার লিখুন"
-        price <= 0 -> "প্রতি লিটারের দাম লিখুন"
-        odoError != null -> "কিমি ঠিক করুন"
-        else -> null
-    }
-
-    Sheet(
-        title = "জ্বালানি",
-        onDismiss = onDismiss,
-        footer = {
-            VaultButton(
-                text = reason ?: "${f.money(calculatedTaka)} সেভ করুন",
-                onClick = {
-                    if (reason != null) {
-                        haptic.perform(HapticKind.ERROR)
-                    } else {
-                        val newLog = RideLog(
-                            title = "Fuel fill-up",
-                            detail = "${f.liters(calculatedLitres)} · ${if (fullTank) "Full tank" else "Partial fill"}",
-                            date = date.toString(),
-                            odometer = odoVal,
-                            kind = "fuel",
-                            liters = calculatedLitres,
-                            fullTank = fullTank,
-                            cost = calculatedTaka,
-                            fuelType = fuelType,
-                            fuelPrice = price,
-                            locationLabel = place.trim()
-                        )
-                        val updatedPlaces = if (place.isNotBlank()) listOf(place.trim()) + state.places.filterNot { it == place.trim() } else state.places
-                        val updatedPrices = state.lastPrices + (fuelType to price)
-                        val next = state.copy(
-                            ride = ride.confirmedMileage(odoVal, date),
-                            logs = listOf(newLog) + state.logs,
-                            places = updatedPlaces.take(6),
-                            lastPrices = updatedPrices
-                        )
-                        val toastMsg = "${f.money(calculatedTaka)} · ${f.liters(calculatedLitres)} যোগ হয়েছে"
-                        onSave(next, toastMsg) {
-                            // Undo action: restore previous state
-                        }
-                    }
-                },
-                full = true,
-                enabled = reason == null
-            )
-            VaultKeypad(onKey = entry::press)
-        }
-    ) {
-        // Amount Hero Card
-        val activeField = entry.activeField
-        val isAmountActive = activeField == "amount" || activeField == "litres"
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(if (isAmountActive) BrandTintColor else SurfaceColor2)
-                .border(2.dp, if (isAmountActive) BrandColor else BorderColor, RoundedCornerShape(16.dp))
-                .clickable { entry.setActive(if (mode == "taka") "amount" else "litres") }
-                .padding(horizontal = 16.dp, vertical = 14.dp)
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = if (mode == "taka") "কত টাকার তেল?" else "কত লিটার?",
-                    fontSize = 13.sp,
-                    color = TextSecondary
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    if (mode == "taka") {
-                        Text("৳", fontSize = 28.sp, fontWeight = FontWeight.SemiBold, color = TextSecondary)
-                    }
-                    val displayText = if (mode == "taka") entry.values["amount"].orEmpty() else entry.values["litres"].orEmpty()
-                    Text(
-                        text = if (displayText.isEmpty()) f.d("0") else f.d(formatLakh(displayText.toDoubleOrNull() ?: 0.0)),
-                        fontSize = 38.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = if (displayText.isEmpty()) TextTertiary else TextPrimary
-                    )
-                    if (mode == "litre") {
-                        Text("লিটার", fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = TextSecondary)
-                    }
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        text = if (mode == "taka") "≈ ${f.liters(calculatedLitres)}" else "≈ ${f.money(calculatedTaka)}",
-                        fontSize = 14.sp,
-                        color = TextSecondary
-                    )
-                    // Editable price pill
-                    Row(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(999.dp))
-                            .background(if (activeField == "price") BrandTintColor else SurfaceColor)
-                            .border(1.5.dp, if (activeField == "price") BrandColor else BorderColor, RoundedCornerShape(999.dp))
-                            .clickable { entry.setActive("price") }
-                            .padding(horizontal = 10.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                            text = "${f.money(price)}/${if (f.digits == Digits.BN) "লি" else "L"}",
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = TextPrimary
-                        )
-                        V3Icon(
-                            path = "feather_icon/fi_edit-2.svg",
-                            description = null,
-                            modifier = Modifier.size(12.dp),
-                            tint = TextSecondary
-                        )
-                    }
-                }
-            }
-        }
-
-        // Mode & Fuel chips
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            VaultChip(text = "টাকা ধরে", active = mode == "taka", onClick = { mode = "taka"; entry.setActive("amount") })
-            VaultChip(text = "লিটার ধরে", active = mode == "litre", onClick = { mode = "litre"; entry.setActive("litres") })
-            Spacer(Modifier.width(4.dp))
-            Box(Modifier.width(1.dp).height(24.dp).background(BorderColor))
-            Spacer(Modifier.width(4.dp))
-            VaultChip(text = "অকটেন", active = fuelType == "octane", onClick = {
-                fuelType = "octane"
-                entry.set("price", kotlin.math.round(state.lastPrices["octane"] ?: 120.0).toInt().toString())
-            })
-            VaultChip(text = "পেট্রোল", active = fuelType == "petrol", onClick = {
-                fuelType = "petrol"
-                entry.set("price", kotlin.math.round(state.lastPrices["petrol"] ?: 115.0).toInt().toString())
-            })
-        }
-
-        // Full tank & date chips
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            VaultChip(text = if (fullTank) "ট্যাংক পূর্ণ" else "আংশিক ভরেছি", active = fullTank, onClick = { fullTank = !fullTank })
-            VaultChip(text = "আজ", active = dateKey == "today", onClick = { dateKey = "today" })
-            VaultChip(text = "গতকাল", active = dateKey == "yesterday", onClick = { dateKey = "yesterday" })
-            VaultChip(text = "অন্য দিন", active = dateKey == "custom", onClick = { dateKey = "custom" })
-        }
-
-        // Custom date field if custom selected
-        AnimatedVisibility(visible = dateKey == "custom") {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(SurfaceColor2)
-                    .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp))
-                    .padding(horizontal = 14.dp, vertical = 12.dp)
-            ) {
-                BasicTextField(
-                    value = customDate,
-                    onValueChange = { customDate = it },
-                    textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary)
-                )
-            }
-        }
-
-        // Odometer Row
-        val isOdoActive = activeField == "odo"
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(if (isOdoActive) BrandTintColor else SurfaceColor)
-                .border(2.dp, if (odoError != null) ErrorColor else if (isOdoActive) BrandColor else BorderColor, RoundedCornerShape(16.dp))
-                .clickable { entry.setActive("odo") }
-                .padding(horizontal = 14.dp, vertical = 12.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    V3Icon(
-                        path = "feather_icon/fi_gauge.svg",
-                        description = null,
-                        modifier = Modifier.size(20.dp),
-                        tint = BrandColor
-                    )
-                    Column {
-                        Text(text = "ওডোমিটার", fontSize = 12.sp, color = TextSecondary)
-                        Text(text = "${f.n(odoVal.toLong())} ${if (f.digits == Digits.BN) "কিমি" else "km"}", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                    }
-                }
-                if (!odoTouched) {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(999.dp))
-                            .background(BrandTintColor)
-                            .border(1.dp, BrandLineColor, RoundedCornerShape(999.dp))
-                            .padding(horizontal = 10.dp, vertical = 2.dp)
-                    ) {
-                        Text(text = "আনুমানিক", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                    }
-                }
-            }
-        }
-
-        if (odoError != null) {
-            Text(text = odoError, fontSize = 13.sp, color = ErrorColor, fontWeight = FontWeight.SemiBold)
-        }
-
-        // Odometer bump chips
-        AnimatedVisibility(visible = isOdoActive) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                listOf(10, 50, 100).forEach { bump ->
-                    VaultChip(
-                        text = "+${f.d(bump.toString())}",
-                        onClick = {
-                            entry.set("odo", (odoVal + bump).toInt().toString())
-                            odoTouched = true
-                        }
-                    )
-                }
-                VaultChip(
-                    text = "আনুমানিক",
-                    onClick = {
-                        entry.set("odo", estimate.toInt().toString())
-                        odoTouched = false
-                    }
-                )
-            }
-        }
-
-        // Pump / Filling station input
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            V3Icon(
-                path = "feather_icon/fi_map-pin.svg",
-                description = null,
-                modifier = Modifier.size(18.dp),
-                tint = TextTertiary
-            )
-            state.places.take(2).forEach { p ->
-                VaultChip(text = p, active = place == p, onClick = { place = if (place == p) "" else p })
-            }
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(SurfaceColor2)
-                .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp))
-                .padding(horizontal = 14.dp, vertical = 14.dp)
-        ) {
-            BasicTextField(
-                value = place,
-                onValueChange = { place = it },
-                textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
-                cursorBrush = SolidColor(BrandColor),
-                decorationBox = { innerTextField ->
-                    if (place.isEmpty()) {
-                        Text(text = "পাম্পের নাম (ঐচ্ছিক)", fontSize = 15.sp, color = TextTertiary)
-                    }
-                    innerTextField()
-                }
-            )
         }
     }
 }

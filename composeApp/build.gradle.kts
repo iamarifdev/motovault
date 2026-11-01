@@ -1,6 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -74,6 +75,25 @@ dependencies {
 }
 
 room { schemaDirectory("$projectDir/schemas") }
+
+// The standalone Kotlin test runner has no Swift app delegate to install the
+// production crypto provider. Build the same Swift primitives into a test host.
+val simulatorCryptoLibrary = layout.buildDirectory.file("ios-test-crypto/libMotoVaultTestCrypto.dylib")
+val buildSimulatorCryptoBridge by tasks.registering(Exec::class) {
+    val primitives = rootProject.file("iosApp/MotoVault/BackupCryptoPrimitives.swift")
+    val bridge = rootProject.file("tools/ios-test-crypto/Bridge.swift")
+    inputs.files(primitives, bridge)
+    outputs.file(simulatorCryptoLibrary)
+    doFirst { simulatorCryptoLibrary.get().asFile.parentFile.mkdirs() }
+    commandLine("xcrun", "--sdk", "iphonesimulator", "swiftc", "-target", "arm64-apple-ios15.0-simulator",
+        "-emit-library", primitives, bridge, "-o", simulatorCryptoLibrary.get().asFile)
+}
+tasks.named<KotlinNativeSimulatorTest>("iosSimulatorArm64Test") {
+    dependsOn(buildSimulatorCryptoBridge)
+    inputs.file(simulatorCryptoLibrary)
+    environment("MOTOVAULT_TEST_CRYPTO_LIBRARY", simulatorCryptoLibrary.get().asFile.absolutePath)
+    environment("SIMCTL_CHILD_MOTOVAULT_TEST_CRYPTO_LIBRARY", simulatorCryptoLibrary.get().asFile.absolutePath)
+}
 
 android {
     namespace = "com.motovault.app"

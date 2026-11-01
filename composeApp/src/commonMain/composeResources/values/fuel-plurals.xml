@@ -1,0 +1,10 @@
+<resources>
+    <plurals name="fuel_entry_count">
+        <item quantity="one">%1$s fuel entry</item>
+        <item quantity="other">%1$s fuel entries</item>
+    </plurals>
+    <plurals name="history_record_count">
+        <item quantity="one">%1$s record</item>
+        <item quantity="other">%1$s records</item>
+    </plurals>
+</resources>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="reminder_service_title">সার্ভিসের রিমাইন্ডার</string>
+    <string name="reminder_document_title">কাগজের রিমাইন্ডার</string>
+    <string name="reminder_service_message">%1$s · রেকর্ড করা সার্ভিসের ব্যবধান দেখুন।</string>
+    <string name="reminder_document_message">%1$s · মেয়াদ শেষ: %2$s</string>
+    <string name="reminder_channel_name">কাগজ ও সার্ভিসের রিমাইন্ডার</string>
+    <string name="reminder_channel_description">কাগজের মেয়াদ ও সার্ভিসের রিমাইন্ডার</string>
+</resources>

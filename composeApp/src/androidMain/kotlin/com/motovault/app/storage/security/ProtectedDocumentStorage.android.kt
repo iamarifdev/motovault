@@ -45,7 +45,24 @@ internal actual object ProtectedDocumentStorage {
     }
 
     @Synchronized actual fun read(id: String) = store().read(id)
+    @Synchronized actual fun sealRecoverySnapshot(id: String, plaintext: ByteArray): ByteArray {
+        prepare()
+        return RecoverySnapshotCipher(AndroidAssetCipher { AndroidAssetKey.load(allowCreation = false) }).seal(id, plaintext)
+    }
+    @Synchronized actual fun openRecoverySnapshot(id: String, ciphertext: ByteArray): ByteArray =
+        RecoverySnapshotCipher(AndroidAssetCipher { AndroidAssetKey.load(allowCreation = false) }).open(id, ciphertext)
     @Synchronized actual fun writeNew(id: String, plaintext: ByteArray) { prepare(); store().writeNew(id, plaintext) }
+    @Synchronized actual fun stageRestore(id: String, plaintext: ByteArray): Boolean {
+        prepare()
+        val target = store()
+        val existed = target.contains(id)
+        return try { target.stageRestore(id, plaintext) } catch (failure: Exception) {
+            if (!existed) try { discard(setOf(id)) } catch (cleanupFailure: Exception) {
+                failure.addSuppressed(cleanupFailure)
+            }
+            throw failure
+        }
+    }
     @Synchronized actual fun migrate(ids: Set<String>) {
         if (ids.isEmpty()) return
         prepare()

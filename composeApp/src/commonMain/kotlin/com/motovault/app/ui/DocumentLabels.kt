@@ -3,7 +3,6 @@ package com.motovault.app.ui
 import androidx.compose.runtime.Composable
 import motovault.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
 
 /**
  * Maps document title or identifier to its type-safe StringResource.
@@ -27,13 +26,13 @@ internal fun documentResourceOf(value: String): StringResource? = when (value) {
 @Composable
 internal fun documentDisplayName(value: String, lang: AppLanguage? = null): String {
     val res = documentResourceOf(value)
-    return if (res != null) stringResource(res) else value
+    return if (res != null) appStringResource(res) else value
 }
 
 @Composable
 internal fun documentSideName(value: String, lang: AppLanguage? = null): String = when {
-    value == "Front" -> stringResource(Res.string.doc_side_front)
-    value == "Back" -> stringResource(Res.string.doc_side_back)
-    value.startsWith("Page ") -> stringResource(Res.string.doc_side_page, value.removePrefix("Page "))
+    value == "Front" -> appStringResource(Res.string.doc_side_front)
+    value == "Back" -> appStringResource(Res.string.doc_side_back)
+    value.startsWith("Page ") -> appStringResource(Res.string.doc_side_page, value.removePrefix("Page "))
     else -> value
 }

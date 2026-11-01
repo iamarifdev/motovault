@@ -30,7 +30,25 @@ internal actual object ProtectedDocumentStorage {
     private fun prepare() { check(IosDocumentCrypto.provider?.prepareFreshStore() == true) { "Document key is unavailable. Existing files have been retained." } }
 
     actual fun read(id: String): ByteArray = serialized { store().read(id) }
+    actual fun sealRecoverySnapshot(id: String, plaintext: ByteArray): ByteArray = serialized {
+        prepare()
+        RecoverySnapshotCipher(IosAssetCipher()).seal(id, plaintext)
+    }
+    actual fun openRecoverySnapshot(id: String, ciphertext: ByteArray): ByteArray = serialized {
+        RecoverySnapshotCipher(IosAssetCipher()).open(id, ciphertext)
+    }
     actual fun writeNew(id: String, plaintext: ByteArray) = serialized { prepare(); store().writeNew(id, plaintext) }
+    actual fun stageRestore(id: String, plaintext: ByteArray): Boolean = serialized {
+        prepare()
+        val target = store()
+        val existed = target.contains(id)
+        try { target.stageRestore(id, plaintext) } catch (failure: Exception) {
+            if (!existed) try { discard(setOf(id)) } catch (cleanupFailure: Exception) {
+                failure.addSuppressed(cleanupFailure)
+            }
+            throw failure
+        }
+    }
     actual fun migrate(ids: Set<String>) = serialized {
         if (ids.isNotEmpty()) { prepare(); ids.sorted().forEach { store().migrate(it) } }
     }

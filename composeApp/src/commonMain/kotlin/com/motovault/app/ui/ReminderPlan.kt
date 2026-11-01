@@ -41,20 +41,24 @@ internal fun reminderPlan(state: VaultState, now: LocalDateTime, previous: List<
     return (documents + services).sortedBy { it.localDateTime() }
 }
 
-internal data class ReminderTarget(val type: String, val id: String, val title: String, val digits: Digits = Digits.BN)
+internal data class ReminderTarget(val type: String, val id: String, val title: String, val digits: Digits = Digits.BN, val language: AppLanguage = AppLanguage.BN)
 
-internal fun reminderHeading(plan: RenewalReminder) = if (plan.targetType == "service") "সার্ভিসের রিমাইন্ডার" else "কাগজের রিমাইন্ডার"
+internal expect fun reminderHeading(plan: RenewalReminder, target: ReminderTarget): String
+internal expect fun reminderMessage(plan: RenewalReminder, target: ReminderTarget): String
+internal expect fun localizedMonthName(language: AppLanguage, monthIndex: Int): String
 
-internal fun reminderMessage(plan: RenewalReminder, target: ReminderTarget) = if (target.type == "service")
-    "${target.title} · রেকর্ড করা সার্ভিসের ব্যবধান দেখুন।"
-else "${target.title} · মেয়াদ শেষ: ${Fmt(target.digits).dateFull(LocalDate.parse(plan.expiry))}"
+internal fun reminderDate(plan: RenewalReminder, target: ReminderTarget): String {
+    val date = LocalDate.parse(plan.expiry)
+    val format = Fmt(target.digits)
+    return "${format.d(date.dayOfMonth.toString())} ${localizedMonthName(target.language, date.monthNumber - 1)} ${format.d(date.year.toString())}"
+}
 
 /** Never resolve by label, array index or an integer hash. Stale notifications explain instead of opening another record. */
 internal fun reminderTarget(state: VaultState, plan: RenewalReminder): ReminderTarget? = when (plan.targetType) {
     "document" -> state.documents.firstOrNull { it.id == plan.documentId && it.expiry == plan.expiry }
-        ?.let { ReminderTarget("document", it.id, it.title, state.digits) }
+        ?.let { ReminderTarget("document", it.id, it.title, state.digits, state.language) }
     "service" -> state.rules.firstOrNull { it.id == plan.documentId && it.reminderRevision() == plan.targetRevision }
-        ?.let { ReminderTarget("service", it.id, it.name, state.digits) }
+        ?.let { ReminderTarget("service", it.id, it.name, state.digits, state.language) }
     else -> null
 }
 

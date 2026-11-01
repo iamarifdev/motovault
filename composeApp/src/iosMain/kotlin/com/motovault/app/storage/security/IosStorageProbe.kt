@@ -11,6 +11,19 @@ import platform.UIKit.*
 import androidx.room.Room
 import com.motovault.app.storage.VaultDatabase
 import com.motovault.app.storage.buildVaultDatabase
+import com.motovault.app.storage.RecoverySnapshotStore
+import com.motovault.app.storage.BackupOperationsAdapter
+import com.motovault.app.storage.BackupRestoreStaging
+import com.motovault.app.application.PreparedVaultChange
+import com.motovault.app.application.VaultCoordinator
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.first
+import org.jetbrains.compose.resources.getPluralString
+import org.jetbrains.compose.resources.getString
+import motovault.composeapp.generated.resources.Res
+import motovault.composeapp.generated.resources.fuel_entry_count
+import motovault.composeapp.generated.resources.fuel_title
+import motovault.composeapp.generated.resources.history_record_count
 
 /** Native storage verification can run only in a debug build with the isolated probe bundle ID. */
 fun runIosStorageProbe(provider: IosAssetCryptography, invalidateSyntheticKey: () -> Unit, cleanupTemporaryCopies: () -> Unit): String {
@@ -25,6 +38,33 @@ fun runIosStorageProbe(provider: IosAssetCryptography, invalidateSyntheticKey: (
     val recoveryId = "probe-recovery-${NSUUID().UUIDString}.pdf"
     var stage = "setup"
     try {
+        stage = "reminder-localization"
+        val reminder = RenewalReminder("synthetic", "document", "2026-10-20", "2026-10-25", "expiry")
+        val english = ReminderTarget("document", "document", "Owner title", Digits.BN, AppLanguage.EN)
+        check(reminderHeading(reminder, english) == "Document reminder")
+        check(reminderMessage(reminder, english).contains("২০ October ২০২৬"))
+        val bangla = english.copy(language = AppLanguage.BN, digits = Digits.EN)
+        check(reminderHeading(reminder, bangla) == "কাগজের রিমাইন্ডার")
+        check(reminderMessage(reminder, bangla).contains("20 অক্টোবর 2026"))
+        checks += "native-reminder-language-and-digit-preferences"
+        stage = "compose-localization"
+        val defaults = NSUserDefaults.standardUserDefaults
+        val priorLanguages = defaults.objectForKey("AppleLanguages")
+        try {
+            defaults.setObject(listOf("en"), forKey = "AppleLanguages")
+            check(runBlocking { getPluralString(Res.plurals.fuel_entry_count, 1, "1") } == "1 fuel entry")
+            check(runBlocking { getPluralString(Res.plurals.fuel_entry_count, 2, "2") } == "2 fuel entries")
+            check(runBlocking { getPluralString(Res.plurals.history_record_count, 1, "১") } == "১ record")
+            check(runBlocking { getPluralString(Res.plurals.history_record_count, 2, "২") } == "২ records")
+            defaults.setObject(listOf("bn"), forKey = "AppleLanguages")
+            check(runBlocking { getPluralString(Res.plurals.fuel_entry_count, 2, "২") } == "২টি জ্বালানির রেকর্ড")
+            defaults.setObject(listOf("fr"), forKey = "AppleLanguages")
+            check(runBlocking { getString(Res.string.fuel_title) } == "Fuel")
+        } finally {
+            if (priorLanguages == null) defaults.removeObjectForKey("AppleLanguages")
+            else defaults.setObject(priorLanguages, forKey = "AppleLanguages")
+        }
+        checks += "native-compose-plural-and-fallback"
         val originals = "$root/documents"
         val encrypted = "$root/documents-protected"
         check(manager.createDirectoryAtPath(originals, true, null, null))
@@ -38,6 +78,121 @@ fun runIosStorageProbe(provider: IosAssetCryptography, invalidateSyntheticKey: (
         stage = "key-provision"
         check(provider.prepareFreshStore())
         checks += "native-key-provision-and-missing-key-refusal"
+        stage = "backup-create-preview"
+        runBlocking {
+            val assetId = "synthetic-backup.pdf"
+            val synthetic = VaultState(
+                ride = Ride("test", "Synthetic", 2020, 1000.0, modelName = "Backup Bike"),
+                logs = listOf(RideLog("Synthetic fuel", "4 L", "2026-01-01", 1000.0, id = "backup-log", kind = "fuel", liters = 4.0)),
+                documents = listOf(VaultDocument("Synthetic", "1", "Synthetic", "2030-01-01", id = "backup-doc", originalPdf = assetId))
+            )
+            val adapter = BackupOperationsAdapter(
+                digest = { bytes -> provider.sha256(bytes.assetData()).assetBytes() },
+                readAsset = { id -> check(id == assetId); source }
+            )
+            val archive = adapter.create(synthetic, 3L, "synthetic-passphrase") { _, _ -> }
+            val preview = adapter.preview(synthetic, archive, "synthetic-passphrase")
+            check(preview.validatedAssetCount == 1 && preview.payload.documents.single().originalPdf == assetId)
+            check(preview.verifiedSummary.bikeDisplayName == "Backup Bike")
+            var rejectedWrongPassword = false
+            try { adapter.preview(synthetic, archive, "incorrect-passphrase") } catch (_: Exception) { rejectedWrongPassword = true }
+            check(rejectedWrongPassword)
+
+            stage = "backup-staged-restore-collision"
+            val restoreEncrypted = "$root/backup-restored-protected"
+            val restoreStore = SecureAssetStore(IosAssetFiles("$root/backup-restored-originals", restoreEncrypted), envelope)
+            val existingBytes = "SYNTHETIC existing original".encodeToByteArray()
+            check(restoreStore.stageRestore(assetId, existingBytes))
+            val remappedId = "synthetic-remapped.pdf"
+            suspend fun discardSyntheticAssets(ids: Set<String>) {
+                ids.forEach { id ->
+                    listOf("$restoreEncrypted/$id.mva", "$restoreEncrypted/$id.committed").forEach { path ->
+                        if (manager.fileExistsAtPath(path)) check(manager.removeItemAtPath(path, null))
+                    }
+                }
+            }
+            val restorePath = "$root/synthetic-backup-restore.db"
+            fun openRestoreDatabase() = buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(name = restorePath))
+            var restoredDatabase = openRestoreDatabase()
+            val previous = VaultState(ride = Ride("test", "Synthetic", 2019, 500.0, modelName = "Previous Bike"),
+                documents = listOf(VaultDocument("Previous", "1", "Synthetic", "2030-01-01", id = "previous-doc", originalPdf = assetId)))
+            restoredDatabase.vault().replace(previous)
+            val recoveryCipher = RecoverySnapshotCipher(IosAssetCipher { provider })
+            val recoveryStore = RecoverySnapshotStore(restoredDatabase.vault(), { "synthetic-previous.pdf" }, recoveryCipher::seal, recoveryCipher::open)
+            val coordinator = VaultCoordinator(
+                scope = this, initialState = VaultState(), restore = { requireNotNull(restoredDatabase.vault().read()) },
+                write = { restoredDatabase.vault().replace(it) }, assetIds = { state -> state.documents.flatMap { it.assetIds() }.toSet() },
+                cleanup = {}, recover = {}, reconcile = {}, writePrepared = { before, after -> recoveryStore.replace(before, after) },
+                recoveryAssetIds = { recoveryStore.referencedAssets() }
+            )
+            coordinator.snapshots.first { !it.loading }
+            val rejected = CompletableDeferred<Result<Unit>>()
+            coordinator.commitPrepared(coordinator.snapshots.value.revision, prepare = {
+                val invalid = BackupRestoreStaging.prepare(
+                    archive, "incorrect-passphrase", assetWriter = { id, bytes -> restoreStore.stageRestore(id, bytes) },
+                    discardAssets = ::discardSyntheticAssets, newAssetId = { remappedId }
+                )
+                PreparedVaultChange(invalid.state, preservePreviousAssets = true) { discardSyntheticAssets(invalid.createdAssets) }
+            }) { rejected.complete(it) }
+            check(rejected.await().isFailure)
+            check(restoredDatabase.vault().read()?.ride?.modelName == "Previous Bike")
+            check(restoredDatabase.vault().restoreRecoveryRows().isEmpty())
+            check(!restoreStore.contains(remappedId) && restoreStore.read(assetId).contentEquals(existingBytes))
+            val completion = CompletableDeferred<Result<Unit>>()
+            coordinator.commitPrepared(coordinator.snapshots.value.revision, prepare = {
+                val staged = BackupRestoreStaging.prepare(
+                    archive, "synthetic-passphrase", assetWriter = { id, bytes -> restoreStore.stageRestore(id, bytes) },
+                    discardAssets = ::discardSyntheticAssets, newAssetId = { remappedId }
+                )
+                check(staged.createdAssets == setOf(remappedId))
+                check(staged.state.documents.single().originalPdf == remappedId)
+                PreparedVaultChange(staged.state, preservePreviousAssets = true) { discardSyntheticAssets(staged.createdAssets) }
+            }) { completion.complete(it) }
+            completion.await().getOrThrow()
+            check(recoveryStore.read("synthetic-previous.pdf").ride?.modelName == "Previous Bike")
+            check(recoveryStore.referencedAssets() == setOf(assetId))
+            check(restoreStore.read(assetId).contentEquals(existingBytes))
+            check(restoreStore.read(remappedId).contentEquals(source))
+            restoredDatabase.close()
+            restoredDatabase = openRestoreDatabase()
+            val reopened = requireNotNull(restoredDatabase.vault().read())
+            check(reopened.ride?.modelName == "Backup Bike")
+            check(reopened.logs.single().id == "backup-log" && reopened.logs.single().liters == 4.0)
+            check(reopened.documents.single().originalPdf == remappedId)
+            check(restoreStore.read(remappedId).contentEquals(source))
+            restoredDatabase.close()
+            checks += "native-backup-coordinated-recovery-collision-room-reopen"
+        }
+        checks += "native-backup-adapter-create-preview-wrong-password"
+        stage = "recovery-snapshot"
+        runBlocking {
+            val path = "$root/synthetic-recovery.db"
+            fun openDatabase() = buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(name = path))
+            var database = openDatabase()
+            val prior = VaultState(ride = Ride("test", "Synthetic", 2020, 1000.0, modelName = "Original"),
+                documents = listOf(VaultDocument("Synthetic", "1", "Synthetic", "2030-01-01", id = "recovery-doc",
+                    pages = listOf(DocumentPage("recovery-original.jpg", "recovery-preview.jpg", "image/jpeg", 10, 10, "Front")))))
+            val replacement = VaultState(ride = Ride("test", "Synthetic", 2021, 2000.0, modelName = "Restored"))
+            database.vault().replace(prior)
+            val recoveryId = "synthetic-recovery.pdf"
+            val cipher = RecoverySnapshotCipher(IosAssetCipher { provider })
+            val snapshots = RecoverySnapshotStore(database.vault(), { recoveryId }, cipher::seal, cipher::open)
+            snapshots.replace(requireNotNull(database.vault().read()), replacement)
+            check(snapshots.referencedAssets() == setOf("recovery-original.jpg", "recovery-preview.jpg"))
+            val summary = snapshots.summaries().single()
+            check(summary.id == recoveryId && summary.createdAtEpochMillis == null)
+            check(summary.bikeName == "Original" && summary.documentCount == 1 && summary.recordCount == 0)
+            val encryptedPayload = database.vault().restoreRecoveryRows().single().payload
+            check(!encryptedPayload.decodeToString().contains("Original"))
+            database.close()
+            database = openDatabase()
+            check(database.vault().read()?.ride?.modelName == "Restored")
+            check(VaultState.decode(cipher.open(recoveryId, database.vault().restoreRecoveryRows().single().payload).decodeToString())?.ride?.modelName == "Original")
+            val tampered = encryptedPayload.copyOf().also { it[it.lastIndex] = (it.last().toInt() xor 1).toByte() }
+            expectProbeFailure { cipher.open(recoveryId, tampered) }
+            database.close()
+        }
+        checks += "native-encrypted-recovery-snapshot-and-reopen"
         stage = "interrupted-stage"
         expectProbeFailure { files.publishEncrypted("synthetic.pdf", envelope.seal("synthetic.pdf", source)) { error("Synthetic interruption") } }
         check(requireNotNull(NSData.dataWithContentsOfFile(originalPath)).assetBytes().contentEquals(source))

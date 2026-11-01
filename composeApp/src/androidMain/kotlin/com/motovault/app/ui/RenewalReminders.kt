@@ -40,18 +40,25 @@ private fun pending(key: String) = PendingIntent.getBroadcast(vaultContext, 0, i
 private fun cancelAlarm(plan: RenewalReminder) {
     vaultContext.getSystemService(AlarmManager::class.java).cancel(pending(plan.key))
 }
-private fun channel() {
-    if (Build.VERSION.SDK_INT >= 26) vaultContext.getSystemService(NotificationManager::class.java).createNotificationChannel(NotificationChannel(CHANNEL, "Document renewals", NotificationManager.IMPORTANCE_DEFAULT).apply { description = "Document warnings and expiry-day reminders" })
+private fun channel(language: AppLanguage) {
+    if (Build.VERSION.SDK_INT >= 26) {
+        val localized = reminderContext(language)
+        vaultContext.getSystemService(NotificationManager::class.java).createNotificationChannel(
+            NotificationChannel(CHANNEL, localized.getString(com.motovault.app.R.string.reminder_channel_name), NotificationManager.IMPORTANCE_DEFAULT).apply {
+                description = localized.getString(com.motovault.app.R.string.reminder_channel_description)
+            }
+        )
+    }
 }
 
 internal fun renewalNotification(context: Context, plan: RenewalReminder, target: ReminderTarget): Notification {
-    channel()
+    channel(target.language)
     val open = PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java)
         .setData(Uri.parse("motovault://reminder/" + Uri.encode(plan.key)))
         .putExtra("motovault.reminder", reminderPayload(plan))
         .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     val builder = if (Build.VERSION.SDK_INT >= 26) Notification.Builder(context, CHANNEL) else Notification.Builder(context)
-    return builder.setSmallIcon(com.motovault.app.R.drawable.motovault_icon).setContentTitle(reminderHeading(plan))
+    return builder.setSmallIcon(com.motovault.app.R.drawable.motovault_icon).setContentTitle(reminderHeading(plan, target))
         .setContentText(reminderMessage(plan, target))
         .addExtras(Bundle().apply { putString("motovault.reminder", reminderPayload(plan)) })
         .setContentIntent(open).setAutoCancel(true).setVisibility(Notification.VISIBILITY_PRIVATE).build()
@@ -60,7 +67,7 @@ internal fun renewalNotification(context: Context, plan: RenewalReminder, target
 internal actual suspend fun reconcileRenewalReminders(documents: List<VaultDocument>) = withContext(Dispatchers.IO) {
     reminderLock.withLock {
         val state = VaultState.restore()
-        channel()
+        channel(state.language)
         val old = plans()
         val allowed = enabled() && permitted()
         val next = if (allowed) reminderPlan(state, Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()), old, consumed()) else emptyList()

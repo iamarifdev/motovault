@@ -73,6 +73,16 @@ class Fmt(val digits: Digits) {
 
     fun raw(s: String): String = d(s)
 
+    /** Group the integer part without rounding or dropping an in-progress decimal. */
+    fun editableNumber(value: String): String {
+        val ascii = toAscii(value)
+        if (ascii.isEmpty()) return d("0")
+        val integer = ascii.substringBefore('.')
+        val grouped = integer.toLongOrNull()?.let(::formatLakh) ?: integer
+        val fraction = if ('.' in ascii) "." + ascii.substringAfter('.') else ""
+        return d(grouped + fraction)
+    }
+
     fun money(x: Double): String = "৳" + d(formatLakh(kotlin.math.round(x).toLong()))
 
     fun km(x: Double): String = d(formatLakh(kotlin.math.round(x).toLong())) + if (digits == Digits.BN) " কিমি" else " km"

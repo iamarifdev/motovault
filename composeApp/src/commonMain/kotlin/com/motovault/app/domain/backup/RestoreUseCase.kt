@@ -1,20 +1,16 @@
 package com.motovault.app.domain.backup
 
-import com.motovault.app.storage.VaultDatabase
-import com.motovault.app.storage.security.documentSha256
-import com.motovault.app.ui.Appearance
-import com.motovault.app.ui.VaultState
-import com.motovault.app.ui.assetIds
-import com.motovault.app.ui.reconcileRenewalReminders
 import kotlinx.serialization.json.Json
 
 object RestoreUseCase {
     private val json = Json { ignoreUnknownKeys = true }
 
     fun validateAndPreview(
+        digest: (ByteArray) -> ByteArray,
+        rideDisplayName: (BackupRide) -> String,
         archiveBytes: ByteArray,
         passphrase: String,
-        currentState: VaultState? = null
+        currentState: BackupCurrentSummary? = null
     ): BackupPreview {
         BackupUseCase.validatePassphrase(passphrase)
         val entries = MvaZipArchive.read(archiveBytes)
@@ -32,6 +28,10 @@ object RestoreUseCase {
             "This backup was created by a newer version of MotoVault (format version ${manifest.formatVersion}). Please update MotoVault to restore it."
         }
 
+        require(manifest.kdf.iterations in 1..MAX_RESTORE_KDF_ITERATIONS) {
+            "Backup key derivation work is outside the supported range."
+        }
+
         // Derive key
         val salt = manifest.kdf.saltHex.hexToByteArray()
         val key = try {
@@ -44,7 +44,7 @@ object RestoreUseCase {
         val encPayload = requireNotNull(entries["vault.enc"]) {
             "Invalid MotoVault backup: missing vault.enc."
         }
-        val payloadAad = "MOTOVAULT-VAULT-v1:${manifest.createdAtEpochMillis}".encodeToByteArray()
+        val payloadAad = vaultAuthenticationData(manifest.createdAtEpochMillis)
         val payloadBytes = try {
             BackupCrypto.decrypt(key, encPayload, payloadAad)
         } catch (e: Exception) {
@@ -71,12 +71,14 @@ object RestoreUseCase {
         // Validate and authenticate every asset in the manifest
         var validatedAssetBytes = 0L
         val manifestAssetIds = manifest.assets.map { it.assetId }.toSet()
+        require(manifestAssetIds.size == manifest.assets.size) { "Backup contains duplicate asset IDs." }
+        require(manifest.assets.map { it.path }.toSet().size == manifest.assets.size) { "Backup contains duplicate asset paths." }
 
         for (asset in manifest.assets) {
             val encAsset = requireNotNull(entries[asset.path]) {
                 "Missing referenced asset file in backup: ${asset.path}"
             }
-            val aad = "MOTOVAULT-ASSET-v1:${asset.assetId}".encodeToByteArray()
+            val aad = assetAuthenticationData(asset.assetId)
             val plain = try {
                 BackupCrypto.decrypt(key, encAsset, aad)
             } catch (e: Exception) {
@@ -85,7 +87,7 @@ object RestoreUseCase {
             require(plain.size == asset.byteLength) {
                 "Asset length mismatch for ${asset.assetId}: manifest specifies ${asset.byteLength}, extracted ${plain.size}."
             }
-            val sha = documentSha256(plain).toHex()
+            val sha = digest(plain).toHex()
             require(sha.equals(asset.sha256, ignoreCase = true)) {
                 "SHA-256 verification failed for asset ${asset.assetId}. Expected ${asset.sha256}, calculated $sha."
             }
@@ -99,72 +101,36 @@ object RestoreUseCase {
             "Backup is incomplete: referenced document assets are missing: $missingFromManifest"
         }
 
+        // Manifest summary is plaintext and is not covered by the encrypted payload's tag.
+        val verifiedSummary = BackupCurrentSummary(
+            bikeBrandId = payload.ride?.brandId,
+            bikeDisplayName = payload.ride?.let(rideDisplayName),
+            odometer = payload.ride?.odometer,
+            logCount = payload.logs.size,
+            documentCount = payload.documents.size
+        )
         val conflicts = currentState?.let { current ->
             BackupConflictSummary(
-                currentBikeDisplayName = current.ride?.displayName,
-                incomingBikeDisplayName = manifest.summary.bikeDisplayName,
-                currentOdometer = current.ride?.odometer,
-                incomingOdometer = manifest.summary.odometer,
-                currentLogCount = current.logs.size,
-                incomingLogCount = manifest.summary.logCount,
-                currentDocumentCount = current.documents.size,
-                incomingDocumentCount = manifest.summary.documentCount,
-                bikeMatches = current.ride?.brandId == payload.ride?.brandId && current.ride?.displayName == payload.ride?.displayName
+                currentBikeDisplayName = current.bikeDisplayName,
+                incomingBikeDisplayName = verifiedSummary.bikeDisplayName,
+                currentOdometer = current.odometer,
+                incomingOdometer = verifiedSummary.odometer ?: 0.0,
+                currentLogCount = current.logCount,
+                incomingLogCount = verifiedSummary.logCount,
+                currentDocumentCount = current.documentCount,
+                incomingDocumentCount = verifiedSummary.documentCount,
+                bikeMatches = current.bikeBrandId == verifiedSummary.bikeBrandId && current.bikeDisplayName == verifiedSummary.bikeDisplayName
             )
         }
 
         return BackupPreview(
             manifest = manifest,
             payload = payload,
+            verifiedSummary = verifiedSummary,
             validatedAssetCount = manifest.assets.size,
             totalAssetBytes = validatedAssetBytes,
             conflicts = conflicts
         )
     }
 
-    suspend fun executeRestore(
-        archiveBytes: ByteArray,
-        passphrase: String,
-        database: VaultDatabase,
-        assetWriter: suspend (id: String, bytes: ByteArray) -> Unit,
-        onComplete: suspend (VaultState) -> Unit
-    ) {
-        val preview = validateAndPreview(archiveBytes, passphrase)
-        val entries = MvaZipArchive.read(archiveBytes)
-        val salt = preview.manifest.kdf.saltHex.hexToByteArray()
-        val key = BackupCrypto.deriveKey(passphrase, salt, iterations = preview.manifest.kdf.iterations)
-
-        // 1. Write and protect all assets first
-        for (asset in preview.manifest.assets) {
-            val encAsset = requireNotNull(entries[asset.path])
-            val aad = "MOTOVAULT-ASSET-v1:${asset.assetId}".encodeToByteArray()
-            val plain = BackupCrypto.decrypt(key, encAsset, aad)
-            assetWriter(asset.assetId, plain)
-        }
-
-        // 2. Prepare new VaultState
-        val targetAppearance = runCatching { Appearance.valueOf(preview.payload.appearance) }.getOrDefault(Appearance.SYSTEM)
-        val restoredState = preview.payload.preferences.applyTo(
-            VaultState(
-                ride = preview.payload.ride,
-                rules = preview.payload.rules,
-                logs = preview.payload.logs,
-                documents = preview.payload.documents,
-                appearance = targetAppearance,
-                autoLocation = preview.payload.autoLocation,
-                economy = VaultState.calculateEconomy(preview.payload.logs),
-                lastFuelOdometer = preview.payload.logs.filter { it.isFuel }.maxOfOrNull { it.odometer }
-            )
-        )
-
-        // 3. Atomically replace database records
-        database.vault().replace(restoredState, legacyImported = preview.payload.legacyImported)
-        database.vault().prepareLocalSync()
-
-        // 4. Reconcile reminders
-        runCatching { reconcileRenewalReminders(restoredState.documents) }
-
-        // 5. Trigger session refresh
-        onComplete(restoredState)
-    }
 }

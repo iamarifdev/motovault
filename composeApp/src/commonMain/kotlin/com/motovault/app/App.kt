@@ -4,4 +4,4 @@ import androidx.compose.runtime.Composable
 import com.motovault.app.ui.MotoVault
 
 @Composable
-fun App() = MotoVault()
+fun App() = MotoVault(AppComposition.vault, AppComposition.backupRestore, AppComposition.fuelEntry, AppComposition.fuelEntry, AppComposition.recoveryRestore, AppComposition.backupOperations)

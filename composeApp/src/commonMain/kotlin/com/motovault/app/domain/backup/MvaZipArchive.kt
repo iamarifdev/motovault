@@ -154,6 +154,7 @@ object MvaZipArchive {
 
             val name = archiveBytes.copyOfRange(nameStart, nameStart + nameLength).decodeToString()
             validateEntryName(name)
+            require(name !in result) { "Archive contains a duplicate entry: $name" }
 
             totalExtractedBytes += uncompressedSize
             require(totalExtractedBytes <= maxTotalBytes) { "Archive expansion exceeds safety limit ($totalExtractedBytes > $maxTotalBytes bytes)." }

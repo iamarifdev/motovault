@@ -1,6 +1,7 @@
 package com.motovault.app.ui
 
 import com.motovault.app.domain.model.ComponentRule
+import com.motovault.app.domain.model.FuelDefaults
 import com.motovault.app.domain.model.DOCUMENT_RENEWAL_WARNING_DAYS
 import com.motovault.app.domain.usecase.LogMaintenanceUseCase
 import com.motovault.app.domain.usecase.FuelEfficiencyUseCase
@@ -105,7 +106,7 @@ data class VaultState(
     val brandOverride: String? = null,
     val serviceReminders: Boolean = true,
     val docReminders: Boolean = true,
-    val lastPrices: Map<String, Double> = mapOf("octane" to 120.0, "petrol" to 115.0),
+    val lastPrices: Map<String, Double> = FuelDefaults.legacyPrices(),
     val lastItemPrices: Map<String, Double> = emptyMap(),
     val workshops: List<String> = emptyList(),
     val places: List<String> = emptyList(),
@@ -380,7 +381,7 @@ data class VaultState(
                 rules = rules,
                 logs = logs,
                 documents = docs,
-                lastPrices = mapOf("octane" to 120.0, "petrol" to 115.0),
+            lastPrices = FuelDefaults.legacyPrices(),
                 lastItemPrices = mapOf(
                     "engine_oil" to 900.0,
                     "oil_filter" to 250.0,

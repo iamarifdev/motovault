@@ -1,9 +1,8 @@
 package com.motovault.app.domain.backup
 
-import com.motovault.app.storage.security.documentSha256
-import com.motovault.app.ui.VaultSettings
-import com.motovault.app.ui.VaultState
-import com.motovault.app.ui.assetIds
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.datetime.Clock
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -20,38 +19,34 @@ object BackupUseCase {
     }
 
     suspend fun createBackup(
-        state: VaultState,
+        digest: (ByteArray) -> ByteArray,
+        snapshot: BackupSnapshot,
         vaultRevision: Long,
         passphrase: String,
         installationId: String = "local-vault",
         assetReader: suspend (String) -> ByteArray,
-        progress: ((Float, String) -> Unit)? = null
+        progress: (suspend (Float, BackupProgress) -> Unit)? = null
     ): ByteArray {
         validatePassphrase(passphrase)
-        progress?.invoke(0.05f, "Preparing vault snapshot...")
+        progress?.invoke(0.05f, BackupProgress(BackupProgressStage.PREPARING))
 
-        // 1. Freeze payload
-        val payload = VaultExportPayload(
-            version = 1,
-            ride = state.ride,
-            rules = state.rules,
-            logs = state.logs,
-            documents = state.documents,
-            preferences = VaultSettings.from(state),
-            appearance = state.appearance.name,
-            autoLocation = state.autoLocation,
-            legacyImported = false
-        )
+        val payload = snapshot.payload
+        require(snapshot.assetIds == payload.documents.flatMap { it.assetIds() }.toSet()) {
+            "Backup asset inventory does not match document references."
+        }
 
         // 2. Gather referenced assets
-        progress?.invoke(0.15f, "Checking document originals...")
-        val referencedAssetIds = state.documents.flatMap { it.assetIds() }.toSet().sorted()
+        progress?.invoke(0.15f, BackupProgress(BackupProgressStage.CHECKING_ASSETS))
+        val referencedAssetIds = snapshot.assetIds.sorted()
         val plainAssets = mutableMapOf<String, ByteArray>()
         var totalAssetBytes = 0L
 
         for (id in referencedAssetIds) {
+            currentCoroutineContext().ensureActive()
             val bytes = try {
                 assetReader(id)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
             } catch (e: Exception) {
                 throw IllegalStateException("Missing referenced asset: $id. Backup cannot be completed without all originals.", e)
             }
@@ -61,20 +56,21 @@ object BackupUseCase {
         }
 
         // 3. Derive key
-        progress?.invoke(0.35f, "Deriving encryption key...")
+        progress?.invoke(0.35f, BackupProgress(BackupProgressStage.DERIVING_KEY))
         val salt = BackupCrypto.generateRandomBytes(32)
-        val key = BackupCrypto.deriveKey(passphrase, salt, iterations = 100_000)
+        val key = BackupCrypto.deriveKey(passphrase, salt, iterations = BACKUP_KDF_ITERATIONS)
 
         // 4. Encrypt assets
-        progress?.invoke(0.50f, "Encrypting document originals...")
+        progress?.invoke(0.50f, BackupProgress(BackupProgressStage.ENCRYPTING_ASSETS))
         val archiveEntries = mutableMapOf<String, ByteArray>()
         val assetEntries = mutableListOf<BackupAssetEntry>()
 
         for ((index, id) in referencedAssetIds.withIndex()) {
+            currentCoroutineContext().ensureActive()
             val plain = plainAssets.getValue(id)
-            val sha = documentSha256(plain).toHex()
+            val sha = digest(plain).toHex()
             val path = "assets/$id.bin"
-            val aad = "MOTOVAULT-ASSET-v1:$id".encodeToByteArray()
+            val aad = assetAuthenticationData(id)
             val ciphertext = BackupCrypto.encrypt(key, plain, aad)
             archiveEntries[path] = ciphertext
 
@@ -89,23 +85,23 @@ object BackupUseCase {
                 )
             )
             val p = 0.50f + (0.25f * (index + 1) / referencedAssetIds.size.coerceAtLeast(1))
-            progress?.invoke(p, "Encrypted ${index + 1} of ${referencedAssetIds.size} documents...")
+            progress?.invoke(p, BackupProgress(BackupProgressStage.ENCRYPTED_ASSETS, index + 1, referencedAssetIds.size))
         }
 
         // 5. Encrypt vault payload
-        progress?.invoke(0.80f, "Encrypting vault database...")
+        progress?.invoke(0.80f, BackupProgress(BackupProgressStage.ENCRYPTING_VAULT))
         val createdAt = Clock.System.now().toEpochMilliseconds()
         val payloadBytes = json.encodeToString(payload).encodeToByteArray()
-        val payloadAad = "MOTOVAULT-VAULT-v1:$createdAt".encodeToByteArray()
+        val payloadAad = vaultAuthenticationData(createdAt)
         val encPayload = BackupCrypto.encrypt(key, payloadBytes, payloadAad)
         archiveEntries["vault.enc"] = encPayload
 
         // 6. Build manifest
         val summary = BackupSummary(
-            bikeDisplayName = state.ride?.displayName ?: "Motorcycle",
-            odometer = state.ride?.odometer ?: 0.0,
-            logCount = state.logs.size,
-            documentCount = state.documents.size,
+            bikeDisplayName = snapshot.bikeDisplayName,
+            odometer = snapshot.odometer,
+            logCount = payload.logs.size,
+            documentCount = payload.documents.size,
             totalAssetBytes = totalAssetBytes
         )
         val manifest = BackupManifest(
@@ -123,9 +119,9 @@ object BackupUseCase {
         archiveEntries["manifest.json"] = json.encodeToString(manifest).encodeToByteArray()
 
         // 7. Bundle archive
-        progress?.invoke(0.95f, "Writing archive bundle...")
+        progress?.invoke(0.95f, BackupProgress(BackupProgressStage.WRITING_ARCHIVE))
         val zip = MvaZipArchive.write(archiveEntries)
-        progress?.invoke(1.0f, "Backup ready.")
+        progress?.invoke(1.0f, BackupProgress(BackupProgressStage.READY))
         return zip
     }
 }
