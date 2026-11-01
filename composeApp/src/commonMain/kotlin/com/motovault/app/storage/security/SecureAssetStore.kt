@@ -1,6 +1,6 @@
 package com.motovault.app.storage.security
 
-import com.motovault.app.ui.validateDocumentAssetId
+import com.motovault.app.domain.model.validateDocumentAssetId
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

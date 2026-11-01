@@ -5,12 +5,6 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
-@Serializable
-enum class Digits(val label: String) {
-    BN("১২৩ বাংলা"),
-    EN("123 English")
-}
-
 private const val BN_DIGITS_STR = "০১২৩৪৫৬৭৮৯"
 
 /** Accepts Bengali, Arabic-Indic, or Latin digits. All numeric inputs normalise through this. */

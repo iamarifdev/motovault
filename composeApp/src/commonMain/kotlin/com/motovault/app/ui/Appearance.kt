@@ -23,13 +23,6 @@ import motovault.composeapp.generated.resources.anek_bangla
 import motovault.composeapp.generated.resources.barlow_condensed
 import org.jetbrains.compose.resources.Font
 
-@Serializable
-enum class Appearance(val label: String) {
-    SYSTEM("ডিভাইসের মতো"),
-    LIGHT("লাইট"),
-    DARK("ডার্ক")
-}
-
 fun Appearance.usesDarkPalette(systemDark: Boolean): Boolean = when (this) {
     Appearance.SYSTEM -> systemDark
     Appearance.LIGHT -> false

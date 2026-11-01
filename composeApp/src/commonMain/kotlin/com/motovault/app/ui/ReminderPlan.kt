@@ -1,13 +1,12 @@
 package com.motovault.app.ui
 
 import com.motovault.app.domain.model.ComponentRule
+import com.motovault.app.domain.model.reminderRevision
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.datetime.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-
-internal fun ComponentRule.reminderRevision() = "$lastServicedOdometerKm:$lastServicedEpochDays:$intervalKm:$intervalDays"
 
 internal fun reminderPlan(state: VaultState, now: LocalDateTime, previous: List<RenewalReminder>, consumed: Set<String>): List<RenewalReminder> {
     val documents = if (state.docReminders) renewalPlan(state.documents, now, previous, consumed, state.reminderPolicy) else emptyList()

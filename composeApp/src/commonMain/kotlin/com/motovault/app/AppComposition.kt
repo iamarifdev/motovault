@@ -16,6 +16,7 @@ import com.motovault.app.ui.removeDocumentAssets
 import com.motovault.app.ui.saveVault
 import com.motovault.app.ui.activeVaultDatabase
 import com.motovault.app.ui.recordId
+import com.motovault.app.ui.restore
 import com.motovault.app.storage.security.ProtectedDocumentStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

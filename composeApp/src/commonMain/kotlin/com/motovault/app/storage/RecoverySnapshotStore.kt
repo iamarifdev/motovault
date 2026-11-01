@@ -1,7 +1,7 @@
 package com.motovault.app.storage
 
-import com.motovault.app.ui.VaultState
-import com.motovault.app.ui.assetIds
+import com.motovault.app.domain.vault.VaultState
+import com.motovault.app.domain.model.assetIds
 import com.motovault.app.application.RecoverySummary
 
 // Current recovery IDs use the existing record ID format followed by the envelope's file suffix.

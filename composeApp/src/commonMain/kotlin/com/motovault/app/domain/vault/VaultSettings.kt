@@ -1,13 +1,11 @@
-package com.motovault.app.ui
+package com.motovault.app.domain.vault
 
-import kotlinx.serialization.Serializable
+import com.motovault.app.domain.model.AppLanguage
+import com.motovault.app.domain.model.Digits
 import com.motovault.app.domain.model.FuelDefaults
-
-@Serializable
-enum class AppLanguage(val code: String, val label: String) {
-    BN("bn", "বাংলা"),
-    EN("en", "English")
-}
+import com.motovault.app.domain.model.ReminderPolicy
+import com.motovault.app.domain.privacy.VaultPrivacySettings
+import kotlinx.serialization.Serializable
 
 /** Preferences are committed with owner records; notification permission remains an OS decision. */
 @Serializable
@@ -25,7 +23,7 @@ data class VaultSettings(
     val workshops: List<String> = emptyList(),
     val places: List<String> = emptyList(),
     val reminderPolicy: ReminderPolicy = ReminderPolicy(),
-    val privacy: com.motovault.app.domain.privacy.VaultPrivacySettings = com.motovault.app.domain.privacy.VaultPrivacySettings(),
+    val privacy: VaultPrivacySettings = VaultPrivacySettings(),
     val lastBackupEpochMillis: Long? = null
 ) {
     fun applyTo(state: VaultState) = state.copy(
@@ -41,13 +39,5 @@ data class VaultSettings(
             state.serviceReminders, state.docReminders, state.lastPrices, state.lastItemPrices,
             state.workshops, state.places, state.reminderPolicy, state.privacy, state.lastBackupEpochMillis
         )
-    }
-}
-
-@Serializable
-data class ReminderPolicy(val warningDays: Int = 30, val minuteOfDay: Int = 540) {
-    init {
-        require(warningDays in 1..365) { "Choose a warning between 1 and 365 days." }
-        require(minuteOfDay in 0..1439) { "Choose a valid local reminder time." }
     }
 }

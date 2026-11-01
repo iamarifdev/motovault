@@ -8,9 +8,9 @@ import com.motovault.app.domain.backup.MvaZipArchive
 import com.motovault.app.domain.backup.RestoreUseCase
 import com.motovault.app.domain.backup.hexToByteArray
 import com.motovault.app.domain.backup.assetAuthenticationData
-import com.motovault.app.ui.Appearance
-import com.motovault.app.ui.VaultState
-import com.motovault.app.ui.recordId
+import com.motovault.app.domain.model.Appearance
+import com.motovault.app.domain.vault.VaultState
+import com.motovault.app.domain.model.recordId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.currentCoroutineContext

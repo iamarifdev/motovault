@@ -3,11 +3,12 @@ package com.motovault.app.storage.security
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
 import com.motovault.app.storage.VaultDatabase
-import com.motovault.app.ui.*
+import com.motovault.app.domain.model.*
+import com.motovault.app.domain.vault.*
 
 /** Called only by isolated native probes with a newly allocated synthetic database path. */
 internal suspend fun verifyVaultFormatMigration(path: String, open: () -> VaultDatabase) {
-    val original = VaultState.create(Ride("yamaha", "Synthetic schema fixture", 2026, 1000.0))
+    val original = VaultState(ride = Ride("yamaha", "Synthetic schema fixture", 2026, 1000.0))
         .logFuel(1000.0, 5.0).copy(digits = Digits.EN, docReminders = false, reduceMotion = true,
             documents = listOf(VaultDocument("Tax token", "SYNTHETIC-SCHEMA", "SYNTHETIC OWNER", "2030-01-01", id = "synthetic-document",
                 pages = listOf(DocumentPage("synthetic-original.jpg", "synthetic-preview.jpg", "image/jpeg", 80, 40, "Front")))))

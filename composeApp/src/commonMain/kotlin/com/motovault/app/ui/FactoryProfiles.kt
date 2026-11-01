@@ -9,16 +9,6 @@ import com.motovault.app.domain.model.ComponentRule
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
-@Serializable
-enum class RideMarket(val label: String) {
-    UNKNOWN("Not sure / other market"), INDIA("India"), EUROPE("Europe / UK"), BANGLADESH("Bangladesh")
-}
-
-@Serializable
-enum class RideEmission(val label: String) {
-    UNKNOWN("Not confirmed"), BS4("BS4"), BS6("BS6"), EURO4("Euro 4"), EURO5("Euro 5"), EURO5_PLUS("Euro 5+")
-}
-
 /**
  * Presentation adapter for the source-backed profiles owned by
  * domain.maintenance. The UI only decides how a ride maps onto a profile.

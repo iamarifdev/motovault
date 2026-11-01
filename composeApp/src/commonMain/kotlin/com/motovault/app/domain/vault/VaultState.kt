@@ -1,13 +1,10 @@
-package com.motovault.app.ui
+package com.motovault.app.domain.vault
 
-import com.motovault.app.domain.model.ComponentRule
-import com.motovault.app.domain.model.FuelDefaults
-import com.motovault.app.domain.model.DOCUMENT_RENEWAL_WARNING_DAYS
-import com.motovault.app.domain.usecase.LogMaintenanceUseCase
+import com.motovault.app.domain.model.*
+import com.motovault.app.domain.usecase.DocumentExpiryUseCase
 import com.motovault.app.domain.usecase.FuelEfficiencyUseCase
 import com.motovault.app.domain.usecase.FuelFill
-import com.motovault.app.domain.usecase.DocumentExpiryUseCase
-import com.motovault.app.domain.model.DocumentExpiryStatus
+import com.motovault.app.domain.usecase.LogMaintenanceUseCase
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -15,78 +12,6 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlin.random.Random
-
-expect suspend fun loadVault(): String?
-expect suspend fun saveVault(value: String)
-expect fun activeVaultDatabase(): com.motovault.app.storage.VaultDatabase
-typealias VaultSave = (VaultState, (Boolean) -> Unit) -> Unit
-
-fun today() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-fun recordId() = Clock.System.now().toEpochMilliseconds().toString() + "-" + Random.nextLong().toString()
-const val RENEWAL_WARNING_DAYS = DOCUMENT_RENEWAL_WARNING_DAYS
-
-@Serializable
-data class Ride(
-    val brandId: String, val edition: String, val year: Int, val odometer: Double,
-    val modelId: String? = null, val modelName: String = "", val registration: String = "",
-    val market: RideMarket = RideMarket.UNKNOWN, val emission: RideEmission = RideEmission.UNKNOWN,
-    val modelCode: String = "", val factoryProfileId: String? = null,
-    val odometerConfirmedDate: String? = null
-) {
-    val selectedModel: BikeModel? get() = BikeCatalogue.find(modelId)?.takeIf { it.brandId == brandId }
-        ?: if (modelName.isBlank()) BikeCatalogue.legacyModel(brandId) else null
-    val displayName: String get() = modelName.ifBlank { selectedModel?.name ?: "Your motorcycle" }
-    fun confirmedMileage(value: Double, date: LocalDate): Ride {
-        require(value.isFinite() && value in 0.0..9999999.0 && date <= today())
-        return if (value >= odometer) copy(odometer = value, odometerConfirmedDate = date.toString()) else this
-    }
-}
-
-@Serializable
-data class RideLog(
-    val title: String, val detail: String, val date: String, val odometer: Double,
-    val id: String = recordId(), val kind: String = "", val liters: Double? = null,
-    val fullTank: Boolean = true, val cost: Double = 0.0,
-    val workshop: String = "", val notes: String = "", val componentId: String? = null,
-    val serviceLines: List<ServiceLineItem> = emptyList(),
-    val serviceLabourPoisha: Int? = null, val serviceMiscellaneousPoisha: Int? = null,
-    val serviceDiscountPoisha: Int? = null, val serviceTotalPoisha: Int? = null,
-    val scheduleIds: List<String> = emptyList(), val location: GeoCapture? = null,
-    val locationLabel: String = "", val receiptBase64: String? = null,
-    val fuelType: String = "octane",
-    val fuelPrice: Double? = null
-) {
-    val isFuel: Boolean get() = kind == "fuel" || title == "Fuel fill-up"
-    val isDocumentFee: Boolean get() = kind == "document_fee"
-    val fuelLiters: Double? get() = liters ?: if (isFuel) detail.substringBefore(" L").toDoubleOrNull() else null
-}
-
-@Serializable
-data class VaultDocument(
-    val title: String, val number: String, val holder: String, val expiry: String,
-    val id: String = recordId(), val issued: String = "",
-    val frontPhoto: String? = null, val backPhoto: String? = null,
-    val pages: List<DocumentPage> = emptyList(), val originalPdf: String? = null,
-    val pdfPageCount: Int = 0, val details: Map<String, String> = emptyMap(),
-    val detailsConfirmed: Boolean = false,
-    val extractionCandidates: Map<String, String> = emptyMap(), val capturedAt: String = "",
-    val reminder: Boolean = false,
-    val kind: String = "",
-    val reminderWarningDays: Int? = null,
-    val reminderSnoozedUntil: String? = null
-) {
-    val daysRemaining: Int? get() = expiry.takeIf { it.isNotBlank() }?.let { runCatching { LocalDate.parse(it).toEpochDays() - today().toEpochDays() }.getOrNull() }
-    val expiryStatus: DocumentExpiryStatus get() = DocumentExpiryUseCase().evaluate(daysRemaining)
-    val expiryLabel: String get() {
-        val days = daysRemaining
-        return when (DocumentExpiryUseCase().evaluate(days)) {
-            DocumentExpiryStatus.NO_EXPIRY -> "No expiry"
-            DocumentExpiryStatus.EXPIRED -> "Expired"
-            DocumentExpiryStatus.EXPIRING_SOON -> "$days days"
-            DocumentExpiryStatus.VALID -> "Valid"
-        }
-    }
-}
 
 @Serializable
 data class VaultState(
@@ -317,134 +242,14 @@ data class VaultState(
         return copy(documents = if (old != null) documents.map { if (it.id == document.id) saved else it } else documents + saved)
     }
 
+
     companion object {
-        fun emptyData(): VaultState = VaultState()
-
-        fun seedData(today: LocalDate = today()): VaultState {
-            val d = { n: Int -> LocalDate.fromEpochDays(today.toEpochDays() + n).toString() }
-            val fuel = { id: String, day: Int, odo: Double, liters: Double, full: Boolean, place: String ->
-                val cost = kotlin.math.round((liters * 120.0) / 10.0) * 10.0
-                RideLog(
-                    id = id,
-                    title = "Fuel fill-up",
-                    detail = "$liters L · ${if (full) "Full tank" else "Partial fill"}",
-                    date = d(day),
-                    odometer = odo,
-                    kind = "fuel",
-                    liters = liters,
-                    fullTank = full,
-                    cost = cost,
-                    fuelType = "octane",
-                    fuelPrice = 120.0,
-                    locationLabel = place
-                )
-            }
-            val logs = listOf(
-                fuel("f7", -11, 12340.0, 4.9, true, "পদ্মা পাম্প, মিরপুর"),
-                fuel("f6", -17, 12120.0, 5.2, true, "পদ্মা পাম্প, মিরপুর"),
-                fuel("f5", -27, 11890.0, 5.0, true, "যমুনা ফিলিং স্টেশন"),
-                fuel("f4", -33, 11700.0, 3.8, false, "যমুনা ফিলিং স্টেশন"),
-                fuel("f3", -41, 11500.0, 4.8, true, "পদ্মা পাম্প, মিরপুর"),
-                fuel("f2", -52, 11290.0, 4.7, true, "পদ্মা পাম্প, মিরপুর"),
-                fuel("f1", -64, 11080.0, 5.0, true, "যমুনা ফিলিং স্টেশন"),
-                RideLog(
-                    id = "s1",
-                    title = "Service",
-                    detail = "ইঞ্জিন অয়েল ও ফিল্টার",
-                    date = d(-45),
-                    odometer = 11350.0,
-                    kind = "service",
-                    workshop = "রহমান মোটরস, মিরপুর ১০",
-                    serviceLabourPoisha = 20000,
-                    serviceMiscellaneousPoisha = 0,
-                    serviceDiscountPoisha = 0,
-                    serviceTotalPoisha = 135000,
-                    cost = 1350.0,
-                    serviceLines = listOf(
-                        ServiceLineItem(catalogueId = "engine_oil", customName = "ইঞ্জিন অয়েল", action = "replace", quantity = 1.0, unitPricePoisha = 90000, detail = "10W-40"),
-                        ServiceLineItem(catalogueId = "oil_filter", customName = "অয়েল ফিল্টার", action = "replace", quantity = 1.0, unitPricePoisha = 25000)
-                    ),
-                    scheduleIds = listOf("r-oil")
-                )
-            )
-            val rules = listOf(
-                ComponentRule("r-oil", "primary", "ইঞ্জিন অয়েল ও ফিল্টার", "ইঞ্জিন অয়েল ও ফিল্টার", 3000.0, 180, 11350.0, today.toEpochDays().toLong() - 45),
-                ComponentRule("r-chain", "primary", "চেইন পরিষ্কার ও লুব্রিকেন্ট", "চেইন পরিষ্কার ও লুব্রিকেন্ট", 500.0, 30, 11520.0, today.toEpochDays().toLong() - 41),
-                ComponentRule("r-air", "primary", "এয়ার ফিল্টার", "এয়ার ফিল্টার", 5000.0, 180, 9900.0, today.toEpochDays().toLong() - 140),
-                ComponentRule("r-spark", "primary", "স্পার্ক প্লাগ", "স্পার্ক প্লাগ", 8000.0, 365, 8000.0, today.toEpochDays().toLong() - 200),
-                ComponentRule("r-brakes", "primary", "ব্রেক প্যাড", "ব্রেক প্যাড", 10000.0, 365, 7200.0, today.toEpochDays().toLong() - 300)
-            ).map { it.copy(baselineCertainty = com.motovault.app.domain.model.BaselineCertainty.CONFIRMED) }
-            val docs = listOf(
-                VaultDocument("রেজিস্ট্রেশন স্মার্ট কার্ড", "ঢাকা মেট্রো-ল ৬২-৪৫১৮", "মো. রাফিদ হাসান", d(400), "d1", reminder = true, kind = "registration"),
-                VaultDocument("ড্রাইভিং লাইসেন্স", "DL-1987-654321", "মো. রাফিদ হাসান", d(24), "d2", reminder = false, kind = "licence"),
-                VaultDocument("ট্যাক্স টোকেন", "TT-2025-88120", "মো. রাফিদ হাসান", d(-5), "d3", reminder = false, kind = "tax"),
-                VaultDocument("বিমা", "INS-554-2291", "মো. রাফিদ হাসান", d(200), "d4", reminder = true, kind = "insurance")
-            )
-            return VaultState(
-                ride = Ride("yamaha", "Official catalogue", 2023, 12340.0, "yamaha-r15-v4", "R15 V4"),
-                rules = rules,
-                logs = logs,
-                documents = docs,
-            lastPrices = FuelDefaults.legacyPrices(),
-                lastItemPrices = mapOf(
-                    "engine_oil" to 900.0,
-                    "oil_filter" to 250.0,
-                    "chain_sprocket" to 350.0,
-                    "air_filter" to 400.0,
-                    "spark_plug" to 300.0,
-                    "brake_pad" to 650.0
-                ),
-                workshops = listOf("রহমান মোটরস, মিরপুর ১০", "স্টার সার্ভিস সেন্টার"),
-                places = listOf("পদ্মা পাম্প, মিরপুর", "যমুনা ফিলিং স্টেশন")
-            )
-        }
-
         private val json = Json { ignoreUnknownKeys = true }
-        suspend fun restore(): VaultState = loadVault()?.let { decode(it) } ?: seedData()
-        fun decode(value: String): VaultState? = runCatching {
+fun decode(value: String): VaultState? = runCatching {
             val state = json.decodeFromString<VaultState>(value)
             state.copy(economy = calculateEconomy(state.logs), lastFuelOdometer = state.logs.filter { it.isFuel }.maxOfOrNull { it.odometer })
         }.getOrNull()
         fun encode(state: VaultState) = json.encodeToString(serializer(), state)
-
-        fun create(
-            ride: Ride,
-            baseline: Double? = ride.odometer,
-            baselineDate: LocalDate = today(),
-            baselineCertainty: com.motovault.app.domain.model.BaselineCertainty? = null
-        ): VaultState {
-            FactoryProfiles.validate(ride)
-            require(ride.odometer.isFinite() && ride.odometer in 0.0..9999999.0)
-            require(baseline == null || (baseline.isFinite() && baseline in 0.0..ride.odometer)) {
-                "Last service mileage cannot exceed current mileage."
-            }
-            require(baselineDate <= today()) { "Baseline date cannot be in the future." }
-            require(ride.modelId == null || BikeCatalogue.find(ride.modelId)?.brandId == ride.brandId) { "Choose a model from the selected brand." }
-            val certainty = baselineCertainty ?: if (baseline == null) {
-                com.motovault.app.domain.model.BaselineCertainty.UNKNOWN
-            } else {
-                com.motovault.app.domain.model.BaselineCertainty.CONFIRMED
-            }
-            val examples = listOf(
-                Triple("Chain lubrication", 500.0, 30),
-                Triple("Engine oil", 3000.0, 180),
-                Triple("Air filter", 5000.0, 180)
-            )
-            return VaultState(ride = ride, rules = FactoryProfiles.find(ride.factoryProfileId)?.rules(baseline, baselineDate, certainty) ?: examples.map { (name, km, days) ->
-                ComponentRule(recordId(), "primary", name, "Owner-defined example. Confirm against your manual.", km, days,
-                    baseline ?: 0.0, if (baseline == null) 0L else baselineDate.toEpochDays().toLong(),
-                    baselineCertainty = certainty,
-                    action = when (name) {
-                        "Chain lubrication" -> com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE
-                        else -> com.motovault.app.domain.maintenance.MaintenanceAction.REPLACE
-                    },
-                    provenance = com.motovault.app.domain.maintenance.ScheduleProvenance(
-                        source = com.motovault.app.domain.maintenance.ScheduleSource.OWNER,
-                        label = "Owner-defined example"
-                    )
-                )
-            })
-        }
 
         fun calculateEconomy(logs: List<RideLog>): Double? = FuelEfficiencyUseCase().calculate(
             logs.filter { it.isFuel }.map { FuelFill(it.odometer, it.fuelLiters, it.fullTank) }

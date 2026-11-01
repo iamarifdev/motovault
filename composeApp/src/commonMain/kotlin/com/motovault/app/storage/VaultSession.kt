@@ -2,9 +2,9 @@ package com.motovault.app.storage
 
 import com.motovault.app.application.VaultCoordinator
 import com.motovault.app.application.VaultWriter
-import com.motovault.app.ui.VaultDocument
-import com.motovault.app.ui.VaultState
-import com.motovault.app.ui.assetIds
+import com.motovault.app.domain.model.VaultDocument
+import com.motovault.app.domain.vault.VaultState
+import com.motovault.app.domain.model.assetIds
 import kotlinx.coroutines.CoroutineScope
 
 /** Compatibility adapter while persisted models remain in the UI package. */

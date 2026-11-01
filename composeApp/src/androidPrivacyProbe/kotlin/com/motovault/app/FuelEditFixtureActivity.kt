@@ -16,6 +16,7 @@ import com.motovault.app.ui.Digits
 import com.motovault.app.ui.LaunchConfig
 import com.motovault.app.ui.MotoVault
 import com.motovault.app.ui.VaultState
+import com.motovault.app.ui.seedData
 import com.motovault.app.ui.today
 import com.motovault.app.ui.vaultContext
 import kotlinx.coroutines.CoroutineScope

@@ -5,9 +5,9 @@ import com.motovault.app.application.fuel.FuelEntryRequest
 import com.motovault.app.application.fuel.FuelEditRequest
 import com.motovault.app.application.fuel.FuelEditRejected
 import com.motovault.app.application.fuel.FuelEntryEditor
-import com.motovault.app.ui.RideLog
-import com.motovault.app.ui.VaultState
-import com.motovault.app.ui.today
+import com.motovault.app.domain.model.RideLog
+import com.motovault.app.domain.vault.VaultState
+import com.motovault.app.domain.model.today
 import com.motovault.app.domain.fuel.FuelEntryRules
 import com.motovault.app.domain.fuel.FuelEntryIssue
 import com.motovault.app.domain.fuel.FuelTimelineEntry

@@ -2,8 +2,8 @@ package com.motovault.app.storage
 
 import com.motovault.app.domain.backup.BackupDocument
 import com.motovault.app.domain.backup.BackupDocumentPage
-import com.motovault.app.ui.DocumentPage
-import com.motovault.app.ui.VaultDocument
+import com.motovault.app.domain.model.DocumentPage
+import com.motovault.app.domain.model.VaultDocument
 
 internal fun VaultDocument.toBackupDocument() = BackupDocument(
     title = title, number = number, holder = holder, expiry = expiry, id = id, issued = issued,

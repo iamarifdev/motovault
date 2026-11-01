@@ -1,7 +1,7 @@
 package com.motovault.app.storage
 
 import com.motovault.app.domain.backup.*
-import com.motovault.app.ui.*
+import com.motovault.app.domain.model.*
 
 internal fun Ride.toBackupRide() = BackupRide(
     brandId, edition, year, odometer, modelId, modelName, registration,
@@ -15,7 +15,7 @@ internal fun BackupRide.toRide() = Ride(
     modelCode, factoryProfileId, odometerConfirmedDate
 )
 
-internal fun backupRideDisplayName(ride: BackupRide): String = ride.toRide().displayName
+internal fun backupRideDisplayName(ride: BackupRide): String = ride.toRide().modelName.ifBlank { com.motovault.app.domain.model.legacyBikeName(ride.brandId) ?: "Motorcycle" }
 
 private fun EngineOilMetadata.toBackupOil() = BackupOilMetadata(
     baseType, saeGrade, apiStandard, jasoStandard, productName, purchaseBasis, packVolumeMl, boughtQuantity, usedQuantityMl

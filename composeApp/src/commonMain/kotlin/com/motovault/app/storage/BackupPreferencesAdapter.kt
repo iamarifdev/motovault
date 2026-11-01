@@ -4,10 +4,10 @@ import com.motovault.app.domain.backup.BackupDigits
 import com.motovault.app.domain.backup.BackupLanguage
 import com.motovault.app.domain.backup.BackupPreferences
 import com.motovault.app.domain.backup.BackupReminderPolicy
-import com.motovault.app.ui.AppLanguage
-import com.motovault.app.ui.Digits
-import com.motovault.app.ui.ReminderPolicy
-import com.motovault.app.ui.VaultSettings
+import com.motovault.app.domain.model.AppLanguage
+import com.motovault.app.domain.model.Digits
+import com.motovault.app.domain.model.ReminderPolicy
+import com.motovault.app.domain.vault.VaultSettings
 
 internal fun VaultSettings.toBackupPreferences() = BackupPreferences(
     language = BackupLanguage.valueOf(language.name), digits = BackupDigits.valueOf(digits.name),

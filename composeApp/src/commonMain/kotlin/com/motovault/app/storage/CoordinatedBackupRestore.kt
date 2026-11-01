@@ -4,7 +4,7 @@ import com.motovault.app.application.PreparedVaultChange
 import com.motovault.app.application.VaultBackupRestorer
 import com.motovault.app.application.VaultWriter
 import com.motovault.app.storage.security.ProtectedDocumentStorage
-import com.motovault.app.ui.VaultState
+import com.motovault.app.domain.vault.VaultState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext

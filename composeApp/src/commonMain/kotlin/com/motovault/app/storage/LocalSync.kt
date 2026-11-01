@@ -2,8 +2,8 @@ package com.motovault.app.storage
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.motovault.app.ui.VaultState
-import com.motovault.app.ui.assetIds
+import com.motovault.app.domain.vault.VaultState
+import com.motovault.app.domain.model.assetIds
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

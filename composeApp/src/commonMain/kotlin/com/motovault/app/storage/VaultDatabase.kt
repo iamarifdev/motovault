@@ -6,7 +6,8 @@ import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.execSQL
 import androidx.room.migration.Migration
 import com.motovault.app.domain.model.ComponentRule
-import com.motovault.app.ui.*
+import com.motovault.app.domain.model.*
+import com.motovault.app.domain.vault.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.serialization.encodeToString

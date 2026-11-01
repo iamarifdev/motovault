@@ -60,3 +60,6 @@ data class ComponentRule(
         return (intervalKm - elapsed).coerceAtLeast(0.0)
     }
 }
+
+
+fun ComponentRule.reminderRevision() = "$lastServicedOdometerKm:$lastServicedEpochDays:$intervalKm:$intervalDays"

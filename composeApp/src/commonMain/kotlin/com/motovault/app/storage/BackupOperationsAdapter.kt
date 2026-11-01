@@ -5,7 +5,7 @@ import com.motovault.app.domain.backup.BackupPreview
 import com.motovault.app.domain.backup.BackupProgress
 import com.motovault.app.domain.backup.BackupUseCase
 import com.motovault.app.domain.backup.RestoreUseCase
-import com.motovault.app.ui.VaultState
+import com.motovault.app.domain.vault.VaultState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext

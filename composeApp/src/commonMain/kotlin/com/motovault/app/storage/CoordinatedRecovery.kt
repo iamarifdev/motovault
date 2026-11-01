@@ -4,8 +4,8 @@ import com.motovault.app.application.PreparedVaultChange
 import com.motovault.app.application.VaultRecovery
 import com.motovault.app.application.RecoverySummary
 import com.motovault.app.application.VaultWriter
-import com.motovault.app.ui.VaultState
-import com.motovault.app.ui.assetIds
+import com.motovault.app.domain.vault.VaultState
+import com.motovault.app.domain.model.assetIds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext

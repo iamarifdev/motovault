@@ -20,13 +20,6 @@ fun reviewedDocumentDetails(type: String, values: Map<String, String>, previous:
 }
 
 @Serializable
-data class DocumentPage(
-    val originalId: String, val previewId: String, val mimeType: String,
-    val width: Int, val height: Int, val side: String,
-    val acceptedId: String? = null
-)
-
-@Serializable
 data class CapturedDocument(
     val pages: List<DocumentPage>, val originalPdf: String? = null, val pdfPageCount: Int = 0,
     val recognizedText: String = "", val readingFailed: Boolean = false
