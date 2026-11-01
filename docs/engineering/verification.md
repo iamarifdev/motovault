@@ -25,9 +25,18 @@ Run `rtk run python3 -m unittest discover -s tools/tests -p test_localization_re
 
 The GitHub Actions workflow `.github/workflows/architecture-checks.yml` runs the portable dependency ratchet, shared package-cycle check, architecture-check fixtures, resource parity checks and roadmap checks on pushes and pull requests. It does not run the configured Gradle project-cycle check: project configuration currently requires the external Sky Design System source, which a clean checkout does not contain. Run the Gradle report and cycle check above in an environment with that source. CI execution and branch protection must be verified in GitHub after the workflow is pushed; the workflow's presence alone does not prove either.
 
-`rtk run python3 tools/ui_literal_gate.py` ratchets direct string literals supplied to shared UI `Text` calls and `contentDescription` assignments against `tools/ui-literal-baseline.json`. Each baseline entry records an owner and a removal task for the screen migration that must replace it; new literals and resolved entries both fail. The initial reviewed baseline contains 175 path/literal entries (177 occurrences) assigned to P04-04, P05-03, P09-04 and P11-02. `--inventory` prints the current inventory. Fixtures run with `rtk run python3 -m unittest discover -s tools/tests -p test_ui_literal_gate.py`. The lexical check does not detect indirect variables, custom text components, every semantics API, native sources or numeric literals, and its literal parsing is not a Kotlin parser. Do not interpret an empty inventory as full localization coverage.
+`rtk run python3 tools/ui_literal_gate.py` ratchets direct string literals supplied to shared UI `Text` calls and `contentDescription` assignments against `tools/ui-literal-baseline.json`. Each baseline entry records an owner and a removal task for the screen migration that must replace it; new literals and resolved entries both fail. The initial reviewed baseline contains 97 path/literal entries (97 occurrences) assigned to P04-04, P05-03, P09-04 and P11-02. `--inventory` prints the current inventory. Fixtures run with `rtk run python3 -m unittest discover -s tools/tests -p test_ui_literal_gate.py`. The lexical check does not detect indirect variables, custom text components, every semantics API, native sources or numeric literals, and its literal parsing is not a Kotlin parser. Do not interpret an empty inventory as full localization coverage.
 
 For an informative comparison with the current committed revision, run `rtk run python3 tools/compare_ui_literal_head.py`. It compares path and literal hashes and counts; it does not follow renamed files or prove the changed code contains no other hardcoded text. This comparison is not a stable CI ratchet because HEAD changes after each commit.
+
+Run `rtk run python3 tools/responsibility_gate.py` to ratchet handwritten
+Kotlin files above 400 lines and brace-delimited functions above 80 lines against
+`tools/responsibility-baseline.json`. Files above 600 lines need a recorded
+exception; growth and new over-threshold entries fail. Fixtures run with
+`rtk run python3 -m unittest discover -s tools/tests -p test_responsibility_gate.py`.
+The checker is lexical; it does not measure expression-body functions or judge
+whether a split has one coherent responsibility. Review [conventions](conventions.md)
+manually as well.
 
 The narrower fuel-presentation pilot is enforced with `rtk run python3 tools/ui_literal_gate.py --fuel` and runs in the GitHub workflow. It uses the explicit empty `tools/ui-fuel-literal-baseline.json`; a direct literal at the supported sinks fails rather than being silently accepted. The same lexical and sink limitations above apply, including no detection of indirect strings or magic numbers. The broad shared-UI baseline and the fuel pilot run together in CI.
 
