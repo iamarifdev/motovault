@@ -943,7 +943,7 @@
             },
             {
               "kind": "implementation",
-              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Controls.kt",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Buttons.kt",
               "summary": "Both native builds and all six r3 representative captures pass. Visual inspection confirms the holder/expiry clipping correction at normal and large text; reduced tab fades now follow v3. iOS real OS-motion r3 passes and restores Reduce Motion=0. Both OS appearance overrides restored. Remaining acceptance is fine motion comparison, native back/gesture and screen-reader focus/modal/announcement checks, plus owner-deferred physical Android/iPhone verification. Screenshots do not close those gates.",
               "at": "2026-10-25T14:23:09+00:00",
               "revision": "48fce40"
@@ -3169,7 +3169,7 @@
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/GarageScreen.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Controls.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Buttons.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/backup/BackupSheet.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt",
@@ -4296,11 +4296,47 @@
           "evidence": []
         },
         {
+          "id": "P08-05",
+          "title": "Complete app-wide localization and close the text-debt baseline",
+          "size": 8,
+          "depends_on": [
+            "P03A-05",
+            "P04A-06",
+            "P08-01"
+          ],
+          "acceptance": [
+            "All production user-facing text in common UI, domain/persisted display labels and Android/iOS native integrations resolves through shared resources or native resources/typed presentation.",
+            "Demo data, fixtures, input-alias tables and stable storage identifiers are documented separately and never counted as localized UI copy.",
+            "No new translated display text is persisted as UI-owned data; existing wire fields are preserved through typed presentation.",
+            "The expanded literal gate reaches zero for the audited user-facing sinks, or every remaining entry has an explicit data-only owner and justification."
+          ],
+          "verification": [
+            "Run English/Bangla resource parity, placeholder/plural and expanded literal-gate checks; switch language on Android and iOS and verify the affected screens plus native notifications/errors.",
+            "Review the localization gap report, the remaining responsibility baseline and persisted-data compatibility."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "design",
+            "android_runtime",
+            "ios_runtime",
+            "review"
+          ],
+          "status": "planned",
+          "owner": "Codex",
+          "started_at": null,
+          "completed_at": null,
+          "blocker": "",
+          "notes": [],
+          "evidence": []
+        },
+        {
           "id": "P08-04",
           "title": "Prepare and verify core release candidate and recovery handoff",
           "size": 3,
           "depends_on": [
-            "P08-03"
+            "P08-03",
+            "P08-05"
           ],
           "acceptance": [
             "Record release build, signing/distribution state, enabled features, privacy/store declarations and known limits.",

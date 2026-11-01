@@ -814,7 +814,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/App.tsx`, `design/app-ui-v3/src/components/Sheet.tsx`, `design/app-ui-v3/src/screens/Home.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/GarageScreen.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Controls.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/backup/BackupSheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`, `composeApp/src/androidInstrumentedTest/kotlin/com/motovault/app/storage/security/NativeAssetInstrumentation.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/GarageScreen.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Buttons.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/backup/BackupSheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`, `composeApp/src/androidInstrumentedTest/kotlin/com/motovault/app/storage/security/NativeAssetInstrumentation.kt`.
 - Proposed sources: `docs/engineering/decisions/ADR-0002-structural-cleanup.md`, `tools/responsibility_gate.py`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/screens/`.
 
 **Data and migration:** Moving persisted models is a source move only. Preserve Room JSON, backup payload, archive field names and schema versions; add frozen compatibility fixtures and recovery evidence before changing ownership.
@@ -1417,11 +1417,31 @@ Verification:
 
 Required completion evidence: verification, review.
 
+### P08-05: Complete app-wide localization and close the text-debt baseline
+
+Status: **Planned** | Size: **8** | Owner: Codex.
+
+Additional task dependencies: P03A-05, P04A-06, P08-01.
+
+Acceptance criteria:
+
+- All production user-facing text in common UI, domain/persisted display labels and Android/iOS native integrations resolves through shared resources or native resources/typed presentation.
+- Demo data, fixtures, input-alias tables and stable storage identifiers are documented separately and never counted as localized UI copy.
+- No new translated display text is persisted as UI-owned data; existing wire fields are preserved through typed presentation.
+- The expanded literal gate reaches zero for the audited user-facing sinks, or every remaining entry has an explicit data-only owner and justification.
+
+Verification:
+
+- Run English/Bangla resource parity, placeholder/plural and expanded literal-gate checks; switch language on Android and iOS and verify the affected screens plus native notifications/errors.
+- Review the localization gap report, the remaining responsibility baseline and persisted-data compatibility.
+
+Required completion evidence: implementation, verification, design, android_runtime, ios_runtime, review.
+
 ### P08-04: Prepare and verify core release candidate and recovery handoff
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P08-03.
+Additional task dependencies: P08-03, P08-05.
 
 Acceptance criteria:
 
