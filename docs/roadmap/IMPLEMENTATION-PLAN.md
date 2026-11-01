@@ -669,7 +669,7 @@ Required completion evidence: implementation, verification, android_runtime, ios
 
 ## P04: Bangladesh maintenance and used-bike onboarding
 
-**Priority:** P1 | **Scope:** core | **Current status:** Ready
+**Priority:** P1 | **Scope:** core | **Current status:** Done
 
 **Outcome:** A locally relevant bike setup leads to accurate, explainable owner-confirmed maintenance tasks.
 
@@ -696,7 +696,7 @@ Required completion evidence: implementation, verification, android_runtime, ios
 
 ### P04-01: Select initial local models and verify source manuals
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: None.
 
@@ -713,7 +713,7 @@ Required completion evidence: research, review.
 
 ### P04-02: Model distinct maintenance actions and source-backed schedules
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P04-01, P03A-02, P03A-03.
 
@@ -732,7 +732,7 @@ Required completion evidence: implementation, verification.
 
 ### P04-03: Add unknown-history and used-bike starting states
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P04-02, P03A-02, P03A-06, P03A-03.
 
@@ -753,7 +753,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P04-04: Expose schedule source, edits and local care actions in v3
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P04-02, P04-03, P03A-02, P03A-06, P03A-03.
 
@@ -774,7 +774,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P04-05: Verify schedule migration and Bangladesh setup end to end
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P04-04.
 

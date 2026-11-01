@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-01T03:50:10+00:00",
+  "updated_at": "2026-11-01T05:27:37+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -2851,13 +2851,37 @@
             "research",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-01T04:03:44+00:00",
+          "completed_at": "2026-11-01T04:58:08+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-01T04:03:44+00:00",
+              "text": "Researching a small Bangladesh model/manual set and traceable service intervals; no physical device required"
+            },
+            {
+              "at": "2026-11-01T04:58:08+00:00",
+              "text": "Two provisional Yamaha models with official manual revisions and page-traced intervals recorded; no structured pilot interviews, confirmation required at P08-03"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "research",
+              "reference": "docs/roadmap/evidence/P04-01-manual-research.md",
+              "summary": "Two provisional Yamaha models with official manual revisions and page-traced intervals recorded; no structured pilot interviews, confirmation required at P08-03",
+              "at": "2026-11-01T04:58:08+00:00",
+              "revision": "f33ff31"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P04-01-manual-research.md",
+              "summary": "Two provisional Yamaha models with official manual revisions and page-traced intervals recorded; no structured pilot interviews, confirmation required at P08-03",
+              "at": "2026-11-01T04:58:08+00:00",
+              "revision": "f33ff31"
+            }
+          ]
         },
         {
           "id": "P04-02",
@@ -2881,13 +2905,37 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-01T04:58:08+00:00",
+          "completed_at": "2026-11-01T05:27:29+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-01T04:58:08+00:00",
+              "text": "Implementing action-specific schedules, source provenance and running-in/reset policy with compatibility fixtures"
+            },
+            {
+              "at": "2026-11-01T05:27:29+00:00",
+              "text": "Action-specific schedules, source provenance, running-in removal and recurring start implemented with 274 passing unit tests and native probes"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P04-02-maintenance-model.md",
+              "summary": "Action-specific schedules, source provenance, running-in removal and recurring start implemented with 274 passing unit tests and native probes",
+              "at": "2026-11-01T05:27:29+00:00",
+              "revision": "f33ff31"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04-02-maintenance-model.md",
+              "summary": "Action-specific schedules, source provenance, running-in removal and recurring start implemented with 274 passing unit tests and native probes",
+              "at": "2026-11-01T05:27:29+00:00",
+              "revision": "f33ff31"
+            }
+          ]
         },
         {
           "id": "P04-03",
@@ -2915,15 +2963,19 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
+          "status": "done",
+          "owner": "Codex",
           "started_at": null,
-          "completed_at": null,
+          "completed_at": "2026-11-01T05:27:31+00:00",
           "blocker": "",
           "notes": [
             {
               "at": "2026-10-23T23:17:33+00:00",
               "text": "P00-D03: unknown-service and empty fixtures currently have the same no-rule shape. Add explicit baseline certainty rather than inventing a service record."
+            },
+            {
+              "at": "2026-11-01T05:27:31+00:00",
+              "text": "Unknown/known baseline onboarding, first-inspection checklist and later baseline completion implemented and screenshot-verified on the Android emulator; shared state checked on iOS"
             }
           ],
           "evidence": [
@@ -2933,6 +2985,27 @@
               "summary": "P00-D03: unknown-service and empty fixtures currently have the same no-rule shape. Add explicit baseline certainty rather than inventing a service record.",
               "at": "2026-10-23T23:17:33+00:00",
               "revision": "50eda3a"
+            },
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P04-03-unknown-baseline.md",
+              "summary": "Unknown/known baseline onboarding, first-inspection checklist and later baseline completion implemented and screenshot-verified on the Android emulator; shared state checked on iOS",
+              "at": "2026-11-01T05:27:31+00:00",
+              "revision": "f33ff31"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04-03-unknown-baseline.md",
+              "summary": "Unknown/known baseline onboarding, first-inspection checklist and later baseline completion implemented and screenshot-verified on the Android emulator; shared state checked on iOS",
+              "at": "2026-11-01T05:27:31+00:00",
+              "revision": "f33ff31"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P04-android-onboarding-unknown.png",
+              "summary": "Unknown/known baseline onboarding, first-inspection checklist and later baseline completion implemented and screenshot-verified on the Android emulator; shared state checked on iOS",
+              "at": "2026-11-01T05:27:31+00:00",
+              "revision": "f33ff31"
             }
           ]
         },
@@ -2963,13 +3036,40 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
+          "status": "done",
+          "owner": "Codex",
           "started_at": null,
-          "completed_at": null,
+          "completed_at": "2026-11-01T05:27:34+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-01T05:27:34+00:00",
+              "text": "Gauge detail shows action, source revision/page, applicability and editable intervals; service flow supports action-specific multi-line resets and was exercised on the Android emulator"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P04-04-schedule-ui.md",
+              "summary": "Gauge detail shows action, source revision/page, applicability and editable intervals; service flow supports action-specific multi-line resets and was exercised on the Android emulator",
+              "at": "2026-11-01T05:27:34+00:00",
+              "revision": "f33ff31"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04-04-schedule-ui.md",
+              "summary": "Gauge detail shows action, source revision/page, applicability and editable intervals; service flow supports action-specific multi-line resets and was exercised on the Android emulator",
+              "at": "2026-11-01T05:27:34+00:00",
+              "revision": "f33ff31"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P04-android-schedule-details.png",
+              "summary": "Gauge detail shows action, source revision/page, applicability and editable intervals; service flow supports action-specific multi-line resets and was exercised on the Android emulator",
+              "at": "2026-11-01T05:27:34+00:00",
+              "revision": "f33ff31"
+            }
+          ]
         },
         {
           "id": "P04-05",
@@ -2992,13 +3092,54 @@
             "ios_runtime",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
+          "status": "done",
+          "owner": "Codex",
           "started_at": null,
-          "completed_at": null,
+          "completed_at": "2026-11-01T05:27:37+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-01T05:27:37+00:00",
+              "text": "Legacy schedule JSON and backup payload fields round-trip; 36-check Android and 21-check iOS simulator probes cover supported, unsupported and unknown-history scenarios; no physical device used"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04-05-runtime-verification.md",
+              "summary": "Legacy schedule JSON and backup payload fields round-trip; 36-check Android and 21-check iOS simulator probes cover supported, unsupported and unknown-history scenarios; no physical device used",
+              "at": "2026-11-01T05:27:37+00:00",
+              "revision": "f33ff31"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P04-android-schedule-details.png",
+              "summary": "Legacy schedule JSON and backup payload fields round-trip; 36-check Android and 21-check iOS simulator probes cover supported, unsupported and unknown-history scenarios; no physical device used",
+              "at": "2026-11-01T05:27:37+00:00",
+              "revision": "f33ff31"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P04-android-onboarding-unknown.png",
+              "summary": "Legacy schedule JSON and backup payload fields round-trip; 36-check Android and 21-check iOS simulator probes cover supported, unsupported and unknown-history scenarios; no physical device used",
+              "at": "2026-11-01T05:27:37+00:00",
+              "revision": "f33ff31"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P04-ios-native-probe.txt",
+              "summary": "Legacy schedule JSON and backup payload fields round-trip; 36-check Android and 21-check iOS simulator probes cover supported, unsupported and unknown-history scenarios; no physical device used",
+              "at": "2026-11-01T05:27:37+00:00",
+              "revision": "f33ff31"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P04-05-runtime-verification.md",
+              "summary": "Legacy schedule JSON and backup payload fields round-trip; 36-check Android and 21-check iOS simulator probes cover supported, unsupported and unknown-history scenarios; no physical device used",
+              "at": "2026-11-01T05:27:37+00:00",
+              "revision": "f33ff31"
+            }
+          ]
         }
       ],
       "architecture_application": [
@@ -6898,6 +7039,62 @@
       "to": "done",
       "note": "Dependency, package-cycle, scoped literal, numeric-policy and localization gates enforced with reviewed baselines, fixtures, documentation and CI; all 46 tool tests and roadmap check passed",
       "revision": "860c3ec"
+    },
+    {
+      "at": "2026-11-01T04:03:44+00:00",
+      "task": "P04-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Researching a small Bangladesh model/manual set and traceable service intervals; no physical device required",
+      "revision": "f33ff31"
+    },
+    {
+      "at": "2026-11-01T04:58:08+00:00",
+      "task": "P04-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Two provisional Yamaha models with official manual revisions and page-traced intervals recorded; no structured pilot interviews, confirmation required at P08-03",
+      "revision": "f33ff31"
+    },
+    {
+      "at": "2026-11-01T04:58:08+00:00",
+      "task": "P04-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implementing action-specific schedules, source provenance and running-in/reset policy with compatibility fixtures",
+      "revision": "f33ff31"
+    },
+    {
+      "at": "2026-11-01T05:27:29+00:00",
+      "task": "P04-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Action-specific schedules, source provenance, running-in removal and recurring start implemented with 274 passing unit tests and native probes",
+      "revision": "f33ff31"
+    },
+    {
+      "at": "2026-11-01T05:27:31+00:00",
+      "task": "P04-03",
+      "from": "planned",
+      "to": "done",
+      "note": "Unknown/known baseline onboarding, first-inspection checklist and later baseline completion implemented and screenshot-verified on the Android emulator; shared state checked on iOS",
+      "revision": "f33ff31"
+    },
+    {
+      "at": "2026-11-01T05:27:34+00:00",
+      "task": "P04-04",
+      "from": "planned",
+      "to": "done",
+      "note": "Gauge detail shows action, source revision/page, applicability and editable intervals; service flow supports action-specific multi-line resets and was exercised on the Android emulator",
+      "revision": "f33ff31"
+    },
+    {
+      "at": "2026-11-01T05:27:37+00:00",
+      "task": "P04-05",
+      "from": "planned",
+      "to": "done",
+      "note": "Legacy schedule JSON and backup payload fields round-trip; 36-check Android and 21-check iOS simulator probes cover supported, unsupported and unknown-history scenarios; no physical device used",
+      "revision": "f33ff31"
     }
   ]
 }
