@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-01T06:13:00+00:00",
+  "updated_at": "2026-11-01T08:56:06+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -3563,6 +3563,73 @@
               "revision": "82c5fec"
             }
           ]
+        },
+        {
+          "id": "P04A-08",
+          "title": "Establish app-wide localization and SRP baseline",
+          "size": 5,
+          "depends_on": [
+            "P04A-07"
+          ],
+          "acceptance": [
+            "All active shared UI, catalogue, native prompt and authentication copy resolves through resources or typed presentation.",
+            "Bangla copy follows localization-style.md and is guarded by the regression lint; English/Bangla parity and placeholders pass.",
+            "Persisted identity uses stable IDs/codes and no new localized display label is stored as record identity.",
+            "No production file exceeds 400 lines; the responsibility baseline contains only documented test support.",
+            "Literal, copy, responsibility, dependency, package-cycle and architecture checks run in CI."
+          ],
+          "verification": [
+            "Run 274 shared tests and Android/iOS shared compilation.",
+            "Run bangla_copy_lint.py, ui_literal_gate.py, responsibility_gate.py, dependency/package-cycle checks and resource parity.",
+            "Review the localization gap report, style guide and responsibility baseline."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "design",
+            "review"
+          ],
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-01T08:56:06+00:00",
+          "completed_at": "2026-11-01T08:56:06+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-01T08:56:06+00:00",
+              "text": "Established resources, stable-ID presentation, modern Bangla copy and the SRP baseline; runtime language switching remains P08-05."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P04A-08-localization-establishment.md",
+              "summary": "Established resources, stable-ID presentation, modern Bangla copy and the SRP baseline; runtime language switching remains P08-05.",
+              "at": "2026-11-01T08:56:06+00:00",
+              "revision": "d8507d8+worktree"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P04A-08-localization-establishment.md",
+              "summary": "274 tests, Android/iOS compilation, copy lint, literal, responsibility, dependency/package-cycle and roadmap checks pass.",
+              "at": "2026-11-01T08:56:06+00:00",
+              "revision": "d8507d8+worktree"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/engineering/localization-style.md",
+              "summary": "Bangla product-copy style and review checklist established.",
+              "at": "2026-11-01T08:56:06+00:00",
+              "revision": "d8507d8+worktree"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/engineering/localization-gap.md",
+              "summary": "Full localization and SRP gap audit reviewed; remaining entries are data/aliases or test support.",
+              "at": "2026-11-01T08:56:06+00:00",
+              "revision": "d8507d8+worktree"
+            }
+          ]
         }
       ]
     },
@@ -3579,7 +3646,8 @@
         "P03A-03",
         "P03A-04",
         "P03A-05",
-        "P04A-07"
+        "P04A-07",
+        "P04A-08"
       ],
       "design": "Vault document detail gains Renew, official verification and renewal history. Reuse DocAdd review, date chips, receipt attachment and a return-to-document flow.",
       "prototype_paths": [
@@ -3610,7 +3678,8 @@
           "title": "Verify official links, document applicability and checklist content",
           "size": 3,
           "depends_on": [
-            "P04A-07"
+            "P04A-07",
+            "P04A-08"
           ],
           "acceptance": [
             "Record official sources, checked dates and applicable document categories.",
@@ -3740,7 +3809,8 @@
       ],
       "architecture_application": [
         "Documents owns renewal events and checklist state; official-link launch and reminders use native ports; ledger fee operations use application contracts without feature UI dependencies.",
-        "Preserve document originals and localized renewal/notification text through saves, Undo and recovery."
+        "Preserve document originals and localized renewal/notification text through saves, Undo and recovery.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     },
     {
@@ -3756,7 +3826,8 @@
         "P03A-03",
         "P03A-04",
         "P03A-05",
-        "P04A-07"
+        "P04A-07",
+        "P04A-08"
       ],
       "design": "History retains its summary and expandable timeline. Add period/category chips and a cost-details sheet; keep fuel entry taka-first and use the v3 keypad.",
       "prototype_paths": [
@@ -3787,7 +3858,8 @@
           "title": "Define money, distance coverage and cost metrics",
           "size": 3,
           "depends_on": [
-            "P04A-07"
+            "P04A-07",
+            "P04A-08"
           ],
           "acceptance": [
             "Specify integer-poisha conversions, category rules, date windows and recorded-distance denominator.",
@@ -3938,7 +4010,8 @@
       ],
       "architecture_application": [
         "Ledger owns money, fuel and cost domain rules with typed units and explicit rounding. P06-01 defines their contract before implementation; P03A-03 pilots fuel state and save flows.",
-        "Use localized amounts and explanations only for display; maintain compatible legacy conversions, atomic commits, correction and Undo."
+        "Use localized amounts and explanations only for display; maintain compatible legacy conversions, atomic commits, correction and Undo.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     },
     {
@@ -3954,7 +4027,8 @@
         "P03A-03",
         "P03A-04",
         "P03A-05",
-        "P04A-07"
+        "P04A-07",
+        "P04A-08"
       ],
       "design": "Keep the center add menu and existing fuel/service/odometer sheets. Native capture fills the existing review draft, keeping explicit confirmation and durable Undo.",
       "prototype_paths": [
@@ -3989,7 +4063,8 @@
           "depends_on": [
             "P03A-02",
             "P03A-03",
-            "P04A-07"
+            "P04A-07",
+            "P04A-08"
           ],
           "acceptance": [
             "Use one normalized draft for manual, pasted, photo and voice inputs with explicit source/confidence.",
@@ -4155,7 +4230,8 @@
       ],
       "architecture_application": [
         "Capture creates reviewed feature drafts; camera, share, voice and permissions sit behind narrow host/native boundaries and never directly write the vault.",
-        "Keep parsing rules, locale-aware numeric entry, privacy and permission/error messages testable and localized on both platforms."
+        "Keep parsing rules, locale-aware numeric entry, privacy and permission/error messages testable and localized on both platforms.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     },
     {
@@ -4171,7 +4247,8 @@
         "P05-04",
         "P06-05",
         "P07-05",
-        "P04A-07"
+        "P04A-07",
+        "P04A-08"
       ],
       "design": "Audit the complete four-tab experience. Remove obsolete demo claims from enabled production flows while preserving v3 layout, motion and native brand logos.",
       "prototype_paths": [
@@ -4302,17 +4379,21 @@
           "depends_on": [
             "P03A-05",
             "P04A-06",
-            "P08-01"
+            "P08-01",
+            "P04A-08"
           ],
           "acceptance": [
             "All production user-facing text in common UI, domain/persisted display labels and Android/iOS native integrations resolves through shared resources or native resources/typed presentation.",
+            "Bangla copy is reviewed against the product style guide (bKash/Pathao-style concise Bangla), with English/Bangla parity and placeholders/plurals intact.",
             "Demo data, fixtures, input-alias tables and stable storage identifiers are documented separately and never counted as localized UI copy.",
-            "No new translated display text is persisted as UI-owned data; existing wire fields are preserved through typed presentation.",
-            "The expanded literal gate reaches zero for the audited user-facing sinks, or every remaining entry has an explicit data-only owner and justification."
+            "No new translated display text is persisted as UI-owned data; existing wire fields are preserved through stable IDs and typed presentation.",
+            "The expanded literal gate reaches zero for the audited user-facing sinks, or every remaining entry has an explicit data-only owner and justification.",
+            "No production file exceeds 400 lines and no function exceeds 80 lines; any documented exception has an owner and removal trigger."
           ],
           "verification": [
-            "Run English/Bangla resource parity, placeholder/plural and expanded literal-gate checks; switch language on Android and iOS and verify the affected screens plus native notifications/errors.",
-            "Review the localization gap report, the remaining responsibility baseline and persisted-data compatibility."
+            "Run English/Bangla resource parity, placeholder/plural, Bangla-copy lint, expanded literal-gate, responsibility and architecture checks.",
+            "Switch language on Android and iOS and verify the affected screens plus native notifications/errors; retain screenshots or recordings.",
+            "Review the localization gap report, style guide, responsibility baseline and persisted-data compatibility."
           ],
           "required_evidence": [
             "implementation",
@@ -4327,7 +4408,12 @@
           "started_at": null,
           "completed_at": null,
           "blocker": "",
-          "notes": [],
+          "notes": [
+            {
+              "at": "2026-11-01T08:56:06+00:00",
+              "text": "Implementation, copy style and static gates are recorded in P04A-08; Android/iOS language-switch evidence remains pending before this task can close."
+            }
+          ],
           "evidence": []
         },
         {
@@ -4362,7 +4448,8 @@
       ],
       "architecture_application": [
         "The core release includes P03A foundation, pilot, P03 backup adaptation and automated architecture/localization gates; independently preserve all product, design and physical-device gates.",
-        "Review changed-feature module boundaries, single writer, migration/recovery, constants and Bangla/English behavior against actual recorded evidence."
+        "Review changed-feature module boundaries, single writer, migration/recovery, constants and Bangla/English behavior against actual recorded evidence.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     },
     {
@@ -4552,7 +4639,8 @@
       ],
       "architecture_application": [
         "Garage owns bike identity/switching, application coordinates bike-scoped commands, and storage provides migration/compatibility behind contracts; features do not import garage UI.",
-        "Preserve cross-bike isolation in state, reminders, assets, backup and Undo, with migration and restore fixtures."
+        "Preserve cross-bike isolation in state, reminders, assets, backup and Undo, with migration and restore fixtures.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     },
     {
@@ -4715,7 +4803,8 @@
       ],
       "architecture_application": [
         "Workshop/repair functionality has a cohesive feature boundary and application contracts for ledger, reminders and portable records; shared domain types do not import feature UI.",
-        "Use named warranty policy values, localized controls and privacy-preserving contact storage with compatible recovery."
+        "Use named warranty policy values, localized controls and privacy-preserving contact storage with compatible recovery.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     },
     {
@@ -4876,7 +4965,8 @@
       ],
       "architecture_application": [
         "Handover selection and export are feature presentation plus application orchestration and native export adapters; preserve existing passport and backup contracts.",
-        "Use resource-backed output labels and explicit privacy defaults; verify format compatibility and buyer-readable native output."
+        "Use resource-backed output labels and explicit privacy defaults; verify format compatibility and buyer-readable native output.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     },
     {
@@ -5038,7 +5128,8 @@
       ],
       "architecture_application": [
         "Keep widget rendering, lifecycle and deep links in Android/iOS adapters; provide a minimal immutable projection through an application contract, not direct UI/Room access.",
-        "Localize widget and accessibility text; validate privacy, stale-state refresh, lifecycle and platform behavior."
+        "Localize widget and accessibility text; validate privacy, stale-state refresh, lifecycle and platform behavior.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     },
     {
@@ -5201,7 +5292,8 @@
       ],
       "architecture_application": [
         "Seasonal care policies and sourced content belong to their feature; weather, dialing and location sharing use optional permission-aware native/external ports.",
-        "Use named thresholds, localized help and consent text; ensure offline behavior and no implicit location sharing."
+        "Use named thresholds, localized help and consent text; ensure offline behavior and no implicit location sharing.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     },
     {
@@ -5359,7 +5451,8 @@
       ],
       "architecture_application": [
         "Keep opt-in work ledger accounting in a dedicated feature and domain/application rules, using shared money policy without importing other feature presentation.",
-        "Use typed monetary values and localized summaries; verify privacy, opt-in state and backup compatibility."
+        "Use typed monetary values and localized summaries; verify privacy, opt-in state and backup compatibility.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     },
     {
@@ -5578,7 +5671,8 @@
       ],
       "architecture_application": [
         "Cloud backup consumes the existing versioned local archive through application contracts; encryption, account, network and storage implementations remain adapters.",
-        "Preserve local-first operation, key separation, retry/cancellation behavior and truthful localized statuses; retain staging and explicit production enablement gates."
+        "Preserve local-first operation, key separation, retry/cancellation behavior and truthful localized statuses; retain staging and explicit production enablement gates.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     },
     {
@@ -5700,7 +5794,8 @@
       ],
       "architecture_application": [
         "Expanded release verifies the completed P03A architecture controls and phase-specific boundaries in addition to the existing migration, platform and release evidence.",
-        "Record remaining exceptions with ownership and retirement work; release never implies optional cloud/rider enablement."
+        "Record remaining exceptions with ownership and retirement work; release never implies optional cloud/rider enablement.",
+        "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
       ]
     }
   ],
@@ -7640,6 +7735,14 @@
       "to": "done",
       "note": "274 tests, 36-check Android probe and 21-check iOS probe pass after split/model move; storage has zero ui imports; responsibility and roadmap gates pass",
       "revision": "82c5fec"
+    },
+    {
+      "at": "2026-11-01T08:56:06+00:00",
+      "task": "P04A-08",
+      "from": "planned",
+      "to": "done",
+      "note": "Recorded completed app-wide localization/SRP establishment ahead of P08-05 runtime evidence.",
+      "revision": "d8507d8+worktree"
     }
   ]
 }

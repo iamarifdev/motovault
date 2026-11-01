@@ -947,6 +947,28 @@ Verification:
 
 Required completion evidence: verification, design, android_runtime, ios_runtime, review.
 
+### P04A-08: Establish app-wide localization and SRP baseline
+
+Status: **Done** | Size: **5** | Owner: Codex.
+
+Additional task dependencies: P04A-07.
+
+Acceptance criteria:
+
+- All active shared UI, catalogue, native prompt and authentication copy resolves through resources or typed presentation.
+- Bangla copy follows localization-style.md and is guarded by the regression lint; English/Bangla parity and placeholders pass.
+- Persisted identity uses stable IDs/codes and no new localized display label is stored as record identity.
+- No production file exceeds 400 lines; the responsibility baseline contains only documented test support.
+- Literal, copy, responsibility, dependency, package-cycle and architecture checks run in CI.
+
+Verification:
+
+- Run 274 shared tests and Android/iOS shared compilation.
+- Run bangla_copy_lint.py, ui_literal_gate.py, responsibility_gate.py, dependency/package-cycle checks and resource parity.
+- Review the localization gap report, style guide and responsibility baseline.
+
+Required completion evidence: implementation, verification, design, review.
+
 **Phase exit gate:**
 
 - Proved-unused legacy UI paths are deleted with call-site evidence and no active route regression.
@@ -967,7 +989,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Why now:** Document storage is already present; guided action closes the practical ownership loop.
 
-**Entry dependencies:** P01-05, P02-05, P03A-03, P03A-04, P03A-05, P04A-07.
+**Entry dependencies:** P01-05, P02-05, P03A-03, P03A-04, P03A-05, P04A-07, P04A-08.
 
 **V3 placement and interaction:** Vault document detail gains Renew, official verification and renewal history. Reuse DocAdd review, date chips, receipt attachment and a return-to-document flow.
 
@@ -983,6 +1005,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 - Documents owns renewal events and checklist state; official-link launch and reminders use native ports; ledger fee operations use application contracts without feature UI dependencies.
 - Preserve document originals and localized renewal/notification text through saves, Undo and recovery.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 
@@ -990,7 +1013,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P04A-07.
+Additional task dependencies: P04A-07, P04A-08.
 
 Acceptance criteria:
 
@@ -1078,7 +1101,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Why now:** Extends the existing 30-day total into practical decisions for cost-conscious owners.
 
-**Entry dependencies:** P00-04, P00-05, P03A-03, P03A-04, P03A-05, P04A-07.
+**Entry dependencies:** P00-04, P00-05, P03A-03, P03A-04, P03A-05, P04A-07, P04A-08.
 
 **V3 placement and interaction:** History retains its summary and expandable timeline. Add period/category chips and a cost-details sheet; keep fuel entry taka-first and use the v3 keypad.
 
@@ -1094,6 +1117,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 - Ledger owns money, fuel and cost domain rules with typed units and explicit rounding. P06-01 defines their contract before implementation; P03A-03 pilots fuel state and save flows.
 - Use localized amounts and explanations only for display; maintain compatible legacy conversions, atomic commits, correction and Undo.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 
@@ -1101,7 +1125,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P04A-07.
+Additional task dependencies: P04A-07, P04A-08.
 
 Acceptance criteria:
 
@@ -1210,7 +1234,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 **Why now:** Reduces the effort needed to maintain a useful ownership history.
 
-**Entry dependencies:** P01-05, P02-05, P03A-03, P03A-04, P03A-05, P04A-07.
+**Entry dependencies:** P01-05, P02-05, P03A-03, P03A-04, P03A-05, P04A-07, P04A-08.
 
 **V3 placement and interaction:** Keep the center add menu and existing fuel/service/odometer sheets. Native capture fills the existing review draft, keeping explicit confirmation and durable Undo.
 
@@ -1226,6 +1250,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 - Capture creates reviewed feature drafts; camera, share, voice and permissions sit behind narrow host/native boundaries and never directly write the vault.
 - Keep parsing rules, locale-aware numeric entry, privacy and permission/error messages testable and localized on both platforms.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 
@@ -1233,7 +1258,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 Status: **Planned** | Size: **3** | Owner: unassigned.
 
-Additional task dependencies: P03A-02, P03A-03, P04A-07.
+Additional task dependencies: P03A-02, P03A-03, P04A-07, P04A-08.
 
 Acceptance criteria:
 
@@ -1346,7 +1371,7 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 **Why now:** Release confidence is a separate deliverable from completing feature code.
 
-**Entry dependencies:** P03-05, P04-05, P05-04, P06-05, P07-05, P04A-07.
+**Entry dependencies:** P03-05, P04-05, P05-04, P06-05, P07-05, P04A-07, P04A-08.
 
 **V3 placement and interaction:** Audit the complete four-tab experience. Remove obsolete demo claims from enabled production flows while preserving v3 layout, motion and native brand logos.
 
@@ -1362,6 +1387,7 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 - The core release includes P03A foundation, pilot, P03 backup adaptation and automated architecture/localization gates; independently preserve all product, design and physical-device gates.
 - Review changed-feature module boundaries, single writer, migration/recovery, constants and Bangla/English behavior against actual recorded evidence.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 
@@ -1421,19 +1447,22 @@ Required completion evidence: verification, review.
 
 Status: **Planned** | Size: **8** | Owner: Codex.
 
-Additional task dependencies: P03A-05, P04A-06, P08-01.
+Additional task dependencies: P03A-05, P04A-06, P08-01, P04A-08.
 
 Acceptance criteria:
 
 - All production user-facing text in common UI, domain/persisted display labels and Android/iOS native integrations resolves through shared resources or native resources/typed presentation.
+- Bangla copy is reviewed against the product style guide (bKash/Pathao-style concise Bangla), with English/Bangla parity and placeholders/plurals intact.
 - Demo data, fixtures, input-alias tables and stable storage identifiers are documented separately and never counted as localized UI copy.
-- No new translated display text is persisted as UI-owned data; existing wire fields are preserved through typed presentation.
+- No new translated display text is persisted as UI-owned data; existing wire fields are preserved through stable IDs and typed presentation.
 - The expanded literal gate reaches zero for the audited user-facing sinks, or every remaining entry has an explicit data-only owner and justification.
+- No production file exceeds 400 lines and no function exceeds 80 lines; any documented exception has an owner and removal trigger.
 
 Verification:
 
-- Run English/Bangla resource parity, placeholder/plural and expanded literal-gate checks; switch language on Android and iOS and verify the affected screens plus native notifications/errors.
-- Review the localization gap report, the remaining responsibility baseline and persisted-data compatibility.
+- Run English/Bangla resource parity, placeholder/plural, Bangla-copy lint, expanded literal-gate, responsibility and architecture checks.
+- Switch language on Android and iOS and verify the affected screens plus native notifications/errors; retain screenshots or recordings.
+- Review the localization gap report, style guide, responsibility baseline and persisted-data compatibility.
 
 Required completion evidence: implementation, verification, design, android_runtime, ios_runtime, review.
 
@@ -1488,6 +1517,7 @@ Required completion evidence: verification, android_device, ios_device, review.
 
 - Garage owns bike identity/switching, application coordinates bike-scoped commands, and storage provides migration/compatibility behind contracts; features do not import garage UI.
 - Preserve cross-bike isolation in state, reminders, assets, backup and Undo, with migration and restore fixtures.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 
@@ -1620,6 +1650,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 - Workshop/repair functionality has a cohesive feature boundary and application contracts for ledger, reminders and portable records; shared domain types do not import feature UI.
 - Use named warranty policy values, localized controls and privacy-preserving contact storage with compatible recovery.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 
@@ -1735,6 +1766,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 - Handover selection and export are feature presentation plus application orchestration and native export adapters; preserve existing passport and backup contracts.
 - Use resource-backed output labels and explicit privacy defaults; verify format compatibility and buyer-readable native output.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 
@@ -1848,6 +1880,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 - Keep widget rendering, lifecycle and deep links in Android/iOS adapters; provide a minimal immutable projection through an application contract, not direct UI/Room access.
 - Localize widget and accessibility text; validate privacy, stale-state refresh, lifecycle and platform behavior.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 
@@ -1961,6 +1994,7 @@ Required completion evidence: verification, design, android_device, ios_device.
 
 - Seasonal care policies and sourced content belong to their feature; weather, dialing and location sharing use optional permission-aware native/external ports.
 - Use named thresholds, localized help and consent text; ensure offline behavior and no implicit location sharing.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 
@@ -2074,6 +2108,7 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 - Keep opt-in work ledger accounting in a dedicated feature and domain/application rules, using shared money policy without importing other feature presentation.
 - Use typed monetary values and localized summaries; verify privacy, opt-in state and backup compatibility.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 
@@ -2185,6 +2220,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 - Cloud backup consumes the existing versioned local archive through application contracts; encryption, account, network and storage implementations remain adapters.
 - Preserve local-first operation, key separation, retry/cancellation behavior and truthful localized statuses; retain staging and explicit production enablement gates.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 
@@ -2332,6 +2368,7 @@ Required completion evidence: verification, cloud, review.
 
 - Expanded release verifies the completed P03A architecture controls and phase-specific boundaries in addition to the existing migration, platform and release evidence.
 - Record remaining exceptions with ownership and retirement work; release never implies optional cloud/rider enablement.
+- Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green.
 
 **Tasks:**
 

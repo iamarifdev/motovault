@@ -34,7 +34,7 @@ actual task status; captured product defects remain open in later phases.
 | Foundation | P00 | Reproducible fixtures, design contract, migration strategy and tracker |
 | Trustworthy local beta | P01-P03 | Real reminders, protected documents, encrypted backup and complete restore |
 | Production architecture foundation | P03A | Shared workflow, dependency boundaries, localization, fuel pilot, backup adaptation and quality gates |
-| Architecture cleanup | P04A | Remove dead legacy UI, split large screens/sheets, complete data/UI ownership and add a responsibility ratchet |
+| Architecture cleanup | P04A | Remove dead legacy UI, split large screens/sheets, complete data/UI ownership, extract app-wide copy and add localization/responsibility ratchets |
 | Core ownership release | P04-P08 | Bangladesh maintenance, renewal assistance, cost insights, native capture and release evidence |
 | Additional ownership | P09-P13, P16 | Multiple bikes, workshops/warranties, handover pack, real widgets and seasonal/breakdown help |
 | Optional rider mode | P14 | Recorded work earnings and cost attribution, separately piloted |
@@ -48,8 +48,10 @@ P03A sits between P03 and P04. P04A follows P04 and is a prerequisite for P05,
 P06, P07 and P08, so the cleanup is not deferred behind the remaining feature
 work. P08 and both release milestones also require P03A and P04A evidence. The
 cleanup phase was added after the post-P04 audit found residual large UI files,
-dead legacy paths and storage-to-UI imports; this is recorded as an intentional
-scope change in the tracker.
+dead legacy paths and storage-to-UI imports. P04A-08 records the completed
+localization/SRP establishment; P08-05 keeps the remaining Android/iOS runtime
+language-switch evidence as a release gate. Both changes are intentional scope
+updates in the tracker.
 
 No calendar promises are assigned before implementation baselines and initial
 slices are measured. Relative sizes 1/2/3/5/8 help split work and compare scope;
