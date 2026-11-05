@@ -140,7 +140,7 @@ internal fun NativeAssetInstrumentation.checkRecoveryUi(language: String, confli
             waitForText(progress)
             val outcome = if (conflict) {
                 if (english) "Your current records changed. Review the vault again before continuing."
-                else "আপনার বর্তমান তথ্য বদলেছে। আবার দেখে নিশ্চিত করুন।"
+                else "বর্তমান তথ্য বদলে গেছে। আবার দেখে কনফার্ম করুন।"
             } else {
                 if (english) "The previous vault is restored." else "আগের ভল্টে ফিরে গেছেন।"
             }
