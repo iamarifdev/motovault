@@ -12,6 +12,14 @@ data class BackupDocumentPage(
 )
 
 @Serializable
+data class BackupDocumentRenewal(
+    val documentId: String, val kind: String, val previousExpiry: String, val newExpiry: String,
+    val renewedOn: String, val documentRevision: Int, val id: String = newBackupRecordId(),
+    val feePoisha: Int? = null, val receiptId: String? = null, val notes: String = "",
+    val sourceCheckedOn: String = "", val feeLogId: String? = null
+)
+
+@Serializable
 data class BackupDocument(
     val title: String, val number: String, val holder: String, val expiry: String,
     val id: String = newBackupRecordId(), val issued: String = "",
@@ -21,9 +29,12 @@ data class BackupDocument(
     val detailsConfirmed: Boolean = false,
     val extractionCandidates: Map<String, String> = emptyMap(), val capturedAt: String = "",
     val reminder: Boolean = false, val kind: String = "", val reminderWarningDays: Int? = null,
-    val reminderSnoozedUntil: String? = null
+    val reminderSnoozedUntil: String? = null, val revision: Int = 0,
+    val renewals: List<BackupDocumentRenewal> = emptyList(),
+    val checkedRenewalSteps: List<String> = emptyList()
 ) {
-    fun assetIds(): Set<String> = pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() + listOfNotNull(originalPdf)
+    fun assetIds(): Set<String> = pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() +
+        listOfNotNull(originalPdf) + renewals.mapNotNull { it.receiptId }
 }
 
 // Mirrors the legacy default for old V1 payloads that do not contain an ID.

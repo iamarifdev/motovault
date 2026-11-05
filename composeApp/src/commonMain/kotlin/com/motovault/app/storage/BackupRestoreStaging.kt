@@ -80,7 +80,8 @@ internal object BackupRestoreStaging {
                                 originalId = mapped(page.originalId)!!,
                                 previewId = mapped(page.previewId)!!,
                                 acceptedId = mapped(page.acceptedId)
-                            ) }
+                            ) },
+                            renewals = restored.renewals.map { renewal -> renewal.copy(receiptId = mapped(renewal.receiptId)) }
                         )
                     },
                     appearance = appearance,

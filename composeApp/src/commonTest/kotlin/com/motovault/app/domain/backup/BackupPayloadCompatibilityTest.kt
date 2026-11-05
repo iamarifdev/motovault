@@ -107,6 +107,40 @@ class BackupPayloadCompatibilityTest {
     }
 
     @Test
+    fun preP05DocumentWirePayloadUsesSafeRenewalDefaults() {
+        val document = json.decodeFromString<BackupDocument>(
+            """{"title":"Synthetic document","number":"SYN-1","holder":"Example","expiry":"2030-01-01","id":"doc-1","kind":"tax"}"""
+        )
+        assertEquals(0, document.revision)
+        assertEquals(emptyList(), document.renewals)
+        assertEquals(emptyList(), document.checkedRenewalSteps)
+        assertEquals(emptySet(), document.assetIds())
+    }
+
+    @Test
+    fun p05RenewalRoundTripsThroughBackupPayloadIncludingReceiptAsset() {
+        val document = VaultDocument("Tax token", "TT-1", "Owner", "2026-12-31", id = "doc-1", kind = "tax")
+        val state = VaultState(ride = Ride("ktm", "BS6", 2023, 4280.0), documents = listOf(document))
+            .renewDocument("doc-1", kotlinx.datetime.LocalDate(2027, 12, 31), kotlinx.datetime.LocalDate(2026, 11, 5),
+                feePoisha = 125000, receiptId = "receipt-1.jpg", notes = "Counter copy")
+        val snapshot = state.backupSnapshot()
+        assertTrue("receipt-1.jpg" in snapshot.assetIds)
+        val payload = json.decodeFromString<VaultExportPayload>(json.encodeToString(snapshot.payload))
+        val restored = payload.documents.single()
+        assertEquals(1, restored.revision)
+        assertEquals(emptyList(), restored.checkedRenewalSteps)
+        val renewal = restored.renewals.single()
+        assertEquals("2026-12-31", renewal.previousExpiry)
+        assertEquals("2027-12-31", renewal.newExpiry)
+        assertEquals(125000, renewal.feePoisha)
+        assertEquals("receipt-1.jpg", renewal.receiptId)
+        assertEquals(1, renewal.documentRevision)
+        assertTrue("receipt-1.jpg" in restored.assetIds())
+        assertEquals("doc-1", payload.logs.singleOrNull()?.documentId)
+        assertEquals(renewal.id, payload.logs.singleOrNull()?.renewalId)
+    }
+
+    @Test
     fun preP04RuleWirePayloadUsesSafeActionDefaults() {
         val rule = json.decodeFromString<ComponentRule>(
             """{"id":"old","vehicleId":"primary","name":"Old rule","specification":"frozen","intervalKm":500.0,"intervalDays":30,"baselineCertainty":"CONFIRMED"}"""

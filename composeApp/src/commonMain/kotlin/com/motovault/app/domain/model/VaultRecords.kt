@@ -53,7 +53,8 @@ data class RideLog(
     val scheduleIds: List<String> = emptyList(), val location: GeoCapture? = null,
     val locationLabel: String = "", val receiptBase64: String? = null,
     val fuelType: String = "octane",
-    val fuelPrice: Double? = null
+    val fuelPrice: Double? = null,
+    val documentId: String? = null, val renewalId: String? = null
 ) {
     val isFuel: Boolean get() = kind == "fuel" || title == "Fuel fill-up"
     val isDocumentFee: Boolean get() = kind == "document_fee"
@@ -72,7 +73,10 @@ data class VaultDocument(
     val reminder: Boolean = false,
     val kind: String = "",
     val reminderWarningDays: Int? = null,
-    val reminderSnoozedUntil: String? = null
+    val reminderSnoozedUntil: String? = null,
+    val revision: Int = 0,
+    val renewals: List<DocumentRenewal> = emptyList(),
+    val checkedRenewalSteps: Set<String> = emptySet()
 ) {
     val daysRemaining: Int? get() = expiry.takeIf { it.isNotBlank() }?.let {
         runCatching { LocalDate.parse(it).toEpochDays() - today().toEpochDays() }.getOrNull()
@@ -80,7 +84,8 @@ data class VaultDocument(
 }
 
 fun VaultDocument.assetIds(): Set<String> =
-    pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() + listOfNotNull(originalPdf)
+    pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() +
+        listOfNotNull(originalPdf) + renewals.mapNotNull { it.receiptId }
 
 fun isCardDocument(type: String): Boolean = when (type) {
     "Registration smart card", "smart_card", "registration", "রেজিস্ট্রেশন স্মার্ট কার্ড", "রেজিস্ট্রেশন সার্টিফিকেট",

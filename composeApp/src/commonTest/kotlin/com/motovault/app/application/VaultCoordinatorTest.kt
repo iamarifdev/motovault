@@ -1,7 +1,12 @@
 package com.motovault.app.application
 
+import com.motovault.app.domain.model.Ride
+import com.motovault.app.domain.model.VaultDocument
+import com.motovault.app.domain.model.assetIds
+import com.motovault.app.domain.vault.VaultState
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.LocalDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.Dispatchers
@@ -277,5 +282,33 @@ class VaultCoordinatorTest {
         assertEquals(0, coordinator.snapshots.value.revision)
         assertFalse(coordinator.snapshots.value.saving)
         assertEquals(VaultError.SAVE_FAILED, coordinator.snapshots.value.error)
+    }
+
+    @Test
+    fun undoAfterRenewalRestoresTheDocumentAndFeeWithoutLeavingTheReceiptReferenced() = runBlocking {
+        val base = VaultState(
+            ride = Ride("ktm", "BS6", 2023, 4280.0),
+            documents = listOf(VaultDocument("Tax token", "TT-1", "Owner", "2026-12-31", id = "doc-1", kind = "tax"))
+        )
+        var durable = base
+        val coordinator = VaultCoordinator(
+            scope = this, initialState = VaultState(), restore = { base },
+            write = { durable = it }, assetIds = { state -> state.documents.flatMap { it.assetIds() }.toSet() },
+            cleanup = {}, recover = {}, reconcile = {}
+        )
+        val renewed = base.renewDocument("doc-1", LocalDate(2027, 12, 31), LocalDate(2026, 11, 5),
+            feePoisha = 125000, receiptId = "receipt-1.jpg")
+        var saved: Boolean? = null
+        coordinator.commit(renewed, 0) { saved = it }
+        assertEquals(true, saved)
+        assertEquals("2027-12-31", durable.documents.single().expiry)
+        assertEquals(1, durable.logs.size)
+        var undone: Boolean? = null
+        coordinator.undo(1) { undone = it }
+        assertEquals(true, undone)
+        assertEquals("2026-12-31", durable.documents.single().expiry)
+        assertTrue(durable.logs.isEmpty())
+        assertTrue(durable.documents.single().renewals.isEmpty())
+        assertFalse("receipt-1.jpg" in durable.documents.flatMap { it.assetIds() }.toSet())
     }
 }

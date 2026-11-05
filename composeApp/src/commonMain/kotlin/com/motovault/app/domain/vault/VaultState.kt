@@ -1,5 +1,6 @@
 package com.motovault.app.domain.vault
 
+import com.motovault.app.domain.documents.RenewalChecklists
 import com.motovault.app.domain.model.*
 import com.motovault.app.domain.usecase.DocumentExpiryUseCase
 import com.motovault.app.domain.usecase.FuelEfficiencyUseCase
@@ -216,13 +217,13 @@ data class VaultState(
 
     /** Keeps each renewal payment as one ledger event; document details never hold a mutable spend total. */
     fun logDocumentFee(documentTitle: String, amountPoisha: Int, date: LocalDate = today(), notes: String = ""): VaultState {
-        require(documents.any { it.title == documentTitle }) { "Choose a saved document first." }
+        val document = documents.firstOrNull { it.title == documentTitle } ?: error("Choose a saved document first.")
         require(amountPoisha >= 0) { "Cost cannot be negative." }
         require(date <= today()) { "Payment date cannot be in the future." }
         val log = RideLog(
-            title = "${documentTitle} renewal", detail = "Document renewal fee", date = date.toString(),
+            title = "", detail = "", date = date.toString(),
             odometer = requireNotNull(ride).odometer, kind = "document_fee", cost = amountPoisha / 100.0,
-            notes = notes.trim()
+            notes = notes.trim(), documentId = document.id
         )
         return copy(logs = listOf(log) + logs)
     }
@@ -238,8 +239,72 @@ data class VaultState(
         val expiry = document.expiry.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) }
         require(issued == null || expiry == null || expiry >= issued) { "Expiry must be on or after the issue date." }
         val old = documents.firstOrNull { it.id == document.id }
-        val saved = if (old != null && old.expiry != document.expiry) document.copy(reminderSnoozedUntil = null) else document
+        val cleared = if (old != null && old.expiry != document.expiry) document.copy(reminderSnoozedUntil = null) else document
+        val saved = if (old != null) cleared.copy(revision = old.revision + 1) else cleared
         return copy(documents = if (old != null) documents.map { if (it.id == document.id) saved else it } else documents + saved)
+    }
+
+    /**
+     * One reviewed renewal. The document expiry and revision, the append-only renewal event,
+     * the paid fee ledger entry and the cleared reminder snooze change in a single state write,
+     * so a failed save or Undo cannot leave one of them behind.
+     */
+    fun renewDocument(
+        documentId: String,
+        newExpiry: LocalDate,
+        renewedOn: LocalDate = today(),
+        feePoisha: Int? = null,
+        receiptId: String? = null,
+        notes: String = "",
+        sourceCheckedOn: LocalDate? = null
+    ): VaultState {
+        require(renewedOn <= today()) { "The renewal date cannot be in the future." }
+        require(newExpiry > renewedOn) { "The new expiry must be after the renewal date." }
+        val document = documents.firstOrNull { it.id == documentId } ?: error("This document is no longer available.")
+        val currentExpiry = document.expiry.takeIf { it.isNotBlank() }
+            ?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
+        require(currentExpiry == null || newExpiry > currentExpiry) { "The new expiry must be after the current expiry." }
+        require(document.renewals.none { it.newExpiry == newExpiry.toString() }) { "This renewal is already recorded." }
+        require(document.revision in 0 until Int.MAX_VALUE) { "This document has too many revisions." }
+        require(feePoisha == null || feePoisha in 0..MAX_RENEWAL_FEE_POISHA) { "Check the amount you paid." }
+        require(receiptId == null || runCatching { validateDocumentAssetId(receiptId) }.isSuccess) {
+            "Attach a JPEG, PNG or WebP receipt."
+        }
+        require(notes.length <= MAX_RENEWAL_NOTES_LENGTH) { "Keep the renewal note shorter." }
+        val kind = document.stableKind() ?: document.kind
+        val revision = document.revision + 1
+        val paid = feePoisha?.takeIf { it > 0 }
+        val feeLogId = paid?.let { recordId() }
+        val renewal = DocumentRenewal(
+            documentId = document.id, kind = kind, previousExpiry = document.expiry,
+            newExpiry = newExpiry.toString(), renewedOn = renewedOn.toString(), documentRevision = revision,
+            feePoisha = feePoisha, receiptId = receiptId, notes = notes.trim(),
+            sourceCheckedOn = sourceCheckedOn?.toString().orEmpty(), feeLogId = feeLogId
+        )
+        val feeLog = paid?.let { amount ->
+            val currentRide = requireNotNull(ride) { "Set up your bike before recording a renewal fee." }
+            RideLog(
+                title = "", detail = "", date = renewedOn.toString(), odometer = currentRide.odometer,
+                id = requireNotNull(feeLogId), kind = "document_fee", cost = amount / 100.0,
+                notes = notes.trim(), documentId = document.id, renewalId = renewal.id
+            )
+        }
+        val updated = document.copy(
+            expiry = newExpiry.toString(), revision = revision, renewals = listOf(renewal) + document.renewals,
+            checkedRenewalSteps = emptySet(), reminderSnoozedUntil = null
+        )
+        return copy(
+            documents = documents.map { if (it.id == updated.id) updated else it },
+            logs = listOfNotNull(feeLog) + logs
+        )
+    }
+
+    /** Checklist progress is persisted next to the document by stable step ID, never by label. */
+    fun setRenewalChecklist(documentId: String, checked: Set<String>): VaultState {
+        val document = documents.firstOrNull { it.id == documentId } ?: error("This document is no longer available.")
+        val guide = RenewalChecklists.of(document.stableKind()) ?: error("This document has no renewal steps.")
+        require(checked.size <= guide.steps.size && checked.all { it in guide.stepIds }) { "Choose a listed renewal step." }
+        return copy(documents = documents.map { if (it.id == documentId) it.copy(checkedRenewalSteps = checked) else it })
     }
 
 

@@ -40,5 +40,6 @@ data class BackupLog(
     val serviceDiscountPoisha: Int? = null, val serviceTotalPoisha: Int? = null,
     val scheduleIds: List<String> = emptyList(), val location: BackupLocation? = null,
     val locationLabel: String = "", val receiptBase64: String? = null,
-    val fuelType: String = FuelDefaults.OCTANE, val fuelPrice: Double? = null
+    val fuelType: String = FuelDefaults.OCTANE, val fuelPrice: Double? = null,
+    val documentId: String? = null, val renewalId: String? = null
 )
