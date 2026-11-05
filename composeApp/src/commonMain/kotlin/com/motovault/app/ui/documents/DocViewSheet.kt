@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
@@ -35,6 +36,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.motovault.app.domain.documents.RENEWAL_QR_VERIFICATION_URL
+import com.motovault.app.domain.documents.RenewalChecklists
+import com.motovault.app.domain.model.stableKind
 import dev.sky.design.tokens.SkyTokens
 import com.motovault.app.domain.model.FuelDefaults
 import com.motovault.app.domain.fuel.FuelEntryIssue
@@ -59,13 +63,17 @@ fun DocViewSheet(
     privacyEnabled: Boolean = false,
     onInspect: (() -> Unit)? = null,
     onOpenPrivacy: (() -> Unit)? = null,
+    onRenew: () -> Unit = {},
     language: AppLanguage = AppLanguage.BN
 ) {
     val f = currentFmt
+    val uriHandler = LocalUriHandler.current
+    val guide = RenewalChecklists.of(doc.stableKind())
     var roadsideMode by remember { mutableStateOf(false) }
+    var verifyFailed by remember(doc.id) { mutableStateOf(false) }
 
     Sheet(
-        title = doc.title,
+        title = documentDisplayName(doc.title),
         onDismiss = onDismiss,
         detent = SheetDetent.TALL,
         footer = {
@@ -104,6 +112,27 @@ fun DocViewSheet(
             }
         }
 
+        VaultButton(appStringResource(Res.string.renewal_action), onClick = onRenew, full = true)
+        if (guide?.qrVerification == true) {
+            VaultButton(
+                text = appStringResource(Res.string.renewal_verify),
+                kind = ButtonKind.SECONDARY,
+                full = true,
+                onClick = {
+                    runCatching { uriHandler.openUri(RENEWAL_QR_VERIFICATION_URL) }.onFailure { verifyFailed = true }
+                }
+            )
+            Text(
+                appStringResource(Res.string.renewal_verify_note),
+                fontSize = 12.sp, lineHeight = 17.sp, color = TextSecondary
+            )
+            if (verifyFailed) Text(
+                appStringResource(Res.string.renewal_link_failed),
+                fontSize = 12.sp, lineHeight = 17.sp, color = WarningColor
+            )
+        }
+        RenewalHistory(doc)
+
         VaultButton(
             text = appStringResource(if (privacyEnabled) Res.string.docview_show_only else Res.string.docview_enable_show),
             kind = ButtonKind.SECONDARY,
@@ -125,6 +154,7 @@ fun DocViewSheet(
             checked = doc.reminder,
             onCheckedChange = { onUpdateReminder(it) }
         )
+
         VaultButton(appStringResource(Res.string.vault_reminder_action), onClick = onReminderSettings, full = true, kind = ButtonKind.SECONDARY)
     }
 }

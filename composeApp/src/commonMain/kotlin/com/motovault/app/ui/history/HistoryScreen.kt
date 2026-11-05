@@ -184,9 +184,17 @@ fun HistoryScreen(
                             }
                             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                 val logDate = runCatching { LocalDate.parse(log.date) }.getOrNull()
-                                val title = if (log.isFuel) appStringResource(Res.string.history_fuel_title,
-                                    appStringResource(Res.string.fuel_litres_value, f.n(log.fuelLiters ?: 0.0, 2)))
-                                    else log.detail.ifBlank { appStringResource(Res.string.history_service) }
+                                val title = when {
+                                    log.isFuel -> appStringResource(Res.string.history_fuel_title,
+                                        appStringResource(Res.string.fuel_litres_value, f.n(log.fuelLiters ?: 0.0, 2)))
+                                    log.isDocumentFee -> {
+                                        val document = state.documents.firstOrNull { it.id == log.documentId }
+                                        val name = document?.let { documentDisplayName(it.title) }
+                                            ?: appStringResource(Res.string.history_document_fee_unknown)
+                                        appStringResource(Res.string.history_document_fee, name)
+                                    }
+                                    else -> log.detail.ifBlank { appStringResource(Res.string.history_service) }
+                                }
                                 val dateLabel = if (logDate != null) appStringResource(Res.string.history_day_month,
                                     f.d(logDate.dayOfMonth.toString()), localizedMonthName(state.language, logDate.monthNumber - 1)) else log.date
                                 Text(text = title, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)

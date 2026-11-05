@@ -263,7 +263,45 @@ internal fun VaultSheetHost(
                                 privacyEnabled = state.privacy.enabled,
                                 onInspect = { onInspect(doc.id) },
                                 onOpenPrivacy = { onSheet(ActiveSheet("privacy")) },
+                                onRenew = { onSheet(ActiveSheet("renewal", doc.id)) },
                                 language = state.language
+                            )
+                        }
+                    }
+                    "renewal" -> {
+                        val docId = sheet.props as? String
+                        val doc = state.documents.firstOrNull { it.id == docId }
+                        if (doc != null) {
+                            val savedMessage = appStringResource(Res.string.renewal_saved, documentDisplayName(doc.title))
+                            RenewalSheet(
+                                state = state,
+                                doc = doc,
+                                onDismiss = { onSheet(null) },
+                                onChecklist = { step ->
+                                    val latest = session.snapshots.value
+                                    val current = latest.state.documents.firstOrNull { it.id == doc.id } ?: doc
+                                    val steps = if (step in current.checkedRenewalSteps) {
+                                        current.checkedRenewalSteps - step
+                                    } else {
+                                        current.checkedRenewalSteps + step
+                                    }
+                                    runCatching { latest.state.setRenewalChecklist(doc.id, steps) }.getOrNull()
+                                        ?.let { next -> session.commit(next, latest.revision) { } }
+                                },
+                                onSave = { next, done ->
+                                    session.commit(next, session.snapshots.value.revision) { ok ->
+                                        if (ok) {
+                                            val savedRevision = session.snapshots.value.revision
+                                            onToast(ToastData(
+                                                id = "renewal_${Clock.System.now().toEpochMilliseconds()}",
+                                                message = savedMessage,
+                                                undoAction = { onUndo(savedRevision) }
+                                            ))
+                                            done(true)
+                                            onSheet(null)
+                                        } else done(false)
+                                    }
+                                }
                             )
                         }
                     }
