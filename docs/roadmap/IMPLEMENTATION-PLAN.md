@@ -983,7 +983,7 @@ Required completion evidence: implementation, verification, design, review.
 
 ## P05: BRTA renewal and document assistance
 
-**Priority:** P1 | **Scope:** core | **Current status:** Ready
+**Priority:** P1 | **Scope:** core | **Current status:** Done
 
 **Outcome:** An expiry warning leads to a useful, sourced renewal checklist and a recorded renewal.
 
@@ -1011,7 +1011,7 @@ Required completion evidence: implementation, verification, design, review.
 
 ### P05-01: Verify official links, document applicability and checklist content
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: DeepSeek.
 
 Additional task dependencies: P04A-07, P04A-08.
 
@@ -1028,7 +1028,7 @@ Required completion evidence: research, review.
 
 ### P05-02: Implement renewal events, fee links and original preservation
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: DeepSeek.
 
 Additional task dependencies: P05-01, P03A-02, P03A-03.
 
@@ -1047,7 +1047,7 @@ Required completion evidence: implementation, verification.
 
 ### P05-03: Build renewal checklist and deliberate official-verification actions
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: DeepSeek.
 
 Additional task dependencies: P05-02, P03A-02, P03A-06, P03A-03.
 
@@ -1068,7 +1068,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P05-04: Verify a full renewal on Android and iOS
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: DeepSeek.
 
 Additional task dependencies: P05-03.
 

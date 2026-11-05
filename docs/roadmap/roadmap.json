@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-01T08:56:06+00:00",
+  "updated_at": "2026-11-05T07:25:22+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -3692,13 +3692,37 @@
             "research",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "DeepSeek",
+          "started_at": "2026-11-05T06:26:08+00:00",
+          "completed_at": "2026-11-05T06:27:16+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-05T06:26:08+00:00",
+              "text": "Verifying official BRTA renewal, transfer, tax-token, fitness and QR sources; recording applicability and copy review before implementation"
+            },
+            {
+              "at": "2026-11-05T06:27:16+00:00",
+              "text": "Verified ten official BRTA/BSP sources, per-kind applicability, fee discrepancy and QR scope; reviewed Bangla/English checklist copy and safe fallback"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "research",
+              "reference": "docs/roadmap/evidence/P05-01-research.md",
+              "summary": "Verified ten official BRTA/BSP sources, per-kind applicability, fee discrepancy and QR scope; reviewed Bangla/English checklist copy and safe fallback",
+              "at": "2026-11-05T06:27:16+00:00",
+              "revision": "55c1e43"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P05-01-review.md",
+              "summary": "Verified ten official BRTA/BSP sources, per-kind applicability, fee discrepancy and QR scope; reviewed Bangla/English checklist copy and safe fallback",
+              "at": "2026-11-05T06:27:16+00:00",
+              "revision": "55c1e43"
+            }
+          ]
         },
         {
           "id": "P05-02",
@@ -3722,13 +3746,37 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "DeepSeek",
+          "started_at": "2026-11-05T06:28:24+00:00",
+          "completed_at": "2026-11-05T06:51:13+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-05T06:28:24+00:00",
+              "text": "Adding reviewed renewal events with previous/new expiry, paid fee, receipt asset, document revision and atomic ledger/reminder update"
+            },
+            {
+              "at": "2026-11-05T06:51:13+00:00",
+              "text": "Renewal event, paid-fee ledger, revision, checklist reset and reminder snooze commit as one state; backup payload and receipt restore extended; 289 tests pass"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P05-02-implementation.md",
+              "summary": "Renewal event, paid-fee ledger, revision, checklist reset and reminder snooze commit as one state; backup payload and receipt restore extended; 289 tests pass",
+              "at": "2026-11-05T06:51:13+00:00",
+              "revision": "55c1e43"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P05-02-verification.md",
+              "summary": "Renewal event, paid-fee ledger, revision, checklist reset and reminder snooze commit as one state; backup payload and receipt restore extended; 289 tests pass",
+              "at": "2026-11-05T06:51:13+00:00",
+              "revision": "55c1e43"
+            }
+          ]
         },
         {
           "id": "P05-03",
@@ -3756,15 +3804,23 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "DeepSeek",
+          "started_at": "2026-11-05T06:51:14+00:00",
+          "completed_at": "2026-11-05T07:25:22+00:00",
           "blocker": "",
           "notes": [
             {
               "at": "2026-10-23T23:17:34+00:00",
               "text": "P00-D04 and D06: compare the native Vault wallet previews and default English type labels with v3 compact Bangla rows. Preserve owner-written free text."
+            },
+            {
+              "at": "2026-11-05T06:51:14+00:00",
+              "text": "Building the sourced renewal sheet, checklist progress, browser boundary, receipt picker and renewal history with Bangla/English resources"
+            },
+            {
+              "at": "2026-11-05T07:25:22+00:00",
+              "text": "Renewal sheet, dated checklist, deliberate BRTA verification, receipt boundary and history implemented in v3 and native UI; Android/iOS runtime and dark/large-text/privacy/fallback checks pass"
             }
           ],
           "evidence": [
@@ -3774,6 +3830,27 @@
               "summary": "P00-D04 and D06: compare the native Vault wallet previews and default English type labels with v3 compact Bangla rows. Preserve owner-written free text.",
               "at": "2026-10-23T23:17:34+00:00",
               "revision": "50eda3a"
+            },
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P05-03-implementation.md",
+              "summary": "Renewal sheet, dated checklist, deliberate BRTA verification, receipt boundary and history implemented in v3 and native UI; Android/iOS runtime and dark/large-text/privacy/fallback checks pass",
+              "at": "2026-11-05T07:25:22+00:00",
+              "revision": "55c1e43"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P05-03-verification.md",
+              "summary": "Renewal sheet, dated checklist, deliberate BRTA verification, receipt boundary and history implemented in v3 and native UI; Android/iOS runtime and dark/large-text/privacy/fallback checks pass",
+              "at": "2026-11-05T07:25:22+00:00",
+              "revision": "55c1e43"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P05-03-design.md",
+              "summary": "Renewal sheet, dated checklist, deliberate BRTA verification, receipt boundary and history implemented in v3 and native UI; Android/iOS runtime and dark/large-text/privacy/fallback checks pass",
+              "at": "2026-11-05T07:25:22+00:00",
+              "revision": "55c1e43"
             }
           ]
         },
@@ -3798,13 +3875,54 @@
             "ios_runtime",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
+          "status": "done",
+          "owner": "DeepSeek",
           "started_at": null,
-          "completed_at": null,
+          "completed_at": "2026-11-05T07:25:22+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-05T07:25:22+00:00",
+              "text": "Full renewal verified on Android emulator and iOS simulator: reminder plan, checklist, receipt attachment, renewed document, fee row and new reminder; cancel/failure preserve originals; 289 unit tests pass"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P05-04-verification.md",
+              "summary": "Full renewal verified on Android emulator and iOS simulator: reminder plan, checklist, receipt attachment, renewed document, fee row and new reminder; cancel/failure preserve originals; 289 unit tests pass",
+              "at": "2026-11-05T07:25:22+00:00",
+              "revision": "55c1e43"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P05-04-design.md",
+              "summary": "Full renewal verified on Android emulator and iOS simulator: reminder plan, checklist, receipt attachment, renewed document, fee row and new reminder; cancel/failure preserve originals; 289 unit tests pass",
+              "at": "2026-11-05T07:25:22+00:00",
+              "revision": "55c1e43"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P05-04-android.md",
+              "summary": "Full renewal verified on Android emulator and iOS simulator: reminder plan, checklist, receipt attachment, renewed document, fee row and new reminder; cancel/failure preserve originals; 289 unit tests pass",
+              "at": "2026-11-05T07:25:22+00:00",
+              "revision": "55c1e43"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P05-04-ios.md",
+              "summary": "Full renewal verified on Android emulator and iOS simulator: reminder plan, checklist, receipt attachment, renewed document, fee row and new reminder; cancel/failure preserve originals; 289 unit tests pass",
+              "at": "2026-11-05T07:25:22+00:00",
+              "revision": "55c1e43"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P05-04-review.md",
+              "summary": "Full renewal verified on Android emulator and iOS simulator: reminder plan, checklist, receipt attachment, renewed document, fee row and new reminder; cancel/failure preserve originals; 289 unit tests pass",
+              "at": "2026-11-05T07:25:22+00:00",
+              "revision": "55c1e43"
+            }
+          ]
         }
       ],
       "architecture_application": [
@@ -7743,6 +7861,62 @@
       "to": "done",
       "note": "Recorded completed app-wide localization/SRP establishment ahead of P08-05 runtime evidence.",
       "revision": "d8507d8+worktree"
+    },
+    {
+      "at": "2026-11-05T06:26:08+00:00",
+      "task": "P05-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Verifying official BRTA renewal, transfer, tax-token, fitness and QR sources; recording applicability and copy review before implementation",
+      "revision": "55c1e43"
+    },
+    {
+      "at": "2026-11-05T06:27:16+00:00",
+      "task": "P05-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Verified ten official BRTA/BSP sources, per-kind applicability, fee discrepancy and QR scope; reviewed Bangla/English checklist copy and safe fallback",
+      "revision": "55c1e43"
+    },
+    {
+      "at": "2026-11-05T06:28:24+00:00",
+      "task": "P05-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Adding reviewed renewal events with previous/new expiry, paid fee, receipt asset, document revision and atomic ledger/reminder update",
+      "revision": "55c1e43"
+    },
+    {
+      "at": "2026-11-05T06:51:13+00:00",
+      "task": "P05-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Renewal event, paid-fee ledger, revision, checklist reset and reminder snooze commit as one state; backup payload and receipt restore extended; 289 tests pass",
+      "revision": "55c1e43"
+    },
+    {
+      "at": "2026-11-05T06:51:14+00:00",
+      "task": "P05-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Building the sourced renewal sheet, checklist progress, browser boundary, receipt picker and renewal history with Bangla/English resources",
+      "revision": "55c1e43"
+    },
+    {
+      "at": "2026-11-05T07:25:22+00:00",
+      "task": "P05-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Renewal sheet, dated checklist, deliberate BRTA verification, receipt boundary and history implemented in v3 and native UI; Android/iOS runtime and dark/large-text/privacy/fallback checks pass",
+      "revision": "55c1e43"
+    },
+    {
+      "at": "2026-11-05T07:25:22+00:00",
+      "task": "P05-04",
+      "from": "planned",
+      "to": "done",
+      "note": "Full renewal verified on Android emulator and iOS simulator: reminder plan, checklist, receipt attachment, renewed document, fee row and new reminder; cancel/failure preserve originals; 289 unit tests pass",
+      "revision": "55c1e43"
     }
   ]
 }
