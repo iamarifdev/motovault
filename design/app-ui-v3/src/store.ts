@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { AppData, DocKind, FuelLog, FuelType, ItemKey, LogEntry, ServiceLine, ServiceLog, Settings, Tab, VaultDoc } from './types'
+import type { AppData, DocKind, DocRenewal, FuelLog, FuelType, ItemKey, LogEntry, ServiceLine, ServiceLog, Settings, Tab, VaultDoc } from './types'
 import { emptyData, seedData } from './data/seed'
 import { itemOf, modelOf } from './data/catalog'
 import { todayISO } from './lib/dates'
@@ -21,6 +21,8 @@ interface Store extends AppData {
   restoreLog: (entry: LogEntry, index: number) => void
   addDoc: (v: Omit<VaultDoc, 'id'>) => string
   setDocReminder: (id: string, on: boolean) => void
+  renewDoc: (docId: string, v: { newExpiry: string; fee: number | null; receiptName?: string; notes?: string }) => void
+  toggleDocStep: (docId: string, stepId: string) => void
   completeOnboarding: (v: { brandId: string; modelId: string; name: string; odometer: number; lastServiceKnown: boolean; lastServiceKm?: number; lastServiceDate?: string }) => void
   startOnboarding: () => void
   resetDemo: () => void
@@ -101,6 +103,25 @@ export const useStore = create<Store>()(
       addDoc: (v) => { const doc = { ...v, id: id() }; set((s) => ({ docs: [doc, ...s.docs.filter((d) => d.kind !== v.kind)] })); return doc.id },
       setDocReminder: (docId, on) => set((s) => ({ docs: s.docs.map((d) => (d.id === docId ? { ...d, reminder: on } : d)) })),
 
+      /** The document expiry, the append-only renewal event and the checklist reset as one save. */
+      renewDoc: (docId, v) => set((s) => ({
+        docs: s.docs.map((d) => {
+          if (d.id !== docId) return d
+          const revision = (d.revision ?? 0) + 1
+          const renewal: DocRenewal = {
+            id: id(), kind: d.kind, previousExpiry: d.expiry, newExpiry: v.newExpiry, renewedOn: todayISO(),
+            fee: v.fee, receiptName: v.receiptName, notes: v.notes?.trim() || undefined, revision,
+          }
+          return { ...d, expiry: v.newExpiry, snoozedUntil: undefined, revision, renewals: [renewal, ...(d.renewals ?? [])], checkedSteps: [] }
+        }),
+      })),
+      toggleDocStep: (docId, stepId) => set((s) => ({
+        docs: s.docs.map((d) => d.id !== docId ? d : {
+          ...d,
+          checkedSteps: d.checkedSteps?.includes(stepId) ? d.checkedSteps.filter((step) => step !== stepId) : [...(d.checkedSteps ?? []), stepId],
+        }),
+      })),
+
       completeOnboarding: ({ brandId, modelId, name, odometer, lastServiceKnown, lastServiceKm, lastServiceDate }) => {
         const today = todayISO()
         const base = emptyData()
@@ -123,7 +144,7 @@ export const useStore = create<Store>()(
   ),
 )
 
-export type SheetName = 'quickAdd' | 'fuel' | 'service' | 'odometer' | 'docAdd' | 'docView' | 'paste' | 'rule' | 'gaugeDetail' | 'reminders' | 'privacy' | 'recovery'
+export type SheetName = 'quickAdd' | 'fuel' | 'service' | 'odometer' | 'docAdd' | 'docView' | 'renewal' | 'paste' | 'rule' | 'gaugeDetail' | 'reminders' | 'privacy' | 'recovery'
 export interface SheetState { name: SheetName; props?: Record<string, unknown> }
 export interface Toast { id: number; text: string; undo?: () => void; tone?: 'ok' | 'warn' }
 

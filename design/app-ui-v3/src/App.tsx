@@ -16,6 +16,7 @@ import { ServiceSheet } from './sheets/ServiceSheet'
 import { OdometerSheet } from './sheets/OdometerSheet'
 import { DocAddSheet } from './sheets/DocAddSheet'
 import { DocViewSheet } from './sheets/DocViewSheet'
+import { RenewalSheet } from './sheets/RenewalSheet'
 import { PasteSheet } from './sheets/PasteSheet'
 import { GaugeDetailSheet } from './sheets/GaugeDetailSheet'
 import { ReminderSheet } from './sheets/ReminderSheet'
@@ -64,6 +65,7 @@ function renderSheet(name: string, props: Record<string, unknown> = {}) {
     case 'odometer': return <OdometerSheet key="odometer" />
     case 'docAdd': return <DocAddSheet key="docAdd" />
     case 'docView': return <DocViewSheet key={`docView-${props.id}`} id={props.id as string} />
+    case 'renewal': return <RenewalSheet key={`renewal-${props.id}`} id={props.id as string} />
     case 'paste': return <PasteSheet key="paste" />
     case 'gaugeDetail': return <GaugeDetailSheet key={`gauge-${props.id}`} id={props.id as string} />
     case 'reminders': return <ReminderSheet key={`reminders-${props.id ?? 'global'}`} id={props.id as string | undefined} type={props.type as string | undefined} />

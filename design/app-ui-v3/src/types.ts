@@ -91,6 +91,18 @@ export type LogEntry = FuelLog | ServiceLog
 
 export type DocKind = 'registration' | 'licence' | 'tax' | 'insurance' | 'fitness'
 
+export interface DocRenewal {
+  id: string
+  kind: DocKind
+  previousExpiry: string
+  newExpiry: string
+  renewedOn: string
+  fee: number | null
+  receiptName?: string
+  notes?: string
+  revision: number
+}
+
 export interface VaultDoc {
   id: string
   kind: DocKind
@@ -100,6 +112,9 @@ export interface VaultDoc {
   reminder: boolean
   snoozedUntil?: string
   warningDays?: number
+  revision?: number
+  renewals?: DocRenewal[]
+  checkedSteps?: string[]
 }
 
 export interface AppData {

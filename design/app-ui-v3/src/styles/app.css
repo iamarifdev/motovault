@@ -312,6 +312,29 @@
 .doc-view.road { background: #fff; color: #181818; box-shadow: inset 0 0 0 2px #181818; }
 .doc-view.road .cap { color: #3a3a3a; }
 
+/* ================= Renewal ================= */
+.renew-summary { display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: var(--r-menu); border: 1px solid var(--line); background: var(--surface-2); }
+.renew-summary b { font-size: 1.0625em; font-weight: 600; }
+.renew-source { font-size: .8125em; color: var(--text-2); line-height: 1.5; }
+.renew-progress { display: flex; flex-direction: column; gap: 8px; font-weight: 600; font-size: .875em; }
+.renew-bar { display: block; height: 6px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.renew-bar i { display: block; height: 100%; border-radius: 999px; background: var(--brand); transition: width var(--dur-sheet-enter) var(--ease-sheet); }
+.renew-steps { display: flex; flex-direction: column; }
+.renew-step { display: flex; gap: 12px; width: 100%; padding: 12px 0; text-align: left; border-bottom: 1px solid var(--line); }
+.renew-step:last-child { border-bottom: 0; }
+.renew-step > span:last-child { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.renew-step b { font-weight: 600; line-height: 1.35; }
+.renew-step small { font-size: .8125em; color: var(--text-2); line-height: 1.45; }
+.renew-step .box { flex: none; width: 24px; height: 24px; border-radius: 8px; border: 2px solid var(--line-strong); display: grid; place-items: center; color: var(--on-brand); }
+.renew-step.on .box { background: var(--brand); border-color: var(--brand); }
+.renew-warn { font-size: .8125em; line-height: 1.55; color: var(--warn); padding: 10px 12px; border-radius: var(--r-menu); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+.renew-receipt { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.renew-receipt label { cursor: pointer; }
+.renew-history { display: flex; flex-direction: column; gap: 8px; }
+.renew-history h3 { font-size: .9375em; font-weight: 600; }
+.renew-history article { display: flex; flex-direction: column; gap: 4px; padding: 12px; border: 1px solid var(--line); border-radius: var(--r-menu); background: var(--surface-2); }
+.renew-history article small { font-size: .8125em; color: var(--text-2); line-height: 1.45; }
+
 /* ================= History ================= */
 .summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 14px; border-radius: var(--r-menu); border: 1px solid var(--line); background: var(--surface); }
 .summary div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
