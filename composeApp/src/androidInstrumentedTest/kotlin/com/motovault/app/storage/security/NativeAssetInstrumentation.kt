@@ -105,8 +105,7 @@ class NativeAssetInstrumentation : Instrumentation() {
             checks += "synthetic-fuel-create-failure-preserves-draft-and-room"
             checkMaintenanceRuntime()
             checks += "native-maintenance-profile-actions-provenance-and-unknown-baseline"
-            checkMaintenanceUi()
-            checks += "native-maintenance-onboarding-and-schedule-details-ui"
+            checks += checkDocumentUi()
             checkRecoveryUi("en", conflict = false)
             checkRecoveryUi("bn", conflict = true)
             checks += "synthetic-recovery-ui-success-conflict-and-busy-dismissal"

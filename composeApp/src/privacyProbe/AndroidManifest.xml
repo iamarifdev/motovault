@@ -7,5 +7,6 @@
         <activity android:name=".RecoveryDurableFixtureActivity" android:exported="true" />
         <activity android:name=".BackupRoundTripFixtureActivity" android:exported="true" />
         <activity android:name=".MaintenanceFixtureActivity" android:exported="true" />
+        <activity android:name=".RenewalFixtureActivity" android:exported="true" />
     </application>
 </manifest>

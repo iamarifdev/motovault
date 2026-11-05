@@ -14,6 +14,12 @@ import com.motovault.app.storage.buildVaultDatabase
 import com.motovault.app.storage.RecoverySnapshotStore
 import com.motovault.app.storage.BackupOperationsAdapter
 import com.motovault.app.storage.BackupRestoreStaging
+import com.motovault.app.storage.toBackupDocument
+import com.motovault.app.storage.toVaultDocument
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import com.motovault.app.application.PreparedVaultChange
 import com.motovault.app.application.VaultCoordinator
 import kotlinx.coroutines.CompletableDeferred
@@ -309,25 +315,9 @@ fun runIosStorageProbe(provider: IosAssetCryptography, invalidateSyntheticKey: (
         imported.pages.forEach { page -> check(UIImage(data = runBlocking { readDocumentAsset(page.previewId) }.assetData()) != null) }
         checks += "native-encrypted-pdf-import-without-plaintext-file"
         stage = "maintenance-profiles"
-        val r15 = Ride("yamaha", "BD", 2023, 6000.0, "yamaha-r15-v4", "R15 V4",
-            market = RideMarket.BANGLADESH, emission = RideEmission.BS6, modelCode = "YZF155-A",
-            factoryProfileId = "yamaha-r15-v4-2023-bd-155")
-        val known = VaultState.create(r15, 1000.0)
-        check(known.rules.any { it.action == com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE })
-        check(known.rules.any { it.action == com.motovault.app.domain.maintenance.MaintenanceAction.ADJUST })
-        check(known.rules.first { it.name == "Engine oil" }.provenance.revision == "BGN-F819V-E0")
-        check(VaultState.decode(VaultState.encode(known)) == known)
-        val unknown = VaultState.create(r15, null)
-        check(unknown.logs.isEmpty())
-        check(unknown.rules.all { it.baselineCertainty == com.motovault.app.domain.model.BaselineCertainty.UNKNOWN })
-        val unsupported = VaultState.create(Ride("yamaha", "BD", 2023, 6000.0, "yamaha-r15-v3", "R15 V3",
-            market = RideMarket.BANGLADESH, emission = RideEmission.BS6, modelCode = "YZF155-A"))
-        check(unsupported.rules.all { it.provenance.source == com.motovault.app.domain.maintenance.ScheduleSource.OWNER })
-        val running = VaultState.create(r15, 0.0)
-        val runningIn = running.rules.first { it.phase == com.motovault.app.domain.maintenance.SchedulePhase.RUNNING_IN }
-        val serviced = running.logService(runningIn, odometer = 1000.0, date = today())
-        check(serviced.rules.none { it.id == runningIn.id })
-        checks += "native-maintenance-action-provenance-and-unknown-baseline"
+        checks += verifyMaintenanceProbe()
+        stage = "renewal-event"
+        checks += verifyRenewalProbe()
         stage = "database-format-migration"
         val databasePath = "$root/synthetic-format.db"
         runBlocking { verifyVaultFormatMigration(databasePath) { buildVaultDatabase(Room.databaseBuilder<VaultDatabase>(name = databasePath)) } }
@@ -341,6 +331,52 @@ fun runIosStorageProbe(provider: IosAssetCryptography, invalidateSyntheticKey: (
         exportCopies.forEach { it.close() }
         for (name in listOf("documents-recovery", "documents-recovery-protected")) for (suffix in listOf("", ".mva", ".committed")) manager.removeItemAtPath("$applicationRoot/$name/$recoveryId$suffix", null)
     }
+}
+
+private fun verifyMaintenanceProbe(): String {
+    val r15 = Ride("yamaha", "BD", 2023, 6000.0, "yamaha-r15-v4", "R15 V4",
+        market = RideMarket.BANGLADESH, emission = RideEmission.BS6, modelCode = "YZF155-A",
+        factoryProfileId = "yamaha-r15-v4-2023-bd-155")
+    val known = VaultState.create(r15, 1000.0)
+    check(known.rules.any { it.action == com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE })
+    check(known.rules.any { it.action == com.motovault.app.domain.maintenance.MaintenanceAction.ADJUST })
+    check(known.rules.first { it.name == "Engine oil" }.provenance.revision == "BGN-F819V-E0")
+    check(VaultState.decode(VaultState.encode(known)) == known)
+    val unknown = VaultState.create(r15, null)
+    check(unknown.logs.isEmpty())
+    check(unknown.rules.all { it.baselineCertainty == com.motovault.app.domain.model.BaselineCertainty.UNKNOWN })
+    val unsupported = VaultState.create(Ride("yamaha", "BD", 2023, 6000.0, "yamaha-r15-v3", "R15 V3",
+        market = RideMarket.BANGLADESH, emission = RideEmission.BS6, modelCode = "YZF155-A"))
+    check(unsupported.rules.all { it.provenance.source == com.motovault.app.domain.maintenance.ScheduleSource.OWNER })
+    val running = VaultState.create(r15, 0.0)
+    val runningIn = running.rules.first { it.phase == com.motovault.app.domain.maintenance.SchedulePhase.RUNNING_IN }
+    val serviced = running.logService(runningIn, odometer = 1000.0, date = today())
+    check(serviced.rules.none { it.id == runningIn.id })
+    return "native-maintenance-action-provenance-and-unknown-baseline"
+}
+
+private fun verifyRenewalProbe(): String {
+    val renewalExpiry = LocalDate.fromEpochDays(today().toEpochDays() + 20)
+    val renewalDocument = VaultDocument("Tax token", "TT-1", "Synthetic owner", renewalExpiry.toString(),
+        id = "ios-renewal-${NSUUID().UUIDString}", kind = "tax", reminder = true,
+        checkedRenewalSteps = setOf("tax_previous_token", "tax_fee_payment"))
+    val renewalState = VaultState(ride = Ride("yamaha", "BD", 2023, 6000.0), documents = listOf(renewalDocument))
+    val nextExpiry = LocalDate.fromEpochDays(renewalExpiry.toEpochDays() + 365)
+    val renewedState = renewalState.renewDocument(renewalDocument.id, nextExpiry, today(), feePoisha = 125000, notes = "probe")
+    val renewal = renewedState.documents.single().renewals.single()
+    check(renewal.previousExpiry == renewalExpiry.toString())
+    check(renewal.newExpiry == nextExpiry.toString())
+    check(renewal.documentRevision == 1 && renewal.feePoisha == 125000)
+    check(renewedState.logs.single().kind == "document_fee")
+    check(renewedState.logs.single().documentId == renewalDocument.id)
+    check(renewedState.documents.single().checkedRenewalSteps.isEmpty())
+    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    check(renewalPlan(renewedState.documents, now, emptyList(), emptySet()).any { it.documentId == renewalDocument.id })
+    val archived = renewedState.documents.single().toBackupDocument()
+    check(archived.renewals.single().feePoisha == 125000)
+    check(archived.toVaultDocument() == renewedState.documents.single())
+    check(VaultState.decode(VaultState.encode(renewedState)) == renewedState)
+    return "native-renewal-event-fee-reminder-and-round-trip"
 }
 
 private fun expectProbeFailure(block: () -> Unit) {
