@@ -53,37 +53,21 @@ class NativeAssetInstrumentation : Instrumentation() {
     internal var pickerOnly = false
     private var roundTripOnly = false
     private var historyLocaleOnly = false
+    private var costOnly = false
+    internal var costPriceOnly = false
     override fun onCreate(arguments: Bundle?) {
         super.onCreate(arguments)
         backupOnly = arguments?.getString("onlyBackup") == "true"
         pickerOnly = arguments?.getString("onlyPicker") == "true"
         roundTripOnly = arguments?.getString("onlyRoundTrip") == "true"
         historyLocaleOnly = arguments?.getString("onlyHistoryLocale") == "true"
+        costPriceOnly = arguments?.getString("onlyCosts") == "price"
+        costOnly = arguments?.getString("onlyCosts") == "true" || costPriceOnly
         start()
     }
 
     override fun onStart() {
-        if (backupOnly || pickerOnly || roundTripOnly || historyLocaleOnly) {
-            val result = Bundle()
-            try {
-                when {
-                    historyLocaleOnly -> { checkHistoryLocale("en", "bn"); checkHistoryLocale("bn", "en") }
-                    roundTripOnly -> checkBackupRoundTripUi()
-                    else -> checkBackupCreateUi()
-                }
-                result.putString("stream", when {
-                    historyLocaleOnly -> "PASS synthetic history language and digit combinations\n"
-                    roundTripOnly -> "PASS synthetic backup UI restore and Room reopen\n"
-                    else -> "PASS synthetic backup creation UI\n"
-                })
-                finish(Activity.RESULT_OK, result)
-            } catch (failure: Throwable) {
-                val testName = when { historyLocaleOnly -> "history language and digits"; roundTripOnly -> "backup UI restore"; else -> "backup creation UI" }
-                result.putString("stream", "FAIL synthetic $testName: ${failure.stackTraceToString()}\n")
-                finish(Activity.RESULT_CANCELED, result)
-            }
-            return
-        }
+        if (runFocusedProbe(backupOnly, pickerOnly, roundTripOnly, historyLocaleOnly, costOnly)) return
         val results = Bundle()
         val id = UUID.randomUUID().toString()
         val root = File(targetContext.filesDir.canonicalFile, "synthetic-privacy-probe-$id")

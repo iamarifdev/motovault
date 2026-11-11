@@ -101,8 +101,8 @@ internal fun NativeAssetInstrumentation.checkFuelEditUi() {
             uiAutomation.takeScreenshot()?.let { bitmap ->
                 File(targetContext.cacheDir, "synthetic-fuel-edit-footer.png").outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
             }
-            waitForText("Save ৳৬০০")
-            clickText("Save ৳৬০০")
+            waitForText("Save ৳৬০০.০০")
+            clickText("Save ৳৬০০.০০")
             // The toast is transient; verify the committed edit through the
             // screen and a fresh connection, then use the durable Undo path.
             waitForText("Fuel fill · ৫.০০ L")
@@ -128,9 +128,10 @@ internal fun NativeAssetInstrumentation.checkFuelCreateFailureUi() {
             waitForText("≈ ০.৫০ L")
             clickText("০")
             waitForText("৬০০")
-            clickText("Save ৳৬০০")
+            clickText("Check and confirm the price per litre")
+            clickText("Save ৳৬০০.০০")
             waitForText("Could not save. Your draft is still here. Try again.")
-            waitForText("Save ৳৬০০")
+            waitForText("Save ৳৬০০.০০")
             check(activity.savedFuelCount() == before)
         } finally {
             runOnMainSync { activity.finish() }
@@ -148,14 +149,14 @@ internal fun NativeAssetInstrumentation.checkHistoryLocale(language: String, dig
             val unit = if (language == "en") "km" else "কিমি"
             waitForText("${formatter.d(date.dayOfMonth.toString())} $month · ${formatter.n(12340L)} $unit")
             if (language == "en") {
-                waitForText("Cost, last ৩০ days")
+                waitForText("Recorded costs")
                 waitForText("Fuel fill · ৪.৯০ L")
-                waitForText("Fuel economy")
+                waitForText("All categories")
                 waitForText("Documents")
             } else {
-                waitForText("গত 30 দিনের খরচ")
+                waitForText("রেকর্ডের খরচ")
                 waitForText("তেল ভরা · 4.90 লিটার")
-                waitForText("জ্বালানি গড়")
+                waitForText("সব ক্যাটাগরি")
                 waitForText("কাগজপত্র")
             }
             uiAutomation.takeScreenshot()?.let { bitmap ->

@@ -133,6 +133,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         // The notification center holds its delegate weakly. UIApplication retains this object.
         UNUserNotificationCenter.current().delegate = self
         #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--motovault-ledger-probe"),
+           Bundle.main.bundleIdentifier == "com.motovault.app.privacyprobe",
+           let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            let result = IosLedgerProbeKt.runIosLedgerProbe()
+            try? FileManager.default.createDirectory(at: caches, withIntermediateDirectories: true)
+            try? result.write(to: caches.appendingPathComponent("p06-ledger-probe.txt"), atomically: true, encoding: .utf8)
+        }
         if ProcessInfo.processInfo.arguments.contains("--motovault-storage-probe"),
            Bundle.main.bundleIdentifier?.hasSuffix(".privacyprobe") == true,
            let root = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first,

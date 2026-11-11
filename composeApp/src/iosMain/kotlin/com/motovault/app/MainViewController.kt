@@ -11,6 +11,8 @@ import platform.UIKit.UIViewController
 import platform.Foundation.NSProcessInfo
 import platform.Foundation.NSBundle
 import com.motovault.app.ui.LaunchConfig
+import com.motovault.app.ui.CostRuntimeFixture
+import com.motovault.app.storage.FuelEntryAdapter
 
 /** The host owns UIKit chrome; Compose keeps the device trait for System mode. */
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalComposeApi::class, ExperimentalNativeApi::class)
@@ -23,5 +25,8 @@ fun MainViewController(onDarkAppearance: (Boolean) -> Unit): UIViewController {
         if (Platform.isDebugBinary) {
             accessibilitySyncOptions = AccessibilitySyncOptions.Always(debugLogger = null)
         }
-    }) { App() }
+    }) {
+        if (isolatedProbe && "--motovault-cost-fixture" in rawArgs)
+            CostRuntimeFixture(FuelEntryAdapter, failSave = "--motovault-cost-failure" in rawArgs) else App()
+    }
 }
