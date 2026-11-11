@@ -38,7 +38,8 @@ data class VaultState(
     val places: List<String> = emptyList(),
     val reminderPolicy: ReminderPolicy = ReminderPolicy(),
     val privacy: com.motovault.app.domain.privacy.VaultPrivacySettings = com.motovault.app.domain.privacy.VaultPrivacySettings(),
-    val lastBackupEpochMillis: Long? = null
+    val lastBackupEpochMillis: Long? = null,
+    val ledger: com.motovault.app.domain.ledger.LedgerPreferences = com.motovault.app.domain.ledger.LedgerPreferences()
 ) {
     /** Only linked, matching recorded service can establish certainty for an older schedule. */
     fun confirmedRules() = rules.map { rule ->
@@ -201,7 +202,7 @@ data class VaultState(
     }
 
     fun deleteLog(log: RideLog): VaultState {
-        if (!log.isFuel && !log.isDocumentFee) {
+        if (!log.isFuel && !log.isDocumentFee && log.kind != "expense") {
             val logEpochDay = LocalDate.parse(log.date).toEpochDays().toLong()
             val linkedBaseline = rules.filter { it.id in log.scheduleIds }.any {
                 it.lastServicedOdometerKm == log.odometer && it.lastServicedEpochDays == logEpochDay
@@ -317,7 +318,7 @@ fun decode(value: String): VaultState? = runCatching {
         fun encode(state: VaultState) = json.encodeToString(serializer(), state)
 
         fun calculateEconomy(logs: List<RideLog>): Double? = FuelEfficiencyUseCase().calculate(
-            logs.filter { it.isFuel }.map { FuelFill(it.odometer, it.fuelLiters, it.fullTank) }
+            logs.filter { it.isFuel }.map { FuelFill(it.odometer, it.fuelLiters, it.fullTank, it.missedFuelFill) }
         )
     }
 }

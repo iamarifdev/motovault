@@ -116,26 +116,7 @@ object WearCalculator {
         return out
     }
 
-    fun economyOf(logs: List<RideLog>): Double? {
-        val fuels = logs.filter { it.isFuel }.sortedBy { it.odometer }
-        var baseOdo: Double? = null
-        var litres = 0.0
-        var km = 0.0
-        var totalLitres = 0.0
-        for (l in fuels) {
-            val lLitres = l.fuelLiters ?: 0.0
-            if (baseOdo != null) litres += lLitres
-            if (l.fullTank) {
-                if (baseOdo != null && litres > 0) {
-                    km += (l.odometer - baseOdo)
-                    totalLitres += litres
-                }
-                baseOdo = l.odometer
-                litres = 0.0
-            }
-        }
-        return if (totalLitres > 0) km / totalLitres else null
-    }
+    fun economyOf(logs: List<RideLog>): Double? = VaultState.calculateEconomy(logs)
 
     fun estimateOdometer(ride: Ride, logs: List<RideLog>, today: LocalDate): Double {
         val fuels = logs.filter { it.isFuel }.sortedBy { it.odometer }

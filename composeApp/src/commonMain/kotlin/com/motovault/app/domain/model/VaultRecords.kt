@@ -54,7 +54,9 @@ data class RideLog(
     val locationLabel: String = "", val receiptBase64: String? = null,
     val fuelType: String = "octane",
     val fuelPrice: Double? = null,
-    val documentId: String? = null, val renewalId: String? = null
+    val documentId: String? = null, val renewalId: String? = null,
+    val costPoisha: Long? = null, val expenseCategory: String? = null,
+    val missedFuelFill: Boolean = false
 ) {
     val isFuel: Boolean get() = kind == "fuel" || title == "Fuel fill-up"
     val isDocumentFee: Boolean get() = kind == "document_fee"
