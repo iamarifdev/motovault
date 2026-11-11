@@ -15,12 +15,12 @@ internal fun VaultState.fuelScreenInput(today: LocalDate): FuelScreenInput? {
         lastFuelOdometer = fuelLogs.maxOfOrNull { it.odometer } ?: 0.0,
         lastFuelDate = dates.filterNotNull().maxOrNull(),
         timeline = fuelLogs.zip(dates) { log, date -> date?.let { FuelTimelineEntry(log.id, log.odometer, it) } },
-        lastPrices = lastPrices.toMap(),
-        places = places.toList()
+        lastPrices = lastPrices + ledger.confirmedPrices.mapValues { it.value.takaPerLitre },
+        places = places.toList(), confirmedPrices = ledger.confirmedPrices
     )
 }
 
 internal fun RideLog.fuelExistingEntry() = FuelExistingEntry(
     id = id, cost = cost, fuelLiters = fuelLiters, fuelPrice = fuelPrice, odometer = odometer,
-    date = date, fullTank = fullTank, fuelType = fuelType, locationLabel = locationLabel
+    date = date, fullTank = fullTank, fuelType = fuelType, locationLabel = locationLabel, missedFill = missedFuelFill
 )

@@ -110,6 +110,8 @@ internal fun VaultSheetHost(
             if (!loading && (state.ride != null || activeSheet?.name == "paste" || activeSheet?.name == "quickAdd")) {
                 activeSheet?.let { sheet ->
                 when (sheet.name) {
+                    "expense", "budget", "cost-details" -> CostSheetHost(sheet, state, onDismiss = { onSheet(null) },
+                        onSave = { next, done -> onCommit(next, done) }, onUndo = { onUndo(revision + 1) }, onToast = onToast)
                     "gaugeDetail" -> GaugeDetailSheet(state, sheet.props as? String,
                         onDismiss = { onSheet(null) }, onOpen = { name, id ->
                             onSheet(if (name == "serviceReminder") ActiveSheet("reminders", "service" to id)

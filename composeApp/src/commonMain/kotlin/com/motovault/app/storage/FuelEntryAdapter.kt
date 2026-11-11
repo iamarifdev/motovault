@@ -12,6 +12,7 @@ import com.motovault.app.domain.fuel.FuelEntryRules
 import com.motovault.app.domain.fuel.FuelEntryIssue
 import com.motovault.app.domain.fuel.FuelTimelineEntry
 import kotlinx.datetime.LocalDate
+import com.motovault.app.domain.ledger.Money
 
 private const val LEGACY_FUEL_TITLE = "Fuel fill-up"
 private const val LEGACY_FUEL_KIND = "fuel"
@@ -21,6 +22,7 @@ private const val MAX_RECENT_FUEL_PLACES = 6
 internal object FuelEntryAdapter : FuelEntryBuilder<VaultState>, FuelEntryEditor<VaultState> {
     override fun build(previous: VaultState, request: FuelEntryRequest): VaultState {
         val ride = requireNotNull(previous.ride)
+        require(request.priceConfirmed || previous.ledger.confirmedPrices[request.fuelType]?.takaPerLitre == request.price)
         val previousFuel = previous.logs.filter { it.isFuel }
         val lastOdometer = previousFuel.maxOfOrNull { it.odometer } ?: 0.0
         val lastDate = previousFuel.mapNotNull { runCatching { LocalDate.parse(it.date) }.getOrNull() }.maxOrNull()
@@ -30,7 +32,8 @@ internal object FuelEntryAdapter : FuelEntryBuilder<VaultState>, FuelEntryEditor
             title = LEGACY_FUEL_TITLE, detail = request.legacyDetail, date = request.date.toString(),
             odometer = request.odometer, kind = LEGACY_FUEL_KIND, liters = request.litres,
             fullTank = request.fullTank, cost = request.amount, fuelType = request.fuelType,
-            fuelPrice = request.price, locationLabel = place
+            fuelPrice = request.price, locationLabel = place, costPoisha = requireNotNull(Money.fromLegacy(request.amount)),
+            missedFuelFill = request.missedFill
         )
         val places = if (place.isNotBlank()) listOf(place) + previous.places.filterNot { it == place } else previous.places
         val logs = listOf(log) + previous.logs
@@ -40,13 +43,16 @@ internal object FuelEntryAdapter : FuelEntryBuilder<VaultState>, FuelEntryEditor
             lastFuelOdometer = logs.filter { it.isFuel }.maxOfOrNull { it.odometer },
             economy = VaultState.calculateEconomy(logs),
             places = places.take(MAX_RECENT_FUEL_PLACES),
-            lastPrices = previous.lastPrices + (request.fuelType to request.price)
+            lastPrices = previous.lastPrices + (request.fuelType to request.price),
+            ledger = previous.ledger.confirmPrice(request.fuelType, request.price, request.date.toString())
         )
     }
 
     override fun edit(previous: VaultState, request: FuelEditRequest): VaultState {
         val existing = previous.logs.singleOrNull { it.id == request.id }?.takeIf { it.isFuel }
             ?: throw FuelEditRejected(FuelEntryIssue.RECORD_MISSING)
+        require(request.price == null || (request.price == existing.fuelPrice && request.fuelType == existing.fuelType) || request.priceConfirmed ||
+            previous.ledger.confirmedPrices[request.fuelType]?.takaPerLitre == request.price)
         FuelEntryRules.validateEditedValues(request.amount, request.litres, request.price, request.odometer, request.date, today())
             ?.let { throw FuelEditRejected(it) }
         val timeline = previous.logs.filter { it.isFuel }.map { log ->
@@ -60,13 +66,17 @@ internal object FuelEntryAdapter : FuelEntryBuilder<VaultState>, FuelEntryEditor
             detail = request.updatedLegacyDetail ?: existing.detail,
             date = request.date.toString(), odometer = request.odometer, liters = request.litres,
             fullTank = request.fullTank, cost = request.amount, fuelType = request.fuelType,
-            fuelPrice = request.price, locationLabel = request.place.trim()
+            fuelPrice = request.price, locationLabel = request.place.trim(),
+            costPoisha = if (request.amount == existing.cost) existing.costPoisha else requireNotNull(Money.fromLegacy(request.amount)),
+            missedFuelFill = request.missedFill
         )
         val logs = previous.logs.map { if (it.id == existing.id) replacement else it }
         return previous.copy(
             ride = requireNotNull(previous.ride).confirmedMileage(request.odometer, request.date),
             logs = logs, lastFuelOdometer = logs.filter { it.isFuel }.maxOfOrNull { it.odometer },
-            economy = VaultState.calculateEconomy(logs)
+            economy = VaultState.calculateEconomy(logs),
+            ledger = if (request.priceConfirmed && request.price != null)
+                previous.ledger.confirmPrice(request.fuelType, request.price, request.date.toString()) else previous.ledger
         )
     }
 }

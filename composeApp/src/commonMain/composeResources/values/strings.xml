@@ -872,7 +872,7 @@
     <string name="renewal_transfer_link">Transfer and correction rules</string>
     <string name="renewal_digital_certificate_link">Digital certificate process</string>
     <string name="history_document_fee">%1$s renewal</string>
-    <string name="history_document_fee_unknown">Document renewal</string>
+    <string name="history_document_fee_unknown">Document</string>
 
     <string name="renewal_step_licence_form">Application form</string>
     <string name="renewal_step_licence_form_detail">Fill in and sign the prescribed form.</string>

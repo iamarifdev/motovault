@@ -13,7 +13,9 @@ internal data class FuelEntryRequest(
     val fullTank: Boolean,
     val fuelType: String,
     val place: String,
-    val legacyDetail: String
+    val legacyDetail: String,
+    val priceConfirmed: Boolean = false,
+    val missedFill: Boolean = false
 )
 
 /** Transitional boundary until the persisted UI-owned vault model is migrated. */
@@ -31,7 +33,9 @@ internal data class FuelEditRequest(
     val fullTank: Boolean,
     val fuelType: String,
     val place: String,
-    val updatedLegacyDetail: String?
+    val updatedLegacyDetail: String?,
+    val priceConfirmed: Boolean = false,
+    val missedFill: Boolean = false
 )
 
 internal class FuelEditRejected(val issue: FuelEntryIssue) : IllegalArgumentException()

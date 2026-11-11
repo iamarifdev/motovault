@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class FuelWorkflowTest {
-    private val request = FuelEntryRequest(600.0, 5.0, 120.0, 1000.0, LocalDate(2025, 1, 1), true, "octane", "", "")
+    private val request = FuelEntryRequest(600.0, 5.0, 120.0, 1000.0, LocalDate(2025, 1, 1), true, "octane", "", "", priceConfirmed = true)
     private val edit = FuelEditRequest("id", 600.0, 5.0, 120.0, 1000.0, LocalDate(2025, 1, 1), true, "octane", "", null)
 
     @Test

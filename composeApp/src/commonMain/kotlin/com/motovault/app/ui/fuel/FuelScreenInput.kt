@@ -10,7 +10,8 @@ internal data class FuelScreenInput(
     val lastFuelDate: LocalDate?,
     val timeline: List<FuelTimelineEntry?>,
     val lastPrices: Map<String, Double>,
-    val places: List<String>
+    val places: List<String>,
+    val confirmedPrices: Map<String, com.motovault.app.domain.ledger.ConfirmedFuelPrice> = emptyMap()
 )
 
 internal data class FuelExistingEntry(
@@ -22,5 +23,6 @@ internal data class FuelExistingEntry(
     val date: String,
     val fullTank: Boolean,
     val fuelType: String,
-    val locationLabel: String?
+    val locationLabel: String?,
+    val missedFill: Boolean = false
 )

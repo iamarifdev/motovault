@@ -79,12 +79,14 @@ internal fun FuelSheet(
     var place by draft::place
     var odoTouched by draft::odometerTouched
     var priceTouched by draft::priceTouched
+    var confirmedPriceKey by remember { mutableStateOf<String?>(null) }
+    var missedFill by remember { mutableStateOf(existing?.missedFill ?: false) }
 
     val entry = rememberNumberEntry(
         initialValues = mapOf(
             "amount" to (existing?.cost?.toString() ?: initialAmount?.let { kotlin.math.round(it).toInt().toString() } ?: ""),
             "litres" to (existing?.fuelLiters?.toString() ?: ""),
-            "price" to (existing?.fuelPrice?.toString() ?: kotlin.math.round(lastOctanePrice).toInt().toString()),
+            "price" to (existing?.fuelPrice?.toString() ?: lastOctanePrice.toString()),
             "odo" to (existing?.odometer?.toString() ?: kotlin.math.round(estimate).toInt().toString())
         ),
         firstField = "amount"
@@ -133,10 +135,14 @@ internal fun FuelSheet(
         FuelEntryIssue.TIMELINE_CONFLICT -> appStringResource(Res.string.fuel_timeline_conflict)
         null -> null
     }
-    val moneyText = appStringResource(Res.string.fuel_money_value, f.n(calculatedTaka))
+    val moneyText = appStringResource(Res.string.fuel_money_value, f.n(calculatedTaka, 2))
     val litresText = appStringResource(Res.string.fuel_litres_value, f.n(calculatedLitres, 2))
     val priceText = if (existing != null && savedPrice == null) appStringResource(Res.string.fuel_price_unknown)
-        else appStringResource(Res.string.fuel_price_value, appStringResource(Res.string.fuel_money_value, f.n(price)))
+        else appStringResource(Res.string.fuel_price_value, appStringResource(Res.string.fuel_money_value, f.n(price, 2)))
+    val priceKey = "$fuelType:$savedPrice"
+    val remembered = input.confirmedPrices[fuelType]
+    val priceConfirmed = confirmedPriceKey == priceKey || (remembered?.takaPerLitre == savedPrice && savedPrice != null) ||
+        (existing != null && existing.fuelPrice == savedPrice && existing.fuelType == fuelType)
     val saveText = appStringResource(Res.string.fuel_save_amount, moneyText)
     val savedMessage = if (existing == null) appStringResource(Res.string.fuel_added, moneyText, litresText) else appStringResource(Res.string.fuel_edit_saved)
 
@@ -145,16 +151,16 @@ internal fun FuelSheet(
         onDismiss = onDismiss,
         footer = {
             VaultButton(
-                text = reason ?: saveText,
+                text = reason ?: if (!priceConfirmed) appStringResource(Res.string.cost_price_confirm) else saveText,
                 contentDescription = reason ?: saveText,
                 onClick = {
-                    if (reason != null) {
+                    if (reason != null || !priceConfirmed) {
                         haptic.perform(HapticKind.ERROR)
                     } else {
                         val legacyDetail = "${f.liters(calculatedLitres)} · ${if (fullTank) "Full tank" else "Partial fill"}"
                         if (existing != null) {
                             onEdit(FuelEditRequest(existing.id, calculatedTaka, calculatedLitres, savedPrice, odoVal, requireNotNull(date), fullTank, fuelType, place,
-                                if (calculatedLitres == existing.fuelLiters && fullTank == existing.fullTank) null else legacyDetail), savedMessage)
+                                if (calculatedLitres == existing.fuelLiters && fullTank == existing.fullTank) null else legacyDetail, priceConfirmed = priceConfirmed, missedFill = missedFill), savedMessage)
                         } else onSave(FuelEntryRequest(
                             legacyDetail = legacyDetail,
                             date = requireNotNull(date),
@@ -164,14 +170,14 @@ internal fun FuelSheet(
                             amount = calculatedTaka,
                             fuelType = fuelType,
                             price = price,
-                            place = place
+                            place = place, priceConfirmed = priceConfirmed, missedFill = missedFill
                         ), savedMessage) {
                             // Undo action: restore previous state
                         }
                     }
                 },
                 full = true,
-                enabled = reason == null
+                enabled = reason == null && priceConfirmed
             )
             VaultKeypad(onKey = { key ->
                 if (entry.activeField == "price") priceTouched = true
@@ -205,43 +211,17 @@ internal fun FuelSheet(
             Spacer(Modifier.width(4.dp))
             VaultChip(text = appStringResource(Res.string.fuel_octane), active = fuelType == FuelDefaults.OCTANE, onClick = {
                 fuelType = FuelDefaults.OCTANE
-                            entry.set("price", kotlin.math.round(input.lastPrices[FuelDefaults.OCTANE] ?: FuelDefaults.LEGACY_OCTANE_TAKA_PER_LITRE).toInt().toString())
+                            entry.set("price", (input.lastPrices[FuelDefaults.OCTANE] ?: FuelDefaults.LEGACY_OCTANE_TAKA_PER_LITRE).toString())
             })
             VaultChip(text = appStringResource(Res.string.fuel_petrol), active = fuelType == FuelDefaults.PETROL, onClick = {
                 fuelType = FuelDefaults.PETROL
-                            entry.set("price", kotlin.math.round(input.lastPrices[FuelDefaults.PETROL] ?: FuelDefaults.LEGACY_PETROL_TAKA_PER_LITRE).toInt().toString())
+                            entry.set("price", (input.lastPrices[FuelDefaults.PETROL] ?: FuelDefaults.LEGACY_PETROL_TAKA_PER_LITRE).toString())
             })
         }
 
-        // Full tank & date chips
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            VaultChip(text = appStringResource(if (fullTank) Res.string.fuel_full_chip else Res.string.fuel_partial_chip), active = fullTank, onClick = { fullTank = !fullTank })
-            VaultChip(text = appStringResource(Res.string.date_today), active = dateKey == FuelDateSelection.TODAY, onClick = { dateKey = FuelDateSelection.TODAY })
-            VaultChip(text = appStringResource(Res.string.date_yesterday), active = dateKey == FuelDateSelection.YESTERDAY, onClick = { dateKey = FuelDateSelection.YESTERDAY })
-            VaultChip(text = appStringResource(Res.string.date_other), active = dateKey == FuelDateSelection.CUSTOM, onClick = { dateKey = FuelDateSelection.CUSTOM })
-        }
-
-        // Custom date field if custom selected
-        AnimatedVisibility(visible = dateKey == FuelDateSelection.CUSTOM) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(SurfaceColor2)
-                    .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp))
-                    .padding(horizontal = 14.dp, vertical = 12.dp)
-            ) {
-                BasicTextField(
-                    value = customDate,
-                    onValueChange = { customDate = it },
-                    textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary)
-                )
-            }
-        }
+        FuelConfidenceControls(priceConfirmed, remembered?.takeIf { it.takaPerLitre == savedPrice }, missedFill, savedPrice != null,
+            { confirmedPriceKey = if (it) priceKey else null }, { missedFill = it })
+        FuelDateControls(fullTank, dateKey, customDate, { fullTank = !fullTank }, { dateKey = it }, { customDate = it })
 
         // Odometer Row
         val activeField = entry.activeField

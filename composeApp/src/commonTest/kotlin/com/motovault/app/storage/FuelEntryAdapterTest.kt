@@ -47,7 +47,7 @@ class FuelEntryAdapterTest {
         val first = RideLog("Fuel fill-up", "first", "2020-01-01", 1000.0, id = "first", kind = "fuel", liters = 5.0)
         val second = RideLog("Fuel fill-up", "second", "2020-01-10", 1200.0, id = "second", kind = "fuel", liters = 5.0, notes = "keep")
         val original = VaultState(ride = Ride("test", "Synthetic", 2020, 1200.0), logs = listOf(second, first), economy = 40.0, lastFuelOdometer = 1200.0)
-        val request = FuelEditRequest("second", 720.0, 6.0, 120.0, 1200.0, LocalDate(2020, 1, 10), true, "octane", "", "6 L · Full tank")
+        val request = FuelEditRequest("second", 720.0, 6.0, 120.0, 1200.0, LocalDate(2020, 1, 10), true, "octane", "", "6 L · Full tank", priceConfirmed = true)
         val result = FuelEntryAdapter.edit(original, request)
         assertEquals("second", result.logs.first().id)
         assertEquals("keep", result.logs.first().notes)
@@ -58,7 +58,7 @@ class FuelEntryAdapterTest {
     @Test
     fun rejectsInvalidValuesAtTheStorageBoundary() {
         val original = VaultState(ride = Ride("test", "Synthetic", 2020, 1000.0))
-        val request = FuelEntryRequest(600.0, 101.0, 120.0, 1100.0, LocalDate(2020, 1, 2), true, "octane", "", "legacy")
+        val request = FuelEntryRequest(600.0, 101.0, 120.0, 1100.0, LocalDate(2020, 1, 2), true, "octane", "", "legacy", priceConfirmed = true)
         assertFailsWith<IllegalArgumentException> { FuelEntryAdapter.build(original, request) }
         assertEquals(emptyList(), original.logs)
     }
@@ -67,7 +67,7 @@ class FuelEntryAdapterTest {
         val date = LocalDate(2020, 1, 2)
         val previousFill = RideLog("Fuel fill-up", "previous", "2020-01-01", 1000.0, id = "previous", kind = "fuel", liters = 5.0, fullTank = true)
         val original = VaultState(ride = Ride("test", "Synthetic", 2020, 1000.0), logs = listOf(previousFill))
-        val request = FuelEntryRequest(600.0, 5.0, 120.0, 1200.0, date, true, "octane", "", "5.00 L · Full tank")
+        val request = FuelEntryRequest(600.0, 5.0, 120.0, 1200.0, date, true, "octane", "", "5.00 L · Full tank", priceConfirmed = true)
         val result = FuelEntryAdapter.build(original, request)
         assertEquals(40.0, result.economy)
         assertEquals(1200.0, result.lastFuelOdometer)
@@ -83,7 +83,7 @@ class FuelEntryAdapterTest {
             places = listOf("Pump A", "Pump B"), lastPrices = mapOf("octane" to 110.0),
             lastFuelOdometer = 900.0, economy = 42.0
         )
-        val request = FuelEntryRequest(600.0, 5.0, 120.0, 1100.0, date, true, "octane", " Pump B ", "৫.০০ লিটার · Full tank")
+        val request = FuelEntryRequest(600.0, 5.0, 120.0, 1100.0, date, true, "octane", " Pump B ", "৫.০০ লিটার · Full tank", priceConfirmed = true)
         val result = FuelEntryAdapter.build(original, request)
         val created = result.logs.first()
         assertEquals("Fuel fill-up", created.title)

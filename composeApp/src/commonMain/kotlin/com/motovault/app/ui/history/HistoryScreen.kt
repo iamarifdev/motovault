@@ -41,40 +41,23 @@ import motovault.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
-private const val HISTORY_SUMMARY_DAYS = 30
+import com.motovault.app.domain.ledger.*
 
 @Composable
 fun HistoryScreen(
     state: VaultState,
     onDeleteLog: (RideLog) -> Unit,
-    onEditFuel: (RideLog) -> Unit
+    onEditFuel: (RideLog) -> Unit,
+    onOpenCost: (String, Any?) -> Unit = { _, _ -> }
 ) {
     val f = currentFmt
     val haptic = currentHaptic
     val today = today()
-    var filter by remember { mutableStateOf("all") } // "all", "service", "fuel"
-
-    val filteredLogs = remember(state.logs, filter) {
-        state.logs.filter {
-            filter == "all" || (filter == "fuel" && it.isFuel) || (filter == "service" && !it.isFuel)
-        }.sortedWith(compareByDescending<RideLog> { it.date }.thenByDescending { it.odometer })
-    }
-
-    val groups = remember(filteredLogs) {
-        filteredLogs.groupBy { it.date.take(7) }.toList()
-    }
-
-    val thirtyDaysAgo = remember(today) { LocalDate.fromEpochDays(today.toEpochDays() - HISTORY_SUMMARY_DAYS).toString() }
-    val recentLogs = remember(state.logs, thirtyDaysAgo) { state.logs.filter { it.date >= thirtyDaysAgo } }
-    val spend30 = remember(recentLogs) { recentLogs.sumOf { it.cost } }
-    val km30 = remember(recentLogs) {
-        if (recentLogs.size > 1) {
-            val maxOdo = recentLogs.maxOf { it.odometer }
-            val minOdo = recentLogs.minOf { it.odometer }
-            maxOdo - minOdo
-        } else 0.0
-    }
-    val avgEconomy = remember(state.logs) { WearCalculator.economyOf(state.logs) }
+    var period by remember { mutableStateOf(CostPeriod.RECENT) }
+    var category by remember { mutableStateOf<CostCategory?>(null) }
+    val summary = remember(state.logs, today, period, category) { CostLedger.summarize(state.logs, today, period, category) }
+    val filteredLogs = summary.logs
+    val groups = remember(filteredLogs) { filteredLogs.groupBy { it.date.take(7) }.toList() }
 
     Column(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp),
@@ -82,48 +65,7 @@ fun HistoryScreen(
     ) {
         Text(text = appStringResource(Res.string.history_title), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
 
-        // 3-stat summary banner
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(SurfaceColor)
-                .border(1.dp, BorderColor, RoundedCornerShape(16.dp))
-                .padding(14.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(text = appStringResource(Res.string.history_spend, f.d(HISTORY_SUMMARY_DAYS.toString())), fontSize = 12.sp, color = TextSecondary)
-                Text(text = f.money(spend30), fontSize = 17.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-            }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(text = appStringResource(Res.string.history_distance_label), fontSize = 12.sp, color = TextSecondary)
-                Text(text = appStringResource(Res.string.history_distance, f.n(km30)), fontSize = 17.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-            }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(text = appStringResource(Res.string.history_economy_label), fontSize = 12.sp, color = TextSecondary)
-                Text(
-                    text = if (avgEconomy != null) appStringResource(Res.string.history_economy, f.n(avgEconomy, 1)) else "--",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextPrimary
-                )
-            }
-        }
-
-        // Filter chips row
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                VaultChip(text = appStringResource(Res.string.history_all), active = filter == "all", onClick = { filter = "all" })
-                VaultChip(text = appStringResource(Res.string.history_service), active = filter == "service", onClick = { filter = "service" })
-                VaultChip(text = appStringResource(Res.string.history_fuel), active = filter == "fuel", onClick = { filter = "fuel" })
-            }
-            Text(text = appPluralStringResource(Res.plurals.history_record_count, filteredLogs.size, f.d(filteredLogs.size.toString())), fontSize = 13.sp, color = TextSecondary)
-        }
+        CostOverview(state, summary, period, category, { period = it }, { category = it }, { onOpenCost(it, if (it == "cost-details") CostDetailsSelection(period, category) else null) })
 
         if (groups.isEmpty()) {
             Box(
@@ -193,19 +135,20 @@ fun HistoryScreen(
                                             ?: appStringResource(Res.string.history_document_fee_unknown)
                                         appStringResource(Res.string.history_document_fee, name)
                                     }
+                                    log.kind == "expense" -> costCategoryLabel(CostLedger.category(log))
                                     else -> log.detail.ifBlank { appStringResource(Res.string.history_service) }
                                 }
                                 val dateLabel = if (logDate != null) appStringResource(Res.string.history_day_month,
                                     f.d(logDate.dayOfMonth.toString()), localizedMonthName(state.language, logDate.monthNumber - 1)) else log.date
                                 Text(text = title, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                                 Text(
-                                    text = appStringResource(Res.string.history_row_subtitle, dateLabel,
+                                    text = if (log.kind == "expense" || log.isDocumentFee) dateLabel else appStringResource(Res.string.history_row_subtitle, dateLabel,
                                         appStringResource(Res.string.history_distance, f.n(log.odometer))),
                                     fontSize = 13.sp,
                                     color = TextSecondary
                                 )
                             }
-                            Text(text = f.money(log.cost), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                            Text(text = CostLedger.amount(log)?.let { costMoney(it) } ?: appStringResource(Res.string.cost_unavailable), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
                             V3Icon(
                                 path = "feather_icon/fi_chevron-down.svg",
                                 description = null,
@@ -261,6 +204,10 @@ fun HistoryScreen(
                                     if (log.workshop.isNotBlank()) Text(log.workshop, fontSize = 13.sp, color = TextSecondary)
                                 }
 
+                                if (log.notes.isNotBlank()) Text(log.notes, color = TextSecondary, fontSize = 13.sp)
+                                if (log.kind == "expense") {
+                                    TextButton(onClick = { onOpenCost("expense", log) }) { Text(appStringResource(Res.string.cost_edit)) }
+                                }
                                 if (log.isFuel) {
                                     TextButton(onClick = { onEditFuel(log) }, contentPadding = PaddingValues(0.dp)) {
                                         Text(appStringResource(Res.string.fuel_edit_action), fontSize = 13.sp)

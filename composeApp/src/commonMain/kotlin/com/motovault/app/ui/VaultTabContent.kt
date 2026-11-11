@@ -138,6 +138,7 @@ internal fun ColumnScope.VaultTabContent(
                                     )
                                     Tab.HISTORY -> HistoryScreen(
                                         state = state,
+                                        onOpenCost = { name, log -> onSheet(ActiveSheet(name, log)) },
                                         onEditFuel = { log -> onEditFuel(log) },
                                         onDeleteLog = { log ->
                                             val next = runCatching { state.deleteLog(log) }.getOrNull()

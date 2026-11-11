@@ -872,7 +872,7 @@
     <string name="renewal_transfer_link">মালিকানা বদলী ও সংশোধনের নিয়ম</string>
     <string name="renewal_digital_certificate_link">ডিজিটাল সার্টিফিকেটের প্রক্রিয়া</string>
     <string name="history_document_fee">%1$s নবায়ন</string>
-    <string name="history_document_fee_unknown">ডকুমেন্ট নবায়ন</string>
+    <string name="history_document_fee_unknown">ডকুমেন্ট</string>
 
     <string name="renewal_step_licence_form">আবেদনের ফরম</string>
     <string name="renewal_step_licence_form_detail">নির্ধারিত ফরম পূরণ ও সই করুন।</string>
