@@ -1,0 +1,27 @@
+COMMAND python3 tools/ui_literal_gate.py
+Direct UI literal baseline matches (18 existing occurrences).
+
+COMMAND python3 tools/bangla_copy_lint.py
+Bangla copy style baseline matches (15 regression phrases).
+
+COMMAND python3 tools/ui_literal_gate.py --fuel
+Direct UI literal baseline matches (0 existing occurrences).
+
+COMMAND python3 tools/responsibility_gate.py
+Responsibility baseline matches (2 files, 7 functions).
+
+COMMAND python3 tools/architecture_dependencies.py
+Dependency import baseline matches (0 existing violations).
+
+COMMAND python3 tools/architecture_package_cycles.py
+No shared domain/application package cycles (12 packages, 19 edges).
+
+COMMAND python3 tools/fuel_policy_literals.py
+Fuel domain numeric policy check passed.
+
+COMMAND python3 -m unittest tools.tests.test_localization_resources
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.011s
+
+OK

@@ -1095,7 +1095,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ## P06: Ownership costs, budgets and fuel confidence
 
-**Priority:** P1 | **Scope:** core | **Current status:** Ready
+**Priority:** P1 | **Scope:** core | **Current status:** Done
 
 **Outcome:** History explains recorded ownership costs and helps plan upcoming spending.
 
@@ -1123,7 +1123,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ### P06-01: Define money, distance coverage and cost metrics
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P04A-07, P04A-08.
 
@@ -1140,7 +1140,7 @@ Required completion evidence: plan, review.
 
 ### P06-02: Implement expenses, budgets and pure cost calculations
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P06-01, P03A-02, P03A-03.
 
@@ -1159,7 +1159,7 @@ Required completion evidence: implementation, verification.
 
 ### P06-03: Add fuel price provenance and incomplete-cycle explanations
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P06-02, P03A-02, P03A-06, P03A-03.
 
@@ -1180,7 +1180,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P06-04: Build cost details, category entry and budgets in v3
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P06-02, P06-03, P03A-02, P03A-06, P03A-03.
 
@@ -1201,7 +1201,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P06-05: Verify cost migration, edit/Undo and export consistency
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P06-04.
 
@@ -1411,7 +1411,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ### P08-02: Run physical-device accessibility, reliability and performance pass
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Planned** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P08-01.
 

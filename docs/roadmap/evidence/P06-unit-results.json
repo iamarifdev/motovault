@@ -1,0 +1,22 @@
+{
+  "initial_suite": {
+    "tests": 305,
+    "passed": 303,
+    "failed": [
+      "com.motovault.app.storage.FuelEntryAdapterTest/editPreservesIdentityHistoricPriceAndUnrelatedMetadata",
+      "com.motovault.app.storage.FuelEntryAdapterTest/editingAFillUpdatesEconomyAndPreservesRecordIdentity"
+    ]
+  },
+  "focused_rerun": {
+    "tests": 9,
+    "passed": 9,
+    "classes": [
+      "com.motovault.app.storage.FuelEntryAdapterTest",
+      "com.motovault.app.storage.FuelPriceProvenanceTest"
+    ]
+  },
+  "distinct_tests_covered": 305,
+  "unresolved_failures": 0,
+  "tooling_tests": 54,
+  "final_resource_parity_tests": 5
+}

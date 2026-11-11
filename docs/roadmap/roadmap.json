@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-05T07:25:22+00:00",
+  "updated_at": "2026-11-11T18:26:48+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -3990,13 +3990,37 @@
             "plan",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-11T17:32:07+00:00",
+          "completed_at": "2026-11-11T17:34:00+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-11T17:32:07+00:00",
+              "text": "Define recorded-cost and fuel-confidence contracts before implementation; consolidate phase validation."
+            },
+            {
+              "at": "2026-11-11T17:34:00+00:00",
+              "text": "Reviewed integer-poisha, date windows, coverage and full-to-full examples against current callers."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "plan",
+              "reference": "docs/roadmap/P06-COST-CONTRACT.md",
+              "summary": "Reviewed integer-poisha, date windows, coverage and full-to-full examples against current callers.",
+              "at": "2026-11-11T17:34:00+00:00",
+              "revision": "f2ca12f"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P06-01-review.md",
+              "summary": "Reviewed integer-poisha, date windows, coverage and full-to-full examples against current callers.",
+              "at": "2026-11-11T17:34:00+00:00",
+              "revision": "f2ca12f"
+            }
+          ]
         },
         {
           "id": "P06-02",
@@ -4020,13 +4044,37 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-11T17:34:07+00:00",
+          "completed_at": "2026-11-11T18:04:18+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-11T17:34:07+00:00",
+              "text": "Implement pure ledger rules and compatible cost metadata through the existing writer."
+            },
+            {
+              "at": "2026-11-11T18:04:18+00:00",
+              "text": "Pure ledger, expenses, optional budgets and backup fields verified by cumulative 305-test coverage and portable/native compilation gates."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P06-implementation.md",
+              "summary": "Pure ledger, expenses, optional budgets and backup fields verified by cumulative 305-test coverage and portable/native compilation gates.",
+              "at": "2026-11-11T18:04:18+00:00",
+              "revision": "f2ca12f"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P06-verification.md",
+              "summary": "Pure ledger, expenses, optional budgets and backup fields verified by cumulative 305-test coverage and portable/native compilation gates.",
+              "at": "2026-11-11T18:04:18+00:00",
+              "revision": "f2ca12f"
+            }
+          ]
         },
         {
           "id": "P06-03",
@@ -4054,13 +4102,44 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-11T18:04:18+00:00",
+          "completed_at": "2026-11-11T18:26:48+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-11T18:04:18+00:00",
+              "text": "Confirmed prices and missing-cycle controls implemented in the coordinated phase slice; native copy evidence is running."
+            },
+            {
+              "at": "2026-11-11T18:26:48+00:00",
+              "text": "Confirmed price dates, decimals and partial/missed cycles verified; native bilingual controls reviewed. Owner approved iOS VoiceOver handoff to P08-02."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P06-implementation.md",
+              "summary": "Confirmed price dates, decimals and partial/missed cycles verified; native bilingual controls reviewed. Owner approved iOS VoiceOver handoff to P08-02.",
+              "at": "2026-11-11T18:26:48+00:00",
+              "revision": "f2ca12f"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P06-verification.md",
+              "summary": "Confirmed price dates, decimals and partial/missed cycles verified; native bilingual controls reviewed. Owner approved iOS VoiceOver handoff to P08-02.",
+              "at": "2026-11-11T18:26:48+00:00",
+              "revision": "f2ca12f"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P06-design.md",
+              "summary": "Confirmed price dates, decimals and partial/missed cycles verified; native bilingual controls reviewed. Owner approved iOS VoiceOver handoff to P08-02.",
+              "at": "2026-11-11T18:26:48+00:00",
+              "revision": "f2ca12f"
+            }
+          ]
         },
         {
           "id": "P06-04",
@@ -4089,13 +4168,44 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-11T18:26:48+00:00",
+          "completed_at": "2026-11-11T18:26:48+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-11T18:26:48+00:00",
+              "text": "Close the prepared coordinated P06 History/expense/budget slice against completed native evidence."
+            },
+            {
+              "at": "2026-11-11T18:26:48+00:00",
+              "text": "Period/category totals, details, expense entry, budgets and exact money verified on both hosts, with four language/digit combinations and dark/large-text captures."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P06-implementation.md",
+              "summary": "Period/category totals, details, expense entry, budgets and exact money verified on both hosts, with four language/digit combinations and dark/large-text captures.",
+              "at": "2026-11-11T18:26:48+00:00",
+              "revision": "f2ca12f"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P06-verification.md",
+              "summary": "Period/category totals, details, expense entry, budgets and exact money verified on both hosts, with four language/digit combinations and dark/large-text captures.",
+              "at": "2026-11-11T18:26:48+00:00",
+              "revision": "f2ca12f"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P06-design.md",
+              "summary": "Period/category totals, details, expense entry, budgets and exact money verified on both hosts, with four language/digit combinations and dark/large-text captures.",
+              "at": "2026-11-11T18:26:48+00:00",
+              "revision": "f2ca12f"
+            }
+          ]
         },
         {
           "id": "P06-05",
@@ -4117,13 +4227,51 @@
             "android_runtime",
             "ios_runtime"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-11T18:26:48+00:00",
+          "completed_at": "2026-11-11T18:26:48+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-11T18:26:48+00:00",
+              "text": "Finalize cumulative unit, native writer/Room/archive and UI evidence; no broad suite rerun."
+            },
+            {
+              "at": "2026-11-11T18:26:48+00:00",
+              "text": "Both hosts passed legacy conversion, correction, delete/Undo, Room reopen and real encrypted-backup consistency. UI totals and save/failure/cancel verified; VoiceOver explicitly tracked by P08-02."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P06-verification.md",
+              "summary": "Both hosts passed legacy conversion, correction, delete/Undo, Room reopen and real encrypted-backup consistency. UI totals and save/failure/cancel verified; VoiceOver explicitly tracked by P08-02.",
+              "at": "2026-11-11T18:26:48+00:00",
+              "revision": "f2ca12f"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P06-design.md",
+              "summary": "Both hosts passed legacy conversion, correction, delete/Undo, Room reopen and real encrypted-backup consistency. UI totals and save/failure/cancel verified; VoiceOver explicitly tracked by P08-02.",
+              "at": "2026-11-11T18:26:48+00:00",
+              "revision": "f2ca12f"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P06-android.md",
+              "summary": "Both hosts passed legacy conversion, correction, delete/Undo, Room reopen and real encrypted-backup consistency. UI totals and save/failure/cancel verified; VoiceOver explicitly tracked by P08-02.",
+              "at": "2026-11-11T18:26:48+00:00",
+              "revision": "f2ca12f"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P06-ios.md",
+              "summary": "Both hosts passed legacy conversion, correction, delete/Undo, Room reopen and real encrypted-backup consistency. UI totals and save/failure/cancel verified; VoiceOver explicitly tracked by P08-02.",
+              "at": "2026-11-11T18:26:48+00:00",
+              "revision": "f2ca12f"
+            }
+          ]
         }
       ],
       "architecture_application": [
@@ -4444,7 +4592,7 @@
             "ios_device"
           ],
           "status": "planned",
-          "owner": null,
+          "owner": "Codex",
           "started_at": null,
           "completed_at": null,
           "blocker": "",
@@ -4452,6 +4600,10 @@
             {
               "at": "2026-10-23T23:17:34+00:00",
               "text": "P00-D07: iOS capture found unnamed clickable labels and inconsistent or zero hit frames during scrolling. Verify steady native accessibility and real-device control interaction."
+            },
+            {
+              "at": "2026-11-11T18:23:41+00:00",
+              "text": "Owner approved tracking the P06 iOS VoiceOver check here on 12 Nov 2026. iOS 27 XCTest exposes only Compose root despite Always sync; screenshots do not prove VoiceOver. Verify production cost, expense, budget and fuel semantics/focus on iPhone before release."
             }
           ],
           "evidence": [
@@ -4461,6 +4613,13 @@
               "summary": "P00-D07: iOS capture found unnamed clickable labels and inconsistent or zero hit frames during scrolling. Verify steady native accessibility and real-device control interaction.",
               "at": "2026-10-23T23:17:34+00:00",
               "revision": "50eda3a"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P06-ios-accessibility.md",
+              "summary": "Owner approved tracking the P06 iOS VoiceOver check here on 12 Nov 2026. iOS 27 XCTest exposes only Compose root despite Always sync; screenshots do not prove VoiceOver. Verify production cost, expense, budget and fuel semantics/focus on iPhone before release.",
+              "at": "2026-11-11T18:23:41+00:00",
+              "revision": "f2ca12f"
             }
           ]
         },
@@ -7917,6 +8076,94 @@
       "to": "done",
       "note": "Full renewal verified on Android emulator and iOS simulator: reminder plan, checklist, receipt attachment, renewed document, fee row and new reminder; cancel/failure preserve originals; 289 unit tests pass",
       "revision": "55c1e43"
+    },
+    {
+      "at": "2026-11-11T17:32:07+00:00",
+      "task": "P06-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Define recorded-cost and fuel-confidence contracts before implementation; consolidate phase validation.",
+      "revision": "f2ca12f"
+    },
+    {
+      "at": "2026-11-11T17:34:00+00:00",
+      "task": "P06-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Reviewed integer-poisha, date windows, coverage and full-to-full examples against current callers.",
+      "revision": "f2ca12f"
+    },
+    {
+      "at": "2026-11-11T17:34:07+00:00",
+      "task": "P06-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement pure ledger rules and compatible cost metadata through the existing writer.",
+      "revision": "f2ca12f"
+    },
+    {
+      "at": "2026-11-11T18:04:18+00:00",
+      "task": "P06-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Pure ledger, expenses, optional budgets and backup fields verified by cumulative 305-test coverage and portable/native compilation gates.",
+      "revision": "f2ca12f"
+    },
+    {
+      "at": "2026-11-11T18:04:18+00:00",
+      "task": "P06-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Confirmed prices and missing-cycle controls implemented in the coordinated phase slice; native copy evidence is running.",
+      "revision": "f2ca12f"
+    },
+    {
+      "at": "2026-11-11T18:23:41+00:00",
+      "task": "P08-02",
+      "from": "planned",
+      "to": "planned",
+      "note": "Owner approved tracking the P06 iOS VoiceOver check here on 12 Nov 2026. iOS 27 XCTest exposes only Compose root despite Always sync; screenshots do not prove VoiceOver. Verify production cost, expense, budget and fuel semantics/focus on iPhone before release.",
+      "revision": "f2ca12f"
+    },
+    {
+      "at": "2026-11-11T18:26:48+00:00",
+      "task": "P06-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Confirmed price dates, decimals and partial/missed cycles verified; native bilingual controls reviewed. Owner approved iOS VoiceOver handoff to P08-02.",
+      "revision": "f2ca12f"
+    },
+    {
+      "at": "2026-11-11T18:26:48+00:00",
+      "task": "P06-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Close the prepared coordinated P06 History/expense/budget slice against completed native evidence.",
+      "revision": "f2ca12f"
+    },
+    {
+      "at": "2026-11-11T18:26:48+00:00",
+      "task": "P06-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Period/category totals, details, expense entry, budgets and exact money verified on both hosts, with four language/digit combinations and dark/large-text captures.",
+      "revision": "f2ca12f"
+    },
+    {
+      "at": "2026-11-11T18:26:48+00:00",
+      "task": "P06-05",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Finalize cumulative unit, native writer/Room/archive and UI evidence; no broad suite rerun.",
+      "revision": "f2ca12f"
+    },
+    {
+      "at": "2026-11-11T18:26:48+00:00",
+      "task": "P06-05",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Both hosts passed legacy conversion, correction, delete/Undo, Room reopen and real encrypted-backup consistency. UI totals and save/failure/cancel verified; VoiceOver explicitly tracked by P08-02.",
+      "revision": "f2ca12f"
     }
   ]
 }

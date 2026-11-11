@@ -1,0 +1,1 @@
+PASS P06 labeled price confirmation controls in English and Bangla
