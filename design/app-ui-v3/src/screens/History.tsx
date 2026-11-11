@@ -9,6 +9,7 @@ import { dur, ease, spring } from '../lib/motion'
 import { haptic } from '../lib/haptics'
 import type { FuelLog, LogEntry, ServiceLog } from '../types'
 import { Chip } from '../components/ui'
+import { CostInsights } from '../components/CostInsights'
 
 type Filter = 'all' | 'service' | 'fuel'
 
@@ -66,22 +67,17 @@ export function History() {
   const showToast = useUI((s) => s.showToast)
   const open = useUI((s) => s.open)
   const f = useFmt()
-  const [filter, setFilter] = useState<Filter>('all')
+  const [period, setPeriod] = useState(0)
+  const [category, setCategory] = useState(0)
   const today = todayISO()
 
-  const view = useMemo(() => logs.filter((l) => filter === 'all' || l.type === filter).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.odo - a.odo)), [logs, filter])
+  const since = period === 0 ? addDays(today, -29) : period === 1 ? `${today.slice(0, 7)}-01` : ''
+  const view = useMemo(() => logs.filter((l) => l.date >= since && l.date <= today && (!category || (l.type === 'fuel' ? 1 : 2) === category)).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.odo - a.odo)), [logs, category, since, today])
   const groups = useMemo(() => {
     const m = new Map<string, LogEntry[]>()
     view.forEach((l) => { const k = l.date.slice(0, 7); m.set(k, [...(m.get(k) ?? []), l]) })
     return [...m.entries()]
   }, [view])
-
-  const since = addDays(today, -30)
-  const recent = logs.filter((l) => l.date >= since)
-  const spend = recent.reduce((a, l) => a + (l.type === 'fuel' ? l.amount : l.total), 0)
-  const fuel = fuelLogs(logs)
-  const km = recent.length > 1 ? Math.max(...recent.map((l) => l.odo)) - Math.min(...recent.map((l) => l.odo)) : 0
-  const econ = economyOf(logs)
 
   const del = (id: string) => {
     const r = removeLog(id)
@@ -93,16 +89,7 @@ export function History() {
   return (
     <div className="screen-pad">
       <header className="page-head"><h1>রেকর্ড</h1></header>
-      <section className="summary" aria-label="গত ৩০ দিন">
-        <div><small>গত ৩০ দিনের খরচ</small><b>{f.money(spend)}</b></div>
-        <div><small>চালানো</small><b>{f.km(km)}</b></div>
-        <div><small>জ্বালানি গড়</small><b>{econ === null ? '--' : `${f.d(econ.toFixed(1))} ${f.digits === 'bn' ? 'কিমি/লি' : 'km/L'}`}</b></div>
-      </section>
-      <div className="row-wrap" role="group" aria-label="ফিল্টার">
-        {(['all', 'service', 'fuel'] as const).map((k) => <Chip key={k} active={filter === k} onClick={() => setFilter(k)}>{k === 'all' ? 'সব' : k === 'service' ? 'সার্ভিস' : 'জ্বালানি'}</Chip>)}
-        <span className="grow" /><span className="cap">{f.d(String(view.length))}টি রেকর্ড</span>
-      </div>
-
+      <CostInsights recorded={logs.map(log => ({ date: log.date, category: log.type === 'fuel' ? 1 : 2, amount: log.type === 'fuel' ? log.amount : log.total, km: log.odo }))} onFilter={(p, c) => { setPeriod(p); setCategory(c) }} />
       {groups.length === 0 && <div className="empty"><p>এখনও কিছু নেই। নিচের + চাপুন।</p></div>}
       {groups.map(([key, items]) => (
         <section key={key} aria-label={f.month(`${key}-01`)}>
@@ -118,7 +105,6 @@ export function History() {
           </ul>
         </section>
       ))}
-      {fuel.length === 0 && null}
     </div>
   )
 }

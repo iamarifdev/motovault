@@ -9,6 +9,7 @@ import { estimateOdometer, fuelLogs } from '../lib/wear'
 import { haptic } from '../lib/haptics'
 import { spring } from '../lib/motion'
 import type { FuelType } from '../types'
+import costCopy from '../data/cost-copy.json'
 import { Sheet } from '../components/Sheet'
 import { Button, Chip } from '../components/ui'
 import { Keypad, useEntry, useHardwareKeys, useShow } from '../components/entry'
@@ -47,6 +48,9 @@ export function FuelSheet({ amount: preset, existingId }: { amount?: number; exi
   const [place, setPlace] = useState(existing?.place ?? '')
   const [odoTouched, setOdoTouched] = useState(Boolean(existing))
   const [saveFailed, setSaveFailed] = useState(false)
+  const [confirmedKey, setConfirmedKey] = useState<string | null>(null)
+  const [missed, setMissed] = useState(false)
+  const c = costCopy.bn
   const e = useEntry<Field>({ amount: existing ? String(existing.amount) : preset ? String(preset) : '', litres: existing ? String(existing.liters) : '', price: String(existing?.price ?? lastPrice.octane), odo: String(existing?.odo ?? estimate) }, 'amount')
 
   const date = dateKey === 'today' ? today : dateKey === 'yesterday' ? addDays(today, -1) : custom
@@ -77,8 +81,9 @@ export function FuelSheet({ amount: preset, existingId }: { amount?: number; exi
   const setFuelType = (t: FuelType) => { setFuel(t); e.set('price', String(lastPrice[t])) }
   const bump = (n: number) => { e.set('odo', String(odo + n)); setOdoTouched(true) }
 
+  const confirmed = confirmedKey === `${fuel}:${price}` || Boolean(existing && existing.price === price && existing.fuel === fuel)
   const save = () => {
-    if (reason) { haptic('error'); return }
+    if (reason || !confirmed) { haptic('error'); return }
     // Synthetic design state; no owner data is written when this fixture is enabled.
     if (new URLSearchParams(window.location.search).get('fuelSaveFailure') === '1') {
       setSaveFailed(true); haptic('error'); return
@@ -98,10 +103,13 @@ export function FuelSheet({ amount: preset, existingId }: { amount?: number; exi
     <Sheet title={existing ? 'জ্বালানির রেকর্ড ঠিক করুন' : 'জ্বালানি'} footer={
       <>
         {saveFailed && <p className="field-msg err" role="alert">সেভ করা যায়নি। তথ্য মুছে যায়নি, আবার চেষ্টা করুন।</p>}
-        <Button full disabled={Boolean(reason)} onClick={save}>{reason ?? `${f.money(taka)} সেভ করুন`}</Button>
+        <Button full disabled={Boolean(reason) || !confirmed} onClick={save}>{reason ?? `${f.money(taka)} সেভ করুন`}</Button>
         <Keypad onKey={e.press} />
       </>
     }>
+      <label className="line-p"><input type="checkbox" checked={confirmed} onChange={ev => setConfirmedKey(ev.target.checked ? `${fuel}:${price}` : null)} />{c.price}</label>
+      <label className="line-p"><input type="checkbox" checked={missed} onChange={ev => setMissed(ev.target.checked)} />{c.missed}</label>
+      {missed && <p>{c.open}</p>}
       <button type="button" className={`amount-card ${e.active === 'amount' || e.active === 'litres' ? 'active' : ''}`} onClick={() => e.setActive(mode === 'taka' ? 'amount' : 'litres')}>
         <span className="cap">{mode === 'taka' ? 'কত টাকার তেল?' : 'কত লিটার?'}</span>
         <span className="amount-line">
