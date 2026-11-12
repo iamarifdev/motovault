@@ -1,0 +1,4 @@
+Filtered `dumpsys alarm` query for com.motovault.app.privacyprobe after granting
+POST_NOTIFICATIONS and opening Profile (which triggers reconciliation), 13 Nov
+2026 00:39 Asia/Dhaka: 0 matching alarm lines. Reminder scheduling was not
+observed; delivery is not claimed from this check.

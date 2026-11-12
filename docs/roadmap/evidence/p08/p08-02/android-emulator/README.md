@@ -1,0 +1,15 @@
+# P08-02 emulator verification (pre-work)
+
+Android emulator Pixel_10, Android 17/API 37 (emulator-5554); isolated probe build.
+
+Files and SHA-256:
+461d2469bb9d94567a7b17476d7f833ee21433f9001fcd0c7ca2745521e6d8c1  cam-emu.log
+d1cf0eb6327e073f3640509021296c0aa3fd13edc5ac3d2ebcc772fcd24b4dd6  ce-01-launch.xml
+74da2b53de642d241f0cc3109c94fa1198efeb72c86bb04dd43faef1c4ba384e  ce-02-garage.xml
+ba6ecc4641dfc3367e1e681e4474f39748fc0fbc1e2273f50ac53acf9a77ac0f  ce-03-sheet.xml
+0b7d8c716502d5c8e8ad1314e859af635cf4845aa7769d2c427f176cfdc7fbe5  ce-04-after-camera-cancel.png
+ba6ecc4641dfc3367e1e681e4474f39748fc0fbc1e2273f50ac53acf9a77ac0f  ce-04-after-camera-cancel.xml
+5048a986cbb12196d1a657d3cba17e53229245b020488254d5fe1e4ccdcabfcd  large-vault-1200-logs-history.png
+ba73790a75104d6fdf3895476ac0bcaed98c859ac8a167767320f9c956226e0b  large-vault-1200-logs-history.xml
+a04f3cd3030e7bb21add6e0662a6400faf900869ff8c0026621183fc388d0fa2  profile-swatches-wrapped.png
+a5eac73a4f5a8cc26152c176c1c1e29e7aa39bf51f96359550cc611496d8cf9a  profile-swatches-wrapped.xml

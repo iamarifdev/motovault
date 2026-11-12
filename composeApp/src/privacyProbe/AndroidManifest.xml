@@ -10,5 +10,7 @@
         <activity android:name=".BackupRoundTripFixtureActivity" android:exported="true" />
         <activity android:name=".MaintenanceFixtureActivity" android:exported="true" />
         <activity android:name=".RenewalFixtureActivity" android:exported="true" />
+        <activity android:name=".LargeVaultFixtureActivity" android:exported="true" />
+        <activity android:name=".NotificationProbeActivity" android:exported="true" />
     </application>
 </manifest>
