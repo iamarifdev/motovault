@@ -37,6 +37,6 @@ class VaultFailureFixtureActivity : ComponentActivity() {
             override suspend fun list(): List<RecoverySummary> = emptyList()
             override fun restore(recoveryId: String, expectedRevision: Long, completed: (Result<Unit>) -> Unit) = completed(Result.failure(IllegalStateException()))
         }
-        setContent { MotoVault(writer, restorer, FuelEntryAdapter, FuelEntryAdapter, recovery, syntheticBackupOperations) }
+        setContent { MotoVault(writer, restorer, FuelEntryAdapter, FuelEntryAdapter, recovery, syntheticBackupOperations, AppComposition.captureDrafts) }
     }
 }

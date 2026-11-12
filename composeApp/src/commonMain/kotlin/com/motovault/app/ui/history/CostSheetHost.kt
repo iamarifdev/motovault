@@ -15,7 +15,8 @@ internal fun CostSheetHost(sheet: ActiveSheet, state: VaultState, onDismiss: () 
         }
     }
     when (sheet.name) {
-        "expense" -> ExpenseSheet(state, sheet.props as? RideLog, onDismiss, save)
+        "expense" -> ExpenseSheet(state, sheet.props as? RideLog, onDismiss, save,
+            initialAmount = (sheet.props as? CapturePrefill)?.amount)
         "budget" -> BudgetSheet(state, onDismiss, save)
         "cost-details" -> CostDetailsSheet(state, sheet.props as? CostDetailsSelection ?: CostDetailsSelection(), onDismiss)
     }

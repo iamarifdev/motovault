@@ -38,7 +38,7 @@ import motovault.composeapp.generated.resources.*
 
 
 @Composable
-internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBackupRestorer, fuelEntry: FuelEntryBuilder<VaultState>, fuelEditor: FuelEntryEditor<VaultState>, recovery: VaultRecovery, backupOperations: VaultBackupOperations<VaultState>) {
+internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBackupRestorer, fuelEntry: FuelEntryBuilder<VaultState>, fuelEditor: FuelEntryEditor<VaultState>, recovery: VaultRecovery, backupOperations: VaultBackupOperations<VaultState>, captureDrafts: com.motovault.app.application.capture.CaptureDraftFactory) {
     val snapshot by session.snapshots.collectAsState()
     val state = snapshot.state
     // Refresh actual OS permission and committed requests when returning from system settings.
@@ -63,6 +63,8 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
         )
     }
     var currentToast by remember { mutableStateOf<ToastData?>(null) }
+    val odometerCapture = rememberOdometerCaptureState()
+    LaunchedEffect(activeSheet?.name) { if (activeSheet?.name != "odometer") odometerCapture.close() }
     var restoreSuccessVisible by remember { mutableStateOf(false) }
     var fuelEditError by remember { mutableStateOf<String?>(null) }
     var fuelCreateError by remember { mutableStateOf<FuelCreateError?>(null) }
@@ -70,8 +72,14 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
     val scope = rememberCoroutineScope()
     val fuelWorkflow = remember(session, fuelEntry, fuelEditor) { FuelWorkflow(session, fuelEntry, fuelEditor) }
     val text = vaultUiText(); val authMessages = rememberAuthMessages()
+    val captureRejected = appStringResource(Res.string.capture_duplicate)
     fun commit(next: VaultState, onDone: ((Boolean) -> Unit)? = null) {
-        session.commit(next, revision) { ok ->
+        val prepared = runCatching { next.acceptPrefill(activeSheet?.props as? CapturePrefill) }.getOrElse {
+            currentToast = ToastData(message = captureRejected)
+            onDone?.invoke(false)
+            return
+        }
+        session.commit(prepared, revision) { ok ->
             if (scope.isActive) {
                 onDone?.invoke(ok)
             }
@@ -184,6 +192,9 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
         activeSheet = null
     }
 
+    CaptureIntake(enabled = !loading && state.ride != null && accessMode == VaultAccessMode.OWNER && activeSheet == null && !editingRide) {
+        activeSheet = ActiveSheet("capture", it)
+    }
     val reminderRequest by ReminderNavigation.requests.collectAsState()
     LaunchedEffect(reminderRequest, loading) {
         val payload = reminderRequest ?: return@LaunchedEffect
@@ -341,8 +352,10 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
                 )
             }
 
+            CompositionLocalProvider(LocalOdometerCapture provides odometerCapture) {
             VaultSheetHost(
                 activeSheet = activeSheet,
+                captureDrafts = captureDrafts,
                 state = state,
                 revision = revision,
                 loading = loading,
@@ -364,6 +377,7 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
                 onInspect = { inspectDocument(it) },
                 onLockNow = { lockNow() }
             )
+            }
             }
             }
         }

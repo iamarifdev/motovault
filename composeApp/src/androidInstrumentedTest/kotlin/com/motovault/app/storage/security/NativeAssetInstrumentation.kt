@@ -53,10 +53,16 @@ class NativeAssetInstrumentation : Instrumentation() {
     internal var pickerOnly = false
     private var roundTripOnly = false
     private var historyLocaleOnly = false
+    private var captureOnly = false
+    private var ocrLifetimeOnly = false
+    private var captureOwnerOnly = false
     private var costOnly = false
     internal var costPriceOnly = false
     override fun onCreate(arguments: Bundle?) {
         super.onCreate(arguments)
+        captureOnly = arguments?.getString("onlyCapture") == "true"
+        ocrLifetimeOnly = arguments?.getString("onlyOcrLifetime") == "true"
+        captureOwnerOnly = arguments?.getString("onlyCaptureOwner") == "true"
         backupOnly = arguments?.getString("onlyBackup") == "true"
         pickerOnly = arguments?.getString("onlyPicker") == "true"
         roundTripOnly = arguments?.getString("onlyRoundTrip") == "true"
@@ -67,6 +73,7 @@ class NativeAssetInstrumentation : Instrumentation() {
     }
 
     override fun onStart() {
+        if (runCaptureProbe(captureOnly, ocrLifetimeOnly, captureOwnerOnly)) return
         if (runFocusedProbe(backupOnly, pickerOnly, roundTripOnly, historyLocaleOnly, costOnly)) return
         val results = Bundle()
         val id = UUID.randomUUID().toString()

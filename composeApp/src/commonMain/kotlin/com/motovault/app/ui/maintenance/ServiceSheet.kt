@@ -63,7 +63,8 @@ fun ServiceSheet(
     initialItemKey: String? = null,
     initialRows: List<ParsedLine>? = null,
     onDismiss: () -> Unit,
-    onSave: (VaultState, String, () -> Unit) -> Unit
+    onSave: (VaultState, String, () -> Unit) -> Unit,
+    initialOdometer: Double? = null
 ) {
     val ride = state.ride ?: return
     val f = currentFmt
@@ -92,11 +93,11 @@ fun ServiceSheet(
             put("labour", "")
             put("misc", "")
             put("discount", "")
-            put("odo", estimate.toInt().toString())
+            put("odo", initialOdometer?.toString() ?: estimate.toInt().toString())
             rows.forEach { r ->
                 val p = initialRows?.firstOrNull { it.item == r.itemKey }?.price
                     ?: state.lastItemPrices[r.itemKey]
-                put("p:${r.uid}", p?.toInt()?.toString() ?: "")
+                put("p:${r.uid}", p?.let { com.motovault.app.domain.ledger.Money.fromLegacy(it)?.let(com.motovault.app.domain.ledger.Money::decimal) } ?: "")
             }
         },
         firstField = if (rows.isNotEmpty()) "p:${rows.first().uid}" else "odo"
@@ -278,7 +279,7 @@ fun ServiceSheet(
                     val r = ServiceRowState("${baseIndex + i}-${p.item}", p.item, catalogLabels[p.item] ?: p.item, p.qty)
                     rows.add(r)
                     val pr = p.price ?: state.lastItemPrices[p.item]
-                    if (pr != null) entry.set("p:${r.uid}", pr.toInt().toString())
+                    if (pr != null) entry.set("p:${r.uid}", com.motovault.app.domain.ledger.Money.fromLegacy(pr)?.let(com.motovault.app.domain.ledger.Money::decimal).orEmpty())
                 }
                 smartOpen = false
                 smartText = ""
@@ -307,7 +308,7 @@ fun ServiceSheet(
                             val r = ServiceRowState("${rows.size}-${item.key}", item.key, catalogLabels[item.key] ?: item.key, 1.0)
                             rows.add(r)
                             val p = state.lastItemPrices[item.key]
-                            if (p != null) entry.set("p:${r.uid}", p.toInt().toString())
+                            if (p != null) entry.set("p:${r.uid}", com.motovault.app.domain.ledger.Money.fromLegacy(p)?.let(com.motovault.app.domain.ledger.Money::decimal).orEmpty())
                             entry.setActive("p:${r.uid}")
                             keysOpen = true
                         }

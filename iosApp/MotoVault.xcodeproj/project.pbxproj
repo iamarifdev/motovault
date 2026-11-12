@@ -14,6 +14,14 @@
 		A10000000000000000000016 /* MotoVault/PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000015 /* MotoVault/PrivacyInfo.xcprivacy */; };
 		C10000000000000000000025 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000024 /* Localizable.strings */; };
 		B10000000000000000000004 /* MotoVaultUITests/OwnerFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000002 /* MotoVaultUITests/OwnerFlowTests.swift */; };
+		C70000000000000000000025 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C70000000000000000000024 /* InfoPlist.strings */; };
+		C80000000000000000000004 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80000000000000000000003; };
+		C80000000000000000000010 /* CaptureShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C80000000000000000000002; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C80000000000000000000015 /* SharedCaptureInbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80000000000000000000014; };
+		C80000000000000000000016 /* Localizable.strings in CaptureShare */ = {isa = PBXBuildFile; fileRef = C10000000000000000000024; };
+		C80000000000000000000022 /* NativeVoiceCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80000000000000000000021; };
+		C80000000000000000000032 /* CaptureFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80000000000000000000031; };
+		C80000000000000000000042 /* CaptureShareRuntimeFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80000000000000000000041; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +36,14 @@
 		C10000000000000000000027 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = MotoVault/bn.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B10000000000000000000002 /* MotoVaultUITests/OwnerFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVaultUITests/OwnerFlowTests.swift; sourceTree = "<group>"; };
 		B10000000000000000000003 /* MotoVaultUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = MotoVaultUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C70000000000000000000026 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = MotoVault/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C70000000000000000000027 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = MotoVault/bn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C80000000000000000000002 /* CaptureShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; path = CaptureShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C80000000000000000000003 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureShare/ShareViewController.swift; sourceTree = "<group>"; };
+		C80000000000000000000014 /* SharedCaptureInbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVault/SharedCaptureInbox.swift; sourceTree = "<group>"; };
+		C80000000000000000000021 /* NativeVoiceCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVault/NativeVoiceCapture.swift; sourceTree = "<group>"; };
+		C80000000000000000000031 /* CaptureFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVaultUITests/CaptureFlowTests.swift; sourceTree = "<group>"; };
+		C80000000000000000000041 /* CaptureShareRuntimeFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVault/CaptureShareRuntimeFixture.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,8 +73,14 @@
 				A10000000000000000000006 /* MotoVault/Info.plist */,
 				A10000000000000000000009 /* MotoVault/Assets.xcassets */,
 				C10000000000000000000024 /* Localizable.strings */,
+				C70000000000000000000024 /* InfoPlist.strings */,
 				B10000000000000000000002 /* MotoVaultUITests/OwnerFlowTests.swift */,
 				C60000000000000000000002,
+				C80000000000000000000003 /* ShareViewController.swift */,
+				C80000000000000000000014 /* SharedCaptureInbox.swift */,
+				C80000000000000000000021 /* NativeVoiceCapture.swift */,
+				C80000000000000000000031 /* CaptureFlowTests.swift */,
+				C80000000000000000000041 /* CaptureShareRuntimeFixture.swift */,
 				A10000000000000000000003 /* Products */,
 				809912C0307FCDD9006BBC49 /* Recovered References */,
 			);
@@ -68,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000000000000000000007 /* MotoVault.app */,
+				C80000000000000000000002 /* CaptureShare.appex */,
 				B10000000000000000000003 /* MotoVaultUITests.xctest */,
 			);
 			name = Products;
@@ -84,11 +107,11 @@
 				A10000000000000000000011 /* Sources */,
 				A10000000000000000000012 /* Frameworks */,
 				A10000000000000000000013 /* Resources */,
+				C80000000000000000000011 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
+			dependencies = (C80000000000000000000012, );
 			name = MotoVault;
 			productName = MotoVault;
 			productReference = A10000000000000000000007 /* MotoVault.app */;
@@ -108,6 +131,12 @@
 			productName = MotoVaultUITests;
 			productReference = B10000000000000000000003 /* MotoVaultUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		C80000000000000000000001 /* CaptureShare */ = {
+			isa = PBXNativeTarget; buildConfigurationList = C80000000000000000000007;
+			buildPhases = (C80000000000000000000005, C80000000000000000000006, ); buildRules = (); dependencies = ();
+			name = CaptureShare; productName = CaptureShare; productReference = C80000000000000000000002;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -131,6 +160,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				C80000000000000000000001 /* CaptureShare */,
 				A10000000000000000000004 /* MotoVault */,
 				B10000000000000000000001 /* MotoVaultUITests */,
 			);
@@ -145,9 +175,11 @@
 				A10000000000000000000014 /* MotoVault/Assets.xcassets in Resources */,
 				A10000000000000000000016 /* MotoVault/PrivacyInfo.xcprivacy in Resources */,
 				C10000000000000000000025 /* Localizable.strings in Resources */,
+				C70000000000000000000025 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C80000000000000000000006 /* CaptureShare Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (C80000000000000000000016, ); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
@@ -158,6 +190,12 @@
 				C10000000000000000000027 /* bn */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		C70000000000000000000024 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (C70000000000000000000026 /* en */, C70000000000000000000027 /* bn */);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -187,6 +225,9 @@
 			files = (
 				A10000000000000000000008 /* MotoVault/AppDelegate.swift in Sources */,
 				A10000000000000000000091 /* BackupCryptoPrimitives.swift in Sources */,
+				C80000000000000000000042 /* CaptureShareRuntimeFixture.swift in Sources */,
+				C80000000000000000000022 /* NativeVoiceCapture.swift in Sources */,
+				C80000000000000000000015 /* SharedCaptureInbox.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,16 +237,31 @@
 			files = (
 				B10000000000000000000004 /* MotoVaultUITests/OwnerFlowTests.swift in Sources */,
 				C60000000000000000000001,
+				C80000000000000000000032 /* CaptureFlowTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C80000000000000000000005 /* CaptureShare Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (C80000000000000000000004, ); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C80000000000000000000011 /* Embed App Extensions */ = {isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = ""; dstSubfolderSpec = 13; files = (C80000000000000000000010, ); name = "Embed App Extensions"; runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		C80000000000000000000013 = {isa = PBXContainerItemProxy; containerPortal = A10000000000000000000001; proxyType = 1; remoteGlobalIDString = C80000000000000000000001; remoteInfo = CaptureShare; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		C80000000000000000000012 = {isa = PBXTargetDependency; target = C80000000000000000000001; targetProxy = C80000000000000000000013; };
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A10000000000000000000022 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				MOTOVAULT_BUNDLE_ID = com.motovault.app;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SDKROOT = iphoneos;
@@ -216,6 +272,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				MOTOVAULT_BUNDLE_ID = com.motovault.app;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SDKROOT = iphoneos;
@@ -241,7 +298,7 @@
 					ComposeApp,
 					"-lsqlite3",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.motovault.app;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MOTOVAULT_BUNDLE_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -269,7 +326,7 @@
 					ComposeApp,
 					"-lsqlite3",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.motovault.app;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MOTOVAULT_BUNDLE_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -305,6 +362,18 @@
 			};
 			name = Release;
 		};
+		C80000000000000000000008 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {
+			APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = CaptureShare/CaptureShare.entitlements;
+			CODE_SIGN_STYLE = Automatic; INFOPLIST_FILE = CaptureShare/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+			PRODUCT_BUNDLE_IDENTIFIER = "$(MOTOVAULT_BUNDLE_ID).capture-share"; PRODUCT_NAME = "$(TARGET_NAME)";
+			SKIP_INSTALL = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2";
+		}; name = Debug; };
+		C80000000000000000000009 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {
+			APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = CaptureShare/CaptureShare.entitlements;
+			CODE_SIGN_STYLE = Automatic; INFOPLIST_FILE = CaptureShare/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+			PRODUCT_BUNDLE_IDENTIFIER = "$(MOTOVAULT_BUNDLE_ID).capture-share"; PRODUCT_NAME = "$(TARGET_NAME)";
+			SKIP_INSTALL = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2";
+		}; name = Release; };
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -335,6 +404,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		C80000000000000000000007 = {isa = XCConfigurationList; buildConfigurations = (C80000000000000000000008, C80000000000000000000009, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
 	};
 	rootObject = A10000000000000000000001 /* Project object */;

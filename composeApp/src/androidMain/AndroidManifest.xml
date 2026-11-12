@@ -9,6 +9,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <queries><intent><action android:name="android.speech.RecognitionService" /></intent></queries>
+
     <application
         android:name=".ui.RenewalApplication"
         android:allowBackup="false"
@@ -32,6 +35,13 @@
             android:grantUriPermissions="true">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/document_paths" />
         </provider>
+        <activity android:name=".CaptureShareActivity" android:exported="true" android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"

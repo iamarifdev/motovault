@@ -53,7 +53,8 @@ import motovault.composeapp.generated.resources.*
 fun OdometerSheet(
     state: VaultState,
     onDismiss: () -> Unit,
-    onSave: (VaultState, String, () -> Unit) -> Unit
+    onSave: (VaultState, String, () -> Unit) -> Unit,
+    initialOdometer: Double? = null
 ) {
     val ride = state.ride ?: return
     val f = currentFmt
@@ -61,15 +62,16 @@ fun OdometerSheet(
     val today = today()
     val estimate = remember(ride, state.logs) { WearCalculator.estimateOdometer(ride, state.logs, today) }
     val entry = rememberNumberEntry(
-        initialValues = mapOf("odo" to estimate.toInt().toString()),
+        initialValues = mapOf("odo" to (initialOdometer?.toString() ?: estimate.toInt().toString())),
         firstField = "odo"
     )
-    var touched by remember { mutableStateOf(false) }
-    var camScanning by remember { mutableStateOf(false) }
-    var camDone by remember { mutableStateOf(false) }
+    var touched by remember { mutableStateOf(initialOdometer != null) }
 
-    val odoVal = parseNum(entry.values["odo"] ?: "") ?: 0.0
-    val badError = if (odoVal < ride.odometer) appStringResource(Res.string.odo_error_below_current, f.n(ride.odometer.toLong())) else null
+    var photoReviewOpen by remember { mutableStateOf(false) }
+    val parsedOdo = parseNum(entry.values["odo"] ?: "")
+    val odoVal = parsedOdo ?: 0.0
+    val badError = if (parsedOdo == null || odoVal !in 0.0..com.motovault.app.domain.capture.MAX_CAPTURE_ODOMETER_KM)
+        appStringResource(Res.string.capture_odo_invalid) else if (odoVal < ride.odometer) appStringResource(Res.string.odo_error_below_current, f.n(ride.odometer.toLong())) else null
     val savedMessage = appStringResource(Res.string.odo_saved, f.km(odoVal))
 
     Sheet(
@@ -87,7 +89,7 @@ fun OdometerSheet(
                     }
                 },
                 full = true,
-                enabled = badError == null,
+                enabled = badError == null && !photoReviewOpen,
                 icon = "fi_check.svg"
             )
             VaultKeypad(
@@ -113,7 +115,7 @@ fun OdometerSheet(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 CountUp(
                     value = odoVal,
-                    format = { n -> f.d(formatLakh(n.toLong())) },
+                    format = { n -> f.n(n, if (odoVal % 1.0 == 0.0) 0 else 1) },
                     style = TextStyle(fontSize = 38.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
                 )
                 Spacer(Modifier.width(6.dp))
@@ -158,80 +160,9 @@ fun OdometerSheet(
             )
         }
 
-        // LCD photo recognition simulated demo
-        VaultButton(
-            text = appStringResource(Res.string.odo_scan_demo),
-            kind = ButtonKind.SECONDARY,
-            icon = "fi_camera.svg",
-            full = true,
-            onClick = {
-                camScanning = true
-                camDone = false
-            }
-        )
-
-        AnimatedVisibility(visible = camScanning) {
-            LaunchedEffect(Unit) {
-                delay(1700)
-                camDone = true
-                haptic.perform(HapticKind.SUCCESS)
-            }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFF0D1210))
-                    .padding(14.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(80.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Color(0xFF9BB59A)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = (estimate.toInt() + 3).toString().padStart(6, '0'),
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B2A1B)
-                    )
-                }
-                if (!camDone) {
-                    Text(
-                        text = appStringResource(Res.string.odo_scan_prompt),
-                        color = Color.White,
-                        fontSize = 14.sp
-                    )
-                } else {
-                    Text(
-                        text = appStringResource(Res.string.odo_detected, f.n((estimate + 3).toLong())),
-                        color = Color.White,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        VaultButton(
-                            text = appStringResource(Res.string.odo_confirm),
-                            size = ButtonSize.SM,
-                            onClick = {
-                                entry.set("odo", (estimate.toInt() + 3).toString())
-                                touched = true
-                                camScanning = false
-                            }
-                        )
-                        VaultButton(
-                            text = appStringResource(Res.string.odo_manual_entry),
-                            kind = ButtonKind.SECONDARY,
-                            size = ButtonSize.SM,
-                            onClick = { camScanning = false }
-                        )
-                    }
-                }
-            }
-        }
+        OdometerPhotoReview(baseline = ride.odometer, onActive = { photoReviewOpen = it }, onApply = { value ->
+            entry.set("odo", value.toString().removeSuffix(".0"))
+            touched = true
+        })
     }
 }

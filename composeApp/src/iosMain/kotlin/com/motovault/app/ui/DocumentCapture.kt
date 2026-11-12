@@ -87,7 +87,7 @@ internal fun preview(image: UIImage, maximum: Double = 1800.0): UIImage {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-private fun recognize(image: UIImage): String {
+internal fun recognizeImageText(image: UIImage): String {
     val cgImage = requireNotNull(image.CGImage)
     val request = VNRecognizeTextRequest()
     request.recognitionLevel = VNRequestTextRecognitionLevelAccurate
@@ -109,7 +109,7 @@ private fun processImages(images: List<UIImage>, type: String, operation: Docume
         val original = originals?.get(index) ?: (saveData(requireNotNull(UIImageJPEGRepresentation(image, .98)), "jpg", operation) to "image/jpeg")
         val small = preview(image)
         val previewId = saveData(requireNotNull(UIImageJPEGRepresentation(small, .96)), "jpg", operation)
-        try { text.append(recognize(small)).append('\n') } catch (_: Exception) { failed = true }
+        try { text.append(recognizeImageText(small)).append('\n') } catch (_: Exception) { failed = true }
         DocumentPage(original.first, previewId, original.second, small.size.useContents { width.toInt() }, small.size.useContents { height.toInt() },
             if (isCardDocument(type)) (if (index == 0) "Front" else "Back") else "Page ${index + 1}")
     }
@@ -322,6 +322,6 @@ actual suspend fun restoreRecoveredDocumentAsset(id: String): String = withConte
 
 actual suspend fun recognizeDocument(draft: CapturedDocument): CapturedDocument = withContext(Dispatchers.Default) {
     var failed = false
-    val text = draft.pages.joinToString("\n") { page -> runCatching { recognize(preview(requireNotNull(UIImage(data = ProtectedDocumentStorage.read(page.acceptedId ?: page.originalId).assetData())))) }.getOrElse { failed = true; "" } }
+    val text = draft.pages.joinToString("\n") { page -> runCatching { recognizeImageText(preview(requireNotNull(UIImage(data = ProtectedDocumentStorage.read(page.acceptedId ?: page.originalId).assetData())))) }.getOrElse { failed = true; "" } }
     draft.copy(recognizedText = text.take(30000), readingFailed = failed || text.isBlank())
 }

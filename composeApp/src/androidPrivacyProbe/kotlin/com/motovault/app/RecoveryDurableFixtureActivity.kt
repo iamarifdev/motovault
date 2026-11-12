@@ -59,7 +59,7 @@ class RecoveryDurableFixtureActivity : ComponentActivity() {
             override fun restore(archive: ByteArray, passphrase: String, expectedRevision: Long, completed: (Result<Unit>) -> Unit) = completed(Result.failure(IllegalStateException()))
         }
         val recovery = CoordinatedRecovery(writer, snapshots) { error("No synthetic assets expected") }
-        setContent { MotoVault(writer, backup, FuelEntryAdapter, FuelEntryAdapter, recovery, syntheticBackupOperations) }
+        setContent { MotoVault(writer, backup, FuelEntryAdapter, FuelEntryAdapter, recovery, syntheticBackupOperations, AppComposition.captureDrafts) }
     }
 
     fun verifyReopened(): Boolean = runBlocking {

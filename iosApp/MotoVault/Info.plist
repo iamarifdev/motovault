@@ -64,5 +64,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>CaptureAppGroup</key>
+	<string>group.$(MOTOVAULT_BUNDLE_ID).capture</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Use Bangla voice to prepare a draft after you tap Start.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Convert your speech to reviewed draft text. The speech service may process audio when selected.</string>
 </dict>
 </plist>

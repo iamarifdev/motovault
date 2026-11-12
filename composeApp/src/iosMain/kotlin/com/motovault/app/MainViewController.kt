@@ -3,7 +3,10 @@ package com.motovault.app
 import androidx.compose.ui.window.ComposeUIViewController
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.AccessibilitySyncOptions
-import androidx.compose.runtime.ExperimentalComposeApi
+import androidx.compose.runtime.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import com.motovault.app.ui.*
 import com.motovault.app.ui.IosHostAppearance
 import kotlin.experimental.ExperimentalNativeApi
 import kotlin.native.Platform
@@ -26,7 +29,14 @@ fun MainViewController(onDarkAppearance: (Boolean) -> Unit): UIViewController {
             accessibilitySyncOptions = AccessibilitySyncOptions.Always(debugLogger = null)
         }
     }) {
-        if (isolatedProbe && "--motovault-cost-fixture" in rawArgs)
+        if (isolatedProbe && "--motovault-capture-fixture" in rawArgs) {
+            var photo by remember { mutableStateOf<OdometerPhoto?>(null) }
+            LaunchedEffect(Unit) {
+                val image = printedImage("12345 km\n23456 km")
+                photo = withContext(Dispatchers.Default) { recognizeOdometerPhoto(image) }
+            }
+            CaptureRuntimeFixture(AppComposition.captureDrafts, photo)
+        } else if (isolatedProbe && "--motovault-cost-fixture" in rawArgs)
             CostRuntimeFixture(FuelEntryAdapter, failSave = "--motovault-cost-failure" in rawArgs) else App()
     }
 }

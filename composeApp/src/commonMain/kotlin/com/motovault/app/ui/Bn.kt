@@ -8,23 +8,13 @@ import kotlinx.serialization.Serializable
 private const val BN_DIGITS_STR = "০১২৩৪৫৬৭৮৯"
 
 /** Accepts Bengali, Arabic-Indic, or Latin digits. All numeric inputs normalise through this. */
-fun toAscii(s: String): String = s.map { ch ->
-    when (ch) {
-        in '০'..'৯' -> ('0'.code + (ch.code - '০'.code)).toChar()
-        in '٠'..'٩' -> ('0'.code + (ch.code - '٠'.code)).toChar()
-        else -> ch
-    }
-}.joinToString("")
+fun toAscii(s: String): String = com.motovault.app.domain.input.NormalizedNumbers.ascii(s)
 
 fun toBn(s: String): String = s.map { ch ->
     if (ch in '0'..'9') BN_DIGITS_STR[ch.code - '0'.code] else ch
 }.joinToString("")
 
-fun parseNum(s: String): Double? {
-    val t = toAscii(s).replace(",", "").trim()
-    if (t.isEmpty() || t == ".") return null
-    return t.toDoubleOrNull()
-}
+fun parseNum(s: String): Double? = com.motovault.app.domain.input.NormalizedNumbers.parse(s)
 
 /** Formats integer using Bangladesh / Indian Lakh grouping (e.g. 1,23,456). */
 fun formatLakh(value: Long): String {

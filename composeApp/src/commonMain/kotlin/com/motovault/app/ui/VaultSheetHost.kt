@@ -1,90 +1,33 @@
 package com.motovault.app.ui
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.selected
-import androidx.compose.ui.semantics.semantics
 import com.motovault.app.ui.backup.BackupSheet
 import com.motovault.app.ui.fuel.FuelSheet
 import com.motovault.app.ui.backup.BackupSheetTab
 import com.motovault.app.ui.backup.RecoverySheet
 import com.motovault.app.application.VaultRecovery
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import com.motovault.app.domain.model.ComponentRule
 import com.motovault.app.domain.privacy.*
 import com.motovault.app.application.VaultWriter
-import com.motovault.app.application.VaultError
-import com.motovault.app.application.fuel.FuelEntryBuilder
-import com.motovault.app.application.fuel.FuelEntryEditor
 import com.motovault.app.application.VaultBackupRestorer
 import com.motovault.app.ui.privacy.*
 import dev.sky.design.*
-import dev.sky.design.tokens.SkyTokens
-import kotlinx.coroutines.delay
 import com.motovault.app.application.fuel.FuelWorkflow
 import com.motovault.app.application.fuel.FuelSaveOutcome
 import com.motovault.app.application.VaultBackupOperations
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
 import motovault.composeapp.generated.resources.*
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.Font
-import org.jetbrains.compose.resources.painterResource
-import kotlin.math.roundToLong
 
 internal enum class FuelCreateError { SAVE_FAILED, CONFLICT }
 
 @Composable
 internal fun VaultSheetHost(
     activeSheet: ActiveSheet?,
+    captureDrafts: com.motovault.app.application.capture.CaptureDraftFactory,
     state: VaultState,
     revision: Long,
     loading: Boolean,
@@ -107,7 +50,7 @@ internal fun VaultSheetHost(
     onLockNow: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
-            if (!loading && (state.ride != null || activeSheet?.name == "paste" || activeSheet?.name == "quickAdd")) {
+            if (!loading && (state.ride != null || activeSheet?.name in setOf("paste", "capture") || activeSheet?.name == "quickAdd")) {
                 activeSheet?.let { sheet ->
                 when (sheet.name) {
                     "expense", "budget", "cost-details" -> CostSheetHost(sheet, state, onDismiss = { onSheet(null) },
@@ -141,10 +84,11 @@ internal fun VaultSheetHost(
                         FuelSheet(
                         input = fuelInput,
                         editError = failureText,
-                        initialAmount = (sheet.props as? Number)?.toDouble(),
+                        initialAmount = (sheet.props as? CapturePrefill)?.amount?.let(com.motovault.app.domain.ledger.Money::taka) ?: (sheet.props as? Number)?.toDouble(),
+                        initialOdometer = (sheet.props as? CapturePrefill)?.odometer,
                         onDismiss = { onSheet(null); onFuelCreateError(null) },
                         onSave = { request, msg, onDone ->
-                            fuelWorkflow.create(request, revision) { outcome ->
+                            fuelWorkflow.create(request.copy(captureReceiptId = (sheet.props as? CapturePrefill)?.receipt), revision) { outcome ->
                                 if (scope.isActive && outcome == FuelSaveOutcome.SAVED) {
                                     onFuelCreateError(null)
                                     onToast(ToastData(
@@ -188,11 +132,12 @@ internal fun VaultSheetHost(
                     }
                     "service" -> {
                         val itemKey = sheet.props as? String
-                        val parsedRows = (sheet.props as? List<*>)?.filterIsInstance<ParsedLine>()
+                        val parsedRows = (sheet.props as? CapturePrefill)?.rows ?: (sheet.props as? List<*>)?.filterIsInstance<ParsedLine>()
                         ServiceSheet(
                             state = state,
                             initialItemKey = itemKey,
                             initialRows = parsedRows,
+                            initialOdometer = (sheet.props as? CapturePrefill)?.odometer,
                             onDismiss = { onSheet(null) },
                             onSave = { nextState, msg, onDone ->
                                 onCommit(nextState) { ok ->
@@ -213,6 +158,7 @@ internal fun VaultSheetHost(
                     }
                     "odometer" -> OdometerSheet(
                         state = state,
+                        initialOdometer = (sheet.props as? CapturePrefill)?.odometer,
                         onDismiss = { onSheet(null) },
                         onSave = { nextState, msg, onDone ->
                             onCommit(nextState) { ok ->
@@ -324,13 +270,8 @@ internal fun VaultSheetHost(
                         onLockNow = { onLockNow() },
                         onDismiss = { onSheet(null) }
                     )
-                    "paste" -> PasteSheet(
-                        onDismiss = { onSheet(null) },
-                        onSelectFlow = { flow, payload ->
-                            onSheet(ActiveSheet(flow, payload))
-                        },
-                        language = state.language
-                    )
+                    "paste", "capture" -> CaptureReviewSheet(sheet.props as? CaptureInput ?: CaptureInput(), state, captureDrafts,
+                        onDismiss = { onSheet(null) }, onContinue = { flow, prefill -> onSheet(ActiveSheet(flow, prefill)) })
                     "backup", "backup-restore" -> BackupSheet(
                         state = state,
                         stateRevision = revision,

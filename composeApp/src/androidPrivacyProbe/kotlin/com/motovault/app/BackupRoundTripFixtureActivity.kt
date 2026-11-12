@@ -94,7 +94,7 @@ class BackupRoundTripFixtureActivity : ComponentActivity() {
                 }
             } })
         val operations = BackupOperationsAdapter(::documentSha256) { assetId -> activeStore.read(assetId) }
-        setContent { MotoVault(writer, restorer, FuelEntryAdapter, FuelEntryAdapter, recovery, operations) }
+        setContent { MotoVault(writer, restorer, FuelEntryAdapter, FuelEntryAdapter, recovery, operations, AppComposition.captureDrafts) }
     }
 
     fun replaceSyntheticCurrent(completed: (Boolean) -> Unit) {

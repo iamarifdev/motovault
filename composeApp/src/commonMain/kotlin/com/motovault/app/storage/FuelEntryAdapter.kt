@@ -7,6 +7,7 @@ import com.motovault.app.application.fuel.FuelEditRejected
 import com.motovault.app.application.fuel.FuelEntryEditor
 import com.motovault.app.domain.model.RideLog
 import com.motovault.app.domain.vault.VaultState
+import com.motovault.app.domain.vault.acceptCapture
 import com.motovault.app.domain.model.today
 import com.motovault.app.domain.fuel.FuelEntryRules
 import com.motovault.app.domain.fuel.FuelEntryIssue
@@ -45,7 +46,7 @@ internal object FuelEntryAdapter : FuelEntryBuilder<VaultState>, FuelEntryEditor
             places = places.take(MAX_RECENT_FUEL_PLACES),
             lastPrices = previous.lastPrices + (request.fuelType to request.price),
             ledger = previous.ledger.confirmPrice(request.fuelType, request.price, request.date.toString())
-        )
+        ).let { next -> request.captureReceiptId?.let(next::acceptCapture) ?: next }
     }
 
     override fun edit(previous: VaultState, request: FuelEditRequest): VaultState {

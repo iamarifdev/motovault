@@ -1,0 +1,3 @@
+"NSCameraUsageDescription" = "Capture your vehicle documents or odometer for review in your private vault.";
+"NSMicrophoneUsageDescription" = "Use Bangla voice to prepare a draft after you tap Start.";
+"NSSpeechRecognitionUsageDescription" = "Convert your speech to reviewed draft text. The speech service may process audio when selected.";

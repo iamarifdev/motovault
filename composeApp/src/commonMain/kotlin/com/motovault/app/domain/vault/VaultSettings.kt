@@ -25,20 +25,22 @@ data class VaultSettings(
     val reminderPolicy: ReminderPolicy = ReminderPolicy(),
     val privacy: VaultPrivacySettings = VaultPrivacySettings(),
     val lastBackupEpochMillis: Long? = null,
-    val ledger: com.motovault.app.domain.ledger.LedgerPreferences = com.motovault.app.domain.ledger.LedgerPreferences()
+    val ledger: com.motovault.app.domain.ledger.LedgerPreferences = com.motovault.app.domain.ledger.LedgerPreferences(),
+    val captureReceipts: List<String> = emptyList()
 ) {
     fun applyTo(state: VaultState) = state.copy(
         language = language, digits = digits, haptics = haptics, reduceMotion = reduceMotion, textScale = textScale,
         brandOverride = brandOverride, serviceReminders = serviceReminders, docReminders = docReminders,
         lastPrices = lastPrices, lastItemPrices = lastItemPrices, workshops = workshops, places = places,
-        reminderPolicy = reminderPolicy, privacy = privacy, lastBackupEpochMillis = lastBackupEpochMillis, ledger = ledger
+        reminderPolicy = reminderPolicy, privacy = privacy, lastBackupEpochMillis = lastBackupEpochMillis, ledger = ledger,
+        captureReceipts = captureReceipts
     )
 
     companion object {
         fun from(state: VaultState) = VaultSettings(
             state.language, state.digits, state.haptics, state.reduceMotion, state.textScale, state.brandOverride,
             state.serviceReminders, state.docReminders, state.lastPrices, state.lastItemPrices,
-            state.workshops, state.places, state.reminderPolicy, state.privacy, state.lastBackupEpochMillis, state.ledger
+            state.workshops, state.places, state.reminderPolicy, state.privacy, state.lastBackupEpochMillis, state.ledger, state.captureReceipts
         )
     }
 }

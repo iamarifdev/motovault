@@ -126,6 +126,8 @@ final class DocumentAssetCrypto: NSObject, IosAssetCryptography, IosBackupCrypto
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        IosVoiceCaptureRegistry.shared.bridge = NativeVoiceCapture()
+        IosSharedCaptureRegistry.shared.bridge = SharedCaptureInbox()
         DocumentAssetCrypto.clearTemporaryCopies()
         let crypto = DocumentAssetCrypto()
         IosDocumentCrypto.shared.provider = crypto
@@ -133,6 +135,17 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         // The notification center holds its delegate weakly. UIApplication retains this object.
         UNUserNotificationCenter.current().delegate = self
         #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--motovault-voice-capability-probe"),
+           Bundle.main.bundleIdentifier == "com.motovault.app.privacyprobe",
+           let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            try? NativeVoiceCapture.capabilityReport().write(to: caches.appendingPathComponent("p07-voice-capabilities.json"), atomically: true, encoding: .utf8)
+        }
+        if ProcessInfo.processInfo.arguments.contains("--motovault-capture-probe"),
+           Bundle.main.bundleIdentifier == "com.motovault.app.privacyprobe",
+           let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            let result = IosCaptureProbeKt.runIosCaptureProbe()
+            try? result.write(to: caches.appendingPathComponent("p07-capture-probe.txt"), atomically: true, encoding: .utf8)
+        }
         if ProcessInfo.processInfo.arguments.contains("--motovault-ledger-probe"),
            Bundle.main.bundleIdentifier == "com.motovault.app.privacyprobe",
            let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
@@ -220,6 +233,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = VaultHostController()
         window.makeKeyAndVisible()
         self.window = window
+        CaptureShareRuntimeFixture.presentIfRequested(from: window.rootViewController)
         if let response = connectionOptions.notificationResponse,
            let payload = response.notification.request.content.userInfo["motovault.reminder"] as? String {
             ReminderNavigation.shared.open(payload: payload)

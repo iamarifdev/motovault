@@ -16,10 +16,10 @@ import motovault.composeapp.generated.resources.*
 
 @Composable
 internal fun ExpenseSheet(state: VaultState, existing: RideLog?, onDismiss: () -> Unit,
-    onSave: (VaultState, (Boolean) -> Unit) -> Unit
+    onSave: (VaultState, (Boolean) -> Unit) -> Unit, initialAmount: Long? = null
 ) {
     val f = currentFmt
-    val entry = rememberNumberEntry(mapOf("amount" to (existing?.let { CostLedger.amount(it) }?.let { Money.decimal(it) } ?: "")), "amount")
+    val entry = rememberNumberEntry(mapOf("amount" to ((existing?.let { CostLedger.amount(it) } ?: initialAmount)?.let { Money.decimal(it) } ?: "")), "amount")
     var category by remember { mutableStateOf(existing?.let(CostLedger::category) ?: CostCategory.PARKING) }
     var date by remember { mutableStateOf(existing?.date ?: today().toString()) }
     var note by remember { mutableStateOf(existing?.notes.orEmpty()) }

@@ -2,6 +2,7 @@ package com.motovault.app
 
 import android.os.Bundle
 import android.content.Intent
+import com.motovault.app.application.capture.ShareCaptureInbox
 import com.motovault.app.ui.ReminderNavigation
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,6 +26,7 @@ class MainActivity : ComponentActivity() {
             if (args.isNotEmpty()) com.motovault.app.ui.LaunchConfig.applyArgs(args)
         }
         intent?.getStringExtra("motovault.reminder")?.let(ReminderNavigation::open)
+        acceptSharedText(intent)
         setContent {
             App()
         }
@@ -52,5 +54,15 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         intent.getStringExtra("motovault.reminder")?.let(ReminderNavigation::open)
+        acceptSharedText(intent)
+    }
+
+    private fun acceptSharedText(incoming: Intent?) {
+        if (incoming?.action != Intent.ACTION_SEND) return
+        val text = sharedCaptureText(incoming)
+        if (text != null && ShareCaptureInbox.pending.value == null) {
+            ShareCaptureInbox.offer(text)
+        }
+        setIntent(Intent(this, MainActivity::class.java))
     }
 }

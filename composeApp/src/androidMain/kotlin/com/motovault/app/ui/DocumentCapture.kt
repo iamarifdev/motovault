@@ -40,7 +40,7 @@ private const val MAX_ASSET_BYTES = 32L * 1024 * 1024
 private val scratchCleaned = java.util.concurrent.atomic.AtomicBoolean(false)
 internal fun cleanDocumentScratchOnProcessStart() {
     if (!scratchCleaned.compareAndSet(false, true)) return
-    for ((name, prefix) in listOf("document-processing" to "pdf-", "document-exports" to "copy-")) {
+    for ((name, prefix) in listOf("document-processing" to "pdf-", "document-exports" to "copy-", "odometer-capture" to "odo-")) {
         val directory = File(vaultContext.cacheDir.canonicalFile, name)
         check(directory.canonicalFile == directory.absoluteFile) { "Invalid document cache." }
         if (!directory.exists()) continue

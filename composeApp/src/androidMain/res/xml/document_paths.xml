@@ -2,4 +2,5 @@
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <cache-path name="document_exports" path="document-exports/" />
     <files-path name="service_passports" path="passports/" />
+    <cache-path name="odometer_capture" path="odometer-capture/" />
 </paths>

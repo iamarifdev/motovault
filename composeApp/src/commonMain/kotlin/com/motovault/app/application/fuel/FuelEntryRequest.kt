@@ -15,7 +15,8 @@ internal data class FuelEntryRequest(
     val place: String,
     val legacyDetail: String,
     val priceConfirmed: Boolean = false,
-    val missedFill: Boolean = false
+    val missedFill: Boolean = false,
+    val captureReceiptId: String? = null
 )
 
 /** Transitional boundary until the persisted UI-owned vault model is migrated. */

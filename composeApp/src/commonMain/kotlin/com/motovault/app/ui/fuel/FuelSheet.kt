@@ -59,7 +59,8 @@ internal fun FuelSheet(
     editError: String? = null,
     onDismiss: () -> Unit,
     onSave: (FuelEntryRequest, String, () -> Unit) -> Unit,
-    onEdit: (FuelEditRequest, String) -> Unit = { _, _ -> }
+    onEdit: (FuelEditRequest, String) -> Unit = { _, _ -> },
+    initialOdometer: Double? = null
 ) {
     val f = currentFmt
     val haptic = currentHaptic
@@ -84,10 +85,10 @@ internal fun FuelSheet(
 
     val entry = rememberNumberEntry(
         initialValues = mapOf(
-            "amount" to (existing?.cost?.toString() ?: initialAmount?.let { kotlin.math.round(it).toInt().toString() } ?: ""),
+            "amount" to (existing?.cost?.toString() ?: initialAmount?.let { com.motovault.app.domain.ledger.Money.fromLegacy(it)?.let(com.motovault.app.domain.ledger.Money::decimal) } ?: ""),
             "litres" to (existing?.fuelLiters?.toString() ?: ""),
             "price" to (existing?.fuelPrice?.toString() ?: lastOctanePrice.toString()),
-            "odo" to (existing?.odometer?.toString() ?: kotlin.math.round(estimate).toInt().toString())
+            "odo" to (existing?.odometer?.toString() ?: initialOdometer?.toString() ?: kotlin.math.round(estimate).toInt().toString())
         ),
         firstField = "amount"
     )

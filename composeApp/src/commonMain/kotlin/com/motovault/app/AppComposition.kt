@@ -54,5 +54,6 @@ internal object AppComposition {
     val backupRestore: VaultBackupRestorer by lazy { CoordinatedBackupRestore(vault) }
     val backupOperations = BackupOperationsAdapter(::documentSha256) { id -> ProtectedDocumentStorage.read(id) }
     val recoveryRestore by lazy { CoordinatedRecovery(vault, recoverySnapshots) { id -> ProtectedDocumentStorage.read(id) } }
+    val captureDrafts = com.motovault.app.application.capture.CaptureDraftFactory(com.motovault.app.storage.CaptureFingerprintAdapter)
     val fuelEntry = FuelEntryAdapter
 }

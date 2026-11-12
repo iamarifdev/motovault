@@ -39,7 +39,8 @@ data class VaultState(
     val reminderPolicy: ReminderPolicy = ReminderPolicy(),
     val privacy: com.motovault.app.domain.privacy.VaultPrivacySettings = com.motovault.app.domain.privacy.VaultPrivacySettings(),
     val lastBackupEpochMillis: Long? = null,
-    val ledger: com.motovault.app.domain.ledger.LedgerPreferences = com.motovault.app.domain.ledger.LedgerPreferences()
+    val ledger: com.motovault.app.domain.ledger.LedgerPreferences = com.motovault.app.domain.ledger.LedgerPreferences(),
+    val captureReceipts: List<String> = emptyList()
 ) {
     /** Only linked, matching recorded service can establish certainty for an older schedule. */
     fun confirmedRules() = rules.map { rule ->

@@ -2,3 +2,10 @@
 "reminder_document_title" = "কাগজের রিমাইন্ডার";
 "reminder_service_message" = "%1$s · রেকর্ড করা সার্ভিসের ব্যবধান দেখুন।";
 "reminder_document_message" = "%1$s · মেয়াদ শেষ: %2$s";
+
+"capture_share_explain" = "MotoVault-এর জন্য লেখার ড্রাফট তৈরি করুন। MotoVault খুলে আনলক করে তথ্য মিলিয়ে সেভ করুন।";
+"capture_share_prepare" = "ড্রাফট তৈরি করুন";
+"capture_share_cancel" = "বন্ধ করুন";
+"capture_share_open_app" = "ড্রাফট তৈরি হয়েছে। এই শিট বন্ধ করে MotoVault খুলুন ও আনলক করে মিলিয়ে নিন। কোনো রেকর্ড সেভ হয়নি।";
+"capture_share_unavailable" = "এই শেয়ার থেকে ড্রাফট তৈরি হয়নি। একবারে একটি সাধারণ লেখার মেসেজ দিন, সর্বোচ্চ ১০,০০০ অক্ষর। আগের ড্রাফট থাকলে আগে MotoVault-এ খুলুন।";
+"capture_share_fixture_text" = "নমুনা MotoVault টেস্ট। ফুয়েল পেমেন্ট ৫০০.৫০ টাকা। ব্যালেন্স ২,১৪০.৫০ টাকা।";

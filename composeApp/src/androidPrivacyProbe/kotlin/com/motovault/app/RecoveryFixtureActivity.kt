@@ -51,6 +51,6 @@ class RecoveryFixtureActivity : ComponentActivity() {
                 }, SYNTHETIC_DELAY_MILLIS)
             }
         }
-        setContent { MotoVault(writer, backup, FuelEntryAdapter, FuelEntryAdapter, recovery, syntheticBackupOperations) }
+        setContent { MotoVault(writer, backup, FuelEntryAdapter, FuelEntryAdapter, recovery, syntheticBackupOperations, AppComposition.captureDrafts) }
     }
 }

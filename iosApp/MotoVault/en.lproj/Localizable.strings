@@ -2,3 +2,10 @@
 "reminder_document_title" = "Document reminder";
 "reminder_service_message" = "%1$s · Check the recorded service interval.";
 "reminder_document_message" = "%1$s · Expires: %2$s";
+
+"capture_share_explain" = "Prepare a private text draft for MotoVault. Open MotoVault and unlock it to review and Save.";
+"capture_share_prepare" = "Prepare draft";
+"capture_share_cancel" = "Close";
+"capture_share_open_app" = "Draft prepared. Close this sheet, open MotoVault and unlock it to review. This has not saved a record.";
+"capture_share_unavailable" = "Could not prepare this share. Share one plain text message up to 10,000 characters. Open any waiting draft in MotoVault first.";
+"capture_share_fixture_text" = "Synthetic MotoVault fuel payment Tk500.50. Balance Tk2,140.50.";

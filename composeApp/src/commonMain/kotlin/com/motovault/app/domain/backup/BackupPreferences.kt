@@ -43,5 +43,6 @@ data class BackupPreferences(
     val reminderPolicy: BackupReminderPolicy = BackupReminderPolicy(),
     val privacy: VaultPrivacySettings = VaultPrivacySettings(),
     val lastBackupEpochMillis: Long? = null,
-    val ledger: com.motovault.app.domain.ledger.LedgerPreferences = com.motovault.app.domain.ledger.LedgerPreferences()
+    val ledger: com.motovault.app.domain.ledger.LedgerPreferences = com.motovault.app.domain.ledger.LedgerPreferences(),
+    val captureReceipts: List<String> = emptyList()
 )

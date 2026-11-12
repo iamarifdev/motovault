@@ -65,7 +65,7 @@ class FuelEditFixtureActivity : ComponentActivity() {
             override suspend fun list(): List<RecoverySummary> = emptyList()
             override fun restore(recoveryId: String, expectedRevision: Long, completed: (Result<Unit>) -> Unit) = completed(Result.failure(IllegalStateException()))
         }
-        setContent { MotoVault(writer, restorer, FuelEntryAdapter, FuelEntryAdapter, recovery, syntheticBackupOperations) }
+        setContent { MotoVault(writer, restorer, FuelEntryAdapter, FuelEntryAdapter, recovery, syntheticBackupOperations, AppComposition.captureDrafts) }
     }
 
     /** Test fallback when the transient toast is not exposed by accessibility. */
