@@ -11,6 +11,7 @@ import { Sheet } from '../components/Sheet'
 import { Button, Chip } from '../components/ui'
 import { CountUp } from '../components/Gauge'
 import { Keypad, useEntry, useHardwareKeys, useShow } from '../components/entry'
+import captureCopy from '../data/capture-copy.json'
 
 /**
  * The reading is pre-filled with an estimate from recent riding, so the common case is one tap on "ঠিক আছে".
@@ -28,6 +29,9 @@ export function OdometerSheet() {
   const e = useEntry<'odo'>({ odo: String(estimate) }, 'odo')
   const [touched, setTouched] = useState(false)
   const [cam, setCam] = useState<'off' | 'scanning' | 'done'>('off')
+  const [photoState, setPhotoState] = useState<'clear' | 'blur' | 'multiple' | 'permission'>('clear')
+  const [candidate, setCandidate] = useState<number | null>(null)
+  const c = captureCopy.bn
   const read = estimate + 3
   const odo = Number(e.vals.odo) || 0
   const bad = odo < ride.odometer ? `বর্তমান কিমির (${f.n(ride.odometer)}) চেয়ে কম হতে পারে না` : null
@@ -51,7 +55,7 @@ export function OdometerSheet() {
   return (
     <Sheet title="ওডোমিটার" footer={
       <>
-        <Button full disabled={Boolean(bad)} icon={Check} onClick={() => save()}>{bad ? 'কিমি ঠিক করুন' : touched ? 'সেভ করুন' : 'ঠিক আছে, সেভ করুন'}</Button>
+        <Button full disabled={Boolean(bad) || cam !== 'off'} icon={Check} onClick={() => save()}>{bad ? 'কিমি ঠিক করুন' : touched ? 'সেভ করুন' : 'ঠিক আছে, সেভ করুন'}</Button>
         {cam === 'off' && <Keypad onKey={(k) => { setTouched(true); e.press(k) }} decimal={false} />}
       </>
     }>
@@ -65,7 +69,7 @@ export function OdometerSheet() {
         {[10, 50, 100, 500].map((n) => <Chip key={n} onClick={() => bump(n)}>+{f.d(String(n))}</Chip>)}
         <Chip onClick={() => { e.set('odo', String(estimate)); setTouched(false) }}>আনুমানিক</Chip>
       </div>
-      <Button kind="secondary" icon={Camera} full onClick={() => { setCam('scanning') }}>ডিসপ্লের ছবি তুলে পড়ুন (ডেমো)</Button>
+      <Button kind="secondary" icon={Camera} full onClick={() => { setCandidate(null); setCam('scanning') }}>{c.photo}</Button>
 
       <AnimatePresence>
         {cam !== 'off' && (
@@ -79,12 +83,19 @@ export function OdometerSheet() {
               </svg>
               {cam === 'scanning' && <motion.i className="scan-line" initial={{ y: 40 }} animate={{ y: [40, 110, 40] }} transition={{ duration: 1.4, ease: 'easeInOut', repeat: Infinity }} />}
             </div>
-            {cam === 'scanning' ? <p className="cam-msg">পড়া হচ্ছে… ফোন স্থির রাখুন</p> : (
+            <p>{c.demo}</p>
+            <label>{c.fixture}<select value={photoState} onChange={ev => { setPhotoState(ev.target.value as typeof photoState); setCandidate(null) }}>
+              {(['clear', 'blur', 'multiple', 'permission'] as const).map(state => <option key={state} value={state}>{c[state]}</option>)}
+            </select></label>
+            {cam === 'scanning' ? <><p className="cam-msg">{c.reading}</p><Button size="sm" kind="secondary" onClick={() => setCam('off')}>{c.cancel}</Button></> : (
               <div className="cam-result">
-                <p className="cam-msg">পড়া হয়েছে: <b>{f.n(read)} {f.digits === 'bn' ? 'কিমি' : 'km'}</b></p>
+                <p>{c.source}</p>
+                <p className="cam-msg">{photoState === 'permission' ? c.denied : photoState === 'blur' ? c.empty : photoState === 'multiple' ? c.choice : c.review}</p>
+                {(photoState === 'clear' || photoState === 'multiple') && <div className="row-wrap">{(photoState === 'multiple' ? [read, read + 100] : [read]).map(value => <Chip key={value} active={candidate === value} onClick={() => setCandidate(value)}>{f.km(value)}</Chip>)}</div>}
                 <div className="row-wrap">
-                  <Button size="sm" onClick={() => { e.set('odo', String(read)); setTouched(true); setCam('off') }}>ঠিক আছে</Button>
-                  <Button size="sm" kind="secondary" onClick={() => setCam('off')}>নিজে লিখব</Button>
+                  <Button size="sm" disabled={candidate === null} onClick={() => { if (candidate === null) return; e.set('odo', String(candidate)); setTouched(true); setCam('off') }}>{c.use}</Button>
+                  <Button size="sm" kind="secondary" onClick={() => setCam('off')}>{c.manual}</Button>
+                  <Button size="sm" kind="secondary" onClick={() => { setCandidate(null); setCam('scanning') }}>{c.retry}</Button>
                 </div>
               </div>
             )}

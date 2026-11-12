@@ -129,7 +129,7 @@ export function ServiceSheet({ item, rows: preset }: { item?: ItemKey; rows?: Pa
       </div>
       <AnimatePresence initial={false}>
         {smart && (
-          <motion.div key="smart" className="clip" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+          <motion.div key="smart" className="clip" style={{ flexShrink: 0 }} initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
             <SmartInput onApply={applyParsed} />
           </motion.div>
         )}
