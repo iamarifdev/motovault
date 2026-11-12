@@ -128,7 +128,7 @@ fun OnboardingScreen(
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(text = "${f.d((step + 1).toString())} / ${f.d("3")}", fontSize = 13.sp, color = TextSecondary)
+                Text(text = appStringResource(Res.string.onboarding_step, f.d((step + 1).toString()), f.d("3")), fontSize = 13.sp, color = TextSecondary)
                 if (onDismiss != null) {
                     VaultIconButton(
                         icon = "fi_x.svg",

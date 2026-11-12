@@ -96,10 +96,22 @@ def inventory_text(path, text):
 
 
 def load_baseline(path):
+    """Load baseline entries. Each entry is either copy debt (needs a removal
+    task) or a documented data-only/glyph literal (needs a justification)."""
     result = Counter()
     for item in json.loads(path.read_text(encoding="utf-8")):
         key = item["path"], item["sha256"]
-        if key in result or not re.fullmatch(r"[0-9a-f]{64}", key[1]) or type(item["count"]) is not int or item["count"] < 1 or not item["owner"] or not item["removal_task"]:
+        kind = item.get("kind", "copy")
+        if (
+            key in result
+            or not re.fullmatch(r"[0-9a-f]{64}", key[1])
+            or type(item["count"]) is not int
+            or item["count"] < 1
+            or not item["owner"]
+            or kind not in {"copy", "data"}
+            or (kind == "copy" and not item.get("removal_task"))
+            or (kind == "data" and not item.get("justification", "").strip())
+        ):
             raise ValueError(f"Invalid baseline entry: {key}")
         result[key] = item["count"]
     return result

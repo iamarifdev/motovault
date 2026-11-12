@@ -150,7 +150,7 @@ internal fun ServiceDateOdometerSection(
                     )
                     Column {
                         Text(text = appStringResource(Res.string.service_odometer), fontSize = 12.sp, color = TextSecondary)
-                        Text(text = "${f.n(odoVal.toLong())} ${appStringResource(Res.string.garage_unit_km)}", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                        Text(text = appStringResource(Res.string.service_odometer_value, f.n(odoVal.toLong()), appStringResource(Res.string.garage_unit_km)), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
                     }
                 }
             }

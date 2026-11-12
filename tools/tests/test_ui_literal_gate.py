@@ -57,6 +57,27 @@ class UiLiteralGateTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 load_baseline(path)
 
+    def test_data_only_baseline_entry_requires_justification(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "baseline.json"
+            entry = {"path": "Screen.kt", "sha256": "b" * 64, "count": 1, "owner": "team", "kind": "data",
+                     "justification": "Chevron glyph; not translatable copy."}
+            path.write_text(json.dumps([entry]), encoding="utf-8")
+            self.assertEqual(sum(load_baseline(path).values()), 1)
+            entry["justification"] = "   "
+            path.write_text(json.dumps([entry]), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                load_baseline(path)
+            entry.pop("justification")
+            entry["kind"] = "copy"
+            entry["removal_task"] = "P08-05"
+            path.write_text(json.dumps([entry]), encoding="utf-8")
+            self.assertEqual(sum(load_baseline(path).values()), 1)
+            entry["kind"] = "unknown"
+            path.write_text(json.dumps([entry]), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                load_baseline(path)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -43,7 +43,7 @@
     <string name="cost_price_confirmed">I confirmed this price</string>
     <string name="cost_price_date">Your confirmed price, effective %1$s. You can edit it.</string>
     <string name="cost_missed_fill">A fill was not recorded in between</string>
-    <string name="cost_empty_amount">No amount</string>
+    <string name="cost_empty_amount">Not entered</string>
     <string name="cost_fixture_en">English</string>
     <string name="cost_fixture_bn">বাংলা</string>
     <string name="cost_fixture_digits">Digits</string>

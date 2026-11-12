@@ -39,30 +39,28 @@ internal fun GaugeDetailSheet(state: VaultState, id: String?, onDismiss: () -> U
             Panel {
                 DocumentNote(if (wear.status == WearStatus.UNKNOWN) appStringResource(Res.string.schedule_unknown_baseline) else appStringResource(Res.string.schedule_next_due) + " · " + f.n(wear.life.toLong()) + "%")
                 DocumentCopy(WearCalculator.describeWear(wear, f))
-                DocumentNote("${appStringResource(Res.string.schedule_source)} · $sourceLabel · $actionLabel")
+                DocumentNote(appStringResource(Res.string.schedule_source_line, appStringResource(Res.string.schedule_source), sourceLabel.orEmpty(), actionLabel.orEmpty()))
                 DocumentCopy(
                     if (rule.provenance.isManualBacked) rule.provenance.displayReference
                     else appStringResource(Res.string.schedule_owner_defined)
                 )
                 if (rule.provenance.isManualBacked) {
-                    DocumentCopy("${appStringResource(Res.string.schedule_applicability)}: ${rule.provenance.applicability}")
+                    DocumentCopy(appStringResource(Res.string.schedule_applicability_value, appStringResource(Res.string.schedule_applicability), rule.provenance.applicability))
                     val uri = LocalUriHandler.current
                     TextButton(onClick = { rule.provenance.url.takeIf { it.isNotBlank() }?.let(uri::openUri) }) {
                         Text(appStringResource(Res.string.schedule_manual_open), color = BrandColor)
                     }
                 }
-                DocumentCopy(
-                    "${if (rule.intervalKm > 0) f.km(rule.intervalKm) else appStringResource(Res.string.schedule_no_distance_limit)} · " +
-                        "${if (rule.intervalDays > 0) f.days(rule.intervalDays) else appStringResource(Res.string.schedule_no_time_limit)}, " +
-                        appStringResource(Res.string.schedule_whichever_first)
-                )
+                val distanceText = if (rule.intervalKm > 0) f.km(rule.intervalKm) else appStringResource(Res.string.schedule_no_distance_limit)
+                val timeText = if (rule.intervalDays > 0) f.days(rule.intervalDays) else appStringResource(Res.string.schedule_no_time_limit)
+                DocumentCopy(appStringResource(Res.string.schedule_interval_summary, distanceText, timeText, appStringResource(Res.string.schedule_whichever_first)))
                 DocumentNote(appStringResource(Res.string.schedule_baseline_basis))
                 DocumentCopy(
                     if (wear.status == WearStatus.UNKNOWN) appStringResource(Res.string.schedule_unknown_baseline)
                     else "${f.km(rule.lastServicedOdometerKm)} · ${f.date(LocalDate.fromEpochDays(rule.lastServicedEpochDays.toInt()))}"
                 )
                 DocumentNote(appStringResource(Res.string.schedule_last_confirmed_km))
-                DocumentCopy("${f.km(ride.odometer)} · ${ride.odometerConfirmedDate ?: appStringResource(Res.string.schedule_date_unknown)}")
+                DocumentCopy(appStringResource(Res.string.schedule_odometer_confirmed, f.km(ride.odometer), ride.odometerConfirmedDate ?: appStringResource(Res.string.schedule_date_unknown)))
                 DocumentCopy(appStringResource(Res.string.schedule_old_km_hint))
             }
             VaultButton(appStringResource(Res.string.schedule_edit_intervals), onClick = { onOpen("schedule", rule.id) }, full = true)

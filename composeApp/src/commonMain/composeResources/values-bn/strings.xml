@@ -305,6 +305,10 @@
     <string name="schedule_baseline_basis">হিসাবের ভিত্তি</string>
     <string name="schedule_last_confirmed_km">শেষ কনফার্ম করা কিমি</string>
     <string name="schedule_date_unknown">তারিখ নিশ্চিত নয়</string>
+    <string name="schedule_source_line">%1$s · %2$s · %3$s</string>
+    <string name="schedule_applicability_value">%1$s: %2$s</string>
+    <string name="schedule_interval_summary">%1$s · %2$s, %3$s</string>
+    <string name="schedule_odometer_confirmed">%1$s · %2$s</string>
     <string name="schedule_old_km_hint">পুরোনো কিমি হলে দূরত্বের হিসাবও পুরোনো।</string>
     <string name="schedule_confirm_odometer">বর্তমান কিমি কনফার্ম করুন</string>
     <string name="schedule_log_service">সার্ভিস লিখুন</string>
@@ -378,6 +382,7 @@
     <string name="garage_service_interval_remaining">সার্ভিস ইন্টারভ্যাল বাকি</string>
     <string name="garage_doc_expiry">ডকুমেন্টের মেয়াদ</string>
     <string name="garage_unit_km">কিমি</string>
+    <string name="odometer_bump_chip">+%1$s</string>
     <string name="garage_unit_km_per_litre">কিমি/লি</string>
     <string name="onboarding_model_count">%1$sটি মডেল</string>
     <string name="onboarding_privacy_note">আপনার সব তথ্য এই ফোনেই থাকবে। কোনো অ্যাকাউন্ট লাগবে না।</string>
@@ -516,6 +521,7 @@
     <string name="wallet_original_doc">আসল %1$s</string>
     <string name="wallet_pages">আসল সার্টিফিকেট · %1$s পৃষ্ঠা</string>
     <string name="wallet_next_renewal">পরবর্তী নবায়ন</string>
+    <string name="wallet_next_line">%1$s · %2$s</string>
     <string name="wallet_scan">কাগজ স্ক্যান করুন ＋</string>
     <string name="wallet_inspection_link">রোডসাইড ভিউ খুলুন ↗</string>
     <string name="wallet_note">আসল স্ক্যান ও যাচাই করা তথ্য একসাথে থাকবে।</string>
@@ -587,6 +593,7 @@
     <string name="service_yesterday">গতকাল</string>
     <string name="service_other_day">অন্য দিন</string>
     <string name="service_odometer">ওডোমিটার</string>
+    <string name="service_odometer_value">%1$s %2$s</string>
     <string name="service_workshop_optional">গ্যারেজ/মেকানিক (ঐচ্ছিক)</string>
     <string name="service_more_expenses">মজুরি, অন্যান্য খরচ বা ডিসকাউন্ট?</string>
     <string name="service_hide_more">মজুরি ও অন্যান্য লুকিয়ে ফেলুন</string>
@@ -761,6 +768,18 @@
     <string name="capture_add_pdf">PDF যোগ করুন</string>
     <string name="capture_add_photo_pdf">ছবি বা PDF যোগ করুন</string>
     <string name="capture_open_original_title">আসল ফাইল খুলুন</string>
+    <string name="capture_open_viewer_failed">ভিউয়ার খোলা যায়নি। সেভ করা পৃষ্ঠাগুলো এখানেই দেখতে পারবেন।</string>
+    <string name="capture_cleanup_failed">সাময়িক কপি মুছে ফেলা যায়নি। ভিউয়ার বন্ধ করে আবার চেষ্টা করুন।</string>
+    <string name="capture_import_failed">ফাইলটি যোগ করা যায়নি। জেপিজি, পিএনজি বা ওয়েবপি ছবি অথবা পিডিএফ দিয়ে আবার চেষ্টা করুন।</string>
+    <string name="capture_camera_failed">ছবি তোলা যায়নি। ফোকাস দেখে আবার চেষ্টা করুন।</string>
+    <string name="capture_capture_save_failed">ছবিটি সেভ করা যায়নি। আবার চেষ্টা করুন।</string>
+    <string name="pick_invalid_type">জেপিজি, পিএনজি বা ওয়েবপি ছবি বেছে নিন।</string>
+    <string name="pick_too_large">প্রতিটি ছবি ১ এমবি বা তার ছোট হতে হবে।</string>
+    <string name="pick_empty">ছবিটি খালি।</string>
+    <string name="pick_read_failed">ছবিটি পড়া যায়নি।</string>
+    <string name="pick_open_failed">ছবি বাছাই করা যায়নি।</string>
+    <string name="passport_open_failed">PDF খোলা যায়নি।</string>
+    <string name="passport_share_failed">শেয়ার করা যায়নি। দুটি ফাইল রাখতে শেয়ার শিটে Save to Files ব্যবহার করুন।</string>
     <string name="capture_open_original_reason">সংবেদনশীল ফাইল দেখতে ফোনের লক দিয়ে যাচাই করুন</string>
     <string name="capture_open_original_required">যাচাই ছাড়া ফাইল খোলা যাবে না।</string>
     <string name="location_searching">লোকেশন খোঁজা হচ্ছে…</string>

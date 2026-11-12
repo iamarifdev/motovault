@@ -198,7 +198,7 @@ fun HistoryScreen(
                                     log.serviceDiscountPoisha?.takeIf { it > 0 }?.let {
                                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                                             Text(appStringResource(Res.string.history_discount), fontSize = 13.sp, color = TextSecondary)
-                                            Text("−${f.money(it / 100.0)}", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                                            Text(appStringResource(Res.string.history_discount_amount, f.money(it / 100.0)), fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                                         }
                                     }
                                     if (log.workshop.isNotBlank()) Text(log.workshop, fontSize = 13.sp, color = TextSecondary)

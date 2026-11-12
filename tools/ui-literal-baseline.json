@@ -3,126 +3,72 @@
     "path": "DocumentFlow.kt",
     "sha256": "bd394682df33cdb8096809e0fb7edc49908a1068b4df89ac98ba07a407e81722",
     "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
+    "owner": "DeepSeek",
+    "kind": "data",
+    "justification": "Back-navigation chevron glyph; not translatable copy."
   },
   {
     "path": "DocumentWallet.kt",
     "sha256": "7297d2085ea0adffc396d546235c67b5cb031150ab4a66a5c72794841e9176b3",
     "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
-  },
-  {
-    "path": "DocumentWallet.kt",
-    "sha256": "e00d0d747be0cbeff3203a2bbe5942edd86c8316cca4b51b7b453afa79a24efc",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
-  },
-  {
-    "path": "GaugeDetailSheet.kt",
-    "sha256": "1397a2c2f8210876bc961c65d375186f5595b4f13743ab79595f53e978b62987",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
-  },
-  {
-    "path": "GaugeDetailSheet.kt",
-    "sha256": "2f2ba89be6d3205b057649dbf36293e1a91b24de37797ed6312e6dceafdfaddc",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
-  },
-  {
-    "path": "GaugeDetailSheet.kt",
-    "sha256": "3ee4045d7591634da8f7e1a4496b2d90ad2f46fae7fbe9b027248afbd85fe5dc",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
-  },
-  {
-    "path": "GaugeDetailSheet.kt",
-    "sha256": "72df2ff0c79289dfd24a563f89acfec6a0f18813397729b40b8a9d8a698c4efc",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
+    "owner": "DeepSeek",
+    "kind": "data",
+    "justification": "Add-document control glyph."
   },
   {
     "path": "components/Gauges.kt",
     "sha256": "15c5e748338b7ecd1296c700d6863dad8091e354a9dfa475fbb4bffba89d225f",
     "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
+    "owner": "DeepSeek",
+    "kind": "data",
+    "justification": "Unknown-wear placeholder glyph."
   },
   {
     "path": "components/Gauges.kt",
     "sha256": "aae8bbcde3fba4cd9c3423d6f894dd67997cd58dc943ca18b93ea0e218496af9",
     "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
+    "owner": "DeepSeek",
+    "kind": "data",
+    "justification": "Percent symbol beside a numeric gauge value."
   },
   {
     "path": "components/Keypad.kt",
     "sha256": "7299b59de0b5dad3b622afc3bdf57544e505249c77a6d4254bd14b1fc9a4ade8",
     "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
+    "owner": "DeepSeek",
+    "kind": "data",
+    "justification": "Decimal separator for numeric keypad input."
   },
   {
     "path": "documents/DocAddSheet.kt",
     "sha256": "4e4d59cb987804c29dd36c62b443c6cd2ee95974b72fb7e34b7d6de912ea16da",
     "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
-  },
-  {
-    "path": "garage/OdometerSheet.kt",
-    "sha256": "a86649bcae9435548e195cb832ba8cbad45be84ae68641f7861cdf51986f78ab",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
-  },
-  {
-    "path": "history/HistoryScreen.kt",
-    "sha256": "728df2787124b74cfc1abefc291ba4617dcc07a246d4117a7544582b3dfd4c0f",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
+    "owner": "DeepSeek",
+    "kind": "data",
+    "justification": "Checked-state glyph."
   },
   {
     "path": "maintenance/ServiceLinesEditor.kt",
     "sha256": "0933fb667296882d8c45abca58ac52e01c8db6f19e626b30de88f0f4ed143ec5",
     "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
+    "owner": "DeepSeek",
+    "kind": "data",
+    "justification": "Decrement quantity control glyph."
   },
   {
     "path": "maintenance/ServiceLinesEditor.kt",
     "sha256": "7297d2085ea0adffc396d546235c67b5cb031150ab4a66a5c72794841e9176b3",
     "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
-  },
-  {
-    "path": "maintenance/ServiceMetaSections.kt",
-    "sha256": "0c285cc3100661e21aee20b05c9cc24f8cdb48e4b57fe336152b0515ce99b478",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
-  },
-  {
-    "path": "onboarding/OnboardingScreen.kt",
-    "sha256": "d4086e782ed9f7e96af172c916293717c347b43a8167ef9ce7123137d2d48410",
-    "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
+    "owner": "DeepSeek",
+    "kind": "data",
+    "justification": "Increment quantity control glyph."
   },
   {
     "path": "onboarding/OnboardingSteps.kt",
     "sha256": "4e4d59cb987804c29dd36c62b443c6cd2ee95974b72fb7e34b7d6de912ea16da",
     "count": 1,
-    "owner": "Codex",
-    "removal_task": "P08-05"
+    "owner": "DeepSeek",
+    "kind": "data",
+    "justification": "Completed-step glyph."
   }
 ]

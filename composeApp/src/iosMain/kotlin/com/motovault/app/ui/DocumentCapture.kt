@@ -152,7 +152,8 @@ internal fun processPdf(data: NSData, type: String, operation: DocumentAssetOper
 actual fun DocumentImportActions(type: String, backOnly: Boolean, onResult: (CapturedDocument) -> Unit, onError: (String) -> Unit) {
     val scope = rememberCoroutineScope()
     val result by rememberUpdatedState(onResult)
-    val error by rememberUpdatedState(onError)
+    val reportError by rememberUpdatedState(onError)
+    val importFailed = appStringResource(Res.string.capture_import_failed)
     val kind by rememberUpdatedState(type)
     val back by rememberUpdatedState(backOnly)
     var busy by remember { mutableStateOf(false) }
@@ -177,7 +178,7 @@ actual fun DocumentImportActions(type: String, backOnly: Boolean, onResult: (Cap
                             }
                             processImages(images, currentKind, operation, originals)
                         }
-                    }) } } catch (cancelled: CancellationException) { throw cancelled } catch (failure: Exception) { error(failure.message ?: "Could not import this copy.") } finally { busy = false }
+                    }) } } catch (cancelled: CancellationException) { throw cancelled } catch (_: Exception) { reportError(importFailed) } finally { busy = false }
                 }
             }
         }
@@ -202,10 +203,15 @@ actual fun OpenOriginalAssetButton(id: String, mimeType: String, label: String) 
     var viewer by remember { mutableStateOf<UIDocumentInteractionController?>(null) }
     var error by remember { mutableStateOf<String?>(null) }
     var exported by remember { mutableStateOf<DocumentExportCopy?>(null) }
+    val openTitle = appStringResource(Res.string.capture_open_original_title)
+    val openReason = appStringResource(Res.string.capture_open_original_reason)
+    val openRequired = appStringResource(Res.string.capture_open_original_required)
+    val cleanupFailed = appStringResource(Res.string.capture_cleanup_failed)
+    val viewerFailed = appStringResource(Res.string.capture_open_viewer_failed)
     fun clearExport(): Boolean {
         val copy = exported ?: return true
         val cleared = copy.close()
-        if (cleared) exported = null else error = "Could not remove the temporary copy. Close the viewer and try again."
+        if (cleared) exported = null else error = cleanupFailed
         return cleared
     }
     val delegate = remember {
@@ -218,9 +224,6 @@ actual fun OpenOriginalAssetButton(id: String, mimeType: String, label: String) 
     var busy by remember { mutableStateOf(false) }
     DisposableEffect(Unit) { onDispose { clearExport() } }
     val authMessages = rememberAuthMessages()
-    val openTitle = appStringResource(Res.string.capture_open_original_title)
-    val openReason = appStringResource(Res.string.capture_open_original_reason)
-    val openRequired = appStringResource(Res.string.capture_open_original_required)
     TextButton(onClick = {
         busy = true; error = null
         scope.launch {
@@ -237,7 +240,7 @@ actual fun OpenOriginalAssetButton(id: String, mimeType: String, label: String) 
                 viewer = UIDocumentInteractionController.interactionControllerWithURL(NSURL.fileURLWithPath(copy.path))
                 viewer?.delegate = delegate
                 check(viewer?.presentPreviewAnimated(true) == true)
-            }.onFailure { clearExport(); viewer = null; error = "Could not open this original. You can still view the saved pages here." }
+            }.onFailure { clearExport(); viewer = null; error = viewerFailed }
             busy = false
         }
     }, enabled = !busy) { Text(label) }

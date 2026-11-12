@@ -198,3 +198,41 @@ spoken product Bangla with familiar loanwords, not literal translation.
 Verification for every slice: English/Bangla resource parity, placeholder/plural
 tests, language switching on Android and iOS, large text, and the expanded
 literal gate. Existing direct `Text`/`contentDescription` baseline must not grow.
+
+## Current status after P08-05 baseline close (2026-11-12)
+
+This audit's measured gap is closed for the audited sinks; the remaining items
+are listed explicitly.
+
+- **Expanded direct-literal gate**: `tools/ui_literal_gate.py` reports **9**
+  occurrences, all documented data-only glyphs (back chevron, add/remove,
+  percent, unknown `?`, decimal point, check marks). Each has an explicit owner
+  and a written justification in `tools/ui-literal-baseline.json`; the checker
+  now requires a justification for `kind: data` entries and a removal task for
+  `kind: copy` entries. Nine former copy-debt compositions were migrated to
+  format resources: `wallet_next_line`, `schedule_source_line`,
+  `schedule_applicability_value`, `schedule_interval_summary`,
+  `schedule_odometer_confirmed`, `odometer_bump_chip`,
+  `history_discount_amount`, `service_odometer_value`, and the existing
+  `onboarding_step` format.
+- **Native UI error copy**: Android document capture/picker/viewer and iOS
+  capture/picker/camera/passport error strings that reach the screen now
+  resolve through shared resources or localized display boundaries
+  (`capture_*`, `pick_*`, `passport_*` keys). Raw exception text is no longer
+  shown for the passport export/verify paths or the document-import path.
+- **Copy defects fixed**: Bangla expense empty amount no longer renders the
+  duplicated word (`টাকা: দেওয়া হয়নি`); English quick-add paste copy reads
+  "Add by typing or pasting" / "From a mechanic, bKash or Nagad message".
+- **Demo/input data**: `VaultCreation.seedData()` demo labels (for example
+  `চেইন`, document titles), `Catalog.kt` input aliases and stable storage IDs
+  remain data, documented in the P08-05 review. They are not counted as
+  localized UI copy and are not exposed as resource strings.
+- **Persisted data**: no new translated display text is persisted; the
+  compatibility fixtures and `P00CompatibilityTest` still pass.
+- **SRP**: `tools/responsibility_gate.py` reports only the two test-support
+  files in its baseline; no production file exceeds 400 lines.
+
+Still open and tracked in P08-05: a **named human Bangla/English copy review**
+of the changed strings (`docs/roadmap/evidence/P08-05-review.md` lists them), and
+broader coverage that this lexical audit cannot reach (indirect/`when` copy,
+every native string, system-owned permission/picker chrome, numeric literals).

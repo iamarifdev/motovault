@@ -43,7 +43,7 @@
     <string name="cost_price_confirmed">দাম কনফার্ম করেছি</string>
     <string name="cost_price_date">কনফার্ম করা দাম, %1$s থেকে। এডিট করতে পারবেন।</string>
     <string name="cost_missed_fill">মাঝে কোনো ফিল সেভ করা হয়নি</string>
-    <string name="cost_empty_amount">টাকা দেওয়া হয়নি</string>
+    <string name="cost_empty_amount">দেওয়া হয়নি</string>
     <string name="cost_fixture_en">English</string>
     <string name="cost_fixture_bn">বাংলা</string>
     <string name="cost_fixture_digits">সংখ্যা</string>

@@ -198,12 +198,13 @@ actual fun DocumentImportActions(type: String, backOnly: Boolean, onResult: (Cap
     var busy by remember { mutableStateOf(false) }
     val result by rememberUpdatedState(onResult)
     val error by rememberUpdatedState(onError)
+    val importFailed = appStringResource(Res.string.capture_import_failed)
     fun import(block: suspend (DocumentAssetOperation) -> CapturedDocument) {
         busy = true
         scope.launch {
             try { documentAssetOperation { operation -> result(block(operation)) } }
             catch (cancelled: CancellationException) { throw cancelled }
-            catch (failure: Exception) { error(failure.message ?: "Could not import this copy.") }
+            catch (_: Exception) { error(importFailed) }
             finally { busy = false }
         }
     }
@@ -304,17 +305,19 @@ actual fun OpenOriginalAssetButton(id: String, mimeType: String, label: String) 
     var error by remember { mutableStateOf<String?>(null) }
     var exported by remember { mutableStateOf<DocumentExportCopy?>(null) }
     var busy by remember { mutableStateOf(false) }
+    val openTitle = appStringResource(Res.string.capture_open_original_title)
+    val openReason = appStringResource(Res.string.capture_open_original_reason)
+    val openRequired = appStringResource(Res.string.capture_open_original_required)
+    val cleanupFailed = appStringResource(Res.string.capture_cleanup_failed)
+    val viewerFailed = appStringResource(Res.string.capture_open_viewer_failed)
     fun clearExport(): Boolean {
         val copy = exported ?: return true
         val cleared = runCatching { copy.close() }.isSuccess
-        if (cleared) exported = null else error = "Could not remove the temporary copy. Close the viewer and try again."
+        if (cleared) exported = null else error = cleanupFailed
         return cleared
     }
     val viewer = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { clearExport(); busy = false }
     val authMessages = rememberAuthMessages()
-    val openTitle = appStringResource(Res.string.capture_open_original_title)
-    val openReason = appStringResource(Res.string.capture_open_original_reason)
-    val openRequired = appStringResource(Res.string.capture_open_original_required)
     DisposableEffect(Unit) { onDispose { clearExport() } }
     TextButton(onClick = {
         busy = true; error = null
@@ -336,9 +339,9 @@ actual fun OpenOriginalAssetButton(id: String, mimeType: String, label: String) 
                 val uri = copy.uri
                 viewer.launch(Intent.createChooser(Intent(Intent.ACTION_VIEW).setDataAndType(uri, mimeType)
                     .apply { clipData = android.content.ClipData.newRawUri("Document copy", uri) }
-                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION), "Open original copy"))
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION), openTitle))
             } catch (cancelled: CancellationException) { runCatching { pending?.close() }; clearExport(); busy = false; throw cancelled }
-            catch (_: Exception) { runCatching { pending?.close() }; clearExport(); busy = false; error = "Could not open a viewer. You can still view the saved pages here." }
+            catch (_: Exception) { runCatching { pending?.close() }; clearExport(); busy = false; error = viewerFailed }
         }
     }, enabled = !busy) { Text(label) }
     error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }

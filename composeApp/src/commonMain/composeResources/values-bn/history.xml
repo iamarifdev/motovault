@@ -22,5 +22,6 @@
     <string name="history_price_unknown">দাম জানা নেই</string>
     <string name="history_labour">সার্ভিস চার্জ / মজুরি</string>
     <string name="history_discount">ছাড় / ডিসকাউন্ট</string>
+    <string name="history_discount_amount">−%1$s</string>
     <string name="history_delete">রেকর্ড মুছুন</string>
 </resources>

@@ -144,7 +144,7 @@ fun OdometerSheet(
         ) {
             listOf(10, 50, 100, 500).forEach { bump ->
                 VaultChip(
-                    text = "+${f.d(bump.toString())}",
+                    text = appStringResource(Res.string.odometer_bump_chip, f.d(bump.toString())),
                     onClick = {
                         entry.set("odo", (odoVal + bump).toInt().toString())
                         touched = true

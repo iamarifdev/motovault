@@ -47,6 +47,7 @@ private fun PassportReview(state: VaultState, dismiss: () -> Unit) {
     val authRequired = appStringResource(Res.string.passport_auth_required)
     val exportChanged = appStringResource(Res.string.passport_export_changed)
     val exportFailed = appStringResource(Res.string.passport_export_failed)
+    val shareFailed = appStringResource(Res.string.passport_share_failed)
     fun edit(value: PassportIdentity) { identity = value; confirmed = false; exported = null }
     Sheet(appStringResource(Res.string.passport_review_title), dismiss) {
         Eyebrow(appStringResource(Res.string.passport_owner_guarantee))
@@ -81,12 +82,12 @@ private fun PassportReview(state: VaultState, dismiss: () -> Unit) {
                     if (latestState == snapshot) { exported = result; digest = bundle.sha256 }
                     else { discardPassportExport(result); error = exportChanged }
                 } catch (cancelled: CancellationException) { throw cancelled }
-                catch (failure: Exception) { error = failure.message ?: exportFailed }
+                catch (_: Exception) { error = exportFailed }
                 finally { busy = false }
             }
         }
         if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
-        exported?.let { Text(appStringResource(Res.string.passport_created, digest), fontSize = 11.sp); PassportNativeActions(it) { message -> error = message } }
+        exported?.let { Text(appStringResource(Res.string.passport_created, digest), fontSize = 11.sp); PassportNativeActions(it) { error = shareFailed } }
         error?.let { Text(it, color = WarningColor, fontSize = 12.sp) }
     }
 }
@@ -108,14 +109,14 @@ private fun PassportVerifier(dismiss: () -> Unit) {
     val imported = appStringResource(Res.string.passport_imported)
     Sheet(appStringResource(Res.string.passport_verify_title), dismiss) {
         Text(appStringResource(Res.string.passport_verify_desc), color = TextSecondary, fontSize = 13.sp)
-        PassportVerificationImport({ json = it; message = imported }, { message = it })
+        PassportVerificationImport({ json = it; message = imported }, { message = verifyFailed })
         Field(appStringResource(Res.string.passport_hash_input), expected, { expected = it.take(100); message = null })
         Text(appStringResource(Res.string.passport_manual_hash_hint), color = TextSecondary, fontSize = 12.sp)
         Primary(appStringResource(Res.string.passport_verify_action), "check", enabled = json != null) {
             message = runCatching { verifyPassportBundle(json!!, expected) }.fold(
                 { if (it.matchesExpected) signatureOk
                   else internalOk },
-                { it.message ?: verifyFailed })
+                { verifyFailed })
         }
         message?.let { Text(it, fontSize = 12.sp) }
     }

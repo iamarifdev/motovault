@@ -1,0 +1,12 @@
+P08-05 iOS localization runtime provenance
+date_utc=2026-11-12T17:22:38Z
+simulator=iPhone 18 Pro Max / iOS 27.0 (24A434) / UDID 50709DF0-FEA9-4B34-9DE6-6172D868875D
+app_bundle=com.motovault.app.privacyprobe (isolated synthetic)
+app_container=/Users/arif/Library/Developer/CoreSimulator/Devices/50709DF0-FEA9-4B34-9DE6-6172D868875D/data/Containers/Bundle/Application/407519E1-DA4B-4E1C-9B8C-3C080216FFDF/MotoVault.app
+app_binary_sha256=c29ee1921470962c0bf2c143f62b8e26df7788c515697025f6898a7c5151424d
+capture_share_sha256=ef4d4d22305d3293ca763084071f60367ce90cf74f182c125431f5a446d08c0e
+composeapp=statically linked into the app binary
+final_run=build/p08-l10n-runs/l10n-ios3-20261112-231753 (P08LocalizationTests 3/3 passed, 48 attachments, TEST SUCCEEDED)
+storage_probe=PASS 22 native iOS storage checks incl native-reminder-language-and-digit-preferences and native-compose-plural-and-fallback
+storage_probe_sha256=effb6f02b14f615de7d80631aff43bde37b4676c40b59f47b8f5193359c5c41b
+source_head=e6c59bf06b03fc54f32ab6ad86b2117a17ac53d4 (working tree not clean)

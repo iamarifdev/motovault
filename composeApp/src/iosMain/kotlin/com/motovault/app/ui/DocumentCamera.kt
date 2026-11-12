@@ -13,6 +13,7 @@ import platform.CoreVideo.*
 import platform.UIKit.*
 import platform.darwin.NSObject
 import platform.darwin.dispatch_queue_create
+import motovault.composeapp.generated.resources.*
 
 @Composable
 actual fun DocumentCamera(modifier: Modifier, captureRequest: Int, onQuality: (CaptureQuality) -> Unit, onCaptured: (DocumentPage) -> Unit, onError: (String) -> Unit) {
@@ -20,6 +21,8 @@ actual fun DocumentCamera(modifier: Modifier, captureRequest: Int, onQuality: (C
     val captured by rememberUpdatedState(onCaptured)
     val quality by rememberUpdatedState(onQuality)
     val error by rememberUpdatedState(onError)
+    val captureFailed by rememberUpdatedState(appStringResource(Res.string.capture_camera_failed))
+    val saveFailed by rememberUpdatedState(appStringResource(Res.string.capture_capture_save_failed))
     val session = remember { AVCaptureSession() }
     val output = remember { AVCapturePhotoOutput() }
     val analysis = remember { AVCaptureVideoDataOutput().apply { alwaysDiscardsLateVideoFrames = true; videoSettings = mapOf(kCVPixelBufferPixelFormatTypeKey to kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) } }
@@ -29,7 +32,7 @@ actual fun DocumentCamera(modifier: Modifier, captureRequest: Int, onQuality: (C
     val delegate = remember {
         object : NSObject(), AVCapturePhotoCaptureDelegateProtocol {
             override fun captureOutput(output: AVCapturePhotoOutput, didFinishProcessingPhoto: AVCapturePhoto, error: NSError?) {
-                if (error != null) { busy = false; onError("Could not capture. Try again."); return }
+                if (error != null) { busy = false; onError(captureFailed); return }
                 scope.launch {
                     try { documentAssetOperation { operation ->
                         val data = requireNotNull(didFinishProcessingPhoto.fileDataRepresentation())
@@ -40,7 +43,7 @@ actual fun DocumentCamera(modifier: Modifier, captureRequest: Int, onQuality: (C
                         }
                         captured(page)
                     }
-                    } catch (cancelled: CancellationException) { throw cancelled } catch (_: Exception) { onError("Could not save the capture. Try again.") } finally { busy = false }
+                    } catch (cancelled: CancellationException) { throw cancelled } catch (_: Exception) { onError(saveFailed) } finally { busy = false }
                 }
             }
         }

@@ -22,5 +22,6 @@
     <string name="history_price_unknown">Price unknown</string>
     <string name="history_labour">Service charge / labour</string>
     <string name="history_discount">Discount</string>
+    <string name="history_discount_amount">−%1$s</string>
     <string name="history_delete">Delete record</string>
 </resources>

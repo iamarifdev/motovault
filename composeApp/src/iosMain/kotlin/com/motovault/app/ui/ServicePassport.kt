@@ -100,6 +100,8 @@ actual suspend fun renderServicePassport(bundle: PassportBundle): PassportExport
 
 @Composable
 actual fun PassportNativeActions(export: PassportExport, onError: (String) -> Unit) {
+    val openFailed = appStringResource(Res.string.passport_open_failed)
+    val shareFailed = appStringResource(Res.string.passport_share_failed)
     var viewer by remember { mutableStateOf<UIDocumentInteractionController?>(null) }
     val delegate = remember {
         object : NSObject(), UIDocumentInteractionControllerDelegateProtocol {
@@ -111,7 +113,7 @@ actual fun PassportNativeActions(export: PassportExport, onError: (String) -> Un
             viewer = UIDocumentInteractionController.interactionControllerWithURL(NSURL.fileURLWithPath(export.pdfPath))
             viewer?.delegate = delegate
             check(viewer?.presentPreviewAnimated(true) == true)
-        }.onFailure { onError("Could not open this PDF.") }
+        }.onFailure { onError(openFailed) }
     }) { Text(appStringResource(Res.string.passport_open_pdf)) }
     TextButton(onClick = {
         runCatching {
@@ -120,7 +122,7 @@ actual fun PassportNativeActions(export: PassportExport, onError: (String) -> Un
             sheet.popoverPresentationController?.sourceView = presenter.view
             sheet.popoverPresentationController?.sourceRect = CGRectMake(0.0,0.0,1.0,1.0)
             presenter.presentViewController(sheet,true,null)
-        }.onFailure { onError("Could not open sharing. Use Save to Files in the share sheet to keep both files.") }
+        }.onFailure { onError(shareFailed) }
     }) { Text(appStringResource(Res.string.passport_share_desc)) }
 }
 

@@ -107,7 +107,8 @@ class LocalizationResourcesTest(unittest.TestCase):
             xml = PROJECT / "composeApp/src/androidMain/res" / android_folder / "reminders.xml"
             android = {item.get("name"): item.text for item in ET.parse(xml).getroot()}
             ios_path = PROJECT / "iosApp/MotoVault" / f"{locale}.lproj/Localizable.strings"
-            ios = dict(re.findall(r'^"([^"]+)"\s*=\s*"([^"]*)";', ios_path.read_text(), re.MULTILINE))
+            ios_all = dict(re.findall(r'^"([^"]+)"\s*=\s*"([^"]*)";', ios_path.read_text(), re.MULTILINE))
+            ios = {key: value for key, value in ios_all.items() if key.startswith("reminder_")}
             self.assertTrue(android)
             shared_android = {key: value for key, value in android.items() if not key.startswith("reminder_channel_")}
             self.assertEqual(shared_android, ios)

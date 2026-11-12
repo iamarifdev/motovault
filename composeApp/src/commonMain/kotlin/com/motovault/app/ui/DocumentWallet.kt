@@ -54,7 +54,7 @@ internal fun ColumnScope.DocumentWallet(documents: List<VaultDocument>, onAppear
     if (next != null) Panel {
         val status = next.expiryStatus
         Text(appStringResource(Res.string.wallet_next_renewal), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { DocumentNote("${documentDisplayName(next.title)} · ${next.expiry}"); DocumentBadge(next.expiryLabel, warning = status == DocumentExpiryStatus.EXPIRED || status == DocumentExpiryStatus.EXPIRING_SOON, good = status == DocumentExpiryStatus.VALID) }
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { DocumentNote(appStringResource(Res.string.wallet_next_line, documentDisplayName(next.title), next.expiry)); DocumentBadge(next.expiryLabel, warning = status == DocumentExpiryStatus.EXPIRED || status == DocumentExpiryStatus.EXPIRING_SOON, good = status == DocumentExpiryStatus.VALID) }
     }
     DocumentPrimary(appStringResource(Res.string.wallet_scan), onClick = onAdd)
     RenewalReminderControl()
