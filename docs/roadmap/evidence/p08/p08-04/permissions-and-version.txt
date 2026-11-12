@@ -1,0 +1,22 @@
+APK: composeApp/build/outputs/apk/privacyProbe/composeApp-privacyProbe.apk
+sha256: ccf20f29e00265212da9b6c7dc3f2388d9dd6e3d7e521a80b0909378c3415955
+
+=== manifest permissions ===
+android.permission.ACCESS_FINE_LOCATION
+android.permission.ACCESS_COARSE_LOCATION
+android.permission.INTERNET
+android.permission.USE_BIOMETRIC
+android.permission.ACCESS_NETWORK_STATE
+android.permission.CAMERA
+android.permission.POST_NOTIFICATIONS
+android.permission.RECEIVE_BOOT_COMPLETED
+android.permission.RECORD_AUDIO
+com.motovault.app.privacyprobe.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+
+=== manifest target sdk ===
+34
+=== manifest min sdk ===
+24
+=== version ===
+1.0.0-privacyprobe
+1

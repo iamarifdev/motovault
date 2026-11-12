@@ -1366,7 +1366,7 @@ Required completion evidence: verification, design, android_device, ios_runtime,
 
 ## P08: Core ownership release gate
 
-**Priority:** P1 | **Scope:** release | **Current status:** Ready
+**Priority:** P1 | **Scope:** release | **Current status:** In progress
 
 **Outcome:** A reviewable, recoverable and verified core app can be piloted and released independently of later additions.
 
@@ -1394,7 +1394,7 @@ Required completion evidence: verification, design, android_device, ios_runtime,
 
 ### P08-01: Run core regression, migration and design matrix
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Ariful Islam.
 
 Additional task dependencies: P03A-03, P03A-04, P03A-05, P04A-07.
 
@@ -1412,7 +1412,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ### P08-02: Run physical-device accessibility, reliability and performance pass
 
-Status: **Planned** | Size: **5** | Owner: Codex.
+Status: **In review** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P08-01.
 
@@ -1446,7 +1446,7 @@ Required completion evidence: verification, review.
 
 ### P08-05: Complete app-wide localization and close the text-debt baseline
 
-Status: **Planned** | Size: **8** | Owner: Codex.
+Status: **Done** | Size: **8** | Owner: DeepSeek.
 
 Additional task dependencies: P03A-05, P04A-06, P08-01, P04A-08.
 

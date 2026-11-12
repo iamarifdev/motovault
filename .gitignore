@@ -14,3 +14,19 @@ xcuserdata/
 
 .claude/
 .serena/
+
+# Evidence screenshots/recordings stay local; commit text evidence only.
+# Existing tracked evidence is unaffected.
+docs/roadmap/evidence/**/*.png
+docs/roadmap/evidence/**/*.jpg
+docs/roadmap/evidence/**/*.jpeg
+docs/roadmap/evidence/**/*.webp
+docs/roadmap/evidence/**/*.gif
+docs/roadmap/evidence/**/*.mov
+docs/roadmap/evidence/**/*.mp4
+docs/roadmap/evidence/**/*.m4a
+docs/roadmap/evidence/**/*.wav
+docs/roadmap/evidence/**/*.mp3
+docs/roadmap/evidence/**/*.pdf
+docs/roadmap/evidence/**/*.xcresult/
+docs/roadmap/evidence/**/*.log

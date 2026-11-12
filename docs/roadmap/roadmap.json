@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-12T11:24:25+00:00",
+  "updated_at": "2026-11-12T18:40:42+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -4950,13 +4950,111 @@
             "android_runtime",
             "ios_runtime"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Ariful Islam",
+          "started_at": "2026-11-12T12:25:38+00:00",
+          "completed_at": "2026-11-12T16:58:49+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-12T12:25:38+00:00",
+              "text": "Started core regression, migration and design matrix run; device gates tracked separately"
+            },
+            {
+              "at": "2026-11-12T12:58:57+00:00",
+              "text": "Portable and Gradle unit gates pass. iOS CaptureFlowTests: 7 of 8 pass; testNativeShareExtension fails (draft preparation). Android runtime not run (no device). See evidence report."
+            },
+            {
+              "at": "2026-11-12T12:59:02+00:00",
+              "text": "Core regression evidence, including the open iOS share failure"
+            },
+            {
+              "at": "2026-11-12T13:12:13+00:00",
+              "text": "iOS CaptureFlowTests 8 of 8 on probe build after harness fix; Android capture probe passes; full Android probe fails at fuel edit UI check; design review open"
+            },
+            {
+              "at": "2026-11-12T13:17:40+00:00",
+              "text": "Android full probe 37 checks and capture probe pass after probe-only fixes; iOS CaptureFlowTests 8 of 8; design matrix review still open"
+            },
+            {
+              "at": "2026-11-12T16:58:10+00:00",
+              "text": "Core regression and migration verification: portable gates pass; fresh 327-test unit run (0 failures, includes P00CompatibilityTest and nine-brand contrast); iOS storage probe PASS 22 checks incl. Room 4-to-5 preservation and future-format refusal; Android full native probe PASS 37 checks on the same APK. Fresh-install restore remains cited from P03-05/P03A-04; no real UI backup archive was created in the capture run."
+            },
+            {
+              "at": "2026-11-12T16:58:10+00:00",
+              "text": "Android design matrix: 42 synthetic PNGs + normal/reduced-motion MP4s driven through the isolated privacyprobe full UI host; four tabs, light/dark, BN/EN, both digit styles, 1.0/1.3 scale, nine swatches, two extreme accents, seven sheets. 12 observations recorded (copy/layout/accessibility); no device data changed."
+            },
+            {
+              "at": "2026-11-12T16:58:10+00:00",
+              "text": "iOS design matrix: P08DesignMatrixTests 8/8 passed on the iOS 27 iPhone 18 Pro Max simulator; 36 kept xcresult screenshots + normal/reduced-motion recordings; nine-swatch and Enfield/KTM accents, light/dark, BN/EN, digits, 1.0/1.3, seven sheets; reduce-motion switch asserted ON before the reduced clip. Review findings recorded."
+            },
+            {
+              "at": "2026-11-12T16:58:49+00:00",
+              "text": "Design matrix executed and reviewed on the iOS 27 simulator (8/8 tests, 36 screenshots, 2 motion recordings) and Android emulator (42 screenshots, 2 recordings); core regression, 327-unit run, iOS storage probe (22 checks), Android native probe (37 checks), portable/workstation gates pass. Findings recorded and carried to P08-02/P08-03/P08-05; physical-device, pilot and signed-release gates remain open."
+            },
+            {
+              "at": "2026-11-12T17:37:28+00:00",
+              "text": "Owner-authorized layout follow-up (12 Nov 2026): Records filter/action rows now wrap like the v3 .row-wrap pattern and VaultSegmented grows/wraps at 1.3 text scale; verified on Android emulator 1.0/1.3 and iOS 27 simulator 1.3. Demo claims/data, expense date digit style and the optional backup-sheet pinned footer remain for the release decision. Evidence: docs/roadmap/evidence/P08-01-layout-resolutions.md."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P08-01-core-regression.md",
+              "summary": "Core regression evidence, including the open iOS share failure",
+              "at": "2026-11-12T12:59:02+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P08-01-core-regression.md",
+              "summary": "iOS CaptureFlowTests 8 of 8 on probe build after harness fix; Android capture probe passes; full Android probe fails at fuel edit UI check; design review open",
+              "at": "2026-11-12T13:12:13+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P08-01-core-regression.md",
+              "summary": "Android full probe 37 checks and capture probe pass after probe-only fixes; iOS CaptureFlowTests 8 of 8; design matrix review still open",
+              "at": "2026-11-12T13:17:40+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P08-01-core-regression.md",
+              "summary": "Core regression and migration verification: portable gates pass; fresh 327-test unit run (0 failures, includes P00CompatibilityTest and nine-brand contrast); iOS storage probe PASS 22 checks incl. Room 4-to-5 preservation and future-format refusal; Android full native probe PASS 37 checks on the same APK. Fresh-install restore remains cited from P03-05/P03A-04; no real UI backup archive was created in the capture run.",
+              "at": "2026-11-12T16:58:10+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/p08/android/android-capture-notes.md",
+              "summary": "Android design matrix: 42 synthetic PNGs + normal/reduced-motion MP4s driven through the isolated privacyprobe full UI host; four tabs, light/dark, BN/EN, both digit styles, 1.0/1.3 scale, nine swatches, two extreme accents, seven sheets. 12 observations recorded (copy/layout/accessibility); no device data changed.",
+              "at": "2026-11-12T16:58:10+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/p08/ios/ios-capture-notes.md",
+              "summary": "iOS design matrix: P08DesignMatrixTests 8/8 passed on the iOS 27 iPhone 18 Pro Max simulator; 36 kept xcresult screenshots + normal/reduced-motion recordings; nine-swatch and Enfield/KTM accents, light/dark, BN/EN, digits, 1.0/1.3, seven sheets; reduce-motion switch asserted ON before the reduced clip. Review findings recorded.",
+              "at": "2026-11-12T16:58:10+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P08-01-design.md",
+              "summary": "Design matrix executed and reviewed on the iOS 27 simulator (8/8 tests, 36 screenshots, 2 motion recordings) and Android emulator (42 screenshots, 2 recordings); core regression, 327-unit run, iOS storage probe (22 checks), Android native probe (37 checks), portable/workstation gates pass. Findings recorded and carried to P08-02/P08-03/P08-05; physical-device, pilot and signed-release gates remain open.",
+              "at": "2026-11-12T16:58:49+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P08-01-layout-resolutions.md",
+              "summary": "Owner-authorized layout follow-up (12 Nov 2026): Records filter/action rows now wrap like the v3 .row-wrap pattern and VaultSegmented grows/wraps at 1.3 text scale; verified on Android emulator 1.0/1.3 and iOS 27 simulator 1.3. Demo claims/data, expense date digit style and the optional backup-sheet pinned footer remain for the release decision. Evidence: docs/roadmap/evidence/P08-01-layout-resolutions.md.",
+              "at": "2026-11-12T17:37:28+00:00",
+              "revision": "e6c59bf"
+            }
+          ]
         },
         {
           "id": "P08-02",
@@ -4978,7 +5076,7 @@
             "android_device",
             "ios_device"
           ],
-          "status": "planned",
+          "status": "in_review",
           "owner": "Codex",
           "started_at": null,
           "completed_at": null,
@@ -4995,6 +5093,70 @@
             {
               "at": "2026-11-12T11:24:25+00:00",
               "text": "P07 handoff: perform physical iPhone camera/share/voice, Android locked/duplicate/unsupported/cancel matrix, cross-device glare/blur and VoiceOver/TalkBack checks. P07 simulator evidence is not physical-device proof."
+            },
+            {
+              "at": "2026-11-12T16:58:05+00:00",
+              "text": "P08-01 design matrix (iOS simulator + Android emulator) observed: nine brand-colour swatches expose no accessible label and the ninth is clipped at rest; dark-mode vault expiry warning badge looks lower contrast than light mode (not measured). Verify with TalkBack/VoiceOver and fix semantics before release. See docs/roadmap/evidence/P08-01-design.md."
+            },
+            {
+              "at": "2026-11-12T17:27:04+00:00",
+              "text": "P08 simulator work is complete; this task still requires physical Android + iPhone hardware (spoken TalkBack/VoiceOver output, camera/share/voice, notifications/background, credentials, restore, pickers, denied permissions, and measured startup/memory/battery budgets). Carried P08-01 finding: nine brand-colour swatches are unlabeled and the ninth is clipped at rest - fix semantics and verify physically. Handoff and exact inputs: docs/roadmap/evidence/P08-remaining-gates.md."
+            },
+            {
+              "at": "2026-11-12T17:37:28+00:00",
+              "text": "Layout follow-up: the P08-01 1.3-scale Records-row clipping and Profile theme-segment truncation are fixed and verified on simulator/emulator (P08-01-layout-resolutions.md); re-check on physical devices during this pass. Still open here: unlabeled/clipped nine brand-colour swatches, spoken TalkBack/VoiceOver output and physical performance budgets."
+            },
+            {
+              "at": "2026-11-12T17:59:15+00:00",
+              "text": "Android physical pass (Motorola edge 50 fusion, Android 16/API 36) completed in one consolidated run: native probe PASS 37 on device; in-app language switch, 1.15 OS x 1.3 in-app effective ~1.5 text scale, wrapping layout verified; notification and camera permission prompts captured, camera denial fallback usable; nine brand-colour swatches remain unlabeled in the physical accessibility tree; measured cold start 943-1018 ms, PSS ~82-137 MB, 431 frames / 6 janky (1.39%), p90 14 ms; device settings and permissions restored. Evidence: docs/roadmap/evidence/P08-02-android-device.md."
+            },
+            {
+              "at": "2026-11-12T17:59:16+00:00",
+              "text": "Android physical slice complete (probe, permissions, language/layout smoke, performance measurements). Still open: physical iPhone evidence, spoken TalkBack/VoiceOver, notification delivery/background, full share/voice/camera matrix, long-run battery/sustained-load budgets. Task stays in review until the iOS physical pass exists."
+            },
+            {
+              "at": "2026-11-12T18:00:46+00:00",
+              "text": "Physical Android artifact review addendum recorded (English UI correct at OS 1.15; nine brand-colour swatches have no accessible name and the ninth is clipped; raw empty-label counts per screen documented as audit signal, not spoken output; notification dialog confirmed still open after allow tap so no grant/delivery claimed). A one-run physical-iPhone plan with build/install/checks/restore steps is ready for when hardware is available."
+            },
+            {
+              "at": "2026-11-12T18:08:00+00:00",
+              "text": "Brand-colour swatch accessibility fix (13 Nov 2026): v3-parity wrapping radiogroup; each of the nine swatches now exposes a reviewed accessible name and selected/radio semantics via the existing settings_brand_color_named resource. Verified on Android emulator (uiautomator: 9 named swatches, wrapped rows) and iOS simulator (new test passed asserting >=9 labelled swatches); 327 unit tests and all gates pass. Spoken physical TalkBack/VoiceOver and the physical iPhone pass remain outstanding. Evidence: docs/roadmap/evidence/P08-02-swatch-accessibility.md."
+            },
+            {
+              "at": "2026-11-12T18:15:48+00:00",
+              "text": "Owner waiver WD-01 recorded (docs/roadmap/evidence/P08-owner-decisions.md): physical iOS verification is deferred while no iPhone is available; do not block on iPhone and do not re-ask. Android physical checks continue on the connected Motorola Edge 50 Fusion. Removal trigger: iPhone becomes available or before a signed release claims iPhone physical support. Simulator evidence stays labelled as such."
+            },
+            {
+              "at": "2026-11-12T18:21:11+00:00",
+              "text": "Additional Android physical pass (13 Nov 2026): cold/warm share review, stream/mime rejection, backup-restore system file picker open+cancel, notification-permission grant state (then restored false), sustained scroll metrics (840 frames, 0.95% janky, p90 12ms, PSS 137MB); one initial share capture that showed the phone home screen was deleted to keep owner data out of evidence. Remaining Android gaps: notification scheduling/delivery, spoken TalkBack/voice, allowed camera path, large-vault ops, unplugged battery budget. iPhone waived per WD-01."
+            },
+            {
+              "at": "2026-11-12T18:24:27+00:00",
+              "text": "Further Android probes (13 Nov): reminder scheduling NOT observed (dumpsys alarm showed zero probe alarms after granting notifications and visiting Profile twice) and camera allowed path NOT confirmed (dumpsys media.camera showed no probe client within 4s, twice); recorded as negative results, not passes. Temp notification/alarm dumps deleted because they contained other apps' owner data. Device restored (notifications false, stay-awake 0, camera granted, unlocked). P08-02 remains in_review; iPhone waived per WD-01. P08-03 pilot kit prepared separately."
+            },
+            {
+              "at": "2026-11-12T18:24:41+00:00",
+              "text": "Correction: the verification entry referencing docs/roadmap/evidence/P08-03-pilot-kit.md was attached here by mistake during the 13 Nov note; the pilot kit belongs to P08-03 (prepared, not run). No P08-02 claim depends on it; the negative scheduling/camera results are recorded in P08-02-android-device.md."
+            },
+            {
+              "at": "2026-11-12T18:28:13+00:00",
+              "text": "Emulator verification added while the physical phone was locked: system-camera launch wiring confirmed (com.android.camera2/CaptureActivity opened via TakePicture, Back returned with odometer sheet intact); large-vault synthetic fixture (1200 fuel logs + 200 documents) measured on emulator as pre-work (cold start 2119 ms, 81/284 janky = 28.5%, PSS ~126 MB); physical large-vault and camera-allowed checks remain pending unlock. Probe APK now ccf20f29 with the test-only LargeVaultFixtureActivity."
+            },
+            {
+              "at": "2026-11-12T18:33:01+00:00",
+              "text": "Regression after swatch/layout changes: iOS full design-matrix suite 8/8 passed on the simulator; Android NativeAssetInstrumentation PASS 37 on the new probe APK ccf20f29 (swatch fix + large-vault fixture). Physical-device swatch spoken check and physical large-vault/camera checks pending unlock; iPhone waived WD-01. Ref: docs/roadmap/evidence/P08-02-swatch-accessibility.md."
+            },
+            {
+              "at": "2026-11-12T18:36:46+00:00",
+              "text": "One-run plan written for the remaining Android physical checks while the phone is locked: docs/roadmap/evidence/P08-02-android-remaining-plan.md (system-camera allowed path without preview capture, physical large-vault measurement, reminder scheduling/alarm check, optional unplugged battery, restore+evidence rules). Probe APK ccf20f29 with LargeVaultFixtureActivity installed on the phone."
+            },
+            {
+              "at": "2026-11-12T18:39:56+00:00",
+              "text": "Physical checks on unlocked phone (13 Nov): camera allowed path PASS (com.motorola.camera5 opened, Back returned, odometer-capture empty, no photo); physical large-vault 1200-logs: start 1318 ms, 772 frames/116 janky (15.03%), p90 12ms, PSS 146→156MB — jank exceeds the provisional 5% budget, recorded as a performance finding for the release decision; native notification delivery verified with production builder/channel (channel=document_renewals, localized name, title/body; force-stop clears it so background retention not claimed); reminder scheduling still not observed (0 probe alarms). Probe APK f53c7a9f. Device restored (notifications false, stay-awake 0, font/night unchanged)."
+            },
+            {
+              "at": "2026-11-12T18:40:42+00:00",
+              "text": "Large-vault performance finding analyzed: root cause is an eager non-virtualized Records list (plain Column + forEach over all grouped rows; no LazyColumn/LazyVerticalGrid in commonMain UI), causing 116/772 janky frames (15.03%) and PSS 146→156MB at 1,208 logs on the physical phone while the 8-log default stays at 1.39%. Options recorded in docs/roadmap/evidence/P08-02-large-vault-performance.md: (A) separate documented large-vault budget or (B) recommended virtualize Records with LazyColumn + month headers. Decision needed from owner; no production UI change made."
             }
           ],
           "evidence": [
@@ -5011,6 +5173,69 @@
               "summary": "Owner approved tracking the P06 iOS VoiceOver check here on 12 Nov 2026. iOS 27 XCTest exposes only Compose root despite Always sync; screenshots do not prove VoiceOver. Verify production cost, expense, budget and fuel semantics/focus on iPhone before release.",
               "at": "2026-11-11T18:23:41+00:00",
               "revision": "f2ca12f"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/p08/p08-02/android-device/README.md",
+              "summary": "Android physical pass (Motorola edge 50 fusion, Android 16/API 36) completed in one consolidated run: native probe PASS 37 on device; in-app language switch, 1.15 OS x 1.3 in-app effective ~1.5 text scale, wrapping layout verified; notification and camera permission prompts captured, camera denial fallback usable; nine brand-colour swatches remain unlabeled in the physical accessibility tree; measured cold start 943-1018 ms, PSS ~82-137 MB, 431 frames / 6 janky (1.39%), p90 14 ms; device settings and permissions restored. Evidence: docs/roadmap/evidence/P08-02-android-device.md.",
+              "at": "2026-11-12T17:59:15+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P08-02-android-device.md",
+              "summary": "Android physical slice complete (probe, permissions, language/layout smoke, performance measurements). Still open: physical iPhone evidence, spoken TalkBack/VoiceOver, notification delivery/background, full share/voice/camera matrix, long-run battery/sustained-load budgets. Task stays in review until the iOS physical pass exists.",
+              "at": "2026-11-12T17:59:16+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P08-02-android-device.md",
+              "summary": "Android physical slice complete (probe, permissions, language/layout smoke, performance measurements). Still open: physical iPhone evidence, spoken TalkBack/VoiceOver, notification delivery/background, full share/voice/camera matrix, long-run battery/sustained-load budgets. Task stays in review until the iOS physical pass exists.",
+              "at": "2026-11-12T17:59:16+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P08-02-swatch-accessibility.md",
+              "summary": "Brand-colour swatch accessibility fix (13 Nov 2026): v3-parity wrapping radiogroup; each of the nine swatches now exposes a reviewed accessible name and selected/radio semantics via the existing settings_brand_color_named resource. Verified on Android emulator (uiautomator: 9 named swatches, wrapped rows) and iOS simulator (new test passed asserting >=9 labelled swatches); 327 unit tests and all gates pass. Spoken physical TalkBack/VoiceOver and the physical iPhone pass remain outstanding. Evidence: docs/roadmap/evidence/P08-02-swatch-accessibility.md.",
+              "at": "2026-11-12T18:08:00+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P08-02-swatch-accessibility.md",
+              "summary": "Brand-colour swatch accessibility fix (13 Nov 2026): v3-parity wrapping radiogroup; each of the nine swatches now exposes a reviewed accessible name and selected/radio semantics via the existing settings_brand_color_named resource. Verified on Android emulator (uiautomator: 9 named swatches, wrapped rows) and iOS simulator (new test passed asserting >=9 labelled swatches); 327 unit tests and all gates pass. Spoken physical TalkBack/VoiceOver and the physical iPhone pass remain outstanding. Evidence: docs/roadmap/evidence/P08-02-swatch-accessibility.md.",
+              "at": "2026-11-12T18:08:00+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/p08/p08-02/android-device/README.md",
+              "summary": "Additional Android physical pass (13 Nov 2026): cold/warm share review, stream/mime rejection, backup-restore system file picker open+cancel, notification-permission grant state (then restored false), sustained scroll metrics (840 frames, 0.95% janky, p90 12ms, PSS 137MB); one initial share capture that showed the phone home screen was deleted to keep owner data out of evidence. Remaining Android gaps: notification scheduling/delivery, spoken TalkBack/voice, allowed camera path, large-vault ops, unplugged battery budget. iPhone waived per WD-01.",
+              "at": "2026-11-12T18:21:11+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P08-03-pilot-kit.md",
+              "summary": "Further Android probes (13 Nov): reminder scheduling NOT observed (dumpsys alarm showed zero probe alarms after granting notifications and visiting Profile twice) and camera allowed path NOT confirmed (dumpsys media.camera showed no probe client within 4s, twice); recorded as negative results, not passes. Temp notification/alarm dumps deleted because they contained other apps' owner data. Device restored (notifications false, stay-awake 0, camera granted, unlocked). P08-02 remains in_review; iPhone waived per WD-01. P08-03 pilot kit prepared separately.",
+              "at": "2026-11-12T18:24:27+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/p08/p08-02/android-device/README.md",
+              "summary": "Physical checks on unlocked phone (13 Nov): camera allowed path PASS (com.motorola.camera5 opened, Back returned, odometer-capture empty, no photo); physical large-vault 1200-logs: start 1318 ms, 772 frames/116 janky (15.03%), p90 12ms, PSS 146→156MB — jank exceeds the provisional 5% budget, recorded as a performance finding for the release decision; native notification delivery verified with production builder/channel (channel=document_renewals, localized name, title/body; force-stop clears it so background retention not claimed); reminder scheduling still not observed (0 probe alarms). Probe APK f53c7a9f. Device restored (notifications false, stay-awake 0, font/night unchanged).",
+              "at": "2026-11-12T18:39:56+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P08-02-large-vault-performance.md",
+              "summary": "Large-vault performance finding analyzed: root cause is an eager non-virtualized Records list (plain Column + forEach over all grouped rows; no LazyColumn/LazyVerticalGrid in commonMain UI), causing 116/772 janky frames (15.03%) and PSS 146→156MB at 1,208 logs on the physical phone while the 8-log default stays at 1.39%. Options recorded in docs/roadmap/evidence/P08-02-large-vault-performance.md: (A) separate documented large-vault budget or (B) recommended virtualize Records with LazyColumn + month headers. Decision needed from owner; no production UI change made.",
+              "at": "2026-11-12T18:40:42+00:00",
+              "revision": "e6c59bf"
             }
           ]
         },
@@ -5041,9 +5266,37 @@
             {
               "at": "2026-11-12T11:24:25+00:00",
               "text": "P07 handoff: run the representative Bangladesh-owner capture pilot using P07-CAPTURE-PILOT.md. P07 has no multi-owner effort or correction sample; do not invent results."
+            },
+            {
+              "at": "2026-11-12T16:58:05+00:00",
+              "text": "P08-01 design review release-blocker candidates to disposition before the pilot/release candidate: 1.3 text scale clips Records action labels and the Profile theme segment; backup/privacy sheet content clipped at rest; expense date field shows Latin digits under Bangla digit style; residual demo claims ('New concepts (demo)', 'Reset demo data') and Bangla seed labels in the English demo state. These were observed on simulator/emulator; P08-02 physical pass may add findings. Evidence: docs/roadmap/evidence/P08-01-design.md."
+            },
+            {
+              "at": "2026-11-12T17:27:04+00:00",
+              "text": "Blocked on external inputs: representative Bangladesh owners + consent and the recorded pilot protocol. Release-blocker candidates needing a product decision first (1.3-scale Records/Profile clipping, backup/privacy sheet clipping, expense date digit style, residual demo claims) are listed in docs/roadmap/evidence/P08-remaining-gates.md."
+            },
+            {
+              "at": "2026-11-12T17:37:28+00:00",
+              "text": "Layout follow-up resolved: 1.3-scale Records action/filter clipping and Profile theme-segment truncation fixed and verified (P08-01-layout-resolutions.md). Remaining product decisions before the pilot: demo-claim/data presentation, expense date digit style, optional backup-sheet pinned-footer refactor."
+            },
+            {
+              "at": "2026-11-12T18:24:13+00:00",
+              "text": "Pilot kit prepared at docs/roadmap/evidence/P08-03-pilot-kit.md: participant profiles (commuter, first-time/used-bike owner, enthusiast), consent scope, isolation rules, 35-45 min protocol (manual baseline, photo/share/voice paths with Save+Undo, reminders, backup/restore, cost comprehension), observation and release-decision templates, evidence rules. Not run; needs real participants and consent. Physical iOS waived under WD-01."
+            },
+            {
+              "at": "2026-11-12T18:24:41+00:00",
+              "text": "Pilot kit evidence attached for planning: docs/roadmap/evidence/P08-03-pilot-kit.md is a prepared, unrun kit (participants/consent/protocol/templates) and does not count as observed verification; P08-03 still needs real participants and consent."
             }
           ],
-          "evidence": []
+          "evidence": [
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P08-03-pilot-kit.md",
+              "summary": "Pilot kit evidence attached for planning: docs/roadmap/evidence/P08-03-pilot-kit.md is a prepared, unrun kit (participants/consent/protocol/templates) and does not count as observed verification; P08-03 still needs real participants and consent.",
+              "at": "2026-11-12T18:24:41+00:00",
+              "revision": "e6c59bf"
+            }
+          ]
         },
         {
           "id": "P08-05",
@@ -5076,18 +5329,104 @@
             "ios_runtime",
             "review"
           ],
-          "status": "planned",
-          "owner": "Codex",
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "DeepSeek",
+          "started_at": "2026-11-12T17:04:26+00:00",
+          "completed_at": "2026-11-12T17:28:25+00:00",
           "blocker": "",
           "notes": [
             {
               "at": "2026-11-01T08:56:06+00:00",
               "text": "Implementation, copy style and static gates are recorded in P04A-08; Android/iOS language-switch evidence remains pending before this task can close."
+            },
+            {
+              "at": "2026-11-12T16:58:05+00:00",
+              "text": "P08-01 design matrix copy observations for the runtime language-switch slice: BN expense empty amount reads 'টাকা: টাকা দেওয়া হয়নি' (duplicate word), EN quick-add copy 'Arrange by typing or pasting' / fragment 'A mechanic, bKash or Nagad message', and EN Garage shows Bangla seed/demo labels (চেইন, document titles). Profile still exposes 'New concepts (demo)' and 'Reset demo data'. Visible BN/EN and both digit styles switched instantly on both platforms; native notifications/permission surfaces still need the P08-05 pass. Evidence: docs/roadmap/evidence/P08-01-design.md."
+            },
+            {
+              "at": "2026-11-12T17:04:26+00:00",
+              "text": "Started closing the expanded literal baseline (9 composition literals to resource formats; 9 symbol literals to documented data-only justifications), fixing the observed copy defects, then Android/iOS runtime language-switch captures including native notification/error surfaces."
+            },
+            {
+              "at": "2026-11-12T17:25:51+00:00",
+              "text": "Implementation: expanded literal baseline closed (9 former copy compositions now shared format resources; 9 remaining entries are data-only glyphs with kind+justification validated by the gate); native UI error copy localized through shared resources/typed boundaries; BN expense empty-amount and EN quick-add/reminder copy defects fixed; no persistence changes. 327 unit tests pass; literal/copy/responsibility/architecture gates pass."
+            },
+            {
+              "at": "2026-11-12T17:25:51+00:00",
+              "text": "Verification: final gate run passes; Android language-switch matrix (same-session BN->EN->BN, tabs, 7 sheets, notification card, localized save-failure; native probe PASS 37 incl. EN/BN notification content) and iOS P08LocalizationTests 3/3 with 23 reviewed screenshots + storage probe PASS 22 (EN/BN reminder localisation, plural/fallback)."
+            },
+            {
+              "at": "2026-11-12T17:25:51+00:00",
+              "text": "Review: gap-audit remediation status, style-guide check, responsibility/persisted-compat checks, demo/alias/identifier data classification and the exact changed-string list are recorded. Named human Bangla/English copy sign-off is still outstanding, so this stays in review."
+            },
+            {
+              "at": "2026-11-12T17:25:52+00:00",
+              "text": "Runtime language-switch evidence complete on both platforms; all static/portable/workstation gates pass. Named human copy review of the listed changed/new strings is the only remaining P08-05 item."
+            },
+            {
+              "at": "2026-11-12T17:28:25+00:00",
+              "text": "Owner sign-off recorded: Ariful Islam (repository owner) approved the changed/new English and Bangla strings and the onboarding_step wording as written on 12 November 2026 (see P08-05-review.md). Runtime language-switch evidence and all static gates were already complete."
+            },
+            {
+              "at": "2026-11-12T18:31:25+00:00",
+              "text": "Post-sign-off gap found during P08-04 iOS metadata review: native permission strings NSLocationWhenInUseUsageDescription and NSPhotoLibraryUsageDescription are not localized in en/bn InfoPlist.strings, so permission dialogs mix languages (English UI shows Bangla location text; Bangla UI shows English photo text). Proposed EN/BN copy is in docs/roadmap/evidence/p08/p08-04/ios-release-metadata-review.md and requires a named human review before editing; recorded as an open release-blocking localization item, not applied. Tracked under P08-04."
+            },
+            {
+              "at": "2026-11-12T18:36:46+00:00",
+              "text": "Parity verified after the plist-gap finding: Compose values/values-bn string, plurals and string-array keys match in every resource XML (script comparison), and iOS en/bn Localizable.strings match 10/10. The only outstanding localization gap is the unlocalized InfoPlist.strings location/photo usage strings awaiting named copy review; camera/mic/speech usage strings are localized in both languages."
             }
           ],
-          "evidence": []
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P08-05-localization.md",
+              "summary": "Implementation: expanded literal baseline closed (9 former copy compositions now shared format resources; 9 remaining entries are data-only glyphs with kind+justification validated by the gate); native UI error copy localized through shared resources/typed boundaries; BN expense empty-amount and EN quick-add/reminder copy defects fixed; no persistence changes. 327 unit tests pass; literal/copy/responsibility/architecture gates pass.",
+              "at": "2026-11-12T17:25:51+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P08-05-localization.md",
+              "summary": "Verification: final gate run passes; Android language-switch matrix (same-session BN->EN->BN, tabs, 7 sheets, notification card, localized save-failure; native probe PASS 37 incl. EN/BN notification content) and iOS P08LocalizationTests 3/3 with 23 reviewed screenshots + storage probe PASS 22 (EN/BN reminder localisation, plural/fallback).",
+              "at": "2026-11-12T17:25:51+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P08-05-review.md",
+              "summary": "Review: gap-audit remediation status, style-guide check, responsibility/persisted-compat checks, demo/alias/identifier data classification and the exact changed-string list are recorded. Named human Bangla/English copy sign-off is still outstanding, so this stays in review.",
+              "at": "2026-11-12T17:25:51+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/p08/localization/android/android-localization-notes.md",
+              "summary": "Runtime language-switch evidence complete on both platforms; all static/portable/workstation gates pass. Named human copy review of the listed changed/new strings is the only remaining P08-05 item.",
+              "at": "2026-11-12T17:25:52+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/p08/localization/ios/ios-localization-notes.md",
+              "summary": "Runtime language-switch evidence complete on both platforms; all static/portable/workstation gates pass. Named human copy review of the listed changed/new strings is the only remaining P08-05 item.",
+              "at": "2026-11-12T17:25:52+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P08-05-review.md",
+              "summary": "Runtime language-switch evidence complete on both platforms; all static/portable/workstation gates pass. Named human copy review of the listed changed/new strings is the only remaining P08-05 item.",
+              "at": "2026-11-12T17:25:52+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P08-05-review.md",
+              "summary": "Owner sign-off recorded: Ariful Islam (repository owner) approved the changed/new English and Bangla strings and the onboarding_step wording as written on 12 November 2026 (see P08-05-review.md). Runtime language-switch evidence and all static gates were already complete.",
+              "at": "2026-11-12T17:28:25+00:00",
+              "revision": "e6c59bf"
+            }
+          ]
         },
         {
           "id": "P08-04",
@@ -5119,9 +5458,55 @@
             {
               "at": "2026-11-12T11:24:25+00:00",
               "text": "P07 handoff: decide/provision the opt-in Bangla voice provider and run actual bn-BD recognition/privacy checks. P07 provider plan remains review-only; no cloud provider is enabled or claimed."
+            },
+            {
+              "at": "2026-11-12T17:27:05+00:00",
+              "text": "Blocked on owner authorization and signing/distribution material; the current uncommitted working tree is not a release candidate. Required outputs and the install/restore smoke path are in docs/roadmap/evidence/P08-remaining-gates.md."
+            },
+            {
+              "at": "2026-11-12T18:26:30+00:00",
+              "text": "Release-candidate pack prepared at docs/roadmap/evidence/P08-04-release-pack.md: candidate identity template, enabled features, privacy/store declaration draft, release-note draft, support/recovery instructions, rollout/rollback criteria, remaining signing/distribution steps. Not a release; signing and publication remain owner-authorized actions. Physical iOS limitation to be disclosed per WD-01."
+            },
+            {
+              "at": "2026-11-12T18:27:37+00:00",
+              "text": "Build-level declaration verification recorded (13 Nov 2026): probe APK ccf20f29 permissions via apkanalyzer; releaseRuntimeClasspath scan shows unbundled Google Play services ML Kit text recognition 19.0.1 + GMS datatransport/firebase-encoders transitively but no analytics/crash SDK; no app HTTP client (INTERNET/network-state come with GMS + external browser links); foreground-only location, explicit on-device speech mode, biometric app lock, boot/time reschedule receiver. Release pack privacy/store draft corrected accordingly; offline first-use OCR is not claimed. Artifacts: docs/roadmap/evidence/p08/p08-04/."
+            },
+            {
+              "at": "2026-11-12T18:31:17+00:00",
+              "text": "iOS release metadata reviewed (build-level): version 1.0.0 (1), app iOS 17 / extension iOS 15, iPhone+iPad; PrivacyInfo.xcprivacy present (no tracking/collected data; UserDefaults/FileTimestamp/SystemBootTime reasons) but CaptureShare extension has none (verify before submission); entitlements app-group/keychain templates exist with no signing material. OPEN GAP: NSLocationWhenInUse and NSPhotoLibraryUsageDescription are not localized in InfoPlist.strings, so permission dialogs mix languages; new EN/BN copy proposed in the review doc requires named human sign-off before editing. Ref: docs/roadmap/evidence/p08/p08-04/ios-release-metadata-review.md."
+            },
+            {
+              "at": "2026-11-12T18:34:36+00:00",
+              "text": "iOS privacy-manifest coverage reviewed in source: app target uses FileManager attributesOfItem (FileTimestamp reason declared); no UserDefaults/boot-time/disk-space/keyboard required-reason APIs found in the extension, which reads only the shared container and fileSizeKey; Apple scanner output remains authoritative. CaptureShare extension still has no own manifest — verify with the release scanner."
+            },
+            {
+              "at": "2026-11-12T18:35:59+00:00",
+              "text": "Android release variant built successfully (unsigned): composeApp-release-unsigned.apk 50a000bd…, 118 MB, com.motovault.app v1.0.0(1), minSdk24/targetSdk34, nine app permissions, no probe fixture activities in the release manifest, isMinifyEnabled=false. Offline cache lacked skyDesignSystem release artifacts so the build fetched declared dependencies. No signing config exists — signing/distribution remains owner action. Artifact facts: docs/roadmap/evidence/p08/p08-04/android-release-build.txt."
             }
           ],
-          "evidence": []
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/p08/p08-04/release-declaration-verification.md",
+              "summary": "Build-level declaration verification recorded (13 Nov 2026): probe APK ccf20f29 permissions via apkanalyzer; releaseRuntimeClasspath scan shows unbundled Google Play services ML Kit text recognition 19.0.1 + GMS datatransport/firebase-encoders transitively but no analytics/crash SDK; no app HTTP client (INTERNET/network-state come with GMS + external browser links); foreground-only location, explicit on-device speech mode, biometric app lock, boot/time reschedule receiver. Release pack privacy/store draft corrected accordingly; offline first-use OCR is not claimed. Artifacts: docs/roadmap/evidence/p08/p08-04/.",
+              "at": "2026-11-12T18:27:37+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/p08/p08-04/ios-release-metadata-review.md",
+              "summary": "iOS release metadata reviewed (build-level): version 1.0.0 (1), app iOS 17 / extension iOS 15, iPhone+iPad; PrivacyInfo.xcprivacy present (no tracking/collected data; UserDefaults/FileTimestamp/SystemBootTime reasons) but CaptureShare extension has none (verify before submission); entitlements app-group/keychain templates exist with no signing material. OPEN GAP: NSLocationWhenInUse and NSPhotoLibraryUsageDescription are not localized in InfoPlist.strings, so permission dialogs mix languages; new EN/BN copy proposed in the review doc requires named human sign-off before editing. Ref: docs/roadmap/evidence/p08/p08-04/ios-release-metadata-review.md.",
+              "at": "2026-11-12T18:31:17+00:00",
+              "revision": "e6c59bf"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/p08/p08-04/android-release-build.txt",
+              "summary": "Android release variant built successfully (unsigned): composeApp-release-unsigned.apk 50a000bd…, 118 MB, com.motovault.app v1.0.0(1), minSdk24/targetSdk34, nine app permissions, no probe fixture activities in the release manifest, isMinifyEnabled=false. Offline cache lacked skyDesignSystem release artifacts so the build fetched declared dependencies. No signing config exists — signing/distribution remains owner action. Artifact facts: docs/roadmap/evidence/p08/p08-04/android-release-build.txt.",
+              "at": "2026-11-12T18:35:59+00:00",
+              "revision": "e6c59bf"
+            }
+          ]
         }
       ],
       "architecture_application": [
@@ -8893,6 +9278,374 @@
       "to": "planned",
       "note": "P07 handoff: decide/provision the opt-in Bangla voice provider and run actual bn-BD recognition/privacy checks. P07 provider plan remains review-only; no cloud provider is enabled or claimed.",
       "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T12:25:38+00:00",
+      "task": "P08-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Started core regression, migration and design matrix run; device gates tracked separately",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T12:58:57+00:00",
+      "task": "P08-01",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Portable and Gradle unit gates pass. iOS CaptureFlowTests: 7 of 8 pass; testNativeShareExtension fails (draft preparation). Android runtime not run (no device). See evidence report.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T12:59:02+00:00",
+      "task": "P08-01",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Core regression evidence, including the open iOS share failure",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T13:12:13+00:00",
+      "task": "P08-01",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "iOS CaptureFlowTests 8 of 8 on probe build after harness fix; Android capture probe passes; full Android probe fails at fuel edit UI check; design review open",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T13:17:40+00:00",
+      "task": "P08-01",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Android full probe 37 checks and capture probe pass after probe-only fixes; iOS CaptureFlowTests 8 of 8; design matrix review still open",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T16:58:05+00:00",
+      "task": "P08-02",
+      "from": "planned",
+      "to": "planned",
+      "note": "P08-01 design matrix (iOS simulator + Android emulator) observed: nine brand-colour swatches expose no accessible label and the ninth is clipped at rest; dark-mode vault expiry warning badge looks lower contrast than light mode (not measured). Verify with TalkBack/VoiceOver and fix semantics before release. See docs/roadmap/evidence/P08-01-design.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T16:58:05+00:00",
+      "task": "P08-05",
+      "from": "planned",
+      "to": "planned",
+      "note": "P08-01 design matrix copy observations for the runtime language-switch slice: BN expense empty amount reads 'টাকা: টাকা দেওয়া হয়নি' (duplicate word), EN quick-add copy 'Arrange by typing or pasting' / fragment 'A mechanic, bKash or Nagad message', and EN Garage shows Bangla seed/demo labels (চেইন, document titles). Profile still exposes 'New concepts (demo)' and 'Reset demo data'. Visible BN/EN and both digit styles switched instantly on both platforms; native notifications/permission surfaces still need the P08-05 pass. Evidence: docs/roadmap/evidence/P08-01-design.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T16:58:05+00:00",
+      "task": "P08-03",
+      "from": "planned",
+      "to": "planned",
+      "note": "P08-01 design review release-blocker candidates to disposition before the pilot/release candidate: 1.3 text scale clips Records action labels and the Profile theme segment; backup/privacy sheet content clipped at rest; expense date field shows Latin digits under Bangla digit style; residual demo claims ('New concepts (demo)', 'Reset demo data') and Bangla seed labels in the English demo state. These were observed on simulator/emulator; P08-02 physical pass may add findings. Evidence: docs/roadmap/evidence/P08-01-design.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T16:58:10+00:00",
+      "task": "P08-01",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Core regression and migration verification: portable gates pass; fresh 327-test unit run (0 failures, includes P00CompatibilityTest and nine-brand contrast); iOS storage probe PASS 22 checks incl. Room 4-to-5 preservation and future-format refusal; Android full native probe PASS 37 checks on the same APK. Fresh-install restore remains cited from P03-05/P03A-04; no real UI backup archive was created in the capture run.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T16:58:10+00:00",
+      "task": "P08-01",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Android design matrix: 42 synthetic PNGs + normal/reduced-motion MP4s driven through the isolated privacyprobe full UI host; four tabs, light/dark, BN/EN, both digit styles, 1.0/1.3 scale, nine swatches, two extreme accents, seven sheets. 12 observations recorded (copy/layout/accessibility); no device data changed.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T16:58:10+00:00",
+      "task": "P08-01",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "iOS design matrix: P08DesignMatrixTests 8/8 passed on the iOS 27 iPhone 18 Pro Max simulator; 36 kept xcresult screenshots + normal/reduced-motion recordings; nine-swatch and Enfield/KTM accents, light/dark, BN/EN, digits, 1.0/1.3, seven sheets; reduce-motion switch asserted ON before the reduced clip. Review findings recorded.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T16:58:49+00:00",
+      "task": "P08-01",
+      "from": "in_review",
+      "to": "done",
+      "note": "Design matrix executed and reviewed on the iOS 27 simulator (8/8 tests, 36 screenshots, 2 motion recordings) and Android emulator (42 screenshots, 2 recordings); core regression, 327-unit run, iOS storage probe (22 checks), Android native probe (37 checks), portable/workstation gates pass. Findings recorded and carried to P08-02/P08-03/P08-05; physical-device, pilot and signed-release gates remain open.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:04:26+00:00",
+      "task": "P08-05",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Started closing the expanded literal baseline (9 composition literals to resource formats; 9 symbol literals to documented data-only justifications), fixing the observed copy defects, then Android/iOS runtime language-switch captures including native notification/error surfaces.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:25:51+00:00",
+      "task": "P08-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Implementation: expanded literal baseline closed (9 former copy compositions now shared format resources; 9 remaining entries are data-only glyphs with kind+justification validated by the gate); native UI error copy localized through shared resources/typed boundaries; BN expense empty-amount and EN quick-add/reminder copy defects fixed; no persistence changes. 327 unit tests pass; literal/copy/responsibility/architecture gates pass.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:25:51+00:00",
+      "task": "P08-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Verification: final gate run passes; Android language-switch matrix (same-session BN->EN->BN, tabs, 7 sheets, notification card, localized save-failure; native probe PASS 37 incl. EN/BN notification content) and iOS P08LocalizationTests 3/3 with 23 reviewed screenshots + storage probe PASS 22 (EN/BN reminder localisation, plural/fallback).",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:25:51+00:00",
+      "task": "P08-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Review: gap-audit remediation status, style-guide check, responsibility/persisted-compat checks, demo/alias/identifier data classification and the exact changed-string list are recorded. Named human Bangla/English copy sign-off is still outstanding, so this stays in review.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:25:52+00:00",
+      "task": "P08-05",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Runtime language-switch evidence complete on both platforms; all static/portable/workstation gates pass. Named human copy review of the listed changed/new strings is the only remaining P08-05 item.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:27:04+00:00",
+      "task": "P08-02",
+      "from": "planned",
+      "to": "planned",
+      "note": "P08 simulator work is complete; this task still requires physical Android + iPhone hardware (spoken TalkBack/VoiceOver output, camera/share/voice, notifications/background, credentials, restore, pickers, denied permissions, and measured startup/memory/battery budgets). Carried P08-01 finding: nine brand-colour swatches are unlabeled and the ninth is clipped at rest - fix semantics and verify physically. Handoff and exact inputs: docs/roadmap/evidence/P08-remaining-gates.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:27:04+00:00",
+      "task": "P08-03",
+      "from": "planned",
+      "to": "planned",
+      "note": "Blocked on external inputs: representative Bangladesh owners + consent and the recorded pilot protocol. Release-blocker candidates needing a product decision first (1.3-scale Records/Profile clipping, backup/privacy sheet clipping, expense date digit style, residual demo claims) are listed in docs/roadmap/evidence/P08-remaining-gates.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:27:05+00:00",
+      "task": "P08-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "Blocked on owner authorization and signing/distribution material; the current uncommitted working tree is not a release candidate. Required outputs and the install/restore smoke path are in docs/roadmap/evidence/P08-remaining-gates.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:28:25+00:00",
+      "task": "P08-05",
+      "from": "in_review",
+      "to": "done",
+      "note": "Owner sign-off recorded: Ariful Islam (repository owner) approved the changed/new English and Bangla strings and the onboarding_step wording as written on 12 November 2026 (see P08-05-review.md). Runtime language-switch evidence and all static gates were already complete.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:37:28+00:00",
+      "task": "P08-01",
+      "from": "done",
+      "to": "done",
+      "note": "Owner-authorized layout follow-up (12 Nov 2026): Records filter/action rows now wrap like the v3 .row-wrap pattern and VaultSegmented grows/wraps at 1.3 text scale; verified on Android emulator 1.0/1.3 and iOS 27 simulator 1.3. Demo claims/data, expense date digit style and the optional backup-sheet pinned footer remain for the release decision. Evidence: docs/roadmap/evidence/P08-01-layout-resolutions.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:37:28+00:00",
+      "task": "P08-02",
+      "from": "planned",
+      "to": "planned",
+      "note": "Layout follow-up: the P08-01 1.3-scale Records-row clipping and Profile theme-segment truncation are fixed and verified on simulator/emulator (P08-01-layout-resolutions.md); re-check on physical devices during this pass. Still open here: unlabeled/clipped nine brand-colour swatches, spoken TalkBack/VoiceOver output and physical performance budgets.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:37:28+00:00",
+      "task": "P08-03",
+      "from": "planned",
+      "to": "planned",
+      "note": "Layout follow-up resolved: 1.3-scale Records action/filter clipping and Profile theme-segment truncation fixed and verified (P08-01-layout-resolutions.md). Remaining product decisions before the pilot: demo-claim/data presentation, expense date digit style, optional backup-sheet pinned-footer refactor.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:59:15+00:00",
+      "task": "P08-02",
+      "from": "planned",
+      "to": "planned",
+      "note": "Android physical pass (Motorola edge 50 fusion, Android 16/API 36) completed in one consolidated run: native probe PASS 37 on device; in-app language switch, 1.15 OS x 1.3 in-app effective ~1.5 text scale, wrapping layout verified; notification and camera permission prompts captured, camera denial fallback usable; nine brand-colour swatches remain unlabeled in the physical accessibility tree; measured cold start 943-1018 ms, PSS ~82-137 MB, 431 frames / 6 janky (1.39%), p90 14 ms; device settings and permissions restored. Evidence: docs/roadmap/evidence/P08-02-android-device.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T17:59:16+00:00",
+      "task": "P08-02",
+      "from": "planned",
+      "to": "in_review",
+      "note": "Android physical slice complete (probe, permissions, language/layout smoke, performance measurements). Still open: physical iPhone evidence, spoken TalkBack/VoiceOver, notification delivery/background, full share/voice/camera matrix, long-run battery/sustained-load budgets. Task stays in review until the iOS physical pass exists.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:00:46+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Physical Android artifact review addendum recorded (English UI correct at OS 1.15; nine brand-colour swatches have no accessible name and the ninth is clipped; raw empty-label counts per screen documented as audit signal, not spoken output; notification dialog confirmed still open after allow tap so no grant/delivery claimed). A one-run physical-iPhone plan with build/install/checks/restore steps is ready for when hardware is available.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:08:00+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Brand-colour swatch accessibility fix (13 Nov 2026): v3-parity wrapping radiogroup; each of the nine swatches now exposes a reviewed accessible name and selected/radio semantics via the existing settings_brand_color_named resource. Verified on Android emulator (uiautomator: 9 named swatches, wrapped rows) and iOS simulator (new test passed asserting >=9 labelled swatches); 327 unit tests and all gates pass. Spoken physical TalkBack/VoiceOver and the physical iPhone pass remain outstanding. Evidence: docs/roadmap/evidence/P08-02-swatch-accessibility.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:15:48+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Owner waiver WD-01 recorded (docs/roadmap/evidence/P08-owner-decisions.md): physical iOS verification is deferred while no iPhone is available; do not block on iPhone and do not re-ask. Android physical checks continue on the connected Motorola Edge 50 Fusion. Removal trigger: iPhone becomes available or before a signed release claims iPhone physical support. Simulator evidence stays labelled as such.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:21:11+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Additional Android physical pass (13 Nov 2026): cold/warm share review, stream/mime rejection, backup-restore system file picker open+cancel, notification-permission grant state (then restored false), sustained scroll metrics (840 frames, 0.95% janky, p90 12ms, PSS 137MB); one initial share capture that showed the phone home screen was deleted to keep owner data out of evidence. Remaining Android gaps: notification scheduling/delivery, spoken TalkBack/voice, allowed camera path, large-vault ops, unplugged battery budget. iPhone waived per WD-01.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:24:13+00:00",
+      "task": "P08-03",
+      "from": "planned",
+      "to": "planned",
+      "note": "Pilot kit prepared at docs/roadmap/evidence/P08-03-pilot-kit.md: participant profiles (commuter, first-time/used-bike owner, enthusiast), consent scope, isolation rules, 35-45 min protocol (manual baseline, photo/share/voice paths with Save+Undo, reminders, backup/restore, cost comprehension), observation and release-decision templates, evidence rules. Not run; needs real participants and consent. Physical iOS waived under WD-01.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:24:27+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Further Android probes (13 Nov): reminder scheduling NOT observed (dumpsys alarm showed zero probe alarms after granting notifications and visiting Profile twice) and camera allowed path NOT confirmed (dumpsys media.camera showed no probe client within 4s, twice); recorded as negative results, not passes. Temp notification/alarm dumps deleted because they contained other apps' owner data. Device restored (notifications false, stay-awake 0, camera granted, unlocked). P08-02 remains in_review; iPhone waived per WD-01. P08-03 pilot kit prepared separately.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:24:41+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Correction: the verification entry referencing docs/roadmap/evidence/P08-03-pilot-kit.md was attached here by mistake during the 13 Nov note; the pilot kit belongs to P08-03 (prepared, not run). No P08-02 claim depends on it; the negative scheduling/camera results are recorded in P08-02-android-device.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:24:41+00:00",
+      "task": "P08-03",
+      "from": "planned",
+      "to": "planned",
+      "note": "Pilot kit evidence attached for planning: docs/roadmap/evidence/P08-03-pilot-kit.md is a prepared, unrun kit (participants/consent/protocol/templates) and does not count as observed verification; P08-03 still needs real participants and consent.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:26:30+00:00",
+      "task": "P08-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "Release-candidate pack prepared at docs/roadmap/evidence/P08-04-release-pack.md: candidate identity template, enabled features, privacy/store declaration draft, release-note draft, support/recovery instructions, rollout/rollback criteria, remaining signing/distribution steps. Not a release; signing and publication remain owner-authorized actions. Physical iOS limitation to be disclosed per WD-01.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:27:37+00:00",
+      "task": "P08-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "Build-level declaration verification recorded (13 Nov 2026): probe APK ccf20f29 permissions via apkanalyzer; releaseRuntimeClasspath scan shows unbundled Google Play services ML Kit text recognition 19.0.1 + GMS datatransport/firebase-encoders transitively but no analytics/crash SDK; no app HTTP client (INTERNET/network-state come with GMS + external browser links); foreground-only location, explicit on-device speech mode, biometric app lock, boot/time reschedule receiver. Release pack privacy/store draft corrected accordingly; offline first-use OCR is not claimed. Artifacts: docs/roadmap/evidence/p08/p08-04/.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:28:13+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Emulator verification added while the physical phone was locked: system-camera launch wiring confirmed (com.android.camera2/CaptureActivity opened via TakePicture, Back returned with odometer sheet intact); large-vault synthetic fixture (1200 fuel logs + 200 documents) measured on emulator as pre-work (cold start 2119 ms, 81/284 janky = 28.5%, PSS ~126 MB); physical large-vault and camera-allowed checks remain pending unlock. Probe APK now ccf20f29 with the test-only LargeVaultFixtureActivity.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:31:17+00:00",
+      "task": "P08-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "iOS release metadata reviewed (build-level): version 1.0.0 (1), app iOS 17 / extension iOS 15, iPhone+iPad; PrivacyInfo.xcprivacy present (no tracking/collected data; UserDefaults/FileTimestamp/SystemBootTime reasons) but CaptureShare extension has none (verify before submission); entitlements app-group/keychain templates exist with no signing material. OPEN GAP: NSLocationWhenInUse and NSPhotoLibraryUsageDescription are not localized in InfoPlist.strings, so permission dialogs mix languages; new EN/BN copy proposed in the review doc requires named human sign-off before editing. Ref: docs/roadmap/evidence/p08/p08-04/ios-release-metadata-review.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:31:25+00:00",
+      "task": "P08-05",
+      "from": "done",
+      "to": "done",
+      "note": "Post-sign-off gap found during P08-04 iOS metadata review: native permission strings NSLocationWhenInUseUsageDescription and NSPhotoLibraryUsageDescription are not localized in en/bn InfoPlist.strings, so permission dialogs mix languages (English UI shows Bangla location text; Bangla UI shows English photo text). Proposed EN/BN copy is in docs/roadmap/evidence/p08/p08-04/ios-release-metadata-review.md and requires a named human review before editing; recorded as an open release-blocking localization item, not applied. Tracked under P08-04.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:33:01+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Regression after swatch/layout changes: iOS full design-matrix suite 8/8 passed on the simulator; Android NativeAssetInstrumentation PASS 37 on the new probe APK ccf20f29 (swatch fix + large-vault fixture). Physical-device swatch spoken check and physical large-vault/camera checks pending unlock; iPhone waived WD-01. Ref: docs/roadmap/evidence/P08-02-swatch-accessibility.md.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:34:36+00:00",
+      "task": "P08-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "iOS privacy-manifest coverage reviewed in source: app target uses FileManager attributesOfItem (FileTimestamp reason declared); no UserDefaults/boot-time/disk-space/keyboard required-reason APIs found in the extension, which reads only the shared container and fileSizeKey; Apple scanner output remains authoritative. CaptureShare extension still has no own manifest — verify with the release scanner.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:35:59+00:00",
+      "task": "P08-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "Android release variant built successfully (unsigned): composeApp-release-unsigned.apk 50a000bd…, 118 MB, com.motovault.app v1.0.0(1), minSdk24/targetSdk34, nine app permissions, no probe fixture activities in the release manifest, isMinifyEnabled=false. Offline cache lacked skyDesignSystem release artifacts so the build fetched declared dependencies. No signing config exists — signing/distribution remains owner action. Artifact facts: docs/roadmap/evidence/p08/p08-04/android-release-build.txt.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:36:46+00:00",
+      "task": "P08-05",
+      "from": "done",
+      "to": "done",
+      "note": "Parity verified after the plist-gap finding: Compose values/values-bn string, plurals and string-array keys match in every resource XML (script comparison), and iOS en/bn Localizable.strings match 10/10. The only outstanding localization gap is the unlocalized InfoPlist.strings location/photo usage strings awaiting named copy review; camera/mic/speech usage strings are localized in both languages.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:36:46+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "One-run plan written for the remaining Android physical checks while the phone is locked: docs/roadmap/evidence/P08-02-android-remaining-plan.md (system-camera allowed path without preview capture, physical large-vault measurement, reminder scheduling/alarm check, optional unplugged battery, restore+evidence rules). Probe APK ccf20f29 with LargeVaultFixtureActivity installed on the phone.",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:39:56+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Physical checks on unlocked phone (13 Nov): camera allowed path PASS (com.motorola.camera5 opened, Back returned, odometer-capture empty, no photo); physical large-vault 1200-logs: start 1318 ms, 772 frames/116 janky (15.03%), p90 12ms, PSS 146→156MB — jank exceeds the provisional 5% budget, recorded as a performance finding for the release decision; native notification delivery verified with production builder/channel (channel=document_renewals, localized name, title/body; force-stop clears it so background retention not claimed); reminder scheduling still not observed (0 probe alarms). Probe APK f53c7a9f. Device restored (notifications false, stay-awake 0, font/night unchanged).",
+      "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-12T18:40:42+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Large-vault performance finding analyzed: root cause is an eager non-virtualized Records list (plain Column + forEach over all grouped rows; no LazyColumn/LazyVerticalGrid in commonMain UI), causing 116/772 janky frames (15.03%) and PSS 146→156MB at 1,208 logs on the physical phone while the 8-log default stays at 1.39%. Options recorded in docs/roadmap/evidence/P08-02-large-vault-performance.md: (A) separate documented large-vault budget or (B) recommended virtualize Records with LazyColumn + month headers. Decision needed from owner; no production UI change made.",
+      "revision": "e6c59bf"
     }
   ]
 }
