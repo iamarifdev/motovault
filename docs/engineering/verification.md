@@ -13,6 +13,23 @@ For every slice, select checks according to the changed behavior:
 
 The iOS testing restriction is iOS 27 iPhone 18 Pro or Pro Max. Verify the running simulator identity before reuse; preserve its data unless a clean-state test is explicitly needed. This restriction does not change the app's deployment target. Cloud, signed builds and publication each need their own evidence and authorization.
 
+## Native app tests
+
+App behavior tests run directly through Gradle/Kotlin, Android instrumentation or XCTest. Python may run the repository checks below, but must not launch or drive the app, coordinate app tests, or decide whether an app flow passed. Run the focused feature tests while developing, then the required platform smoke checks once for the candidate revision; do not repeat a passing run when neither code nor test setup changed.
+
+```bash
+rtk run ./gradlew :composeApp:testDebugUnitTest --offline
+rtk run ./gradlew :composeApp:connectedPrivacyProbeAndroidTest --offline
+rtk run xcodebuild test \
+  -project iosApp/MotoVault.xcodeproj \
+  -scheme MotoVault \
+  -destination 'platform=iOS Simulator,id=VERIFIED_IOS_27_IPHONE_18_PRO_OR_PRO_MAX_UDID' \
+  -only-testing:MotoVaultUITests/CaptureFlowTests \
+  -resultBundlePath /tmp/MotoVault-Capture-UNIQUE-RUN-NAME.xcresult
+```
+
+Use the existing connected Android device for the instrumentation task. For XCTest, replace the destination value with the UDID of the verified, already-running allowed simulator, and choose a result-bundle path that does not exist yet. Python checks in `tools/` remain repository gates; they do not count as app runtime evidence.
+
 ## Handoff gate
 
 Before claiming done, run the checks required by the task plus this portable set:

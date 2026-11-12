@@ -60,6 +60,8 @@ over 400 lines, a new language branch or a redesign of an unrelated screen.
 
 ## 4. Verify
 
+Run app behavior tests with the platform runner: Gradle/Kotlin and Android instrumentation on Android, `xcodebuild`/XCTest on iOS. Python may run repository checks below, but must not launch or drive the app, coordinate app tests, or decide whether an app flow passed.
+
 Run the task-specific checks, then the portable gates:
 
 ```bash
@@ -80,6 +82,8 @@ rtk run python3 tools/roadmap.py check
 Also use, when relevant:
 
 - `rtk run ./gradlew :composeApp:assembleDebug --offline` for Android host changes.
+- `rtk run ./gradlew :composeApp:connectedPrivacyProbeAndroidTest --offline` for Android instrumentation on a connected device.
+- XCTest for iOS UI tests, using the verified, already-running iOS 27 iPhone 18 Pro or Pro Max destination (see the exact command in `verification.md`).
 - the pinned iOS simulator build and runtime checks for native changes.
 - an actual Android emulator and iOS simulator language switch for any copy or
   locale change; verify both languages, digit styles and the affected native
