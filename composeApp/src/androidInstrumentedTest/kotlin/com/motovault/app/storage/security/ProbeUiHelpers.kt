@@ -101,6 +101,59 @@ internal fun NativeAssetInstrumentation.clickText(text: String) {
         check(node?.performAction(AccessibilityNodeInfo.ACTION_CLICK) == true) { "Synthetic UI control not clickable: $text" }
     }
 
+internal fun NativeAssetInstrumentation.clickLowestText(text: String) {
+        waitForText(text)
+        val matches = mutableListOf<Pair<Int, AccessibilityNodeInfo>>()
+        val bounds = Rect()
+        fun collect(node: AccessibilityNodeInfo?) {
+            if (node == null) return
+            if (node.text?.toString() == text || node.contentDescription?.toString() == text) {
+                node.getBoundsInScreen(bounds)
+                matches += bounds.top to node
+            }
+            for (index in 0 until node.childCount) collect(node.getChild(index))
+        }
+        collect(uiAutomation.rootInActiveWindow)
+        // Bottom navigation sits below screen headers that repeat the same label.
+        for ((_, match) in matches.sortedByDescending { it.first }) {
+            var node: AccessibilityNodeInfo? = match
+            while (node != null) {
+                if (node.isClickable && node.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return
+                node = node.parent
+            }
+        }
+        // Bottom navigation items may expose no clickable ancestor; tap the visible control.
+        val target = matches.maxByOrNull { it.first }?.second ?: error("Synthetic UI control not found: $text")
+        target.getBoundsInScreen(bounds)
+        check(bounds.width() > 0 && bounds.height() > 0) { "Synthetic UI control has no bounds: $text" }
+        val now = SystemClock.uptimeMillis()
+        val x = bounds.exactCenterX()
+        val y = bounds.exactCenterY()
+        val down = MotionEvent.obtain(now, now, MotionEvent.ACTION_DOWN, x, y, 0)
+        val up = MotionEvent.obtain(now, now + 40, MotionEvent.ACTION_UP, x, y, 0)
+        check(uiAutomation.injectInputEvent(down, true) && uiAutomation.injectInputEvent(up, true)) { "Synthetic tap failed: $text" }
+        down.recycle(); up.recycle()
+        SystemClock.sleep(300)
+    }
+
+internal fun NativeAssetInstrumentation.scrollUntilText(text: String) {
+        repeat(12) {
+            if (nodeWithText(text) != null) return
+            val scrollable = findScrollable(uiAutomation.rootInActiveWindow)
+                ?: error("Synthetic UI has no scrollable list for: $text")
+            scrollable.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
+            SystemClock.sleep(400)
+        }
+        waitForText(text)
+    }
+
+private fun findScrollable(node: AccessibilityNodeInfo?): AccessibilityNodeInfo? {
+        if (node == null) return null
+        if (node.isScrollable) return node
+        for (index in 0 until node.childCount) findScrollable(node.getChild(index))?.let { return it }
+        return null
+    }
+
 internal fun NativeAssetInstrumentation.clickAnyText(vararg texts: String) {
         val label = waitForAnyText(*texts)
         var node: AccessibilityNodeInfo? = label

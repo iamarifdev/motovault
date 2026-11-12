@@ -1,0 +1,11 @@
+iOS probe build provenance (P08-01 design matrix + storage probe)
+date_utc=2026-11-12T16:37:48Z
+simulator=iPhone 18 Pro Max / iOS 27.0 (24A434) / UDID 50709DF0-FEA9-4B34-9DE6-6172D868875D
+app_bundle=com.motovault.app.privacyprobe
+app_container=4755D15D-9A96-4191-9901-6FB25BC446DD (reinstalled by xcodebuild test from build/p08-derived)
+app_binary_sha256=5acfc7adafa9cb54c2c88ce2439d65a5bb88f36b5a24d1639970d4e39acab9ec
+capture_share_binary_sha256=ef4d4d22305d3293ca763084071f60367ce90cf74f182c125431f5a446d08c0e
+composeapp=statically linked into the app binary (no Frameworks bundle)
+storage_probe_result_sha256=9113b84d7d7277a77d4c2bc1e56345e1f19926f7409f8ed4d871e28d15487912
+source_head=e6c59bf06b03fc54f32ab6ad86b2117a17ac53d4 (working tree not clean)
+storage_probe_launch=xcrun simctl launch 50709DF0-FEA9-4B34-9DE6-6172D868875D com.motovault.app.privacyprobe --motovault-storage-probe

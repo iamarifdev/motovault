@@ -148,7 +148,7 @@ fun <T> VaultSegmented(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .height(40.dp)
+                    .heightIn(min = 40.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(if (isSelected) SurfaceColor else Color.Transparent)
                     .then(if (isSelected) Modifier.border(0.5.dp, BorderColor, RoundedCornerShape(10.dp)) else Modifier)
@@ -157,13 +157,15 @@ fun <T> VaultSegmented(
                             haptic.perform(HapticKind.TICK)
                             onSelect(value)
                         }
-                    },
+                    }
+                    .padding(horizontal = 6.dp, vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = optLabel,
                     color = if (isSelected) TextPrimary else TextSecondary,
                     fontSize = 14.sp,
+                    lineHeight = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.Center
                 )

@@ -1,0 +1,19 @@
+iOS design-matrix + motion final provenance
+date_utc=2026-11-12T16:57:12Z
+simulator=iPhone 18 Pro Max / iOS 27.0 (24A434) / UDID 50709DF0-FEA9-4B34-9DE6-6172D868875D
+app_bundle=com.motovault.app.privacyprobe (synthetic probe, isolated)
+app_container_bundle=/Users/arif/Library/Developer/CoreSimulator/Devices/50709DF0-FEA9-4B34-9DE6-6172D868875D/data/Containers/Bundle/Application/E82EC660-89FB-4018-9501-BBF3E54458DB/MotoVault.app
+app_container_data=/Users/arif/Library/Developer/CoreSimulator/Devices/50709DF0-FEA9-4B34-9DE6-6172D868875D/data/Containers/Data/Application/EA226EA8-A3A5-411A-B93F-669942D9F20A
+app_binary_sha256=5acfc7adafa9cb54c2c88ce2439d65a5bb88f36b5a24d1639970d4e39acab9ec
+capture_share_binary_sha256=ef4d4d22305d3293ca763084071f60367ce90cf74f182c125431f5a446d08c0e
+composeapp=statically linked into the app binary (no Frameworks bundle)
+source_head=e6c59bf06b03fc54f32ab6ad86b2117a17ac53d4 (working tree not clean)
+xcodebuild=Xcode 27.0 (27A266a); xcodebuild test ... -derivedDataPath build/p08-derived ... -collect-test-diagnostics never
+final_matrix_run=build/p08-ios-runs/final-20261112-225133 (8/8 passed, 36 exported PNGs)
+motion_normal_run=build/p08-ios-runs/motion (testMotionSequenceNormal passed, 16.1 s)
+motion_reduced_run=build/p08-ios-runs/motion (testMotionSequenceReduced passed, 23.0 s; ON-state still in xcresult set)
+storage_probe=pass 22 native iOS storage checks (p08-ios-storage-probe-full2-run.txt)
+
+recording hashes:
+7ce6a663366ff6e55166e69c596e9dd7388072f05d666ce22e5ba8a55564ec9d  docs/roadmap/evidence/p08/ios/recordings/p08-ios-motion-normal.mov
+aafed5e57041e2d01ac73818e71dc1b2b20b11c5bf2fbc200dec2ceab149aa35  docs/roadmap/evidence/p08/ios/recordings/p08-ios-motion-reduced.mov

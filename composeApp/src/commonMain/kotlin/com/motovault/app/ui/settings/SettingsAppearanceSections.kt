@@ -6,10 +6,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -41,6 +41,7 @@ import motovault.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun SettingsAppearanceSection(
     state: VaultState,
@@ -76,13 +77,16 @@ internal fun SettingsAppearanceSection(
             // Brand color swatches
             Column(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(appStringResource(Res.string.settings_color), fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
-                Row(
-                    modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth().selectableGroup(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     BRAND_COLOR_MAP.forEach { (bId, colors) ->
                         val isSelected = activeBrandId == bId
                         val swatchColor = Color(if (LocalVaultPalette.current.dark) colors.dark else colors.light)
+                        val brandName = worlds.firstOrNull { it.id == bId }?.name.orEmpty()
+                        val swatchLabel = appStringResource(Res.string.settings_brand_color_named, brandName)
                         Box(
                             modifier = Modifier
                                 .size(34.dp)
@@ -93,10 +97,11 @@ internal fun SettingsAppearanceSection(
                                     if (isSelected) TextPrimary else BorderStrongColor,
                                     CircleShape
                                 )
-                                .clickable {
+                                .selectable(selected = isSelected, role = Role.RadioButton) {
                                     haptic.perform(HapticKind.TICK)
                                     onUpdateState(state.copy(brandOverride = if (bId == rideBrandId) null else bId))
                                 }
+                                .semantics { contentDescription = swatchLabel }
                         )
                     }
                 }

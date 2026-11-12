@@ -90,7 +90,9 @@ internal fun NativeAssetInstrumentation.checkFuelEditUi() {
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("language", "en")
         val activity = startActivitySync(intent) as com.motovault.app.FuelEditFixtureActivity
         try {
+            clickLowestText("Records")
             clickText("Fuel fill · ৪.৯০ L")
+            scrollUntilText("Edit fuel record")
             clickText("Edit fuel record")
             waitForText("How much did you spend?")
             waitForText("≈ ৪.৯০ L")

@@ -144,7 +144,7 @@ private fun NativeAssetInstrumentation.checkRenewalExpenseUi() {
         setEditable("যত টাকা দিয়েছেন", "1250")
         clickLastText("নবায়ন সেভ করুন")
         waitForText("ট্যাক্স টোকেন নবায়ন")
-        waitForText("৳১,২৫০")
+        waitForText("৳১,২৫০.০০")
         shot("synthetic-p05-renewal-expense.png")
     } finally {
         runOnMainSync { history.finish() }

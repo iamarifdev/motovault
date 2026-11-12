@@ -21,6 +21,8 @@
 		C80000000000000000000016 /* Localizable.strings in CaptureShare */ = {isa = PBXBuildFile; fileRef = C10000000000000000000024; };
 		C80000000000000000000022 /* NativeVoiceCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80000000000000000000021; };
 		C80000000000000000000032 /* CaptureFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80000000000000000000031; };
+		C90000000000000000000002 /* P08DesignMatrixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90000000000000000000001 /* P08DesignMatrixTests.swift */; };
+		C91000000000000000000002 /* P08LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91000000000000000000001 /* P08LocalizationTests.swift */; };
 		C80000000000000000000042 /* CaptureShareRuntimeFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80000000000000000000041; };
 /* End PBXBuildFile section */
 
@@ -43,6 +45,8 @@
 		C80000000000000000000014 /* SharedCaptureInbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVault/SharedCaptureInbox.swift; sourceTree = "<group>"; };
 		C80000000000000000000021 /* NativeVoiceCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVault/NativeVoiceCapture.swift; sourceTree = "<group>"; };
 		C80000000000000000000031 /* CaptureFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVaultUITests/CaptureFlowTests.swift; sourceTree = "<group>"; };
+		C90000000000000000000001 /* P08DesignMatrixTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVaultUITests/P08DesignMatrixTests.swift; sourceTree = "<group>"; };
+		C91000000000000000000001 /* P08LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVaultUITests/P08LocalizationTests.swift; sourceTree = "<group>"; };
 		C80000000000000000000041 /* CaptureShareRuntimeFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVault/CaptureShareRuntimeFixture.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,6 +84,8 @@
 				C80000000000000000000014 /* SharedCaptureInbox.swift */,
 				C80000000000000000000021 /* NativeVoiceCapture.swift */,
 				C80000000000000000000031 /* CaptureFlowTests.swift */,
+				C90000000000000000000001 /* P08DesignMatrixTests.swift */,
+				C91000000000000000000001 /* P08LocalizationTests.swift */,
 				C80000000000000000000041 /* CaptureShareRuntimeFixture.swift */,
 				A10000000000000000000003 /* Products */,
 				809912C0307FCDD9006BBC49 /* Recovered References */,
@@ -108,6 +114,7 @@
 				A10000000000000000000012 /* Frameworks */,
 				A10000000000000000000013 /* Resources */,
 				C80000000000000000000011 /* Embed App Extensions */,
+				C80000000000000000000030 /* Sign share extension for simulator */,
 			);
 			buildRules = (
 			);
@@ -216,6 +223,21 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" = \"YES\" ]; then exit 0; fi\ncd \"$SRCROOT/..\"\nexport JAVA_HOME=\"/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home\"\n./gradlew :composeApp:embedAndSignAppleFrameworkForXcode --console=plain\n";
 		};
+		C80000000000000000000030 /* Sign share extension for simulator */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Sign share extension for simulator";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/scripts/sign-capture-share.sh\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -238,6 +260,8 @@
 				B10000000000000000000004 /* MotoVaultUITests/OwnerFlowTests.swift in Sources */,
 				C60000000000000000000001,
 				C80000000000000000000032 /* CaptureFlowTests.swift in Sources */,
+				C90000000000000000000002 /* P08DesignMatrixTests.swift in Sources */,
+				C91000000000000000000002 /* P08LocalizationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
