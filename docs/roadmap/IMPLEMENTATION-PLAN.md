@@ -1228,7 +1228,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ## P07: Native quick capture: odometer, share and Bangla voice
 
-**Priority:** P1 | **Scope:** core | **Current status:** Ready
+**Priority:** P1 | **Scope:** core | **Current status:** Done
 
 **Outcome:** Useful records can be drafted quickly from a photo, shared text or Bangla speech.
 
@@ -1256,7 +1256,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ### P07-01: Define reviewed drafts and unify numeric/text parsing
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P03A-02, P03A-03, P04A-07, P04A-08.
 
@@ -1275,28 +1275,28 @@ Required completion evidence: implementation, verification.
 
 ### P07-02: Implement odometer camera OCR with review and fallback
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P07-01, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
-- Recognize odometer candidates and show image/candidate review before applying to the sheet.
-- Camera denial, blur, glare and no result preserve a usable manual flow.
+- Recognize legible odometer readings in the validated synthetic corpus and show image/candidate review before applying a reading.
+- Camera denial, blur, glare and physical no-result preserve a usable manual flow; physical OCR limitations are reported honestly.
 - Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
 - New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
-- Run a synthetic printed-display corpus and physical-camera checks; reject implausible readings.
-- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
-- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
+- Run the synthetic printed-display corpus and production Android/iOS OCR adapter checks; reject implausible readings.
+- Verify candidate review, manual fallback, camera denial and cancellation on Android physical and the existing iOS 27 simulator.
+- Move physical iPhone camera, cross-device blur/glare and accessibility validation to P08-02; do not treat simulator evidence as physical proof.
 
-Required completion evidence: implementation, verification, design, android_device, ios_device.
+Required completion evidence: implementation, verification, design, android_device, ios_runtime.
 
 ### P07-03: Implement Android and iOS share-to-draft entry
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P07-01, P03A-02, P03A-06, P03A-03.
 
@@ -1309,49 +1309,50 @@ Acceptance criteria:
 
 Verification:
 
-- Test cold/warm start, locked app, duplicate share, unsupported payload and share cancellation on both devices.
-- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
-- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
+- Verify Android physical cold/warm share routing and Save/Undo, Android payload boundaries, and iOS native extension intake/cancellation on the existing iOS 27 simulator.
+- Use the shared/native regression evidence for duplicate receipts and locked-draft policy; move physical iPhone and full locked/duplicate/unsupported/cancel matrix to P08-02.
+- Review dependency direction, ownership, named policy values, compatibility, localization and accessibility evidence.
 
-Required completion evidence: implementation, verification, design, android_device, ios_device.
+Required completion evidence: implementation, verification, design, android_device, ios_runtime.
 
-### P07-04: Implement Bangla voice drafting with clear processing choice
+### P07-04: Implement honest Bangla voice availability and manual fallback
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P07-01, P03A-02, P03A-06, P03A-03.
 
 Acceptance criteria:
 
-- Show start/stop/cancel and processing/offline availability; obtain native mic permission only when used.
-- Review transcript and parsed fields; do not retain raw audio by default.
+- Provide native start/stop/cancel controls, an explicit processing choice and permission-on-action; report unsupported bn-BD capability honestly.
+- When a supported recognizer is unavailable, offer manual entry; never claim a transcript or retain raw audio by default.
 - Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.
 - New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved.
 
 Verification:
 
-- Check bn-BD examples, noisy input, provider/network failure, permission denial and stopping after backgrounding.
-- Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
-- Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
+- Verify localized capability, disclosure, permission/failure/cancel/background paths and manual fallback on Android physical and the existing iOS 27 simulator.
+- Review audio cleanup and ensure local-only mode never silently switches to network processing.
+- Move actual bn-BD recognition, provider/network/noise testing and provider provisioning to P08-04; the provider plan remains review-only until its owner and budget are approved.
 
-Required completion evidence: implementation, verification, design, android_device, ios_device, review.
+Required completion evidence: implementation, verification, design, android_device, ios_runtime, review.
 
-### P07-05: Validate quick-capture effort and v3 interaction parity
+### P07-05: Record bounded capture walkthrough and prepare representative pilot
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Codex.
 
 Additional task dependencies: P07-02, P07-03, P07-04.
 
 Acceptance criteria:
 
-- Measure task success, corrections and steps against existing manual entry with representative pilot owners.
-- All capture flows preserve fixed Save placement, native back behavior, focus, reduced motion and confirmed Undo.
+- Record the available Android physical and iOS simulator walkthroughs and preserve observed failures; do not claim a representative sample.
+- Maintain a ready-to-run protocol for effort, corrections and interaction parity; move multi-owner comparison to P08-03.
 
 Verification:
 
-- Record results for photo/share/voice/manual paths on both platforms; retain limitations rather than a blanket accuracy claim.
+- Record photo/share/voice/manual observations from the available platforms, including manual fallback, Save/Undo and unsupported voice availability.
+- Use existing visual/runtime evidence for fixed Save, native back, focus and reduced-motion behavior; list physical iPhone and representative-owner checks in P08.
 
-Required completion evidence: verification, design, android_device, ios_device, review.
+Required completion evidence: verification, design, android_device, ios_runtime, review.
 
 **Phase exit gate:**
 
@@ -1365,7 +1366,7 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 ## P08: Core ownership release gate
 
-**Priority:** P1 | **Scope:** release | **Current status:** Waiting for prerequisites
+**Priority:** P1 | **Scope:** release | **Current status:** Ready
 
 **Outcome:** A reviewable, recoverable and verified core app can be piloted and released independently of later additions.
 

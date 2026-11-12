@@ -1,0 +1,144 @@
+{
+  "updatedAtUtc": "2026-11-12T11:08:14Z",
+  "baseRevision": "ee36e75dd5d03e70c8e14ba8930b9df6f134b14b",
+  "sourceManifest": "P07-native-source.json",
+  "sourceManifestSha256": "6143af4658be527467dea74dc29f2863f0309bca4cb0ebb1ef737f89804ad8bc",
+  "deviceMetadata": "P07-motorola-device.json",
+  "physical": true,
+  "scope": "Partial Android physical checks. Warm share Save/Undo passed. The cold-start route after the forwarding fix also passed one automated synthetic Save/Undo run: review showed 12,345; Room readback showed 12,345 after Save and 1,000 after Undo, with zero ledger rows and the receipt removed. Camera OCR, cancellation return, locked/duplicate cases, Bangla voice and other platform/device gates remain open.",
+  "cases": [
+    {
+      "id": "camera-native-permission-denial",
+      "status": "passed",
+      "observed": "Actual permission prompt denied once; localized manual fallback; Save clickable ancestor disabled during review."
+    },
+    {
+      "id": "camera-denial-manual-return",
+      "status": "passed",
+      "observed": "Manual entry returns with the 1000 km value and fixed Save visible; camera action can be retried."
+    },
+    {
+      "id": "camera-target-photo",
+      "status": "failed",
+      "observed": "Two Motorola camera captures of synthetic ODO 12345 km targets, including a large full-screen high-contrast target, each returned an image preview but no parsed odometer candidate or Use action; baseline remained 1000 km. No raw preview screenshot was retained."
+    },
+    {
+      "id": "photo-save-undo",
+      "status": "pending",
+      "observed": "Not exercised with a selected photo candidate because recognition returned none."
+    },
+    {
+      "id": "manual-fallback-save-undo",
+      "status": "passed",
+      "observed": "Entered 12345 km manually after the no-candidate photo result. Isolated Room readback showed 12345 after Save, then 1000 after immediate Undo; ledger count stayed zero."
+    },
+    {
+      "id": "physical-share",
+      "status": "passed",
+      "observed": "One basic Android ACTION_SEND chooser flow: owner selected MotoVault; review showed ODO 12345 km with candidate 12345. Odometer opened with 12345 km and Save still required. Room readback showed 12345 after Save; immediate Undo restored 1000 km, zero ledger rows, and removed the temporary capture receipt. No external message was sent. Cold/warm/locked, duplicate and cancel cases remain open."
+    },
+    {
+      "id": "physical-bangla-voice",
+      "status": "pending",
+      "observed": "Local-only mode reported offline Bangla unavailable on this device. The phone speech service was not selected; no phrase was recorded."
+    },
+    {
+      "id": "physical-local-bn-bd-availability",
+      "status": "unavailable",
+      "observed": "The app displayed the localized offline Bangla unavailable message and offered manual entry or the separate phone speech service."
+    },
+    {
+      "id": "probe-audio-files",
+      "status": "passed",
+      "observed": "No audio files found in the probe private files/cache after the local-only check."
+    },
+    {
+      "id": "physical-accessibility-parity",
+      "status": "pending"
+    },
+    {
+      "id": "physical-share-cold-start",
+      "status": "failed",
+      "observed": "After force-stopping the isolated probe, a synthetic ACTION_SEND was resolved directly to MotoVault without a chooser. CaptureShareActivity launched MainActivity, but the visible screen remained Garage with no review draft. Room stayed at 1000 km with zero ledger entries."
+    },
+    {
+      "id": "physical-share-cold-start-after-forwarding-fix",
+      "status": "passed",
+      "observed": "After force-stopping only the isolated probe, an explicit synthetic ACTION_SEND launched CaptureShareActivity with LaunchState COLD and forwarded to MainActivity. The actual review hierarchy showed ODO 12345 km and candidate 12,345; selecting Odometer opened the editor with the 1,000 km baseline. Room readback showed 12,345 after Save, then 1,000 after immediate Undo; ledger count stayed zero and the temporary capture receipt was removed. This automated run targeted the MotoVault component directly and did not exercise the Android chooser."
+    },
+    {
+      "id": "physical-share-unsupported-mime",
+      "status": "pending",
+      "observed": "A synthetic ACTION_SEND with image/jpeg reached the isolated CaptureShareActivity. The guarded UI reader stopped because the foreground hierarchy package was outside its allowlist, so the unavailable-message UI was not verified. Room remained at 1000 km with zero ledger entries."
+    },
+    {
+      "id": "physical-share-cancel",
+      "status": "partial",
+      "observed": "Android opened the cold system ResolverActivity for synthetic ODO 12345 km. Back was sent without selecting a target. Room stayed at 1000 km with zero ledger entries. The guarded UI reader could not verify return to Garage."
+    }
+  ],
+  "persistedBaselineKm": 1000.0,
+  "baselineLedgerCount": 0,
+  "fullSuiteRepeated": false,
+  "artifacts": [
+    {
+      "path": "docs/roadmap/evidence/P07/screenshots/motorola-odometer-before-camera.png",
+      "sha256": "d8cfa023cf4c259153edf25ec823ab41c626ab6ecf90b607a70f77105ca09ece"
+    },
+    {
+      "path": "docs/roadmap/evidence/P07/screenshots/motorola-camera-denied.png",
+      "sha256": "00c18343804b8917572fa859563727542b37e120bd181c02279c807f2fa55ae1"
+    },
+    {
+      "path": "docs/roadmap/evidence/P07/screenshots/motorola-camera-denied-manual.png",
+      "sha256": "cdc94358ca24b64ef4299d834a2b1a05040b18a44961915e2644aa1b1f9fd445"
+    },
+    {
+      "path": "build/p07-motorola/readback-post-cold-fix-review-handoff.json",
+      "sha256": "e27ca859f8d0717951a94e57188c6d962bf66654c6729207a131d1208dc431b1"
+    },
+    {
+      "path": "build/p07-motorola/readback-post-unsupported-mime.json",
+      "sha256": "e27ca859f8d0717951a94e57188c6d962bf66654c6729207a131d1208dc431b1"
+    },
+    {
+      "path": "build/p07-motorola/readback-post-share-cancel.json",
+      "sha256": "e27ca859f8d0717951a94e57188c6d962bf66654c6729207a131d1208dc431b1"
+    },
+    {
+      "path": "build/p07-motorola/readback-before-cold-share.json",
+      "sha256": "e27ca859f8d0717951a94e57188c6d962bf66654c6729207a131d1208dc431b1"
+    },
+    {
+      "path": "build/p07-motorola/readback-cold-share-after-save.json",
+      "sha256": "5df081a832acd452d5cc35728f60ed8d99285b236b14b45feb9d9501045f014c"
+    },
+    {
+      "path": "build/p07-motorola/readback-cold-share-after-undo.json",
+      "sha256": "e27ca859f8d0717951a94e57188c6d962bf66654c6729207a131d1208dc431b1"
+    }
+  ],
+  "androidBuild": {
+    "task": "rtk run ./gradlew :composeApp:assemblePrivacyProbe --offline",
+    "result": "passed",
+    "artifact": "composeApp/build/outputs/apk/privacyProbe/composeApp-privacyProbe.apk",
+    "sha256": "73a3ce93f164fc890a50523abca20c43e6719f2140e5716e88704a4444812479",
+    "installedArtifactSha256": "73a3ce93f164fc890a50523abca20c43e6719f2140e5716e88704a4444812479",
+    "matchesInstalled": true,
+    "baseRevision": "ee36e75dd5d03e70c8e14ba8930b9df6f134b14b",
+    "workingTreeChanges": true
+  },
+  "coldShareDisplaySettings": {
+    "stayOnWhilePluggedIn": {
+      "before": 0,
+      "during": 3,
+      "after": 0
+    },
+    "screenOffTimeoutMs": {
+      "before": 60000,
+      "during": 600000,
+      "after": 60000
+    },
+    "restorationVerified": true
+  }
+}

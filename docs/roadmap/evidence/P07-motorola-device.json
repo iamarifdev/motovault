@@ -1,0 +1,33 @@
+{
+  "capturedAtUtc": "2026-11-12T09:41:03Z",
+  "deviceAlias": "Motorola edge 50 Fusion",
+  "physical": true,
+  "serialOmitted": true,
+  "probeWasPreviouslyInstalled": false,
+  "ownerAppDataCleared": false,
+  "syntheticRide": {
+    "brandId": "yamaha",
+    "modelDisplay": "MT-15 V2",
+    "baselineKm": 1000
+  },
+  "ro.product.manufacturer": "motorola",
+  "ro.product.model": "motorola edge 50 fusion",
+  "ro.build.version.release": "16",
+  "ro.build.version.sdk": "36",
+  "ro.build.id": "W1UUIS36H.110-42-4",
+  "ro.build.version.security_patch": "2026-09-01",
+  "configuredVoiceService": "com.google.android.tts/com.google.android.apps.speech.tts.googletts.service.GoogleTTSRecognitionService",
+  "originalFontScale": "1.15",
+  "apks": [
+    {
+      "path": "composeApp/build/outputs/apk/privacyProbe/composeApp-privacyProbe.apk",
+      "sha256": "73a3ce93f164fc890a50523abca20c43e6719f2140e5716e88704a4444812479"
+    },
+    {
+      "path": "composeApp/build/outputs/apk/androidTest/privacyProbe/composeApp-privacyProbe-androidTest.apk",
+      "sha256": "307928f68982a1311d1ce953942c38020e6633441532698050e3a9edbe28172c"
+    }
+  ],
+  "installedProbeSha256": "73a3ce93f164fc890a50523abca20c43e6719f2140e5716e88704a4444812479",
+  "installedProbeMatchesVerifiedApk": true
+}

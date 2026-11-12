@@ -1,0 +1,23 @@
+{
+  "base": "ee36e75",
+  "files": {
+    "composeApp/src/commonMain/kotlin/com/motovault/app/application/capture/CaptureDraftFactory.kt": "a0bc449837caa8ffd26168951f0ab9fec7acdf18c2fbaea888c90ef78daee50e",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/domain/backup/BackupPreferences.kt": "b6b85b89ecbf2bed47042c55e86deef811ace8a39ef1a57874bdb2a6da1fef84",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/CaptureDraft.kt": "856954dd0eedf57546692cd167029277b3a6340e453fe349bcc2335ec79af9fc",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/CaptureDraftParser.kt": "bcaac079c1c704a1d7cb1f86cabb1dd2fe9ed16e308d7dcc790be018036c804a",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/CaptureServiceParser.kt": "2b14315945815d90e5540a9572c44c483a95a6df81e0dbe89abd8a2161e5eca5",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/CaptureTextNumbers.kt": "7460c1396aa2b311fc3a3f34db4913cceeedeabaff7f7fefcb8afeacb9e5e822",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/domain/input/NormalizedNumbers.kt": "afdf24b8b910e3ea10dabb149c93e54c2e87e01ef53cd8f740b1adb51ddfad7c",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/CaptureReceiptMutation.kt": "9b9ea6e78647d929f45432f5380a4d6a5573f83091ae8d613e3ea2c5a6a863ff",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultSettings.kt": "ac3bbc443ca0433bb77aa92de07cdcd03ace4eedc1825a3322b2ad47f7505639",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt": "0e85d8f7415e29c07603bf4f2e69508a89669b13d03c55c88dfee448f353890d",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/BackupPreferencesAdapter.kt": "64c121613bb4869917acb974dec19f5e3953c566e9d2865c04bc73f62e021249",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/storage/CaptureFingerprintAdapter.kt": "a88408044e8dcf15958837866f559e2c5b70aa756c13ae42c127bf0ef58836c8",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Bn.kt": "2249d66b8cd12330809fa9a2832dd086423a543290b5313cb9fde9191f476d25",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartParse.kt": "d1d4aac88b4d7818b8d8186a415c9902bbbd14c06092fad1db079a598d43b857",
+    "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt": "82397d22a208bae68ad00ac6a94c8e4afaa0b72866ea1b660edb0c7e1c68c48f",
+    "composeApp/src/commonTest/kotlin/com/motovault/app/domain/capture/CaptureDraftParserTest.kt": "2450d6bb7588f22bd118af846d80df2fa67b1ac4573c079fc1e31f5aadc886bd",
+    "composeApp/src/commonTest/kotlin/com/motovault/app/domain/input/NormalizedNumbersTest.kt": "8ffce10369e6fb0978b20232c97d94fa37197e8b4edf84a2636af889058046e5",
+    "composeApp/src/commonTest/kotlin/com/motovault/app/storage/CaptureCompatibilityTest.kt": "bda4791b925d4ae22d4422a8b30fe0d4efb360cc9e9bf4d516e6c76d076564ee"
+  }
+}

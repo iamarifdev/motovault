@@ -1,0 +1,49 @@
+{
+  "reportedAtUtc": "2026-11-12T07:48:28.917551+00:00",
+  "policy": "The full 320-test suite ran once. Later selections overlap; do not sum stage counts. Only affected failures/changes were rechecked.",
+  "stages": [
+    {
+      "scope": "P07-01 full common/Android-host unit suite",
+      "tests": 320,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "evidence": "P07-01-unit-results.json"
+    },
+    {
+      "scope": "CaptureIngressTest, FuelEntryAdapterTest, StringResourceParityTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "log": "build/p07-native/gradle.log",
+      "xmlObservedBeforeNextSelection": true
+    },
+    {
+      "scope": "CaptureDraftParserTest (11), CaptureIngressTest (3), after native regex failure",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "log": "build/p07-native/gradle-regression.log",
+      "xmlObservedBeforeNextSelection": true
+    },
+    {
+      "scope": "StringResourceParityTest after final fixture copy",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "log": "build/p07-native/gradle-ui-final.log"
+    },
+    {
+      "scope": "OdometerCaptureStateTest after native-camera/private-review ownership fix",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "log": "build/p07-capture-owner/build.log",
+      "xml": "composeApp/build/test-results/testDebugUnitTest/TEST-com.motovault.app.ui.OdometerCaptureStateTest.xml"
+    }
+  ]
+}

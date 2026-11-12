@@ -1,0 +1,470 @@
+{
+  "capturedAtUtc": "2026-11-11T21:47:11.237662+00:00",
+  "baseRevision": "ee36e75dd5d03e70c8e14ba8930b9df6f134b14b",
+  "branch": "main",
+  "committed": false,
+  "scope": "Final changed source and local built artifacts. Earlier staged checks are scoped in P07-native-verification.md; no physical/release identity is claimed.",
+  "files": [
+    {
+      "path": "composeApp/src/androidInstrumentedTest/kotlin/com/motovault/app/storage/security/NativeAssetInstrumentation.kt",
+      "sha256": "9a0c2c8365bc4d124f55a2ee4469640ad15d30c9a5372755100b27eb2f5ad048",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidInstrumentedTest/kotlin/com/motovault/app/ui/CaptureInstrumentation.kt",
+      "sha256": "3e5806b39ceac43169fb311cb850ae27f400873054d2e7f09d804e0b287fe0e0",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidMain/AndroidManifest.xml",
+      "sha256": "25ece0a63cec155c9e5c305d580b936823264938490e8f70e213f68f31196c1c",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/CaptureShareActivity.kt",
+      "sha256": "c79cf9b9a7c564937eb6259027c15406ed8b0bcf47488e152661be69b4a23b07",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCapture.kt",
+      "sha256": "5e3e293ed697ae1b2add1003d6e2efb22250e859d3fff06aa9dbb71966e68eee",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/OdometerCamera.kt",
+      "sha256": "6d7e5885f76397195bb3e5acf740221f5798fe08a290e2d0061809e612484e0b",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidMain/kotlin/com/motovault/app/ui/VoiceCapture.kt",
+      "sha256": "cd5a19de911310dbc939d8081a3dac318180bda19d2599cc41330dc607dca2bd",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidMain/res/values-bn/capture_strings.xml",
+      "sha256": "02a8e125549d4f6f5527908ec336f2b57ceffb14cd41dcae8798885d89ec235d",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidMain/res/values/capture_strings.xml",
+      "sha256": "0cc7eb682feee900455855ebcfb063fb1a16a767a45d08e1828402094b4aff96",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidMain/res/xml/document_paths.xml",
+      "sha256": "766c816ef142a74e11192abb4a111f1b50fc91e4ba73fade02e0788f5dfab237",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidPrivacyProbe/kotlin/com/motovault/app/BackupRoundTripFixtureActivity.kt",
+      "sha256": "5803f7a6a8682cb329ea4fd0558ebf67590d91649291e605a80038376cb35a8c",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidPrivacyProbe/kotlin/com/motovault/app/CaptureFixtureActivity.kt",
+      "sha256": "554395c682dbf92f2ac73dea7f21491c5949bbf4e3179398b40d8f3662eccdb0",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidPrivacyProbe/kotlin/com/motovault/app/FuelEditFixtureActivity.kt",
+      "sha256": "d1840bb5b81c773a7c96a500fbd87ca5f0943ab8999e8217e1e7f027474728a9",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidPrivacyProbe/kotlin/com/motovault/app/RecoveryDurableFixtureActivity.kt",
+      "sha256": "d3413447d5af5e8d568019759fedac4e07aeb9e24040d6daac1847dfe56a9ba7",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidPrivacyProbe/kotlin/com/motovault/app/RecoveryFixtureActivity.kt",
+      "sha256": "1a6eb77b7b217c88a1d691c5be7b3be3bac44a3057a57adf038fcdbcac7172b5",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/androidPrivacyProbe/kotlin/com/motovault/app/VaultFailureFixtureActivity.kt",
+      "sha256": "f6f61467e70f9a5bbf855a16f784c5544fda7731ad09f175b674b9d61d975bc8",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/composeResources/values-bn/strings.xml",
+      "sha256": "467d8db9b4585c1dd6dce8f92d304458a228debd4fb4aeb23aad93bfbecf4342",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/composeResources/values/strings.xml",
+      "sha256": "371e79a27853bcec49836a3e4444eb713ed4f48bca9385bbef3cf6d3eb726d7d",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/App.kt",
+      "sha256": "c233f9c0ad66ad7501046c0ee68fefdc039d5ee3e35c299c5a2c51f1c82b7ffe",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/AppComposition.kt",
+      "sha256": "0935f7fd37dec3c22094bb670dc971c56bd3f8fd804569b2c517314d0f1b3de6",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/application/capture/CaptureDraftFactory.kt",
+      "sha256": "ae26d67bcfb88645d7bbf05e76bcb20e2749d7a64d4fafe894e50c1e9a7633cf",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/application/capture/ShareCaptureInbox.kt",
+      "sha256": "8a00df62be09010ccf9838f9009c90a92c3bfdee9023cbe1b07f0a8451c063b5",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/application/capture/VoiceCaptureBridge.kt",
+      "sha256": "e6b9e6a810888f98f102a3c02aad2d5c9d117c5a1af9cf8279803ba6a5a8e20f",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/application/fuel/FuelEntryRequest.kt",
+      "sha256": "df29ef3b19a029ebf40e70efa2a027dc77166aa2c006a6be955201571c95248a",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/backup/BackupPreferences.kt",
+      "sha256": "b6b85b89ecbf2bed47042c55e86deef811ace8a39ef1a57874bdb2a6da1fef84",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/CaptureDraft.kt",
+      "sha256": "856954dd0eedf57546692cd167029277b3a6340e453fe349bcc2335ec79af9fc",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/CaptureDraftParser.kt",
+      "sha256": "bcaac079c1c704a1d7cb1f86cabb1dd2fe9ed16e308d7dcc790be018036c804a",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/CaptureServiceParser.kt",
+      "sha256": "3ad0523808e6a5a98341398d66309c7b14d8c3bf50a1399d335eb6e68f68d77e",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/CaptureTextNumbers.kt",
+      "sha256": "b64d88938ea8ccfae41835b79f6d8a0672d4b341550db22faa5d53f90bfece2b",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/CaptureWordBoundaries.kt",
+      "sha256": "b7cca412ab601103f4a2f542cc80f2c11813a27e378f24f9cb1dadf634922ba6",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/input/NormalizedNumbers.kt",
+      "sha256": "afdf24b8b910e3ea10dabb149c93e54c2e87e01ef53cd8f740b1adb51ddfad7c",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/CaptureReceiptMutation.kt",
+      "sha256": "9b9ea6e78647d929f45432f5380a4d6a5573f83091ae8d613e3ea2c5a6a863ff",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultSettings.kt",
+      "sha256": "ac3bbc443ca0433bb77aa92de07cdcd03ace4eedc1825a3322b2ad47f7505639",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt",
+      "sha256": "0e85d8f7415e29c07603bf4f2e69508a89669b13d03c55c88dfee448f353890d",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/storage/BackupPreferencesAdapter.kt",
+      "sha256": "64c121613bb4869917acb974dec19f5e3953c566e9d2865c04bc73f62e021249",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/storage/CaptureFingerprintAdapter.kt",
+      "sha256": "a88408044e8dcf15958837866f559e2c5b70aa756c13ae42c127bf0ef58836c8",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/storage/FuelEntryAdapter.kt",
+      "sha256": "d8efbbae912ecb3f6c64276ad114a7bdac3c7d92c12c44053fe60774420c620f",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/Bn.kt",
+      "sha256": "2249d66b8cd12330809fa9a2832dd086423a543290b5313cb9fde9191f476d25",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt",
+      "sha256": "daf092657bf63723262f366492e3e932aea28ba9a98905de1b3417709c2a6d71",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartParse.kt",
+      "sha256": "d1d4aac88b4d7818b8d8186a415c9902bbbd14c06092fad1db079a598d43b857",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt",
+      "sha256": "82397d22a208bae68ad00ac6a94c8e4afaa0b72866ea1b660edb0c7e1c68c48f",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultSheetHost.kt",
+      "sha256": "fbec33b3f42193b32f47414f7864af9334a2cd3e4ff4ccd64f94289618d4387d",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/CaptureIntake.kt",
+      "sha256": "60fb9c0fb4e057efde98f5a8c7655e12178bc0cfdf54efda340d54b0a68cfb11",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/CapturePrefill.kt",
+      "sha256": "b36a27c52c200bdfe8a3e0e6c1476b966400ca1f4a501213bf987e2f2a6468fa",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/CaptureReviewSheet.kt",
+      "sha256": "e15d65ddc951abe30635890b3080a3468c9c1c5047c9faf40fda2f56b51a8e0c",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/CaptureRuntimeFixture.kt",
+      "sha256": "78952b295a2f9a8e8a0d02f930c24d9c4f45c194e438239f390216761972d214",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/OdometerCamera.kt",
+      "sha256": "3070ce368203fa46a660eb03b0fd2404fcf240bef5562afbfeaf884f036180a8",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/OdometerPhotoReview.kt",
+      "sha256": "d40153cf9e759eb4653766c6d671ad6b44e5b2291d05191e622b7a13c626123e",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/VoiceCapture.kt",
+      "sha256": "7d85393e404029069996e3f98568c6f01501488d19746caa0e95c06c363d9088",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/VoiceCaptureControls.kt",
+      "sha256": "d2425f0b9ac72ca35345ea203c9daa6116066c56444523ca02f3f867f909b695",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/fuel/FuelSheet.kt",
+      "sha256": "e29a5c6754af2aa2d6052d35acafa66823c8b3a2d91baf8d8019b8c58a711879",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/OdometerSheet.kt",
+      "sha256": "0204e429520505454add1f90c2181cebfe8bd6fd262b5f8df92bca8020e9dd5a",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/history/CostSheetHost.kt",
+      "sha256": "53f44e2c0ebac9db171f60525dff4346b1055480db183d167e9b7a7256f1dab6",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/history/ExpenseSheet.kt",
+      "sha256": "7d3b6cb46f814a065e1a68d186152c3d2bd608365a18bf3285fbe75a2d43fddb",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/history/PasteSheet.kt",
+      "sha256": null,
+      "status": "deleted"
+    },
+    {
+      "path": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/maintenance/ServiceSheet.kt",
+      "sha256": "6379c5b87c6fdb8dd9711420f1893265de2da038c9ad99d299b6e4a6cbb6abf3",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/domain/capture/CaptureDraftParserTest.kt",
+      "sha256": "4225272c665c0454a991b1bac818696a1fc4307fc3d155ecf4239e5b05383520",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/domain/input/NormalizedNumbersTest.kt",
+      "sha256": "8ffce10369e6fb0978b20232c97d94fa37197e8b4edf84a2636af889058046e5",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/storage/CaptureCompatibilityTest.kt",
+      "sha256": "bda4791b925d4ae22d4422a8b30fe0d4efb360cc9e9bf4d516e6c76d076564ee",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/commonTest/kotlin/com/motovault/app/storage/CaptureIngressTest.kt",
+      "sha256": "5ced646a57eb5f5e5e73a1d6514abf6292d326502d6dbe7fd8d846cce9166923",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/MainViewController.kt",
+      "sha256": "5435406d9a07b9424fb9cf2d2c5e5187e3c8a7b06be5b3e2bbafcb3f3235d03c",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/DocumentCapture.kt",
+      "sha256": "b86cf227c481824d949d623316a273c4e22c220d34b4f7cf934c562768943945",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/IosCaptureProbe.kt",
+      "sha256": "257c3764a324b1a607b0b754dead2c91324f7306b708134e929167c918247fae",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/OdometerCamera.kt",
+      "sha256": "00f326751ad6b119ffc26f4cf3ef8ddeb7455a624dcead76a3fa1e9cb5e8d852",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/iosMain/kotlin/com/motovault/app/ui/VoiceCapture.kt",
+      "sha256": "1d02d80ff6febc0c28c6722c5875e4761344177984e2d838b2deb9a204132c0f",
+      "status": "present"
+    },
+    {
+      "path": "composeApp/src/privacyProbe/AndroidManifest.xml",
+      "sha256": "a2a7548571cb25cfb94e79ab971f481afdd6d62ba2205c40f9338558609a3734",
+      "status": "present"
+    },
+    {
+      "path": "design/app-ui-v3/src/components/SmartInput.tsx",
+      "sha256": "029a393588330e2926b699b20f83f1c42d33089a80d8694ea9f8142dcaa73fa9",
+      "status": "present"
+    },
+    {
+      "path": "design/app-ui-v3/src/data/capture-copy.json",
+      "sha256": "5899f89026d236cf8c79b645373029e7cf2729b787e3c13562fae11db50f7491",
+      "status": "present"
+    },
+    {
+      "path": "design/app-ui-v3/src/lib/captureMoney.ts",
+      "sha256": "53ef5bb0def3b30e9388bd85b6742621dd70360bdafe84b82655806eb831c967",
+      "status": "present"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/OdometerSheet.tsx",
+      "sha256": "10976fef9d98d1459beef168cd31dc4c24399db91e178f9a8e467757ceb3504e",
+      "status": "present"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/PasteSheet.tsx",
+      "sha256": "dc0b4e2797f67bbfda15891e195a0264c5099cc0eeae200e8df2cdbe6f5aa5fd",
+      "status": "present"
+    },
+    {
+      "path": "design/app-ui-v3/src/sheets/ServiceSheet.tsx",
+      "sha256": "80936130875c700a1b0413137540163e71834d18815c59d99afa3aabbe03bb66",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/CaptureShare/CaptureShare.entitlements",
+      "sha256": "0df1934282b85fec4e7a77e77811d3f8595512a71d53888b0454a1d75d7f1b4b",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/CaptureShare/Info.plist",
+      "sha256": "0a156247531148c41e17b88415c385e937a48abe2fff0f48e167e8b5453635c0",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/CaptureShare/ShareViewController.swift",
+      "sha256": "147f8817a52c4e8effb534b6a4169074cde013aa3b0fe39a5b1acfe69925db96",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVault.xcodeproj/project.pbxproj",
+      "sha256": "7a9d55ca4f35a1173d632f54d9ae2821c3d7bea3aee32618a8a747624bab3a46",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVault/AppDelegate.swift",
+      "sha256": "7b507aae386d7b9c5b7a1695bf9a75590d035f7ea6d00f4b6d5cf0922ba1c3bb",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVault/CaptureShareRuntimeFixture.swift",
+      "sha256": "90bb716ad1a167b37129a0e1c62147dfe50667cddd5b49cbc1a20bd97ad152fb",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVault/Info.plist",
+      "sha256": "69834afaee081be7bfbe7037273d4bf655d01af1144772d1c9a86485c0651936",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVault/MotoVault.entitlements",
+      "sha256": "51f1ba76200138fa5dc02b26f78e5497cd071b2ef5e3e5aa77ee9cd4ee2e90f5",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVault/NativeVoiceCapture.swift",
+      "sha256": "4e2ec5fd2db9d6026c4fded67e7fbd72cdff60b1ed5a4a4d645fc86c9f2f3fa3",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVault/SharedCaptureInbox.swift",
+      "sha256": "d828da3e8e4d6db4b415583374f5b2aea62817ecad2386efbea86ca262af6387",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVault/bn.lproj/InfoPlist.strings",
+      "sha256": "6e4e9a2c55a4cd0101b48200635575f6567c35865cd30f231cc13463b3c905bc",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVault/bn.lproj/Localizable.strings",
+      "sha256": "f787ad9b734354a7de57a2a25be9807c281ad7e17374cda97ff0c77256d9dc2a",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVault/en.lproj/InfoPlist.strings",
+      "sha256": "53376ce2da1e515026178e5343a8846564b9b38914cae0b70756cfce84a6a381",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVault/en.lproj/Localizable.strings",
+      "sha256": "e4f6376b6c561fc05c2bc179160be667a4332d1161755bd4ce5d1a7fd5394c58",
+      "status": "present"
+    },
+    {
+      "path": "iosApp/MotoVaultUITests/CaptureFlowTests.swift",
+      "sha256": "54c5933cd63c9db9e031d7e5fb1a96035ad3818b51e19ee4a122d1fee0979904",
+      "status": "present"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "composeApp/build/outputs/apk/debug/composeApp-debug.apk",
+      "sha256": "3adf97d4c423552dec488a4d6735f3d77e730283db8f4bd97b3c778bfb9d2c16"
+    },
+    {
+      "path": "composeApp/build/outputs/apk/privacyProbe/composeApp-privacyProbe.apk",
+      "sha256": "86087a4bdd878e05e9f453bb146231cce3b2e723cb15e8b7ee5c21aa54ce8eab"
+    },
+    {
+      "path": "composeApp/build/outputs/apk/androidTest/privacyProbe/composeApp-privacyProbe-androidTest.apk",
+      "sha256": "fc8b4917a202e179caac0b21c3ed63268c71a493598419235822416b4360e5b3"
+    },
+    {
+      "path": "build/p07-native/DerivedData/Build/Products/Debug-iphonesimulator/MotoVault.app/MotoVault.debug.dylib",
+      "sha256": "b65063413101e3356d3740b58a19bcfb0ce3a1953920051f701263867aec822a"
+    },
+    {
+      "path": "build/p07-native/DerivedData/Build/Products/Debug-iphonesimulator/CaptureShare.appex/CaptureShare",
+      "sha256": "44690e60c0a5087028e24f8bba0ce60a13f618cbfaa843d1ea7cf8ea87a2d56a"
+    },
+    {
+      "path": "design/app-ui-v3/dist/assets/index-t9bgajHq.js",
+      "sha256": "c9b618ab77cd2748036d9db692eceb9692c0416e358b9b7d537a584a6593311a"
+    }
+  ]
+}

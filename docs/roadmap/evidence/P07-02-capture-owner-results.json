@@ -1,0 +1,51 @@
+{
+  "capturedAtUtc": "2026-11-12T07:50:38.751362+00:00",
+  "baseRevision": "ee36e75dd5d03e70c8e14ba8930b9df6f134b14b",
+  "committed": false,
+  "sourceManifest": "P07-native-source.json",
+  "result": "passed",
+  "unitScope": "OdometerCaptureStateTest",
+  "unitResults": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "android": "Actual external-camera pause, consumer disposal/remount, same root callback after cancellation, empty scratch cache; pre-granted isolated fixture",
+  "iosDestination": "iOS 27 iPhone 18 Pro Max, existing allowed simulator",
+  "iosUiTestMethods": [
+    "CaptureFlowTests/testCaptureNativeCameraCancellation"
+  ],
+  "iosUsedFreshSharedFramework": true,
+  "iosScreenshotsVisuallyReviewed": true,
+  "fullSuiteRepeated": false,
+  "nativeAuthenticationTested": false,
+  "physicalDeviceTested": false,
+  "logs": [
+    {
+      "path": "build/p07-capture-owner/portable.log",
+      "sha256": "c9d128bdd76021c6d5ab60f1185edaae52537e5bfe0dbce3a61f292755a8939c"
+    },
+    {
+      "path": "build/p07-capture-owner/build.log",
+      "sha256": "547c4f685e3a8bf3261fb1cfe45cb4bf59ad9df429a5016f579ff0be3a30aaaa"
+    },
+    {
+      "path": "build/p07-capture-owner/android-runtime.log",
+      "sha256": "138accf3a7779d1f73e974dd2addd8a0c4049edb5ead7424c22b8001e2318821"
+    },
+    {
+      "path": "build/p07-capture-owner/ios-build-destination-failed.log",
+      "sha256": "aec648e1c6b769c13a14e9d0e5008a7bf435fbd6b3af05b3f4247245bec641c6"
+    },
+    {
+      "path": "build/p07-capture-owner/ios-build.log",
+      "sha256": "7260dea2b4dfd368e4a200ef37ae4e6bea04e832acd64d7aa54af8fdeabd905b"
+    },
+    {
+      "path": "build/p07-capture-owner/ios-runtime.log",
+      "sha256": "63622b6ed99413475a5dd9461ad552f7a678823cbbdcb31999b53b02614066bf"
+    }
+  ],
+  "unitXmlSha256": "22d7a34d2bd7d4a9595a13099266c7f1d959fe73a4a2f860c2b8ac4a9bb88084"
+}

@@ -1,0 +1,27 @@
+{
+  "capturedAtUtc": "2026-11-11T22:09:53.571465+00:00",
+  "baseRevision": "ee36e75dd5d03e70c8e14ba8930b9df6f134b14b",
+  "committed": false,
+  "platform": "Existing Pixel 10 Android emulator, read-only instance",
+  "package": "com.motovault.app.privacyprobe",
+  "result": "passed",
+  "googleTaskLifetimeChecks": 4,
+  "productionMlKitPrintedImageChecks": 1,
+  "fullSuiteRepeated": false,
+  "physicalCameraTested": false,
+  "sourceManifest": "P07-native-source-before-capture-owner.json",
+  "logs": [
+    {
+      "path": "build/p07-ocr-lifetime/portable.log",
+      "sha256": "c9d128bdd76021c6d5ab60f1185edaae52537e5bfe0dbce3a61f292755a8939c"
+    },
+    {
+      "path": "build/p07-ocr-lifetime/build.log",
+      "sha256": "f56f4e1a123b9fb1aa61e74ed12d5395bf6b48c137ae0696a7cb0e1026cd9a24"
+    },
+    {
+      "path": "build/p07-ocr-lifetime/runtime.log",
+      "sha256": "65c0690776e3f077e4f2d5c33ae863d5fe36589c513dc462fa1b99fd76cacc97"
+    }
+  ]
+}

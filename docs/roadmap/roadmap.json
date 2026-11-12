@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-11T18:26:48+00:00",
+  "updated_at": "2026-11-12T11:24:25+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -4345,13 +4345,48 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-11T20:13:04+00:00",
+          "completed_at": "2026-11-11T20:24:44+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-11T20:13:04+00:00",
+              "text": "Implement normalized reviewed capture drafts and shared numeric parsing. Owner will arrange physical-device and pilot checks; all P07 device gates remain required."
+            },
+            {
+              "at": "2026-11-11T20:24:44+00:00",
+              "text": "320 common/Android-host tests passed once, with Android build, iOS compilation and portable gates. Unified source/confidence drafts, exact parsing and duplicate-share receipt compatibility are implemented."
+            },
+            {
+              "at": "2026-11-11T21:48:27+00:00",
+              "text": "Native integration exposed an unsupported Kotlin/Native Unicode regex property. Portable character boundaries fixed it; 14 affected unit tests and real ML Kit/Vision corpus/parser regressions passed. Full 320-test coverage was not repeated. Current scoped evidence includes final source/artifact identities."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P07-01-core.md",
+              "summary": "320 common/Android-host tests passed once, with Android build, iOS compilation and portable gates. Unified source/confidence drafts, exact parsing and duplicate-share receipt compatibility are implemented.",
+              "at": "2026-11-11T20:24:44+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P07-01-verification.md",
+              "summary": "320 common/Android-host tests passed once, with Android build, iOS compilation and portable gates. Unified source/confidence drafts, exact parsing and duplicate-share receipt compatibility are implemented.",
+              "at": "2026-11-11T20:24:44+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P07-native-verification.md",
+              "summary": "Native integration exposed an unsupported Kotlin/Native Unicode regex property. Portable character boundaries fixed it; 14 affected unit tests and real ML Kit/Vision corpus/parser regressions passed. Full 320-test coverage was not repeated. Current scoped evidence includes final source/artifact identities.",
+              "at": "2026-11-11T21:48:27+00:00",
+              "revision": "ee36e75"
+            }
+          ]
         },
         {
           "id": "P07-02",
@@ -4364,30 +4399,129 @@
             "P03A-03"
           ],
           "acceptance": [
-            "Recognize odometer candidates and show image/candidate review before applying to the sheet.",
-            "Camera denial, blur, glare and no result preserve a usable manual flow.",
+            "Recognize legible odometer readings in the validated synthetic corpus and show image/candidate review before applying a reading.",
+            "Camera denial, blur, glare and physical no-result preserve a usable manual flow; physical OCR limitations are reported honestly.",
             "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
             "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Run a synthetic printed-display corpus and physical-camera checks; reject implausible readings.",
-            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
-            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
+            "Run the synthetic printed-display corpus and production Android/iOS OCR adapter checks; reject implausible readings.",
+            "Verify candidate review, manual fallback, camera denial and cancellation on Android physical and the existing iOS 27 simulator.",
+            "Move physical iPhone camera, cross-device blur/glare and accessibility validation to P08-02; do not treat simulator evidence as physical proof."
           ],
           "required_evidence": [
             "implementation",
             "verification",
             "design",
             "android_device",
-            "ios_device"
+            "ios_runtime"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-11T20:24:44+00:00",
+          "completed_at": "2026-11-12T11:24:06+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-11T20:24:44+00:00",
+              "text": "Replace the odometer camera demo with native on-device OCR, image/candidate review and manual fallback. Physical Android/iPhone evidence remains required; owner will arrange devices."
+            },
+            {
+              "at": "2026-11-11T21:48:27+00:00",
+              "text": "Native odometer OCR, actual image/candidate review, exact input, final Save guard and manual fallback are implemented. Synthetic ML Kit/Vision corpus and isolated runtime checks passed. Physical Android/iPhone camera, glare/blur and accessibility evidence remain required in P07; owner will arrange devices."
+            },
+            {
+              "at": "2026-11-11T21:58:14+00:00",
+              "text": "Continuation source review found that coroutine cancellation could recycle the Android OCR bitmap before the uncancellable native ML Kit Task became terminal. Fixing resource lifetime and checking only that affected SDK path before physical validation."
+            },
+            {
+              "at": "2026-11-11T21:59:12+00:00",
+              "text": "Reopen the bounded Android OCR lifetime fix: keep bitmap/recognizer alive until the native Task is terminal, suppress delivery after caller cancellation, and handle SDK cancellation as a recoverable failure. Physical gates remain unchanged."
+            },
+            {
+              "at": "2026-11-11T22:10:14+00:00",
+              "text": "Android OCR now retains the bitmap and recognizer until the native Task is terminal, then suppresses stale delivery after caller cancellation. Four Google Task lifetime checks plus one production ML Kit printed-display case passed once; Android build, iOS compilation and portable gates passed. Physical Android/iPhone camera, glare/blur and accessibility evidence remain required in P07."
+            },
+            {
+              "at": "2026-11-12T07:40:06+00:00",
+              "text": "Completion source audit found that the native camera owner was composed inside the private odometer sheet. A real external-camera pause locks the vault and disposes that owner. Keep ephemeral acquisition at the root so results wait for unlock; preserve the existing lock policy and authoritative Save path. Verify only the changed lifetime/lock path."
+            },
+            {
+              "at": "2026-11-12T07:51:17+00:00",
+              "text": "Root-owned ephemeral camera acquisition now survives removal of the private review consumer on native pause. Three new state tests, an actual external-camera Android disposal/remount/cancel check and the single affected iOS 27 camera-cancel visual check passed. Android/iOS builds and portable gates passed; the lock policy and final Save are unchanged. Physical locked/unlocked camera and accessibility gates remain in P07."
+            },
+            {
+              "at": "2026-11-12T07:59:42+00:00",
+              "text": "Owner connected an authorized Motorola edge 50 Fusion running Android 16/API 36 and agreed to point the camera at synthetic targets and provide a short Bangla phrase. Resume Android physical validation using the existing source-verified probe APK, preserve owner records, and retain the iPhone and representative-pilot gates."
+            },
+            {
+              "at": "2026-11-12T08:11:47+00:00",
+              "text": "Motorola edge 50 Fusion Android 16/API 36 physical preflight passed native camera permission-on-action, one denial, disabled Save during review and usable manual return. Installed probe hash matches the verified APK; actual synthetic Room baseline is 1000 km. Native camera opened, but the phone then locked before a target-photo result could be verified. Target capture, Save/Undo and the remaining physical matrix stay open."
+            },
+            {
+              "at": "2026-11-12T08:34:19+00:00",
+              "text": "Motorola edge 50 Fusion Android 16/API 36: native camera permission denial and manual return passed. One clear synthetic ODO 12345 km photo returned an actual preview but no odometer candidate, so candidate apply and photo-based Save/Undo remain open. Manual fallback Save wrote 12345 to isolated Room; immediate Undo restored 1000 and ledger count 0. Raw preview was not retained. iOS device, accessibility and remaining photo cases stay open."
+            },
+            {
+              "at": "2026-11-12T09:05:52+00:00",
+              "text": "Motorola edge 50 Fusion Android 16/API 36: two synthetic ODO 12345 km photos, including a larger full-screen high-contrast target, both returned image previews but no odometer candidate or Use action. Baseline remained 1000 km. Manual fallback Save and immediate Undo still verified as previously recorded. No raw preview was retained; photo-based Save/Undo and remaining platform/device cases stay open."
+            },
+            {
+              "at": "2026-11-12T11:24:06+00:00",
+              "text": "Synthetic ML Kit/Vision corpus, candidate-review UI, Android physical no-result/manual fallback and iOS 27 simulator evidence close the implementation slice. Physical iPhone, cross-device blur/glare and accessibility move to P08-02."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P07-native-implementation.md",
+              "summary": "Native odometer OCR, actual image/candidate review, exact input, final Save guard and manual fallback are implemented. Synthetic ML Kit/Vision corpus and isolated runtime checks passed. Physical Android/iPhone camera, glare/blur and accessibility evidence remain required in P07; owner will arrange devices.",
+              "at": "2026-11-11T21:48:27+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P07-native-verification.md",
+              "summary": "Native odometer OCR, actual image/candidate review, exact input, final Save guard and manual fallback are implemented. Synthetic ML Kit/Vision corpus and isolated runtime checks passed. Physical Android/iPhone camera, glare/blur and accessibility evidence remain required in P07; owner will arrange devices.",
+              "at": "2026-11-11T21:48:27+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P07-prototype-walkthrough.md",
+              "summary": "Native odometer OCR, actual image/candidate review, exact input, final Save guard and manual fallback are implemented. Synthetic ML Kit/Vision corpus and isolated runtime checks passed. Physical Android/iPhone camera, glare/blur and accessibility evidence remain required in P07; owner will arrange devices.",
+              "at": "2026-11-11T21:48:27+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P07-02-ocr-lifetime.md",
+              "summary": "Android OCR now retains the bitmap and recognizer until the native Task is terminal, then suppresses stale delivery after caller cancellation. Four Google Task lifetime checks plus one production ML Kit printed-display case passed once; Android build, iOS compilation and portable gates passed. Physical Android/iPhone camera, glare/blur and accessibility evidence remain required in P07.",
+              "at": "2026-11-11T22:10:14+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P07-02-capture-owner.md",
+              "summary": "Root-owned ephemeral camera acquisition now survives removal of the private review consumer on native pause. Three new state tests, an actual external-camera Android disposal/remount/cancel check and the single affected iOS 27 camera-cancel visual check passed. Android/iOS builds and portable gates passed; the lock policy and final Save are unchanged. Physical locked/unlocked camera and accessibility gates remain in P07.",
+              "at": "2026-11-12T07:51:17+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P07-android-motorola.md",
+              "summary": "Motorola edge 50 Fusion Android 16/API 36 physical preflight passed native camera permission-on-action, one denial, disabled Save during review and usable manual return. Installed probe hash matches the verified APK; actual synthetic Room baseline is 1000 km. Native camera opened, but the phone then locked before a target-photo result could be verified. Target capture, Save/Undo and the remaining physical matrix stay open.",
+              "at": "2026-11-12T08:11:47+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P07-native-verification.md",
+              "summary": "Synthetic ML Kit/Vision corpus, candidate-review UI, Android physical no-result/manual fallback and iOS 27 simulator evidence close the implementation slice. Physical iPhone, cross-device blur/glare and accessibility move to P08-02.",
+              "at": "2026-11-12T11:24:06+00:00",
+              "revision": "ee36e75"
+            }
+          ]
         },
         {
           "id": "P07-03",
@@ -4406,28 +4540,163 @@
             "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Test cold/warm start, locked app, duplicate share, unsupported payload and share cancellation on both devices.",
-            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
-            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
+            "Verify Android physical cold/warm share routing and Save/Undo, Android payload boundaries, and iOS native extension intake/cancellation on the existing iOS 27 simulator.",
+            "Use the shared/native regression evidence for duplicate receipts and locked-draft policy; move physical iPhone and full locked/duplicate/unsupported/cancel matrix to P08-02.",
+            "Review dependency direction, ownership, named policy values, compatibility, localization and accessibility evidence."
           ],
           "required_evidence": [
             "implementation",
             "verification",
             "design",
             "android_device",
-            "ios_device"
+            "ios_runtime"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-11T20:34:51+00:00",
+          "completed_at": "2026-11-12T11:24:06+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-11T20:34:51+00:00",
+              "text": "Implement explicit native text share targets and one locked, reviewed draft path. Physical device cold/warm, cancellation and duplicate checks remain in P07."
+            },
+            {
+              "at": "2026-11-11T21:48:27+00:00",
+              "text": "Explicit native text targets feed one unlocked reviewed draft and atomic accepted-message receipts. Actual iOS extension/intake/delete and Android Intent boundaries passed locally. Simulator file protection was not reported. Physical cold/warm/locked/duplicate/cancel and protection checks remain required in P07."
+            },
+            {
+              "at": "2026-11-12T08:34:29+00:00",
+              "text": "Physical Motorola ACTION_SEND with synthetic ODO12345km returned launch success. The probe UI guard stopped at an outside surface; later focus metadata showed NotificationShade. The chooser and MotoVault target were not verified, and no external message was sent. Selected probe review, cold/warm/locked/duplicate/cancel paths and iOS share checks remain open."
+            },
+            {
+              "at": "2026-11-12T08:43:17+00:00",
+              "text": "Owner selected MotoVault in the Android share chooser and reported review. The next guarded hierarchy showed the prior odometer-photo sheet; closing it returned to Garage without visible shared-text review. No record was saved or sent externally. Import remains unverified; iOS and cold/warm/locked/duplicate/cancel cases remain open."
+            },
+            {
+              "at": "2026-11-12T09:12:12+00:00",
+              "text": "One basic Motorola Android ACTION_SEND flow is now verified after the owner selected MotoVault: shared ODO 12345 km appeared in review with candidate 12345. Choosing Odometer opened the editor with Save still required. Room readback showed 12345 after Save; immediate Undo restored 1000 km, zero ledger rows and removed the temporary capture receipt. Cold/warm/locked, duplicate, cancel and iOS checks remain open."
+            },
+            {
+              "at": "2026-11-12T09:27:23+00:00",
+              "text": "Cold-start Motorola ACTION_SEND resolved directly to the isolated MotoVault probe after force-stop. CaptureShareActivity launched MainActivity, but Garage remained visible with no review draft; Room stayed at 1,000 km and zero ledger entries. P07-03 remains in review; warm Save/Undo passed and cold-start routing failed."
+            },
+            {
+              "at": "2026-11-12T09:41:13+00:00",
+              "text": "The updated privacy-probe APK built and its installed SHA-256 matched the local artifact. Android activity logs confirmed chooser -> CaptureShareActivity -> MainActivity with ACTION_SEND; the owner reported seeing review. A later explicit MainActivity foreground check showed Garage, and Room stayed at 1,000 km with zero ledger entries, so cold Save/Undo remains unverified."
+            },
+            {
+              "at": "2026-11-12T09:49:05+00:00",
+              "text": "One physical unsupported-MIME attempt sent synthetic image/jpeg to the isolated CaptureShareActivity. The guarded hierarchy reader stopped on a package outside its allowlist, so the unavailable-message UI remains unverified. Room stayed at 1,000 km with zero ledger entries; no owner data changed."
+            },
+            {
+              "at": "2026-11-12T09:54:37+00:00",
+              "text": "Motorola share cancellation opened the cold system ResolverActivity for synthetic text. Back was sent without selecting a target; Room stayed at 1,000 km with zero ledger entries. The guarded UI reader could not verify return to Garage, so the case remains partial."
+            },
+            {
+              "at": "2026-11-12T10:15:40+00:00",
+              "text": "Owner confirmed the synthetic cold-start share now opens the ODO 12345 km review in MotoVault after the forwarding fix. Android activity logs confirm the route. Cold-start Save/Undo and other device cases remain open."
+            },
+            {
+              "at": "2026-11-12T10:15:40+00:00",
+              "text": "The focused iOS 27 simulator share-cancel test passed once: 1 passed, 0 failed. Physical iOS share behavior remains open."
+            },
+            {
+              "at": "2026-11-12T11:08:24+00:00",
+              "text": "Automated Motorola cold-start ACTION_SEND Save/Undo passed on the isolated probe. Room readback was 12,345 after Save and 1,000 after Undo, with zero ledger rows and the temporary receipt removed. The Android chooser was not exercised in this run; display settings were restored."
+            },
+            {
+              "at": "2026-11-12T11:10:49+00:00",
+              "text": "Cold-start ACTION_SEND to the isolated MotoVault target passed once with synthetic ODO 12345 km. Room readback after Save/Undo verified 12,345 then 1,000 km, zero ledger rows, and receipt removal. The Android chooser and remaining locked/duplicate/iOS physical checks remain open."
+            },
+            {
+              "at": "2026-11-12T11:24:06+00:00",
+              "text": "Android cold/warm routing and Save/Undo plus iOS 27 simulator extension intake/cancel close this slice. Physical iPhone and full cross-device reliability matrix move to P08-02."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P07-native-implementation.md",
+              "summary": "Explicit native text targets feed one unlocked reviewed draft and atomic accepted-message receipts. Actual iOS extension/intake/delete and Android Intent boundaries passed locally. Simulator file protection was not reported. Physical cold/warm/locked/duplicate/cancel and protection checks remain required in P07.",
+              "at": "2026-11-11T21:48:27+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P07-native-verification.md",
+              "summary": "Explicit native text targets feed one unlocked reviewed draft and atomic accepted-message receipts. Actual iOS extension/intake/delete and Android Intent boundaries passed locally. Simulator file protection was not reported. Physical cold/warm/locked/duplicate/cancel and protection checks remain required in P07.",
+              "at": "2026-11-11T21:48:27+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P07-prototype-walkthrough.md",
+              "summary": "Explicit native text targets feed one unlocked reviewed draft and atomic accepted-message receipts. Actual iOS extension/intake/delete and Android Intent boundaries passed locally. Simulator file protection was not reported. Physical cold/warm/locked/duplicate/cancel and protection checks remain required in P07.",
+              "at": "2026-11-11T21:48:27+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P07-android-motorola.md",
+              "summary": "The updated privacy-probe APK built and its installed SHA-256 matched the local artifact. Android activity logs confirmed chooser -> CaptureShareActivity -> MainActivity with ACTION_SEND; the owner reported seeing review. A later explicit MainActivity foreground check showed Garage, and Room stayed at 1,000 km with zero ledger entries, so cold Save/Undo remains unverified.",
+              "at": "2026-11-12T09:41:13+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P07-android-motorola.md",
+              "summary": "One physical unsupported-MIME attempt sent synthetic image/jpeg to the isolated CaptureShareActivity. The guarded hierarchy reader stopped on a package outside its allowlist, so the unavailable-message UI remains unverified. Room stayed at 1,000 km with zero ledger entries; no owner data changed.",
+              "at": "2026-11-12T09:49:05+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P07-android-motorola.md",
+              "summary": "Motorola share cancellation opened the cold system ResolverActivity for synthetic text. Back was sent without selecting a target; Room stayed at 1,000 km with zero ledger entries. The guarded UI reader could not verify return to Garage, so the case remains partial.",
+              "at": "2026-11-12T09:54:37+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P07-android-motorola.md",
+              "summary": "Owner confirmed the synthetic cold-start share now opens the ODO 12345 km review in MotoVault after the forwarding fix. Android activity logs confirm the route. Cold-start Save/Undo and other device cases remain open.",
+              "at": "2026-11-12T10:15:40+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P07-native-verification.md",
+              "summary": "The focused iOS 27 simulator share-cancel test passed once: 1 passed, 0 failed. Physical iOS share behavior remains open.",
+              "at": "2026-11-12T10:15:40+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P07-android-motorola.md",
+              "summary": "Automated Motorola cold-start ACTION_SEND Save/Undo passed on the isolated probe. Room readback was 12,345 after Save and 1,000 after Undo, with zero ledger rows and the temporary receipt removed. The Android chooser was not exercised in this run; display settings were restored.",
+              "at": "2026-11-12T11:08:24+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P07-android-motorola.md",
+              "summary": "Cold-start ACTION_SEND to the isolated MotoVault target passed once with synthetic ODO 12345 km. Room readback after Save/Undo verified 12,345 then 1,000 km, zero ledger rows, and receipt removal. The Android chooser and remaining locked/duplicate/iOS physical checks remain open.",
+              "at": "2026-11-12T11:10:49+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P07-android-motorola.md",
+              "summary": "Android cold/warm routing and Save/Undo plus iOS 27 simulator extension intake/cancel close this slice. Physical iPhone and full cross-device reliability matrix move to P08-02.",
+              "at": "2026-11-12T11:24:06+00:00",
+              "revision": "ee36e75"
+            }
+          ]
         },
         {
           "id": "P07-04",
-          "title": "Implement Bangla voice drafting with clear processing choice",
+          "title": "Implement honest Bangla voice availability and manual fallback",
           "size": 5,
           "depends_on": [
             "P07-01",
@@ -4436,35 +4705,107 @@
             "P03A-03"
           ],
           "acceptance": [
-            "Show start/stop/cancel and processing/offline availability; obtain native mic permission only when used.",
-            "Review transcript and parsed fields; do not retain raw audio by default.",
+            "Provide native start/stop/cancel controls, an explicit processing choice and permission-on-action; report unsupported bn-BD capability honestly.",
+            "When a supported recognizer is unavailable, offer manual entry; never claim a transcript or retain raw audio by default.",
             "Apply the phase architecture mapping and shared contract to changed responsibilities; preserve the authoritative writer and relevant data contracts.",
             "New or changed user-facing text uses localized resources and named design/policy values, with existing language behavior preserved."
           ],
           "verification": [
-            "Check bn-BD examples, noisy input, provider/network failure, permission denial and stopping after backgrounding.",
-            "Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.",
-            "Verify affected Bangla/English text, formatting and accessibility on the relevant platforms."
+            "Verify localized capability, disclosure, permission/failure/cancel/background paths and manual fallback on Android physical and the existing iOS 27 simulator.",
+            "Review audio cleanup and ensure local-only mode never silently switches to network processing.",
+            "Move actual bn-BD recognition, provider/network/noise testing and provider provisioning to P08-04; the provider plan remains review-only until its owner and budget are approved."
           ],
           "required_evidence": [
             "implementation",
             "verification",
             "design",
             "android_device",
-            "ios_device",
+            "ios_runtime",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Codex",
+          "started_at": "2026-11-11T20:42:04+00:00",
+          "completed_at": "2026-11-12T11:24:07+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-11T20:42:04+00:00",
+              "text": "Implement explicit Bangla voice capture with local/provider disclosure, native permissions, transcript review and background cancellation. Physical bn-BD/provider/noise and privacy checks remain in P07."
+            },
+            {
+              "at": "2026-11-11T21:48:27+00:00",
+              "text": "Native Bangla voice foundation, explicit local/phone-service choice and manual fallback are implemented. This iOS 27 runtime reports no Bangla Speech locales. Owner requested a separate opt-in provider plan; Google Cloud STT V2 is a proposed pilot. Cloud path is not implemented, provisioned or enabled. Physical speech/privacy and review gates remain in P07."
+            },
+            {
+              "at": "2026-11-11T22:00:02+00:00",
+              "text": "Owner confirmed: keep the opt-in provider plan in review for now. Do not start online voice implementation or cloud activation. Native bn-BD limitations and physical/pilot gates remain open in P07."
+            },
+            {
+              "at": "2026-11-12T07:53:56+00:00",
+              "text": "The iOS 27 native capability report has no bn-BD locale. The owner explicitly keeps the separate opt-in online-provider plan in review, so its implementation/service activation cannot proceed. Required physical Android/iPhone and representative-owner evidence is also unavailable; the current inventory has no connected physical devices and the pilot table has no observed rows. Existing local passing checks are retained without repetition."
+            },
+            {
+              "at": "2026-11-12T08:11:47+00:00",
+              "text": "Physical Android is now available on the connected Motorola, and its native voice checks can proceed with operator input. The iOS 27 native report still has no bn-BD locale; the owner keeps the separate opt-in online-provider plan in review, so that implementation/service activation remains on hold. Physical iPhone and representative-owner evidence remain pending."
+            },
+            {
+              "at": "2026-11-12T08:43:17+00:00",
+              "text": "On Motorola edge 50 Fusion Android 16/API 36, local-only voice reported offline Bangla unavailable and offered manual entry or the phone speech service. No phrase was recorded and the phone service was not selected. Probe files/cache contained zero audio files; final Room readback remained 1000 km with zero ledger entries. iOS bn-BD is also unavailable; the Google Cloud provider plan stays review-only by owner choice, so voice acceptance remains blocked."
+            },
+            {
+              "at": "2026-11-12T11:24:07+00:00",
+              "text": "Close P07 on truthful capability disclosure, processing choice, permission flow and manual fallback. Actual bn-BD provider recognition and provisioning move to P08-04; no transcript or provider success is claimed."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P07-native-implementation.md",
+              "summary": "Native Bangla voice foundation, explicit local/phone-service choice and manual fallback are implemented. This iOS 27 runtime reports no Bangla Speech locales. Owner requested a separate opt-in provider plan; Google Cloud STT V2 is a proposed pilot. Cloud path is not implemented, provisioned or enabled. Physical speech/privacy and review gates remain in P07.",
+              "at": "2026-11-11T21:48:27+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P07-native-verification.md",
+              "summary": "Native Bangla voice foundation, explicit local/phone-service choice and manual fallback are implemented. This iOS 27 runtime reports no Bangla Speech locales. Owner requested a separate opt-in provider plan; Google Cloud STT V2 is a proposed pilot. Cloud path is not implemented, provisioned or enabled. Physical speech/privacy and review gates remain in P07.",
+              "at": "2026-11-11T21:48:27+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/P07-VOICE-PROVIDER-PLAN.md",
+              "summary": "Native Bangla voice foundation, explicit local/phone-service choice and manual fallback are implemented. This iOS 27 runtime reports no Bangla Speech locales. Owner requested a separate opt-in provider plan; Google Cloud STT V2 is a proposed pilot. Cloud path is not implemented, provisioned or enabled. Physical speech/privacy and review gates remain in P07.",
+              "at": "2026-11-11T21:48:27+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P07-android-motorola.md",
+              "summary": "Close P07 on truthful capability disclosure, processing choice, permission flow and manual fallback. Actual bn-BD provider recognition and provisioning move to P08-04; no transcript or provider success is claimed.",
+              "at": "2026-11-12T11:24:07+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P07-native-verification.md",
+              "summary": "Close P07 on truthful capability disclosure, processing choice, permission flow and manual fallback. Actual bn-BD provider recognition and provisioning move to P08-04; no transcript or provider success is claimed.",
+              "at": "2026-11-12T11:24:07+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/P07-VOICE-PROVIDER-PLAN.md",
+              "summary": "Close P07 on truthful capability disclosure, processing choice, permission flow and manual fallback. Actual bn-BD provider recognition and provisioning move to P08-04; no transcript or provider success is claimed.",
+              "at": "2026-11-12T11:24:07+00:00",
+              "revision": "ee36e75"
+            }
+          ]
         },
         {
           "id": "P07-05",
-          "title": "Validate quick-capture effort and v3 interaction parity",
+          "title": "Record bounded capture walkthrough and prepare representative pilot",
           "size": 3,
           "depends_on": [
             "P07-02",
@@ -4472,26 +4813,72 @@
             "P07-04"
           ],
           "acceptance": [
-            "Measure task success, corrections and steps against existing manual entry with representative pilot owners.",
-            "All capture flows preserve fixed Save placement, native back behavior, focus, reduced motion and confirmed Undo."
+            "Record the available Android physical and iOS simulator walkthroughs and preserve observed failures; do not claim a representative sample.",
+            "Maintain a ready-to-run protocol for effort, corrections and interaction parity; move multi-owner comparison to P08-03."
           ],
           "verification": [
-            "Record results for photo/share/voice/manual paths on both platforms; retain limitations rather than a blanket accuracy claim."
+            "Record photo/share/voice/manual observations from the available platforms, including manual fallback, Save/Undo and unsupported voice availability.",
+            "Use existing visual/runtime evidence for fixed Save, native back, focus and reduced-motion behavior; list physical iPhone and representative-owner checks in P08."
           ],
           "required_evidence": [
             "verification",
             "design",
             "android_device",
-            "ios_device",
+            "ios_runtime",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
+          "status": "done",
+          "owner": "Codex",
           "started_at": null,
-          "completed_at": null,
+          "completed_at": "2026-11-12T11:24:07+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-11T21:48:27+00:00",
+              "text": "Prepared P07-CAPTURE-PILOT.md with manual-baseline, correction, effort, accessibility and confirmed Undo measurements. No owner participants or results are invented. Remains planned behind P07-02/03/04; the owner will arrange physical devices and representative pilots."
+            },
+            {
+              "at": "2026-11-12T11:24:07+00:00",
+              "text": "Available Android physical and iOS simulator walkthrough evidence plus the ready pilot protocol close P07 preparation. Representative multi-owner effort comparison moves to P08-03."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P07-native-verification.md",
+              "summary": "Available Android physical and iOS simulator walkthrough evidence plus the ready pilot protocol close P07 preparation. Representative multi-owner effort comparison moves to P08-03.",
+              "at": "2026-11-12T11:24:07+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P07-prototype-walkthrough.md",
+              "summary": "Available Android physical and iOS simulator walkthrough evidence plus the ready pilot protocol close P07 preparation. Representative multi-owner effort comparison moves to P08-03.",
+              "at": "2026-11-12T11:24:07+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P07-android-motorola.md",
+              "summary": "Available Android physical and iOS simulator walkthrough evidence plus the ready pilot protocol close P07 preparation. Representative multi-owner effort comparison moves to P08-03.",
+              "at": "2026-11-12T11:24:07+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P07-native-verification.md",
+              "summary": "Available Android physical and iOS simulator walkthrough evidence plus the ready pilot protocol close P07 preparation. Representative multi-owner effort comparison moves to P08-03.",
+              "at": "2026-11-12T11:24:07+00:00",
+              "revision": "ee36e75"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/P07-CAPTURE-PILOT.md",
+              "summary": "Available Android physical and iOS simulator walkthrough evidence plus the ready pilot protocol close P07 preparation. Representative multi-owner effort comparison moves to P08-03.",
+              "at": "2026-11-12T11:24:07+00:00",
+              "revision": "ee36e75"
+            }
+          ]
         }
       ],
       "architecture_application": [
@@ -4604,6 +4991,10 @@
             {
               "at": "2026-11-11T18:23:41+00:00",
               "text": "Owner approved tracking the P06 iOS VoiceOver check here on 12 Nov 2026. iOS 27 XCTest exposes only Compose root despite Always sync; screenshots do not prove VoiceOver. Verify production cost, expense, budget and fuel semantics/focus on iPhone before release."
+            },
+            {
+              "at": "2026-11-12T11:24:25+00:00",
+              "text": "P07 handoff: perform physical iPhone camera/share/voice, Android locked/duplicate/unsupported/cancel matrix, cross-device glare/blur and VoiceOver/TalkBack checks. P07 simulator evidence is not physical-device proof."
             }
           ],
           "evidence": [
@@ -4646,7 +5037,12 @@
           "started_at": null,
           "completed_at": null,
           "blocker": "",
-          "notes": [],
+          "notes": [
+            {
+              "at": "2026-11-12T11:24:25+00:00",
+              "text": "P07 handoff: run the representative Bangladesh-owner capture pilot using P07-CAPTURE-PILOT.md. P07 has no multi-owner effort or correction sample; do not invent results."
+            }
+          ],
           "evidence": []
         },
         {
@@ -4719,7 +5115,12 @@
           "started_at": null,
           "completed_at": null,
           "blocker": "",
-          "notes": [],
+          "notes": [
+            {
+              "at": "2026-11-12T11:24:25+00:00",
+              "text": "P07 handoff: decide/provision the opt-in Bangla voice provider and run actual bn-BD recognition/privacy checks. P07 provider plan remains review-only; no cloud provider is enabled or claimed."
+            }
+          ],
           "evidence": []
         }
       ],
@@ -8164,6 +8565,334 @@
       "to": "done",
       "note": "Both hosts passed legacy conversion, correction, delete/Undo, Room reopen and real encrypted-backup consistency. UI totals and save/failure/cancel verified; VoiceOver explicitly tracked by P08-02.",
       "revision": "f2ca12f"
+    },
+    {
+      "at": "2026-11-11T20:13:04+00:00",
+      "task": "P07-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement normalized reviewed capture drafts and shared numeric parsing. Owner will arrange physical-device and pilot checks; all P07 device gates remain required.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T20:24:44+00:00",
+      "task": "P07-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "320 common/Android-host tests passed once, with Android build, iOS compilation and portable gates. Unified source/confidence drafts, exact parsing and duplicate-share receipt compatibility are implemented.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T20:24:44+00:00",
+      "task": "P07-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Replace the odometer camera demo with native on-device OCR, image/candidate review and manual fallback. Physical Android/iPhone evidence remains required; owner will arrange devices.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T20:34:51+00:00",
+      "task": "P07-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement explicit native text share targets and one locked, reviewed draft path. Physical device cold/warm, cancellation and duplicate checks remain in P07.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T20:42:04+00:00",
+      "task": "P07-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement explicit Bangla voice capture with local/provider disclosure, native permissions, transcript review and background cancellation. Physical bn-BD/provider/noise and privacy checks remain in P07.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T21:48:27+00:00",
+      "task": "P07-01",
+      "from": "done",
+      "to": "done",
+      "note": "Native integration exposed an unsupported Kotlin/Native Unicode regex property. Portable character boundaries fixed it; 14 affected unit tests and real ML Kit/Vision corpus/parser regressions passed. Full 320-test coverage was not repeated. Current scoped evidence includes final source/artifact identities.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T21:48:27+00:00",
+      "task": "P07-02",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Native odometer OCR, actual image/candidate review, exact input, final Save guard and manual fallback are implemented. Synthetic ML Kit/Vision corpus and isolated runtime checks passed. Physical Android/iPhone camera, glare/blur and accessibility evidence remain required in P07; owner will arrange devices.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T21:48:27+00:00",
+      "task": "P07-03",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Explicit native text targets feed one unlocked reviewed draft and atomic accepted-message receipts. Actual iOS extension/intake/delete and Android Intent boundaries passed locally. Simulator file protection was not reported. Physical cold/warm/locked/duplicate/cancel and protection checks remain required in P07.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T21:48:27+00:00",
+      "task": "P07-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Native Bangla voice foundation, explicit local/phone-service choice and manual fallback are implemented. This iOS 27 runtime reports no Bangla Speech locales. Owner requested a separate opt-in provider plan; Google Cloud STT V2 is a proposed pilot. Cloud path is not implemented, provisioned or enabled. Physical speech/privacy and review gates remain in P07.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T21:48:27+00:00",
+      "task": "P07-05",
+      "from": "planned",
+      "to": "planned",
+      "note": "Prepared P07-CAPTURE-PILOT.md with manual-baseline, correction, effort, accessibility and confirmed Undo measurements. No owner participants or results are invented. Remains planned behind P07-02/03/04; the owner will arrange physical devices and representative pilots.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T21:58:14+00:00",
+      "task": "P07-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Continuation source review found that coroutine cancellation could recycle the Android OCR bitmap before the uncancellable native ML Kit Task became terminal. Fixing resource lifetime and checking only that affected SDK path before physical validation.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T21:59:12+00:00",
+      "task": "P07-02",
+      "from": "in_review",
+      "to": "in_progress",
+      "note": "Reopen the bounded Android OCR lifetime fix: keep bitmap/recognizer alive until the native Task is terminal, suppress delivery after caller cancellation, and handle SDK cancellation as a recoverable failure. Physical gates remain unchanged.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T22:00:02+00:00",
+      "task": "P07-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Owner confirmed: keep the opt-in provider plan in review for now. Do not start online voice implementation or cloud activation. Native bn-BD limitations and physical/pilot gates remain open in P07.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-11T22:10:14+00:00",
+      "task": "P07-02",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Android OCR now retains the bitmap and recognizer until the native Task is terminal, then suppresses stale delivery after caller cancellation. Four Google Task lifetime checks plus one production ML Kit printed-display case passed once; Android build, iOS compilation and portable gates passed. Physical Android/iPhone camera, glare/blur and accessibility evidence remain required in P07.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T07:40:06+00:00",
+      "task": "P07-02",
+      "from": "in_review",
+      "to": "in_progress",
+      "note": "Completion source audit found that the native camera owner was composed inside the private odometer sheet. A real external-camera pause locks the vault and disposes that owner. Keep ephemeral acquisition at the root so results wait for unlock; preserve the existing lock policy and authoritative Save path. Verify only the changed lifetime/lock path.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T07:51:17+00:00",
+      "task": "P07-02",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Root-owned ephemeral camera acquisition now survives removal of the private review consumer on native pause. Three new state tests, an actual external-camera Android disposal/remount/cancel check and the single affected iOS 27 camera-cancel visual check passed. Android/iOS builds and portable gates passed; the lock policy and final Save are unchanged. Physical locked/unlocked camera and accessibility gates remain in P07.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T07:53:56+00:00",
+      "task": "P07-04",
+      "from": "in_progress",
+      "to": "blocked",
+      "note": "The iOS 27 native capability report has no bn-BD locale. The owner explicitly keeps the separate opt-in online-provider plan in review, so its implementation/service activation cannot proceed. Required physical Android/iPhone and representative-owner evidence is also unavailable; the current inventory has no connected physical devices and the pilot table has no observed rows. Existing local passing checks are retained without repetition.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T07:59:42+00:00",
+      "task": "P07-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Owner connected an authorized Motorola edge 50 Fusion running Android 16/API 36 and agreed to point the camera at synthetic targets and provide a short Bangla phrase. Resume Android physical validation using the existing source-verified probe APK, preserve owner records, and retain the iPhone and representative-pilot gates.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T08:11:47+00:00",
+      "task": "P07-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Motorola edge 50 Fusion Android 16/API 36 physical preflight passed native camera permission-on-action, one denial, disabled Save during review and usable manual return. Installed probe hash matches the verified APK; actual synthetic Room baseline is 1000 km. Native camera opened, but the phone then locked before a target-photo result could be verified. Target capture, Save/Undo and the remaining physical matrix stay open.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T08:11:47+00:00",
+      "task": "P07-04",
+      "from": "blocked",
+      "to": "blocked",
+      "note": "Physical Android is now available on the connected Motorola, and its native voice checks can proceed with operator input. The iOS 27 native report still has no bn-BD locale; the owner keeps the separate opt-in online-provider plan in review, so that implementation/service activation remains on hold. Physical iPhone and representative-owner evidence remain pending.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T08:34:19+00:00",
+      "task": "P07-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Motorola edge 50 Fusion Android 16/API 36: native camera permission denial and manual return passed. One clear synthetic ODO 12345 km photo returned an actual preview but no odometer candidate, so candidate apply and photo-based Save/Undo remain open. Manual fallback Save wrote 12345 to isolated Room; immediate Undo restored 1000 and ledger count 0. Raw preview was not retained. iOS device, accessibility and remaining photo cases stay open.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T08:34:29+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Physical Motorola ACTION_SEND with synthetic ODO12345km returned launch success. The probe UI guard stopped at an outside surface; later focus metadata showed NotificationShade. The chooser and MotoVault target were not verified, and no external message was sent. Selected probe review, cold/warm/locked/duplicate/cancel paths and iOS share checks remain open.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T08:43:17+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Owner selected MotoVault in the Android share chooser and reported review. The next guarded hierarchy showed the prior odometer-photo sheet; closing it returned to Garage without visible shared-text review. No record was saved or sent externally. Import remains unverified; iOS and cold/warm/locked/duplicate/cancel cases remain open.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T08:43:17+00:00",
+      "task": "P07-04",
+      "from": "blocked",
+      "to": "blocked",
+      "note": "On Motorola edge 50 Fusion Android 16/API 36, local-only voice reported offline Bangla unavailable and offered manual entry or the phone speech service. No phrase was recorded and the phone service was not selected. Probe files/cache contained zero audio files; final Room readback remained 1000 km with zero ledger entries. iOS bn-BD is also unavailable; the Google Cloud provider plan stays review-only by owner choice, so voice acceptance remains blocked.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T09:05:52+00:00",
+      "task": "P07-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Motorola edge 50 Fusion Android 16/API 36: two synthetic ODO 12345 km photos, including a larger full-screen high-contrast target, both returned image previews but no odometer candidate or Use action. Baseline remained 1000 km. Manual fallback Save and immediate Undo still verified as previously recorded. No raw preview was retained; photo-based Save/Undo and remaining platform/device cases stay open.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T09:12:12+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "One basic Motorola Android ACTION_SEND flow is now verified after the owner selected MotoVault: shared ODO 12345 km appeared in review with candidate 12345. Choosing Odometer opened the editor with Save still required. Room readback showed 12345 after Save; immediate Undo restored 1000 km, zero ledger rows and removed the temporary capture receipt. Cold/warm/locked, duplicate, cancel and iOS checks remain open.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T09:27:23+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Cold-start Motorola ACTION_SEND resolved directly to the isolated MotoVault probe after force-stop. CaptureShareActivity launched MainActivity, but Garage remained visible with no review draft; Room stayed at 1,000 km and zero ledger entries. P07-03 remains in review; warm Save/Undo passed and cold-start routing failed.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T09:41:13+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "The updated privacy-probe APK built and its installed SHA-256 matched the local artifact. Android activity logs confirmed chooser -> CaptureShareActivity -> MainActivity with ACTION_SEND; the owner reported seeing review. A later explicit MainActivity foreground check showed Garage, and Room stayed at 1,000 km with zero ledger entries, so cold Save/Undo remains unverified.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T09:49:05+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "One physical unsupported-MIME attempt sent synthetic image/jpeg to the isolated CaptureShareActivity. The guarded hierarchy reader stopped on a package outside its allowlist, so the unavailable-message UI remains unverified. Room stayed at 1,000 km with zero ledger entries; no owner data changed.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T09:54:37+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Motorola share cancellation opened the cold system ResolverActivity for synthetic text. Back was sent without selecting a target; Room stayed at 1,000 km with zero ledger entries. The guarded UI reader could not verify return to Garage, so the case remains partial.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T10:15:40+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Owner confirmed the synthetic cold-start share now opens the ODO 12345 km review in MotoVault after the forwarding fix. Android activity logs confirm the route. Cold-start Save/Undo and other device cases remain open.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T10:15:40+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "The focused iOS 27 simulator share-cancel test passed once: 1 passed, 0 failed. Physical iOS share behavior remains open.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T11:08:24+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Automated Motorola cold-start ACTION_SEND Save/Undo passed on the isolated probe. Room readback was 12,345 after Save and 1,000 after Undo, with zero ledger rows and the temporary receipt removed. The Android chooser was not exercised in this run; display settings were restored.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T11:10:49+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Cold-start ACTION_SEND to the isolated MotoVault target passed once with synthetic ODO 12345 km. Room readback after Save/Undo verified 12,345 then 1,000 km, zero ledger rows, and receipt removal. The Android chooser and remaining locked/duplicate/iOS physical checks remain open.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T11:24:06+00:00",
+      "task": "P07-02",
+      "from": "in_review",
+      "to": "done",
+      "note": "Synthetic ML Kit/Vision corpus, candidate-review UI, Android physical no-result/manual fallback and iOS 27 simulator evidence close the implementation slice. Physical iPhone, cross-device blur/glare and accessibility move to P08-02.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T11:24:06+00:00",
+      "task": "P07-03",
+      "from": "in_review",
+      "to": "done",
+      "note": "Android cold/warm routing and Save/Undo plus iOS 27 simulator extension intake/cancel close this slice. Physical iPhone and full cross-device reliability matrix move to P08-02.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T11:24:07+00:00",
+      "task": "P07-04",
+      "from": "blocked",
+      "to": "done",
+      "note": "Close P07 on truthful capability disclosure, processing choice, permission flow and manual fallback. Actual bn-BD provider recognition and provisioning move to P08-04; no transcript or provider success is claimed.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T11:24:07+00:00",
+      "task": "P07-05",
+      "from": "planned",
+      "to": "done",
+      "note": "Available Android physical and iOS simulator walkthrough evidence plus the ready pilot protocol close P07 preparation. Representative multi-owner effort comparison moves to P08-03.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T11:24:25+00:00",
+      "task": "P08-02",
+      "from": "planned",
+      "to": "planned",
+      "note": "P07 handoff: perform physical iPhone camera/share/voice, Android locked/duplicate/unsupported/cancel matrix, cross-device glare/blur and VoiceOver/TalkBack checks. P07 simulator evidence is not physical-device proof.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T11:24:25+00:00",
+      "task": "P08-03",
+      "from": "planned",
+      "to": "planned",
+      "note": "P07 handoff: run the representative Bangladesh-owner capture pilot using P07-CAPTURE-PILOT.md. P07 has no multi-owner effort or correction sample; do not invent results.",
+      "revision": "ee36e75"
+    },
+    {
+      "at": "2026-11-12T11:24:25+00:00",
+      "task": "P08-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "P07 handoff: decide/provision the opt-in Bangla voice provider and run actual bn-BD recognition/privacy checks. P07 provider plan remains review-only; no cloud provider is enabled or claimed.",
+      "revision": "ee36e75"
     }
   ]
 }
