@@ -1,5 +1,7 @@
 # MotoVault continuation handoff
 
+> **Historical, non-normative.** This document records an earlier state and is kept for context only. It is not an instruction source. Follow [AGENTS.md](../AGENTS.md) and the documents it names; if this text disagrees with them, they win.
+
 Prepared 12 October 2026. Workspace: `/Users/arif/workspace/bbn/motovault`.
 
 Current completion checkpoint: [CONTINUATION_PROGRESS.md](CONTINUATION_PROGRESS.md), updated 14 October 2026. This handoff preserves the original baseline; use the current checkpoint and linked native evidence for delivered status and remaining gates.

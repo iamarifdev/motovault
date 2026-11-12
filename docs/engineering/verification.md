@@ -25,31 +25,59 @@ rtk run xcodebuild test \
   -scheme MotoVault \
   -destination 'platform=iOS Simulator,id=VERIFIED_IOS_27_IPHONE_18_PRO_OR_PRO_MAX_UDID' \
   -only-testing:MotoVaultUITests/CaptureFlowTests \
-  -resultBundlePath /tmp/MotoVault-Capture-UNIQUE-RUN-NAME.xcresult
+  -resultBundlePath "$TMPDIR/MotoVault-Capture-UNIQUE-RUN-NAME.xcresult"
 ```
 
-Use the existing connected Android device for the instrumentation task. For XCTest, replace the destination value with the UDID of the verified, already-running allowed simulator, and choose a result-bundle path that does not exist yet. Python checks in `tools/` remain repository gates; they do not count as app runtime evidence.
+Use the existing connected Android device for the instrumentation task. Do not boot, erase or reconfigure a simulator or device without the owner's approval. For XCTest, replace the destination value with the UDID of the verified, already-running allowed simulator, and choose a result-bundle path that does not exist yet. Python checks in `tools/` remain repository gates; they do not count as app runtime evidence.
 
-## Handoff gate
+## Gates by class
 
-Before claiming done, run the checks required by the task plus this portable set:
+This is the only list of gates. Other documents link here. Change classes (C0–C3)
+are defined in [the workflow](ai-workflow.md#change-classes). A gate passes by the
+exit code of its command, run with `rtk run` when `rtk` is installed and plain
+otherwise. Any gate you cannot run stays open and is reported.
+
+| Class | Required gates |
+| --- | --- |
+| C0 | `python3 tools/roadmap.py check` and `python3 tools/check_agent_docs.py` |
+| C1 | Portable and Workstation sets below |
+| C2 | C1, plus Android and iOS runtime checks of the affected flow, plus a language-switch check if copy or locale behavior changed |
+| C3 | C2, plus compatibility fixtures, recovery checks and native platform evidence |
+
+**Portable set** (clean checkout, Python 3; the same checks run in CI):
 
 ```bash
-rtk run ./gradlew :composeApp:testDebugUnitTest \
-  :composeApp:compileKotlinIosSimulatorArm64 --offline
-rtk run python3 tools/ui_literal_gate.py
-rtk run python3 tools/ui_literal_gate.py --fuel
-rtk run python3 tools/responsibility_gate.py
-rtk run python3 tools/architecture_dependencies.py
-rtk run python3 tools/architecture_package_cycles.py
-rtk run python3 tools/fuel_policy_literals.py
-rtk run python3 -m unittest discover -s tools/tests -p 'test_*.py'
-rtk run python3 tools/roadmap.py check
+python3 tools/check_agent_docs.py
+python3 tools/ui_literal_gate.py
+python3 tools/ui_literal_gate.py --fuel
+python3 tools/bangla_copy_lint.py
+python3 tools/responsibility_gate.py
+python3 tools/architecture_dependencies.py
+python3 tools/architecture_package_cycles.py
+python3 tools/fuel_policy_literals.py
+python3 -m unittest discover -s tools/tests -p 'test_*.py'
+python3 tools/roadmap.py check
 ```
 
-For changed copy or locale behavior, add an Android/iOS language-switch check;
-a green unit suite does not satisfy that runtime gate. See
-[the shared AI workflow](ai-workflow.md#definition-of-done).
+The unittest discovery includes the English/Bangla resource-parity checks.
+
+**Workstation set** (needs the Sky checkout, Xcode and a warm Gradle cache; drop
+`--offline` only if the owner allows network access):
+
+```bash
+./gradlew :composeApp:testDebugUnitTest :composeApp:compileKotlinIosSimulatorArm64 --offline
+./gradlew architectureModuleEdges --offline
+python3 tools/architecture_cycles.py
+```
+
+Run the last two in sequence; the report is a generated snapshot. Add
+`./gradlew :composeApp:assembleDebug --offline` for Android host changes.
+
+**Device set** is the native app tests section above, plus screenshots or
+recordings for visible changes (kept separate from test output) and an actual
+Android emulator and iOS simulator language switch for any copy or locale change,
+covering both languages, digit styles and affected native notification and
+permission surfaces.
 
 Use [the report template](templates/verification-report.md). Report manual inspection separately from automated evidence. The P03A-05 checks below are lexical ratchets, not semantic proof; keep incomplete validation `in_review` and do not mark a task done to unblock a dependency.
 
@@ -68,7 +96,7 @@ Bangla copy is reviewed against [localization-style.md](localization-style.md).
 regressions (শিগগির, দরকার, পেরিয়ে গেছে, ফুয়েলর, duplicate verbs and similar);
 it is a regression guard, not a complete style checker. Fixtures run with
 `rtk run python3 -m unittest discover -s tools/tests -p test_bangla_copy_lint.py`.
-`rtk run python3 tools/ui_literal_gate.py` ratchets direct string literals supplied to shared UI `Text`, `contentDescription`, `Field`, `VaultButton`, `Primary`, `Eyebrow`, `Heading`, `VaultChip`, `Sheet`, `DocumentNote`, `DocumentCopy` and `DocumentHeading` sinks against `tools/ui-literal-baseline.json`. Each baseline entry records an owner and a removal task; new literals and resolved entries both fail. The expanded P08-05 baseline currently contains 18 path/literal entries (18 occurrences); the fuel pilot remains empty. `--inventory` prints the current inventory. Fixtures run with `rtk run python3 -m unittest discover -s tools/tests -p test_ui_literal_gate.py`. The lexical check does not detect indirect variables, custom text components, every semantics API, native sources or numeric literals, and its literal parsing is not a Kotlin parser. Do not interpret an empty inventory as full localization coverage.
+`rtk run python3 tools/ui_literal_gate.py` ratchets direct string literals supplied to shared UI `Text`, `contentDescription`, `Field`, `VaultButton`, `Primary`, `Eyebrow`, `Heading`, `VaultChip`, `Sheet`, `DocumentNote`, `DocumentCopy` and `DocumentHeading` sinks against `tools/ui-literal-baseline.json`. Each baseline entry records an owner and a removal task; new literals and resolved entries both fail. The fuel pilot baseline is empty. `--inventory` prints the current inventory. Fixtures run with `rtk run python3 -m unittest discover -s tools/tests -p test_ui_literal_gate.py`. The lexical check does not detect indirect variables, custom text components, every semantics API, native sources or numeric literals, and its literal parsing is not a Kotlin parser. Do not interpret an empty inventory as full localization coverage.
 
 For an informative comparison with the current committed revision, run `rtk run python3 tools/compare_ui_literal_head.py`. It compares path and literal hashes and counts; it does not follow renamed files or prove the changed code contains no other hardcoded text. This comparison is not a stable CI ratchet because HEAD changes after each commit.
 

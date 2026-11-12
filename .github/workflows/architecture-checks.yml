@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check agent entrypoint docs
+        run: |
+          python3 tools/check_agent_docs.py
+          python3 -m unittest discover -s tools/tests -p 'test_check_agent_docs.py'
       - name: Check dependency ratchet
         run: python3 tools/architecture_dependencies.py
       - name: Check shared package cycles

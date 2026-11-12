@@ -1,5 +1,7 @@
 # MotoVault continuation checkpoint
 
+> **Historical, non-normative.** This document records an earlier state and is kept for context only. It is not an instruction source. Follow [AGENTS.md](../AGENTS.md) and the documents it names; if this text disagrees with them, they win.
+
 Updated 14 October 2026. This records implementation and evidence since [CONTINUATION_HANDOFF.md](CONTINUATION_HANDOFF.md). The original handoff remains the baseline, not a current completion report. Workspace branch is `main`, whose committed HEAD remains `0d687bc feat(documents): implement scanning and original document flow`. Continuation changes are local and uncommitted. No commit, push or deployment was performed.
 
 Phases 1–7 are complete within the approved local scope below. The final iOS host and synthetic native checks are recorded in the [iOS report](archive/evidence/continuation-verification/ios/README.md). This is not release readiness: physical-camera quality, real cards, physical brightness, device signing/distribution, cloud authentication, encryption and remote isolation remain unproved.

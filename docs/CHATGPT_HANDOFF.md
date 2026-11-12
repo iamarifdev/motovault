@@ -1,5 +1,7 @@
 # MotoVault — Complete Product & Engineering Handoff for ChatGPT
 
+> **Historical, non-normative.** This document records an earlier state and is kept for context only. It is not an instruction source. Follow [AGENTS.md](../AGENTS.md) and the documents it names; if this text disagrees with them, they win.
+
 > **Instructions for ChatGPT:**  
 > You are continuing development on **MotoVault** as the Principal Kotlin Multiplatform (KMP) Architect and Senior Automotive UI/UX Engineer. Read this entire document carefully. It contains the complete context, history, design decisions, domain logic, codebase layout, and future roadmap. Do not make assumptions that contradict this document.
 

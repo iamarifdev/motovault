@@ -1,5 +1,7 @@
 # MotoVault — Architecture, Context & Engineering Handoff
 
+> **Historical, non-normative.** This document records an earlier state and is kept for context only. It is not an instruction source. Follow [AGENTS.md](../AGENTS.md) and the documents it names; if this text disagrees with them, they win.
+
 > **Version:** 2.0.0 (Automotive Luxury Edition)  
 > **Repository:** [git@github.com:iamarifdev/motovault.git](https://github.com/iamarifdev/motovault)  
 > **Platform:** Kotlin Multiplatform (KMP 2.0.21) + Compose Multiplatform (1.7.0)  

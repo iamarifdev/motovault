@@ -1,15 +1,18 @@
 # MotoVault architecture and AI delivery contract
 
 This contract applies to maintenance of completed P03 backup/restore work and to
-all subsequent roadmap phases. It is the shared instruction source for people,
-Codex, Claude, Gemini and other assistants. The detailed rationale and staged
+all subsequent roadmap phases. It is the shared architecture source for people
+and every AI assistant. The detailed rationale and staged
 target are in [the architecture proposal](../ARCHITECTURE-PROPOSAL.md). Task
 scope and dependencies remain in [the tracker](roadmap.json); use the tracker
 tools and the phase-specific architecture application in its generated plan.
 Practical contributor guidance is in [engineering architecture](../engineering/architecture.md),
 [conventions](../engineering/conventions.md), [verification](../engineering/verification.md)
-and the [shared AI workflow](../engineering/ai-workflow.md). This contract governs
-if those documents appear to conflict.
+and the [delivery workflow](../engineering/ai-workflow.md). Precedence is defined in
+[AGENTS.md](../../AGENTS.md). Within it, this contract decides architecture,
+boundary, localization and data questions; the workflow decides process;
+verification decides gate commands. If two disagree at the same level, stop and
+ask the owner.
 
 P00–P03 completion records describe their original scope and evidence. They are
 not proof that the target architecture is already in place. P03A delivered the
@@ -99,33 +102,29 @@ is not an acceptable substitute for a coherent responsibility.
   feature. Record any temporary exceptions, owner and removal task.
 - These are hard gates, not review suggestions: new inline user-facing text,
   language branches, localized persisted labels, production files over 400 lines
-  or new storage-to-UI imports fail the task. Run the literal, responsibility,
-  dependency, package-cycle, resource-parity, Bangla-copy and roadmap checks before
-  handoff.
+  or new storage-to-UI imports fail the task. Run the gates that
+  [verification](../engineering/verification.md#gates-by-class) lists for the change
+  class before handoff.
 
 ## Required workflow
 
-1. Read `AGENTS.md`, [the shared AI workflow](../engineering/ai-workflow.md), the
-   design contract, this contract, [the Bangla style](../engineering/localization-style.md)
-   and the relevant tracker task/phase mapping. Inspect the current branch, dirty
-   tree, callers, platforms, persistence/backup formats and existing evidence.
-2. State the responsibility boundary, concrete files, behavior/data contracts,
-   dependency changes, design impact and verification plan. Extend the v3
-   prototype first for new UI states. Research-only tasks do not require code.
-3. Respect tracker dependencies. Mark a feature task `in_progress` with owner
-   and factual note before feature edits. Preserve unrelated work and do not
-   claim proposed modules or checks are present before inspecting them.
-4. Implement one bounded slice. Enforce the boundary, SRP, reuse, constants and
-   localization requirements in changed code, including modern Bangla copy and
-   stable-ID presentation. Test critical business behavior, error/cancellation
-   paths, state lifetime and durable data changes as relevant.
-5. Verify Android/iOS behavior at the affected scope, including compatibility,
-   existing translations and native integration when applicable. Use actual
-   available quality commands; until automated gates exist, record explicit
-   manual checks and limitations. A missing tool or device leaves its gate open.
-6. Record sanitized evidence with actual commit and dirty diff identity,
-   commands, platform, outcome and remaining gates. Keep incomplete work in
-   review. Run `rtk run python3 tools/roadmap.py check` before handoff.
+Follow [the delivery workflow](../engineering/ai-workflow.md). For this contract
+specifically:
+
+- State the responsibility boundary, concrete files, behavior and data contracts,
+  dependency changes, design impact and verification plan before editing.
+  Extend the v3 prototype first for new UI states. Research-only tasks do not
+  require code.
+- Respect tracker dependencies. Do not claim proposed modules or checks are
+  present before inspecting them.
+- Enforce the boundary, SRP, reuse, constants and localization requirements in
+  changed code. Test critical business behavior, error and cancellation paths,
+  state lifetime and durable data changes as relevant.
+- Verify Android and iOS behavior at the affected scope, including compatibility,
+  existing translations and native integration. A missing tool or device leaves
+  its gate open.
+- Record sanitized evidence with the base commit, working-tree identity,
+  commands, platform, outcome and remaining gates. Keep incomplete work in review.
 
 Do not present a build, simulator, physical device, cloud staging, signed
 release or publication as proof of another. Preserve migration fixtures and
