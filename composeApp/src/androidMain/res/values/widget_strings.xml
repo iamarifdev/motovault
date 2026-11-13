@@ -1,0 +1,23 @@
+<resources>
+    <string name="widget_name">MotoVault Summary</string>
+    <string name="widget_description">Next service task and quick Fuel / km shortcuts</string>
+    <string name="widget_no_bike_title">No active bike</string>
+    <string name="widget_no_bike_body">Open MotoVault to set up your bike</string>
+    <string name="widget_locked_title">MotoVault is locked</string>
+    <string name="widget_locked_body">Tap to unlock and view bike status</string>
+    <string name="widget_status_overdue">%1$s · Due now</string>
+    <string name="widget_status_soon">%1$s · Due soon</string>
+    <string name="widget_status_ok">%1$s · Interval remaining</string>
+    <string name="widget_status_unknown">%1$s · Verify baseline</string>
+    <string name="widget_stale_badge">Saved snapshot · Tap to refresh</string>
+    <string name="widget_btn_fuel">⛽ Fuel</string>
+    <string name="widget_btn_km">📏 km</string>
+    <string name="widget_km_suffix">km</string>
+    <string name="widget_item_chain">Chain</string>
+    <string name="widget_item_oil">Engine oil</string>
+    <string name="widget_item_air">Air filter</string>
+    <string name="widget_item_spark">Spark plug</string>
+    <string name="widget_item_brake">Brake pad</string>
+    <string name="widget_item_coolant">Coolant</string>
+    <string name="widget_item_service">Service</string>
+</resources>

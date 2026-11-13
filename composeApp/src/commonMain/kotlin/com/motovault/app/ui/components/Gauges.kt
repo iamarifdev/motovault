@@ -89,7 +89,7 @@ fun Gauge(
 
     val text = if (wear.status == WearStatus.OVERDUE) WearCalculator.describeWear(wear, f)
                else WearCalculator.statusLabel(wear.status)
-    val partName = wear.rule.name.substringBefore(" ও ").substringBefore(" পরিষ্কার")
+    val partName = componentLabel(wear.rule)
 
     val targetSweep = if (wear.status == WearStatus.UNKNOWN) 0f else (wear.life / 100f).coerceIn(0.02f, 1f)
     val animSweep = remember { Animatable(if (reducedMotion) targetSweep else 0f) }

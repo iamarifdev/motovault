@@ -40,6 +40,7 @@ import kotlinx.datetime.toLocalDateTime
 import motovault.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
+import com.motovault.app.ui.garage.SeasonalCareSection
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
@@ -47,7 +48,8 @@ fun GarageScreen(
     state: VaultState,
     onOpenSheet: (String, Any?) -> Unit,
     onSwitchTab: (Tab) -> Unit,
-    onOpenServiceForItem: (String) -> Unit
+    onOpenServiceForItem: (String) -> Unit,
+    onUpdateState: (VaultState) -> Unit = {}
 ) {
     val f = currentFmt
     val haptic = currentHaptic
@@ -81,10 +83,19 @@ fun GarageScreen(
         modifier = Modifier.fillMaxWidth().padding(start = 20.dp, top = 8.dp, end = 20.dp, bottom = 28.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        GarageHeaderSection(ride, brandWorld, model) {
-            haptic.perform(HapticKind.TICK)
-            onSwitchTab(Tab.ME)
-        }
+        GarageHeaderSection(
+            ride = ride,
+            brandWorld = brandWorld,
+            model = model,
+            onSwitchBike = {
+                haptic.perform(HapticKind.TICK)
+                onOpenSheet("bikeSwitcher", null)
+            },
+            onSettings = {
+                haptic.perform(HapticKind.TICK)
+                onSwitchTab(Tab.ME)
+            }
+        )
 
         if (topWear != null) {
             GarageHeroSection(topWear) {
@@ -177,6 +188,12 @@ fun GarageScreen(
             onHistory = { onSwitchTab(Tab.HISTORY) }
         )
 
+        SeasonalCareSection(
+            state = state,
+            onUpdateState = onUpdateState,
+            onOpenBreakdown = { onOpenSheet("breakdown", null) }
+        )
+
         // Gauges Section
         Column {
         SectionTitle(appStringResource(Res.string.garage_service_interval_remaining))
@@ -237,7 +254,7 @@ fun GarageScreen(
                                 tint = textColor
                             )
                             Column(Modifier.weight(1f)) {
-                                Text(text = doc.title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                                Text(text = documentDisplayName(doc.title), fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                                 Text(
                                     text = if (isExpired) appStringResource(Res.string.garage_expired_ago, f.days(-leftDays))
                                     else appStringResource(Res.string.garage_expires_in, f.days(leftDays)),

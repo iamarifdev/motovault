@@ -179,16 +179,18 @@ internal fun SettingsBackupSection(
             }
             VaultButton(text = appStringResource(Res.string.recovery_entry), kind = ButtonKind.SECONDARY, full = true,
                 onClick = { onOpenSheet("recovery", null) })
+            VaultButton(text = appStringResource(Res.string.cloud_backup_section_action), kind = ButtonKind.SECONDARY, full = true,
+                onClick = { onOpenSheet("cloud-backup", null) })
         }
 
 }
 
 @Composable
 internal fun SettingsDemoSection(
-    ride: Ride,
+    state: VaultState,
+    onUpdateState: (VaultState) -> Unit,
     onOpenSheet: (String, Any?) -> Unit
 ) {
-    val f = currentFmt
     val haptic = currentHaptic
     var widgetOpen by remember { mutableStateOf(false) }
         // New concepts (demo)
@@ -233,37 +235,8 @@ internal fun SettingsDemoSection(
                 }
             }
 
-            // Widget preview
             AnimatedVisibility(visible = widgetOpen) {
-                Box(modifier = Modifier.padding(14.dp)) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(0.65f)
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(BrandTintColor)
-                            .border(1.dp, BrandLineColor, RoundedCornerShape(20.dp))
-                            .padding(14.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(text = ride.displayName, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = BrandColor)
-                            Text(text = f.km(ride.odometer), fontSize = 12.sp, color = TextSecondary)
-                        }
-                        Text(text = appStringResource(Res.string.settings_widget_due), fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = ErrorColor)
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Box(modifier = Modifier.weight(1f).clip(RoundedCornerShape(10.dp)).background(SurfaceColor).padding(vertical = 4.dp), contentAlignment = Alignment.Center) {
-                                Text(appStringResource(Res.string.settings_widget_fuel), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-                            }
-                            Box(modifier = Modifier.weight(1f).clip(RoundedCornerShape(10.dp)).background(SurfaceColor).padding(vertical = 4.dp), contentAlignment = Alignment.Center) {
-                                Text(appStringResource(Res.string.settings_widget_km), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-                            }
-                        }
-                    }
-                }
+                SettingsWidgetSection(state = state, onUpdateState = onUpdateState)
             }
         }
 

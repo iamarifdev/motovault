@@ -57,13 +57,13 @@ fun MeScreen(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
-        SettingsProfileSection(brand, model, ride, onStartOnboarding)
+        SettingsProfileSection(brand, model, ride) { onOpenSheet("bikeSwitcher", null) }
         SettingsAppearanceSection(state, activeBrandId, ride.brandId, onUpdateState)
         SettingsPreferencesSection(state, onUpdateState)
         SettingsRemindersSection(state, onUpdateState, onOpenSheet)
         SettingsPrivacySection(state, onUpdateState, onOpenSheet)
         SettingsBackupSection(state, onOpenSheet)
-        SettingsDemoSection(ride, onOpenSheet)
+        SettingsDemoSection(state, onUpdateState, onOpenSheet)
         SettingsAboutSection(onResetDemo)
     }
 }

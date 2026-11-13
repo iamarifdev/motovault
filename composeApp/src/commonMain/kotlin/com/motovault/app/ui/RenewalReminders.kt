@@ -10,7 +10,8 @@ internal data class RenewalReminder(
     val minuteOfDay: Int = 540,
     val warningDays: Int = 60,
     val targetType: String = "document",
-    val targetRevision: String? = null
+    val targetRevision: String? = null,
+    val vehicleId: String? = null
 )
 
 /** Event identity includes the full durable ID and expiry, independent of display text or platform integers. */
@@ -25,7 +26,8 @@ internal fun renewalPlan(documents: List<VaultDocument>, now: LocalDateTime, pre
         if (expiry < today && snooze == null) return@flatMap emptyList()
         val lead = document.reminderWarningDays ?: policy.warningDays
         require(lead in 1..365)
-        fun event(kind: String, date: LocalDate) = RenewalReminder("renewal:${document.id.length}:${document.id}:${document.expiry}:$kind", document.id, document.expiry, date.toString(), kind, policy.minuteOfDay, lead)
+        val docVehicleId = document.vehicleId.takeUnless { document.isOwnerScoped }
+        fun event(kind: String, date: LocalDate) = RenewalReminder("renewal:${document.id.length}:${document.id}:${document.expiry}:$kind", document.id, document.expiry, date.toString(), kind, policy.minuteOfDay, lead, vehicleId = docVehicleId)
         val warningDate = LocalDate.fromEpochDays(expiry.toEpochDays() - lead)
         val warning = event("warning", warningDate)
         val remembered = previous.firstOrNull { it.key == warning.key && it.warningDays == lead && it.minuteOfDay == policy.minuteOfDay }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import com.motovault.app.ui.backup.BackupSheet
+import com.motovault.app.ui.backup.CloudBackupSheet
 import com.motovault.app.ui.fuel.FuelSheet
 import com.motovault.app.ui.backup.BackupSheetTab
 import com.motovault.app.ui.backup.RecoverySheet
@@ -18,6 +19,11 @@ import dev.sky.design.*
 import com.motovault.app.application.fuel.FuelWorkflow
 import com.motovault.app.application.fuel.FuelSaveOutcome
 import com.motovault.app.application.VaultBackupOperations
+import com.motovault.app.domain.garage.mutateBike
+import com.motovault.app.domain.garage.switchToBike
+import com.motovault.app.ui.garage.BikeSwitcherSheet
+import com.motovault.app.ui.garage.BreakdownHelpSheet
+import com.motovault.app.ui.history.WorkLedgerSheet
 import kotlinx.coroutines.isActive
 import kotlinx.datetime.Clock
 import motovault.composeapp.generated.resources.*
@@ -47,14 +53,25 @@ internal fun VaultSheetHost(
     onToast: (ToastData?) -> Unit,
     onRestoreSuccess: () -> Unit,
     onInspect: (String) -> Unit,
-    onLockNow: () -> Unit
+    onLockNow: () -> Unit,
+    onStartOnboarding: () -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
             if (!loading && (state.ride != null || activeSheet?.name in setOf("paste", "capture") || activeSheet?.name == "quickAdd")) {
                 activeSheet?.let { sheet ->
+                val targetBikeId = (sheet.props as? CapturePrefill)?.targetBikeId
+                val scopedState = if (targetBikeId != null && targetBikeId != state.ride?.id) {
+                    runCatching { state.switchToBike(targetBikeId) }.getOrDefault(state)
+                } else state
+                val commitScoped: (VaultState, ((Boolean) -> Unit)?) -> Unit = { nextScoped, done ->
+                    val merged = runCatching {
+                        if (targetBikeId == null) nextScoped else state.mutateBike(targetBikeId) { nextScoped }
+                    }.getOrNull()
+                    if (merged == null) done?.invoke(false) else onCommit(merged, done)
+                }
                 when (sheet.name) {
-                    "expense", "budget", "cost-details" -> CostSheetHost(sheet, state, onDismiss = { onSheet(null) },
-                        onSave = { next, done -> onCommit(next, done) }, onUndo = { onUndo(revision + 1) }, onToast = onToast)
+                    "expense", "budget", "cost-details" -> CostSheetHost(sheet, scopedState, onDismiss = { onSheet(null) },
+                        onSave = { next, done -> commitScoped(next, done) }, onUndo = { onUndo(revision + 1) }, onToast = onToast)
                     "gaugeDetail" -> GaugeDetailSheet(state, sheet.props as? String,
                         onDismiss = { onSheet(null) }, onOpen = { name, id ->
                             onSheet(if (name == "serviceReminder") ActiveSheet("reminders", "service" to id)
@@ -88,7 +105,11 @@ internal fun VaultSheetHost(
                         initialOdometer = (sheet.props as? CapturePrefill)?.odometer,
                         onDismiss = { onSheet(null); onFuelCreateError(null) },
                         onSave = { request, msg, onDone ->
-                            fuelWorkflow.create(request.copy(captureReceiptId = (sheet.props as? CapturePrefill)?.receipt), revision) { outcome ->
+                            val prefill = sheet.props as? CapturePrefill
+                            fuelWorkflow.create(
+                                request.copy(captureReceiptId = prefill?.receipt, targetBikeId = prefill?.targetBikeId ?: state.ride?.id),
+                                revision
+                            ) { outcome ->
                                 if (scope.isActive && outcome == FuelSaveOutcome.SAVED) {
                                     onFuelCreateError(null)
                                     onToast(ToastData(
@@ -117,7 +138,8 @@ internal fun VaultSheetHost(
                                 onDismiss = { onSheet(null); onFuelEditError(null) },
                                 onSave = { _, _, _ -> },
                                 onEdit = { request, message ->
-                                    fuelWorkflow.edit(request, target.revision) { outcome ->
+                                    val scopedRequest = request.copy(targetBikeId = target.record.vehicleId.ifBlank { state.ride?.id ?: "primary" })
+                                    fuelWorkflow.edit(scopedRequest, target.revision) { outcome ->
                                             if (scope.isActive) {
                                                 if (outcome == FuelSaveOutcome.SAVED) {
                                                     onToast(ToastData(id = "fuel_edit_${request.id}", message = message, undoAction = { onUndo(target.revision + 1) }))
@@ -134,13 +156,13 @@ internal fun VaultSheetHost(
                         val itemKey = sheet.props as? String
                         val parsedRows = (sheet.props as? CapturePrefill)?.rows ?: (sheet.props as? List<*>)?.filterIsInstance<ParsedLine>()
                         ServiceSheet(
-                            state = state,
+                            state = scopedState,
                             initialItemKey = itemKey,
                             initialRows = parsedRows,
                             initialOdometer = (sheet.props as? CapturePrefill)?.odometer,
                             onDismiss = { onSheet(null) },
                             onSave = { nextState, msg, onDone ->
-                                onCommit(nextState) { ok ->
+                                commitScoped(nextState) { ok ->
                                     if (ok) {
                                         onToast(ToastData(
                                             id = "svc_${Clock.System.now().toEpochMilliseconds()}",
@@ -157,11 +179,11 @@ internal fun VaultSheetHost(
                         )
                     }
                     "odometer" -> OdometerSheet(
-                        state = state,
+                        state = scopedState,
                         initialOdometer = (sheet.props as? CapturePrefill)?.odometer,
                         onDismiss = { onSheet(null) },
                         onSave = { nextState, msg, onDone ->
-                            onCommit(nextState) { ok ->
+                            commitScoped(nextState) { ok ->
                                 if (ok) {
                                     onToast(ToastData(
                                         id = "odo_${Clock.System.now().toEpochMilliseconds()}",
@@ -294,6 +316,34 @@ internal fun VaultSheetHost(
                         }
                     )
                     "recovery" -> RecoverySheet(recovery, revision = { session.snapshots.value.revision }, onDismiss = { onSheet(null) })
+                    "bikeSwitcher" -> BikeSwitcherSheet(
+                        state = state,
+                        onDismiss = { onSheet(null) },
+                        onSelectBike = { next, msg ->
+                            onCommit(next) { ok ->
+                                if (ok) {
+                                    onToast(ToastData(id = "bike_${Clock.System.now().toEpochMilliseconds()}", message = msg))
+                                    onSheet(null)
+                                }
+                            }
+                        },
+                        onAddBike = onStartOnboarding
+                    )
+                    "breakdown" -> BreakdownHelpSheet(
+                        state = state,
+                        onUpdateState = { next -> onCommit(next, null) },
+                        onToast = { toast -> onToast(toast) },
+                        onDismiss = { onSheet(null) }
+                    )
+                    "work-ledger" -> WorkLedgerSheet(
+                        state = state,
+                        onUpdateState = { next -> onCommit(next, null) },
+                        onDismiss = { onSheet(null) }
+                    )
+                    "cloud-backup" -> CloudBackupSheet(
+                        onOpenLocalBackup = { onSheet(ActiveSheet("backup", BackupSheetTab.CREATE)) },
+                        onDismiss = { onSheet(null) }
+                    )
                 }
 }
 }

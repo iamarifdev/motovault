@@ -24,8 +24,11 @@ actual fun activeVaultDatabase(): VaultDatabase = database
 actual suspend fun loadVault(): String? = withContext(Dispatchers.IO) {
     val state = database.vault().read() ?: database.vault().migrate(legacyVault())
     database.vault().prepareLocalSync()
+    syncAndroidWidgetSnapshot(vaultContext, state)
     VaultState.encode(state)
 }
 actual suspend fun saveVault(value: String) = withContext(Dispatchers.IO) {
-    database.vault().replace(requireNotNull(VaultState.decode(value)) { "Could not read records to save." })
+    val state = requireNotNull(VaultState.decode(value)) { "Could not read records to save." }
+    database.vault().replace(state)
+    syncAndroidWidgetSnapshot(vaultContext, state)
 }

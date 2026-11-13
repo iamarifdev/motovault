@@ -1,5 +1,7 @@
 package com.motovault.app.ui
 
+import com.motovault.app.domain.garage.activeReminderDocuments
+import com.motovault.app.domain.garage.allBikes
 import com.motovault.app.domain.model.ComponentRule
 import com.motovault.app.domain.model.reminderRevision
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,9 +11,9 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 internal fun reminderPlan(state: VaultState, now: LocalDateTime, previous: List<RenewalReminder>, consumed: Set<String>): List<RenewalReminder> {
-    val documents = if (state.docReminders) renewalPlan(state.documents, now, previous, consumed, state.reminderPolicy) else emptyList()
+    val documents = if (state.docReminders) renewalPlan(state.activeReminderDocuments(), now, previous, consumed, state.reminderPolicy) else emptyList()
     val ride = state.ride ?: return documents
-    if (!state.serviceReminders) return documents
+    if (ride.archived || !state.serviceReminders) return documents
     val time = LocalTime(state.reminderPolicy.minuteOfDay / 60, state.reminderPolicy.minuteOfDay % 60)
     val nextLocal = if (now.time < time) now.date else LocalDate.fromEpochDays(now.date.toEpochDays() + 1)
     val services = state.confirmedRules().mapNotNull { rule ->
@@ -27,20 +29,37 @@ internal fun reminderPlan(state: VaultState, now: LocalDateTime, previous: List<
         val snooze = rule.reminderSnoozedUntil?.let { LocalDateTime.parse(it) }
         if (snooze != null) return@mapNotNull RenewalReminder(
             key + ":snooze:$snooze", rule.id, snooze.date.toString(), snooze.date.toString(), "service",
-            snooze.hour * 60 + snooze.minute, 0, "service", revision
+            snooze.hour * 60 + snooze.minute, 0, "service", revision, vehicleId = ride.id
         ).takeUnless { it.key in consumed }
         if (!distanceDue && calendarDue == null) return@mapNotNull null
         val due = if (distanceDue || calendarDue!! < nextLocal) nextLocal else calendarDue
         val prior = previous.firstOrNull { it.key == key && it.minuteOfDay == state.reminderPolicy.minuteOfDay }
         val event = prior?.takeUnless { distanceDue && it.localDateTime() > LocalDateTime(nextLocal, time) }
             ?: RenewalReminder(key, rule.id, due.toString(), due.toString(), "service",
-            state.reminderPolicy.minuteOfDay, 0, "service", revision)
+            state.reminderPolicy.minuteOfDay, 0, "service", revision, vehicleId = ride.id)
         event.takeUnless { it.key in consumed }
     }
-    return (documents + services).sortedBy { it.localDateTime() }
+    val warranties = state.warranties.mapNotNull { w ->
+        if (!w.reminder || w.isExpired(now.date, ride.odometer)) return@mapNotNull null
+        val expiry = runCatching { LocalDate.parse(w.expiryDate) }.getOrNull() ?: return@mapNotNull null
+        val key = "warranty:${w.id.length}:${w.id}:${w.expiryDate}:due"
+        val due = if (expiry < nextLocal) nextLocal else expiry
+        RenewalReminder(
+            key, w.id, w.expiryDate, due.toString(), "warranty",
+            state.reminderPolicy.minuteOfDay, 0, "warranty", null, vehicleId = ride.id
+        ).takeUnless { it.key in consumed }
+    }
+    return (documents + services + warranties).sortedBy { it.localDateTime() }
 }
 
-internal data class ReminderTarget(val type: String, val id: String, val title: String, val digits: Digits = Digits.BN, val language: AppLanguage = AppLanguage.BN)
+internal data class ReminderTarget(
+    val type: String,
+    val id: String,
+    val title: String,
+    val digits: Digits = Digits.BN,
+    val language: AppLanguage = AppLanguage.BN,
+    val vehicleId: String? = null
+)
 
 internal expect fun reminderHeading(plan: RenewalReminder, target: ReminderTarget): String
 internal expect fun reminderMessage(plan: RenewalReminder, target: ReminderTarget): String
@@ -54,11 +73,36 @@ internal fun reminderDate(plan: RenewalReminder, target: ReminderTarget): String
 
 /** Never resolve by label, array index or an integer hash. Stale notifications explain instead of opening another record. */
 internal fun reminderTarget(state: VaultState, plan: RenewalReminder): ReminderTarget? = when (plan.targetType) {
-    "document" -> state.documents.firstOrNull { it.id == plan.documentId && it.expiry == plan.expiry }
-        ?.let { ReminderTarget("document", it.id, it.title, state.digits, state.language) }
-    "service" -> state.rules.firstOrNull { it.id == plan.documentId && it.reminderRevision() == plan.targetRevision }
-        ?.let { ReminderTarget("service", it.id, it.name, state.digits, state.language) }
+    "document" -> state.activeReminderDocuments().firstOrNull { it.id == plan.documentId && it.expiry == plan.expiry }
+        ?.let {
+            ReminderTarget(
+                type = "document",
+                id = it.id,
+                title = it.title,
+                digits = state.digits,
+                language = state.language,
+                vehicleId = it.vehicleId.takeUnless { _ -> it.isOwnerScoped }
+            )
+        }
+    "service" -> activeBikeRules(state).firstNotNullOfOrNull { (bikeId, bikeRules) ->
+        bikeRules.firstOrNull { it.id == plan.documentId && it.reminderRevision() == plan.targetRevision }
+            ?.let { ReminderTarget("service", it.id, it.name, state.digits, state.language, vehicleId = bikeId) }
+    }
+    "warranty" -> activeBikeWarranties(state).firstOrNull { (_, w) -> w.id == plan.documentId && w.expiryDate == plan.expiry }
+        ?.let { (bikeId, w) -> ReminderTarget("service", w.id, w.partName, state.digits, state.language, vehicleId = bikeId) }
     else -> null
+}
+
+private fun activeBikeRules(state: VaultState): List<Pair<String, List<ComponentRule>>> {
+    val current = state.ride?.takeUnless { it.archived }?.let { it.id to state.rules }
+    val others = state.garageBikes.filterNot { it.ride.archived }.map { it.ride.id to it.rules }
+    return listOfNotNull(current) + others
+}
+
+private fun activeBikeWarranties(state: VaultState): List<Pair<String, com.motovault.app.domain.model.PartWarranty>> {
+    val current = state.ride?.takeUnless { it.archived }?.let { r -> state.warranties.map { r.id to it } }.orEmpty()
+    val others = state.garageBikes.filterNot { it.ride.archived }.flatMap { b -> b.warranties.map { b.ride.id to it } }
+    return current + others
 }
 
 /** Delivery consumes a scheduling event, but a current alert stays visible until the owner opens or dismisses it. */
@@ -66,7 +110,7 @@ internal fun deliveredReminderIsCurrent(state: VaultState, plan: RenewalReminder
     if (reminderTarget(state, plan) == null) return@runCatching false
     when (plan.targetType) {
         "document" -> {
-            val document = state.documents.first { it.id == plan.documentId }
+            val document = state.activeReminderDocuments().first { it.id == plan.documentId }
             if (!state.docReminders || !document.reminder) return@runCatching false
             LocalDate.parse(document.expiry)
             val snooze = document.reminderSnoozedUntil?.let { LocalDateTime.parse(it) }
@@ -77,12 +121,19 @@ internal fun deliveredReminderIsCurrent(state: VaultState, plan: RenewalReminder
             }
         }
         "service" -> {
-            val rule = state.confirmedRules().first { it.id == plan.documentId }
-            if (state.ride == null || !state.serviceReminders || !rule.reminder ||
-                rule.baselineCertainty != com.motovault.app.domain.model.BaselineCertainty.CONFIRMED) return@runCatching false
+            val activeRules = activeBikeRules(state).flatMap { (_, bikeRules) ->
+                bikeRules.filter { it.baselineCertainty == com.motovault.app.domain.model.BaselineCertainty.CONFIRMED }
+            }
+            val rule = activeRules.first { it.id == plan.documentId }
+            if (state.ride == null || !state.serviceReminders || !rule.reminder) return@runCatching false
             val snooze = rule.reminderSnoozedUntil?.let { LocalDateTime.parse(it) }
             if (snooze == null) plan.key.endsWith(":due")
             else plan.localDateTime() == snooze && plan.key.endsWith(":snooze:$snooze")
+        }
+        "warranty" -> {
+            val warranty = activeBikeWarranties(state).first { (_, w) -> w.id == plan.documentId }.second
+            val rideOdo = state.allBikes().firstOrNull { it.id == plan.vehicleId }?.odometer ?: state.ride?.odometer ?: 0.0
+            state.serviceReminders && warranty.reminder && !warranty.isExpired(Clock.System.todayIn(TimeZone.currentSystemDefault()), rideOdo)
         }
         else -> false
     }

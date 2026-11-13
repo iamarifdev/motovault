@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.content.Intent
 import com.motovault.app.application.capture.ShareCaptureInbox
 import com.motovault.app.ui.ReminderNavigation
+import com.motovault.app.ui.WidgetNavigation
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,6 +27,7 @@ class MainActivity : ComponentActivity() {
             if (args.isNotEmpty()) com.motovault.app.ui.LaunchConfig.applyArgs(args)
         }
         intent?.getStringExtra("motovault.reminder")?.let(ReminderNavigation::open)
+        acceptWidgetAction(intent)
         acceptSharedText(intent)
         setContent {
             App()
@@ -54,7 +56,14 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         intent.getStringExtra("motovault.reminder")?.let(ReminderNavigation::open)
+        acceptWidgetAction(intent)
         acceptSharedText(intent)
+    }
+
+    private fun acceptWidgetAction(incoming: Intent?) {
+        val uri = incoming?.getStringExtra("motovault.widget")
+            ?: incoming?.dataString?.takeIf { it.startsWith("motovault://widget") }
+        if (uri != null) WidgetNavigation.open(uri)
     }
 
     private fun acceptSharedText(incoming: Intent?) {

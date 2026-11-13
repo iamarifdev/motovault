@@ -60,10 +60,11 @@ internal fun CostNumberField(label: String, entry: NumberEntryState, field: Stri
 
 @Composable
 internal fun CostDateControls(date: String, onChange: (String) -> Unit) {
+    val fmt = currentFmt
     Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        VaultChip(appStringResource(Res.string.date_today), active = date == today().toString(), onClick = { onChange(today().toString()) })
+        VaultChip(appStringResource(Res.string.date_today), active = toAscii(date) == today().toString(), onClick = { onChange(today().toString()) })
         val yesterday = LocalDate.fromEpochDays(today().toEpochDays() - 1).toString()
-        VaultChip(appStringResource(Res.string.date_yesterday), active = date == yesterday, onClick = { onChange(yesterday) })
+        VaultChip(appStringResource(Res.string.date_yesterday), active = toAscii(date) == yesterday, onClick = { onChange(yesterday) })
     }
-    Field(appStringResource(Res.string.cost_date), date, onChange)
+    Field(appStringResource(Res.string.cost_date), fmt.d(date), { onChange(toAscii(it)) })
 }

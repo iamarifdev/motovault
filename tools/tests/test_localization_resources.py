@@ -119,6 +119,24 @@ class LocalizationResourcesTest(unittest.TestCase):
                 self.assertEqual(placeholder_signature(tables["en"][key]),
                                  placeholder_signature(tables["bn"][key]))
 
+    def test_ios_infoplist_usage_descriptions_localized(self):
+        import plistlib
+        plist_path = PROJECT / "iosApp/MotoVault/Info.plist"
+        with plist_path.open("rb") as handle:
+            plist = plistlib.load(handle)
+        usage_keys = sorted(k for k in plist if k.startswith("NS") and k.endswith("UsageDescription"))
+        self.assertTrue(usage_keys)
+        bengali_re = re.compile(r"[\u0980-\u09FF]")
+        en_path = PROJECT / "iosApp/MotoVault/en.lproj/InfoPlist.strings"
+        bn_path = PROJECT / "iosApp/MotoVault/bn.lproj/InfoPlist.strings"
+        en_entries = dict(re.findall(r'^"([^"]+)"\s*=\s*"([^"]*)";', en_path.read_text(), re.MULTILINE))
+        bn_entries = dict(re.findall(r'^"([^"]+)"\s*=\s*"([^"]*)";', bn_path.read_text(), re.MULTILINE))
+        for key in usage_keys:
+            self.assertFalse(bengali_re.search(str(plist[key])), f"Base Info.plist contains Bengali for {key}")
+            self.assertTrue(en_entries.get(key, "").strip(), f"Missing en InfoPlist.strings entry for {key}")
+            self.assertTrue(bn_entries.get(key, "").strip(), f"Missing bn InfoPlist.strings entry for {key}")
+            self.assertTrue(bengali_re.search(bn_entries[key]), f"Expected Bangla copy in bn InfoPlist.strings for {key}")
+
 
 if __name__ == "__main__":
     unittest.main()

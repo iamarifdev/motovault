@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.motovault.app.domain.garage.allDocumentAssetIds
 import com.motovault.app.domain.privacy.*
 import com.motovault.app.ui.*
 import kotlinx.coroutines.launch
@@ -211,7 +212,7 @@ fun PrivacySheet(
                                 }
                                 // Run asset protection / verification
                                 try {
-                                    val referenced = state.documents.flatMap { it.assetIds() }.toSet()
+                                    val referenced = state.allDocumentAssetIds()
                                     if (referenced.isNotEmpty()) {
                                         protectDocumentAssets(referenced)
                                     }

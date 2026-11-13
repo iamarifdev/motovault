@@ -4,6 +4,7 @@ import ComposeApp
 import CryptoKit
 import Security
 import CommonCrypto
+import WidgetKit
 
 // No key is created during an open operation. Provisioning belongs to a verified fresh-store flow.
 final class DocumentAssetCrypto: NSObject, IosAssetCryptography, IosBackupCryptoBridge {
@@ -128,6 +129,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         IosVoiceCaptureRegistry.shared.bridge = NativeVoiceCapture()
         IosSharedCaptureRegistry.shared.bridge = SharedCaptureInbox()
+        IosWidgetBridgeRegistry.shared.bridge = NativeWidgetBridge()
         DocumentAssetCrypto.clearTemporaryCopies()
         let crypto = DocumentAssetCrypto()
         IosDocumentCrypto.shared.provider = crypto
@@ -237,6 +239,25 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let response = connectionOptions.notificationResponse,
            let payload = response.notification.request.content.userInfo["motovault.reminder"] as? String {
             ReminderNavigation.shared.open(payload: payload)
+        }
+        if let uri = connectionOptions.urlContexts.first?.url.absoluteString,
+           uri.hasPrefix("motovault://widget") {
+            WidgetNavigation.shared.open(uri: uri)
+        }
+    }
+
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let uri = URLContexts.first?.url.absoluteString, uri.hasPrefix("motovault://widget") else { return }
+        DispatchQueue.main.async {
+            WidgetNavigation.shared.open(uri: uri)
+        }
+    }
+}
+
+private final class NativeWidgetBridge: NSObject, IosWidgetBridge {
+    func reloadTimelines() {
+        if #available(iOS 14.0, *) {
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
 }

@@ -63,7 +63,7 @@ internal fun CaptureReviewSheet(input: CaptureInput, state: VaultState, factory:
             VaultButton(appStringResource(title), full = true, kind = ButtonKind.SECONDARY,
                 enabled = allowed && available && state.ride != null &&
                     (draft.odometers.size <= 1 || chosenOdometer != null),
-                onClick = { onContinue(target, draft.prefill(chosenAmount, chosenOdometer)) })
+                onClick = { onContinue(target, draft.prefill(chosenAmount, chosenOdometer, state.ride?.id)) })
         }
     }
 }

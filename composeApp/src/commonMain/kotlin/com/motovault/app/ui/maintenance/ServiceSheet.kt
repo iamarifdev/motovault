@@ -43,6 +43,8 @@ import com.motovault.app.domain.fuel.FuelEntryRules
 import com.motovault.app.domain.fuel.MAX_FUEL_LITRES
 import com.motovault.app.application.fuel.FuelEntryRequest
 import com.motovault.app.application.fuel.FuelEditRequest
+import com.motovault.app.domain.model.VisitRecordState
+import com.motovault.app.domain.workshop.recordWorkshopVisit
 import com.motovault.app.domain.fuel.FuelTimelineEntry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -106,6 +108,10 @@ fun ServiceSheet(
     var dateKey by remember { mutableStateOf("today") }
     var customDate by remember { mutableStateOf(today.toString()) }
     var workshop by remember { mutableStateOf("") }
+    var workshopPhone by remember { mutableStateOf("") }
+    var visitState by remember { mutableStateOf(VisitRecordState.PAID) }
+    var caseTitle by remember { mutableStateOf("") }
+    var warrantyMonths by remember { mutableStateOf(0) }
     var smartOpen by remember { mutableStateOf(false) }
     var smartText by remember { mutableStateOf("") }
     var moreOpen by remember { mutableStateOf(false) }
@@ -128,6 +134,7 @@ fun ServiceSheet(
     val unknownPrices = rows.count { parseNum(entry.values["p:${it.uid}"] ?: "") == null }
     val odoVal = parseNum(entry.values["odo"] ?: "") ?: 0.0
     val serviceAddedMessage = appStringResource(Res.string.service_added, f.money(total))
+    val serviceQuoteMessage = appStringResource(Res.string.service_visit_quote)
     val serviceSaveError = appStringResource(Res.string.service_save_error)
     val demoServiceText = appStringResource(Res.string.service_demo_text)
 
@@ -195,16 +202,22 @@ fun ServiceSheet(
                             val p = parseNum(entry.values["p:${r.uid}"] ?: "")
                             if (p != null) updatedPrices[r.itemKey] = p
                         }
-                        val updatedWorkshops = if (workshop.isNotBlank()) listOf(workshop.trim()) + state.workshops.filterNot { it == workshop.trim() } else state.workshops
-                        val recorded = runCatching { state.saveQuickService(newLog, selectedRule?.id) }.getOrElse {
+                        val recorded = runCatching {
+                            state.recordWorkshopVisit(
+                                log = newLog,
+                                selectedRuleId = selectedRule?.id,
+                                visitState = visitState,
+                                caseTitle = caseTitle,
+                                warrantyMonths = warrantyMonths,
+                                workshopPhone = workshopPhone,
+                                saveQuickServiceFn = VaultState::saveQuickService
+                            )
+                        }.getOrElse {
                             saveIssue = if (it.message == "service_baseline_invalid") baselineOrder else it.message ?: serviceSaveError
                             return@VaultButton
                         }
-                        val next = recorded.copy(
-                            lastItemPrices = updatedPrices,
-                            workshops = updatedWorkshops.take(6)
-                        )
-                        val toastMsg = serviceAddedMessage
+                        val next = recorded.copy(lastItemPrices = updatedPrices)
+                        val toastMsg = if (visitState == VisitRecordState.PAID) serviceAddedMessage else serviceQuoteMessage
                         onSave(next, toastMsg) {}
                     }
                 },
@@ -350,31 +363,21 @@ fun ServiceSheet(
         }
 
         AnimatedVisibility(visible = moreOpen) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                listOf("labour" to appStringResource(Res.string.service_labour), "misc" to appStringResource(Res.string.service_misc), "discount" to appStringResource(Res.string.service_discount)).forEach { (k, label) ->
-                    val isActive = entry.activeField == k && keysOpen
-                    val v = parseNum(entry.values[k] ?: "")
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(if (isActive) BrandTintColor else SurfaceColor)
-                            .border(2.dp, if (isActive) BrandColor else BorderColor, RoundedCornerShape(12.dp))
-                            .clickable {
-                                entry.setActive(k)
-                                keysOpen = true
-                            }
-                            .padding(10.dp),
-                        verticalArrangement = Arrangement.spacedBy(2.dp)
-                    ) {
-                        Text(text = label, fontSize = 12.sp, color = TextSecondary)
-                        Text(text = if (v != null) f.money(v) else "—", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                    }
-                }
-            }
+            ServiceRepairWarrantyControls(
+                state = state,
+                visitState = visitState,
+                onVisitState = { visitState = it },
+                workshopPhone = workshopPhone,
+                onWorkshopPhone = { workshopPhone = it },
+                caseTitle = caseTitle,
+                onCaseTitle = { caseTitle = it },
+                warrantyMonths = warrantyMonths,
+                onWarrantyMonths = { warrantyMonths = it },
+                entry = entry,
+                keysOpen = keysOpen,
+                onFocusNumber = { k -> entry.setActive(k); keysOpen = true },
+                f = f
+            )
         }
     }
 }

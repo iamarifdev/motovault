@@ -1,6 +1,7 @@
 package com.motovault.app.ui
 
 import androidx.compose.foundation.*
+import com.motovault.app.domain.garage.allDocumentAssetIds
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
@@ -115,7 +116,7 @@ expect fun documentDialogProperties(): DialogProperties
     var importVisible by rememberSaveable { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val draft = draftJson?.let { Json.decodeFromString<CapturedDocument>(it) }
-    val protected = state.documents.flatMap { it.assetIds() }.toSet()
+    val protected = state.allDocumentAssetIds()
     fun setDraft(value: CapturedDocument) { draftJson = Json.encodeToString(CapturedDocument.serializer(), value) }
     fun discard() { draft?.let { removeDocumentAssets(it.assetIds() - protected) } }
     fun leave() { if (!busy) { discard(); onDismiss() } }

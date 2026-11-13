@@ -1,5 +1,6 @@
 package com.motovault.app.ui
 
+import com.motovault.app.domain.workshop.transitionVisitState
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -116,17 +117,21 @@ internal fun ColumnScope.VaultTabContent(
                                     mainScrollState.scrollTo(mainScrollState.maxValue)
                                 }
                             }
+                            val scrollModifier = if (destination == Tab.HISTORY) {
+                                Modifier.fillMaxSize()
+                            } else {
+                                Modifier.fillMaxSize().verticalScroll(mainScrollState)
+                            }
                             Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .verticalScroll(mainScrollState)
+                                modifier = scrollModifier
                             ) {
                                 when (destination) {
                                     Tab.GARAGE -> GarageScreen(
                                         state = state,
                                         onOpenSheet = { name, payload -> onSheet(ActiveSheet(name, payload)) },
                                         onSwitchTab = { nextTab -> onSwitchTab(nextTab) },
-                                        onOpenServiceForItem = { itemKey -> onSheet(ActiveSheet("service", itemKey)) }
+                                        onOpenServiceForItem = { itemKey -> onSheet(ActiveSheet("service", itemKey)) },
+                                        onUpdateState = { next -> onCommit(next, null) }
                                     )
                                     Tab.VAULT -> VaultScreen(
                                         state = state,
@@ -140,6 +145,12 @@ internal fun ColumnScope.VaultTabContent(
                                         state = state,
                                         onOpenCost = { name, log -> onSheet(ActiveSheet(name, log)) },
                                         onEditFuel = { log -> onEditFuel(log) },
+                                        onTransitionVisit = { logId, nextState ->
+                                            val next = runCatching {
+                                                state.transitionVisitState(logId, nextState, VaultState::saveQuickService)
+                                            }.getOrNull()
+                                            if (next != null && next != state) onCommit(next, null)
+                                        },
                                         onDeleteLog = { log ->
                                             val next = runCatching { state.deleteLog(log) }.getOrNull()
                                             if (next != null) {

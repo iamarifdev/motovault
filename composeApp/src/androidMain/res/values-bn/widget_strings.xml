@@ -1,0 +1,23 @@
+<resources>
+    <string name="widget_name">MotoVault সারাংশ</string>
+    <string name="widget_description">পরের সার্ভিসের কাজ এবং দ্রুত ফুয়েল ও কিমি শর্টকাট</string>
+    <string name="widget_no_bike_title">কোনো সক্রিয় বাইক নেই</string>
+    <string name="widget_no_bike_body">বাইক সেট আপ করতে MotoVault খুলুন</string>
+    <string name="widget_locked_title">MotoVault লক করা আছে</string>
+    <string name="widget_locked_body">বাইকের তথ্য দেখতে ট্যাপ করে আনলক করুন</string>
+    <string name="widget_status_overdue">%1$s · এখনই প্রয়োজন</string>
+    <string name="widget_status_soon">%1$s · শীঘ্রই প্রয়োজন</string>
+    <string name="widget_status_ok">%1$s · ব্যবধান বাকি</string>
+    <string name="widget_status_unknown">%1$s · আগের সার্ভিস যাচাই করুন</string>
+    <string name="widget_stale_badge">সংরক্ষিত তথ্য · আপডেট করতে ট্যাপ করুন</string>
+    <string name="widget_btn_fuel">⛽ ফুয়েল</string>
+    <string name="widget_btn_km">📏 কিমি</string>
+    <string name="widget_km_suffix">কিমি</string>
+    <string name="widget_item_chain">চেইন</string>
+    <string name="widget_item_oil">ইঞ্জিন অয়েল</string>
+    <string name="widget_item_air">এয়ার ফিল্টার</string>
+    <string name="widget_item_spark">স্পার্ক প্লাগ</string>
+    <string name="widget_item_brake">ব্রেক প্যাড</string>
+    <string name="widget_item_coolant">কুল্যান্ট</string>
+    <string name="widget_item_service">সার্ভিস</string>
+</resources>

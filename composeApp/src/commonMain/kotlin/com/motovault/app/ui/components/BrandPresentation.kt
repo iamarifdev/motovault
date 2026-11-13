@@ -83,16 +83,22 @@ import kotlin.math.roundToLong
 
 fun componentSuffix(rule: ComponentRule): String {
     val knownSuffix = listOf("air_filter", "spark_plug", "brake_pads", "brake_fluid", "chain", "oil", "coolant")
-        .firstOrNull { rule.id.endsWith("_$it") }
-    return knownSuffix ?: when (rule.name.trim().lowercase()) {
-        "chain" -> "chain"
-        "engine oil", "engine oil & oil filter" -> "oil"
-        "air filter" -> "air_filter"
-        "spark plug" -> "spark_plug"
-        "brake pads (front & rear)" -> "brake_pads"
-        "engine coolant" -> "coolant"
-        "brake fluid (dot 4)" -> "brake_fluid"
-        else -> rule.id.substringAfterLast('_')
+        .firstOrNull { rule.id.endsWith("_$it") || rule.id.endsWith("-$it") }
+    if (knownSuffix != null) return knownSuffix
+    return when (rule.id) {
+        "r-air" -> "air_filter"
+        "r-spark" -> "spark_plug"
+        "r-brakes" -> "brake_pads"
+        else -> when (rule.name.trim().lowercase()) {
+            "chain", "drive chain clean & lube", "চেইন পরিষ্কার ও লুব্রিকেন্ট" -> "chain"
+            "engine oil", "engine oil & oil filter", "ইঞ্জিন অয়েল ও ফিল্টার" -> "oil"
+            "air filter", "এয়ার ফিল্টার" -> "air_filter"
+            "spark plug", "স্পার্ক প্লাগ" -> "spark_plug"
+            "brake pads (front & rear)", "brake pads", "ব্রেক প্যাড" -> "brake_pads"
+            "engine coolant" -> "coolant"
+            "brake fluid (dot 4)" -> "brake_fluid"
+            else -> rule.id.substringAfterLast('_')
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.motovault.app.ui
 
+import com.motovault.app.domain.model.BaselineCertainty
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -7,6 +8,23 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+
+@Serializable
+data class PassportRedactionOptions(
+    val includeRegistration: Boolean = true,
+    val includeChassisAndEngine: Boolean = true,
+    val includeCosts: Boolean = true,
+    val includeWorkshops: Boolean = true,
+    val includeNotes: Boolean = true
+) {
+    fun redactedFieldList(): List<String> = buildList {
+        if (!includeRegistration) add("registration")
+        if (!includeChassisAndEngine) add("chassis_engine")
+        if (!includeCosts) add("costs")
+        if (!includeWorkshops) add("workshops")
+        if (!includeNotes) add("notes")
+    }
+}
 
 @Serializable
 data class PassportIdentity(
@@ -34,10 +52,13 @@ data class PassportServiceItem(
 )
 
 @Serializable
+@OptIn(ExperimentalSerializationApi::class)
 data class ServicePassport(
     val schema: String = "motovault-service-passport-v2",
     val confirmedAt: String, val identity: PassportIdentity, val services: List<PassportService>,
-    val declaration: String = PASSPORT_DECLARATION
+    val declaration: String = PASSPORT_DECLARATION,
+    @EncodeDefault(EncodeDefault.Mode.NEVER) val redactedFields: List<String> = emptyList(),
+    @EncodeDefault(EncodeDefault.Mode.NEVER) val unknownBaselineCount: Int? = null
 )
 
 @Serializable
@@ -61,36 +82,69 @@ fun passportNumberValue(value: String): Double {
 fun canonicalPassport(passport: ServicePassport): String = passportJson.encodeToString(ServicePassport.serializer(), passport)
 fun encodePassportBundle(bundle: PassportBundle): String = passportJson.encodeToString(PassportBundle.serializer(), bundle)
 
-fun passportDefaults(state: VaultState): PassportIdentity {
-    val ride = requireNotNull(state.ride) { "Set up your motorcycle first." }
-    val registration = state.documents.firstOrNull { it.title == "Registration smart card" && it.detailsConfirmed }
+fun passportDefaults(state: VaultState, bikeId: String? = null): PassportIdentity {
+    val targetRecord = if (bikeId == null || state.ride?.id == bikeId) null else state.garageBikes.firstOrNull { it.ride.id == bikeId }
+    val ride = requireNotNull(if (bikeId == null || state.ride?.id == bikeId) state.ride else targetRecord?.ride) { "Set up your motorcycle first." }
+    val docs = if (bikeId == null || state.ride?.id == bikeId) state.documents else targetRecord?.documents.orEmpty()
+    val registration = docs.firstOrNull {
+        it.title == "Registration smart card" && it.detailsConfirmed && (it.vehicleId == null || it.vehicleId == ride.id)
+    }
     return PassportIdentity(registration?.holder.orEmpty(), ride.brandId, ride.displayName, ride.edition, ride.year,
         ride.registration.ifBlank { registration?.details?.get("registration").orEmpty() },
         registration?.details?.get("chassis").orEmpty(), registration?.details?.get("engine").orEmpty(), passportNumber(ride.odometer))
 }
 
 class ExportServicePassportUseCase {
-    fun execute(state: VaultState, reviewed: PassportIdentity, ownerConfirmed: Boolean, confirmedAt: String = Clock.System.now().toString()): PassportBundle {
+    fun execute(
+        state: VaultState,
+        reviewed: PassportIdentity,
+        ownerConfirmed: Boolean,
+        confirmedAt: String = Clock.System.now().toString(),
+        options: PassportRedactionOptions = PassportRedactionOptions(),
+        bikeId: String? = null
+    ): PassportBundle {
         require(ownerConfirmed) { "Confirm the identity and service history before exporting." }
-        requireNotNull(state.ride)
+        val targetRecord = if (bikeId == null || state.ride?.id == bikeId) null else state.garageBikes.firstOrNull { it.ride.id == bikeId }
+        requireNotNull(if (bikeId == null || state.ride?.id == bikeId) state.ride else targetRecord?.ride)
         require(passportV1BlockReason(state) == null) { requireNotNull(passportV1BlockReason(state)) }
         require(reviewed.owner.isNotBlank() && reviewed.model.isNotBlank()) { "Enter the owner and model." }
         Instant.parse(confirmedAt)
         passportNumberValue(reviewed.odometerKmBits)
-        val services = state.logs.filter { !it.isFuel && !it.isDocumentFee }.sortedWith(compareBy<RideLog> { LocalDate.parse(it.date) }.thenBy { it.odometer }.thenBy { it.id }).map { log ->
+        val targetLogs = if (bikeId == null || state.ride?.id == bikeId) state.logs else targetRecord?.logs.orEmpty()
+        val targetRules = if (bikeId == null || state.ride?.id == bikeId) state.rules else targetRecord?.rules.orEmpty()
+        val finalIdentity = reviewed.copy(
+            registration = if (options.includeRegistration) reviewed.registration else "",
+            chassis = if (options.includeChassisAndEngine) reviewed.chassis else "",
+            engine = if (options.includeChassisAndEngine) reviewed.engine else ""
+        )
+        val services = targetLogs.filter { it.isPaidService }.sortedWith(compareBy<RideLog> { LocalDate.parse(it.date) }.thenBy { it.odometer }.thenBy { it.id }).map { log ->
             PassportService(
                 log.id, log.date, log.title, log.detail, passportNumber(log.odometer),
-                passportNumber(if (log.serviceLines.isNotEmpty()) (log.serviceTotalPoisha?.div(100.0) ?: 0.0) else log.cost),
-                log.workshop, log.notes, log.componentId,
+                if (options.includeCosts) passportNumber(if (log.serviceLines.isNotEmpty()) (log.serviceTotalPoisha?.div(100.0) ?: 0.0) else log.cost) else passportNumber(0.0),
+                if (options.includeWorkshops) log.workshop else "",
+                if (options.includeNotes) log.notes else "",
+                log.componentId,
                 items = log.serviceLines.map { line -> PassportServiceItem(
                     line.catalogueId, line.displayName, line.action, passportNumber(line.quantity), line.unitBn,
-                    line.unitPricePoisha, line.lineTotalPoisha, line.oil
+                    if (options.includeCosts) line.unitPricePoisha else null,
+                    if (options.includeCosts) line.lineTotalPoisha else null,
+                    line.oil
                 ) },
-                labourPoisha = log.serviceLabourPoisha, miscellaneousPoisha = log.serviceMiscellaneousPoisha,
-                discountPoisha = log.serviceDiscountPoisha, totalPoisha = log.serviceTotalPoisha
+                labourPoisha = if (options.includeCosts) log.serviceLabourPoisha else null,
+                miscellaneousPoisha = if (options.includeCosts) log.serviceMiscellaneousPoisha else null,
+                discountPoisha = if (options.includeCosts) log.serviceDiscountPoisha else null,
+                totalPoisha = if (options.includeCosts) log.serviceTotalPoisha else null
             )
         }
-        val passport = ServicePassport(confirmedAt = confirmedAt, identity = reviewed, services = services)
+        val redacted = options.redactedFieldList()
+        val unknownBaselines = targetRules.count { it.baselineCertainty != BaselineCertainty.CONFIRMED }.takeIf { it > 0 && redacted.isNotEmpty() }
+        val passport = ServicePassport(
+            confirmedAt = confirmedAt,
+            identity = finalIdentity,
+            services = services,
+            redactedFields = redacted,
+            unknownBaselineCount = unknownBaselines
+        )
         return PassportBundle(passport, sha256(canonicalPassport(passport).encodeToByteArray()))
     }
 }
@@ -175,6 +229,12 @@ fun passportParagraphs(bundle: PassportBundle): List<PassportParagraph> = buildL
     add(PassportParagraph("MOTOVAULT / SERVICE PASSPORT", true))
     add(PassportParagraph(PASSPORT_DECLARATION))
     add(PassportParagraph("Owner confirmation: ${passport.confirmedAt}"))
+    if (passport.redactedFields.isNotEmpty()) {
+        add(PassportParagraph("Redacted fields: ${passport.redactedFields.joinToString(", ")}"))
+    }
+    passport.unknownBaselineCount?.takeIf { it > 0 }?.let { count ->
+        add(PassportParagraph("Schedules without confirmed baseline: $count"))
+    }
     add(PassportParagraph("Vehicle identity", true))
     add(PassportParagraph("Owner: ${identity.owner}\nVehicle: ${identity.brand} ${identity.model}\nEdition: ${identity.edition.ifBlank { "Not supplied" }} / ${identity.year}\nRegistration: ${identity.registration.ifBlank { "Not supplied" }}\nChassis: ${identity.chassis.ifBlank { "Not supplied" }}\nEngine: ${identity.engine.ifBlank { "Not supplied" }}\nCurrent mileage: ${passportNumberValue(identity.odometerKmBits)} km"))
     add(PassportParagraph("Service ledger (${passport.services.size} entries)", true))

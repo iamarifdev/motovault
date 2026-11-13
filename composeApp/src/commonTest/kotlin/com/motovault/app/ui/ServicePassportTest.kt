@@ -1,5 +1,8 @@
 package com.motovault.app.ui
 
+import com.motovault.app.domain.garage.addBike
+import com.motovault.app.domain.model.BaselineCertainty
+import com.motovault.app.domain.model.ComponentRule
 import kotlin.test.*
 
 class ServicePassportTest {
@@ -87,5 +90,55 @@ class ServicePassportTest {
         val changes = listOf(identity.copy(owner="Other"), identity.copy(brand="Other"), identity.copy(model="Other"), identity.copy(edition="Other"), identity.copy(year=2025), identity.copy(registration="Other"), identity.copy(chassis="Other"), identity.copy(engine="Other"), identity.copy(odometerKmBits=passportNumber(5000.25000001)))
         changes.forEach { changed -> assertNotEquals(bundle.sha256, ExportServicePassportUseCase().execute(state,changed,true,confirmation).sha256) }
         assertNotEquals(bundle.sha256, ExportServicePassportUseCase().execute(state,identity,true,"2026-10-12T00:00:01Z").sha256)
+    }
+
+    @Test fun selectiveRedactionStripsSecretsFromJsonAndPdfAndCoversRedactedList() {
+        val withUnknown = state.copy(rules = listOf(
+            ComponentRule(
+                id = "r1",
+                vehicleId = "primary",
+                name = "Chain",
+                specification = "",
+                intervalKm = 500.0,
+                intervalDays = 30,
+                lastServicedOdometerKm = 0.0,
+                lastServicedEpochDays = 0L,
+                baselineCertainty = BaselineCertainty.UNKNOWN
+            )
+        ))
+        val opts = PassportRedactionOptions(
+            includeRegistration = false,
+            includeChassisAndEngine = false,
+            includeCosts = false,
+            includeWorkshops = false,
+            includeNotes = false
+        )
+        val bundle = ExportServicePassportUseCase().execute(withUnknown, identity, true, confirmation, opts)
+        val canonical = canonicalPassport(bundle.passport)
+        val pdfText = passportParagraphs(bundle).joinToString("\n") { it.text }
+        listOf("ঢাকা-১২", "C1", "E1", "ঢাকা গ্যারেজ", "checked", "1234.56").forEach { secret ->
+            assertFalse(canonical.contains(secret), "Canonical JSON leaked redacted value: $secret")
+            assertFalse(pdfText.contains(secret), "PDF text leaked redacted value: $secret")
+        }
+        assertEquals(listOf("registration", "chassis_engine", "costs", "workshops", "notes"), bundle.passport.redactedFields)
+        assertEquals(1, bundle.passport.unknownBaselineCount)
+        assertEquals(bundle, verifyPassportBundle(encodePassportBundle(bundle), bundle.sha256).bundle)
+        assertFailsWith<IllegalArgumentException> {
+            verifyPassportBundle(encodePassportBundle(bundle).replace("\"notes\"", "\"tampered\""))
+        }
+    }
+
+    @Test fun quotationsExpensesAndOtherBikesAreExcludedFromSelectedBikeExport() {
+        val quote = earlier.copy(id = "quote-1", visitState = "quote")
+        val expense = RideLog("Toll", "Bridge toll", "2026-10-03", 5050.0, id = "exp-1", kind = "expense", cost = 50.0)
+        val multiBike = state.copy(logs = listOf(later, earlier, quote, expense))
+            .addBike(Ride("yamaha", "MT-15", 2025, 900.0, id = "bike-2"), emptyList())
+            .copy(logs = listOf(earlier.copy(id = "b2-svc", vehicleId = "bike-2")))
+
+        val primaryBundle = ExportServicePassportUseCase().execute(multiBike, identity, true, confirmation, bikeId = "primary")
+        assertEquals(listOf("a", "b"), primaryBundle.passport.services.map { it.id })
+
+        val secondaryBundle = ExportServicePassportUseCase().execute(multiBike, identity.copy(model = "MT-15"), true, confirmation, bikeId = "bike-2")
+        assertEquals(listOf("b2-svc"), secondaryBundle.passport.services.map { it.id })
     }
 }

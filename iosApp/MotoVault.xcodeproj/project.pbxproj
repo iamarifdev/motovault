@@ -24,6 +24,7 @@
 		C90000000000000000000002 /* P08DesignMatrixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90000000000000000000001 /* P08DesignMatrixTests.swift */; };
 		C91000000000000000000002 /* P08LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91000000000000000000001 /* P08LocalizationTests.swift */; };
 		C80000000000000000000042 /* CaptureShareRuntimeFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80000000000000000000041; };
+		D10000000000000000000002 /* SharedWidgetTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10000000000000000000001 /* SharedWidgetTimeline.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		C90000000000000000000001 /* P08DesignMatrixTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVaultUITests/P08DesignMatrixTests.swift; sourceTree = "<group>"; };
 		C91000000000000000000001 /* P08LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVaultUITests/P08LocalizationTests.swift; sourceTree = "<group>"; };
 		C80000000000000000000041 /* CaptureShareRuntimeFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVault/CaptureShareRuntimeFixture.swift; sourceTree = "<group>"; };
+		D10000000000000000000001 /* SharedWidgetTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotoVault/SharedWidgetTimeline.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 				C90000000000000000000001 /* P08DesignMatrixTests.swift */,
 				C91000000000000000000001 /* P08LocalizationTests.swift */,
 				C80000000000000000000041 /* CaptureShareRuntimeFixture.swift */,
+				D10000000000000000000001 /* SharedWidgetTimeline.swift */,
 				A10000000000000000000003 /* Products */,
 				809912C0307FCDD9006BBC49 /* Recovered References */,
 			);
@@ -250,6 +253,7 @@
 				C80000000000000000000042 /* CaptureShareRuntimeFixture.swift in Sources */,
 				C80000000000000000000022 /* NativeVoiceCapture.swift in Sources */,
 				C80000000000000000000015 /* SharedCaptureInbox.swift in Sources */,
+				D10000000000000000000002 /* SharedWidgetTimeline.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

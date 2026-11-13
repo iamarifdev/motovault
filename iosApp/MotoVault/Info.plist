@@ -32,7 +32,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Capture your original vehicle documents for your private vault.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>আপনার অনুরোধে জ্বালানি বা সার্ভিস রেকর্ডে বর্তমান লোকেশন যোগ করতে।</string>
+	<string>Allow location access to auto-fill nearby fuel stations and service workshops.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Select original document photos to import into your private vault.</string>
 	<key>UIApplicationSceneManifest</key>
@@ -66,6 +66,17 @@
 	<true/>
 	<key>CaptureAppGroup</key>
 	<string>group.$(MOTOVAULT_BUNDLE_ID).capture</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.motovault.app.widget</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>motovault</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Use Bangla voice to prepare a draft after you tap Start.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

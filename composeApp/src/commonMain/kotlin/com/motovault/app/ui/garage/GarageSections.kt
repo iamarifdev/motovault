@@ -46,6 +46,7 @@ internal fun GarageHeaderSection(
     ride: Ride,
     brandWorld: BrandWorld,
     model: BikeModel?,
+    onSwitchBike: () -> Unit = {},
     onSettings: () -> Unit
 ) {
     val f = currentFmt
@@ -56,7 +57,7 @@ internal fun GarageHeaderSection(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(text = appStringResource(Res.string.garage_title), fontSize = 13.sp, color = TextSecondary)
                 Text(
                     text = ride.displayName,
@@ -66,8 +67,17 @@ internal fun GarageHeaderSection(
                     color = TextPrimary,
                     lineHeight = 37.8.sp
                 )
-                val brandLine = "${brandWorld.name} · ${f.d(ride.year.toString())}"
-                Text(text = brandLine, fontSize = 13.sp, color = TextSecondary)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    val brandLine = "${brandWorld.name} · ${f.d(ride.year.toString())}"
+                    Text(text = brandLine, fontSize = 13.sp, color = TextSecondary)
+                    VaultChip(
+                        text = appStringResource(Res.string.garage_switch_bike),
+                        onClick = onSwitchBike
+                    )
+                }
             }
             // Avatar Button to Bike Settings / Me tab
             Box(
@@ -119,8 +129,11 @@ internal fun GarageHeroSection(
                 WearStatus.OK -> "fi_circle-check.svg"
                 WearStatus.UNKNOWN -> "fi_triangle-alert.svg"
             }
-            val topItem = catalogItemOf(topWear.rule.id) ?: catalogItemOf(topWear.rule.name.lowercase())
-            val partTitle = topWear.rule.name.substringBefore(" ও ").substringBefore(" পরিষ্কার")
+            val suffix = componentSuffix(topWear.rule)
+            val topItem = catalogItemOf(topWear.rule.id)
+                ?: catalogItemOf(topWear.rule.name.lowercase())
+                ?: CATALOG_ITEMS.firstOrNull { it.ruleSuffix == suffix }
+            val partTitle = componentLabel(topWear.rule)
 
             Column(
                 modifier = Modifier

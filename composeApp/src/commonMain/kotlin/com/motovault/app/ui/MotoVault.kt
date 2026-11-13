@@ -20,6 +20,9 @@ import com.motovault.app.application.VaultRecovery
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.motovault.app.domain.privacy.*
+import com.motovault.app.domain.garage.allBikes
+import com.motovault.app.domain.garage.completeBikeOnboarding
+import com.motovault.app.domain.garage.switchToBike
 import com.motovault.app.application.VaultWriter
 import com.motovault.app.application.VaultError
 import com.motovault.app.application.fuel.FuelEntryBuilder
@@ -204,15 +207,21 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
         }
         val target = decodeReminderPayload(payload)?.let { reminderTarget(state, it) }
         if (target == null) currentToast = ToastData(message = text.reminderGone)
-        else if (target.type == "document") {
-            tab = Tab.VAULT
-            activeSheet = ActiveSheet("docView", target.id)
-        } else {
-            tab = Tab.GARAGE
-            activeSheet = ActiveSheet("service", target.id)
+        else {
+            if (target.vehicleId != null && target.vehicleId != state.ride?.id) {
+                runCatching { state.switchToBike(target.vehicleId) }.getOrNull()?.let { commit(it) }
+            }
+            if (target.type == "document") {
+                tab = Tab.VAULT
+                activeSheet = ActiveSheet("docView", target.id)
+            } else {
+                tab = Tab.GARAGE
+                activeSheet = ActiveSheet("service", target.id)
+            }
         }
         ReminderNavigation.handled(payload)
     }
+    WidgetNavigationEffect(state, loading, accessMode, onCommit = { commit(it) }, onTab = { tab = it }, onSheet = { activeSheet = it })
 
     LaunchedEffect(LaunchConfig.initialSeed, loading) {
         if (LaunchConfig.initialSeed && !loading && LaunchConfig.consumeSeed()) {
@@ -296,17 +305,9 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
                                 factoryProfileId = result.factoryProfileId,
                                 odometerConfirmedDate = today.toString()
                             )
-                            val created = VaultState.create(ride, result.baselineKm, result.baselineDate, result.baselineCertainty)
-                            val nextState = created.copy(
-                                documents = state.documents,
-                                appearance = state.appearance,
-                                language = state.language,
-                                digits = state.digits,
-                                haptics = state.haptics,
-                                reduceMotion = state.reduceMotion,
-                                textScale = state.textScale
-                            )
-                            commit(nextState) { ok ->
+                            val nextId = if (state.ride == null) "primary" else "bike-${today.toEpochDays()}-${state.allBikes().size + 1}"
+                            val created = VaultState.create(ride.copy(id = nextId, archived = false), result.baselineKm, result.baselineDate, result.baselineCertainty)
+                            commit(state.completeBikeOnboarding(created)) { ok ->
                                 if (ok) {
                                     editingRide = false
                                     tab = Tab.GARAGE
@@ -375,7 +376,8 @@ internal fun MotoVault(session: VaultWriter<VaultState>, backupRestore: VaultBac
                 onToast = { currentToast = it },
                 onRestoreSuccess = { restoreSuccessVisible = true },
                 onInspect = { inspectDocument(it) },
-                onLockNow = { lockNow() }
+                onLockNow = { lockNow() },
+                onStartOnboarding = { editingRide = true }
             )
             }
             }
