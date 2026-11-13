@@ -22,6 +22,7 @@ import { GaugeDetailSheet } from './sheets/GaugeDetailSheet'
 import { ReminderSheet } from './sheets/ReminderSheet'
 import { PrivacySheet } from './sheets/PrivacySheet'
 import { RecoverySheet } from './sheets/RecoverySheet'
+import { BikeSwitcherSheet } from './sheets/BikeSwitcherSheet'
 import { PrivacyGate } from './components/PrivacyGate'
 import { usePrivacyPreview } from './lib/privacyPreview'
 import type { ItemKey, Tab } from './types'
@@ -71,6 +72,7 @@ function renderSheet(name: string, props: Record<string, unknown> = {}) {
     case 'reminders': return <ReminderSheet key={`reminders-${props.id ?? 'global'}`} id={props.id as string | undefined} type={props.type as string | undefined} />
     case 'privacy': return <PrivacySheet key="privacy" />
     case 'recovery': return <RecoverySheet key="recovery" />
+    case 'bikeSwitcher': return <BikeSwitcherSheet key="bikeSwitcher" />
     default: return null
   }
 }
@@ -85,6 +87,7 @@ const PANELS: { id: Tab; node: () => JSX.Element }[] = [
 function Screen() {
   const ride = useStore((s) => s.ride)
   const tab = useUI((s) => s.tab)
+  const addingBike = useUI((s) => s.addingBike)
   const sheet = useUI((s) => s.sheet)
   const close = useUI((s) => s.close)
   const privacyEnabled = useStore((s) => s.settings.privacyEnabled)
@@ -114,7 +117,7 @@ function Screen() {
     return () => window.removeEventListener('keydown', h)
   }, [close])
 
-  if (!ride) return <Onboarding />
+  if (!ride || addingBike) return <Onboarding />
   if (privacyEnabled && privacyMode !== 'owner') return <PrivacyGate key={privacyGeneration} />
   return (
     <>

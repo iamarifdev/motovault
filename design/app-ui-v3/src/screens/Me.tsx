@@ -12,13 +12,40 @@ import { RECOVERY_ENTRY } from '../sheets/RecoverySheet'
 function WidgetPreview() {
   const ride = useStore((s) => s.ride)!
   const rules = useStore((s) => s.rules)
+  const garageBikes = useStore((s) => s.garageBikes ?? [])
+  const switchBike = useStore((s) => s.switchBike)
+  const privacyEnabled = useStore((s) => Boolean(s.settings.privacyEnabled))
+  const open = useUI((u) => u.open)
   const f = useFmt()
+  const activeBikes = [ride, ...garageBikes.map((b) => b.ride)].filter((b) => !b.archived)
   const top = byUrgency(rules, ride.odometer, todayISO())[0]
   return (
-    <div className="widget" aria-label="হোম স্ক্রিন উইজেটের নমুনা">
-      <div className="widget-head"><GaugeIcon size={16} aria-hidden /><b>{ride.name}</b><span>{f.km(ride.odometer)}</span></div>
-      <p className={`widget-line ${top?.status}`}>{top?.rule.name.split(' ও ')[0].split(' পরিষ্কার')[0]} · {!top || top.status === 'unknown' ? 'তথ্য নিশ্চিত নয়' : top.status === 'overdue' ? 'এখনই' : top.status === 'soon' ? 'শিগগির' : 'ব্যবধান বাকি'}</p>
-      <div className="widget-btns"><span>⛽ তেল</span><span>📏 কিমি</span></div>
+    <div style={{ padding: '0 16px 14px' }}>
+      {activeBikes.length > 1 && (
+        <div className="chips" style={{ marginBottom: 8 }}>
+          {activeBikes.map((b) => (
+            <button key={b.id ?? b.name} type="button" className={`chip ${b.name === ride.name ? 'active' : ''}`}
+              onClick={() => { haptic('tick'); if (b.id) switchBike(b.id) }}>
+              {b.name}
+            </button>
+          ))}
+        </div>
+      )}
+      <div className="widget" style={{ margin: '0 0 8px' }} aria-label="হোম স্ক্রিন উইজেট">
+        {privacyEnabled ? (
+          <p className="widget-line">অ্যাপ লক চালু আছে — আনলক না করা পর্যন্ত তথ্য গোপন থাকবে</p>
+        ) : (
+          <>
+            <div className="widget-head"><GaugeIcon size={16} aria-hidden /><b>{ride.name}</b><span>{f.km(ride.odometer)}</span></div>
+            <p className={`widget-line ${top?.status}`}>{top?.rule.name.split(' ও ')[0].split(' পরিষ্কার')[0]} · {!top || top.status === 'unknown' ? 'তথ্য নিশ্চিত নয়' : top.status === 'overdue' ? 'এখনই' : top.status === 'soon' ? 'শীঘ্রই' : 'ব্যবধান বাকি'}</p>
+          </>
+        )}
+        <div className="widget-btns">
+          <button type="button" onClick={() => { haptic('tick'); open('fuel') }}>⛽ তেল</button>
+          <button type="button" onClick={() => { haptic('tick'); open('odometer') }}>📏 কিমি</button>
+        </div>
+      </div>
+      <p className="hint" style={{ margin: 0 }}>হোম স্ক্রিনে চাপ দিয়ে ধরে MotoVault উইজেট যোগ করুন।</p>
     </div>
   )
 }
@@ -44,7 +71,7 @@ export function Me() {
       <section className="profile">
         <div className="profile-photo">{model?.photo ? <img src={model.photo} alt="" /> : <GaugeIcon size={32} aria-hidden />}</div>
         <div><b>{brand.name} {ride.name}</b><small>{f.d(String(ride.year))} · {f.km(ride.odometer)}</small></div>
-        <Button size="sm" kind="secondary" onClick={startOnboarding}>বাইক বদলান</Button>
+        <Button size="sm" kind="secondary" onClick={() => open('bikeSwitcher')}>বাইক বদলান</Button>
       </section>
 
       <section aria-label="চেহারা">
@@ -99,7 +126,21 @@ export function Me() {
 
       <section aria-label={recovery.title}>
         <SectionTitle>{recovery.title}</SectionTitle>
-        <div className="card-stack"><div className="setting"><b>{recovery.heading}</b><p>{recovery.description}</p><Button full kind="secondary" onClick={() => open('recovery')}>{recovery.action}</Button></div></div>
+        <div className="card-stack">
+          <div className="setting"><b>{recovery.heading}</b><p>{recovery.description}</p><Button full kind="secondary" onClick={() => open('recovery')}>{recovery.action}</Button></div>
+          <div className="setting"><b>ক্লাউড ব্যাকআপ (সংযুক্ত নয়)</b><p>লোকাল ভল্ট সম্পূর্ণ অফলাইনে চলে; ক্লাউড সিঙ্ক কেবল এনক্রিপ্টেড .mva ব্যবহার করে।</p><Button full kind="secondary" onClick={() => open('cloud-backup')}>ক্লাউড ব্যাকআপ অবস্থা</Button></div>
+        </div>
+      </section>
+
+      <section aria-label="সার্ভিস পাসপোর্ট ও হ্যান্ডওভার">
+        <SectionTitle>সার্ভিস পাসপোর্ট ও হ্যান্ডওভার</SectionTitle>
+        <div className="card-stack">
+          <div className="setting">
+            <b>বিক্রয় ও হস্তান্তর প্যাক (গোপনীয়তা সুরক্ষিত)</b>
+            <p>নম্বর প্লেট, চ্যাসিস ও ইঞ্জিন নম্বর ডিফল্টভাবে লুকানো থাকে; তেল, ব্যক্তিগত খরচ ও মূল কাগজ কখনো যুক্ত হয় না।</p>
+            <small className="cap">BRTA মালিকানা বদল চেকলিস্ট: স্মার্ট কার্ড, ট্যাক্স টোকেন ও বিক্রয় রশিদ অফলাইনে সাথে রাখুন।</small>
+          </div>
+        </div>
       </section>
 
       <section aria-label="নতুন ধারণা">

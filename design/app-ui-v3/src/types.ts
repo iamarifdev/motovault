@@ -24,6 +24,8 @@ export interface Settings {
 }
 
 export interface Ride {
+  id?: string
+  archived?: boolean
   brandId: string
   modelId: string
   name: string
@@ -31,6 +33,13 @@ export interface Ride {
   odometer: number
   odometerAt: string
   startedAt: string
+}
+
+export interface GarageBike {
+  ride: Ride
+  rules: Rule[]
+  logs: LogEntry[]
+  docs: VaultDoc[]
 }
 
 export interface Rule {
@@ -85,6 +94,10 @@ export interface ServiceLog {
   workshop: string
   notes: string
   resets: string[]
+  visitState?: 'paid' | 'quote'
+  repairCase?: string
+  warrantyMonths?: number
+  workshopPhone?: string
 }
 
 export type LogEntry = FuelLog | ServiceLog
@@ -122,6 +135,7 @@ export interface AppData {
   rules: Rule[]
   logs: LogEntry[]
   docs: VaultDoc[]
+  garageBikes?: GarageBike[]
   lastPrice: Record<FuelType, number>
   lastItemPrice: Partial<Record<ItemKey, number>>
   workshops: string[]

@@ -52,6 +52,10 @@ export function ServiceSheet({ item, rows: preset }: { item?: ItemKey; rows?: Pa
   const [dateKey, setDateKey] = useState<'today' | 'yesterday' | 'custom'>('today')
   const [custom, setCustom] = useState(today)
   const [workshop, setWorkshop] = useState('')
+  const [workshopPhone, setWorkshopPhone] = useState('')
+  const [visitState, setVisitState] = useState<'paid' | 'quote'>('paid')
+  const [repairCase, setRepairCase] = useState('')
+  const [warrantyMonths, setWarrantyMonths] = useState(0)
   const [smart, setSmart] = useState(false)
   const [more, setMore] = useState(false)
   const [odoTouched, setOdoTouched] = useState(false)
@@ -101,9 +105,15 @@ export function ServiceSheet({ item, rows: preset }: { item?: ItemKey; rows?: Pa
     if (reason) { haptic('error'); return }
     const snap = snapshotData()
     const lines: ServiceLine[] = rows.map((r) => ({ item: r.item, name: r.name, qty: r.qty, price: priceOf(r), detail: r.detail }))
-    const id = addService({ date, odo, lines, labour: num('labour') ?? 0, misc: num('misc') ?? 0, discount: num('discount') ?? 0, workshop, notes: '' })
+    const id = addService({
+      date, odo, lines, labour: num('labour') ?? 0, misc: num('misc') ?? 0, discount: num('discount') ?? 0,
+      workshop, notes: '', visitState, repairCase: repairCase.trim() || undefined,
+      warrantyMonths: visitState === 'paid' && warrantyMonths > 0 ? warrantyMonths : undefined,
+      workshopPhone: workshopPhone.trim() || undefined,
+    })
     haptic('success'); close()
-    showToast(`সার্ভিস যোগ হয়েছে · ${f.money(total)}${resets.length ? ` · ${f.d(String(resets.length))}টি রিমাইন্ডার নতুন` : ''}`, () => { removeLog(id); restoreData(snap) })
+    const resetNote = visitState === 'paid' && resets.length ? ` · ${f.d(String(resets.length))}টি রিমাইন্ডার নতুন` : ''
+    showToast(`${visitState === 'quote' ? 'কোটেশন সেভ হয়েছে' : 'সার্ভিস যোগ হয়েছে'} · ${f.money(total)}${resetNote}`, () => { removeLog(id); restoreData(snap) })
   }
 
   const cls = (k: string) => (e.active === k && keys ? 'active' : '')
@@ -191,6 +201,19 @@ export function ServiceSheet({ item, rows: preset }: { item?: ItemKey; rows?: Pa
       <AnimatePresence initial={false}>
         {more && (
           <motion.div key="more" className="clip" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+            <div className="row-wrap" role="group" aria-label="ভিজিটের ধরন">
+              <Chip active={visitState === 'paid'} onClick={() => setVisitState('paid')}>পরিশোধিত</Chip>
+              <Chip active={visitState === 'quote'} onClick={() => setVisitState('quote')}>হিসাব / কোটেশন</Chip>
+            </div>
+            <input className="input" placeholder="ওয়ার্কশপ ফোন (ঐচ্ছিক)" aria-label="ওয়ার্কশপ ফোন" value={workshopPhone} maxLength={20} onChange={(ev) => setWorkshopPhone(ev.target.value)} />
+            <input className="input" placeholder="একই সমস্যার নাম, যেমন ফর্ক লিক (ঐচ্ছিক)" aria-label="সমস্যার নাম" value={repairCase} maxLength={60} onChange={(ev) => setRepairCase(ev.target.value)} />
+            {visitState === 'paid' && (
+              <div className="row-wrap" role="group" aria-label="পার্টস ওয়ারেন্টি">
+                {([[0, 'ওয়ারেন্টি নেই'], [6, '৬ মাস'], [12, '১২ মাস']] as const).map(([m, label]) => (
+                  <Chip key={m} active={warrantyMonths === m} onClick={() => setWarrantyMonths(m)}>{label}</Chip>
+                ))}
+              </div>
+            )}
             <div className="trio">
               {([['labour', 'শ্রম'], ['misc', 'অন্যান্য'], ['discount', 'ছাড়']] as const).map(([k, label]) => (
                 <button key={k} type="button" className={`mini ${cls(k)}`} onClick={() => focus(k)}>

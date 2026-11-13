@@ -48,7 +48,14 @@ function Row({ log, onDelete, onEdit }: { log: LogEntry; onDelete: () => void; o
                   {svc.lines.map((l, i) => <p key={i} className="line-p"><span>{l.name}{l.detail ? ` · ${l.detail}` : ''}{l.qty > 1 ? ` × ${f.d(String(l.qty))}` : ''}</span><b>{l.price === null ? 'দাম জানা নেই' : f.money(l.price * l.qty)}</b></p>)}
                   {svc.labour > 0 && <p className="line-p"><span>শ্রম</span><b>{f.money(svc.labour)}</b></p>}
                   {svc.discount > 0 && <p className="line-p"><span>ছাড়</span><b>−{f.money(svc.discount)}</b></p>}
-                  {svc.workshop && <p>{svc.workshop}</p>}
+                  {svc.workshop && <p>{svc.workshop}{svc.workshopPhone ? ` · ${svc.workshopPhone}` : ''}</p>}
+                  {(svc.visitState === 'quote' || svc.repairCase || svc.warrantyMonths) && (
+                    <p className="svc-badges">
+                      {svc.visitState === 'quote' && <span className="tag">কোটেশন</span>}
+                      {svc.repairCase && <span className="tag">সমস্যা: {svc.repairCase}</span>}
+                      {svc.warrantyMonths ? <span className="tag">ওয়ারেন্টি {f.d(String(svc.warrantyMonths))} মাস</span> : null}
+                    </p>
+                  )}
                 </>}
                 <button type="button" className="link danger" onClick={onDelete}><Trash2 size={16} aria-hidden /> রেকর্ড মুছুন</button>
               </div>
@@ -90,6 +97,10 @@ export function History() {
     <div className="screen-pad">
       <header className="page-head"><h1>রেকর্ড</h1></header>
       <CostInsights recorded={logs.map(log => ({ date: log.date, category: log.type === 'fuel' ? 1 : 2, amount: log.type === 'fuel' ? log.amount : log.total, km: log.odo }))} onFilter={(p, c) => { setPeriod(p); setCategory(c) }} />
+      <div className="panel" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <div><b>ওয়ার্ক লেজার (ঐচ্ছিক)</b><p className="cap" style={{ margin: 0 }}>রাইড/ডেলিভারি আয় ও শিফট হিসাব</p></div>
+        <button type="button" className="link" onClick={() => open('work-ledger')}>খুলুন</button>
+      </div>
       {groups.length === 0 && <div className="empty"><p>এখনও কিছু নেই। নিচের + চাপুন।</p></div>}
       {groups.map(([key, items]) => (
         <section key={key} aria-label={f.month(`${key}-01`)}>

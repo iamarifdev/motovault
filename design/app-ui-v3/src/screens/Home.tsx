@@ -57,6 +57,9 @@ export function Home() {
           <span className="cap">আমার গ্যারেজ</span>
           <h1 className="bike-name">{ride.name}</h1>
           <span className="cap">{brand.name} · {f.d(String(ride.year))}</span>
+          <div style={{ marginTop: 6 }}>
+            <Button size="sm" kind="ghost" onClick={() => { haptic('tick'); open('bikeSwitcher') }}>বাইক বদলান</Button>
+          </div>
         </div>
         <button type="button" className="avatar" aria-label="বাইকের সেটিংস" onClick={() => { haptic('tick'); setTab('me') }}>
           {model?.photo ? <img src={model.photo} alt="" /> : <GaugeIcon size={26} aria-hidden />}
@@ -116,6 +119,20 @@ export function Home() {
           <strong>{econ === null ? '--' : <CountUp value={econ} format={(n) => f.d(n.toFixed(1))} />}<small>{f.digits === 'bn' ? 'কিমি/লি' : 'km/L'}</small></strong>
           <span className="stat-hint"><Spark values={series.slice(-6)} /></span>
         </button>
+      </motion.section>
+
+      <motion.section {...enter(4)} aria-label="মৌসুমি যত্ন ও জরুরি সহায়তা">
+        <SectionTitle>মৌসুমি যত্ন ও জরুরি সহায়তা</SectionTitle>
+        <div className="panel" style={{ display: 'grid', gap: 10 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+            <b>বর্ষা ও আবহাওয়া যত্ন (অফলাইন)</b>
+            <span className="cap">অঞ্চল: বাংলাদেশ (BMD)</span>
+          </div>
+          <p className="stat-hint" style={{ margin: 0 }}>বৃষ্টিতে চালানোর পর চেইন, ব্রেক ও ইলেকট্রিক্যাল কানেক্টর পরীক্ষা করুন।</p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <Button size="sm" kind="secondary" onClick={() => open('breakdown')}>ব্রেকডাউন ও জরুরি সহায়তা</Button>
+          </div>
+        </div>
       </motion.section>
 
       <motion.section {...enter(5)} aria-label="যন্ত্রাংশের অবস্থা">
