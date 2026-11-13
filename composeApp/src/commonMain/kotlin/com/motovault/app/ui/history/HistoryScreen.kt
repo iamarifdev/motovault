@@ -73,7 +73,9 @@ fun HistoryScreen(
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(text = appStringResource(Res.string.history_title), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                 CostOverview(state, summary, period, category, { period = it }, { category = it }, { onOpenCost(it, if (it == "cost-details") CostDetailsSelection(period, category) else null) })
-                WorkLedgerHistoryCard(state = state, onOpenWorkSheet = { onOpenCost("work-ledger", null) })
+                if (state.ledger.workModeEnabled) {
+                    WorkLedgerHistoryCard(state = state, onOpenWorkSheet = { onOpenCost("work-ledger", null) })
+                }
             }
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -123,6 +125,12 @@ fun HistoryScreen(
                     onOpenCost = onOpenCost,
                     onTransitionVisit = onTransitionVisit
                 )
+            }
+        }
+        if (!state.ledger.workModeEnabled) {
+            item(key = "work_ledger_footer") {
+                Spacer(modifier = Modifier.height(8.dp))
+                WorkLedgerHistoryCard(state = state, onOpenWorkSheet = { onOpenCost("work-ledger", null) })
             }
         }
     }

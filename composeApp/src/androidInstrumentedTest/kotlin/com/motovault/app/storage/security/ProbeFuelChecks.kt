@@ -91,6 +91,7 @@ internal fun NativeAssetInstrumentation.checkFuelEditUi() {
         val activity = startActivitySync(intent) as com.motovault.app.FuelEditFixtureActivity
         try {
             clickLowestText("Records")
+            scrollUntilText("Fuel fill · ৪.৯০ L")
             clickText("Fuel fill · ৪.৯০ L")
             scrollUntilText("Edit fuel record")
             clickText("Edit fuel record")
@@ -149,18 +150,20 @@ internal fun NativeAssetInstrumentation.checkHistoryLocale(language: String, dig
             val formatter = Fmt(if (digits == "en") Digits.EN else Digits.BN)
             val month = java.text.DateFormatSymbols.getInstance(Locale.forLanguageTag(language)).months[date.monthNumber - 1]
             val unit = if (language == "en") "km" else "কিমি"
-            waitForText("${formatter.d(date.dayOfMonth.toString())} $month · ${formatter.n(12340L)} $unit")
             if (language == "en") {
                 waitForText("Recorded costs")
-                waitForText("Fuel fill · ৪.৯০ L")
                 waitForText("All categories")
                 waitForText("Documents")
+                scrollUntilText("Fuel fill · ৪.৯০ L")
+                waitForText("Fuel fill · ৪.৯০ L")
             } else {
                 waitForText("রেকর্ডের খরচ")
-                waitForText("তেল ভরা · 4.90 লিটার")
                 waitForText("সব ক্যাটাগরি")
                 waitForText("কাগজপত্র")
+                scrollUntilText("তেল ভরা · 4.90 লিটার")
+                waitForText("তেল ভরা · 4.90 লিটার")
             }
+            waitForText("${formatter.d(date.dayOfMonth.toString())} $month · ${formatter.n(12340L)} $unit")
             uiAutomation.takeScreenshot()?.let { bitmap ->
                 File(targetContext.cacheDir, "synthetic-history-$language-$digits.png").outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
             }
