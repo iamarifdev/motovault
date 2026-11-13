@@ -1,7 +1,11 @@
 package com.motovault.app.domain.backup
 
 import com.motovault.app.domain.model.FuelDefaults
+import com.motovault.app.domain.model.GarageBikeRecord
 import com.motovault.app.domain.privacy.VaultPrivacySettings
+import com.motovault.app.domain.model.PartWarranty
+import com.motovault.app.domain.model.RepairCase
+import com.motovault.app.domain.model.WorkshopContact
 import kotlinx.serialization.Serializable
 
 private const val DEFAULT_REMINDER_WARNING_DAYS = 30
@@ -44,5 +48,14 @@ data class BackupPreferences(
     val privacy: VaultPrivacySettings = VaultPrivacySettings(),
     val lastBackupEpochMillis: Long? = null,
     val ledger: com.motovault.app.domain.ledger.LedgerPreferences = com.motovault.app.domain.ledger.LedgerPreferences(),
-    val captureReceipts: List<String> = emptyList()
+    val captureReceipts: List<String> = emptyList(),
+    val garageBikes: List<GarageBikeRecord> = emptyList(),
+    val workshopContacts: List<WorkshopContact> = emptyList(),
+    val repairCases: List<RepairCase> = emptyList(),
+    val warranties: List<PartWarranty> = emptyList(),
+    val widgetBikeId: String? = null,
+    val checkedSeasonalItems: Set<String> = emptySet(),
+    val dismissedSeasonKeys: Set<String> = emptySet(),
+    val breakdownContacts: List<com.motovault.app.domain.model.BreakdownContact> = emptyList(),
+    val weatherCache: com.motovault.app.domain.model.WeatherCacheSnapshot = com.motovault.app.domain.model.WeatherCacheSnapshot()
 )

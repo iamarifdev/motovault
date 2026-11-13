@@ -5,6 +5,8 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.execSQL
 import androidx.room.migration.Migration
+import com.motovault.app.domain.garage.allDocumentAssetIds
+import com.motovault.app.domain.garage.allDocuments
 import com.motovault.app.domain.model.ComponentRule
 import com.motovault.app.domain.model.*
 import com.motovault.app.domain.vault.*
@@ -44,6 +46,7 @@ abstract class VaultDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE) abstract suspend fun putPendingSync(row: SyncOutboxRow)
     @Query("SELECT * FROM vault_meta WHERE id = 1") abstract suspend fun meta(): VaultMetaRow?
     @Query("SELECT * FROM vehicle WHERE id = 'primary'") abstract suspend fun vehicle(): VehicleRow?
+    @Query("SELECT * FROM vehicle ORDER BY id") abstract suspend fun vehicles(): List<VehicleRow>
     @Query("SELECT * FROM schedule ORDER BY position") abstract suspend fun schedules(): List<ScheduleRow>
     @Query("SELECT * FROM ledger ORDER BY position") abstract suspend fun ledger(): List<LedgerRow>
     @Query("SELECT * FROM document ORDER BY position") abstract suspend fun documents(): List<DocumentRow>
@@ -64,10 +67,12 @@ abstract class VaultDao {
     open suspend fun read(): VaultState? {
         val settings = meta() ?: return null
         check(settings.assetFormatVersion == 1) { "This vault uses an unsupported document format. Existing records have been preserved." }
+        val prefs = codec.decodeFromString<VaultSettings>(settings.preferences)
         val logs = ledger().map { row -> codec.decodeFromString<RideLog>(row.payload).also { check(it.id == row.id) { "Ledger record does not match its stored ID." } } }
         val docs = documents().map { row -> codec.decodeFromString<VaultDocument>(row.payload).also { check(it.id == row.id) { "Document record does not match its stored ID." } } }
-        check(references().toSet() == assetRows(docs).toSet()) { "Document asset references could not be read. Existing storage has been preserved." }
-        return codec.decodeFromString<VaultSettings>(settings.preferences).applyTo(VaultState(
+        val allDocs = (docs + prefs.garageBikes.flatMap { it.documents }).distinctBy { it.id }
+        check(references().toSet() == assetRows(allDocs).toSet()) { "Document asset references could not be read. Existing storage has been preserved." }
+        return prefs.applyTo(VaultState(
             ride = vehicle()?.let { codec.decodeFromString<Ride>(it.payload) },
             rules = schedules().map { row -> codec.decodeFromString<ComponentRule>(row.payload).also { check(it.id == row.id) { "Schedule does not match its stored ID." } } },
             logs = logs, documents = docs, appearance = Appearance.valueOf(settings.appearance), autoLocation = settings.autoLocation,
@@ -82,10 +87,16 @@ abstract class VaultDao {
         val imported = legacyImported ?: meta()?.legacyImported ?: false
         require(state.rules.map { it.id }.distinct().size == state.rules.size) { "Duplicate schedule IDs." }
         require(state.logs.map { it.id }.distinct().size == state.logs.size) { "Duplicate ledger IDs." }
+        val allDocs = state.allDocuments()
         require(state.documents.map { it.id }.distinct().size == state.documents.size) { "Duplicate document IDs." }
-        val refs = assetRows(state.documents)
+        require(allDocs.map { it.id }.distinct().size == allDocs.size) { "Duplicate garage document IDs." }
+        val refs = assetRows(allDocs)
         clearReferences(); clearDocuments(); clearLedger(); clearSchedules(); clearVehicle()
-        state.ride?.let { putVehicle(VehicleRow(payload = codec.encodeToString(it))) }
+        state.ride?.let { putVehicle(VehicleRow(id = "primary", payload = codec.encodeToString(it))) }
+        state.garageBikes.forEach { gb ->
+            val rowId = if (gb.ride.id == "primary") "garage_primary" else gb.ride.id
+            putVehicle(VehicleRow(id = rowId, payload = codec.encodeToString(gb.ride)))
+        }
         putSchedules(state.rules.mapIndexed { index, rule -> ScheduleRow(rule.id, index, codec.encodeToString(rule)) })
         putLedger(state.logs.mapIndexed { index, entry -> LedgerRow(entry.id, index, codec.encodeToString(entry)) })
         putDocuments(state.documents.mapIndexed { index, document -> DocumentRow(document.id, index, codec.encodeToString(document)) })

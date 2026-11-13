@@ -43,5 +43,6 @@ data class BackupLog(
     val fuelType: String = FuelDefaults.OCTANE, val fuelPrice: Double? = null,
     val documentId: String? = null, val renewalId: String? = null,
     val costPoisha: Long? = null, val expenseCategory: String? = null,
-    val missedFuelFill: Boolean = false
+    val missedFuelFill: Boolean = false,
+    val vehicleId: String = "primary"
 )

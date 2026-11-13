@@ -15,5 +15,7 @@ data class BackupRide(
     val modelId: String? = null, val modelName: String = "", val registration: String = "",
     val market: BackupRideMarket = BackupRideMarket.UNKNOWN, val emission: BackupRideEmission = BackupRideEmission.UNKNOWN,
     val modelCode: String = "", val factoryProfileId: String? = null,
-    val odometerConfirmedDate: String? = null
+    val odometerConfirmedDate: String? = null,
+    val id: String = "primary",
+    val archived: Boolean = false
 )

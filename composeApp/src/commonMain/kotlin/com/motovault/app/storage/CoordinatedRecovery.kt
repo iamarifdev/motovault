@@ -4,8 +4,8 @@ import com.motovault.app.application.PreparedVaultChange
 import com.motovault.app.application.VaultRecovery
 import com.motovault.app.application.RecoverySummary
 import com.motovault.app.application.VaultWriter
+import com.motovault.app.domain.garage.allDocumentAssetIds
 import com.motovault.app.domain.vault.VaultState
-import com.motovault.app.domain.model.assetIds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
@@ -21,7 +21,7 @@ internal class CoordinatedRecovery(
         writer.commitPrepared(expectedRevision, prepare = {
             val state = withContext(Dispatchers.IO) {
                 snapshots.read(recoveryId).also { snapshot ->
-                    snapshot.documents.flatMap { it.assetIds() }.toSet().forEach { id ->
+                    snapshot.allDocumentAssetIds().forEach { id ->
                         check(readAsset(id).isNotEmpty()) { "A recovery original is unavailable." }
                     }
                 }

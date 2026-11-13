@@ -40,12 +40,21 @@ data class VaultState(
     val privacy: com.motovault.app.domain.privacy.VaultPrivacySettings = com.motovault.app.domain.privacy.VaultPrivacySettings(),
     val lastBackupEpochMillis: Long? = null,
     val ledger: com.motovault.app.domain.ledger.LedgerPreferences = com.motovault.app.domain.ledger.LedgerPreferences(),
-    val captureReceipts: List<String> = emptyList()
+    val captureReceipts: List<String> = emptyList(),
+    val garageBikes: List<GarageBikeRecord> = emptyList(),
+    val workshopContacts: List<com.motovault.app.domain.model.WorkshopContact> = emptyList(),
+    val repairCases: List<com.motovault.app.domain.model.RepairCase> = emptyList(),
+    val warranties: List<com.motovault.app.domain.model.PartWarranty> = emptyList(),
+    val widgetBikeId: String? = null,
+    val checkedSeasonalItems: Set<String> = emptySet(),
+    val dismissedSeasonKeys: Set<String> = emptySet(),
+    val breakdownContacts: List<com.motovault.app.domain.model.BreakdownContact> = emptyList(),
+    val weatherCache: com.motovault.app.domain.model.WeatherCacheSnapshot = com.motovault.app.domain.model.WeatherCacheSnapshot()
 ) {
     /** Only linked, matching recorded service can establish certainty for an older schedule. */
     fun confirmedRules() = rules.map { rule ->
         if (rule.baselineCertainty != com.motovault.app.domain.model.BaselineCertainty.UNKNOWN) rule
-        else if (logs.any { log -> !log.isFuel && !log.isDocumentFee &&
+        else if (logs.any { log -> log.isPaidService &&
             (rule.id in log.scheduleIds || log.componentId == rule.id) &&
             log.odometer == rule.lastServicedOdometerKm &&
             runCatching { LocalDate.parse(log.date).toEpochDays().toLong() }.getOrNull() == rule.lastServicedEpochDays

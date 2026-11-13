@@ -33,7 +33,9 @@ data class Ride(
     val modelId: String? = null, val modelName: String = "", val registration: String = "",
     val market: RideMarket = RideMarket.UNKNOWN, val emission: RideEmission = RideEmission.UNKNOWN,
     val modelCode: String = "", val factoryProfileId: String? = null,
-    val odometerConfirmedDate: String? = null
+    val odometerConfirmedDate: String? = null,
+    val id: String = "primary",
+    val archived: Boolean = false
 ) {
     fun confirmedMileage(value: Double, date: LocalDate): Ride {
         require(value.isFinite() && value in 0.0..9999999.0 && date <= today())
@@ -56,10 +58,17 @@ data class RideLog(
     val fuelPrice: Double? = null,
     val documentId: String? = null, val renewalId: String? = null,
     val costPoisha: Long? = null, val expenseCategory: String? = null,
-    val missedFuelFill: Boolean = false
+    val missedFuelFill: Boolean = false,
+    val vehicleId: String = "primary",
+    val visitState: String = "paid",
+    val workshopId: String? = null,
+    val repairCaseId: String? = null,
+    val warrantyIds: List<String> = emptyList()
 ) {
     val isFuel: Boolean get() = kind == "fuel" || title == "Fuel fill-up"
     val isDocumentFee: Boolean get() = kind == "document_fee"
+    val isPaidService: Boolean
+        get() = !isFuel && !isDocumentFee && kind != "expense" && (visitState.isBlank() || visitState == "paid")
     val fuelLiters: Double? get() = liters ?: if (isFuel) detail.substringBefore(" L").toDoubleOrNull() else null
 }
 
@@ -78,12 +87,30 @@ data class VaultDocument(
     val reminderSnoozedUntil: String? = null,
     val revision: Int = 0,
     val renewals: List<DocumentRenewal> = emptyList(),
-    val checkedRenewalSteps: Set<String> = emptySet()
+    val checkedRenewalSteps: Set<String> = emptySet(),
+    val vehicleId: String? = null
 ) {
     val daysRemaining: Int? get() = expiry.takeIf { it.isNotBlank() }?.let {
         runCatching { LocalDate.parse(it).toEpochDays() - today().toEpochDays() }.getOrNull()
     }
+    val isOwnerScoped: Boolean
+        get() = vehicleId == null && (
+            kind.equals("licence", ignoreCase = true) ||
+                title.equals("Driving licence", ignoreCase = true) ||
+                title.equals("Driving license", ignoreCase = true) ||
+                title == "ড্রাইভিং লাইসেন্স"
+            )
 }
+
+@Serializable
+data class GarageBikeRecord(
+    val ride: Ride,
+    val rules: List<ComponentRule> = emptyList(),
+    val logs: List<RideLog> = emptyList(),
+    val documents: List<VaultDocument> = emptyList(),
+    val repairCases: List<RepairCase> = emptyList(),
+    val warranties: List<PartWarranty> = emptyList()
+)
 
 fun VaultDocument.assetIds(): Set<String> =
     pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() +

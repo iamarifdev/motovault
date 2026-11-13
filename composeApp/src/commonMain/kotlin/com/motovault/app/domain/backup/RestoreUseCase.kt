@@ -1,5 +1,6 @@
 package com.motovault.app.domain.backup
 
+import com.motovault.app.domain.model.assetIds as modelAssetIds
 import kotlinx.serialization.json.Json
 
 object RestoreUseCase {
@@ -95,7 +96,8 @@ object RestoreUseCase {
         }
 
         // Verify document references: all referenced assets must be present
-        val referencedInDocs = payload.documents.flatMap { it.assetIds() }.toSet()
+        val referencedInDocs = (payload.documents.flatMap { it.assetIds() } +
+            payload.preferences.garageBikes.flatMap { bike -> bike.documents.flatMap { it.modelAssetIds() } }).toSet()
         val missingFromManifest = referencedInDocs - manifestAssetIds
         require(missingFromManifest.isEmpty()) {
             "Backup is incomplete: referenced document assets are missing: $missingFromManifest"

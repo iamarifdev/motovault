@@ -35,11 +35,12 @@ object CostLedger {
     }
 
     fun summarize(logs: List<RideLog>, today: LocalDate, period: CostPeriod, category: CostCategory? = null): CostSummary {
+        val eligibleLogs = logs.filterNot { it.visitState.isNotBlank() && it.visitState != "paid" }
         val issues = mutableSetOf<CostIssue>()
-        if (logs.map { it.id }.distinct().size != logs.size ||
-            logs.mapNotNull { it.renewalId }.let { it.distinct().size != it.size }) issues += CostIssue.DUPLICATE
+        if (eligibleLogs.map { it.id }.distinct().size != eligibleLogs.size ||
+            eligibleLogs.mapNotNull { it.renewalId }.let { it.distinct().size != it.size }) issues += CostIssue.DUPLICATE
         val start = start(period, today)
-        val dated = logs.mapNotNull { log ->
+        val dated = eligibleLogs.mapNotNull { log ->
             val date = runCatching { LocalDate.parse(log.date) }.getOrNull()
             if (date == null || amount(log) == null) issues += CostIssue.INVALID_RECORD
             date?.let { log to it }

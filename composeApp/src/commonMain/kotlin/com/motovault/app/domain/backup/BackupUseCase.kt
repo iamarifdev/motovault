@@ -1,5 +1,6 @@
 package com.motovault.app.domain.backup
 
+import com.motovault.app.domain.model.assetIds as modelAssetIds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -31,7 +32,9 @@ object BackupUseCase {
         progress?.invoke(0.05f, BackupProgress(BackupProgressStage.PREPARING))
 
         val payload = snapshot.payload
-        require(snapshot.assetIds == payload.documents.flatMap { it.assetIds() }.toSet()) {
+        val referencedAssets = (payload.documents.flatMap { it.assetIds() } +
+            payload.preferences.garageBikes.flatMap { bike -> bike.documents.flatMap { it.modelAssetIds() } }).toSet()
+        require(snapshot.assetIds == referencedAssets) {
             "Backup asset inventory does not match document references."
         }
 

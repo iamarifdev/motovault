@@ -44,4 +44,34 @@ class BackupOperationsAdapterTest {
         assertFailsWith<CancellationException> { cancelled.create(state, 0, "valid password") { _, _ -> } }
         Unit
     }
+
+    @Test
+    fun multiBikeBackupIncludesNonActiveGarageAssetsAndArchivedBikes() = runBlocking {
+        val page1 = DocumentPage("bike1-orig.jpg", "bike1-prev.jpg", "image/jpeg", 10, 10, "Front")
+        val bike1Doc = VaultDocument("Tax token", "TT-1", "Owner", "2028-01-01", id = "doc-b1", kind = "tax", pages = listOf(page1))
+        val bike1 = VaultState(
+            ride = Ride("yamaha", "Std", 2023, 5000.0, id = "primary", archived = true, modelName = "R15"),
+            documents = listOf(bike1Doc)
+        )
+        val garage = com.motovault.app.domain.model.GarageBikeRecord(
+            ride = bike1.ride!!,
+            rules = bike1.rules,
+            logs = bike1.logs,
+            documents = bike1.documents
+        )
+        val ownerDoc = VaultDocument("Driving licence", "DL-1", "Owner", "2029-01-01", id = "doc-owner", kind = "licence")
+        val multiState = VaultState(
+            ride = Ride("honda", "Std", 2024, 300.0, id = "bike-2", modelName = "CBR"),
+            documents = listOf(ownerDoc),
+            garageBikes = listOf(garage)
+        )
+        val reads = mutableSetOf<String>()
+        val adapter = BackupOperationsAdapter(::documentSha256) { id -> reads += id; id.encodeToByteArray() }
+        val archive = adapter.create(multiState, 2, "valid password") { _, _ -> }
+        assertEquals(setOf("bike1-orig.jpg", "bike1-prev.jpg"), reads)
+        val preview = adapter.preview(multiState, archive, "valid password")
+        assertEquals(2, preview.validatedAssetCount)
+        assertEquals(1, preview.payload.preferences.garageBikes.size)
+        assertTrue(preview.payload.preferences.garageBikes.single().ride.archived)
+    }
 }

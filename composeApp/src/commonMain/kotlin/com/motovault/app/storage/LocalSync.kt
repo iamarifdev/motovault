@@ -2,8 +2,11 @@ package com.motovault.app.storage
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.motovault.app.domain.garage.allDocumentAssetIds
+import com.motovault.app.domain.garage.allDocuments
+import com.motovault.app.domain.garage.allLogs
+import com.motovault.app.domain.garage.allRules
 import com.motovault.app.domain.vault.VaultState
-import com.motovault.app.domain.model.assetIds
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -46,10 +49,10 @@ internal object LocalSyncProtocol {
         fun removed(retained: List<String>, prior: List<String>, current: List<String>) =
             ((retained + (prior.toSet() - current.toSet())) - current.toSet()).distinct().sorted()
         val deleted = SyncTombstones(
-            documents = removed(old.documents, before?.documents.orEmpty().map { it.id }, next.documents.map { it.id }),
-            ledger = removed(old.ledger, before?.logs.orEmpty().map { it.id }, next.logs.map { it.id }),
-            schedules = removed(old.schedules, before?.rules.orEmpty().map { it.id }, next.rules.map { it.id }),
-            assets = removed(old.assets, before?.documents.orEmpty().flatMap { it.assetIds() }, next.documents.flatMap { it.assetIds() }),
+            documents = removed(old.documents, before?.allDocuments().orEmpty().map { it.id }, next.allDocuments().map { it.id }),
+            ledger = removed(old.ledger, before?.allLogs().orEmpty().map { it.id }, next.allLogs().map { it.id }),
+            schedules = removed(old.schedules, before?.allRules().orEmpty().map { it.id }, next.allRules().map { it.id }),
+            assets = removed(old.assets, before?.allDocumentAssetIds().orEmpty().toList(), next.allDocumentAssetIds().toList()),
             vehicleRemoved = next.ride == null && (old.vehicleRemoved || before?.ride != null)
         )
         check(previous == null || previous.revision < Long.MAX_VALUE) { "Local revision limit reached." }

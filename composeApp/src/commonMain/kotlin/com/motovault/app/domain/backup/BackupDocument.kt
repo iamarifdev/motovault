@@ -31,7 +31,8 @@ data class BackupDocument(
     val reminder: Boolean = false, val kind: String = "", val reminderWarningDays: Int? = null,
     val reminderSnoozedUntil: String? = null, val revision: Int = 0,
     val renewals: List<BackupDocumentRenewal> = emptyList(),
-    val checkedRenewalSteps: List<String> = emptyList()
+    val checkedRenewalSteps: List<String> = emptyList(),
+    val vehicleId: String? = null
 ) {
     fun assetIds(): Set<String> = pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() +
         listOfNotNull(originalPdf) + renewals.mapNotNull { it.receiptId }

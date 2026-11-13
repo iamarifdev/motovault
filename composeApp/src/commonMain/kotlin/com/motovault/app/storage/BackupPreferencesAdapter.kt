@@ -15,7 +15,16 @@ internal fun VaultSettings.toBackupPreferences() = BackupPreferences(
     serviceReminders = serviceReminders, docReminders = docReminders,
     lastPrices = lastPrices, lastItemPrices = lastItemPrices, workshops = workshops, places = places,
     reminderPolicy = BackupReminderPolicy(reminderPolicy.warningDays, reminderPolicy.minuteOfDay),
-    privacy = privacy, lastBackupEpochMillis = lastBackupEpochMillis, ledger = ledger, captureReceipts = captureReceipts
+    privacy = privacy, lastBackupEpochMillis = lastBackupEpochMillis, ledger = ledger, captureReceipts = captureReceipts,
+    garageBikes = garageBikes,
+    workshopContacts = workshopContacts,
+    repairCases = repairCases,
+    warranties = warranties,
+    widgetBikeId = widgetBikeId,
+    checkedSeasonalItems = checkedSeasonalItems,
+    dismissedSeasonKeys = dismissedSeasonKeys,
+    breakdownContacts = breakdownContacts,
+    weatherCache = weatherCache
 )
 
 internal fun BackupPreferences.toVaultSettings() = VaultSettings(
@@ -24,5 +33,14 @@ internal fun BackupPreferences.toVaultSettings() = VaultSettings(
     serviceReminders = serviceReminders, docReminders = docReminders,
     lastPrices = lastPrices, lastItemPrices = lastItemPrices, workshops = workshops, places = places,
     reminderPolicy = ReminderPolicy(reminderPolicy.warningDays, reminderPolicy.minuteOfDay),
-    privacy = privacy, lastBackupEpochMillis = lastBackupEpochMillis, ledger = ledger, captureReceipts = captureReceipts
+    privacy = privacy, lastBackupEpochMillis = lastBackupEpochMillis, ledger = ledger, captureReceipts = captureReceipts,
+    garageBikes = garageBikes,
+    workshopContacts = workshopContacts,
+    repairCases = repairCases,
+    warranties = warranties,
+    widgetBikeId = widgetBikeId,
+    checkedSeasonalItems = checkedSeasonalItems,
+    dismissedSeasonKeys = dismissedSeasonKeys,
+    breakdownContacts = breakdownContacts,
+    weatherCache = weatherCache
 )

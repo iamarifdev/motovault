@@ -28,7 +28,8 @@ data class CaptureDraft(
     val amounts: List<CaptureCandidate<Long>>,
     val odometers: List<CaptureCandidate<Double>>,
     val service: CapturedService,
-    val issues: Set<CaptureIssue>
+    val issues: Set<CaptureIssue>,
+    val targetBikeId: String = "primary"
 ) {
     val requiresChoice get() = CaptureIssue.AMBIGUOUS_AMOUNT in issues || CaptureIssue.AMBIGUOUS_ODOMETER in issues
     val canReview get() = issues.none { it in setOf(CaptureIssue.EMPTY, CaptureIssue.TOO_LONG, CaptureIssue.DUPLICATE_SHARE) }

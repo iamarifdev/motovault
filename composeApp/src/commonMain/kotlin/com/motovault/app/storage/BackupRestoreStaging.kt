@@ -8,7 +8,9 @@ import com.motovault.app.domain.backup.MvaZipArchive
 import com.motovault.app.domain.backup.RestoreUseCase
 import com.motovault.app.domain.backup.hexToByteArray
 import com.motovault.app.domain.backup.assetAuthenticationData
+import com.motovault.app.domain.garage.mapDocumentsAcrossGarage
 import com.motovault.app.domain.model.Appearance
+import com.motovault.app.domain.model.assetIds
 import com.motovault.app.domain.vault.VaultState
 import com.motovault.app.domain.model.recordId
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +40,8 @@ internal object BackupRestoreStaging {
                 val derived = BackupCrypto.deriveKey(passphrase, salt, iterations = validated.manifest.kdf.iterations)
                 Triple(validated, archiveEntries, derived)
             }
-            val referenced = preview.payload.documents.flatMap { it.assetIds() }.toSet()
+            val referenced = (preview.payload.documents.flatMap { it.assetIds() } +
+                preview.payload.preferences.garageBikes.flatMap { bike -> bike.documents.flatMap { it.assetIds() } }).toSet()
             val replacements = mutableMapOf<String, String>()
             for (asset in preview.manifest.assets.filter { it.assetId in referenced }) {
                 currentCoroutineContext().ensureActive()
@@ -66,30 +69,30 @@ internal object BackupRestoreStaging {
             currentCoroutineContext().ensureActive()
             val appearance = runCatching { Appearance.valueOf(preview.payload.appearance) }.getOrDefault(Appearance.SYSTEM)
             val restoredLogs = preview.payload.logs.map { it.toRideLog() }
+            fun mapped(id: String?) = id?.let { replacements[it] ?: it }
+            fun remapDocAssets(doc: com.motovault.app.domain.model.VaultDocument) = doc.copy(
+                originalPdf = mapped(doc.originalPdf),
+                pages = doc.pages.map { page ->
+                    page.copy(
+                        originalId = mapped(page.originalId)!!,
+                        previewId = mapped(page.previewId)!!,
+                        acceptedId = mapped(page.acceptedId)
+                    )
+                },
+                renewals = doc.renewals.map { renewal -> renewal.copy(receiptId = mapped(renewal.receiptId)) }
+            )
             val state = preview.payload.preferences.toVaultSettings().applyTo(
                 VaultState(
                     ride = preview.payload.ride?.toRide(),
                     rules = preview.payload.rules,
                     logs = restoredLogs,
-                    documents = preview.payload.documents.map { document ->
-                        fun mapped(id: String?) = id?.let { replacements[it] ?: it }
-                        val restored = document.toVaultDocument()
-                        restored.copy(
-                            originalPdf = mapped(document.originalPdf),
-                            pages = restored.pages.map { page -> page.copy(
-                                originalId = mapped(page.originalId)!!,
-                                previewId = mapped(page.previewId)!!,
-                                acceptedId = mapped(page.acceptedId)
-                            ) },
-                            renewals = restored.renewals.map { renewal -> renewal.copy(receiptId = mapped(renewal.receiptId)) }
-                        )
-                    },
+                    documents = preview.payload.documents.map { remapDocAssets(it.toVaultDocument()) },
                     appearance = appearance,
                     autoLocation = preview.payload.autoLocation,
                     economy = VaultState.calculateEconomy(restoredLogs),
                     lastFuelOdometer = restoredLogs.filter { it.isFuel }.maxOfOrNull { it.odometer }
                 )
-            )
+            ).mapDocumentsAcrossGarage(::remapDocAssets)
             return StagedRestore(state, created.toSet())
         } catch (failure: Throwable) {
             withContext(NonCancellable) {

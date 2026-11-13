@@ -14,7 +14,8 @@ internal fun VaultDocument.toBackupDocument() = BackupDocument(
     originalPdf = originalPdf, pdfPageCount = pdfPageCount, details = details,
     detailsConfirmed = detailsConfirmed, extractionCandidates = extractionCandidates, capturedAt = capturedAt,
     reminder = reminder, kind = kind, reminderWarningDays = reminderWarningDays, reminderSnoozedUntil = reminderSnoozedUntil,
-    revision = revision, renewals = renewals.map { it.toBackupRenewal() }, checkedRenewalSteps = checkedRenewalSteps.toList()
+    revision = revision, renewals = renewals.map { it.toBackupRenewal() }, checkedRenewalSteps = checkedRenewalSteps.toList(),
+    vehicleId = vehicleId
 )
 
 internal fun DocumentRenewal.toBackupRenewal() = BackupDocumentRenewal(
@@ -34,5 +35,6 @@ internal fun BackupDocument.toVaultDocument() = VaultDocument(
     originalPdf = originalPdf, pdfPageCount = pdfPageCount, details = details,
     detailsConfirmed = detailsConfirmed, extractionCandidates = extractionCandidates, capturedAt = capturedAt,
     reminder = reminder, kind = kind, reminderWarningDays = reminderWarningDays, reminderSnoozedUntil = reminderSnoozedUntil,
-    revision = revision, renewals = renewals.map { it.toDocumentRenewal() }, checkedRenewalSteps = checkedRenewalSteps.toSet()
+    revision = revision, renewals = renewals.map { it.toDocumentRenewal() }, checkedRenewalSteps = checkedRenewalSteps.toSet(),
+    vehicleId = vehicleId
 )

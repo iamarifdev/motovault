@@ -4,6 +4,8 @@ import androidx.room.Room
 import androidx.room.useWriterConnection
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
+import com.motovault.app.domain.garage.addBike
+import com.motovault.app.domain.garage.allDocumentAssetIds
 import com.motovault.app.storage.*
 import com.motovault.app.ui.*
 import kotlinx.coroutines.runBlocking
@@ -251,5 +253,30 @@ class VaultDatabaseTest {
         assertFailsWith<IllegalStateException> { db.vault().migrate(VaultState.encode(original)) }
         assertEquals("damaged-id", db.vault().documents().single().id)
         db.close()
+    }
+
+    @Test fun multiBikeStateAndGarageAssetReferencesPersistAcrossReopenAndSwitch() = runBlocking {
+        val location = path()
+        val db = open(location)
+        val ownerDoc = VaultDocument(
+            title = "Driving licence", number = "DL-9", holder = "Owner",
+            expiry = "2028-05-01", id = "doc-owner", kind = "licence", vehicleId = null
+        )
+        val first = fixture().let { it.copy(documents = it.documents + ownerDoc) }
+        val second = first.addBike(
+            Ride("honda", "ABS", 2024, 500.0, "honda-cbr150r", "CBR 150R", registration = "DHK-22"),
+            listOf(com.motovault.app.domain.model.ComponentRule("r2-oil", "b2", "Engine oil", "Oil", 3000.0, 180, 500.0, today().toEpochDays().toLong()))
+        ).logFuel(600.0, 2.5, cost = 330.0)
+        db.vault().replace(second)
+        assertEquals(2, db.vault().vehicles().size)
+        assertEquals(setOf("document-1"), db.vault().references().map { it.documentId }.toSet())
+        db.close()
+
+        val reopened = open(location)
+        val readBack = reopened.vault().read()!!
+        assertEquals(second, readBack)
+        assertEquals(1, readBack.garageBikes.size)
+        assertTrue("raw-1.jpg" in readBack.allDocumentAssetIds())
+        reopened.close()
     }
 }

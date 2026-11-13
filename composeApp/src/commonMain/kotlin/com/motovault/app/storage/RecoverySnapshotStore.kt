@@ -1,7 +1,7 @@
 package com.motovault.app.storage
 
+import com.motovault.app.domain.garage.allDocumentAssetIds
 import com.motovault.app.domain.vault.VaultState
-import com.motovault.app.domain.model.assetIds
 import com.motovault.app.application.RecoverySummary
 
 // Current recovery IDs use the existing record ID format followed by the envelope's file suffix.
@@ -28,7 +28,7 @@ internal class RecoverySnapshotStore(
     suspend fun referencedAssets(): Set<String> = dao.restoreRecoveryRows().flatMap { row ->
         val plaintext = open(row.id, row.payload).decodeToString()
         requireNotNull(VaultState.decode(plaintext)) { "Recovery snapshot could not be read." }
-            .documents.flatMap { it.assetIds() }
+            .allDocumentAssetIds()
     }.toSet()
 
     suspend fun read(id: String): VaultState {

@@ -6,13 +6,13 @@ import com.motovault.app.domain.model.*
 internal fun Ride.toBackupRide() = BackupRide(
     brandId, edition, year, odometer, modelId, modelName, registration,
     BackupRideMarket.valueOf(market.name), BackupRideEmission.valueOf(emission.name),
-    modelCode, factoryProfileId, odometerConfirmedDate
+    modelCode, factoryProfileId, odometerConfirmedDate, id, archived
 )
 
 internal fun BackupRide.toRide() = Ride(
     brandId, edition, year, odometer, modelId, modelName, registration,
     RideMarket.valueOf(market.name), RideEmission.valueOf(emission.name),
-    modelCode, factoryProfileId, odometerConfirmedDate
+    modelCode, factoryProfileId, odometerConfirmedDate, id, archived
 )
 
 internal fun backupRideDisplayName(ride: BackupRide): String = ride.toRide().modelName.ifBlank { com.motovault.app.domain.model.legacyBikeName(ride.brandId) ?: "Motorcycle" }
@@ -35,7 +35,7 @@ internal fun RideLog.toBackupLog() = BackupLog(
     serviceLines.map { it.toBackupLine() }, serviceLabourPoisha, serviceMiscellaneousPoisha,
     serviceDiscountPoisha, serviceTotalPoisha, scheduleIds,
     location?.let { BackupLocation(it.latitude, it.longitude, it.accuracyMeters, it.capturedAtEpochMillis, it.source) },
-    locationLabel, receiptBase64, fuelType, fuelPrice, documentId, renewalId, costPoisha, expenseCategory, missedFuelFill
+    locationLabel, receiptBase64, fuelType, fuelPrice, documentId, renewalId, costPoisha, expenseCategory, missedFuelFill, vehicleId
 )
 
 internal fun BackupLog.toRideLog() = RideLog(
@@ -43,5 +43,5 @@ internal fun BackupLog.toRideLog() = RideLog(
     serviceLines.map { it.toServiceLine() }, serviceLabourPoisha, serviceMiscellaneousPoisha,
     serviceDiscountPoisha, serviceTotalPoisha, scheduleIds,
     location?.let { GeoCapture(it.latitude, it.longitude, it.accuracyMeters, it.capturedAtEpochMillis, it.source) },
-    locationLabel, receiptBase64, fuelType, fuelPrice, documentId, renewalId, costPoisha, expenseCategory, missedFuelFill
+    locationLabel, receiptBase64, fuelType, fuelPrice, documentId, renewalId, costPoisha, expenseCategory, missedFuelFill, vehicleId
 )

@@ -3,9 +3,9 @@ package com.motovault.app.storage
 import com.motovault.app.domain.backup.BackupCurrentSummary
 import com.motovault.app.domain.backup.BackupSnapshot
 import com.motovault.app.domain.backup.VaultExportPayload
+import com.motovault.app.domain.garage.allDocumentAssetIds
 import com.motovault.app.domain.vault.VaultState
 import com.motovault.app.domain.vault.VaultSettings
-import com.motovault.app.domain.model.assetIds
 
 /** Maps the legacy persisted state to the data needed by archive preview. */
 internal fun VaultState.backupCurrentSummary() = BackupCurrentSummary(
@@ -22,7 +22,7 @@ internal fun VaultState.backupSnapshot() = BackupSnapshot(
         preferences = VaultSettings.from(this).toBackupPreferences(), appearance = appearance.name,
         autoLocation = autoLocation, legacyImported = false
     ),
-    assetIds = documents.flatMap { it.assetIds() }.toSet(),
+    assetIds = allDocumentAssetIds(),
     bikeDisplayName = ride?.modelName?.ifBlank { "Motorcycle" } ?: "Motorcycle",
     odometer = ride?.odometer ?: 0.0
 )

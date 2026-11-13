@@ -2,9 +2,10 @@ package com.motovault.app.storage
 
 import com.motovault.app.application.VaultCoordinator
 import com.motovault.app.application.VaultWriter
+import com.motovault.app.domain.garage.allDocumentAssetIds
+import com.motovault.app.domain.garage.allDocuments
 import com.motovault.app.domain.model.VaultDocument
 import com.motovault.app.domain.vault.VaultState
-import com.motovault.app.domain.model.assetIds
 import kotlinx.coroutines.CoroutineScope
 
 /** Compatibility adapter while persisted models remain in the UI package. */
@@ -22,10 +23,10 @@ internal class VaultSession(
     initialState = VaultState(),
     restore = restore,
     write = write,
-    assetIds = { state -> state.documents.flatMap { it.assetIds() }.toSet() },
+    assetIds = { state -> state.allDocumentAssetIds() },
     cleanup = cleanup,
     recover = recover,
-    reconcile = { state -> reconcile(state.documents) },
+    reconcile = { state -> reconcile(state.allDocuments()) },
     writePrepared = writePrepared,
     recoveryAssetIds = recoveryAssetIds
 )
