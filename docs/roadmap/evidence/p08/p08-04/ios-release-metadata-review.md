@@ -16,34 +16,17 @@ sign-off or signing material are flagged, not applied.
 | Extension deployment target | iOS 15.0 |
 | Device family | iPhone + iPad (`1,2`) |
 
-## Usage descriptions and localization — **open gap**
+## Usage descriptions and localization — **resolved in simulator/source (13 November 2026)**
 
-`MotoVault/Info.plist` declares camera, microphone, speech recognition, photo
-library and when-in-use location usage strings. Localized overrides exist in
-`en.lproj/InfoPlist.strings` and `bn.lproj/InfoPlist.strings` **only for camera,
-microphone and speech recognition**. The result at this revision:
-
-| Key | Base Info.plist | bn override | en override | Effect |
-| --- | --- | --- | --- | --- |
-| `NSCameraUsageDescription` | EN | BN | EN | OK both languages |
-| `NSMicrophoneUsageDescription` | EN | BN | EN | OK both languages |
-| `NSSpeechRecognitionUsageDescription` | EN | BN | EN | OK both languages |
-| `NSLocationWhenInUseUsageDescription` | **BN** | missing | missing | English UI shows Bangla permission text |
-| `NSPhotoLibraryUsageDescription` | **EN** | missing | missing | Bangla UI shows English permission text |
-
-This is a native-permission localization defect discovered after the P08-05 copy
-sign-off. **Fix requires new EN/BN copy and a named human review**, so it is
-proposed here rather than silently edited:
-
-- BN photo library: "ভল্টে রাখতে ডকুমেন্টের ছবি বেছে নিন।"
-- EN location: "Attach current location to a fuel or service record only when you ask."
-- EN photo library (keep base): "Select original document photos to import into your private vault."
-- BN location (keep base): "আপনার অনুরোধে জ্বালানি বা সার্ভিস রেকর্ডে বর্তমান লোকেশন যোগ করতে।"
-
-Action: owner (or named reviewer) approves the copy, then add the missing entries
-to both `InfoPlist.strings` files, run the localization gate, and re-record P08-05
-coverage. Until then this is a release-blocking localization item for App Store
-submission.
+`MotoVault/Info.plist` now uses English base strings for all five
+`NS*UsageDescription` keys (fixing the previous Bengali literal in
+`NSLocationWhenInUseUsageDescription`), and both `en.lproj/InfoPlist.strings` and
+`bn.lproj/InfoPlist.strings` define all five keys (`NSCameraUsageDescription`,
+`NSMicrophoneUsageDescription`, `NSSpeechRecognitionUsageDescription`,
+`NSLocationWhenInUseUsageDescription`, `NSPhotoLibraryUsageDescription`).
+`tools/tests/test_localization_resources.py::LocalizationResourcesTest.test_ios_infoplist_usage_descriptions_localized`
+enforces key parity and Bangla/English separation. Human native copy review by a
+named reviewer remains required prior to App Store submission under WD-02.
 
 ## Privacy manifest
 

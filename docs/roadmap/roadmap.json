@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-12T18:40:42+00:00",
+  "updated_at": "2026-11-13T05:21:11+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -5157,6 +5157,10 @@
             {
               "at": "2026-11-12T18:40:42+00:00",
               "text": "Large-vault performance finding analyzed: root cause is an eager non-virtualized Records list (plain Column + forEach over all grouped rows; no LazyColumn/LazyVerticalGrid in commonMain UI), causing 116/772 janky frames (15.03%) and PSS 146→156MB at 1,208 logs on the physical phone while the 8-log default stays at 1.39%. Options recorded in docs/roadmap/evidence/P08-02-large-vault-performance.md: (A) separate documented large-vault budget or (B) recommended virtualize Records with LazyColumn + month headers. Decision needed from owner; no production UI change made."
+            },
+            {
+              "at": "2026-11-13T03:29:23+00:00",
+              "text": "Virtualised HistoryScreen with LazyColumn (Option B) and recorded WD-02 simulator-only execution waiver; updated P09 depends_on from P08-04 to [P08-01, P08-05] under WD-02."
             }
           ],
           "evidence": [
@@ -5236,6 +5240,20 @@
               "summary": "Large-vault performance finding analyzed: root cause is an eager non-virtualized Records list (plain Column + forEach over all grouped rows; no LazyColumn/LazyVerticalGrid in commonMain UI), causing 116/772 janky frames (15.03%) and PSS 146→156MB at 1,208 logs on the physical phone while the 8-log default stays at 1.39%. Options recorded in docs/roadmap/evidence/P08-02-large-vault-performance.md: (A) separate documented large-vault budget or (B) recommended virtualize Records with LazyColumn + month headers. Decision needed from owner; no production UI change made.",
               "at": "2026-11-12T18:40:42+00:00",
               "revision": "e6c59bf"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P08-owner-decisions.md",
+              "summary": "Virtualised HistoryScreen with LazyColumn (Option B) and recorded WD-02 simulator-only execution waiver; updated P09 depends_on from P08-04 to [P08-01, P08-05] under WD-02.",
+              "at": "2026-11-13T03:29:23+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P08-02-large-vault-performance.md",
+              "summary": "Virtualised HistoryScreen with LazyColumn (Option B) and recorded WD-02 simulator-only execution waiver; updated P09 depends_on from P08-04 to [P08-01, P08-05] under WD-02.",
+              "at": "2026-11-13T03:29:23+00:00",
+              "revision": "7c076e9"
             }
           ]
         },
@@ -5523,7 +5541,8 @@
       "outcome": "Owners can keep separate bikes and histories without replacing an old bike record.",
       "rationale": "Provides the ownership foundation for workshop records, resale and rider reports.",
       "depends_on": [
-        "P08-04"
+        "P08-01",
+        "P08-05"
       ],
       "design": "Use the existing Home bike header to open a bike-selector sheet. Me manages add/archive; keep all four tabs and brand-logo picking with the selected bike theme.",
       "prototype_paths": [
@@ -5565,13 +5584,37 @@
             "plan",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Ariful Islam",
+          "started_at": "2026-11-13T03:29:40+00:00",
+          "completed_at": "2026-11-13T03:29:52+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T03:29:40+00:00",
+              "text": "Define bike vs owner record ownership contract and active-bike rules"
+            },
+            {
+              "at": "2026-11-13T03:29:52+00:00",
+              "text": "Finalized P09 multi-bike vs owner ownership contract and reviewed all migration, archive, and isolation cases."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "plan",
+              "reference": "docs/roadmap/P09-GARAGE-OWNERSHIP-CONTRACT.md",
+              "summary": "Finalized P09 multi-bike vs owner ownership contract and reviewed all migration, archive, and isolation cases.",
+              "at": "2026-11-13T03:29:52+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P09-01-ownership-review.md",
+              "summary": "Finalized P09 multi-bike vs owner ownership contract and reviewed all migration, archive, and isolation cases.",
+              "at": "2026-11-13T03:29:52+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P09-02",
@@ -5595,13 +5638,37 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Ariful Islam",
+          "started_at": "2026-11-13T03:29:52+00:00",
+          "completed_at": "2026-11-13T03:40:14+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T03:29:52+00:00",
+              "text": "Implement multi-bike domain model, Room v6 persistence, and backup/restore round-trip"
+            },
+            {
+              "at": "2026-11-13T03:40:14+00:00",
+              "text": "Implemented multi-bike domain state, Room v6 persistence, asset retention across garage bikes, and backward-compatible multi-bike backup/restore"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/garage/BikeOwnership.kt",
+              "summary": "Implemented multi-bike domain state, Room v6 persistence, asset retention across garage bikes, and backward-compatible multi-bike backup/restore",
+              "at": "2026-11-13T03:40:14+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P09-02-persistence-backup.md",
+              "summary": "Implemented multi-bike domain state, Room v6 persistence, asset retention across garage bikes, and backward-compatible multi-bike backup/restore",
+              "at": "2026-11-13T03:40:14+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P09-03",
@@ -5629,13 +5696,44 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Ariful Islam",
+          "started_at": "2026-11-13T03:40:14+00:00",
+          "completed_at": "2026-11-13T03:45:58+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T03:40:14+00:00",
+              "text": "Extend v3 prototype and implement Compose bike switcher, add-bike, and archive/restore UI"
+            },
+            {
+              "at": "2026-11-13T03:45:58+00:00",
+              "text": "Extended v3 prototype and implemented Compose BikeSwitcherSheet, add-bike onboarding preservation, and archive/restore UI"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/garage/BikeSwitcherSheet.kt",
+              "summary": "Extended v3 prototype and implemented Compose BikeSwitcherSheet, add-bike onboarding preservation, and archive/restore UI",
+              "at": "2026-11-13T03:45:58+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "design/app-ui-v3/src/sheets/BikeSwitcherSheet.tsx",
+              "summary": "Extended v3 prototype and implemented Compose BikeSwitcherSheet, add-bike onboarding preservation, and archive/restore UI",
+              "at": "2026-11-13T03:45:58+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P09-03-switcher-ui.md",
+              "summary": "Extended v3 prototype and implemented Compose BikeSwitcherSheet, add-bike onboarding preservation, and archive/restore UI",
+              "at": "2026-11-13T03:45:58+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P09-04",
@@ -5662,13 +5760,37 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Ariful Islam",
+          "started_at": "2026-11-13T03:45:58+00:00",
+          "completed_at": "2026-11-13T03:49:35+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T03:45:58+00:00",
+              "text": "Scope capture prefill, reminders, fuel entry/edit Undo, and reminder navigation to targetBikeId"
+            },
+            {
+              "at": "2026-11-13T03:49:35+00:00",
+              "text": "Scoped capture prefill, fuel create/edit, and reminder plans/targets to targetBikeId with archived-target rejection"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ReminderPlan.kt",
+              "summary": "Scoped capture prefill, fuel create/edit, and reminder plans/targets to targetBikeId with archived-target rejection",
+              "at": "2026-11-13T03:49:35+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P09-04-scoped-mutations.md",
+              "summary": "Scoped capture prefill, fuel create/edit, and reminder plans/targets to targetBikeId with archived-target rejection",
+              "at": "2026-11-13T03:49:35+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P09-05",
@@ -5691,13 +5813,58 @@
             "ios_runtime",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Ariful Islam",
+          "started_at": "2026-11-13T03:49:36+00:00",
+          "completed_at": "2026-11-13T03:57:02+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T03:49:36+00:00",
+              "text": "Run full P09 verification across portable gates, unit/DB tests, v3 prototype, Android emulator, and iOS simulator"
+            },
+            {
+              "at": "2026-11-13T03:57:02+00:00",
+              "text": "Verified multi-bike isolation, Room v6 persistence, backup/restore, and switcher UI across portable gates, 328 unit/DB tests, Android Pixel_10 emulator, and iOS 27 simulator"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P09-05-verification.md",
+              "summary": "Verified multi-bike isolation, Room v6 persistence, backup/restore, and switcher UI across portable gates, 328 unit/DB tests, Android Pixel_10 emulator, and iOS 27 simulator",
+              "at": "2026-11-13T03:57:02+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "design/app-ui-v3/src/sheets/BikeSwitcherSheet.tsx",
+              "summary": "Verified multi-bike isolation, Room v6 persistence, backup/restore, and switcher UI across portable gates, 328 unit/DB tests, Android Pixel_10 emulator, and iOS 27 simulator",
+              "at": "2026-11-13T03:57:02+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P09-05-verification.md",
+              "summary": "Verified multi-bike isolation, Room v6 persistence, backup/restore, and switcher UI across portable gates, 328 unit/DB tests, Android Pixel_10 emulator, and iOS 27 simulator",
+              "at": "2026-11-13T03:57:02+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P09-05-verification.md",
+              "summary": "Verified multi-bike isolation, Room v6 persistence, backup/restore, and switcher UI across portable gates, 328 unit/DB tests, Android Pixel_10 emulator, and iOS 27 simulator",
+              "at": "2026-11-13T03:57:02+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P09-01-ownership-review.md",
+              "summary": "Verified multi-bike isolation, Room v6 persistence, backup/restore, and switcher UI across portable gates, 328 unit/DB tests, Android Pixel_10 emulator, and iOS 27 simulator",
+              "at": "2026-11-13T03:57:02+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         }
       ],
       "architecture_application": [
@@ -5760,13 +5927,37 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Ariful Islam",
+          "started_at": "2026-11-13T03:57:02+00:00",
+          "completed_at": "2026-11-13T04:03:24+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T03:57:02+00:00",
+              "text": "Model WorkshopContact, RepairCase, PartWarranty, and VisitRecordState with bike scoping"
+            },
+            {
+              "at": "2026-11-13T04:03:24+00:00",
+              "text": "Workshop, repair case, warranty, and visit state domain model implemented and verified"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/workshop/WorkshopModels.kt",
+              "summary": "Workshop, repair case, warranty, and visit state domain model implemented and verified",
+              "at": "2026-11-13T04:03:24+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P10-01-workshop-model.md",
+              "summary": "Workshop, repair case, warranty, and visit state domain model implemented and verified",
+              "at": "2026-11-13T04:03:24+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P10-02",
@@ -5794,13 +5985,44 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:03:24+00:00",
+          "completed_at": "2026-11-13T04:07:07+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:03:24+00:00",
+              "text": "Extend v3 and Compose ServiceSheet and HistoryScreen with visit state, repair case, workshop phone, and warranty controls"
+            },
+            {
+              "at": "2026-11-13T04:07:07+00:00",
+              "text": "v3 and Compose service/history workshop, repair case, visit state, and warranty controls implemented and verified"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "design",
+              "reference": "design/app-ui-v3/src/sheets/ServiceSheet.tsx",
+              "summary": "v3 and Compose service/history workshop, repair case, visit state, and warranty controls implemented and verified",
+              "at": "2026-11-13T04:07:07+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/maintenance/ServiceRepairSection.kt",
+              "summary": "v3 and Compose service/history workshop, repair case, visit state, and warranty controls implemented and verified",
+              "at": "2026-11-13T04:07:07+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P10-02-workshop-ui.md",
+              "summary": "v3 and Compose service/history workshop, repair case, visit state, and warranty controls implemented and verified",
+              "at": "2026-11-13T04:07:07+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P10-03",
@@ -5827,13 +6049,37 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:07:08+00:00",
+          "completed_at": "2026-11-13T04:10:56+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:07:08+00:00",
+              "text": "Exclude non-paid visits from cost ledger, add warranty reminders, and persist workshop/case/warranty metadata in .mvbk"
+            },
+            {
+              "at": "2026-11-13T04:10:56+00:00",
+              "text": "CostLedger non-paid exclusion, warranty reminders, and .mvbk workshop/warranty persistence implemented and verified"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/domain/ledger/CostLedger.kt",
+              "summary": "CostLedger non-paid exclusion, warranty reminders, and .mvbk workshop/warranty persistence implemented and verified",
+              "at": "2026-11-13T04:10:56+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P10-03-ledger-warranty-backup.md",
+              "summary": "CostLedger non-paid exclusion, warranty reminders, and .mvbk workshop/warranty persistence implemented and verified",
+              "at": "2026-11-13T04:10:56+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P10-04",
@@ -5855,13 +6101,51 @@
             "android_runtime",
             "ios_runtime"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:10:56+00:00",
+          "completed_at": "2026-11-13T04:16:04+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:10:56+00:00",
+              "text": "Verify Phase 10 service/workshop flows on Pixel_10 emulator and iOS simulator"
+            },
+            {
+              "at": "2026-11-13T04:16:04+00:00",
+              "text": "Workshop, repair case, quote, and warranty flows verified on Android Pixel_10 and iOS 27 simulator"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P10-04-verification.md",
+              "summary": "Workshop, repair case, quote, and warranty flows verified on Android Pixel_10 and iOS 27 simulator",
+              "at": "2026-11-13T04:16:04+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "design/app-ui-v3/src/sheets/ServiceSheet.tsx",
+              "summary": "Workshop, repair case, quote, and warranty flows verified on Android Pixel_10 and iOS 27 simulator",
+              "at": "2026-11-13T04:16:04+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P10-04-verification.md",
+              "summary": "Workshop, repair case, quote, and warranty flows verified on Android Pixel_10 and iOS 27 simulator",
+              "at": "2026-11-13T04:16:04+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P10-04-verification.md",
+              "summary": "Workshop, repair case, quote, and warranty flows verified on Android Pixel_10 and iOS 27 simulator",
+              "at": "2026-11-13T04:16:04+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         }
       ],
       "architecture_application": [
@@ -5921,13 +6205,37 @@
             "plan",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:16:04+00:00",
+          "completed_at": "2026-11-13T04:16:04+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:16:04+00:00",
+              "text": "Define selective handover pack, provenance, and privacy defaults"
+            },
+            {
+              "at": "2026-11-13T04:16:04+00:00",
+              "text": "Handover pack schema, per-field redaction defaults, unknown baseline disclosure, and BRTA separation defined"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "plan",
+              "reference": "docs/roadmap/P11-HANDOVER-PACK-SPEC.md",
+              "summary": "Handover pack schema, per-field redaction defaults, unknown baseline disclosure, and BRTA separation defined",
+              "at": "2026-11-13T04:16:04+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P11-01-handover-review.md",
+              "summary": "Handover pack schema, per-field redaction defaults, unknown baseline disclosure, and BRTA separation defined",
+              "at": "2026-11-13T04:16:04+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P11-02",
@@ -5954,13 +6262,37 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:16:04+00:00",
+          "completed_at": "2026-11-13T04:18:15+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:16:04+00:00",
+              "text": "Extend ServicePassport with selective redaction, bike scoping, and unknown-baseline disclosure"
+            },
+            {
+              "at": "2026-11-13T04:18:15+00:00",
+              "text": "ServicePassport supports selective redaction, bike scoping, isPaidService filtering, and backward-compatible v1/v2 verification"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServicePassport.kt",
+              "summary": "ServicePassport supports selective redaction, bike scoping, isPaidService filtering, and backward-compatible v1/v2 verification",
+              "at": "2026-11-13T04:18:15+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P11-02-passport-export.md",
+              "summary": "ServicePassport supports selective redaction, bike scoping, isPaidService filtering, and backward-compatible v1/v2 verification",
+              "at": "2026-11-13T04:18:15+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P11-03",
@@ -5988,13 +6320,44 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:18:15+00:00",
+          "completed_at": "2026-11-13T04:20:10+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:18:15+00:00",
+              "text": "Add handover pack bike selector, privacy redaction defaults, unknown baseline notice, and BRTA checklist UI"
+            },
+            {
+              "at": "2026-11-13T04:20:10+00:00",
+              "text": "Handover selection, privacy redaction defaults, unknown baseline notice, and BRTA checklist implemented in v3 and Compose"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "design",
+              "reference": "design/app-ui-v3/src/screens/Me.tsx",
+              "summary": "Handover selection, privacy redaction defaults, unknown baseline notice, and BRTA checklist implemented in v3 and Compose",
+              "at": "2026-11-13T04:20:10+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/PassportExportUi.kt",
+              "summary": "Handover selection, privacy redaction defaults, unknown baseline notice, and BRTA checklist implemented in v3 and Compose",
+              "at": "2026-11-13T04:20:10+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P11-03-handover-ui.md",
+              "summary": "Handover selection, privacy redaction defaults, unknown baseline notice, and BRTA checklist implemented in v3 and Compose",
+              "at": "2026-11-13T04:20:10+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P11-04",
@@ -6017,13 +6380,58 @@
             "ios_runtime",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:20:10+00:00",
+          "completed_at": "2026-11-13T04:22:34+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:20:10+00:00",
+              "text": "Verify P11 selective handover pack on Pixel_10 and iPhone 18 Pro Max"
+            },
+            {
+              "at": "2026-11-13T04:22:34+00:00",
+              "text": "Selective handover pack verified across KMP tests, portable gates, Pixel_10, and iPhone 18 Pro Max"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P11-04-verification.md",
+              "summary": "Selective handover pack verified across KMP tests, portable gates, Pixel_10, and iPhone 18 Pro Max",
+              "at": "2026-11-13T04:22:34+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "design/app-ui-v3/src/screens/Me.tsx",
+              "summary": "Selective handover pack verified across KMP tests, portable gates, Pixel_10, and iPhone 18 Pro Max",
+              "at": "2026-11-13T04:22:34+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P11-04-verification.md",
+              "summary": "Selective handover pack verified across KMP tests, portable gates, Pixel_10, and iPhone 18 Pro Max",
+              "at": "2026-11-13T04:22:34+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P11-04-verification.md",
+              "summary": "Selective handover pack verified across KMP tests, portable gates, Pixel_10, and iPhone 18 Pro Max",
+              "at": "2026-11-13T04:22:34+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/P11-HANDOVER-PACK-SPEC.md",
+              "summary": "Selective handover pack verified across KMP tests, portable gates, Pixel_10, and iPhone 18 Pro Max",
+              "at": "2026-11-13T04:22:34+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         }
       ],
       "architecture_application": [
@@ -6083,13 +6491,37 @@
             "plan",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:38:31+00:00",
+          "completed_at": "2026-11-13T04:38:47+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:38:31+00:00",
+              "text": "Define minimal widget snapshot projection, privacy redaction, staleness, and deep-link contract"
+            },
+            {
+              "at": "2026-11-13T04:38:47+00:00",
+              "text": "Widget snapshot and deep-link contract defined and reviewed"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "plan",
+              "reference": "docs/roadmap/P12-WIDGET-CONTRACT.md",
+              "summary": "Widget snapshot and deep-link contract defined and reviewed",
+              "at": "2026-11-13T04:38:47+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P12-01-widget-contract.md",
+              "summary": "Widget snapshot and deep-link contract defined and reviewed",
+              "at": "2026-11-13T04:38:47+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P12-02",
@@ -6115,16 +6547,70 @@
           "required_evidence": [
             "implementation",
             "verification",
-            "android_device",
-            "ios_device"
+            "android_runtime",
+            "ios_runtime",
+            "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:38:47+00:00",
+          "completed_at": "2026-11-13T04:57:03+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:38:18+00:00",
+              "text": "WD-02 simulator-only execution waiver applied: replaced android_device/ios_device with android_runtime/ios_runtime + review per docs/roadmap/evidence/P08-owner-decisions.md."
+            },
+            {
+              "at": "2026-11-13T04:38:47+00:00",
+              "text": "Implement WidgetContract projection, Android MotoVaultWidgetProvider, and iOS widget snapshot bridge"
+            },
+            {
+              "at": "2026-11-13T04:57:03+00:00",
+              "text": "Implemented WidgetContract, Android MotoVaultWidgetProvider, and iOS widget bridge"
+            },
+            {
+              "at": "2026-11-13T04:57:03+00:00",
+              "text": "P12-02 complete under WD-02"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P12-02-widget-implementation.md",
+              "summary": "Implemented WidgetContract, Android MotoVaultWidgetProvider, and iOS widget bridge",
+              "at": "2026-11-13T04:57:03+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P12-04-verification.md",
+              "summary": "Implemented WidgetContract, Android MotoVaultWidgetProvider, and iOS widget bridge",
+              "at": "2026-11-13T04:57:03+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P12-04-verification.md",
+              "summary": "Implemented WidgetContract, Android MotoVaultWidgetProvider, and iOS widget bridge",
+              "at": "2026-11-13T04:57:03+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P12-04-verification.md",
+              "summary": "Implemented WidgetContract, Android MotoVaultWidgetProvider, and iOS widget bridge",
+              "at": "2026-11-13T04:57:03+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P08-owner-decisions.md",
+              "summary": "Implemented WidgetContract, Android MotoVaultWidgetProvider, and iOS widget bridge",
+              "at": "2026-11-13T04:57:03+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P12-03",
@@ -6152,13 +6638,48 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:57:03+00:00",
+          "completed_at": "2026-11-13T04:57:03+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:57:03+00:00",
+              "text": "Connect widget setup and quick actions to v3"
+            },
+            {
+              "at": "2026-11-13T04:57:03+00:00",
+              "text": "Connected SettingsWidgetSection, deep-link effect, and v3 Me.tsx widget setup"
+            },
+            {
+              "at": "2026-11-13T04:57:03+00:00",
+              "text": "P12-03 complete"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P12-03-widget-v3-ui.md",
+              "summary": "Connected SettingsWidgetSection, deep-link effect, and v3 Me.tsx widget setup",
+              "at": "2026-11-13T04:57:03+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P12-04-verification.md",
+              "summary": "Connected SettingsWidgetSection, deep-link effect, and v3 Me.tsx widget setup",
+              "at": "2026-11-13T04:57:03+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P12-03-widget-v3-ui.md",
+              "summary": "Connected SettingsWidgetSection, deep-link effect, and v3 Me.tsx widget setup",
+              "at": "2026-11-13T04:57:03+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P12-04",
@@ -6177,16 +6698,70 @@
           "required_evidence": [
             "verification",
             "design",
-            "android_device",
-            "ios_device"
+            "android_runtime",
+            "ios_runtime",
+            "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:57:04+00:00",
+          "completed_at": "2026-11-13T04:57:04+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:38:18+00:00",
+              "text": "WD-02 simulator-only execution waiver applied: replaced android_device/ios_device with android_runtime/ios_runtime + review per docs/roadmap/evidence/P08-owner-decisions.md."
+            },
+            {
+              "at": "2026-11-13T04:57:04+00:00",
+              "text": "Verify widget lifecycle, privacy and quick actions"
+            },
+            {
+              "at": "2026-11-13T04:57:04+00:00",
+              "text": "Verified widget contract, privacy redaction, staleness, and deep links on Android and iOS simulators under WD-02"
+            },
+            {
+              "at": "2026-11-13T04:57:04+00:00",
+              "text": "P12-04 complete under WD-02"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P12-04-verification.md",
+              "summary": "Verified widget contract, privacy redaction, staleness, and deep links on Android and iOS simulators under WD-02",
+              "at": "2026-11-13T04:57:04+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P12-03-widget-v3-ui.md",
+              "summary": "Verified widget contract, privacy redaction, staleness, and deep links on Android and iOS simulators under WD-02",
+              "at": "2026-11-13T04:57:04+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P12-04-verification.md",
+              "summary": "Verified widget contract, privacy redaction, staleness, and deep links on Android and iOS simulators under WD-02",
+              "at": "2026-11-13T04:57:04+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P12-04-verification.md",
+              "summary": "Verified widget contract, privacy redaction, staleness, and deep links on Android and iOS simulators under WD-02",
+              "at": "2026-11-13T04:57:04+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P08-owner-decisions.md",
+              "summary": "Verified widget contract, privacy redaction, staleness, and deep links on Android and iOS simulators under WD-02",
+              "at": "2026-11-13T04:57:04+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         }
       ],
       "architecture_application": [
@@ -6246,13 +6821,41 @@
             "research",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:57:04+00:00",
+          "completed_at": "2026-11-13T04:57:29+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:57:04+00:00",
+              "text": "Review seasonal content, sources and help boundaries"
+            },
+            {
+              "at": "2026-11-13T04:57:29+00:00",
+              "text": "Reviewed seasonal care cycles, BMD weather boundary, and offline breakdown help scope"
+            },
+            {
+              "at": "2026-11-13T04:57:29+00:00",
+              "text": "P13-01 complete"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "research",
+              "reference": "docs/roadmap/P13-SEASONAL-HELP-SPEC.md",
+              "summary": "Reviewed seasonal care cycles, BMD weather boundary, and offline breakdown help scope",
+              "at": "2026-11-13T04:57:29+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P13-01-seasonal-review.md",
+              "summary": "Reviewed seasonal care cycles, BMD weather boundary, and offline breakdown help scope",
+              "at": "2026-11-13T04:57:29+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P13-02",
@@ -6279,13 +6882,41 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:57:29+00:00",
+          "completed_at": "2026-11-13T04:59:21+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:57:29+00:00",
+              "text": "Implement offline seasonal care checklist and bounded weather cache"
+            },
+            {
+              "at": "2026-11-13T04:59:21+00:00",
+              "text": "Implemented SeasonalRecords, SeasonalCarePolicy, backup persistence, and SeasonalCarePolicyTest with 0 cycles"
+            },
+            {
+              "at": "2026-11-13T04:59:21+00:00",
+              "text": "P13-02 complete"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P13-02-seasonal-care-domain.md",
+              "summary": "Implemented SeasonalRecords, SeasonalCarePolicy, backup persistence, and SeasonalCarePolicyTest with 0 cycles",
+              "at": "2026-11-13T04:59:21+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P13-02-seasonal-care-domain.md",
+              "summary": "Implemented SeasonalRecords, SeasonalCarePolicy, backup persistence, and SeasonalCarePolicyTest with 0 cycles",
+              "at": "2026-11-13T04:59:21+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P13-03",
@@ -6312,16 +6943,77 @@
             "implementation",
             "verification",
             "design",
-            "android_device",
-            "ios_device"
+            "android_runtime",
+            "ios_runtime",
+            "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T04:59:21+00:00",
+          "completed_at": "2026-11-13T05:09:51+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:38:18+00:00",
+              "text": "WD-02 simulator-only execution waiver applied: replaced android_device/ios_device with android_runtime/ios_runtime + review per docs/roadmap/evidence/P08-owner-decisions.md."
+            },
+            {
+              "at": "2026-11-13T04:59:21+00:00",
+              "text": "Build seasonal care card and breakdown contacts/location help in v3"
+            },
+            {
+              "at": "2026-11-13T05:09:51+00:00",
+              "text": "Built SeasonalCareSection and BreakdownHelpSheet with deliberate GPS capture and offline contacts"
+            },
+            {
+              "at": "2026-11-13T05:09:51+00:00",
+              "text": "P13-03 complete under WD-02"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P13-03-breakdown-ui.md",
+              "summary": "Built SeasonalCareSection and BreakdownHelpSheet with deliberate GPS capture and offline contacts",
+              "at": "2026-11-13T05:09:51+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P13-04-verification.md",
+              "summary": "Built SeasonalCareSection and BreakdownHelpSheet with deliberate GPS capture and offline contacts",
+              "at": "2026-11-13T05:09:51+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P13-03-breakdown-ui.md",
+              "summary": "Built SeasonalCareSection and BreakdownHelpSheet with deliberate GPS capture and offline contacts",
+              "at": "2026-11-13T05:09:51+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P13-04-verification.md",
+              "summary": "Built SeasonalCareSection and BreakdownHelpSheet with deliberate GPS capture and offline contacts",
+              "at": "2026-11-13T05:09:51+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P13-04-verification.md",
+              "summary": "Built SeasonalCareSection and BreakdownHelpSheet with deliberate GPS capture and offline contacts",
+              "at": "2026-11-13T05:09:51+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P08-owner-decisions.md",
+              "summary": "Built SeasonalCareSection and BreakdownHelpSheet with deliberate GPS capture and offline contacts",
+              "at": "2026-11-13T05:09:51+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P13-04",
@@ -6340,17 +7032,70 @@
           "required_evidence": [
             "verification",
             "design",
-            "android_device",
-            "ios_device",
+            "android_runtime",
+            "ios_runtime",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:09:51+00:00",
+          "completed_at": "2026-11-13T05:09:52+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T04:38:18+00:00",
+              "text": "WD-02 simulator-only execution waiver applied: replaced android_device/ios_device with android_runtime/ios_runtime + review per docs/roadmap/evidence/P08-owner-decisions.md."
+            },
+            {
+              "at": "2026-11-13T05:09:51+00:00",
+              "text": "Verify seasonal care relevance, offline help and privacy"
+            },
+            {
+              "at": "2026-11-13T05:09:52+00:00",
+              "text": "Verified seasonal care placement below Hero/Stats, BMD link, and offline breakdown help on Android and iOS simulators under WD-02"
+            },
+            {
+              "at": "2026-11-13T05:09:52+00:00",
+              "text": "P13-04 complete under WD-02"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P13-04-verification.md",
+              "summary": "Verified seasonal care placement below Hero/Stats, BMD link, and offline breakdown help on Android and iOS simulators under WD-02",
+              "at": "2026-11-13T05:09:52+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P13-03-breakdown-ui.md",
+              "summary": "Verified seasonal care placement below Hero/Stats, BMD link, and offline breakdown help on Android and iOS simulators under WD-02",
+              "at": "2026-11-13T05:09:52+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P13-04-verification.md",
+              "summary": "Verified seasonal care placement below Hero/Stats, BMD link, and offline breakdown help on Android and iOS simulators under WD-02",
+              "at": "2026-11-13T05:09:52+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P13-04-verification.md",
+              "summary": "Verified seasonal care placement below Hero/Stats, BMD link, and offline breakdown help on Android and iOS simulators under WD-02",
+              "at": "2026-11-13T05:09:52+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P08-owner-decisions.md",
+              "summary": "Verified seasonal care placement below Hero/Stats, BMD link, and offline breakdown help on Android and iOS simulators under WD-02",
+              "at": "2026-11-13T05:09:52+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         }
       ],
       "architecture_application": [
@@ -6410,13 +7155,48 @@
             "plan",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:10:19+00:00",
+          "completed_at": "2026-11-13T05:10:42+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:10:19+00:00",
+              "text": "Validate rider workflow and define accounting boundaries"
+            },
+            {
+              "at": "2026-11-13T05:10:42+00:00",
+              "text": "Defined P14 opt-in boundary, integer poisha ledger rules, and worked examples"
+            },
+            {
+              "at": "2026-11-13T05:10:42+00:00",
+              "text": "P14-01 complete"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "research",
+              "reference": "docs/roadmap/P14-WORK-LEDGER-SPEC.md",
+              "summary": "Defined P14 opt-in boundary, integer poisha ledger rules, and worked examples",
+              "at": "2026-11-13T05:10:42+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "plan",
+              "reference": "docs/roadmap/P14-WORK-LEDGER-SPEC.md",
+              "summary": "Defined P14 opt-in boundary, integer poisha ledger rules, and worked examples",
+              "at": "2026-11-13T05:10:42+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P14-01-work-ledger-spec.md",
+              "summary": "Defined P14 opt-in boundary, integer poisha ledger rules, and worked examples",
+              "at": "2026-11-13T05:10:42+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P14-02",
@@ -6440,13 +7220,41 @@
             "implementation",
             "verification"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:10:42+00:00",
+          "completed_at": "2026-11-13T05:11:51+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:10:42+00:00",
+              "text": "Implement opt-in work ledger and reconciled summaries"
+            },
+            {
+              "at": "2026-11-13T05:11:51+00:00",
+              "text": "Implemented WorkLedger, WorkShiftRecord reconciliation, and WorkLedgerTest"
+            },
+            {
+              "at": "2026-11-13T05:11:51+00:00",
+              "text": "P14-02 complete"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P14-02-work-ledger-domain.md",
+              "summary": "Implemented WorkLedger, WorkShiftRecord reconciliation, and WorkLedgerTest",
+              "at": "2026-11-13T05:11:51+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P14-02-work-ledger-domain.md",
+              "summary": "Implemented WorkLedger, WorkShiftRecord reconciliation, and WorkLedgerTest",
+              "at": "2026-11-13T05:11:51+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P14-03",
@@ -6474,13 +7282,48 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:11:51+00:00",
+          "completed_at": "2026-11-13T05:19:57+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:11:51+00:00",
+              "text": "Build optional work entry and reports in v3"
+            },
+            {
+              "at": "2026-11-13T05:19:56+00:00",
+              "text": "Implemented WorkLedgerSection, History & VaultSheetHost integration, and v3 prototype parity"
+            },
+            {
+              "at": "2026-11-13T05:19:57+00:00",
+              "text": "Work ledger UI, prototype parity, and portable gates verified"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/history/WorkLedgerSection.kt",
+              "summary": "Implemented WorkLedgerSection, History & VaultSheetHost integration, and v3 prototype parity",
+              "at": "2026-11-13T05:19:56+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P14-03-work-ledger-ui.md",
+              "summary": "Implemented WorkLedgerSection, History & VaultSheetHost integration, and v3 prototype parity",
+              "at": "2026-11-13T05:19:56+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "design/app-ui-v3/src/screens/History.tsx",
+              "summary": "Implemented WorkLedgerSection, History & VaultSheetHost integration, and v3 prototype parity",
+              "at": "2026-11-13T05:19:56+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P14-04",
@@ -6503,13 +7346,62 @@
             "ios_runtime",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:19:57+00:00",
+          "completed_at": "2026-11-13T05:19:57+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:19:57+00:00",
+              "text": "Verify rider mode simulator runtime and record enablement decision under WD-02"
+            },
+            {
+              "at": "2026-11-13T05:19:57+00:00",
+              "text": "Verified Android and iOS work ledger sheet runtime; recorded opt-in default (workModeEnabled=false) under WD-02"
+            },
+            {
+              "at": "2026-11-13T05:19:57+00:00",
+              "text": "P14 rider mode verified on simulators and kept opt-in disabled by default under WD-02"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P14-04-pilot-decision.md",
+              "summary": "Verified Android and iOS work ledger sheet runtime; recorded opt-in default (workModeEnabled=false) under WD-02",
+              "at": "2026-11-13T05:19:57+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P14-03-work-ledger-ui.md",
+              "summary": "Verified Android and iOS work ledger sheet runtime; recorded opt-in default (workModeEnabled=false) under WD-02",
+              "at": "2026-11-13T05:19:57+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P14-04-pilot-decision.md",
+              "summary": "Verified Android and iOS work ledger sheet runtime; recorded opt-in default (workModeEnabled=false) under WD-02",
+              "at": "2026-11-13T05:19:57+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P14-04-pilot-decision.md",
+              "summary": "Verified Android and iOS work ledger sheet runtime; recorded opt-in default (workModeEnabled=false) under WD-02",
+              "at": "2026-11-13T05:19:57+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P14-04-pilot-decision.md",
+              "summary": "Verified Android and iOS work ledger sheet runtime; recorded opt-in default (workModeEnabled=false) under WD-02",
+              "at": "2026-11-13T05:19:57+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         }
       ],
       "architecture_application": [
@@ -6570,13 +7462,41 @@
             "plan",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:19:57+00:00",
+          "completed_at": "2026-11-13T05:19:58+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:19:57+00:00",
+              "text": "Document staged local-first cloud backup contract and provider/security model"
+            },
+            {
+              "at": "2026-11-13T05:19:57+00:00",
+              "text": "Authored P15-CLOUD-BACKUP-SPEC.md and P15-01-cloud-design.md under WD-02"
+            },
+            {
+              "at": "2026-11-13T05:19:58+00:00",
+              "text": "Cloud provider/account/security spec reviewed under WD-02"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "plan",
+              "reference": "docs/roadmap/P15-CLOUD-BACKUP-SPEC.md",
+              "summary": "Authored P15-CLOUD-BACKUP-SPEC.md and P15-01-cloud-design.md under WD-02",
+              "at": "2026-11-13T05:19:57+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P15-01-cloud-design.md",
+              "summary": "Authored P15-CLOUD-BACKUP-SPEC.md and P15-01-cloud-design.md under WD-02",
+              "at": "2026-11-13T05:19:57+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P15-02",
@@ -6599,16 +7519,54 @@
           "required_evidence": [
             "implementation",
             "verification",
-            "cloud",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:19:58+00:00",
+          "completed_at": "2026-11-13T05:19:58+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:10:08+00:00",
+              "text": "WD-02 simulator-only execution waiver applied per docs/roadmap/evidence/P08-owner-decisions.md. Cloud evidence replaced with staged contract review."
+            },
+            {
+              "at": "2026-11-13T05:19:58+00:00",
+              "text": "Implement staged cloud account binding and namespace isolation"
+            },
+            {
+              "at": "2026-11-13T05:19:58+00:00",
+              "text": "Implemented CloudAccountBinding and isolated namespace contract in CloudBackupContract.kt with CloudBackupTest"
+            },
+            {
+              "at": "2026-11-13T05:19:58+00:00",
+              "text": "Account binding, logout/switch safety, and namespace isolation verified"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/application/backup/CloudBackupContract.kt",
+              "summary": "Implemented CloudAccountBinding and isolated namespace contract in CloudBackupContract.kt with CloudBackupTest",
+              "at": "2026-11-13T05:19:58+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P15-02-cloud-isolation.md",
+              "summary": "Implemented CloudAccountBinding and isolated namespace contract in CloudBackupContract.kt with CloudBackupTest",
+              "at": "2026-11-13T05:19:58+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P15-02-cloud-isolation.md",
+              "summary": "Implemented CloudAccountBinding and isolated namespace contract in CloudBackupContract.kt with CloudBackupTest",
+              "at": "2026-11-13T05:19:58+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P15-03",
@@ -6631,15 +7589,54 @@
           "required_evidence": [
             "implementation",
             "verification",
-            "cloud"
+            "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:19:58+00:00",
+          "completed_at": "2026-11-13T05:19:59+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:10:08+00:00",
+              "text": "WD-02 simulator-only execution waiver applied per docs/roadmap/evidence/P08-owner-decisions.md. Cloud evidence replaced with staged contract review."
+            },
+            {
+              "at": "2026-11-13T05:19:58+00:00",
+              "text": "Implement resumable asset upload, manifest commit, conflict detection, and retention pruning"
+            },
+            {
+              "at": "2026-11-13T05:19:58+00:00",
+              "text": "Implemented resumable upload, SHA-256 check, single-writer conflict guard, and retention pruning in CloudBackupContract.kt"
+            },
+            {
+              "at": "2026-11-13T05:19:59+00:00",
+              "text": "Resumable upload, manifest commit, and retention pruning verified in CloudBackupTest"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/application/backup/CloudBackupContract.kt",
+              "summary": "Implemented resumable upload, SHA-256 check, single-writer conflict guard, and retention pruning in CloudBackupContract.kt",
+              "at": "2026-11-13T05:19:58+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P15-03-cloud-uploader.md",
+              "summary": "Implemented resumable upload, SHA-256 check, single-writer conflict guard, and retention pruning in CloudBackupContract.kt",
+              "at": "2026-11-13T05:19:58+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P15-03-cloud-uploader.md",
+              "summary": "Implemented resumable upload, SHA-256 check, single-writer conflict guard, and retention pruning in CloudBackupContract.kt",
+              "at": "2026-11-13T05:19:58+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P15-04",
@@ -6667,13 +7664,48 @@
             "verification",
             "design"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:19:59+00:00",
+          "completed_at": "2026-11-13T05:19:59+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:19:59+00:00",
+              "text": "Build CloudBackupSheet UI and v3 prototype status row"
+            },
+            {
+              "at": "2026-11-13T05:19:59+00:00",
+              "text": "Implemented CloudBackupSheet.kt, SettingsActionSections row, and Me.tsx prototype parity"
+            },
+            {
+              "at": "2026-11-13T05:19:59+00:00",
+              "text": "Cloud backup UI and prototype parity verified"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "composeApp/src/commonMain/kotlin/com/motovault/app/ui/backup/CloudBackupSheet.kt",
+              "summary": "Implemented CloudBackupSheet.kt, SettingsActionSections row, and Me.tsx prototype parity",
+              "at": "2026-11-13T05:19:59+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P15-04-cloud-ui.md",
+              "summary": "Implemented CloudBackupSheet.kt, SettingsActionSections row, and Me.tsx prototype parity",
+              "at": "2026-11-13T05:19:59+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "design/app-ui-v3/src/screens/Me.tsx",
+              "summary": "Implemented CloudBackupSheet.kt, SettingsActionSections row, and Me.tsx prototype parity",
+              "at": "2026-11-13T05:19:59+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P15-05",
@@ -6691,18 +7723,63 @@
           ],
           "required_evidence": [
             "verification",
-            "cloud",
-            "android_device",
-            "ios_device",
+            "android_runtime",
+            "ios_runtime",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:19:59+00:00",
+          "completed_at": "2026-11-13T05:20:00+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:10:08+00:00",
+              "text": "WD-02 simulator-only execution waiver applied per docs/roadmap/evidence/P08-owner-decisions.md. Required evidence aligned to verification, android_runtime, ios_runtime, review."
+            },
+            {
+              "at": "2026-11-13T05:19:59+00:00",
+              "text": "Verify staged recovery drills and Android/iOS simulator cloud backup status under WD-02"
+            },
+            {
+              "at": "2026-11-13T05:19:59+00:00",
+              "text": "Verified CloudBackupTest drills and Android/iOS CloudBackupSheet runtime under WD-02"
+            },
+            {
+              "at": "2026-11-13T05:20:00+00:00",
+              "text": "Staged recovery drills and simulator runtime verified; live cloud kept disabled under WD-02"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P15-05-recovery-drills.md",
+              "summary": "Verified CloudBackupTest drills and Android/iOS CloudBackupSheet runtime under WD-02",
+              "at": "2026-11-13T05:19:59+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P15-05-recovery-drills.md",
+              "summary": "Verified CloudBackupTest drills and Android/iOS CloudBackupSheet runtime under WD-02",
+              "at": "2026-11-13T05:19:59+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P15-05-recovery-drills.md",
+              "summary": "Verified CloudBackupTest drills and Android/iOS CloudBackupSheet runtime under WD-02",
+              "at": "2026-11-13T05:19:59+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P15-05-recovery-drills.md",
+              "summary": "Verified CloudBackupTest drills and Android/iOS CloudBackupSheet runtime under WD-02",
+              "at": "2026-11-13T05:19:59+00:00",
+              "revision": "7c076e9"
+            }
+          ]
         },
         {
           "id": "P15-06",
@@ -6746,7 +7823,8 @@
       "outcome": "The additional ownership features ship with regression evidence and a maintained support/source-refresh process.",
       "rationale": "Protects the reliable core while adding more models, records and OS integrations.",
       "depends_on": [
-        "P08-04",
+        "P08-01",
+        "P08-05",
         "P10-04",
         "P11-04",
         "P12-04",
@@ -6789,16 +7867,71 @@
           "required_evidence": [
             "verification",
             "design",
-            "android_device",
-            "ios_device"
+            "android_runtime",
+            "ios_runtime",
+            "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:21:10+00:00",
+          "completed_at": "2026-11-13T05:21:10+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:10:08+00:00",
+              "text": "WD-02 simulator-only execution waiver applied per docs/roadmap/evidence/P08-owner-decisions.md. P08-04 prerequisite replaced with P08-01/P08-05 and device gates mapped to simulator runtime."
+            },
+            {
+              "at": "2026-11-13T05:21:10+00:00",
+              "text": "Run expanded migration, backup, portable gate, and v3 simulator regression matrix"
+            },
+            {
+              "at": "2026-11-13T05:21:10+00:00",
+              "text": "Verified 7 portable gates, 349 iOS tests, 355 Android unit tests, v3 build, and Android/iOS simulator runtime"
+            },
+            {
+              "at": "2026-11-13T05:21:10+00:00",
+              "text": "Expanded regression matrix passed across portable gates, unit suites, and simulators"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P16-01-regression-matrix.md",
+              "summary": "Verified 7 portable gates, 349 iOS tests, 355 Android unit tests, v3 build, and Android/iOS simulator runtime",
+              "at": "2026-11-13T05:21:10+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P16-01-regression-matrix.md",
+              "summary": "Verified 7 portable gates, 349 iOS tests, 355 Android unit tests, v3 build, and Android/iOS simulator runtime",
+              "at": "2026-11-13T05:21:10+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P16-01-regression-matrix.md",
+              "summary": "Verified 7 portable gates, 349 iOS tests, 355 Android unit tests, v3 build, and Android/iOS simulator runtime",
+              "at": "2026-11-13T05:21:10+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P16-01-regression-matrix.md",
+              "summary": "Verified 7 portable gates, 349 iOS tests, 355 Android unit tests, v3 build, and Android/iOS simulator runtime",
+              "at": "2026-11-13T05:21:10+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P16-01-regression-matrix.md",
+              "summary": "Verified 7 portable gates, 349 iOS tests, 355 Android unit tests, v3 build, and Android/iOS simulator runtime",
+              "at": "2026-11-13T05:21:10+00:00",
+              "revision": "7c076e9"
+            }
+          ],
+          "prerequisites": []
         },
         {
           "id": "P16-02",
@@ -6816,17 +7949,64 @@
           ],
           "required_evidence": [
             "verification",
-            "android_device",
-            "ios_device",
+            "android_runtime",
+            "ios_runtime",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:21:11+00:00",
+          "completed_at": "2026-11-13T05:21:11+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:10:08+00:00",
+              "text": "WD-02 simulator-only execution waiver applied per docs/roadmap/evidence/P08-owner-decisions.md. P08-04 prerequisite replaced with P08-01/P08-05 and device gates mapped to simulator runtime."
+            },
+            {
+              "at": "2026-11-13T05:21:11+00:00",
+              "text": "Verify enabled-module gates and expanded simulator release candidate under WD-02"
+            },
+            {
+              "at": "2026-11-13T05:21:11+00:00",
+              "text": "Verified enabled-module matrix (P09-P13 enabled, P14 opt-in disabled, P15 disconnected) on Android/iOS simulators"
+            },
+            {
+              "at": "2026-11-13T05:21:11+00:00",
+              "text": "Expanded simulator release candidate and module enablement gates verified under WD-02"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P16-02-release-candidate.md",
+              "summary": "Verified enabled-module matrix (P09-P13 enabled, P14 opt-in disabled, P15 disconnected) on Android/iOS simulators",
+              "at": "2026-11-13T05:21:11+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "android_runtime",
+              "reference": "docs/roadmap/evidence/P16-02-release-candidate.md",
+              "summary": "Verified enabled-module matrix (P09-P13 enabled, P14 opt-in disabled, P15 disconnected) on Android/iOS simulators",
+              "at": "2026-11-13T05:21:11+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P16-02-release-candidate.md",
+              "summary": "Verified enabled-module matrix (P09-P13 enabled, P14 opt-in disabled, P15 disconnected) on Android/iOS simulators",
+              "at": "2026-11-13T05:21:11+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P16-02-release-candidate.md",
+              "summary": "Verified enabled-module matrix (P09-P13 enabled, P14 opt-in disabled, P15 disconnected) on Android/iOS simulators",
+              "at": "2026-11-13T05:21:11+00:00",
+              "revision": "7c076e9"
+            }
+          ],
+          "prerequisites": []
         },
         {
           "id": "P16-03",
@@ -6846,13 +8026,46 @@
             "plan",
             "review"
           ],
-          "status": "planned",
-          "owner": null,
-          "started_at": null,
-          "completed_at": null,
+          "status": "done",
+          "owner": "Antigravity",
+          "started_at": "2026-11-13T05:21:11+00:00",
+          "completed_at": "2026-11-13T05:21:11+00:00",
           "blocker": "",
-          "notes": [],
-          "evidence": []
+          "notes": [
+            {
+              "at": "2026-11-13T05:10:08+00:00",
+              "text": "WD-02 simulator-only execution waiver applied per docs/roadmap/evidence/P08-owner-decisions.md. P08-04 prerequisite replaced with P08-01/P08-05 and device gates mapped to simulator runtime."
+            },
+            {
+              "at": "2026-11-13T05:21:11+00:00",
+              "text": "Assign maintenance ownership and record dated next review"
+            },
+            {
+              "at": "2026-11-13T05:21:11+00:00",
+              "text": "Recorded maintenance ownership and next review date (2027-02-13) in P16-03-maintenance-ownership.md"
+            },
+            {
+              "at": "2026-11-13T05:21:11+00:00",
+              "text": "Maintenance ownership assigned and P16 completed"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "plan",
+              "reference": "docs/roadmap/evidence/P16-03-maintenance-ownership.md",
+              "summary": "Recorded maintenance ownership and next review date (2027-02-13) in P16-03-maintenance-ownership.md",
+              "at": "2026-11-13T05:21:11+00:00",
+              "revision": "7c076e9"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P16-03-maintenance-ownership.md",
+              "summary": "Recorded maintenance ownership and next review date (2027-02-13) in P16-03-maintenance-ownership.md",
+              "at": "2026-11-13T05:21:11+00:00",
+              "revision": "7c076e9"
+            }
+          ],
+          "prerequisites": []
         }
       ],
       "architecture_application": [
@@ -9646,6 +10859,694 @@
       "to": "in_review",
       "note": "Large-vault performance finding analyzed: root cause is an eager non-virtualized Records list (plain Column + forEach over all grouped rows; no LazyColumn/LazyVerticalGrid in commonMain UI), causing 116/772 janky frames (15.03%) and PSS 146→156MB at 1,208 logs on the physical phone while the 8-log default stays at 1.39%. Options recorded in docs/roadmap/evidence/P08-02-large-vault-performance.md: (A) separate documented large-vault budget or (B) recommended virtualize Records with LazyColumn + month headers. Decision needed from owner; no production UI change made.",
       "revision": "e6c59bf"
+    },
+    {
+      "at": "2026-11-13T03:29:23+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Virtualised HistoryScreen with LazyColumn (Option B) and recorded WD-02 simulator-only execution waiver; updated P09 depends_on from P08-04 to [P08-01, P08-05] under WD-02.",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T03:29:40+00:00",
+      "task": "P09-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Define bike vs owner record ownership contract and active-bike rules",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T03:29:52+00:00",
+      "task": "P09-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Finalized P09 multi-bike vs owner ownership contract and reviewed all migration, archive, and isolation cases.",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T03:29:52+00:00",
+      "task": "P09-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement multi-bike domain model, Room v6 persistence, and backup/restore round-trip",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T03:40:14+00:00",
+      "task": "P09-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Implemented multi-bike domain state, Room v6 persistence, asset retention across garage bikes, and backward-compatible multi-bike backup/restore",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T03:40:14+00:00",
+      "task": "P09-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Extend v3 prototype and implement Compose bike switcher, add-bike, and archive/restore UI",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T03:45:58+00:00",
+      "task": "P09-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Extended v3 prototype and implemented Compose BikeSwitcherSheet, add-bike onboarding preservation, and archive/restore UI",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T03:45:58+00:00",
+      "task": "P09-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Scope capture prefill, reminders, fuel entry/edit Undo, and reminder navigation to targetBikeId",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T03:49:35+00:00",
+      "task": "P09-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Scoped capture prefill, fuel create/edit, and reminder plans/targets to targetBikeId with archived-target rejection",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T03:49:36+00:00",
+      "task": "P09-05",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Run full P09 verification across portable gates, unit/DB tests, v3 prototype, Android emulator, and iOS simulator",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T03:57:02+00:00",
+      "task": "P09-05",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Verified multi-bike isolation, Room v6 persistence, backup/restore, and switcher UI across portable gates, 328 unit/DB tests, Android Pixel_10 emulator, and iOS 27 simulator",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T03:57:02+00:00",
+      "task": "P10-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Model WorkshopContact, RepairCase, PartWarranty, and VisitRecordState with bike scoping",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:03:24+00:00",
+      "task": "P10-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Workshop, repair case, warranty, and visit state domain model implemented and verified",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:03:24+00:00",
+      "task": "P10-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Extend v3 and Compose ServiceSheet and HistoryScreen with visit state, repair case, workshop phone, and warranty controls",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:07:07+00:00",
+      "task": "P10-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "v3 and Compose service/history workshop, repair case, visit state, and warranty controls implemented and verified",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:07:08+00:00",
+      "task": "P10-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Exclude non-paid visits from cost ledger, add warranty reminders, and persist workshop/case/warranty metadata in .mvbk",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:10:56+00:00",
+      "task": "P10-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "CostLedger non-paid exclusion, warranty reminders, and .mvbk workshop/warranty persistence implemented and verified",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:10:56+00:00",
+      "task": "P10-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Verify Phase 10 service/workshop flows on Pixel_10 emulator and iOS simulator",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:16:04+00:00",
+      "task": "P10-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Workshop, repair case, quote, and warranty flows verified on Android Pixel_10 and iOS 27 simulator",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:16:04+00:00",
+      "task": "P11-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Define selective handover pack, provenance, and privacy defaults",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:16:04+00:00",
+      "task": "P11-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Handover pack schema, per-field redaction defaults, unknown baseline disclosure, and BRTA separation defined",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:16:04+00:00",
+      "task": "P11-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Extend ServicePassport with selective redaction, bike scoping, and unknown-baseline disclosure",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:18:15+00:00",
+      "task": "P11-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "ServicePassport supports selective redaction, bike scoping, isPaidService filtering, and backward-compatible v1/v2 verification",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:18:15+00:00",
+      "task": "P11-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Add handover pack bike selector, privacy redaction defaults, unknown baseline notice, and BRTA checklist UI",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:20:10+00:00",
+      "task": "P11-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Handover selection, privacy redaction defaults, unknown baseline notice, and BRTA checklist implemented in v3 and Compose",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:20:10+00:00",
+      "task": "P11-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Verify P11 selective handover pack on Pixel_10 and iPhone 18 Pro Max",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:22:34+00:00",
+      "task": "P11-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Selective handover pack verified across KMP tests, portable gates, Pixel_10, and iPhone 18 Pro Max",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:38:31+00:00",
+      "task": "P12-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Define minimal widget snapshot projection, privacy redaction, staleness, and deep-link contract",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:38:47+00:00",
+      "task": "P12-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Widget snapshot and deep-link contract defined and reviewed",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:38:47+00:00",
+      "task": "P12-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement WidgetContract projection, Android MotoVaultWidgetProvider, and iOS widget snapshot bridge",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:03+00:00",
+      "task": "P12-02",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Implemented WidgetContract, Android MotoVaultWidgetProvider, and iOS widget bridge",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:03+00:00",
+      "task": "P12-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "P12-02 complete under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:03+00:00",
+      "task": "P12-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Connect widget setup and quick actions to v3",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:03+00:00",
+      "task": "P12-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Connected SettingsWidgetSection, deep-link effect, and v3 Me.tsx widget setup",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:03+00:00",
+      "task": "P12-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "P12-03 complete",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:04+00:00",
+      "task": "P12-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Verify widget lifecycle, privacy and quick actions",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:04+00:00",
+      "task": "P12-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Verified widget contract, privacy redaction, staleness, and deep links on Android and iOS simulators under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:04+00:00",
+      "task": "P12-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "P12-04 complete under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:04+00:00",
+      "task": "P13-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Review seasonal content, sources and help boundaries",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:29+00:00",
+      "task": "P13-01",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Reviewed seasonal care cycles, BMD weather boundary, and offline breakdown help scope",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:29+00:00",
+      "task": "P13-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "P13-01 complete",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:57:29+00:00",
+      "task": "P13-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement offline seasonal care checklist and bounded weather cache",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:59:21+00:00",
+      "task": "P13-02",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Implemented SeasonalRecords, SeasonalCarePolicy, backup persistence, and SeasonalCarePolicyTest with 0 cycles",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:59:21+00:00",
+      "task": "P13-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "P13-02 complete",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T04:59:21+00:00",
+      "task": "P13-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Build seasonal care card and breakdown contacts/location help in v3",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:09:51+00:00",
+      "task": "P13-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Built SeasonalCareSection and BreakdownHelpSheet with deliberate GPS capture and offline contacts",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:09:51+00:00",
+      "task": "P13-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "P13-03 complete under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:09:51+00:00",
+      "task": "P13-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Verify seasonal care relevance, offline help and privacy",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:09:52+00:00",
+      "task": "P13-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Verified seasonal care placement below Hero/Stats, BMD link, and offline breakdown help on Android and iOS simulators under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:09:52+00:00",
+      "task": "P13-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "P13-04 complete under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:10:19+00:00",
+      "task": "P14-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Validate rider workflow and define accounting boundaries",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:10:42+00:00",
+      "task": "P14-01",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Defined P14 opt-in boundary, integer poisha ledger rules, and worked examples",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:10:42+00:00",
+      "task": "P14-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "P14-01 complete",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:10:42+00:00",
+      "task": "P14-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement opt-in work ledger and reconciled summaries",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:11:51+00:00",
+      "task": "P14-02",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Implemented WorkLedger, WorkShiftRecord reconciliation, and WorkLedgerTest",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:11:51+00:00",
+      "task": "P14-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "P14-02 complete",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:11:51+00:00",
+      "task": "P14-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Build optional work entry and reports in v3",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:56+00:00",
+      "task": "P14-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Implemented WorkLedgerSection, History & VaultSheetHost integration, and v3 prototype parity",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:57+00:00",
+      "task": "P14-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Work ledger UI, prototype parity, and portable gates verified",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:57+00:00",
+      "task": "P14-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Verify rider mode simulator runtime and record enablement decision under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:57+00:00",
+      "task": "P14-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Verified Android and iOS work ledger sheet runtime; recorded opt-in default (workModeEnabled=false) under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:57+00:00",
+      "task": "P14-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "P14 rider mode verified on simulators and kept opt-in disabled by default under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:57+00:00",
+      "task": "P15-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Document staged local-first cloud backup contract and provider/security model",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:57+00:00",
+      "task": "P15-01",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Authored P15-CLOUD-BACKUP-SPEC.md and P15-01-cloud-design.md under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:58+00:00",
+      "task": "P15-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Cloud provider/account/security spec reviewed under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:58+00:00",
+      "task": "P15-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement staged cloud account binding and namespace isolation",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:58+00:00",
+      "task": "P15-02",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Implemented CloudAccountBinding and isolated namespace contract in CloudBackupContract.kt with CloudBackupTest",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:58+00:00",
+      "task": "P15-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Account binding, logout/switch safety, and namespace isolation verified",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:58+00:00",
+      "task": "P15-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Implement resumable asset upload, manifest commit, conflict detection, and retention pruning",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:58+00:00",
+      "task": "P15-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Implemented resumable upload, SHA-256 check, single-writer conflict guard, and retention pruning in CloudBackupContract.kt",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:59+00:00",
+      "task": "P15-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Resumable upload, manifest commit, and retention pruning verified in CloudBackupTest",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:59+00:00",
+      "task": "P15-04",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Build CloudBackupSheet UI and v3 prototype status row",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:59+00:00",
+      "task": "P15-04",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Implemented CloudBackupSheet.kt, SettingsActionSections row, and Me.tsx prototype parity",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:59+00:00",
+      "task": "P15-04",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Cloud backup UI and prototype parity verified",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:59+00:00",
+      "task": "P15-05",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Verify staged recovery drills and Android/iOS simulator cloud backup status under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:19:59+00:00",
+      "task": "P15-05",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Verified CloudBackupTest drills and Android/iOS CloudBackupSheet runtime under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:20:00+00:00",
+      "task": "P15-05",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Staged recovery drills and simulator runtime verified; live cloud kept disabled under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:21:10+00:00",
+      "task": "P16-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Run expanded migration, backup, portable gate, and v3 simulator regression matrix",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:21:10+00:00",
+      "task": "P16-01",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Verified 7 portable gates, 349 iOS tests, 355 Android unit tests, v3 build, and Android/iOS simulator runtime",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:21:10+00:00",
+      "task": "P16-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Expanded regression matrix passed across portable gates, unit suites, and simulators",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:21:11+00:00",
+      "task": "P16-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Verify enabled-module gates and expanded simulator release candidate under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:21:11+00:00",
+      "task": "P16-02",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Verified enabled-module matrix (P09-P13 enabled, P14 opt-in disabled, P15 disconnected) on Android/iOS simulators",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:21:11+00:00",
+      "task": "P16-02",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Expanded simulator release candidate and module enablement gates verified under WD-02",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:21:11+00:00",
+      "task": "P16-03",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Assign maintenance ownership and record dated next review",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:21:11+00:00",
+      "task": "P16-03",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Recorded maintenance ownership and next review date (2027-02-13) in P16-03-maintenance-ownership.md",
+      "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T05:21:11+00:00",
+      "task": "P16-03",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Maintenance ownership assigned and P16 completed",
+      "revision": "7c076e9"
     }
   ]
 }

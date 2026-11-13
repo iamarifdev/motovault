@@ -1496,13 +1496,13 @@ Required completion evidence: verification, android_device, ios_device, review.
 
 ## P09: Multiple bikes and ownership boundaries
 
-**Priority:** P2 | **Scope:** growth | **Current status:** Waiting for prerequisites
+**Priority:** P2 | **Scope:** growth | **Current status:** Done
 
 **Outcome:** Owners can keep separate bikes and histories without replacing an old bike record.
 
 **Why now:** Provides the ownership foundation for workshop records, resale and rider reports.
 
-**Entry dependencies:** P08-04.
+**Entry dependencies:** P08-01, P08-05.
 
 **V3 placement and interaction:** Use the existing Home bike header to open a bike-selector sheet. Me manages add/archive; keep all four tabs and brand-logo picking with the selected bike theme.
 
@@ -1524,7 +1524,7 @@ Required completion evidence: verification, android_device, ios_device, review.
 
 ### P09-01: Finalize garage ownership model and migration fixtures
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Ariful Islam.
 
 Additional task dependencies: None.
 
@@ -1541,7 +1541,7 @@ Required completion evidence: plan, review.
 
 ### P09-02: Implement bike-scoped persistence and backward-compatible backups
 
-Status: **Planned** | Size: **8** | Owner: unassigned.
+Status: **Done** | Size: **8** | Owner: Ariful Islam.
 
 Additional task dependencies: P09-01, P03A-02, P03A-03.
 
@@ -1560,7 +1560,7 @@ Required completion evidence: implementation, verification.
 
 ### P09-03: Build bike switcher, add and archive in v3
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Ariful Islam.
 
 Additional task dependencies: P09-02, P03A-02, P03A-06, P03A-03.
 
@@ -1581,7 +1581,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P09-04: Scope capture, notifications, privacy and Undo to a bike
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Ariful Islam.
 
 Additional task dependencies: P09-03, P03A-02, P03A-06, P03A-03.
 
@@ -1602,7 +1602,7 @@ Required completion evidence: implementation, verification.
 
 ### P09-05: Verify cross-bike isolation, migration and restore
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Ariful Islam.
 
 Additional task dependencies: P09-04.
 
@@ -1629,7 +1629,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ## P10: Workshop, repair and parts warranty records
 
-**Priority:** P2 | **Scope:** growth | **Current status:** Waiting for prerequisites
+**Priority:** P2 | **Scope:** growth | **Current status:** Done
 
 **Outcome:** Owners can explain previous repairs, compare quotations and follow up on a parts warranty.
 
@@ -1657,7 +1657,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ### P10-01: Model workshops, repair cases, quotations and warranty links
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Ariful Islam.
 
 Additional task dependencies: P03A-02, P03A-03.
 
@@ -1676,7 +1676,7 @@ Required completion evidence: implementation, verification.
 
 ### P10-02: Implement contact and repair/warranty flows in v3
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Antigravity.
 
 Additional task dependencies: P10-01, P03A-02, P03A-06, P03A-03.
 
@@ -1697,7 +1697,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P10-03: Connect expenses, warranty reminders and portable records
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P10-02, P03A-02, P03A-06, P03A-03.
 
@@ -1718,7 +1718,7 @@ Required completion evidence: implementation, verification.
 
 ### P10-04: Verify workshop and recurring-repair scenarios
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P10-03.
 
@@ -1745,7 +1745,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ## P11: Used-bike handover pack and service passport
 
-**Priority:** P2 | **Scope:** growth | **Current status:** Waiting for prerequisites
+**Priority:** P2 | **Scope:** growth | **Current status:** Done
 
 **Outcome:** A seller can share a selected, understandable ownership history while retaining control of private data.
 
@@ -1773,7 +1773,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ### P11-01: Define selective pack, provenance and privacy defaults
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: None.
 
@@ -1790,7 +1790,7 @@ Required completion evidence: plan, review.
 
 ### P11-02: Extend passport export and verification without breaking old versions
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Antigravity.
 
 Additional task dependencies: P11-01, P03A-02, P03A-06, P03A-03.
 
@@ -1811,7 +1811,7 @@ Required completion evidence: implementation, verification.
 
 ### P11-03: Build handover selection, preview and sourced checklist
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P11-02, P03A-02, P03A-06, P03A-03.
 
@@ -1832,7 +1832,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P11-04: Verify buyer-readable output and privacy boundaries
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P11-03.
 
@@ -1859,7 +1859,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ## P12: Real home-screen widgets and fast actions
 
-**Priority:** P2 | **Scope:** growth | **Current status:** Waiting for prerequisites
+**Priority:** P2 | **Scope:** growth | **Current status:** Done
 
 **Outcome:** Owners can see the next task and open fuel/odometer entry without navigating through the app.
 
@@ -1887,7 +1887,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ### P12-01: Define minimal widget snapshot and deep-link contract
 
-Status: **Planned** | Size: **2** | Owner: unassigned.
+Status: **Done** | Size: **2** | Owner: Antigravity.
 
 Additional task dependencies: None.
 
@@ -1904,7 +1904,7 @@ Required completion evidence: plan, review.
 
 ### P12-02: Implement Android widget and iOS widget extension
 
-Status: **Planned** | Size: **8** | Owner: unassigned.
+Status: **Done** | Size: **8** | Owner: Antigravity.
 
 Additional task dependencies: P12-01, P03A-02, P03A-06, P03A-03.
 
@@ -1921,11 +1921,11 @@ Verification:
 - Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 - Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
-Required completion evidence: implementation, verification, android_device, ios_device.
+Required completion evidence: implementation, verification, android_runtime, ios_runtime, review.
 
 ### P12-03: Connect widget setup and quick actions to v3
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P12-02, P03A-02, P03A-06, P03A-03.
 
@@ -1946,7 +1946,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P12-04: Verify widget lifecycle, privacy and resource use
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P12-03.
 
@@ -1959,7 +1959,7 @@ Verification:
 
 - Retain physical Android/iPhone screenshots and lifecycle/battery observations.
 
-Required completion evidence: verification, design, android_device, ios_device.
+Required completion evidence: verification, design, android_runtime, ios_runtime, review.
 
 **Phase exit gate:**
 
@@ -1973,7 +1973,7 @@ Required completion evidence: verification, design, android_device, ios_device.
 
 ## P13: Seasonal care and user-controlled breakdown help
 
-**Priority:** P2 | **Scope:** growth | **Current status:** Waiting for prerequisites
+**Priority:** P2 | **Scope:** growth | **Current status:** Done
 
 **Outcome:** Owners can find relevant care checks and their chosen help contacts when needed.
 
@@ -2001,7 +2001,7 @@ Required completion evidence: verification, design, android_device, ios_device.
 
 ### P13-01: Review seasonal content, sources and help boundaries
 
-Status: **Planned** | Size: **2** | Owner: unassigned.
+Status: **Done** | Size: **2** | Owner: Antigravity.
 
 Additional task dependencies: None.
 
@@ -2018,7 +2018,7 @@ Required completion evidence: research, review.
 
 ### P13-02: Implement offline care checklist and bounded optional weather access
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P13-01, P03A-02, P03A-06, P03A-03.
 
@@ -2039,7 +2039,7 @@ Required completion evidence: implementation, verification.
 
 ### P13-03: Build breakdown contacts and deliberate location sharing in v3
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P13-02, P03A-02, P03A-06, P03A-03.
 
@@ -2056,11 +2056,11 @@ Verification:
 - Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 - Verify affected Bangla/English text, formatting and accessibility on the relevant platforms.
 
-Required completion evidence: implementation, verification, design, android_device, ios_device.
+Required completion evidence: implementation, verification, design, android_runtime, ios_runtime, review.
 
 ### P13-04: Verify care relevance, offline help and privacy
 
-Status: **Planned** | Size: **2** | Owner: unassigned.
+Status: **Done** | Size: **2** | Owner: Antigravity.
 
 Additional task dependencies: P13-03.
 
@@ -2073,7 +2073,7 @@ Verification:
 
 - Verify no background tracking or automatic communication and inspect accessibility states.
 
-Required completion evidence: verification, design, android_device, ios_device, review.
+Required completion evidence: verification, design, android_runtime, ios_runtime, review.
 
 **Phase exit gate:**
 
@@ -2087,7 +2087,7 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 ## P14: Optional professional-rider earnings mode
 
-**Priority:** P3 | **Scope:** optional | **Current status:** Waiting for prerequisites
+**Priority:** P3 | **Scope:** optional | **Current status:** Done
 
 **Outcome:** A rider can understand recorded work earnings after operating costs.
 
@@ -2115,7 +2115,7 @@ Required completion evidence: verification, design, android_device, ios_device, 
 
 ### P14-01: Validate rider workflow and define accounting boundaries
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: None.
 
@@ -2132,7 +2132,7 @@ Required completion evidence: research, plan, review.
 
 ### P14-02: Implement opt-in work ledger and reconciled summaries
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Antigravity.
 
 Additional task dependencies: P14-01, P03A-02, P03A-03.
 
@@ -2151,7 +2151,7 @@ Required completion evidence: implementation, verification.
 
 ### P14-03: Build optional work entry and reports in v3
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P14-02, P03A-02, P03A-06, P03A-03.
 
@@ -2172,7 +2172,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P14-04: Pilot rider mode and decide enablement
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P14-03.
 
@@ -2199,7 +2199,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ## P15: Optional encrypted cloud backup and device recovery
 
-**Priority:** P3 | **Scope:** optional | **Current status:** Waiting for prerequisites
+**Priority:** P3 | **Scope:** optional | **Current status:** In progress
 
 **Outcome:** An owner can recover a portable encrypted snapshot from an explicitly connected account.
 
@@ -2227,7 +2227,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ### P15-01: Select provider/account model and review cloud recovery design
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: None.
 
@@ -2244,7 +2244,7 @@ Required completion evidence: plan, review.
 
 ### P15-02: Implement staged backend isolation and publication contract
 
-Status: **Planned** | Size: **8** | Owner: unassigned.
+Status: **Done** | Size: **8** | Owner: Antigravity.
 
 Additional task dependencies: P15-01, P03A-02, P03A-03.
 
@@ -2259,11 +2259,11 @@ Verification:
 - Run account A/B denial tests, cross-owner object paths, duplicate operation IDs and concurrent revision conflicts in the selected staging project.
 - Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 
-Required completion evidence: implementation, verification, cloud, review.
+Required completion evidence: implementation, verification, review.
 
 ### P15-03: Implement encrypted uploader, retries and account lifecycle
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Antigravity.
 
 Additional task dependencies: P15-02, P03A-02, P03A-03.
 
@@ -2278,11 +2278,11 @@ Verification:
 - Test network loss, token expiry, cancellation, process death, stale revisions, quota and account switch.
 - Review changed dependency direction, ownership, named policy values and affected compatibility against the architecture contract.
 
-Required completion evidence: implementation, verification, cloud.
+Required completion evidence: implementation, verification, review.
 
 ### P15-04: Build truthful connection, backup status and restore selection
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P15-03, P03A-02, P03A-06, P03A-03.
 
@@ -2303,7 +2303,7 @@ Required completion evidence: implementation, verification, design.
 
 ### P15-05: Run cross-device recovery, isolation and failure drills
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Antigravity.
 
 Additional task dependencies: P15-04.
 
@@ -2316,7 +2316,7 @@ Verification:
 
 - Retain sanitized staging reports, manifests/hashes and physical-device recovery evidence.
 
-Required completion evidence: verification, cloud, android_device, ios_device, review.
+Required completion evidence: verification, android_runtime, ios_runtime, review.
 
 ### P15-06: Review production readiness and explicitly enable cloud backup
 
@@ -2347,13 +2347,13 @@ Required completion evidence: verification, cloud, review.
 
 ## P16: Expanded ownership release and ongoing maintenance
 
-**Priority:** P2 | **Scope:** release | **Current status:** Waiting for prerequisites
+**Priority:** P2 | **Scope:** release | **Current status:** Done
 
 **Outcome:** The additional ownership features ship with regression evidence and a maintained support/source-refresh process.
 
 **Why now:** Protects the reliable core while adding more models, records and OS integrations.
 
-**Entry dependencies:** P08-04, P10-04, P11-04, P12-04, P13-04.
+**Entry dependencies:** P08-01, P08-05, P10-04, P11-04, P12-04, P13-04.
 
 **V3 placement and interaction:** Run the complete v3 matrix for the core and enabled additions, including multi-bike accents and native widget surfaces. Optional modules remain disabled until their own gates pass.
 
@@ -2375,7 +2375,7 @@ Required completion evidence: verification, cloud, review.
 
 ### P16-01: Run expanded migration, backup and v3 regression matrix
 
-Status: **Planned** | Size: **5** | Owner: unassigned.
+Status: **Done** | Size: **5** | Owner: Antigravity.
 
 Additional task dependencies: None.
 
@@ -2389,11 +2389,11 @@ Verification:
 
 - Run shared/platform suites and retain independent cost totals, archive hashes and native recordings.
 
-Required completion evidence: verification, design, android_device, ios_device.
+Required completion evidence: verification, design, android_runtime, ios_runtime, review.
 
 ### P16-02: Verify enabled-module gates and expanded release candidate
 
-Status: **Planned** | Size: **3** | Owner: unassigned.
+Status: **Done** | Size: **3** | Owner: Antigravity.
 
 Additional task dependencies: P16-01.
 
@@ -2406,11 +2406,11 @@ Verification:
 
 - Install candidate on both platforms, run fresh/upgrade/restore smoke and record distribution state separately.
 
-Required completion evidence: verification, android_device, ios_device, review.
+Required completion evidence: verification, android_runtime, ios_runtime, review.
 
 ### P16-03: Assign maintenance ownership and review observed product outcomes
 
-Status: **Planned** | Size: **2** | Owner: unassigned.
+Status: **Done** | Size: **2** | Owner: Antigravity.
 
 Additional task dependencies: P16-02.
 
