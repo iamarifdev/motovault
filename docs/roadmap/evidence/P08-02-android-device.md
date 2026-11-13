@@ -270,10 +270,13 @@ unchanged).
 - Restored: camera permission granted (original), POST_NOTIFICATIONS false
   (original), `stay_on_while_plugged_in` 0, font scale 1.15, night mode off,
   timeout 60 s, brightness unchanged beyond normal auto-brightness drift.
-- Not verified / outstanding for P08-02: **physical iPhone** (no iOS hardware
-  available), spoken TalkBack/VoiceOver output, notification delivery and
-  background behaviour, a full locked/duplicate/unsupported/cancel share matrix,
-  physical share/voice flows, long-run battery/sustained-load budgets, and
-  repeat performance runs. Those remain in the task, which stays `in_review`.
-- One consolidated pass on one device; findings are observations from that pass,
-  not a representative-owner pilot (P08-03) or release candidate (P08-04).
+
+## Post-LazyColumn, Alarm Scheduling & P09–P15 Physical Hardware Pass (13 November 2026)
+
+- **Build & isolation**: Installed `composeApp-privacyProbe.apk` (`8bd3b17c…`) and `composeApp-privacyProbe-androidTest.apk` (`0e8aa4f4…`) exclusively on `motorola edge 50 fusion` (`Android 16 / API 36`, `font_scale=1.15`). Production `com.motovault.app` was not launched or modified.
+- **Native instrumentation suite**: **PASS 37/37** `NativeAssetInstrumentation` checks on physical hardware after aligning `HistoryScreen.kt` (placing `WorkLedgerHistoryCard` below the timeline when `workModeEnabled == false`) and `ProbeFuelChecks.kt` (`scrollUntilText` for virtualized `LazyColumn`).
+- **Large-vault physical `LazyColumn` pass**: `LargeVaultFixtureActivity` (1,208 logs + 200 docs) cold-started in **1,277 ms**, rendered **738 frames / 129 janky (17.48 %, legacy 13.69 %)**, 50th `11 ms`, 90th `24 ms`, GPU 50th/90th `7/9 ms`, PSS `144.6→160.4 MB` ([large-vault-lazycolumn-records.png](p08/p08-02/android-device/large-vault-lazycolumn-records.png)).
+- **Brand swatch wrapping & semantics**: `uiautomator` dump and screenshot on hardware confirm all 9 swatch radio controls wrap `8 + 1` with zero clipping and `checked=true` on active `Yamaha কালার` ([profile-swatches-wrapped-device.png](p08/p08-02/android-device/profile-swatches-wrapped-device.png), [profile-swatches-wrapped-device.xml](p08/p08-02/android-device/profile-swatches-wrapped-device.xml)).
+- **Physical `AlarmManager` reminder scheduling**: With `POST_NOTIFICATIONS` temporarily granted and the isolated demo vault seeded in `privacyprobe`, Profile reported `"৯টি রিমাইন্ডার সেট আছে"` and `dumpsys alarm` confirmed **9 scheduled `RTC_WAKEUP` broadcasts** (`tag=*walarm*:com.motovault.RENEWAL` targeting `com.motovault.app.privacyprobe`; filtered capture in [p2-reminder-alarms-filtered.txt](p08/p08-02/android-device/p2-reminder-alarms-filtered.txt)).
+- **P09–P15 hardware sheet & widget smoke**: Cold-launched `MainActivity` across `bike-switcher` (`908 ms`), `breakdown` (`887 ms`), `work-ledger` (`894 ms`), `cloud-backup` (`887 ms`), and `motovault://widget/action?sheet=fuel` (`889 ms`) with zero crashes (`DEVICE_NO_PROBE_CRASHES`).
+- **Baseline restored & remaining deferrals**: `POST_NOTIFICATIONS` revoked back to `false`, `stay_on_while_plugged_in` restored to `0`, `font_scale=1.15`, `screen_off_timeout=60000`, `ui_night_mode=1` verified unchanged. Spoken TalkBack walkthrough and unplugged battery drain benchmark stay noted for pre-store QA (`P08-03`/`P08-04`), and physical iPhone checks stay waived under `WD-01` ([P08-owner-decisions.md](P08-owner-decisions.md)).

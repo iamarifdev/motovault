@@ -4,9 +4,11 @@ Device: motorola edge 50 fusion (motorola), Android 16 / API 36, arm64-v8a, 1080
 Build fingerprint: motorola/cuscoi_g/cuscoi:16/W1UUIS36H.110-42-4/83f47c-9d83a:user/release-keys
 Serial recorded internally, omitted from evidence.
 
-Probe APK installed: e60d3bf49011cea4b48aef711b849e35eb47710b954d04f4c207860968bd5564
-Test APK installed: 7f7c82fbae147c414896f928f57a9629282ed007f418f3c9de98c076701c7713
-Source: e6c59bf06b03fc54f32ab6ad86b2117a17ac53d4 + uncommitted P08 working tree (not a clean HEAD).
+Probe APK installed (initial pass): e60d3bf49011cea4b48aef711b849e35eb47710b954d04f4c207860968bd5564
+Test APK installed (initial pass): 7f7c82fbae147c414896f928f57a9629282ed007f418f3c9de98c076701c7713
+Probe APK installed (post-HistoryScreen fix & P09–P15 pass): 8bd3b17cb42704f4254b448a63a05b40ca9d340966b70d31d86f8d4bc6395b90
+Test APK installed (post-HistoryScreen fix & P09–P15 pass): 0e8aa4f41f29e3fc915b66a2b5f0bd63c356b70c5eba70d70a9ff1edbd267a00
+Source: P08 initial pass (`e6c59bf06b03fc54f32ab6ad86b2117a17ac53d4` + working tree) followed by `HistoryScreen.kt` / `ProbeFuelChecks.kt` + P09–P16 working tree.
 
 Device settings before: font_scale=1.15, night mode=no, screen_off_timeout=60000 ms, brightness=110, stay_on_while_plugged_in=0
 Camera permission before: granted=true (previous synthetic probe session); revoked only to capture the prompt and restored to granted=true afterwards.
@@ -85,7 +87,7 @@ f06ba2c864c6dccdadb7ec6072e29e8eddd75122108252c43a581b172303a0d6  p2-cam-01-laun
 a361f97d509ce26e510c9c9b5a7b1741a3a3756449050f948ebff1d542553a2d  p2-largevault-records.png
 f97e77c34ab1875c79d25f2dc38ac703481ea2f93f8b8ee79e9d9deecca5f4c9  p2-largevault-records.xml
 abf2611d19950c29dec86f69bd3dd9b0ccb211ca81f7c8ce7c1eaaa8fcf41b15  p2-notification-delivered-filtered.txt
-99f8d76b4bde59bcb1089aaf3301288e768dc23324e0ab1d01e178816001a420  p2-reminder-alarms-filtered.txt
+16b2763faae5b95ff7147035cda2e751d92360ca1a97a525094a7aaa0f40e05a  p2-reminder-alarms-filtered.txt
 8cb2143607f9e95e67dc0f51e55989b054a489067e2b99dd6ff6137acc25d60e  p2-sched-01-main.xml
 f06ba2c864c6dccdadb7ec6072e29e8eddd75122108252c43a581b172303a0d6  picker-01-launch.xml
 e65e13ba3b42fcfef6eb37a59497ab55fe8d78a3ea8752e757a1616f84ce9757  picker-02-profile.xml
@@ -100,3 +102,6 @@ b54b3c39fc817875d0297bd6a3e9e74824b069fbca8d0ceadab59a4dc5c932ad  picker-files-0
 8c05c296b56db60589184f7f361323980c119e158ba0443fb3061fee377de866  share-mime-rejection.xml
 b268773ce361c25720a5f9489ea3a2ce7d7ff0230ae3cc05b0ee45dd80465b5a  share-warm-review.png
 8cb2143607f9e95e67dc0f51e55989b054a489067e2b99dd6ff6137acc25d60e  share-warm-review.xml
+2e33f345bcf6f7927859d8aad9d444f4800f65e96e7d1459f7ecec744ddda62e  large-vault-lazycolumn-records.png
+124c6b067dd3fbef9cd275bb69706dd5451d987a6e3684d2c6379dfd04047bf9  profile-swatches-wrapped-device.png
+6b9a5c91793d0ad04102bc686796ab49d86f122384c2ed5ffc704b0adfca4ddd  profile-swatches-wrapped-device.xml

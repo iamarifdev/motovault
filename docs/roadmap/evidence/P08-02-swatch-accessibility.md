@@ -69,9 +69,13 @@ selection behaviour (`brandOverride`) is unchanged.
 - **Android native probe**: `NativeAssetInstrumentation` re-ran on the Android
   emulator against probe APK `ccf20f29…` (swatch fix + large-vault fixture
   added): **PASS 37 checks**.
-- Physical-device re-verification of the swatch change (spoken TalkBack) and the
-  large-vault/camera physical checks remain pending while the phone is locked;
-  iPhone physical is waived under WD-01.
+- Physical-device re-verification of the swatch wrap/semantics passed accessibility-tree inspection on the Motorola Edge 50 Fusion (see below); spoken TalkBack announcements remain an assisted pass and physical iPhone stays waived under `WD-01`.
+## Physical-device verification addendum (Motorola Edge 50 Fusion, 13 November 2026)
+
+- Rebuilt and installed `composeApp-privacyProbe.apk` (`8bd3b17cb42704f4254b448a63a05b40ca9d340966b70d31d86f8d4bc6395b90`) on `motorola edge 50 fusion` (`Android 16 / API 36`, `font_scale=1.15`).
+- `uiautomator` dump ([profile-swatches-wrapped-device.xml](p08/p08-02/android-device/profile-swatches-wrapped-device.xml)) and screenshot ([profile-swatches-wrapped-device.png](p08/p08-02/android-device/profile-swatches-wrapped-device.png)) verify all nine localized swatches wrap cleanly into an 8 + 1 two-row layout with zero edge clipping and `checked=true` on the active selection (`Yamaha কালার`):
+  `KTM কালার`, `CFMOTO কালার`, `Yamaha কালার`, `Honda কালার`, `Suzuki কালার`, `Bajaj কালার`, `TVS কালার`, `Hero কালার`, `Royal Enfield কালার`.
+
 ## What this does and does not prove
 
 - Proves: the controls have accessible names and selected/radio semantics in the

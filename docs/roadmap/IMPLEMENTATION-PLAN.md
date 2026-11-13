@@ -1412,7 +1412,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 
 ### P08-02: Run physical-device accessibility, reliability and performance pass
 
-Status: **In review** | Size: **5** | Owner: Codex.
+Status: **Done** | Size: **5** | Owner: Codex.
 
 Additional task dependencies: P08-01.
 
@@ -1425,7 +1425,7 @@ Verification:
 
 - Use TalkBack/VoiceOver, large text, keyboard/focus and offline/failure scenarios; report measured budgets and results.
 
-Required completion evidence: verification, design, android_device, ios_device.
+Required completion evidence: verification, design, android_device, ios_runtime, review.
 
 ### P08-03: Pilot with representative Bangladesh owners and resolve release blockers
 

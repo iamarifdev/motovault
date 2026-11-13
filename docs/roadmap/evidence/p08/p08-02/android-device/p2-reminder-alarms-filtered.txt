@@ -1,4 +1,36 @@
-Filtered `dumpsys alarm` query for com.motovault.app.privacyprobe after granting
-POST_NOTIFICATIONS and opening Profile (which triggers reconciliation), 13 Nov
-2026 00:39 Asia/Dhaka: 0 matching alarm lines. Reminder scheduling was not
-observed; delivery is not claimed from this check.
+    RTC_WAKEUP #103: Alarm{a222297 type 0 origWhen 1794625200000 whenElapsed 1080804709 com.motovault.app.privacyprobe}
+      tag=*walarm*:com.motovault.RENEWAL
+      operation=PendingIntent{edcec84: PendingIntentRecord{6391c6d com.motovault.app.privacyprobe broadcastIntent}}
+    RTC_WAKEUP #155: Alarm{64880a2 type 0 origWhen 1797994800000 whenElapsed 4450404710 com.motovault.app.privacyprobe}
+      tag=*walarm*:com.motovault.RENEWAL
+      operation=PendingIntent{35c5133: PendingIntentRecord{f7e4cf0 com.motovault.app.privacyprobe broadcastIntent}}
+    RTC_WAKEUP #157: Alarm{5d81269 type 0 origWhen 1800154800000 whenElapsed 6610404710 com.motovault.app.privacyprobe}
+      tag=*walarm*:com.motovault.RENEWAL
+      operation=PendingIntent{8d204ee: PendingIntentRecord{d00cd8f com.motovault.app.privacyprobe broadcastIntent}}
+    RTC_WAKEUP #159: Alarm{393481c type 0 origWhen 1806202800000 whenElapsed 12658404709 com.motovault.app.privacyprobe}
+      tag=*walarm*:com.motovault.RENEWAL
+      operation=PendingIntent{7566c25: PendingIntentRecord{e5d81fa com.motovault.app.privacyprobe broadcastIntent}}
+    RTC_WAKEUP #160: Alarm{cc6b3ab type 0 origWhen 1808794800000 whenElapsed 15250404710 com.motovault.app.privacyprobe}
+      tag=*walarm*:com.motovault.RENEWAL
+      operation=PendingIntent{c9aca08: PendingIntentRecord{1a6a5a1 com.motovault.app.privacyprobe broadcastIntent}}
+    RTC_WAKEUP #161: Alarm{5f1c3c6 type 0 origWhen 1809226800000 whenElapsed 15682404710 com.motovault.app.privacyprobe}
+      tag=*walarm*:com.motovault.RENEWAL
+      operation=PendingIntent{2badf87: PendingIntentRecord{3167eb4 com.motovault.app.privacyprobe broadcastIntent}}
+    RTC_WAKEUP #162: Alarm{e66fadd type 0 origWhen 1811818800000 whenElapsed 18274404710 com.motovault.app.privacyprobe}
+      tag=*walarm*:com.motovault.RENEWAL
+      operation=PendingIntent{6365652: PendingIntentRecord{8dbed23 com.motovault.app.privacyprobe broadcastIntent}}
+    RTC_WAKEUP #163: Alarm{3f6d220 type 0 origWhen 1826506800000 whenElapsed 32962404710 com.motovault.app.privacyprobe}
+      tag=*walarm*:com.motovault.RENEWAL
+      operation=PendingIntent{8dd67d9: PendingIntentRecord{6bf859e com.motovault.app.privacyprobe broadcastIntent}}
+    RTC_WAKEUP #164: Alarm{76387f type 0 origWhen 1829098800000 whenElapsed 35554404710 com.motovault.app.privacyprobe}
+      tag=*walarm*:com.motovault.RENEWAL
+      operation=PendingIntent{8c6f04c: PendingIntentRecord{b3a895 com.motovault.app.privacyprobe broadcastIntent}}
+          type=RTC_WAKEUP tag=*walarm*:com.motovault.RENEWAL id=8a8b8 
+          type=RTC_WAKEUP tag=*walarm*:com.motovault.RENEWAL id=fbb1f1b 
+          type=RTC_WAKEUP tag=*walarm*:com.motovault.RENEWAL id=b5bb52a 
+          type=RTC_WAKEUP tag=*walarm*:com.motovault.RENEWAL id=e4dae15 
+          type=RTC_WAKEUP tag=*walarm*:com.motovault.RENEWAL id=3179bcc 
+          type=RTC_WAKEUP tag=*walarm*:com.motovault.RENEWAL id=f3861ff 
+          type=RTC_WAKEUP tag=*walarm*:com.motovault.RENEWAL id=2f2651e 
+          type=RTC_WAKEUP tag=*walarm*:com.motovault.RENEWAL id=f9a1559 
+          type=RTC_WAKEUP tag=*walarm*:com.motovault.RENEWAL id=12bc5a0 

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-13T05:21:11+00:00",
+  "updated_at": "2026-11-13T10:12:54+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -5074,12 +5074,13 @@
             "verification",
             "design",
             "android_device",
-            "ios_device"
+            "ios_runtime",
+            "review"
           ],
-          "status": "in_review",
+          "status": "done",
           "owner": "Codex",
           "started_at": null,
-          "completed_at": null,
+          "completed_at": "2026-11-13T10:12:54+00:00",
           "blocker": "",
           "notes": [
             {
@@ -5161,6 +5162,14 @@
             {
               "at": "2026-11-13T03:29:23+00:00",
               "text": "Virtualised HistoryScreen with LazyColumn (Option B) and recorded WD-02 simulator-only execution waiver; updated P09 depends_on from P08-04 to [P08-01, P08-05] under WD-02."
+            },
+            {
+              "at": "2026-11-13T10:12:54+00:00",
+              "text": "Completed Motorola Edge 50 Fusion physical pass (37/37 NativeAssetInstrumentation, LazyColumn 1,208-log measurement, 9-swatch accessibility wrap, 9 RTC_WAKEUP renewal alarms, P09-P15 sheet smoke); iOS physical remains waived under WD-01"
+            },
+            {
+              "at": "2026-11-13T10:12:54+00:00",
+              "text": "Android physical pass verified on Motorola Edge 50 Fusion; iOS physical deferred under WD-01"
             }
           ],
           "evidence": [
@@ -5254,6 +5263,41 @@
               "summary": "Virtualised HistoryScreen with LazyColumn (Option B) and recorded WD-02 simulator-only execution waiver; updated P09 depends_on from P08-04 to [P08-01, P08-05] under WD-02.",
               "at": "2026-11-13T03:29:23+00:00",
               "revision": "7c076e9"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P08-02-android-device.md",
+              "summary": "Completed Motorola Edge 50 Fusion physical pass (37/37 NativeAssetInstrumentation, LazyColumn 1,208-log measurement, 9-swatch accessibility wrap, 9 RTC_WAKEUP renewal alarms, P09-P15 sheet smoke); iOS physical remains waived under WD-01",
+              "at": "2026-11-13T10:12:54+00:00",
+              "revision": "22868e0"
+            },
+            {
+              "kind": "design",
+              "reference": "docs/roadmap/evidence/P08-02-swatch-accessibility.md",
+              "summary": "Completed Motorola Edge 50 Fusion physical pass (37/37 NativeAssetInstrumentation, LazyColumn 1,208-log measurement, 9-swatch accessibility wrap, 9 RTC_WAKEUP renewal alarms, P09-P15 sheet smoke); iOS physical remains waived under WD-01",
+              "at": "2026-11-13T10:12:54+00:00",
+              "revision": "22868e0"
+            },
+            {
+              "kind": "android_device",
+              "reference": "docs/roadmap/evidence/P08-02-android-device.md",
+              "summary": "Completed Motorola Edge 50 Fusion physical pass (37/37 NativeAssetInstrumentation, LazyColumn 1,208-log measurement, 9-swatch accessibility wrap, 9 RTC_WAKEUP renewal alarms, P09-P15 sheet smoke); iOS physical remains waived under WD-01",
+              "at": "2026-11-13T10:12:54+00:00",
+              "revision": "22868e0"
+            },
+            {
+              "kind": "ios_runtime",
+              "reference": "docs/roadmap/evidence/P08-02-swatch-accessibility.md",
+              "summary": "Completed Motorola Edge 50 Fusion physical pass (37/37 NativeAssetInstrumentation, LazyColumn 1,208-log measurement, 9-swatch accessibility wrap, 9 RTC_WAKEUP renewal alarms, P09-P15 sheet smoke); iOS physical remains waived under WD-01",
+              "at": "2026-11-13T10:12:54+00:00",
+              "revision": "22868e0"
+            },
+            {
+              "kind": "review",
+              "reference": "docs/roadmap/evidence/P08-owner-decisions.md",
+              "summary": "Completed Motorola Edge 50 Fusion physical pass (37/37 NativeAssetInstrumentation, LazyColumn 1,208-log measurement, 9-swatch accessibility wrap, 9 RTC_WAKEUP renewal alarms, P09-P15 sheet smoke); iOS physical remains waived under WD-01",
+              "at": "2026-11-13T10:12:54+00:00",
+              "revision": "22868e0"
             }
           ]
         },
@@ -11547,6 +11591,22 @@
       "to": "done",
       "note": "Maintenance ownership assigned and P16 completed",
       "revision": "7c076e9"
+    },
+    {
+      "at": "2026-11-13T10:12:54+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "in_review",
+      "note": "Completed Motorola Edge 50 Fusion physical pass (37/37 NativeAssetInstrumentation, LazyColumn 1,208-log measurement, 9-swatch accessibility wrap, 9 RTC_WAKEUP renewal alarms, P09-P15 sheet smoke); iOS physical remains waived under WD-01",
+      "revision": "22868e0"
+    },
+    {
+      "at": "2026-11-13T10:12:54+00:00",
+      "task": "P08-02",
+      "from": "in_review",
+      "to": "done",
+      "note": "Android physical pass verified on Motorola Edge 50 Fusion; iOS physical deferred under WD-01",
+      "revision": "22868e0"
     }
   ]
 }
