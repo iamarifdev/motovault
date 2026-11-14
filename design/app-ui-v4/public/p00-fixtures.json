@@ -1,0 +1,756 @@
+[
+  {
+    "fixtureVersion": 1,
+    "id": "empty",
+    "referenceDate": "2026-10-24",
+    "synthetic": true,
+    "native": {
+      "ride": {
+        "brandId": "yamaha",
+        "edition": "P00 synthetic",
+        "year": 2023,
+        "odometer": 12340.0,
+        "modelId": "yamaha-r15-v4",
+        "modelName": "R15 V4",
+        "registration": "P00-SYNTHETIC",
+        "market": "BANGLADESH",
+        "emission": "UNKNOWN"
+      },
+      "rules": [],
+      "logs": [],
+      "documents": [],
+      "appearance": "LIGHT",
+      "autoLocation": false,
+      "digits": "BN",
+      "haptics": false,
+      "reduceMotion": false,
+      "textScale": 1.0,
+      "serviceReminders": false,
+      "docReminders": false,
+      "lastPrices": {
+        "octane": 120.0,
+        "petrol": 115.0
+      }
+    },
+    "prototype": {
+      "ride": {
+        "brandId": "yamaha",
+        "modelId": "yamaha-r15-v4",
+        "name": "R15 V4",
+        "year": 2023,
+        "odometer": 12340,
+        "odometerAt": "2026-10-24",
+        "startedAt": "2026-07-16"
+      },
+      "rules": [],
+      "logs": [],
+      "docs": [],
+      "lastPrice": {
+        "octane": 120.0,
+        "petrol": 115.0
+      },
+      "lastItemPrice": {},
+      "workshops": [],
+      "places": [],
+      "settings": {
+        "theme": "light",
+        "digits": "bn",
+        "haptics": false,
+        "reduceMotion": false,
+        "textScale": 1,
+        "gps": false,
+        "brandOverride": null,
+        "serviceReminders": false,
+        "docReminders": false
+      }
+    },
+    "notes": [
+      "All IDs, names, numbers and prices are synthetic.",
+      "Document fixture is metadata-only; no owner images or documents.",
+      "Unknown service uses no rules: current models cannot encode baseline certainty.",
+      "Runtime clocks are observed, not overridden; date differences must be reported."
+    ]
+  },
+  {
+    "fixtureVersion": 1,
+    "id": "overdue",
+    "referenceDate": "2026-10-24",
+    "synthetic": true,
+    "native": {
+      "ride": {
+        "brandId": "yamaha",
+        "edition": "P00 synthetic",
+        "year": 2023,
+        "odometer": 12340.0,
+        "modelId": "yamaha-r15-v4",
+        "modelName": "R15 V4",
+        "registration": "P00-SYNTHETIC",
+        "market": "BANGLADESH",
+        "emission": "UNKNOWN"
+      },
+      "rules": [
+        {
+          "id": "p00-chain",
+          "vehicleId": "primary",
+          "name": "Chain",
+          "specification": "P00 synthetic owner-defined interval; no factory claim",
+          "intervalKm": 500.0,
+          "intervalDays": 30,
+          "lastServicedOdometerKm": 11520.0,
+          "lastServicedEpochDays": 20709,
+          "isCritical": false
+        },
+        {
+          "id": "p00-oil",
+          "vehicleId": "primary",
+          "name": "Engine oil",
+          "specification": "P00 synthetic owner-defined interval; no factory claim",
+          "intervalKm": 3000.0,
+          "intervalDays": 180,
+          "lastServicedOdometerKm": 11350.0,
+          "lastServicedEpochDays": 20705,
+          "isCritical": true
+        }
+      ],
+      "logs": [],
+      "documents": [],
+      "appearance": "LIGHT",
+      "autoLocation": false,
+      "digits": "BN",
+      "haptics": false,
+      "reduceMotion": false,
+      "textScale": 1.0,
+      "serviceReminders": false,
+      "docReminders": false,
+      "lastPrices": {
+        "octane": 120.0,
+        "petrol": 115.0
+      }
+    },
+    "prototype": {
+      "ride": {
+        "brandId": "yamaha",
+        "modelId": "yamaha-r15-v4",
+        "name": "R15 V4",
+        "year": 2023,
+        "odometer": 12340,
+        "odometerAt": "2026-10-24",
+        "startedAt": "2026-07-16"
+      },
+      "rules": [
+        {
+          "id": "p00-chain",
+          "item": "chain_sprocket",
+          "name": "চেইন",
+          "intervalKm": 500.0,
+          "intervalDays": 30,
+          "lastKm": 11520.0,
+          "lastDate": "2026-09-13"
+        },
+        {
+          "id": "p00-oil",
+          "item": "engine_oil",
+          "name": "ইঞ্জিন অয়েল",
+          "intervalKm": 3000.0,
+          "intervalDays": 180,
+          "lastKm": 11350.0,
+          "lastDate": "2026-09-09"
+        }
+      ],
+      "logs": [],
+      "docs": [],
+      "lastPrice": {
+        "octane": 120.0,
+        "petrol": 115.0
+      },
+      "lastItemPrice": {},
+      "workshops": [],
+      "places": [],
+      "settings": {
+        "theme": "light",
+        "digits": "bn",
+        "haptics": false,
+        "reduceMotion": false,
+        "textScale": 1,
+        "gps": false,
+        "brandOverride": null,
+        "serviceReminders": false,
+        "docReminders": false
+      }
+    },
+    "notes": [
+      "All IDs, names, numbers and prices are synthetic.",
+      "Document fixture is metadata-only; no owner images or documents.",
+      "Unknown service uses no rules: current models cannot encode baseline certainty.",
+      "Runtime clocks are observed, not overridden; date differences must be reported."
+    ]
+  },
+  {
+    "fixtureVersion": 1,
+    "id": "partial-fill",
+    "referenceDate": "2026-10-24",
+    "synthetic": true,
+    "native": {
+      "ride": {
+        "brandId": "yamaha",
+        "edition": "P00 synthetic",
+        "year": 2023,
+        "odometer": 12340.0,
+        "modelId": "yamaha-r15-v4",
+        "modelName": "R15 V4",
+        "registration": "P00-SYNTHETIC",
+        "market": "BANGLADESH",
+        "emission": "UNKNOWN"
+      },
+      "rules": [
+        {
+          "id": "p00-chain",
+          "vehicleId": "primary",
+          "name": "Chain",
+          "specification": "P00 synthetic owner-defined interval; no factory claim",
+          "intervalKm": 500.0,
+          "intervalDays": 30,
+          "lastServicedOdometerKm": 11520.0,
+          "lastServicedEpochDays": 20709,
+          "isCritical": false
+        },
+        {
+          "id": "p00-oil",
+          "vehicleId": "primary",
+          "name": "Engine oil",
+          "specification": "P00 synthetic owner-defined interval; no factory claim",
+          "intervalKm": 3000.0,
+          "intervalDays": 180,
+          "lastServicedOdometerKm": 11350.0,
+          "lastServicedEpochDays": 20705,
+          "isCritical": true
+        }
+      ],
+      "logs": [
+        {
+          "id": "p00-fuel-4",
+          "title": "Fuel fill-up",
+          "detail": "4.9 L",
+          "date": "2026-10-16",
+          "odometer": 12340.0,
+          "kind": "fuel",
+          "liters": 4.9,
+          "fullTank": true,
+          "cost": 588.0,
+          "fuelType": "octane",
+          "fuelPrice": 120.0,
+          "locationLabel": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-3",
+          "title": "Fuel fill-up",
+          "detail": "3.0 L",
+          "date": "2026-10-09",
+          "odometer": 12120.0,
+          "kind": "fuel",
+          "liters": 3.0,
+          "fullTank": true,
+          "cost": 360.0,
+          "fuelType": "octane",
+          "fuelPrice": 120.0,
+          "locationLabel": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-2",
+          "title": "Fuel fill-up",
+          "detail": "2.0 L",
+          "date": "2026-10-04",
+          "odometer": 12020.0,
+          "kind": "fuel",
+          "liters": 2.0,
+          "fullTank": false,
+          "cost": 240.0,
+          "fuelType": "octane",
+          "fuelPrice": 120.0,
+          "locationLabel": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-1",
+          "title": "Fuel fill-up",
+          "detail": "5.0 L",
+          "date": "2026-09-27",
+          "odometer": 11890.0,
+          "kind": "fuel",
+          "liters": 5.0,
+          "fullTank": true,
+          "cost": 600.0,
+          "fuelType": "octane",
+          "fuelPrice": 120.0,
+          "locationLabel": "P00 synthetic pump"
+        }
+      ],
+      "documents": [],
+      "appearance": "LIGHT",
+      "autoLocation": false,
+      "digits": "BN",
+      "haptics": false,
+      "reduceMotion": false,
+      "textScale": 1.0,
+      "serviceReminders": false,
+      "docReminders": false,
+      "lastPrices": {
+        "octane": 120.0,
+        "petrol": 115.0
+      }
+    },
+    "prototype": {
+      "ride": {
+        "brandId": "yamaha",
+        "modelId": "yamaha-r15-v4",
+        "name": "R15 V4",
+        "year": 2023,
+        "odometer": 12340,
+        "odometerAt": "2026-10-24",
+        "startedAt": "2026-07-16"
+      },
+      "rules": [
+        {
+          "id": "p00-chain",
+          "item": "chain_sprocket",
+          "name": "চেইন",
+          "intervalKm": 500.0,
+          "intervalDays": 30,
+          "lastKm": 11520.0,
+          "lastDate": "2026-09-13"
+        },
+        {
+          "id": "p00-oil",
+          "item": "engine_oil",
+          "name": "ইঞ্জিন অয়েল",
+          "intervalKm": 3000.0,
+          "intervalDays": 180,
+          "lastKm": 11350.0,
+          "lastDate": "2026-09-09"
+        }
+      ],
+      "logs": [
+        {
+          "id": "p00-fuel-4",
+          "type": "fuel",
+          "date": "2026-10-16",
+          "odo": 12340,
+          "liters": 4.9,
+          "amount": 588.0,
+          "price": 120.0,
+          "full": true,
+          "fuel": "octane",
+          "place": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-3",
+          "type": "fuel",
+          "date": "2026-10-09",
+          "odo": 12120,
+          "liters": 3.0,
+          "amount": 360.0,
+          "price": 120.0,
+          "full": true,
+          "fuel": "octane",
+          "place": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-2",
+          "type": "fuel",
+          "date": "2026-10-04",
+          "odo": 12020,
+          "liters": 2.0,
+          "amount": 240.0,
+          "price": 120.0,
+          "full": false,
+          "fuel": "octane",
+          "place": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-1",
+          "type": "fuel",
+          "date": "2026-09-27",
+          "odo": 11890,
+          "liters": 5.0,
+          "amount": 600.0,
+          "price": 120.0,
+          "full": true,
+          "fuel": "octane",
+          "place": "P00 synthetic pump"
+        }
+      ],
+      "docs": [],
+      "lastPrice": {
+        "octane": 120.0,
+        "petrol": 115.0
+      },
+      "lastItemPrice": {},
+      "workshops": [],
+      "places": [],
+      "settings": {
+        "theme": "light",
+        "digits": "bn",
+        "haptics": false,
+        "reduceMotion": false,
+        "textScale": 1,
+        "gps": false,
+        "brandOverride": null,
+        "serviceReminders": false,
+        "docReminders": false
+      }
+    },
+    "notes": [
+      "All IDs, names, numbers and prices are synthetic.",
+      "Document fixture is metadata-only; no owner images or documents.",
+      "Unknown service uses no rules: current models cannot encode baseline certainty.",
+      "Runtime clocks are observed, not overridden; date differences must be reported."
+    ]
+  },
+  {
+    "fixtureVersion": 1,
+    "id": "documents",
+    "referenceDate": "2026-10-24",
+    "synthetic": true,
+    "native": {
+      "ride": {
+        "brandId": "yamaha",
+        "edition": "P00 synthetic",
+        "year": 2023,
+        "odometer": 12340.0,
+        "modelId": "yamaha-r15-v4",
+        "modelName": "R15 V4",
+        "registration": "P00-SYNTHETIC",
+        "market": "BANGLADESH",
+        "emission": "UNKNOWN"
+      },
+      "rules": [
+        {
+          "id": "p00-chain",
+          "vehicleId": "primary",
+          "name": "Chain",
+          "specification": "P00 synthetic owner-defined interval; no factory claim",
+          "intervalKm": 500.0,
+          "intervalDays": 30,
+          "lastServicedOdometerKm": 11520.0,
+          "lastServicedEpochDays": 20709,
+          "isCritical": false
+        },
+        {
+          "id": "p00-oil",
+          "vehicleId": "primary",
+          "name": "Engine oil",
+          "specification": "P00 synthetic owner-defined interval; no factory claim",
+          "intervalKm": 3000.0,
+          "intervalDays": 180,
+          "lastServicedOdometerKm": 11350.0,
+          "lastServicedEpochDays": 20705,
+          "isCritical": true
+        }
+      ],
+      "logs": [
+        {
+          "id": "p00-fuel-4",
+          "title": "Fuel fill-up",
+          "detail": "4.9 L",
+          "date": "2026-10-16",
+          "odometer": 12340.0,
+          "kind": "fuel",
+          "liters": 4.9,
+          "fullTank": true,
+          "cost": 588.0,
+          "fuelType": "octane",
+          "fuelPrice": 120.0,
+          "locationLabel": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-3",
+          "title": "Fuel fill-up",
+          "detail": "3.0 L",
+          "date": "2026-10-09",
+          "odometer": 12120.0,
+          "kind": "fuel",
+          "liters": 3.0,
+          "fullTank": true,
+          "cost": 360.0,
+          "fuelType": "octane",
+          "fuelPrice": 120.0,
+          "locationLabel": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-2",
+          "title": "Fuel fill-up",
+          "detail": "2.0 L",
+          "date": "2026-10-04",
+          "odometer": 12020.0,
+          "kind": "fuel",
+          "liters": 2.0,
+          "fullTank": false,
+          "cost": 240.0,
+          "fuelType": "octane",
+          "fuelPrice": 120.0,
+          "locationLabel": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-1",
+          "title": "Fuel fill-up",
+          "detail": "5.0 L",
+          "date": "2026-09-27",
+          "odometer": 11890.0,
+          "kind": "fuel",
+          "liters": 5.0,
+          "fullTank": true,
+          "cost": 600.0,
+          "fuelType": "octane",
+          "fuelPrice": 120.0,
+          "locationLabel": "P00 synthetic pump"
+        }
+      ],
+      "documents": [
+        {
+          "id": "p00-doc-tax",
+          "title": "Tax token",
+          "number": "P00-TEST-TAX",
+          "holder": "SYNTHETIC OWNER",
+          "expiry": "2026-10-19",
+          "kind": "tax",
+          "detailsConfirmed": true,
+          "reminder": false
+        },
+        {
+          "id": "p00-doc-licence",
+          "title": "Driving licence",
+          "number": "P00-TEST-LICENCE",
+          "holder": "SYNTHETIC OWNER",
+          "expiry": "2026-11-17",
+          "kind": "licence",
+          "detailsConfirmed": true,
+          "reminder": false
+        },
+        {
+          "id": "p00-doc-registration",
+          "title": "Registration smart card",
+          "number": "P00-TEST-REGISTRATION",
+          "holder": "SYNTHETIC OWNER",
+          "expiry": "",
+          "kind": "registration",
+          "detailsConfirmed": true,
+          "reminder": false
+        }
+      ],
+      "appearance": "LIGHT",
+      "autoLocation": false,
+      "digits": "BN",
+      "haptics": false,
+      "reduceMotion": false,
+      "textScale": 1.0,
+      "serviceReminders": false,
+      "docReminders": false,
+      "lastPrices": {
+        "octane": 120.0,
+        "petrol": 115.0
+      }
+    },
+    "prototype": {
+      "ride": {
+        "brandId": "yamaha",
+        "modelId": "yamaha-r15-v4",
+        "name": "R15 V4",
+        "year": 2023,
+        "odometer": 12340,
+        "odometerAt": "2026-10-24",
+        "startedAt": "2026-07-16"
+      },
+      "rules": [
+        {
+          "id": "p00-chain",
+          "item": "chain_sprocket",
+          "name": "চেইন",
+          "intervalKm": 500.0,
+          "intervalDays": 30,
+          "lastKm": 11520.0,
+          "lastDate": "2026-09-13"
+        },
+        {
+          "id": "p00-oil",
+          "item": "engine_oil",
+          "name": "ইঞ্জিন অয়েল",
+          "intervalKm": 3000.0,
+          "intervalDays": 180,
+          "lastKm": 11350.0,
+          "lastDate": "2026-09-09"
+        }
+      ],
+      "logs": [
+        {
+          "id": "p00-fuel-4",
+          "type": "fuel",
+          "date": "2026-10-16",
+          "odo": 12340,
+          "liters": 4.9,
+          "amount": 588.0,
+          "price": 120.0,
+          "full": true,
+          "fuel": "octane",
+          "place": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-3",
+          "type": "fuel",
+          "date": "2026-10-09",
+          "odo": 12120,
+          "liters": 3.0,
+          "amount": 360.0,
+          "price": 120.0,
+          "full": true,
+          "fuel": "octane",
+          "place": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-2",
+          "type": "fuel",
+          "date": "2026-10-04",
+          "odo": 12020,
+          "liters": 2.0,
+          "amount": 240.0,
+          "price": 120.0,
+          "full": false,
+          "fuel": "octane",
+          "place": "P00 synthetic pump"
+        },
+        {
+          "id": "p00-fuel-1",
+          "type": "fuel",
+          "date": "2026-09-27",
+          "odo": 11890,
+          "liters": 5.0,
+          "amount": 600.0,
+          "price": 120.0,
+          "full": true,
+          "fuel": "octane",
+          "place": "P00 synthetic pump"
+        }
+      ],
+      "docs": [
+        {
+          "id": "p00-doc-tax",
+          "kind": "tax",
+          "number": "P00-TEST-TAX",
+          "holder": "SYNTHETIC OWNER",
+          "expiry": "2026-10-19",
+          "reminder": false
+        },
+        {
+          "id": "p00-doc-licence",
+          "kind": "licence",
+          "number": "P00-TEST-LICENCE",
+          "holder": "SYNTHETIC OWNER",
+          "expiry": "2026-11-17",
+          "reminder": false
+        },
+        {
+          "id": "p00-doc-registration",
+          "kind": "registration",
+          "number": "P00-TEST-REGISTRATION",
+          "holder": "SYNTHETIC OWNER",
+          "expiry": "",
+          "reminder": false
+        }
+      ],
+      "lastPrice": {
+        "octane": 120.0,
+        "petrol": 115.0
+      },
+      "lastItemPrice": {},
+      "workshops": [],
+      "places": [],
+      "settings": {
+        "theme": "light",
+        "digits": "bn",
+        "haptics": false,
+        "reduceMotion": false,
+        "textScale": 1,
+        "gps": false,
+        "brandOverride": null,
+        "serviceReminders": false,
+        "docReminders": false
+      }
+    },
+    "notes": [
+      "All IDs, names, numbers and prices are synthetic.",
+      "Document fixture is metadata-only; no owner images or documents.",
+      "Unknown service uses no rules: current models cannot encode baseline certainty.",
+      "Runtime clocks are observed, not overridden; date differences must be reported."
+    ]
+  },
+  {
+    "fixtureVersion": 1,
+    "id": "unknown-service",
+    "referenceDate": "2026-10-24",
+    "synthetic": true,
+    "native": {
+      "ride": {
+        "brandId": "yamaha",
+        "edition": "P00 synthetic",
+        "year": 2023,
+        "odometer": 12340.0,
+        "modelId": "yamaha-r15-v4",
+        "modelName": "R15 V4",
+        "registration": "P00-SYNTHETIC",
+        "market": "BANGLADESH",
+        "emission": "UNKNOWN"
+      },
+      "rules": [],
+      "logs": [],
+      "documents": [],
+      "appearance": "LIGHT",
+      "autoLocation": false,
+      "digits": "BN",
+      "haptics": false,
+      "reduceMotion": false,
+      "textScale": 1.0,
+      "serviceReminders": false,
+      "docReminders": false,
+      "lastPrices": {
+        "octane": 120.0,
+        "petrol": 115.0
+      }
+    },
+    "prototype": {
+      "ride": {
+        "brandId": "yamaha",
+        "modelId": "yamaha-r15-v4",
+        "name": "R15 V4",
+        "year": 2023,
+        "odometer": 12340,
+        "odometerAt": "2026-10-24",
+        "startedAt": "2026-07-16"
+      },
+      "rules": [],
+      "logs": [],
+      "docs": [],
+      "lastPrice": {
+        "octane": 120.0,
+        "petrol": 115.0
+      },
+      "lastItemPrice": {},
+      "workshops": [],
+      "places": [],
+      "settings": {
+        "theme": "light",
+        "digits": "bn",
+        "haptics": false,
+        "reduceMotion": false,
+        "textScale": 1,
+        "gps": false,
+        "brandOverride": null,
+        "serviceReminders": false,
+        "docReminders": false
+      }
+    },
+    "notes": [
+      "All IDs, names, numbers and prices are synthetic.",
+      "Document fixture is metadata-only; no owner images or documents.",
+      "Unknown service uses no rules: current models cannot encode baseline certainty.",
+      "Runtime clocks are observed, not overridden; date differences must be reported."
+    ]
+  }
+]
