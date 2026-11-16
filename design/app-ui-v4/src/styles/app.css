@@ -293,7 +293,9 @@
 .remind p { color: var(--text-2); }
 
 .docart { position: relative; aspect-ratio: 1.586; border-radius: 14px; padding: 12px 14px; color: #fff; display: flex; flex-direction: column; gap: 6px; overflow: hidden; background: linear-gradient(135deg, var(--a), var(--b)); }
-.docart.kind-registration { --a: #1f6e55; --b: #2f8f77; } .docart.kind-licence { --a: #2c4f9c; --b: #4574c9; }
+.docart.kind-licence, .docart.kind-registration { padding: 0; color: #141821; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08); }
+.docart.kind-licence { --dl-label: #8b1d27; --dl-scrim: rgba(253, 249, 243, .58); --dl-photo: #4c6178; background: #f5efe6 url('/docs/brta-licence-bg.jpg') center / 100% 100% no-repeat; }
+.docart.kind-registration { --dl-label: #1c5a44; --dl-scrim: rgba(251, 253, 250, .64); --dl-photo: #3f6659; background: #eef6f2 url('/docs/brta-registration-bg.jpg') center / 100% 100% no-repeat; }
 .docart.kind-tax { --a: #8a5a1c; --b: #b8802f; } .docart.kind-insurance { --a: #5b3c8f; --b: #7d58b8; } .docart.kind-fitness { --a: #3e4a55; --b: #5d6b78; }
 .wallet-card .docart-head { display: none; }
 .docart-head { display: flex; justify-content: space-between; align-items: baseline; font-size: .875em; }
@@ -302,6 +304,18 @@
 .docart-body { display: grid; grid-template-columns: auto 1fr; gap: 0 10px; font-size: .8125em; margin-top: auto; align-items: baseline; }
 .docart-body small { opacity: .8; font-size: .85em; } .docart-body b { font-weight: 600; }
 .docart.large { padding: 18px 20px; font-size: 1.1em; }
+.docart.kind-licence.large, .docart.kind-registration.large { padding: 0; }
+.dl-photo { position: absolute; left: 4.8%; top: 25.5%; width: 28%; height: 59%; display: grid; place-items: center; color: var(--dl-photo); opacity: .45; pointer-events: none; }
+.docart.kind-registration .dl-photo { left: 5.5%; top: 27.5%; width: 24.5%; height: 48%; }
+.dl-fields { position: absolute; left: 35.5%; top: 25%; right: 22.5%; bottom: 14%; display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 4px 7px; border-radius: 6px; background: var(--dl-scrim); }
+.docart.kind-registration .dl-fields { left: 34%; top: 24.5%; right: 11.5%; bottom: 10%; }
+.docart.large .dl-fields { gap: 5px; padding: 6px 8px; }
+.dl-field { display: flex; flex-direction: column; min-width: 0; }
+.dl-field small { font-size: .6875em; line-height: 1.15; font-weight: 600; color: var(--dl-label); }
+.dl-field b { font-size: .8125em; line-height: 1.25; font-weight: 700; color: #141821; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dl-field b.muted { color: #5b636e; font-weight: 500; }
+.dl-sample { position: absolute; left: 4.8%; bottom: 4.2%; font-size: .625em; line-height: 1.1; font-weight: 600; color: #5b4548; opacity: .82; }
+.docart.kind-registration .dl-sample { left: 5.5%; bottom: 5%; color: #36574b; }
 
 .wallet { display: flex; flex-direction: column; padding-bottom: 6px; }
 .wallet-card { position: relative; margin-top: -142px; padding: 10px 12px 12px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 -6px 16px rgba(0, 0, 0, .1); display: flex; flex-direction: column; gap: 8px; text-align: left; }

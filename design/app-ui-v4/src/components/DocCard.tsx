@@ -1,9 +1,14 @@
-import { CircleCheck, Timer, TriangleAlert } from 'lucide-react'
+import { CircleCheck, Timer, TriangleAlert, UserRound } from 'lucide-react'
 import { docName } from '../data/catalog'
 import { diffDays, todayISO } from '../lib/dates'
 import { useFmt } from '../lib/bn'
-import type { VaultDoc } from '../types'
+import type { DocKind, VaultDoc } from '../types'
 import { useStore } from '../store'
+
+const BRTA_CARD_FIELDS: Partial<Record<DocKind, { primaryLabel: string; primaryKey: 'holder' | 'number'; secondaryLabel: string; secondaryKey: 'holder' | 'number' }>> = {
+  licence: { primaryLabel: 'নাম', primaryKey: 'holder', secondaryLabel: 'লাইসেন্স নং', secondaryKey: 'number' },
+  registration: { primaryLabel: 'রেজিস্ট্রেশন নং', primaryKey: 'number', secondaryLabel: 'মালিকের নাম', secondaryKey: 'holder' },
+}
 
 export function expiryOf(doc: VaultDoc, lead = 30) {
   if (!doc.expiry) return { left: Infinity, status: 'none' } as const
@@ -26,14 +31,49 @@ export function DocArt({ doc, large, accessible = false }: { doc: VaultDoc; larg
   const f = useFmt()
   const number = doc.number || 'নম্বর দেওয়া নেই'
   const holder = doc.holder || 'নাম দেওয়া নেই'
+  const expiryText = doc.expiry ? f.dateFull(doc.expiry) : 'মেয়াদ নেই'
+  const a11yProps = {
+    'aria-hidden': !accessible,
+    role: accessible ? ('img' as const) : undefined,
+    'aria-label': accessible ? `${docName(doc.kind)}। নম্বর ${number}। নাম ${holder}। ${doc.expiry ? `মেয়াদ ${expiryText}` : 'মেয়াদ নেই'}। ডেমো কপি।` : undefined,
+  }
+
+  const cardFields = BRTA_CARD_FIELDS[doc.kind]
+  if (cardFields) {
+    const values = { number, holder }
+    const has = { number: Boolean(doc.number), holder: Boolean(doc.holder) }
+    return (
+      <div className={`docart kind-${doc.kind}${large ? ' large' : ''}`} {...a11yProps}>
+        <div className="dl-photo" aria-hidden>
+          <UserRound size={large ? 40 : 34} strokeWidth={1.6} />
+        </div>
+        <div className="dl-fields">
+          <div className="dl-field">
+            <small>{cardFields.primaryLabel}</small>
+            <b className={has[cardFields.primaryKey] ? undefined : 'muted'}>{values[cardFields.primaryKey]}</b>
+          </div>
+          <div className="dl-field">
+            <small>{cardFields.secondaryLabel}</small>
+            <b className={has[cardFields.secondaryKey] ? undefined : 'muted'}>{values[cardFields.secondaryKey]}</b>
+          </div>
+          <div className="dl-field">
+            <small>মেয়াদ</small>
+            <b>{expiryText}</b>
+          </div>
+        </div>
+        <span className="dl-sample">নমুনা · ডেমো</span>
+      </div>
+    )
+  }
+
   return (
-    <div className={`docart kind-${doc.kind}${large ? ' large' : ''}`} aria-hidden={!accessible} role={accessible ? 'img' : undefined} aria-label={accessible ? `${docName(doc.kind)}। নম্বর ${number}। নাম ${holder}। ${doc.expiry ? `মেয়াদ ${f.dateFull(doc.expiry)}` : 'মেয়াদ নেই'}। ডেমো কপি।` : undefined}>
+    <div className={`docart kind-${doc.kind}${large ? ' large' : ''}`} {...a11yProps}>
       <div className="docart-head"><b>{docName(doc.kind)}</b><small>নমুনা · ডেমো</small></div>
       <div className="docart-chip" />
       <div className="docart-body">
         <small>নম্বর</small><b>{number}</b>
         <small>নাম</small><b>{holder}</b>
-        <small>মেয়াদ</small><b>{doc.expiry ? f.dateFull(doc.expiry) : 'মেয়াদ নেই'}</b>
+        <small>মেয়াদ</small><b>{expiryText}</b>
       </div>
     </div>
   )
