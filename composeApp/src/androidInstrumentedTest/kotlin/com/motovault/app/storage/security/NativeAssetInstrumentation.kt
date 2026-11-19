@@ -23,6 +23,7 @@ import kotlinx.coroutines.runBlocking
 import com.motovault.app.domain.backup.*
 import com.motovault.app.domain.model.BaselineCertainty
 import com.motovault.app.domain.model.ComponentRule
+import com.motovault.app.domain.model.assetIds
 import kotlin.experimental.xor
 import androidx.room.Room
 import com.motovault.app.storage.VaultDatabase
@@ -116,9 +117,9 @@ class NativeAssetInstrumentation : Instrumentation() {
             check(notificationManager.getNotificationChannel(englishNotification.channelId).name.toString() == "Document and service reminders")
             val banglaTarget = englishTarget.copy(language = AppLanguage.BN, digits = Digits.EN)
             val banglaNotification = renewalNotification(targetContext, reminder, banglaTarget)
-            check(banglaNotification.extras.getCharSequence(android.app.Notification.EXTRA_TITLE).toString() == "কাগজের রিমাইন্ডার")
+            check(banglaNotification.extras.getCharSequence(android.app.Notification.EXTRA_TITLE).toString() == "ডকুমেন্টের রিমাইন্ডার")
             check(banglaNotification.extras.getCharSequence(android.app.Notification.EXTRA_TEXT).toString().contains("20 অক্টোবর 2026"))
-            check(notificationManager.getNotificationChannel(banglaNotification.channelId).name.toString() == "কাগজ ও সার্ভিসের রিমাইন্ডার")
+            check(notificationManager.getNotificationChannel(banglaNotification.channelId).name.toString() == "ডকুমেন্ট ও সার্ভিসের রিমাইন্ডার")
             checks += "native-reminder-language-and-digit-preferences"
             val previousLocale = Locale.getDefault()
             try {

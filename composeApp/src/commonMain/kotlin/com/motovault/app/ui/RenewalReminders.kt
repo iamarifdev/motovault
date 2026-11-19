@@ -57,4 +57,3 @@ internal data class ReminderAccess(
     val plans: List<RenewalReminder> = emptyList()
 )
 @Composable internal expect fun rememberReminderAccess(): ReminderAccess
-@Composable internal fun RenewalReminderControl() = ReminderAccessPanel(rememberReminderAccess())

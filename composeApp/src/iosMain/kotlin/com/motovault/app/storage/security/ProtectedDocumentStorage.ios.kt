@@ -2,7 +2,7 @@
 package com.motovault.app.storage.security
 
 import platform.Foundation.*
-import com.motovault.app.ui.validateDocumentAssetId
+import com.motovault.app.domain.model.validateDocumentAssetId
 
 internal actual object ProtectedDocumentStorage {
     private val lock = NSRecursiveLock()

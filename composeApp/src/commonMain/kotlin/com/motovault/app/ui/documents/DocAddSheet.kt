@@ -1,331 +1,300 @@
 package com.motovault.app.ui
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import dev.sky.design.tokens.SkyTokens
-import com.motovault.app.domain.model.FuelDefaults
-import com.motovault.app.domain.fuel.FuelEntryIssue
-import com.motovault.app.domain.fuel.FuelEntryMode
-import com.motovault.app.domain.fuel.FuelEntryRules
-import com.motovault.app.domain.fuel.MAX_FUEL_LITRES
-import com.motovault.app.application.fuel.FuelEntryRequest
-import com.motovault.app.application.fuel.FuelEditRequest
-import com.motovault.app.domain.fuel.FuelTimelineEntry
-import kotlinx.coroutines.delay
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import com.motovault.app.domain.vault.upsertDocumentByKind
+import com.motovault.app.domain.garage.allDocumentAssetIds
+import com.motovault.app.domain.input.NormalizedNumbers
+import com.motovault.app.domain.model.DocumentKinds
+import com.motovault.app.domain.model.VaultDocument
+import com.motovault.app.domain.model.isCardDocument
+import com.motovault.app.domain.model.stableKind
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
-import motovault.composeapp.generated.resources.*
+import motovault.composeapp.generated.resources.Res
+import motovault.composeapp.generated.resources.doc_add_save_failed
+import motovault.composeapp.generated.resources.doc_add_saved
+import motovault.composeapp.generated.resources.doc_add_saved_reminder
+import motovault.composeapp.generated.resources.doc_add_scan_title
+import motovault.composeapp.generated.resources.doc_add_type_title
+import motovault.composeapp.generated.resources.doc_edit_saved
+import motovault.composeapp.generated.resources.doc_edit_title
+
+private enum class DocAddStep { TYPE, PHOTO, REVIEW }
+
+@Stable
+private class DocAddState(
+    existing: VaultDocument?,
+    todayDate: LocalDate,
+    val protectedAssets: Set<String>
+) {
+    var step by mutableStateOf(if (existing != null) DocAddStep.REVIEW else DocAddStep.TYPE)
+    var selectedKind by mutableStateOf(existing?.stableKind() ?: DocumentKinds.REGISTRATION)
+    var captured by mutableStateOf<CapturedDocument?>(null)
+    var captureBack by mutableStateOf(false)
+    var photoBusy by mutableStateOf(false)
+    var photoError by mutableStateOf<String?>(null)
+    var committedAssets by mutableStateOf<Set<String>>(emptySet())
+    var expiry by mutableStateOf(
+        existing?.expiry?.takeIf { it.isNotBlank() }
+            ?: LocalDate.fromEpochDays(todayDate.toEpochDays() + 365).toString()
+    )
+    var reminder by mutableStateOf(existing?.reminder ?: true)
+    var number by mutableStateOf(existing?.number.orEmpty())
+    var holder by mutableStateOf(existing?.holder.orEmpty())
+    var showOptional by mutableStateOf(existing != null && (existing.number.isNotBlank() || existing.holder.isNotBlank()))
+    var saveError by mutableStateOf<String?>(null)
+}
 
 @Composable
 fun DocAddSheet(
     state: VaultState,
+    existingId: String? = null,
     onDismiss: () -> Unit,
     onSave: (VaultState, String, () -> Unit) -> Unit
 ) {
     val f = currentFmt
     val haptic = currentHaptic
-    val today = today()
-    var step by remember { mutableStateOf(1) } // 1: Type, 2: Scan, 3: Review, 4: Remind
-    var selectedKind by remember { mutableStateOf("registration") }
-    var number by remember { mutableStateOf("") }
-    var holder by remember { mutableStateOf("") }
-    var expiry by remember { mutableStateOf("") }
-    var checked by remember { mutableStateOf(false) }
-    var scanFlash by remember { mutableStateOf(false) }
-    val selectedDocName = docDisplayName(selectedKind)
-    val savedMessage = appStringResource(Res.string.doc_add_saved, selectedDocName)
-    val savedReminderMessage = appStringResource(Res.string.doc_add_saved_reminder, selectedDocName)
-    val sampleLicence = appStringResource(Res.string.doc_add_sample_licence)
-    val sampleRegistration = appStringResource(Res.string.doc_add_sample_registration)
-    val sampleHolder = appStringResource(Res.string.doc_add_sample_holder)
+    val scope = rememberCoroutineScope()
+    val todayDate = today()
+    val leadDays = state.reminderPolicy.warningDays
+    val existing = existingId?.let { id -> state.documents.firstOrNull { it.id == id } }
+    val draft = remember(existingId) { DocAddState(existing, todayDate, state.allDocumentAssetIds()) }
 
-    Sheet(
-        title = when (step) {
-            1 -> appStringResource(Res.string.doc_add_type_title)
-            2 -> appStringResource(Res.string.doc_add_scan_title)
-            3 -> appStringResource(Res.string.doc_add_review_title)
-            else -> appStringResource(Res.string.doc_add_remind_title)
-        },
-        onDismiss = onDismiss,
-        detent = SheetDetent.TALL
-    ) {
-        when (step) {
-            1 -> {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    DOCUMENT_KINDS.forEach { kindInfo ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(SurfaceColor2)
-                                .border(1.dp, BorderColor, RoundedCornerShape(16.dp))
-                                .clickable {
-                                    haptic.perform(HapticKind.TICK)
-                                    selectedKind = kindInfo.kind
-                                    step = 2
-                                }
-                                .padding(16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                V3Icon(
-                                    path = "feather_icon/fi_file-text.svg",
-                                    description = null,
-                                    modifier = Modifier.size(24.dp),
-                                    tint = BrandColor
-                                )
-                                Column {
-                                    Text(text = appStringResource(kindInfo.resource), fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                                    Text(text = if (kindInfo.card) appStringResource(Res.string.doc_add_card_sides) else appStringResource(Res.string.doc_add_full_page), fontSize = 13.sp, color = TextSecondary)
-                                }
-                            }
-                            V3Icon(
-                                path = "feather_icon/fi_chevron-right.svg",
-                                description = null,
-                                modifier = Modifier.size(20.dp),
-                                tint = TextTertiary
-                            )
-                        }
-                    }
-                    TextButton(
-                        onClick = {
-                            number = if (selectedKind == "licence") sampleLicence else sampleRegistration
-                            holder = sampleHolder
-                            expiry = LocalDate.fromEpochDays(today.toEpochDays() + 365).toString()
-                            step = 3
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(appStringResource(Res.string.doc_add_manual), color = BrandColor, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
-                    }
-                }
-            }
-            2 -> {
-                // Viewfinder Scanner
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(240.dp)
-                            .clip(RoundedCornerShape(18.dp))
-                            .background(if (scanFlash) Color.White else Color(0xFF0D1210)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        V3Icon(
-                            path = "feather_icon/fi_camera.svg",
-                            description = null,
-                            modifier = Modifier.size(44.dp),
-                            tint = Color.White.copy(alpha = 0.35f)
-                        )
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(bottom = 16.dp)
-                                .clip(RoundedCornerShape(999.dp))
-                                .background(Color.White.copy(alpha = 0.16f))
-                                .padding(horizontal = 14.dp, vertical = 6.dp)
-                        ) {
-                            Text(appStringResource(Res.string.doc_add_scan_hint), color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
-                        }
-                    }
-                    Text(text = appStringResource(Res.string.doc_add_demo_note), fontSize = 13.sp, color = TextSecondary)
-                    // Shutter button
-                    Box(
-                        modifier = Modifier
-                            .size(76.dp)
-                            .clip(CircleShape)
-                            .border(4.dp, BrandColor, CircleShape)
-                            .clickable {
-                                haptic.perform(HapticKind.SUCCESS)
-                                scanFlash = true
-                                number = if (selectedKind == "licence") sampleLicence else sampleRegistration
-                                holder = sampleHolder
-                                expiry = LocalDate.fromEpochDays(today.toEpochDays() + 730).toString()
-                                step = 3
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Box(modifier = Modifier.size(56.dp).clip(CircleShape).background(BrandColor))
-                    }
-                }
-            }
-            3 -> {
-                // Review
-                val reason = when {
-                    number.isBlank() -> appStringResource(Res.string.doc_add_error_number)
-                    holder.isBlank() -> appStringResource(Res.string.doc_add_error_holder)
-                    expiry.isBlank() -> appStringResource(Res.string.doc_add_error_expiry)
-                    !checked -> appStringResource(Res.string.doc_add_error_confirm)
-                    else -> null
-                }
-
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(appStringResource(Res.string.doc_add_review_intro), color = TextSecondary, fontSize = 14.sp)
-
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(appStringResource(Res.string.doc_add_number), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-                        Box(
-                            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(SurfaceColor2)
-                                .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp)).padding(14.dp)
-                        ) {
-                            BasicTextField(value = number, onValueChange = { number = it }, textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary))
-                        }
-                    }
-
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(appStringResource(Res.string.doc_add_holder), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-                        Box(
-                            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(SurfaceColor2)
-                                .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp)).padding(14.dp)
-                        ) {
-                            BasicTextField(value = holder, onValueChange = { holder = it }, textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary))
-                        }
-                    }
-
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(appStringResource(Res.string.doc_add_expiry), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-                        Box(
-                            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(SurfaceColor2)
-                                .border(1.5.dp, WarningColor, RoundedCornerShape(12.dp)).padding(14.dp)
-                        ) {
-                            BasicTextField(value = expiry, onValueChange = { expiry = it }, textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary))
-                        }
-                    }
-
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        listOf(1, 2, 5).forEach { y ->
-                            val targetDate = LocalDate.fromEpochDays(today.toEpochDays() + 365 * y).toString()
-                            VaultChip(
-                                text = appStringResource(Res.string.doc_add_years_later, f.d(y.toString())),
-                                active = expiry == targetDate,
-                                onClick = { expiry = targetDate }
-                            )
-                        }
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth().clickable { checked = !checked }.padding(vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clip(RoundedCornerShape(6.dp))
-                                .background(if (checked) BrandColor else Color.Transparent)
-                                .border(2.dp, if (checked) BrandColor else BorderStrongColor, RoundedCornerShape(6.dp)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            if (checked) Text("✓", color = OnBrandColor, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                        }
-                        Text(appStringResource(Res.string.doc_add_confirm), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-                    }
-
-                    VaultButton(
-                        text = reason ?: appStringResource(Res.string.doc_add_save),
-                        full = true,
-                        enabled = reason == null,
-                        onClick = {
-                            if (reason != null) haptic.perform(HapticKind.ERROR)
-                            else step = 4
-                        }
-                    )
-                }
-            }
-            4 -> {
-                // Reminder prompt
-                Column(
-                    modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Box(
-                        modifier = Modifier.size(72.dp).clip(RoundedCornerShape(24.dp)).background(BrandTintColor),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        V3Icon(path = "feather_icon/fi_bell.svg", description = null, modifier = Modifier.size(34.dp), tint = BrandColor)
-                    }
-                    Text(appStringResource(Res.string.doc_add_reminder_prompt), fontSize = 20.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
-                    Text(appStringResource(Res.string.doc_add_reminder_desc), fontSize = 14.sp, color = TextSecondary, textAlign = TextAlign.Center)
-                    Spacer(Modifier.height(8.dp))
-                    VaultButton(
-                        text = appStringResource(Res.string.doc_add_reminder_yes),
-                        full = true,
-                        icon = "fi_bell.svg",
-                        onClick = {
-                            val newDoc = VaultDocument(
-                                title = selectedDocName,
-                                number = number.trim(),
-                                holder = holder.trim(),
-                                expiry = expiry.trim(),
-                                kind = selectedKind,
-                                reminder = true
-                            )
-                            val next = state.copy(documents = listOf(newDoc) + state.documents.filterNot { it.kind == selectedKind })
-                            val toastMsg = savedReminderMessage
-                            onSave(next, toastMsg) {}
-                        }
-                    )
-                    VaultButton(
-                        text = appStringResource(Res.string.doc_add_not_now),
-                        kind = ButtonKind.GHOST,
-                        full = true,
-                        onClick = {
-                            val newDoc = VaultDocument(
-                                title = selectedDocName,
-                                number = number.trim(),
-                                holder = holder.trim(),
-                                expiry = expiry.trim(),
-                                kind = selectedKind,
-                                reminder = false
-                            )
-                            val next = state.copy(documents = listOf(newDoc) + state.documents.filterNot { it.kind == selectedKind })
-                            val toastMsg = savedMessage
-                            onSave(next, toastMsg) {}
-                        }
-                    )
-                }
-            }
+    DisposableEffect(existingId) {
+        onDispose {
+            val pending = draft.captured?.assetIds().orEmpty() - draft.protectedAssets - draft.committedAssets
+            if (pending.isNotEmpty()) runCatching { removeDocumentAssets(pending) }
         }
+    }
+
+    val kindInfo = docKindInfo(draft.selectedKind)
+    val kindName = appStringResource(kindInfo.resource)
+    val sheetTitle = when {
+        existingId != null -> appStringResource(Res.string.doc_edit_title, kindName)
+        draft.step == DocAddStep.TYPE -> appStringResource(Res.string.doc_add_type_title)
+        draft.step == DocAddStep.PHOTO -> appStringResource(Res.string.doc_add_scan_title)
+        else -> kindName
+    }
+    val saveFailedMessage = appStringResource(Res.string.doc_add_save_failed)
+    val toastMessage = buildDocSavedToast(kindName, existingId != null, draft.reminder, draft.expiry, leadDays, f::date)
+
+    Sheet(title = sheetTitle, onDismiss = onDismiss, detent = SheetDetent.TALL) {
+        DocAddStepBody(
+            state = state,
+            existingId = existingId,
+            existing = existing,
+            draft = draft,
+            kindInfo = kindInfo,
+            kindName = kindName,
+            leadDays = leadDays,
+            todayDate = todayDate,
+            saveFailedMessage = saveFailedMessage,
+            toastMessage = toastMessage,
+            scope = scope,
+            onSuccessHaptic = { haptic.perform(HapticKind.SUCCESS) },
+            onErrorHaptic = { haptic.perform(HapticKind.ERROR) },
+            onSave = onSave
+        )
+    }
+}
+
+@Composable
+private fun DocAddStepBody(
+    state: VaultState,
+    existingId: String?,
+    existing: VaultDocument?,
+    draft: DocAddState,
+    kindInfo: DocumentKindInfo,
+    kindName: String,
+    leadDays: Int,
+    todayDate: LocalDate,
+    saveFailedMessage: String,
+    toastMessage: String,
+    scope: CoroutineScope,
+    onSuccessHaptic: () -> Unit,
+    onErrorHaptic: () -> Unit,
+    onSave: (VaultState, String, () -> Unit) -> Unit
+) {
+    when (draft.step) {
+        DocAddStep.TYPE -> DocTypeStep(
+            onPickKind = { picked ->
+                draft.selectedKind = picked.kind
+                draft.captured = null
+                draft.captureBack = false
+                draft.photoError = null
+                draft.step = DocAddStep.PHOTO
+            },
+            onSkipPhoto = {
+                draft.selectedKind = DocumentKinds.REGISTRATION
+                draft.captured = null
+                draft.captureBack = false
+                draft.photoError = null
+                draft.step = DocAddStep.REVIEW
+            }
+        )
+        DocAddStep.PHOTO -> DocPhotoStep(
+            docKind = kindInfo,
+            captureBack = draft.captureBack,
+            busy = draft.photoBusy,
+            errorMessage = draft.photoError,
+            onCaptureBusyChange = { draft.photoBusy = it },
+            onCameraPageCaptured = { page ->
+                val merged = if (draft.captureBack) {
+                    CapturedDocument(listOfNotNull(draft.captured?.pages?.firstOrNull()) + page.copy(side = "Back"))
+                } else {
+                    CapturedDocument(listOf(page.copy(side = if (isCardDocument(draft.selectedKind)) "Front" else "Page 1")))
+                }
+                acceptCapturedDocument(draft, kindInfo, merged, scope)
+            },
+            onImported = { imported ->
+                val merged = if (draft.captureBack && imported.pages.isNotEmpty()) {
+                    CapturedDocument(listOfNotNull(draft.captured?.pages?.firstOrNull()) + imported.pages.first().copy(side = "Back"))
+                } else {
+                    imported
+                }
+                acceptCapturedDocument(draft, kindInfo, merged, scope)
+            },
+            onError = { msg -> draft.photoError = msg },
+            onKeepFrontOnly = {
+                draft.captureBack = false
+                draft.step = DocAddStep.REVIEW
+            },
+            onSkipPhoto = {
+                val stale = draft.captured?.assetIds().orEmpty() - draft.protectedAssets
+                if (stale.isNotEmpty()) runCatching { removeDocumentAssets(stale) }
+                draft.captured = null
+                draft.captureBack = false
+                draft.step = DocAddStep.REVIEW
+            }
+        )
+        DocAddStep.REVIEW -> DocExpiryStep(
+            kindName = kindName,
+            isEdit = existingId != null,
+            missingExisting = existingId != null && existing == null,
+            existingSameKind = existingId == null && hasSameKindDocument(state, draft.selectedKind),
+            hasPhoto = draft.captured != null,
+            expiry = draft.expiry,
+            reminder = draft.reminder,
+            number = draft.number,
+            holder = draft.holder,
+            showOptional = draft.showOptional,
+            leadDays = leadDays,
+            today = todayDate,
+            saveError = draft.saveError,
+            onExpiryChange = { draft.expiry = it },
+            onReminderChange = { draft.reminder = it },
+            onToggleOptional = { draft.showOptional = !draft.showOptional },
+            onNumberChange = { draft.number = it },
+            onHolderChange = { draft.holder = it },
+            onSave = {
+                submitDocAddSave(state, draft, existingId, saveFailedMessage, toastMessage, onSuccessHaptic, onErrorHaptic, onSave)
+            }
+        )
+    }
+}
+
+private fun hasSameKindDocument(state: VaultState, selectedKind: String): Boolean =
+    state.documents.any { doc ->
+        doc.stableKind() == selectedKind &&
+            if (selectedKind == DocumentKinds.LICENCE) doc.isOwnerScoped
+            else (doc.vehicleId == null || doc.vehicleId == state.ride?.id)
+    }
+
+private fun acceptCapturedDocument(
+    draft: DocAddState,
+    kindInfo: DocumentKindInfo,
+    nextCaptured: CapturedDocument,
+    scope: CoroutineScope
+) {
+    val stale = draft.captured?.assetIds().orEmpty() - nextCaptured.assetIds() - draft.protectedAssets
+    if (stale.isNotEmpty()) runCatching { removeDocumentAssets(stale) }
+    draft.captured = nextCaptured
+    if (isCardDocument(draft.selectedKind) && !draft.captureBack && nextCaptured.pages.size == 1 && nextCaptured.originalPdf == null) {
+        draft.captureBack = true
+        return
+    }
+    draft.photoBusy = true
+    scope.launch {
+        try {
+            val processed = if (nextCaptured.recognizedText.isBlank()) recognizeDocument(nextCaptured) else nextCaptured
+            draft.captured = processed
+            val suggestions = DocumentTextReader.suggestions(kindInfo.title, processed.recognizedText)
+            suggestions["expiry"]?.let { if (draft.expiry.isBlank()) draft.expiry = it }
+            suggestions["number"]?.let { if (draft.number.isBlank()) draft.number = it }
+            suggestions["holder"]?.let { if (draft.holder.isBlank()) draft.holder = it }
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (_: Exception) {
+            // Keep manual entry ready when on-device OCR cannot extract text.
+        } finally {
+            draft.photoBusy = false
+            draft.captureBack = false
+            draft.step = DocAddStep.REVIEW
+        }
+    }
+}
+
+private fun submitDocAddSave(
+    state: VaultState,
+    draft: DocAddState,
+    existingId: String?,
+    saveFailedMessage: String,
+    toastMessage: String,
+    onSuccessHaptic: () -> Unit,
+    onErrorHaptic: () -> Unit,
+    onSave: (VaultState, String, () -> Unit) -> Unit
+) {
+    draft.saveError = null
+    val nextState = runCatching {
+        state.upsertDocumentByKind(
+            kind = draft.selectedKind,
+            expiry = NormalizedNumbers.ascii(draft.expiry),
+            reminder = draft.reminder,
+            number = draft.number,
+            holder = draft.holder,
+            pages = draft.captured?.pages.orEmpty(),
+            originalPdf = draft.captured?.originalPdf,
+            pdfPageCount = draft.captured?.pdfPageCount ?: 0,
+            existingId = existingId,
+            capturedAt = if (draft.captured != null) Clock.System.now().toString() else ""
+        )
+    }.getOrElse {
+        draft.saveError = saveFailedMessage
+        onErrorHaptic()
+        return
+    }
+    val stagedAssets = draft.captured?.assetIds().orEmpty()
+    onSuccessHaptic()
+    onSave(nextState, toastMessage) {
+        draft.committedAssets = stagedAssets
+    }
+}
+
+@Composable
+private fun buildDocSavedToast(
+    kindName: String,
+    isEdit: Boolean,
+    reminder: Boolean,
+    expiry: String,
+    leadDays: Int,
+    formatDate: (LocalDate) -> String
+): String {
+    if (isEdit) return appStringResource(Res.string.doc_edit_saved, kindName)
+    val parsed = runCatching { LocalDate.parse(NormalizedNumbers.ascii(expiry.trim())) }.getOrNull()
+    return if (reminder && parsed != null) {
+        val remindDate = LocalDate.fromEpochDays(parsed.toEpochDays() - leadDays)
+        appStringResource(Res.string.doc_add_saved_reminder, kindName, formatDate(remindDate))
+    } else {
+        appStringResource(Res.string.doc_add_saved, kindName)
     }
 }

@@ -35,7 +35,8 @@ data class Ride(
     val modelCode: String = "", val factoryProfileId: String? = null,
     val odometerConfirmedDate: String? = null,
     val id: String = "primary",
-    val archived: Boolean = false
+    val archived: Boolean = false,
+    val cc: Int? = null
 ) {
     fun confirmedMileage(value: Double, date: LocalDate): Ride {
         require(value.isFinite() && value in 0.0..9999999.0 && date <= today())
@@ -116,11 +117,8 @@ fun VaultDocument.assetIds(): Set<String> =
     pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() +
         listOfNotNull(originalPdf) + renewals.mapNotNull { it.receiptId }
 
-fun isCardDocument(type: String): Boolean = when (type) {
-    "Registration smart card", "smart_card", "registration", "রেজিস্ট্রেশন স্মার্ট কার্ড", "রেজিস্ট্রেশন সার্টিফিকেট",
-    "Driving licence", "Driving license", "licence", "license", "ড্রাইভিং লাইসেন্স" -> true
-    else -> false
-}
+fun isCardDocument(type: String): Boolean =
+    DocumentKinds.fromStored(type, type) in setOf(DocumentKinds.REGISTRATION, DocumentKinds.LICENCE)
 
 fun documentPageLimit(type: String) = if (isCardDocument(type)) 2 else 8
 

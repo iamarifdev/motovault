@@ -1,39 +1,24 @@
 package com.motovault.app.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import com.motovault.app.ui.backup.BackupSheet
-import com.motovault.app.ui.backup.CloudBackupSheet
-import com.motovault.app.ui.fuel.FuelSheet
-import com.motovault.app.ui.backup.BackupSheetTab
-import com.motovault.app.ui.backup.RecoverySheet
-import com.motovault.app.application.VaultRecovery
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import com.motovault.app.domain.privacy.*
-import com.motovault.app.application.VaultWriter
-import com.motovault.app.application.VaultBackupRestorer
-import com.motovault.app.ui.privacy.*
-import dev.sky.design.*
-import com.motovault.app.application.fuel.FuelWorkflow
-import com.motovault.app.application.fuel.FuelSaveOutcome
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.runtime.rememberCoroutineScope
 import com.motovault.app.application.VaultBackupOperations
+import com.motovault.app.application.VaultBackupRestorer
+import com.motovault.app.application.VaultRecovery
+import com.motovault.app.application.VaultWriter
+import com.motovault.app.application.capture.CaptureDraftFactory
+import com.motovault.app.application.fuel.FuelWorkflow
 import com.motovault.app.domain.garage.mutateBike
 import com.motovault.app.domain.garage.switchToBike
-import com.motovault.app.ui.garage.BikeSwitcherSheet
-import com.motovault.app.ui.garage.BreakdownHelpSheet
-import com.motovault.app.ui.history.WorkLedgerSheet
-import kotlinx.coroutines.isActive
-import kotlinx.datetime.Clock
-import motovault.composeapp.generated.resources.*
+import com.motovault.app.domain.privacy.VaultAccessPolicy
 
 internal enum class FuelCreateError { SAVE_FAILED, CONFLICT }
 
 @Composable
 internal fun VaultSheetHost(
     activeSheet: ActiveSheet?,
-    captureDrafts: com.motovault.app.application.capture.CaptureDraftFactory,
+    captureDrafts: CaptureDraftFactory,
     state: VaultState,
     revision: Long,
     loading: Boolean,
@@ -54,297 +39,43 @@ internal fun VaultSheetHost(
     onRestoreSuccess: () -> Unit,
     onInspect: (String) -> Unit,
     onLockNow: () -> Unit,
-    onStartOnboarding: () -> Unit = {}
+    onStartOnboarding: () -> Unit = {},
+    onSwitchTab: (Tab) -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
-            if (!loading && (state.ride != null || activeSheet?.name in setOf("paste", "capture") || activeSheet?.name == "quickAdd")) {
-                activeSheet?.let { sheet ->
-                val targetBikeId = (sheet.props as? CapturePrefill)?.targetBikeId
-                val scopedState = if (targetBikeId != null && targetBikeId != state.ride?.id) {
-                    runCatching { state.switchToBike(targetBikeId) }.getOrDefault(state)
-                } else state
-                val commitScoped: (VaultState, ((Boolean) -> Unit)?) -> Unit = { nextScoped, done ->
-                    val merged = runCatching {
-                        if (targetBikeId == null) nextScoped else state.mutateBike(targetBikeId) { nextScoped }
-                    }.getOrNull()
-                    if (merged == null) done?.invoke(false) else onCommit(merged, done)
-                }
-                when (sheet.name) {
-                    "expense", "budget", "cost-details" -> CostSheetHost(sheet, scopedState, onDismiss = { onSheet(null) },
-                        onSave = { next, done -> commitScoped(next, done) }, onUndo = { onUndo(revision + 1) }, onToast = onToast)
-                    "gaugeDetail" -> GaugeDetailSheet(state, sheet.props as? String,
-                        onDismiss = { onSheet(null) }, onOpen = { name, id ->
-                            onSheet(if (name == "serviceReminder") ActiveSheet("reminders", "service" to id)
-                                else ActiveSheet(name, id))
-                        })
-                    "schedule" -> state.rules.firstOrNull { it.id == sheet.props as? String }?.let { rule ->
-                        ScheduleDialog(state, rule, onDismiss = { onSheet(null) },
-                            onSave = { next, done -> onCommit(next, done) })
-                    }
-                    "reminders" -> {
-                        val target = sheet.props as? Pair<*, *>
-                        ReminderSettingsSheet(state, target?.first as? String, target?.second as? String,
-                            onDismiss = { onSheet(null) },
-                            onOpen = { type, id -> onSheet(ActiveSheet("reminders", type to id)) },
-                            onSave = { next, done -> onCommit(next, done) })
-                    }
-                    "quickAdd" -> QuickAddSheet(
-                        onDismiss = { onSheet(null) },
-                        onSelectFlow = { flow -> onSheet(ActiveSheet(flow)) }
-                    )
-                    "fuel" -> state.fuelScreenInput(today())?.let { fuelInput ->
-                        val failureText = when (fuelCreateError) {
-                            FuelCreateError.SAVE_FAILED -> appStringResource(Res.string.fuel_create_save_failed)
-                            FuelCreateError.CONFLICT -> appStringResource(Res.string.fuel_create_conflict)
-                            null -> null
-                        }
-                        FuelSheet(
-                        input = fuelInput,
-                        editError = failureText,
-                        initialAmount = (sheet.props as? CapturePrefill)?.amount?.let(com.motovault.app.domain.ledger.Money::taka) ?: (sheet.props as? Number)?.toDouble(),
-                        initialOdometer = (sheet.props as? CapturePrefill)?.odometer,
-                        onDismiss = { onSheet(null); onFuelCreateError(null) },
-                        onSave = { request, msg, onDone ->
-                            val prefill = sheet.props as? CapturePrefill
-                            fuelWorkflow.create(
-                                request.copy(captureReceiptId = prefill?.receipt, targetBikeId = prefill?.targetBikeId ?: state.ride?.id),
-                                revision
-                            ) { outcome ->
-                                if (scope.isActive && outcome == FuelSaveOutcome.SAVED) {
-                                    onFuelCreateError(null)
-                                    onToast(ToastData(
-                                        id = "fuel_${Clock.System.now().toEpochMilliseconds()}",
-                                        message = msg,
-                                        undoAction = {
-                                            onUndo(revision + 1)
-                                        }
-                                    ))
-                                    onDone()
-                                    onSheet(null)
-                                } else if (scope.isActive) onFuelCreateError(when (outcome) {
-                                    FuelSaveOutcome.CONFLICT, FuelSaveOutcome.INVALID -> FuelCreateError.CONFLICT
-                                    else -> FuelCreateError.SAVE_FAILED
-                                })
-                            }
-                        }
-                    ) }
-                    "fuelEdit" -> {
-                        val target = sheet.props as? FuelEditTarget
-                        if (target != null) {
-                            val conflictText = appStringResource(Res.string.fuel_edit_conflict)
-                            val failureText = appStringResource(Res.string.fuel_edit_save_failed)
-                            state.fuelScreenInput(today())?.let { fuelInput -> FuelSheet(
-                                input = fuelInput, existing = target.record.fuelExistingEntry(), editError = fuelEditError,
-                                onDismiss = { onSheet(null); onFuelEditError(null) },
-                                onSave = { _, _, _ -> },
-                                onEdit = { request, message ->
-                                    val scopedRequest = request.copy(targetBikeId = target.record.vehicleId.ifBlank { state.ride?.id ?: "primary" })
-                                    fuelWorkflow.edit(scopedRequest, target.revision) { outcome ->
-                                            if (scope.isActive) {
-                                                if (outcome == FuelSaveOutcome.SAVED) {
-                                                    onToast(ToastData(id = "fuel_edit_${request.id}", message = message, undoAction = { onUndo(target.revision + 1) }))
-                                                    onSheet(null)
-                                                    onFuelEditError(null)
-                                                } else onFuelEditError(if (outcome == FuelSaveOutcome.FAILED) failureText else conflictText)
-                                            }
-                                    }
-                                }
-                            ) }
-                        }
-                    }
-                    "service" -> {
-                        val itemKey = sheet.props as? String
-                        val parsedRows = (sheet.props as? CapturePrefill)?.rows ?: (sheet.props as? List<*>)?.filterIsInstance<ParsedLine>()
-                        ServiceSheet(
-                            state = scopedState,
-                            initialItemKey = itemKey,
-                            initialRows = parsedRows,
-                            initialOdometer = (sheet.props as? CapturePrefill)?.odometer,
-                            onDismiss = { onSheet(null) },
-                            onSave = { nextState, msg, onDone ->
-                                commitScoped(nextState) { ok ->
-                                    if (ok) {
-                                        onToast(ToastData(
-                                            id = "svc_${Clock.System.now().toEpochMilliseconds()}",
-                                            message = msg,
-                                            undoAction = {
-                                                onUndo(revision + 1)
-                                            }
-                                        ))
-                                        onDone()
-                                        onSheet(null)
-                                    }
-                                }
-                            }
-                        )
-                    }
-                    "odometer" -> OdometerSheet(
-                        state = scopedState,
-                        initialOdometer = (sheet.props as? CapturePrefill)?.odometer,
-                        onDismiss = { onSheet(null) },
-                        onSave = { nextState, msg, onDone ->
-                            commitScoped(nextState) { ok ->
-                                if (ok) {
-                                    onToast(ToastData(
-                                        id = "odo_${Clock.System.now().toEpochMilliseconds()}",
-                                        message = msg,
-                                        undoAction = {
-                                            onUndo(revision + 1)
-                                        }
-                                    ))
-                                    onDone()
-                                    onSheet(null)
-                                }
-                            }
-                        }
-                    )
-                    "docAdd" -> DocAddSheet(
-                        state = state,
-                        onDismiss = { onSheet(null) },
-                        onSave = { nextState, msg, onDone ->
-                            onCommit(nextState) { ok ->
-                                if (ok) {
-                                    onToast(ToastData(
-                                        id = "doc_${Clock.System.now().toEpochMilliseconds()}",
-                                        message = msg,
-                                        undoAction = {
-                                            onUndo(revision + 1)
-                                        }
-                                    ))
-                                    onDone()
-                                    onSheet(null)
-                                }
-                            }
-                        }
-                    )
-                    "docView" -> {
-                        val docId = sheet.props as? String
-                        val doc = state.documents.firstOrNull { it.id == docId }
-                        if (doc != null) {
-                            DocViewSheet(
-                                doc = doc,
-                                onDismiss = { onSheet(null) },
-                                onUpdateReminder = { enabled ->
-                                    val updated = state.documents.map { if (it.id == doc.id) it.copy(reminder = enabled) else it }
-                                    onCommit(state.copy(documents = updated), null)
-                                },
-                                onReminderSettings = { onSheet(ActiveSheet("reminders", "document" to doc.id)) },
-                                warningDays = doc.reminderWarningDays ?: state.reminderPolicy.warningDays,
-                                privacyEnabled = state.privacy.enabled,
-                                onInspect = { onInspect(doc.id) },
-                                onOpenPrivacy = { onSheet(ActiveSheet("privacy")) },
-                                onRenew = { onSheet(ActiveSheet("renewal", doc.id)) },
-                                language = state.language
-                            )
-                        }
-                    }
-                    "renewal" -> {
-                        val docId = sheet.props as? String
-                        val doc = state.documents.firstOrNull { it.id == docId }
-                        if (doc != null) {
-                            val savedMessage = appStringResource(Res.string.renewal_saved, documentDisplayName(doc.title))
-                            RenewalSheet(
-                                state = state,
-                                doc = doc,
-                                onDismiss = { onSheet(null) },
-                                onChecklist = { step ->
-                                    val latest = session.snapshots.value
-                                    val current = latest.state.documents.firstOrNull { it.id == doc.id } ?: doc
-                                    val steps = if (step in current.checkedRenewalSteps) {
-                                        current.checkedRenewalSteps - step
-                                    } else {
-                                        current.checkedRenewalSteps + step
-                                    }
-                                    runCatching { latest.state.setRenewalChecklist(doc.id, steps) }.getOrNull()
-                                        ?.let { next -> session.commit(next, latest.revision) { } }
-                                },
-                                onSave = { next, done ->
-                                    session.commit(next, session.snapshots.value.revision) { ok ->
-                                        if (ok) {
-                                            val savedRevision = session.snapshots.value.revision
-                                            onToast(ToastData(
-                                                id = "renewal_${Clock.System.now().toEpochMilliseconds()}",
-                                                message = savedMessage,
-                                                undoAction = { onUndo(savedRevision) }
-                                            ))
-                                            done(true)
-                                            onSheet(null)
-                                        } else done(false)
-                                    }
-                                }
-                            )
-                        }
-                    }
-                    "privacy" -> PrivacySheet(
-                        state = state,
-                        onUpdatePrivacy = { next ->
-                            val request = if (!state.privacy.enabled && next.enabled) {
-                                accessPolicy.beginAuthentication(VaultAuthAction.ENABLE)
-                            } else if (state.privacy.enabled && !next.enabled) {
-                                accessPolicy.beginAuthentication(VaultAuthAction.DISABLE)
-                            } else null
-                            val grant = request?.let { accessPolicy.completeAuthentication(it, true) }
-                            val committed = accessPolicy.settingsCommitted(next, grant)
-                            if (committed) {
-                                onCommit(state.copy(privacy = next), null)
-                            }
-                        },
-                        onLockNow = { onLockNow() },
-                        onDismiss = { onSheet(null) }
-                    )
-                    "paste", "capture" -> CaptureReviewSheet(sheet.props as? CaptureInput ?: CaptureInput(), state, captureDrafts,
-                        onDismiss = { onSheet(null) }, onContinue = { flow, prefill -> onSheet(ActiveSheet(flow, prefill)) })
-                    "backup", "backup-restore" -> BackupSheet(
-                        state = state,
-                        stateRevision = revision,
-                        backupOperations = backupOperations,
-                        vaultRevision = { session.snapshots.value.revision },
-                        initialTab = if (sheet.name == "backup-restore" || sheet.props == BackupSheetTab.RESTORE) BackupSheetTab.RESTORE else BackupSheetTab.CREATE,
-                        onDismiss = { onSheet(null) },
-                        onBackupSaved = { timestamp ->
-                            onCommit(state.copy(lastBackupEpochMillis = timestamp), null)
-                        },
-                        onRestore = { archive, password, expectedRevision, completed ->
-                            backupRestore.restore(archive, password, expectedRevision) { result ->
-                                completed(result)
-                                if (result.isSuccess) {
-                                    onSheet(null)
-                                    onToast(null)
-                                    onRestoreSuccess()
-                                }
-                            }
-                        }
-                    )
-                    "recovery" -> RecoverySheet(recovery, revision = { session.snapshots.value.revision }, onDismiss = { onSheet(null) })
-                    "bikeSwitcher" -> BikeSwitcherSheet(
-                        state = state,
-                        onDismiss = { onSheet(null) },
-                        onSelectBike = { next, msg ->
-                            onCommit(next) { ok ->
-                                if (ok) {
-                                    onToast(ToastData(id = "bike_${Clock.System.now().toEpochMilliseconds()}", message = msg))
-                                    onSheet(null)
-                                }
-                            }
-                        },
-                        onAddBike = onStartOnboarding
-                    )
-                    "breakdown" -> BreakdownHelpSheet(
-                        state = state,
-                        onUpdateState = { next -> onCommit(next, null) },
-                        onToast = { toast -> onToast(toast) },
-                        onDismiss = { onSheet(null) }
-                    )
-                    "work-ledger" -> WorkLedgerSheet(
-                        state = state,
-                        onUpdateState = { next -> onCommit(next, null) },
-                        onDismiss = { onSheet(null) }
-                    )
-                    "cloud-backup" -> CloudBackupSheet(
-                        onOpenLocalBackup = { onSheet(ActiveSheet("backup", BackupSheetTab.CREATE)) },
-                        onDismiss = { onSheet(null) }
-                    )
-                }
-}
-}
+    val canShow = !loading && (
+        state.ride != null ||
+            activeSheet?.name in setOf("paste", "capture", "quickAdd")
+        )
+    if (!canShow || activeSheet == null) return
+
+    val targetBikeId = (activeSheet.props as? CapturePrefill)?.targetBikeId
+    val scopedState = if (targetBikeId != null && targetBikeId != state.ride?.id) {
+        runCatching { state.switchToBike(targetBikeId) }.getOrDefault(state)
+    } else state
+    val commitScoped: (VaultState, ((Boolean) -> Unit)?) -> Unit = { nextScoped, done ->
+        val merged = runCatching {
+            if (targetBikeId == null) nextScoped else state.mutateBike(targetBikeId) { nextScoped }
+        }.getOrNull()
+        if (merged == null) done?.invoke(false) else onCommit(merged, done)
+    }
+
+    key(activeSheet.name, activeSheet.props) {
+        val ctx = SheetRouteContext(
+            sheet = activeSheet, state = state, scopedState = scopedState, revision = revision,
+            captureDrafts = captureDrafts, backupOperations = backupOperations, session = session,
+            backupRestore = backupRestore, recovery = recovery, fuelWorkflow = fuelWorkflow,
+            accessPolicy = accessPolicy, fuelCreateError = fuelCreateError, fuelEditError = fuelEditError,
+            scope = scope, onSwitchTab = onSwitchTab, onSheet = onSheet, onCommit = onCommit, onCommitScoped = commitScoped,
+            onUndo = onUndo, onFuelCreateError = onFuelCreateError, onFuelEditError = onFuelEditError,
+            onToast = onToast, onRestoreSuccess = onRestoreSuccess, onInspect = onInspect,
+            onLockNow = onLockNow, onStartOnboarding = onStartOnboarding
+        )
+        when (activeSheet.name) {
+            "quickAdd", "gaugeDetail", "odometer", "bikeSwitcher", "breakdown" -> RenderGarageSheet(ctx)
+            "expense", "fuel", "fuelEdit", "service", "serviceEdit", "paste", "capture", "work-ledger" -> RenderEntrySheet(ctx)
+            "docAdd", "docView", "renewal" -> RenderDocumentSheet(ctx)
+            "settings", "reminders", "privacy", "backup", "backup-restore", "recovery", "cloud-backup" -> RenderSettingsSheet(ctx)
+        }
+    }
 }

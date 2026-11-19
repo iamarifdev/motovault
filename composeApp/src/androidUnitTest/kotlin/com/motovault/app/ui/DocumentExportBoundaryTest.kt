@@ -1,5 +1,6 @@
 package com.motovault.app.ui
 
+import com.motovault.app.domain.model.validateDocumentAssetId
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.*

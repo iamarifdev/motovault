@@ -1,6 +1,8 @@
 package com.motovault.app.ui
 
 import com.motovault.app.domain.model.BaselineCertainty
+import com.motovault.app.domain.model.DocumentKinds
+import com.motovault.app.domain.model.stableKind
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -87,7 +89,7 @@ fun passportDefaults(state: VaultState, bikeId: String? = null): PassportIdentit
     val ride = requireNotNull(if (bikeId == null || state.ride?.id == bikeId) state.ride else targetRecord?.ride) { "Set up your motorcycle first." }
     val docs = if (bikeId == null || state.ride?.id == bikeId) state.documents else targetRecord?.documents.orEmpty()
     val registration = docs.firstOrNull {
-        it.title == "Registration smart card" && it.detailsConfirmed && (it.vehicleId == null || it.vehicleId == ride.id)
+        it.stableKind() == DocumentKinds.REGISTRATION && it.detailsConfirmed && (it.vehicleId == null || it.vehicleId == ride.id)
     }
     return PassportIdentity(registration?.holder.orEmpty(), ride.brandId, ride.displayName, ride.edition, ride.year,
         ride.registration.ifBlank { registration?.details?.get("registration").orEmpty() },

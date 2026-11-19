@@ -7,6 +7,7 @@ import com.motovault.app.domain.maintenance.ScheduleSource
 import com.motovault.app.domain.model.BaselineCertainty
 import com.motovault.app.domain.model.ComponentRule
 import com.motovault.app.storage.backupSnapshot
+import com.motovault.app.storage.toRide
 import com.motovault.app.ui.AppLanguage
 import com.motovault.app.ui.Digits
 import com.motovault.app.ui.DocumentPage
@@ -61,11 +62,26 @@ class BackupPayloadCompatibilityTest {
     @Test
     fun olderV1PayloadKeepsMissingFieldDefaults() {
         val payload = json.decodeFromString<VaultExportPayload>(olderV1)
+        assertNull(payload.ride?.cc)
         assertEquals("doc-1", payload.documents.single().id)
         assertEquals(emptyList(), payload.documents.single().pages)
         assertEquals(BackupLanguage.BN, payload.preferences.language)
         assertEquals("SYSTEM", payload.appearance)
         assertFalse(payload.autoLocation)
+    }
+
+    @Test
+    fun c3RideCcAndCustomModelRoundTripThroughBackupPayload() {
+        val primary = Ride("yamaha", "Standard", 2024, 3400.0, modelId = "yamaha-r15-v4", modelName = "R15 V4", cc = 155)
+        val custom = Ride("honda", "Custom", 2025, 1200.0, modelId = null, modelName = "Custom Cafe", cc = 150)
+        listOf(primary, custom).forEach { expected ->
+            val snapshot = VaultState(ride = expected).backupSnapshot()
+            val wire = json.encodeToString(snapshot.payload)
+            val restored = json.decodeFromString<VaultExportPayload>(wire).ride!!.toRide()
+            assertEquals(expected, restored)
+            assertEquals(expected.cc, restored.cc)
+            assertEquals(expected.modelId, restored.modelId)
+        }
     }
 
     @Test

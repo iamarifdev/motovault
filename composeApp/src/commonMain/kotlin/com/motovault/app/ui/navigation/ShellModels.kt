@@ -29,4 +29,14 @@ data class ActiveSheet(
     val props: Any? = null
 )
 
+enum class SettingsSection {
+    APPEARANCE,
+    LANGUAGE,
+    MORE,
+    REMINDERS,
+    LOCK,
+    SALE,
+    WIDGET
+}
+
 internal data class FuelEditTarget(val record: RideLog, val revision: Long)

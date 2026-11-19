@@ -17,5 +17,6 @@ data class BackupRide(
     val modelCode: String = "", val factoryProfileId: String? = null,
     val odometerConfirmedDate: String? = null,
     val id: String = "primary",
-    val archived: Boolean = false
+    val archived: Boolean = false,
+    val cc: Int? = null
 )

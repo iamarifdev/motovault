@@ -1,6 +1,7 @@
 @file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class, kotlin.experimental.ExperimentalNativeApi::class)
 package com.motovault.app.storage.security
 
+import com.motovault.app.domain.model.assetIds
 import com.motovault.app.ui.*
 import kotlinx.cinterop.useContents
 import kotlinx.coroutines.runBlocking
@@ -50,7 +51,7 @@ fun runIosStorageProbe(provider: IosAssetCryptography, invalidateSyntheticKey: (
         check(reminderHeading(reminder, english) == "Document reminder")
         check(reminderMessage(reminder, english).contains("২০ October ২০২৬"))
         val bangla = english.copy(language = AppLanguage.BN, digits = Digits.EN)
-        check(reminderHeading(reminder, bangla) == "কাগজের রিমাইন্ডার")
+        check(reminderHeading(reminder, bangla) == "ডকুমেন্টের রিমাইন্ডার")
         check(reminderMessage(reminder, bangla).contains("20 অক্টোবর 2026"))
         checks += "native-reminder-language-and-digit-preferences"
         stage = "compose-localization"

@@ -18,4 +18,6 @@ internal object CaptureWordBoundaries {
     fun tokenStart(text: String, start: Int): Boolean = text.getOrNull(start - 1)?.let {
         !letterOrMark(it) && !it.isDigit() && it != '.' && it != ','
     } ?: true
+    fun wordBoundary(text: String, range: IntRange): Boolean =
+        !letterOrMark(text.getOrNull(range.first - 1)) && !letterOrMark(text.getOrNull(range.last + 1))
 }

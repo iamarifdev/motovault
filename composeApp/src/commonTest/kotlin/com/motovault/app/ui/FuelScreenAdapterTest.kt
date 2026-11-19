@@ -1,5 +1,6 @@
 package com.motovault.app.ui
 
+import com.motovault.app.ui.fuel.RecentPump
 import kotlinx.datetime.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -21,6 +22,33 @@ class FuelScreenAdapterTest {
         assertEquals(590.0, edit.cost)
         assertEquals(4.9, edit.fuelLiters)
         assertNull(edit.fuelPrice)
+    }
+
+    @Test
+    fun recentPumpsPreferNewestDateDeduplicateIgnoreBlankAndCapAtFive() {
+        val logs = listOf(
+            RideLog("Fuel", "", "2025-01-01", 1000.0, id = "f1", kind = "fuel", liters = 4.0, cost = 520.0, locationLabel = "Padma"),
+            RideLog("Fuel", "", "2025-01-05", 1150.0, id = "f2", kind = "fuel", liters = 4.0, cost = 520.0, locationLabel = " Padma "),
+            RideLog("Fuel", "", "2025-01-03", 1100.0, id = "f3", kind = "fuel", liters = 4.0, cost = 520.0, locationLabel = "Meghna"),
+            RideLog("Fuel", "", "2025-01-04", 1120.0, id = "f4", kind = "fuel", liters = 4.0, cost = 520.0, locationLabel = "   "),
+            RideLog("Service", "", "2025-01-09", 1200.0, id = "s1", kind = "service", locationLabel = "Garage")
+        )
+        val state = VaultState(
+            ride = Ride("test", "Synthetic", 2020, 1200.0),
+            logs = logs,
+            places = listOf("Padma", "Jamuna", "Trust", "Karnafuli", "UnusedSixth", "   ")
+        )
+        val input = requireNotNull(state.fuelScreenInput(LocalDate(2025, 1, 10)))
+        assertEquals(
+            listOf(
+                RecentPump("Padma", "2025-01-05"),
+                RecentPump("Meghna", "2025-01-03"),
+                RecentPump("Jamuna", null),
+                RecentPump("Trust", null),
+                RecentPump("Karnafuli", null)
+            ),
+            input.recentPumps
+        )
     }
 
     @Test

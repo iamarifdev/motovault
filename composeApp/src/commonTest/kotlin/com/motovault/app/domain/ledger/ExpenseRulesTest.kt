@@ -22,8 +22,10 @@ class ExpenseRulesTest {
         assertTrue(corrected.deleteLog(corrected.logs.single()).logs.isEmpty())
     }
 
-    @Test fun rejectsRefundsInvalidDatesUnknownCategoriesAndMissingEdits() {
+    @Test fun rejectsZeroRefundsInvalidDatesUnknownCategoriesAndMissingEdits() {
         val valid = ExpenseDraft(CostCategory.CUSTOM, 100, today, "")
+        assertEquals(ExpenseIssue.AMOUNT, ExpenseRules.validate(valid.copy(amountPoisha = 0), today))
+        assertEquals(ExpenseIssue.AMOUNT, ExpenseRules.validate(valid.copy(amountPoisha = null), today))
         assertEquals(ExpenseIssue.AMOUNT, ExpenseRules.validate(valid.copy(amountPoisha = -1), today))
         assertEquals(ExpenseIssue.DATE, ExpenseRules.validate(valid.copy(date = LocalDate(2026, 11, 12)), today))
         assertEquals(ExpenseIssue.CATEGORY, ExpenseRules.validate(valid.copy(category = CostCategory.FUEL), today))

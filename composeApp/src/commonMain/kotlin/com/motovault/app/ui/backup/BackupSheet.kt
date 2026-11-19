@@ -98,6 +98,9 @@ import motovault.composeapp.generated.resources.backup_ready_size
 import motovault.composeapp.generated.resources.backup_saved
 import motovault.composeapp.generated.resources.backup_share_failed
 import motovault.composeapp.generated.resources.backup_snapshot_changed
+import motovault.composeapp.generated.resources.recovery_entry
+import motovault.composeapp.generated.resources.settings_backup_last
+import motovault.composeapp.generated.resources.settings_backup_none
 
 private const val BYTES_PER_KIB = 1024
 
@@ -150,21 +153,17 @@ internal fun BackupSheet(
     initialTab: BackupSheetTab = BackupSheetTab.CREATE,
     onDismiss: () -> Unit,
     onBackupSaved: (Long) -> Unit,
-    onRestore: (ByteArray, String, Long, (Result<Unit>) -> Unit) -> Unit
+    onRestore: (ByteArray, String, Long, (Result<Unit>) -> Unit) -> Unit,
+    onOpenRecovery: (() -> Unit)? = null
 ) {
     val f = currentFmt
     val haptic = currentHaptic
-    val scope = rememberCoroutineScope()
     val createPasswordLabel = appStringResource(Res.string.backup_password_label, f.n(BackupUseCase.MIN_PASSPHRASE_LENGTH.toLong()))
     val confirmPasswordLabel = appStringResource(Res.string.backup_confirm_password_label)
     val restorePasswordLabel = appStringResource(Res.string.restore_enter_password)
 
     var activeTab by remember { mutableStateOf(initialTab) }
-
-    // --- CREATE BACKUP STATE ---
     val create = remember { BackupCreateState() }
-
-    // --- RESTORE BACKUP STATE ---
     val restore = remember { BackupRestoreState() }
     val busy = restore.isRestoring || create.isExporting || restore.isValidating
 
@@ -174,11 +173,7 @@ internal fun BackupSheet(
         dismissEnabled = !busy,
         detent = SheetDetent.TALL
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            // Tab Selector
+        Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             VaultSegmented(
                 options = listOf(
                     BackupSheetTab.CREATE to appStringResource(Res.string.backup_tab_create),
@@ -191,35 +186,39 @@ internal fun BackupSheet(
                     activeTab = it
                 }
             )
-
-            // ==========================================
-            // TAB 1: CREATE BACKUP
-            // ==========================================
             if (activeTab == BackupSheetTab.CREATE) {
-                BackupCreateContent(
-                    state = state,
-                    stateRevision = stateRevision,
-                    backupOperations = backupOperations,
-                    ui = create,
-                    f = f,
-                    createPasswordLabel = createPasswordLabel,
-                    confirmPasswordLabel = confirmPasswordLabel,
-                    vaultRevision = vaultRevision,
-                    onBackupSaved = onBackupSaved
-                )
+                BackupCreateContent(state, stateRevision, backupOperations, create, f, createPasswordLabel, confirmPasswordLabel, vaultRevision, onBackupSaved)
             } else {
-                BackupRestoreContent(
-                    state = state,
-                    stateRevision = stateRevision,
-                    backupOperations = backupOperations,
-                    ui = restore,
-                    f = f,
-                    restorePasswordLabel = restorePasswordLabel,
-                    vaultRevision = vaultRevision,
-                    busy = busy,
-                    onRestore = onRestore
-                )
+                BackupRestoreContent(state, stateRevision, backupOperations, restore, f, restorePasswordLabel, vaultRevision, busy, onRestore)
             }
+            BackupStatusAndRecovery(state = state, f = f, busy = busy, onOpenRecovery = onOpenRecovery)
         }
+    }
+}
+
+@Composable
+private fun BackupStatusAndRecovery(
+    state: VaultState,
+    f: Fmt,
+    busy: Boolean,
+    onOpenRecovery: (() -> Unit)?
+) {
+    val lastDate = state.lastBackupEpochMillis?.let { millis ->
+        runCatching {
+            val date = Instant.fromEpochMilliseconds(millis).toLocalDateTime(TimeZone.currentSystemDefault()).date
+            f.d(date.toString())
+        }.getOrNull()
+    }
+    val statusText = lastDate?.let { appStringResource(Res.string.settings_backup_last, it) }
+        ?: appStringResource(Res.string.settings_backup_none)
+    Text(text = statusText, fontSize = 13.sp, color = if (lastDate != null) BrandColor else TextSecondary)
+    if (onOpenRecovery != null) {
+        VaultButton(
+            text = appStringResource(Res.string.recovery_entry),
+            kind = ButtonKind.SECONDARY,
+            full = true,
+            enabled = !busy,
+            onClick = onOpenRecovery
+        )
     }
 }

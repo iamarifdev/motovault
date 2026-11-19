@@ -15,6 +15,10 @@ fun VaultState.allBikes(): List<Ride> = listOfNotNull(ride) + garageBikes.map { 
 /** Returns only non-archived bikes eligible for active selection, reminders, and mutations. */
 fun VaultState.activeBikes(): List<Ride> = allBikes().filterNot { it.archived }
 
+/** Returns active bikes in stable carousel order: "primary" first, then sorted by id. */
+fun VaultState.carouselBikes(): List<Ride> =
+    activeBikes().sortedWith(compareBy<Ride>({ it.id != "primary" }, { it.id }))
+
 /** Returns all documents across the active bike, owner-scoped licence, and garage bikes. */
 fun VaultState.allDocuments(): List<VaultDocument> =
     (documents + garageBikes.flatMap { it.documents }).distinctBy { it.id }

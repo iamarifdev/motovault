@@ -1,72 +1,198 @@
 package com.motovault.app.ui
 
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.motovault.app.domain.maintenance.MaintenanceAction
-import com.motovault.app.domain.maintenance.ScheduleSource
+import com.motovault.app.domain.model.BaselineCertainty
+import com.motovault.app.domain.model.ComponentRule
 import kotlinx.datetime.LocalDate
-import motovault.composeapp.generated.resources.*
+import motovault.composeapp.generated.resources.Res
+import motovault.composeapp.generated.resources.gauge_current_odo
+import motovault.composeapp.generated.resources.gauge_edit_last_desc
+import motovault.composeapp.generated.resources.gauge_interval_every_label
+import motovault.composeapp.generated.resources.gauge_interval_every_value
+import motovault.composeapp.generated.resources.gauge_last_done_empty
+import motovault.composeapp.generated.resources.gauge_last_done_label
+import motovault.composeapp.generated.resources.gauge_last_done_value
+import motovault.composeapp.generated.resources.gauge_last_saved
+import motovault.composeapp.generated.resources.gauge_log_service_action
+import motovault.composeapp.generated.resources.gauge_reset_action
+import motovault.composeapp.generated.resources.gauge_reset_saved
+import motovault.composeapp.generated.resources.gauge_unknown_hint
+import motovault.composeapp.generated.resources.schedule_details_title
+import motovault.composeapp.generated.resources.schedule_missing
+import motovault.composeapp.generated.resources.wear_or
 
 @Composable
-internal fun GaugeDetailSheet(state: VaultState, id: String?, onDismiss: () -> Unit, onOpen: (String, String?) -> Unit) {
+internal fun GaugeDetailSheet(
+    state: VaultState,
+    id: String?,
+    onDismiss: () -> Unit,
+    onOpen: (String, String?) -> Unit,
+    onSaveSchedule: (VaultState, String, Boolean) -> Unit = { _, _, _ -> }
+) {
     val ride = state.ride ?: return
     val rule = state.confirmedRules().firstOrNull { it.id == id }
-    val f = currentFmt
-    val actionLabel = rule?.let {
-        appStringResource(when (it.action) {
-            MaintenanceAction.INSPECT -> Res.string.action_inspect
-            MaintenanceAction.CLEAN -> Res.string.action_clean
-            MaintenanceAction.LUBRICATE -> Res.string.action_lubricate
-            MaintenanceAction.ADJUST -> Res.string.action_adjust
-            MaintenanceAction.REPLACE -> Res.string.action_replace
-        })
-    }
-    val sourceLabel = rule?.let {
-        when (it.provenance.source) {
-            ScheduleSource.MANUAL -> appStringResource(Res.string.schedule_source_manual)
-            ScheduleSource.DEALER -> appStringResource(Res.string.schedule_source_dealer)
-            ScheduleSource.OWNER -> appStringResource(Res.string.schedule_source_owner)
+    if (rule == null) {
+        Sheet(title = appStringResource(Res.string.schedule_details_title), onDismiss = onDismiss) {
+            Text(text = appStringResource(Res.string.schedule_missing), fontSize = 15.sp, color = TextSecondary)
         }
+        return
     }
-    Sheet(rule?.name ?: appStringResource(Res.string.schedule_details_title), onDismiss = onDismiss) {
-        Text(appStringResource(Res.string.gauge_physical_note), fontSize = 14.sp, color = TextSecondary)
-        if (rule == null) Text(appStringResource(Res.string.schedule_missing), fontSize = 14.sp)
-        else {
-            val wear = WearCalculator.wearOf(rule, ride.odometer, today().toEpochDays().toLong())
-            Panel {
-                DocumentNote(if (wear.status == WearStatus.UNKNOWN) appStringResource(Res.string.schedule_unknown_baseline) else appStringResource(Res.string.schedule_next_due) + " · " + f.n(wear.life.toLong()) + "%")
-                DocumentCopy(WearCalculator.describeWear(wear, f))
-                DocumentNote(appStringResource(Res.string.schedule_source_line, appStringResource(Res.string.schedule_source), sourceLabel.orEmpty(), actionLabel.orEmpty()))
-                DocumentCopy(
-                    if (rule.provenance.isManualBacked) rule.provenance.displayReference
-                    else appStringResource(Res.string.schedule_owner_defined)
+
+    val f = currentFmt
+    val haptic = currentHaptic
+    val currentDay = today()
+    val wear = WearCalculator.wearOf(rule, ride.odometer, currentDay.toEpochDays().toLong())
+    val known = rule.baselineCertainty == BaselineCertainty.CONFIRMED
+    var editing by remember(rule.id) { mutableStateOf(false) }
+    val resetMsg = appStringResource(Res.string.gauge_reset_saved)
+    val lastSavedMsg = appStringResource(Res.string.gauge_last_saved)
+
+    Sheet(title = componentLabel(rule), onDismiss = onDismiss) {
+        GaugeDetailCardStack(
+            rule = rule,
+            wear = wear,
+            rideOdometer = ride.odometer,
+            today = currentDay,
+            known = known,
+            editing = editing,
+            f = f,
+            onStartEdit = { haptic.perform(HapticKind.TICK); editing = true },
+            onCancelEdit = { editing = false },
+            onSaveEdit = { savedKm, savedDate ->
+                val updated = rule.copy(
+                    lastServicedOdometerKm = savedKm,
+                    lastServicedEpochDays = savedDate.toEpochDays().toLong(),
+                    baselineCertainty = BaselineCertainty.CONFIRMED
                 )
-                if (rule.provenance.isManualBacked) {
-                    DocumentCopy(appStringResource(Res.string.schedule_applicability_value, appStringResource(Res.string.schedule_applicability), rule.provenance.applicability))
-                    val uri = LocalUriHandler.current
-                    TextButton(onClick = { rule.provenance.url.takeIf { it.isNotBlank() }?.let(uri::openUri) }) {
-                        Text(appStringResource(Res.string.schedule_manual_open), color = BrandColor)
+                val next = runCatching { state.saveSchedule(updated) }.getOrNull()
+                if (next != null) {
+                    haptic.perform(HapticKind.SUCCESS)
+                    editing = false
+                    onSaveSchedule(next, lastSavedMsg, false)
+                } else {
+                    haptic.perform(HapticKind.ERROR)
+                }
+            }
+        )
+
+        if (!editing) {
+            VaultButton(
+                text = appStringResource(Res.string.gauge_reset_action),
+                full = true,
+                onClick = {
+                    val updated = rule.copy(
+                        lastServicedOdometerKm = ride.odometer,
+                        lastServicedEpochDays = currentDay.toEpochDays().toLong(),
+                        baselineCertainty = BaselineCertainty.CONFIRMED
+                    )
+                    val next = runCatching { state.saveSchedule(updated) }.getOrNull()
+                    if (next != null) {
+                        haptic.perform(HapticKind.SUCCESS)
+                        onSaveSchedule(next, resetMsg, true)
+                    } else {
+                        haptic.perform(HapticKind.ERROR)
                     }
                 }
-                val distanceText = if (rule.intervalKm > 0) f.km(rule.intervalKm) else appStringResource(Res.string.schedule_no_distance_limit)
-                val timeText = if (rule.intervalDays > 0) f.days(rule.intervalDays) else appStringResource(Res.string.schedule_no_time_limit)
-                DocumentCopy(appStringResource(Res.string.schedule_interval_summary, distanceText, timeText, appStringResource(Res.string.schedule_whichever_first)))
-                DocumentNote(appStringResource(Res.string.schedule_baseline_basis))
-                DocumentCopy(
-                    if (wear.status == WearStatus.UNKNOWN) appStringResource(Res.string.schedule_unknown_baseline)
-                    else "${f.km(rule.lastServicedOdometerKm)} · ${f.date(LocalDate.fromEpochDays(rule.lastServicedEpochDays.toInt()))}"
-                )
-                DocumentNote(appStringResource(Res.string.schedule_last_confirmed_km))
-                DocumentCopy(appStringResource(Res.string.schedule_odometer_confirmed, f.km(ride.odometer), ride.odometerConfirmedDate ?: appStringResource(Res.string.schedule_date_unknown)))
-                DocumentCopy(appStringResource(Res.string.schedule_old_km_hint))
+            )
+            VaultButton(
+                text = appStringResource(Res.string.gauge_log_service_action),
+                kind = ButtonKind.SECONDARY,
+                full = true,
+                onClick = { onOpen("service", rule.id) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun GaugeDetailCardStack(
+    rule: ComponentRule,
+    wear: Wear,
+    rideOdometer: Double,
+    today: LocalDate,
+    known: Boolean,
+    editing: Boolean,
+    f: Fmt,
+    onStartEdit: () -> Unit,
+    onCancelEdit: () -> Unit,
+    onSaveEdit: (Double, LocalDate) -> Unit
+) {
+    val shape = RoundedCornerShape(16.dp)
+    val intervalParts = buildList {
+        if (rule.intervalKm > 0) add(f.km(rule.intervalKm))
+        if (rule.intervalDays > 0) add(f.days(rule.intervalDays))
+    }
+
+    Column(modifier = Modifier.fillMaxWidth().clip(shape).background(SurfaceColor).border(1.dp, BorderColor, shape)) {
+        Column(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(text = WearCalculator.describeWear(wear, f), fontSize = 15.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+            val sub = if (wear.status == WearStatus.UNKNOWN) appStringResource(Res.string.gauge_unknown_hint)
+            else appStringResource(Res.string.gauge_current_odo, f.km(rideOdometer))
+            Text(text = sub, fontSize = 13.sp, color = TextSecondary)
+        }
+
+        HorizontalDivider(color = BorderColor, thickness = 1.dp)
+        if (editing) {
+            val initKm = if (known) rule.lastServicedOdometerKm.toLong().toString() else ""
+            val initDate = if (known && rule.lastServicedEpochDays > 0L) LocalDate.fromEpochDays(rule.lastServicedEpochDays.toInt()).toString() else today.toString()
+            GaugeLastDoneEditor(initKm, initDate, rideOdometer, today, onSaveEdit, onCancelEdit)
+        } else {
+            val editDesc = appStringResource(Res.string.gauge_edit_last_desc)
+            val lastText = if (!known) appStringResource(Res.string.gauge_last_done_empty)
+            else appStringResource(
+                Res.string.gauge_last_done_value,
+                f.km(rule.lastServicedOdometerKm),
+                f.dateFull(LocalDate.fromEpochDays(rule.lastServicedEpochDays.toInt()))
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(role = Role.Button, onClick = onStartEdit)
+                    .semantics { contentDescription = editDesc }
+                    .padding(14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(text = appStringResource(Res.string.gauge_last_done_label), fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                    Text(text = lastText, fontSize = 14.sp, color = TextSecondary)
+                }
+                V3Icon(path = "feather_icon/fi_edit-2.svg", description = null, modifier = Modifier.size(18.dp), tint = TextTertiary)
             }
-            VaultButton(appStringResource(Res.string.schedule_edit_intervals), onClick = { onOpen("schedule", rule.id) }, full = true)
-            VaultButton(appStringResource(Res.string.schedule_confirm_odometer), onClick = { onOpen("odometer", null) }, full = true, kind = ButtonKind.SECONDARY)
-            VaultButton(appStringResource(Res.string.schedule_log_service), onClick = { onOpen("service", rule.id) }, full = true, kind = ButtonKind.SECONDARY)
-            VaultButton(appStringResource(Res.string.schedule_reminder), onClick = { onOpen("serviceReminder", rule.id) }, full = true, kind = ButtonKind.SECONDARY)
+        }
+
+        if (intervalParts.isNotEmpty()) {
+            HorizontalDivider(color = BorderColor, thickness = 1.dp)
+            Column(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(text = appStringResource(Res.string.gauge_interval_every_label), fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                val joined = intervalParts.joinToString(appStringResource(Res.string.wear_or))
+                Text(text = appStringResource(Res.string.gauge_interval_every_value, joined), fontSize = 14.sp, color = TextSecondary)
+            }
         }
     }
 }

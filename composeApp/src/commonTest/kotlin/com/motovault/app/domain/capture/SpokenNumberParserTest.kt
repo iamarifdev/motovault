@@ -20,4 +20,13 @@ class SpokenNumberParserTest {
         assertNull(SpokenNumberParser.parse("hello motovault"))
         assertNull(SpokenNumberParser.parse("কোনো সংখ্যা নেই"))
     }
+
+    @Test fun parsesBothFormsOfBanglaNuktaLetters() {
+        val oneCodePoint = "পঁয়ত্রিশ"
+        val baseWithNukta = "পঁয়ত্রিশ"
+        assertEquals(35L, SpokenNumberParser.parse(oneCodePoint))
+        assertEquals(35L, SpokenNumberParser.parse(baseWithNukta))
+        assertEquals(6000L, SpokenNumberParser.parse("ছয় হাজার"))
+        assertEquals(6000L, SpokenNumberParser.parse("ছয় হাজার"))
+    }
 }

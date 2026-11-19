@@ -89,6 +89,7 @@ class CaptureDraftParserTest {
         assertEquals(listOf("engine_oil", "oil_filter"), service.lines.map { it.line.catalogueId })
         assertEquals(2.0, service.lines.first().line.quantity)
         assertEquals(120025, service.lines.first().line.unitPricePoisha)
+        assertEquals(35000, service.lines.last().line.unitPricePoisha)
         assertEquals(listOf("unknown fork noise"), service.unmatched)
         assertNull(CaptureServiceParser.parse("engine oil Tk 1.2.3 and Tk 500").lines.single().line.unitPricePoisha)
         assertTrue(CaptureServiceParser.parse("সার্ভিসচার্জ Tk 5").lines.isEmpty())

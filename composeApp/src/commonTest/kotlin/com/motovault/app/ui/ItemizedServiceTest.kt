@@ -158,15 +158,15 @@ class ItemizedServiceTest {
 
     @Test
     fun smartEntryCreatesReviewableCandidatesAndKeepsUnknownText() {
-        val draft = SmartServiceDraftParser.parse("Engine oil 1200 taka\nOil filter 350 taka\nunknown front fork noise")
-        assertEquals(listOf("engine_oil", "oil_filter"), draft.suggestions.map { it.line.catalogueId })
-        assertEquals(120000, draft.suggestions[0].line.unitPricePoisha)
-        assertEquals(35000, draft.suggestions[1].line.unitPricePoisha)
+        val draft = com.motovault.app.domain.capture.CaptureServiceParser.parse("Engine oil 1200 taka\nOil filter 350 taka\nunknown front fork noise")
+        assertEquals(listOf("engine_oil", "oil_filter"), draft.lines.map { it.line.catalogueId })
+        assertEquals(120000, draft.lines[0].line.unitPricePoisha)
+        assertEquals(35000, draft.lines[1].line.unitPricePoisha)
         assertEquals(listOf("unknown front fork noise"), draft.unmatched)
-        assertEquals("mineral", draft.suggestions[0].line.oil?.baseType)
-        val bangla = SmartServiceDraftParser.parse("ইঞ্জিন অয়েল ১২০০ টাকা")
-        assertEquals("engine_oil", bangla.suggestions.single().line.catalogueId)
-        assertEquals(120000, bangla.suggestions.single().line.unitPricePoisha)
+        assertEquals("mineral", draft.lines[0].line.oil?.baseType)
+        val bangla = com.motovault.app.domain.capture.CaptureServiceParser.parse("ইঞ্জিন অয়েল ১২০০ টাকা")
+        assertEquals("engine_oil", bangla.lines.single().line.catalogueId)
+        assertEquals(120000, bangla.lines.single().line.unitPricePoisha)
     }
 
     @Test

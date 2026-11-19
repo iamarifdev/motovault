@@ -6,13 +6,13 @@ import com.motovault.app.domain.model.*
 internal fun Ride.toBackupRide() = BackupRide(
     brandId, edition, year, odometer, modelId, modelName, registration,
     BackupRideMarket.valueOf(market.name), BackupRideEmission.valueOf(emission.name),
-    modelCode, factoryProfileId, odometerConfirmedDate, id, archived
+    modelCode, factoryProfileId, odometerConfirmedDate, id, archived, cc
 )
 
 internal fun BackupRide.toRide() = Ride(
     brandId, edition, year, odometer, modelId, modelName, registration,
     RideMarket.valueOf(market.name), RideEmission.valueOf(emission.name),
-    modelCode, factoryProfileId, odometerConfirmedDate, id, archived
+    modelCode, factoryProfileId, odometerConfirmedDate, id, archived, cc
 )
 
 internal fun backupRideDisplayName(ride: BackupRide): String = ride.toRide().modelName.ifBlank { com.motovault.app.domain.model.legacyBikeName(ride.brandId) ?: "Motorcycle" }

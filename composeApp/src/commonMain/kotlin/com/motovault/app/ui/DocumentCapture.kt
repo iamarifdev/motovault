@@ -2,16 +2,11 @@ package com.motovault.app.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.motovault.app.domain.model.documentPageLimit
+import com.motovault.app.domain.model.validateDocumentAssetId
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
-val documentTypes = listOf("Registration smart card", "Driving licence", "Tax token", "Insurance", "Fitness certificate")
-fun isCardDocument(type: String): Boolean = when (type) {
-    "Registration smart card", "smart_card", "registration", "রেজিস্ট্রেশন স্মার্ট কার্ড", "রেজিস্ট্রেশন সার্টিফিকেট",
-    "Driving licence", "Driving license", "licence", "license", "ড্রাইভিং লাইসেন্স" -> true
-    else -> false
-}
-fun documentPageLimit(type: String) = if (isCardDocument(type)) 2 else 8
 fun reviewedDocumentDetails(type: String, values: Map<String, String>, previous: Map<String, String>, includeExtras: Boolean): Map<String, String> {
     val core = if (type == "Registration smart card") setOf("registration") else emptySet()
     val extras = if (type == "Driving licence") setOf("bloodGroup", "vehicleClass", "birthDate") else setOf("registration", "chassis", "engine")
@@ -34,11 +29,6 @@ fun CapturedDocument.appendPage(page: DocumentPage, type: String): CapturedDocum
     return copy(pages = pages + page.copy(side = "Page ${pages.size + 1}"), recognizedText = "", readingFailed = false)
 }
 
-fun validateDocumentAssetId(id: String): String {
-    require(id.length in 1..160 && Regex("[A-Za-z0-9_-]+\\.(jpg|jpeg|png|webp|pdf)").matches(id)) { "Invalid document file." }
-    return id
-}
-
 @Composable
 expect fun DocumentImportActions(type: String, backOnly: Boolean, onResult: (CapturedDocument) -> Unit, onError: (String) -> Unit)
 @Composable
@@ -59,7 +49,6 @@ expect suspend fun readDocumentAsset(id: String): ByteArray
 expect suspend fun protectDocumentAssets(referenced: Set<String>)
 expect fun removeDocumentAssets(ids: Set<String>)
 fun CapturedDocument.assetIds(): Set<String> = pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() + listOfNotNull(originalPdf)
-fun VaultDocument.assetIds(): Set<String> = pages.flatMap { listOfNotNull(it.originalId, it.previewId, it.acceptedId) }.toSet() + listOfNotNull(originalPdf)
 
 /** Owns only files allocated by this operation, never existing originals or saved pages. */
 internal class DocumentAssetOperation(private val remove: (Set<String>) -> Unit = ::removeDocumentAssets) {

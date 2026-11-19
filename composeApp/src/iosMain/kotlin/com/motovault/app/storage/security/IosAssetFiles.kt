@@ -1,7 +1,7 @@
 @file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
 package com.motovault.app.storage.security
 
-import com.motovault.app.ui.validateDocumentAssetId
+import com.motovault.app.domain.model.validateDocumentAssetId
 import platform.Foundation.*
 import platform.posix.*
 

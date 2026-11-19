@@ -1,74 +1,10 @@
 [
   {
-    "path": "DocumentFlow.kt",
-    "sha256": "bd394682df33cdb8096809e0fb7edc49908a1068b4df89ac98ba07a407e81722",
-    "count": 1,
-    "owner": "DeepSeek",
-    "kind": "data",
-    "justification": "Back-navigation chevron glyph; not translatable copy."
-  },
-  {
-    "path": "DocumentWallet.kt",
-    "sha256": "7297d2085ea0adffc396d546235c67b5cb031150ab4a66a5c72794841e9176b3",
-    "count": 1,
-    "owner": "DeepSeek",
-    "kind": "data",
-    "justification": "Add-document control glyph."
-  },
-  {
-    "path": "components/Gauges.kt",
-    "sha256": "15c5e748338b7ecd1296c700d6863dad8091e354a9dfa475fbb4bffba89d225f",
-    "count": 1,
-    "owner": "DeepSeek",
-    "kind": "data",
-    "justification": "Unknown-wear placeholder glyph."
-  },
-  {
-    "path": "components/Gauges.kt",
-    "sha256": "aae8bbcde3fba4cd9c3423d6f894dd67997cd58dc943ca18b93ea0e218496af9",
-    "count": 1,
-    "owner": "DeepSeek",
-    "kind": "data",
-    "justification": "Percent symbol beside a numeric gauge value."
-  },
-  {
     "path": "components/Keypad.kt",
     "sha256": "7299b59de0b5dad3b622afc3bdf57544e505249c77a6d4254bd14b1fc9a4ade8",
     "count": 1,
     "owner": "DeepSeek",
     "kind": "data",
     "justification": "Decimal separator for numeric keypad input."
-  },
-  {
-    "path": "documents/DocAddSheet.kt",
-    "sha256": "4e4d59cb987804c29dd36c62b443c6cd2ee95974b72fb7e34b7d6de912ea16da",
-    "count": 1,
-    "owner": "DeepSeek",
-    "kind": "data",
-    "justification": "Checked-state glyph."
-  },
-  {
-    "path": "maintenance/ServiceLinesEditor.kt",
-    "sha256": "0933fb667296882d8c45abca58ac52e01c8db6f19e626b30de88f0f4ed143ec5",
-    "count": 1,
-    "owner": "DeepSeek",
-    "kind": "data",
-    "justification": "Decrement quantity control glyph."
-  },
-  {
-    "path": "maintenance/ServiceLinesEditor.kt",
-    "sha256": "7297d2085ea0adffc396d546235c67b5cb031150ab4a66a5c72794841e9176b3",
-    "count": 1,
-    "owner": "DeepSeek",
-    "kind": "data",
-    "justification": "Increment quantity control glyph."
-  },
-  {
-    "path": "onboarding/OnboardingSteps.kt",
-    "sha256": "4e4d59cb987804c29dd36c62b443c6cd2ee95974b72fb7e34b7d6de912ea16da",
-    "count": 1,
-    "owner": "DeepSeek",
-    "kind": "data",
-    "justification": "Completed-step glyph."
   }
 ]

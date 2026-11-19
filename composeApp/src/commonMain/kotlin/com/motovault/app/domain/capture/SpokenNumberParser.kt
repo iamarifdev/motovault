@@ -17,8 +17,14 @@ object SpokenNumberParser {
         "একানব্বই", "বিরানব্বই", "তিরানব্বই", "চুরানব্বই", "পঁচানব্বই", "ছিয়ানব্বই", "সাতানব্বই", "আটানব্বই", "নিরানব্বই"
     )
 
+    /** Speech engines send য়, ড়, ঢ় either as one code point or as base letter plus nukta; use one form. */
+    private fun decompose(text: String): String = text
+        .replace("\u09DF", "\u09AF\u09BC")
+        .replace("\u09DC", "\u09A1\u09BC")
+        .replace("\u09DD", "\u09A2\u09BC")
+
     private val values: Map<String, Long> = buildMap {
-        banglaWords1To99.forEachIndexed { index, word -> put(word, (index + 1).toLong()) }
+        banglaWords1To99.forEachIndexed { index, word -> put(decompose(word), (index + 1).toLong()) }
         put("শূন্য", 0L); put("দু", 2L); put("ছ", 6L); put("ছয়", 6L); put("নই", 9L); put("নয়", 9L)
         put("এগার", 11L); put("বার", 12L); put("তের", 13L); put("পনের", 15L); put("ষোল", 16L)
         put("সতের", 17L); put("আঠার", 18L)
@@ -52,7 +58,7 @@ object SpokenNumberParser {
     }
 
     fun parse(input: String): Long? {
-        val cleaned = NormalizedNumbers.ascii(input).lowercase().replace(",", "")
+        val cleaned = decompose(NormalizedNumbers.ascii(input)).lowercase().replace(",", "")
         val tokens = cleaned.split(Regex("[\\s\\-]+")).filter { it.isNotBlank() }
         var total = 0L
         var current = 0L

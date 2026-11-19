@@ -27,19 +27,19 @@ object VaultMotion {
 
     fun <T> sheetSpring(reducedMotion: Boolean = false) =
         if (reducedMotion) snap<T>()
-        else spring<T>(dampingRatio = 0.85f, stiffness = 420f)
+        else spring<T>(dampingRatio = 1.03f, stiffness = 420f)
 
     fun <T> pressSpring(reducedMotion: Boolean = false) =
         if (reducedMotion) snap<T>()
-        else spring<T>(dampingRatio = 0.8f, stiffness = 600f)
+        else spring<T>(dampingRatio = 0.653f, stiffness = 600f)
 
     fun <T> listSpring(reducedMotion: Boolean = false) =
         if (reducedMotion) snap<T>()
-        else spring<T>(dampingRatio = 0.82f, stiffness = 500f)
+        else spring<T>(dampingRatio = 0.85f, stiffness = 500f)
 
     fun <T> markerSpring(reducedMotion: Boolean = false) =
         if (reducedMotion) snap<T>()
-        else spring<T>(dampingRatio = 0.8f, stiffness = 520f)
+        else spring<T>(dampingRatio = 0.79f, stiffness = 520f)
 }
 
 val LocalReducedMotion = staticCompositionLocalOf { false }

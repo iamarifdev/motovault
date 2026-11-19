@@ -35,6 +35,19 @@ class BanglaCopyLintTest(unittest.TestCase):
             with self.assertRaises(FileNotFoundError):
                 violations(Path(directory) / "missing.xml")
 
+    def test_directory_scan_checks_all_xml_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "strings.xml").write_text('<resources><string name="ok">ডকুমেন্ট স্ক্যান করুন</string></resources>', encoding="utf-8")
+            (root / "strings-entry.xml").write_text('<resources><string name="bad">ট্যাংক পূর্ণ</string></resources>', encoding="utf-8")
+            found = violations(root)
+            self.assertEqual([("bad", "ট্যাংক পূর্ণ", "use ফুল ট্যাংক")], found)
+
+    def test_empty_directory_fails_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaises(ValueError):
+                violations(Path(directory))
+
 
 if __name__ == "__main__":
     unittest.main()

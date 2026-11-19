@@ -89,33 +89,6 @@ object WearCalculator {
         return appStringResource(Res.string.wear_remaining, parts.joinToString(appStringResource(Res.string.wear_or)))
     }
 
-    @Composable
-    fun statusLabel(s: WearStatus): String = when (s) {
-        WearStatus.OVERDUE -> appStringResource(Res.string.wear_status_overdue)
-        WearStatus.SOON -> appStringResource(Res.string.wear_status_soon)
-        WearStatus.OK -> appStringResource(Res.string.wear_status_ok)
-        WearStatus.UNKNOWN -> appStringResource(Res.string.wear_status_unknown)
-    }
-
-    fun economySeries(logs: List<RideLog>): List<Double> {
-        val fuels = logs.filter { it.isFuel }.sortedBy { it.odometer }
-        var baseOdo: Double? = null
-        var litres = 0.0
-        val out = mutableListOf<Double>()
-        for (l in fuels) {
-            val lLitres = l.fuelLiters ?: 0.0
-            if (baseOdo != null) litres += lLitres
-            if (l.fullTank) {
-                if (baseOdo != null && litres > 0) {
-                    out.add((l.odometer - baseOdo) / litres)
-                }
-                baseOdo = l.odometer
-                litres = 0.0
-            }
-        }
-        return out
-    }
-
     fun economyOf(logs: List<RideLog>): Double? = VaultState.calculateEconomy(logs)
 
     fun estimateOdometer(ride: Ride, logs: List<RideLog>, today: LocalDate): Double {

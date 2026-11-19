@@ -18,6 +18,15 @@ class BackupRideLogAdapterTest {
     }
 
     @Test
+    fun rideCcFieldRoundTripsAndPreservesWireJson() {
+        val ride = Ride("bajaj", "Dual ABS", 2024, 1500.0, modelId = "bajaj-pulsar-n160", modelName = "Pulsar N160", cc = 165)
+        val archive = ride.toBackupRide()
+        assertEquals(ride, archive.toRide())
+        assertEquals(165, archive.cc)
+        assertEquals(Json.parseToJsonElement(Json.encodeToString(ride)), Json.parseToJsonElement(Json.encodeToString(archive)))
+    }
+
+    @Test
     fun logAndNestedFieldsKeepTheirWireRepresentation() {
         val oil = EngineOilMetadata("full_synthetic", "10W-40", "SN", "MA2", "Synthetic", "bottle", 1000, 2.0, 900)
         val line = ServiceLineItem("engine_oil", "Oil", "replace", 1.5, "L", 10000, "schedule", true, oil, "synthetic")

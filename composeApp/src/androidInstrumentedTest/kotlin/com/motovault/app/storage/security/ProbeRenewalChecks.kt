@@ -83,7 +83,7 @@ private fun NativeAssetInstrumentation.checkRenewalFlow() {
     val originalId = requireNotNull(RenewalFixtureActivity.originalPdfId)
     val originalBytes = ProtectedDocumentStorage.read(originalId)
     try {
-        waitForText("কাগজের রিমাইন্ডার")
+        waitForText("ডকুমেন্টের রিমাইন্ডার")
         clickText("কাগজ খুলুন")
         waitForText("ট্যাক্স টোকেন")
         clickText("নবায়ন")

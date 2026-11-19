@@ -6,6 +6,7 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
 import com.motovault.app.domain.garage.addBike
 import com.motovault.app.domain.garage.allDocumentAssetIds
+import com.motovault.app.domain.model.assetIds
 import com.motovault.app.storage.*
 import com.motovault.app.ui.*
 import kotlinx.coroutines.runBlocking

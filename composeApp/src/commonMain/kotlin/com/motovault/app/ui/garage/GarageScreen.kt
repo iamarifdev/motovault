@@ -1,277 +1,108 @@
 package com.motovault.app.ui
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toLocalDateTime
-import motovault.composeapp.generated.resources.*
-import org.jetbrains.compose.resources.Font
-import org.jetbrains.compose.resources.painterResource
+import com.motovault.app.domain.garage.switchToBike
 import com.motovault.app.ui.garage.SeasonalCareSection
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-@OptIn(ExperimentalLayoutApi::class)
-fun GarageScreen(
+internal fun GarageScreen(
     state: VaultState,
     onOpenSheet: (String, Any?) -> Unit,
     onSwitchTab: (Tab) -> Unit,
     onOpenServiceForItem: (String) -> Unit,
-    onUpdateState: (VaultState) -> Unit = {}
+    onUpdateState: (VaultState) -> Unit = {},
+    onCommitState: (VaultState, (Boolean) -> Unit) -> Unit = { next, done -> onUpdateState(next); done(true) }
 ) {
-    val f = currentFmt
-    val haptic = currentHaptic
-    val today = today()
-    val ride = state.ride ?: return
-    val wears = remember(state.rules, state.logs, ride.odometer, today) {
-        WearCalculator.byUrgency(state.confirmedRules(), ride.odometer, today.toEpochDays().toLong())
-    }
-    val topWear = wears.firstOrNull()
-    val economy = remember(state.logs) { WearCalculator.economyOf(state.logs) }
-    val series = remember(state.logs) { WearCalculator.economySeries(state.logs) }
-    val estimate = remember(state.logs, ride, today) { WearCalculator.estimateOdometer(ride, state.logs, today) }
-
-    val lastFuel = state.logs.filter { it.isFuel }.maxByOrNull { it.odometer }
-    val sinceFuelDays = lastFuel?.let {
-        runCatching { today.toEpochDays() - LocalDate.parse(it.date).toEpochDays() }.getOrNull()
-    }
-    var nudgeHidden by remember { mutableStateOf(false) }
-
-    val renewals = remember(state.documents, state.reminderPolicy, today) {
-        state.documents.mapNotNull { doc ->
-            val days = doc.daysRemaining
-            if (days != null && days <= (doc.reminderWarningDays ?: state.reminderPolicy.warningDays)) doc to days else null
-        }.sortedBy { it.second }
-    }
-
-    val model = ride.selectedModel
-    val brandWorld = worlds.firstOrNull { it.id == ride.brandId } ?: worlds.first()
+    val currentDay = today()
+    val snapshot = remember(state.ride, state.rules, state.logs, state.documents, state.reminderPolicy, currentDay) {
+        buildGarageHomeSnapshot(state, currentDay)
+    } ?: return
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(start = 20.dp, top = 8.dp, end = 20.dp, bottom = 28.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, top = 8.dp, end = 20.dp, bottom = 28.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        GarageHeaderSection(
-            ride = ride,
-            brandWorld = brandWorld,
-            model = model,
-            onSwitchBike = {
-                haptic.perform(HapticKind.TICK)
-                onOpenSheet("bikeSwitcher", null)
-            },
-            onSettings = {
-                haptic.perform(HapticKind.TICK)
-                onSwitchTab(Tab.ME)
-            }
-        )
-
-        if (topWear != null) {
-            GarageHeroSection(topWear) {
-                haptic.perform(HapticKind.TICK)
-                onOpenServiceForItem(topWear.rule.id)
-            }
-        }
-
-        // Quick Action Row (4 columns)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            val quickActions = listOf(
-                Triple("fi_fuel.svg", appStringResource(Res.string.garage_quick_fuel), "fuel"),
-                Triple("fi_tool.svg", appStringResource(Res.string.garage_quick_service), "service"),
-                Triple("fi_gauge.svg", appStringResource(Res.string.garage_quick_km), "odometer"),
-                Triple("fi_file-text.svg", appStringResource(Res.string.garage_quick_document), "docAdd")
+        GarageZone(index = 0) {
+            BikeShowroom(
+                state = state,
+                snapshot = snapshot,
+                onOpenBikeSwitcher = { onOpenSheet("bikeSwitcher", null) },
+                onSwitchBike = { targetId, done ->
+                    val next = runCatching { state.switchToBike(targetId) }.getOrNull()
+                    if (next == null) done(false) else onCommitState(next, done)
+                },
+                onOpenOdometer = { onOpenSheet("odometer", null) },
+                onOpenHistory = { onSwitchTab(Tab.HISTORY) },
+                onOpenNextJob = {
+                    val job = snapshot.nextJob
+                    if (job != null) onOpenSheet("gaugeDetail", job.rule.id) else onOpenSheet("service", null)
+                }
             )
-            quickActions.forEach { (icon, label, sheet) ->
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(SurfaceColor2)
-                        .clickable {
-                            haptic.perform(HapticKind.TICK)
-                            onOpenSheet(sheet, null)
-                        }
-                         .padding(start = 4.dp, top = 12.dp, end = 4.dp, bottom = 10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(52.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(BrandTintColor)
-                            .border(1.dp, BrandLineColor, RoundedCornerShape(16.dp)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        V3Icon(path = "feather_icon/$icon", description = null, modifier = Modifier.size(26.dp), tint = BrandColor)
-                    }
-                    Text(text = label, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                }
-            }
         }
-
-        // Nudge banner (if >= 10 days since fuel)
-        if (!nudgeHidden && sinceFuelDays != null && sinceFuelDays >= 10) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(BrandTintColor)
-                    .border(1.dp, BrandLineColor, RoundedCornerShape(16.dp))
-                    .padding(start = 14.dp, top = 10.dp, end = 6.dp, bottom = 10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                V3Icon(path = "feather_icon/fi_droplets.svg", description = null, modifier = Modifier.size(20.dp), tint = BrandColor)
-                Text(
-                    text = appStringResource(Res.string.garage_since_fuel, f.d(sinceFuelDays.toString())),
-                    fontSize = 14.sp,
-                    lineHeight = 19.6.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = TextPrimary,
-                    modifier = Modifier.weight(1f)
-                )
-                VaultButton(
-                    text = appStringResource(Res.string.garage_add),
-                    size = ButtonSize.SM,
-                    kind = ButtonKind.SECONDARY,
-                    onClick = { onOpenSheet("fuel", null) }
-                )
-                VaultIconButton(
-                    icon = "fi_x.svg",
-                    label = appStringResource(Res.string.garage_hide),
-                    onClick = { nudgeHidden = true }
-                )
-            }
+        GarageZone(index = 1) {
+            GarageQuickActions(
+                fuelDot = snapshot.fuelWarningDot,
+                docDot = snapshot.docWarningDot,
+                onAction = { sheetName -> onOpenSheet(sheetName, null) }
+            )
         }
-
-        GarageStatsSection(
-            ride = ride,
-            economy = economy,
-            series = series,
-            estimate = estimate,
-            onOdometer = { onOpenSheet("odometer", null) },
-            onHistory = { onSwitchTab(Tab.HISTORY) }
-        )
-
-        SeasonalCareSection(
-            state = state,
-            onUpdateState = onUpdateState,
-            onOpenBreakdown = { onOpenSheet("breakdown", null) }
-        )
-
-        // Gauges Section
-        Column {
-        SectionTitle(appStringResource(Res.string.garage_service_interval_remaining))
-        Row(
-            modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)
-                .horizontalScroll(rememberScrollState()).padding(top = 2.dp, bottom = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            wears.forEachIndexed { i, wear ->
-                Gauge(
-                    wear = wear,
-                    index = i,
-                    modifier = Modifier.fillMaxHeight(),
-                    onClick = {
-                        haptic.perform(HapticKind.TICK)
-                        onOpenSheet("gaugeDetail", wear.rule.id)
-                    }
-                )
-            }
+        GarageZone(index = 2) {
+            GarageJobsSection(
+                snapshot = snapshot,
+                onOpenWear = { ruleId -> onOpenSheet("gaugeDetail", ruleId) },
+                onOpenDoc = { docId -> onOpenSheet("docView", docId) }
+            )
         }
+        GarageZone(index = 3) {
+            SeasonalCareSection(onOpenBreakdown = { onOpenSheet("breakdown", null) })
         }
-
-        // Renewals Section (if any within 30 days)
-        if (renewals.isNotEmpty()) {
-            Column {
-            SectionTitle(appStringResource(Res.string.garage_doc_expiry))
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                renewals.forEach { (doc, leftDays) ->
-                    val isExpired = leftDays < 0
-                    val (textColor, borderColor, bg) = if (isExpired) {
-                        Triple(ErrorColor, ErrorColor.copy(alpha = 0.4f), ErrorColor.copy(alpha = 0.07f))
-                    } else {
-                        Triple(WarningColor, WarningColor.copy(alpha = 0.4f), SurfaceColor)
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(bg)
-                            .border(1.dp, borderColor, RoundedCornerShape(16.dp))
-                            .clickable {
-                                haptic.perform(HapticKind.TICK)
-                                onSwitchTab(Tab.VAULT)
-                            }
-                            .padding(horizontal = 14.dp, vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            V3Icon(
-                                path = if (isExpired) "feather_icon/fi_triangle-alert.svg" else "feather_icon/fi_timer.svg",
-                                description = null,
-                                modifier = Modifier.size(20.dp),
-                                tint = textColor
-                            )
-                            Column(Modifier.weight(1f)) {
-                                Text(text = documentDisplayName(doc.title), fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                                Text(
-                                    text = if (isExpired) appStringResource(Res.string.garage_expired_ago, f.days(-leftDays))
-                                    else appStringResource(Res.string.garage_expires_in, f.days(leftDays)),
-                                    fontSize = 13.sp,
-                                    color = textColor
-                                )
-                            }
-                        }
-                        V3Icon(path = "feather_icon/fi_chevron-right.svg", description = null, modifier = Modifier.size(20.dp), tint = TextTertiary)
-                    }
-                }
-            }
-            }
-        }
-
-        GarageBikeCardSection(ride, brandWorld, model)
     }
 }
 
-internal data class Quad<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
+@Composable
+private fun GarageZone(index: Int, content: @Composable () -> Unit) {
+    val reducedMotion = isReducedMotion
+    val density = LocalDensity.current
+    val slidePx = with(density) { 12.dp.toPx() }
+    val alpha = remember { Animatable(if (reducedMotion) 1f else 0f) }
+    val offsetY = remember { Animatable(if (reducedMotion) 0f else slidePx) }
+
+    LaunchedEffect(reducedMotion) {
+        if (reducedMotion) {
+            alpha.snapTo(1f)
+            offsetY.snapTo(0f)
+        } else {
+            delay(index * 50L)
+            launch { alpha.animateTo(1f, tween(VaultMotion.PageMs, easing = VaultMotion.SkyCurve)) }
+            launch { offsetY.animateTo(0f, tween(VaultMotion.PageMs, easing = VaultMotion.SkyCurve)) }
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .graphicsLayer {
+                this.alpha = alpha.value
+                translationY = offsetY.value
+            }
+    ) {
+        content()
+    }
+}

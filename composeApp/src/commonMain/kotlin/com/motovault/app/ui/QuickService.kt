@@ -13,7 +13,8 @@ internal fun VaultState.saveQuickService(log: RideLog, selectedRuleId: String?):
     require(logs.none { it.id == log.id })
     val linked = log.serviceLines.mapNotNull { line ->
         if (line.action !in setOf("replace", "service")) return@mapNotNull null
-        val candidates = rules.filter { BangladeshServiceCatalogue.scheduleNameMatchesItem(it.name, line.catalogueId.orEmpty()) }
+        val catId = line.catalogueId ?: return@mapNotNull null
+        val candidates = rules.filter { BangladeshServiceCatalogue.scheduleNameMatchesItem(it.name, catId) }
         candidates.firstOrNull { it.id == selectedRuleId } ?: candidates.singleOrNull()
     }.distinctBy { it.id }
     val confirmed = confirmedRules().associateBy { it.id }
@@ -27,7 +28,9 @@ internal fun VaultState.saveQuickService(log: RideLog, selectedRuleId: String?):
     val ids = linked.map { it.id }.toSet()
     val nextRules = LogMaintenanceUseCase().recordService(rules, ids, log.odometer, date.toEpochDays().toLong()).updatedRules
     val lines = log.serviceLines.map { line ->
-        val rule = linked.firstOrNull { BangladeshServiceCatalogue.scheduleNameMatchesItem(it.name, line.catalogueId.orEmpty()) }
+        val rule = line.catalogueId?.let { catId ->
+            linked.firstOrNull { BangladeshServiceCatalogue.scheduleNameMatchesItem(it.name, catId) }
+        }
         line.copy(scheduleId = rule?.id, resetsScheduleBaseline = rule != null)
     }
     return copy(ride = ride.confirmedMileage(log.odometer, date), rules = nextRules,

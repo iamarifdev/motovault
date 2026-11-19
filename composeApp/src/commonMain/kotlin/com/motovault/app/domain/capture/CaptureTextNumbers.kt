@@ -7,10 +7,11 @@ data class CapturedOdometers(val candidates: List<CaptureCandidate<Double>>, val
 
 object CaptureTextNumbers {
     private const val CONTEXT_LENGTH = 40
+    private const val HS = "[ \\t]*"
     private const val NUMBER = "[+-]?[0-9][0-9,.eE+-]*"
     private const val CURRENCY = "(?:৳|(?<![a-z])(?:bdt|tk|taka)(?![a-z])|টাকা)"
-    private val before = Regex("$CURRENCY\\s*($NUMBER)", RegexOption.IGNORE_CASE)
-    private val after = Regex("($NUMBER)\\s*$CURRENCY", RegexOption.IGNORE_CASE)
+    private val before = Regex("$CURRENCY$HS($NUMBER)", RegexOption.IGNORE_CASE)
+    private val after = Regex("($NUMBER)$HS$CURRENCY", RegexOption.IGNORE_CASE)
     private val labels = Regex("balance|available|charge|fee|ব্যালেন্স|চার্জ|ফি|paid|payment|amount|total|মোট|পেমেন্ট|পরিশোধ|দিয়েছি|দিয়েছি", RegexOption.IGNORE_CASE)
     private val excluded = setOf("balance", "available", "charge", "fee", "ব্যালেন্স", "চার্জ", "ফি")
     private val odoBefore = Regex("(?:odometer|(?<![a-z])odo|ওডোমিটার|মিটার)\\s*[:=]?\\s*($NUMBER)", RegexOption.IGNORE_CASE)
@@ -23,9 +24,12 @@ object CaptureTextNumbers {
         val matches = (before.findAll(text).filter { CaptureWordBoundaries.tokenEnd(text, it.range.last) }.toList() +
             after.findAll(text).filter { CaptureWordBoundaries.tokenStart(text, it.range.first) && CaptureWordBoundaries.tokenEnd(text, it.range.last) }.toList())
             .distinctBy { it.range }
-        if (matches.isEmpty() && Regex("$CURRENCY\\s*[+-]?[0-9]", RegexOption.IGNORE_CASE).containsMatchIn(text)) malformed = true
+        if (matches.isEmpty() && Regex("$CURRENCY$HS[+-]?[0-9]", RegexOption.IGNORE_CASE).containsMatchIn(text)) malformed = true
         val found = matches.mapNotNull { match ->
-                val label = labels.findAll(text.substring(maxOf(0, match.range.first - CONTEXT_LENGTH), match.range.first)).lastOrNull()?.value
+                val context = text.substring(maxOf(0, match.range.first - CONTEXT_LENGTH), match.range.first)
+                val label = labels.findAll(context)
+                    .filter { CaptureWordBoundaries.wordBoundary(context, it.range) }
+                    .lastOrNull()?.value
                 if (label in excluded) return@mapNotNull null
                 val amount = NormalizedNumbers.poisha(match.groupValues[1].removeSuffix(".").removeSuffix(","))
                 if (amount == null) { malformed = true; return@mapNotNull null }

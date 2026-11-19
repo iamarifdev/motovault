@@ -1,6 +1,9 @@
 @file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
 package com.motovault.app.ui
 
+import com.motovault.app.domain.model.documentPageLimit
+import com.motovault.app.domain.model.isCardDocument
+import com.motovault.app.domain.model.validateDocumentAssetId
 import motovault.composeapp.generated.resources.*
 
 import androidx.compose.foundation.layout.*

@@ -3,7 +3,6 @@ package com.motovault.app.ui
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
@@ -33,9 +32,15 @@ internal fun CostRuntimeFixture(fuelBuilder: FuelEntryBuilder<VaultState>, failS
             Surface(Modifier.fillMaxSize(), color = CanvasColor) {
                 Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
                     CostFixtureControls(state, { state = it }, { dark = !dark }, { undo?.let { state = it; undo = null } }, { sheet = ActiveSheet("fuel") })
-                    Column(Modifier.weight(1f).verticalScroll(rememberScrollState())) {
-                        HistoryScreen(state, onDeleteLog = { undo = state; state = state.deleteLog(it) },
-                            onEditFuel = {}, onOpenCost = { name, log -> sheet = ActiveSheet(name, log) })
+                    Box(Modifier.weight(1f).fillMaxWidth()) {
+                        HistoryScreen(
+                            state = state,
+                            onDeleteLog = { undo = state; state = state.deleteLog(it) },
+                            onEditFuel = {},
+                            onOpenCost = { name, log -> sheet = ActiveSheet(name, log) },
+                            onEditService = {},
+                            onDeleteExpense = { undo = state; state = state.deleteLog(it) }
+                        )
                     }
                 }
                 sheet?.let {

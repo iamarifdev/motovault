@@ -13,7 +13,7 @@ object ExpenseRules {
 
     fun validate(draft: ExpenseDraft, today: LocalDate): ExpenseIssue? = when {
         draft.category !in entryCategories -> ExpenseIssue.CATEGORY
-        draft.amountPoisha == null || draft.amountPoisha !in 0..MAX_COST_POISHA -> ExpenseIssue.AMOUNT
+        draft.amountPoisha == null || draft.amountPoisha !in 1..MAX_COST_POISHA -> ExpenseIssue.AMOUNT
         draft.date == null || draft.date > today -> ExpenseIssue.DATE
         draft.note.length > MAX_EXPENSE_NOTE_LENGTH -> ExpenseIssue.NOTE
         else -> null

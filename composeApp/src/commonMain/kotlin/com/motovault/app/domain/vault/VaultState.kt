@@ -242,10 +242,9 @@ data class VaultState(
     fun saveDocument(document: VaultDocument): VaultState {
         require(document.reminderWarningDays == null || document.reminderWarningDays in 1..365)
         document.reminderSnoozedUntil?.let { kotlinx.datetime.LocalDateTime.parse(it) }
-        require(document.pages.size <= documentPageLimit(document.title)) { "Too many document pages." }
+        require(document.pages.size <= documentPageLimit(document.stableKind() ?: document.title)) { "Too many document pages." }
         document.pages.forEach { validateDocumentAssetId(it.originalId); validateDocumentAssetId(it.previewId); it.acceptedId?.let(::validateDocumentAssetId); require(it.width > 0 && it.height > 0) }
         document.originalPdf?.let { validateDocumentAssetId(it) }
-        require(document.number.isNotBlank() && document.holder.isNotBlank()) { "Enter a document number and holder name." }
         val issued = document.issued.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) }
         val expiry = document.expiry.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) }
         require(issued == null || expiry == null || expiry >= issued) { "Expiry must be on or after the issue date." }

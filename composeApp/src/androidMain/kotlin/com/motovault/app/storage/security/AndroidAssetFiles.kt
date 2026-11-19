@@ -1,6 +1,6 @@
 package com.motovault.app.storage.security
 
-import com.motovault.app.ui.validateDocumentAssetId
+import com.motovault.app.domain.model.validateDocumentAssetId
 import java.io.File
 import java.io.FileOutputStream
 import android.system.Os

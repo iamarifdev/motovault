@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-COPY = ROOT / "composeApp/src/commonMain/composeResources/values-bn/strings.xml"
+COPY = ROOT / "composeApp/src/commonMain/composeResources/values-bn"
 
 # Keep this list small and evidence-based. It is a regression guard, not a
 # complete style checker; review the rest against localization-style.md.
@@ -33,9 +33,7 @@ BANNED = {
 STRING = re.compile(r'<string name="([^"]+)">(.*?)</string>', re.S)
 
 
-def violations(path: Path = COPY) -> list[tuple[str, str, str]]:
-    if not path.is_file():
-        raise FileNotFoundError(path)
+def _scan_file(path: Path) -> list[tuple[str, str, str]]:
     text = path.read_text(encoding="utf-8")
     found: list[tuple[str, str, str]] = []
     for match in STRING.finditer(text):
@@ -44,6 +42,22 @@ def violations(path: Path = COPY) -> list[tuple[str, str, str]]:
             if phrase in value:
                 found.append((key, phrase, guidance))
     return found
+
+
+def violations(path: Path = COPY) -> list[tuple[str, str, str]]:
+    if not path.exists():
+        raise FileNotFoundError(path)
+    if path.is_file():
+        return _scan_file(path)
+    if path.is_dir():
+        xml_files = sorted(path.glob("*.xml"))
+        if not xml_files:
+            raise ValueError(f"No XML files in {path}")
+        found: list[tuple[str, str, str]] = []
+        for xml_file in xml_files:
+            found.extend(_scan_file(xml_file))
+        return found
+    raise FileNotFoundError(path)
 
 
 def main() -> int:

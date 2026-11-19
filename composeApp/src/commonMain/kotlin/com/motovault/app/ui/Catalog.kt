@@ -46,10 +46,10 @@ data class DocumentKindInfo(
 )
 
 val DOCUMENT_KINDS = listOf(
-    DocumentKindInfo("registration", "Registration certificate", true, Res.string.doc_smart_card),
+    DocumentKindInfo("registration", "Registration smart card", true, Res.string.doc_smart_card),
     DocumentKindInfo("licence", "Driving licence", true, Res.string.doc_driving_license),
     DocumentKindInfo("tax", "Tax token", false, Res.string.doc_tax_token),
-    DocumentKindInfo("insurance", "Insurance certificate", false, Res.string.doc_insurance),
+    DocumentKindInfo("insurance", "Insurance", false, Res.string.doc_insurance),
     DocumentKindInfo("fitness", "Fitness certificate", false, Res.string.doc_fitness)
 )
 

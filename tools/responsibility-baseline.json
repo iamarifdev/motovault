@@ -33,22 +33,6 @@
       "justification": "Existing function exceeds the 80-line review trigger; extract a coherent section on the next change."
     },
     {
-      "path": "commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt",
-      "function": "DocumentCaptureFlow",
-      "lines": 109,
-      "owner": "Codex",
-      "removal_task": "P04A-03",
-      "justification": "Existing function exceeds the 80-line review trigger; extract a coherent section on the next change."
-    },
-    {
-      "path": "commonMain/kotlin/com/motovault/app/ui/MotoVault.kt",
-      "function": "MotoVault",
-      "lines": 582,
-      "owner": "Codex",
-      "removal_task": "P04A-03",
-      "justification": "Existing function exceeds the 80-line review trigger; extract a coherent section on the next change."
-    },
-    {
       "path": "commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt",
       "function": "ScheduleDialog",
       "lines": 94,

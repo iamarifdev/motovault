@@ -2,9 +2,6 @@ package com.motovault.app.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.hapticfeedback.HapticFeedback
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
 
 enum class HapticKind {
     TICK,
@@ -13,19 +10,20 @@ enum class HapticKind {
     ERROR
 }
 
-class VaultHaptic(private val feedback: HapticFeedback?, private val enabled: Boolean) {
+class VaultHaptic(
+    private val performer: (HapticKind) -> Unit = {},
+    private val enabled: Boolean = true
+) {
     fun perform(kind: HapticKind) {
-        if (!enabled || feedback == null) return
-        when (kind) {
-            HapticKind.TICK -> feedback.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-            HapticKind.SUCCESS -> feedback.performHapticFeedback(HapticFeedbackType.LongPress)
-            HapticKind.WARNING -> feedback.performHapticFeedback(HapticFeedbackType.LongPress)
-            HapticKind.ERROR -> feedback.performHapticFeedback(HapticFeedbackType.LongPress)
-        }
+        if (!enabled) return
+        performer(kind)
     }
 }
 
-val LocalVaultHaptic = staticCompositionLocalOf { VaultHaptic(null, true) }
+val LocalVaultHaptic = staticCompositionLocalOf { VaultHaptic() }
 
 val currentHaptic: VaultHaptic
     @Composable get() = LocalVaultHaptic.current
+
+@Composable
+internal expect fun rememberPlatformHaptic(enabled: Boolean): VaultHaptic

@@ -1,55 +1,22 @@
 package com.motovault.app.ui.fuel
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import dev.sky.design.tokens.SkyTokens
-import com.motovault.app.domain.model.FuelDefaults
-import com.motovault.app.domain.fuel.FuelEntryIssue
-import com.motovault.app.domain.fuel.FuelEntryMode
-import com.motovault.app.domain.fuel.FuelEntryRules
-import com.motovault.app.domain.fuel.MAX_FUEL_LITRES
-import com.motovault.app.application.fuel.FuelEntryRequest
 import com.motovault.app.application.fuel.FuelEditRequest
-import com.motovault.app.domain.fuel.FuelTimelineEntry
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
-import motovault.composeapp.generated.resources.*
-
+import com.motovault.app.application.fuel.FuelEntryRequest
+import com.motovault.app.domain.fuel.FuelEntryMode
+import com.motovault.app.domain.fuel.MAX_FUEL_LITRES
 import com.motovault.app.ui.*
+import motovault.composeapp.generated.resources.*
+import kotlin.math.round
+
+private val ODO_BUMPS = listOf(10, 50, 100)
 
 @Composable
 internal fun FuelSheet(
@@ -62,281 +29,342 @@ internal fun FuelSheet(
     onEdit: (FuelEditRequest, String) -> Unit = { _, _ -> },
     initialOdometer: Double? = null
 ) {
-    val f = currentFmt
-    val haptic = currentHaptic
-    val today = today()
-    val estimate = input.estimatedOdometer
-    val lastOdo = input.lastFuelOdometer
-    val lastFuelDate = input.lastFuelDate
-    val initialFuelType = existing?.fuelType ?: FuelDefaults.OCTANE
-    val lastOctanePrice = existing?.fuelPrice ?: input.lastPrices[initialFuelType] ?: FuelDefaults.LEGACY_OCTANE_TAKA_PER_LITRE
-
-    val draft = remember { FuelDraft(existing, today) }
-    var fuelType by draft::fuelType
-    var mode by draft::mode
-    var fullTank by draft::fullTank
-    var dateKey by draft::dateSelection
-    var customDate by draft::customDate
-    var place by draft::place
-    var odoTouched by draft::odometerTouched
-    var priceTouched by draft::priceTouched
-    var confirmedPriceKey by remember { mutableStateOf<String?>(null) }
-    var missedFill by remember { mutableStateOf(existing?.missedFill ?: false) }
-
+    val currentDay = today()
+    val draft = remember { FuelDraft(existing, currentDay) }
+    val initialPrice = existing?.fuelPrice ?: (input.lastPrices[draft.fuelType] ?: defaultPriceForFuel(draft.fuelType))
     val entry = rememberNumberEntry(
         initialValues = mapOf(
-            "amount" to (existing?.cost?.toString() ?: initialAmount?.let { com.motovault.app.domain.ledger.Money.fromLegacy(it)?.let(com.motovault.app.domain.ledger.Money::decimal) } ?: ""),
-            "litres" to (existing?.fuelLiters?.toString() ?: ""),
-            "price" to (existing?.fuelPrice?.toString() ?: lastOctanePrice.toString()),
-            "odo" to (existing?.odometer?.toString() ?: initialOdometer?.toString() ?: kotlin.math.round(estimate).toInt().toString())
+            "amount" to (existing?.cost?.let(::formatFuelInputNumber)
+                ?: initialAmount?.let(::formatFuelInputNumber).orEmpty()),
+            "litres" to (existing?.fuelLiters?.let(::formatFuelInputNumber).orEmpty()),
+            "price" to formatFuelInputNumber(initialPrice),
+            "odo" to (existing?.odometer?.let(::formatFuelInputNumber)
+                ?: initialOdometer?.let(::formatFuelInputNumber)
+                ?: round(input.estimatedOdometer).toLong().toString())
         ),
         firstField = "amount"
     )
+    var pumpPickerOpen by remember { mutableStateOf(false) }
+    val capture = LocalOdometerCapture.current ?: rememberOdometerCaptureState()
+    val haptic = currentHaptic
+    val voice = rememberFuelVoiceController(input, existing, draft, entry)
 
-    val price = parseNum(entry.values["price"] ?: "") ?: lastOctanePrice
-    val amountVal = parseNum(entry.values["amount"] ?: "") ?: 0.0
-    val litresVal = parseNum(entry.values["litres"] ?: "") ?: 0.0
-    val odoVal = parseNum(entry.values["odo"] ?: "") ?: 0.0
-
-    val calculation = FuelEntryRules.calculate(mode, amountVal, litresVal, price, odoVal, if (existing == null) lastOdo else 0.0)
-    val editCalculation = existing?.let {
-        FuelEntryRules.calculateEdit(mode, amountVal, litresVal, price, it.cost, it.fuelLiters, it.fuelPrice,
-            it.fuelPrice ?: kotlin.math.round(lastOctanePrice), fuelType == it.fuelType, priceTouched)
-    }
-    val calculatedTaka = editCalculation?.amount ?: calculation.amount
-    val calculatedLitres = editCalculation?.litres ?: calculation.litres
-    val savedPrice = if (editCalculation == null) price else editCalculation.price
-
-    val date = when (dateKey) {
-        FuelDateSelection.YESTERDAY -> LocalDate.fromEpochDays(today.toEpochDays() - 1)
-        FuelDateSelection.CUSTOM -> runCatching { LocalDate.parse(toAscii(customDate)) }.getOrNull()
-        FuelDateSelection.TODAY -> today
+    if (pumpPickerOpen) {
+        PumpPickerSheet(
+            value = draft.place,
+            recentPumps = input.recentPumps,
+            onPick = { picked -> draft.place = picked; pumpPickerOpen = false },
+            onDismiss = { pumpPickerOpen = false }
+        )
+        return
     }
 
-    val odoError = if (calculation.odometerTooLow)
-        appStringResource(Res.string.fuel_odometer_above_previous, f.n(lastOdo.toLong())) else null
-    val timeline = if (existing != null) input.timeline else emptyList()
-    val issue = if (existing == null) calculation.issue ?: FuelEntryRules.validateDate(date, today, lastFuelDate)
-    else if (existing.fuelLiters == null && mode == FuelEntryMode.AMOUNT) FuelEntryIssue.ENTER_LITRES
-    else if (date == null) FuelEntryIssue.INVALID_DATE
-    else FuelEntryRules.validateEditedValues(calculatedTaka, calculatedLitres, savedPrice, odoVal, date, today)
-        ?: if (timeline.any { it == null }) FuelEntryIssue.TIMELINE_CONFLICT
-        else FuelEntryRules.validateEditOrder(FuelTimelineEntry(existing.id, odoVal, date), timeline.filterNotNull())
-    val reason = when (issue) {
-        FuelEntryIssue.ENTER_AMOUNT -> appStringResource(Res.string.fuel_enter_amount)
-        FuelEntryIssue.ENTER_LITRES -> appStringResource(Res.string.fuel_enter_litres)
-        FuelEntryIssue.ENTER_PRICE -> appStringResource(Res.string.fuel_enter_price)
-        FuelEntryIssue.LITRES_TOO_HIGH -> appStringResource(Res.string.fuel_litres_too_high, f.n(MAX_FUEL_LITRES))
-        FuelEntryIssue.INVALID_ODOMETER -> appStringResource(Res.string.fuel_invalid_odometer)
-        FuelEntryIssue.ODOMETER_TOO_LOW -> appStringResource(Res.string.fuel_fix_odometer)
-        FuelEntryIssue.INVALID_DATE -> appStringResource(Res.string.fuel_invalid_date)
-        FuelEntryIssue.FUTURE_DATE -> appStringResource(Res.string.fuel_future_date)
-        FuelEntryIssue.DATE_BEFORE_LAST_FILL -> appStringResource(Res.string.fuel_date_before_last)
-        FuelEntryIssue.RECORD_MISSING -> appStringResource(Res.string.fuel_record_missing)
-        FuelEntryIssue.TIMELINE_CONFLICT -> appStringResource(Res.string.fuel_timeline_conflict)
-        null -> null
-    }
-    val moneyText = appStringResource(Res.string.fuel_money_value, f.n(calculatedTaka, 2))
-    val litresText = appStringResource(Res.string.fuel_litres_value, f.n(calculatedLitres, 2))
-    val priceText = if (existing != null && savedPrice == null) appStringResource(Res.string.fuel_price_unknown)
-        else appStringResource(Res.string.fuel_price_value, appStringResource(Res.string.fuel_money_value, f.n(price, 2)))
-    val priceKey = "$fuelType:$savedPrice"
-    val remembered = input.confirmedPrices[fuelType]
-    val priceConfirmed = confirmedPriceKey == priceKey || (remembered?.takaPerLitre == savedPrice && savedPrice != null) ||
-        (existing != null && existing.fuelPrice == savedPrice && existing.fuelType == fuelType)
-    val saveText = appStringResource(Res.string.fuel_save_amount, moneyText)
-    val savedMessage = if (existing == null) appStringResource(Res.string.fuel_added, moneyText, litresText) else appStringResource(Res.string.fuel_edit_saved)
+    val eval = evaluateFuelDraft(input, existing, currentDay, draft, entry)
 
     Sheet(
         title = appStringResource(if (existing == null) Res.string.fuel_title else Res.string.fuel_edit_title),
         onDismiss = onDismiss,
-        footer = {
-            VaultButton(
-                text = reason ?: if (!priceConfirmed) appStringResource(Res.string.cost_price_confirm) else saveText,
-                contentDescription = reason ?: saveText,
-                onClick = {
-                    if (reason != null || !priceConfirmed) {
-                        haptic.perform(HapticKind.ERROR)
-                    } else {
-                        val legacyDetail = "${f.liters(calculatedLitres)} · ${if (fullTank) "Full tank" else "Partial fill"}"
-                        if (existing != null) {
-                            onEdit(FuelEditRequest(existing.id, calculatedTaka, calculatedLitres, savedPrice, odoVal, requireNotNull(date), fullTank, fuelType, place,
-                                if (calculatedLitres == existing.fuelLiters && fullTank == existing.fullTank) null else legacyDetail, priceConfirmed = priceConfirmed, missedFill = missedFill), savedMessage)
-                        } else onSave(FuelEntryRequest(
-                            legacyDetail = legacyDetail,
-                            date = requireNotNull(date),
-                            odometer = odoVal,
-                            litres = calculatedLitres,
-                            fullTank = fullTank,
-                            amount = calculatedTaka,
-                            fuelType = fuelType,
-                            price = price,
-                            place = place, priceConfirmed = priceConfirmed, missedFill = missedFill
-                        ), savedMessage) {
-                            // Undo action: restore previous state
-                        }
-                    }
-                },
-                full = true,
-                enabled = reason == null && priceConfirmed
-            )
-            VaultKeypad(onKey = { key ->
-                if (entry.activeField == "price") priceTouched = true
-                entry.press(key)
-            })
+        compact = true,
+        actions = if (capture.open) {
+            null
+        } else {
+            {
+                VaultIconButton(
+                    icon = "fi_camera.svg",
+                    label = appStringResource(Res.string.fuel_camera_action),
+                    onClick = { voice.cancel(); capture.start() }
+                )
+                VaultIconButton(
+                    icon = if (voice.active) "fi_mic-off.svg" else "fi_mic.svg",
+                    label = appStringResource(if (voice.active) Res.string.odo_mic_stop else Res.string.odo_mic_start),
+                    tone = if (voice.active) IconTone.TINT else IconTone.PLAIN,
+                    onClick = { capture.close(); voice.toggleMic() }
+                )
+            }
+        },
+        footer = if (capture.open) {
+            null
+        } else {
+            { FuelSaveFooter(eval, existing, editError, entry, draft, onSave, onEdit) }
         }
     ) {
-        editError?.let { Text(text = it, color = ErrorColor, fontSize = 13.sp) }
-        val amountDisplayText = if (mode == FuelEntryMode.AMOUNT) entry.values["amount"].orEmpty() else entry.values["litres"].orEmpty()
-        FuelAmountHero(
-            mode = mode,
-            displayText = amountDisplayText,
-            amountActive = entry.activeField == "amount" || entry.activeField == "litres",
-            priceActive = entry.activeField == "price",
-            priceText = priceText,
-            secondaryText = if (mode == FuelEntryMode.AMOUNT) litresText else moneyText,
-            onActivate = { entry.setActive(if (mode == FuelEntryMode.AMOUNT) "amount" else "litres") },
-            onPrice = { entry.setActive("price") }
-        )
-
-        // Mode & Fuel chips
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            VaultChip(text = appStringResource(Res.string.fuel_by_amount), active = mode == FuelEntryMode.AMOUNT, onClick = { mode = FuelEntryMode.AMOUNT; entry.setActive("amount") })
-            VaultChip(text = appStringResource(Res.string.fuel_by_litres), active = mode == FuelEntryMode.LITRES, onClick = { mode = FuelEntryMode.LITRES; entry.setActive("litres") })
-            Spacer(Modifier.width(4.dp))
-            Box(Modifier.width(1.dp).height(24.dp).background(BorderColor))
-            Spacer(Modifier.width(4.dp))
-            VaultChip(text = appStringResource(Res.string.fuel_octane), active = fuelType == FuelDefaults.OCTANE, onClick = {
-                fuelType = FuelDefaults.OCTANE
-                            entry.set("price", (input.lastPrices[FuelDefaults.OCTANE] ?: FuelDefaults.LEGACY_OCTANE_TAKA_PER_LITRE).toString())
-            })
-            VaultChip(text = appStringResource(Res.string.fuel_petrol), active = fuelType == FuelDefaults.PETROL, onClick = {
-                fuelType = FuelDefaults.PETROL
-                            entry.set("price", (input.lastPrices[FuelDefaults.PETROL] ?: FuelDefaults.LEGACY_PETROL_TAKA_PER_LITRE).toString())
-            })
-        }
-
-        FuelConfidenceControls(priceConfirmed, remembered?.takeIf { it.takaPerLitre == savedPrice }, missedFill, savedPrice != null,
-            { confirmedPriceKey = if (it) priceKey else null }, { missedFill = it })
-        FuelDateControls(fullTank, dateKey, customDate, { fullTank = !fullTank }, { dateKey = it }, { customDate = it })
-
-        // Odometer Row
-        val activeField = entry.activeField
-        val isOdoActive = activeField == "odo"
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(if (isOdoActive) BrandTintColor else SurfaceColor)
-                .border(2.dp, if (odoError != null) ErrorColor else if (isOdoActive) BrandColor else BorderColor, RoundedCornerShape(16.dp))
-                .clickable { entry.setActive("odo") }
-                .padding(horizontal = 14.dp, vertical = 12.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    V3Icon(
-                        path = "feather_icon/fi_gauge.svg",
-                        description = null,
-                        modifier = Modifier.size(20.dp),
-                        tint = BrandColor
-                    )
-                    Column {
-                        Text(text = appStringResource(Res.string.garage_odometer), fontSize = 12.sp, color = TextSecondary)
-                        Text(text = appStringResource(Res.string.fuel_distance_value, f.n(odoVal.toLong())), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                    }
-                }
-                if (!odoTouched) {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(999.dp))
-                            .background(BrandTintColor)
-                            .border(1.dp, BrandLineColor, RoundedCornerShape(999.dp))
-                            .padding(horizontal = 10.dp, vertical = 2.dp)
-                    ) {
-                        Text(text = appStringResource(Res.string.odo_estimated), fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                    }
-                }
+        if (capture.open) {
+            FuelPumpCameraCard(capture = capture) { reading ->
+                applyPumpMeterReading(reading, input, existing, draft, entry)
+                haptic.perform(HapticKind.SUCCESS)
+                capture.close()
             }
+        } else {
+            FuelSheetBody(input, draft, entry, eval, existing, voice) { pumpPickerOpen = true }
         }
+    }
+}
 
-        if (odoError != null) {
-            Text(text = odoError, fontSize = 13.sp, color = ErrorColor, fontWeight = FontWeight.SemiBold)
+@Composable
+private fun FuelSheetBody(
+    input: FuelScreenInput,
+    draft: FuelDraft,
+    entry: NumberEntryState,
+    eval: FuelValidationSnapshot,
+    existing: FuelExistingEntry?,
+    voice: FuelVoiceController,
+    onOpenPumpPicker: () -> Unit
+) {
+    if (voice.disclosureOpen) {
+        VoiceDisclosureCard(onConfirm = voice.confirmProvider, onCancel = voice.dismissProvider)
+    }
+    FuelAmountSection(draft = draft, entry = entry, eval = eval, existing = existing, voiceBanner = voice.banner)
+    if (draft.mode == FuelEntryMode.AMOUNT) {
+        FuelPresetsLine(
+            activeAmount = eval.taka,
+            hasAmountText = entry.values["amount"].orEmpty().isNotBlank(),
+            onSelect = { preset ->
+                draft.mode = FuelEntryMode.AMOUNT
+                entry.setActive("amount")
+                entry.set("amount", preset.toString())
+            }
+        )
+    }
+    PickerField(
+        text = draft.place.ifBlank { appStringResource(Res.string.fuel_pump_placeholder) },
+        isSet = draft.place.isNotBlank(),
+        leadingIcon = "fi_map-pin.svg",
+        onClick = onOpenPumpPicker
+    )
+    FuelOdometerRow(input = input, draft = draft, entry = entry, eval = eval)
+    FuelOptionsLine(
+        fullTank = draft.fullTank,
+        fuelType = draft.fuelType,
+        dateKey = draft.dateSelection,
+        customDate = draft.customDate,
+        missedFill = draft.missedFill,
+        onToggleFull = { draft.fullTank = !draft.fullTank },
+        onSelectFuel = { nextType ->
+            draft.fuelType = nextType
+            draft.priceTouched = false
+            entry.set("price", formatFuelInputNumber(defaultPriceFor(input, existing, nextType)))
+        },
+        onSelectDateKey = { draft.dateSelection = it },
+        onCustomDateChange = { draft.customDate = it },
+        onToggleMissedFill = { draft.missedFill = !draft.missedFill }
+    )
+}
+
+@Composable
+private fun FuelAmountSection(
+    draft: FuelDraft,
+    entry: NumberEntryState,
+    eval: FuelValidationSnapshot,
+    existing: FuelExistingEntry?,
+    voiceBanner: FuelVoiceBanner?
+) {
+    val f = currentFmt
+    val rawAmountText = if (draft.mode == FuelEntryMode.AMOUNT) {
+        entry.values["amount"].orEmpty()
+    } else {
+        entry.values["litres"].orEmpty()
+    }
+    val questionText = appStringResource(
+        if (draft.mode == FuelEntryMode.AMOUNT) Res.string.fuel_amount_question else Res.string.fuel_litres_question
+    )
+    EntryAmountCard(
+        caption = questionText,
+        valueText = f.editableNumber(rawAmountText),
+        isPlaceholder = rawAmountText.isEmpty(),
+        active = entry.activeField == "amount" || entry.activeField == "litres",
+        amountDescription = questionText,
+        leadingUnit = if (draft.mode == FuelEntryMode.AMOUNT) appStringResource(Res.string.fuel_currency_symbol) else null,
+        trailingUnit = if (draft.mode == FuelEntryMode.LITRES) appStringResource(Res.string.fuel_liters) else null,
+        topTrailing = {
+            SegmentedPill(
+                options = listOf(
+                    FuelEntryMode.AMOUNT to appStringResource(Res.string.fuel_mode_taka),
+                    FuelEntryMode.LITRES to appStringResource(Res.string.fuel_mode_litre)
+                ),
+                selected = draft.mode,
+                label = appStringResource(Res.string.fuel_mode_label),
+                onSelect = { nextMode ->
+                    draft.mode = nextMode
+                    entry.setActive(if (nextMode == FuelEntryMode.AMOUNT) "amount" else "litres")
+                }
+            )
+        },
+        subContent = { FuelAmountSubline(draft, entry, eval, existing) },
+        message = fuelCardMessage(eval.literWarning, voiceBanner),
+        messageIsWarning = eval.literWarning,
+        onClick = { entry.setActive(if (draft.mode == FuelEntryMode.AMOUNT) "amount" else "litres") }
+    )
+}
+
+@Composable
+private fun FuelAmountSubline(
+    draft: FuelDraft,
+    entry: NumberEntryState,
+    eval: FuelValidationSnapshot,
+    existing: FuelExistingEntry?
+) {
+    val f = currentFmt
+    val secondaryText = if (draft.mode == FuelEntryMode.AMOUNT) f.liters(eval.litres) else f.money(eval.taka)
+    val priceActive = entry.activeField == "price"
+    val priceText = if (existing != null && eval.savedPrice == null && !priceActive) {
+        appStringResource(Res.string.fuel_price_unknown)
+    } else {
+        val rawPrice = entry.values["price"].orEmpty()
+        val displayPrice = when {
+            priceActive -> f.editableNumber(rawPrice)
+            eval.price % 1.0 == 0.0 -> f.money(eval.price)
+            else -> appStringResource(Res.string.fuel_money_value, f.n(eval.price, 2))
         }
+        appStringResource(Res.string.fuel_price_value, displayPrice)
+    }
+    Text(
+        text = appStringResource(Res.string.fuel_approximate_value, secondaryText),
+        fontSize = 14.sp,
+        color = TextSecondary
+    )
+    ConfirmPill(
+        text = priceText,
+        tone = if (priceActive) PillTone.ACTIVE else PillTone.DEFAULT,
+        trailingIcon = "fi_edit-2.svg",
+        contentDescription = appStringResource(Res.string.fuel_price_edit_desc),
+        onClick = { entry.setActive("price") }
+    )
+    if (!eval.priceKnown && eval.price > 0.0) {
+        ConfirmPill(
+            text = appStringResource(if (eval.priceConfirmed) Res.string.fuel_price_ok else Res.string.fuel_price_new_check),
+            icon = if (eval.priceConfirmed) "fi_check.svg" else null,
+            tone = if (eval.priceConfirmed) PillTone.CONFIRM_DONE else PillTone.CONFIRM_PENDING,
+            onClick = { draft.confirmedPriceKey = if (eval.priceConfirmed) null else eval.priceKey }
+        )
+    }
+}
 
-        // Odometer bump chips
-        AnimatedVisibility(visible = isOdoActive) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                listOf(10, 50, 100).forEach { bump ->
-                    val bumpLabel = "+${f.d(bump.toString())}"
-                    VaultChip(
-                        text = bumpLabel,
+@Composable
+private fun fuelCardMessage(literWarning: Boolean, voiceBanner: FuelVoiceBanner?): String? = when {
+    literWarning -> appStringResource(Res.string.fuel_liter_warn)
+    voiceBanner is FuelVoiceBanner.Parsed -> appStringResource(Res.string.fuel_voice_parsed, voiceBanner.transcript)
+    voiceBanner is FuelVoiceBanner.Unparsed -> appStringResource(Res.string.fuel_voice_unparsed, voiceBanner.transcript)
+    voiceBanner is FuelVoiceBanner.Retry -> appStringResource(Res.string.fuel_voice_retry)
+    voiceBanner is FuelVoiceBanner.Unavailable -> appStringResource(Res.string.capture_voice_unavailable)
+    else -> null
+}
+
+@Composable
+private fun FuelOdometerRow(
+    input: FuelScreenInput,
+    draft: FuelDraft,
+    entry: NumberEntryState,
+    eval: FuelValidationSnapshot
+) {
+    val f = currentFmt
+    val isOdoActive = entry.activeField == "odo"
+    val errorLabel = when (eval.odometerError) {
+        FuelValidationReason.ODOMETER_TOO_LOW ->
+            appStringResource(Res.string.fuel_odometer_above_previous, f.n(input.lastFuelOdometer.toLong()))
+        FuelValidationReason.TIMELINE_CONFLICT ->
+            appStringResource(Res.string.fuel_timeline_conflict)
+        else -> null
+    }
+    val rowLabel = errorLabel ?: appStringResource(
+        if (draft.odometerTouched) Res.string.fuel_odo_label else Res.string.fuel_odo_estimated_label
+    )
+
+    OdoRow(
+        label = rowLabel,
+        valueText = appStringResource(
+            Res.string.fuel_distance_value,
+            f.editableNumber(entry.values["odo"].orEmpty())
+        ),
+        active = isOdoActive,
+        isError = errorLabel != null,
+        onClick = { entry.setActive("odo") },
+        trailing = {
+            if (isOdoActive) {
+                ODO_BUMPS.forEach { bump ->
+                    ConfirmPill(
+                        text = appStringResource(Res.string.odometer_bump_chip, f.d(bump.toString())),
                         onClick = {
-                            entry.set("odo", (odoVal + bump).toInt().toString())
-                            odoTouched = true
+                            entry.set("odo", (eval.odometer + bump).toLong().toString())
+                            draft.odometerTouched = true
                         }
                     )
                 }
-                VaultChip(
-                    text = appStringResource(Res.string.odo_estimated),
-                    onClick = {
-                        entry.set("odo", estimate.toInt().toString())
-                        odoTouched = false
-                    }
+            } else if (!draft.odometerTouched) {
+                ConfirmPill(
+                    text = appStringResource(Res.string.odo_confirm),
+                    icon = "fi_check.svg",
+                    tone = PillTone.CONFIRM_PENDING,
+                    onClick = { draft.odometerTouched = true }
                 )
             }
         }
+    )
+}
 
-        // Pump / Filling station input
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            V3Icon(
-                path = "feather_icon/fi_map-pin.svg",
-                description = null,
-                modifier = Modifier.size(18.dp),
-                tint = TextTertiary
-            )
-            input.places.take(2).forEach { p ->
-                VaultChip(text = p, active = place == p, onClick = { place = if (place == p) "" else p })
+@Composable
+private fun FuelSaveFooter(
+    eval: FuelValidationSnapshot,
+    existing: FuelExistingEntry?,
+    editError: String?,
+    entry: NumberEntryState,
+    draft: FuelDraft,
+    onSave: (FuelEntryRequest, String, () -> Unit) -> Unit,
+    onEdit: (FuelEditRequest, String) -> Unit
+) {
+    val f = currentFmt
+    val haptic = currentHaptic
+    val reasonText = validationMessage(eval.reason)
+    val moneyText = f.money(eval.taka)
+    val saveText = appStringResource(Res.string.fuel_save_amount, moneyText)
+    val savedMessage = if (existing == null) {
+        appStringResource(Res.string.fuel_added, moneyText, f.liters(eval.litres))
+    } else {
+        appStringResource(Res.string.fuel_edit_saved)
+    }
+
+    if (editError != null) {
+        Text(text = editError, color = ErrorColor, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+    }
+    VaultButton(
+        text = reasonText ?: saveText,
+        contentDescription = reasonText ?: saveText,
+        full = true,
+        enabled = eval.reason == null,
+        onClick = {
+            if (eval.reason != null) {
+                haptic.perform(HapticKind.ERROR)
+                return@VaultButton
             }
+            submitFuelSave(eval, existing, draft, f.liters(eval.litres), savedMessage, onSave, onEdit)
+            haptic.perform(HapticKind.SUCCESS)
         }
+    )
+    VaultKeypad(
+        onKey = { key ->
+            if (entry.activeField == "price") draft.priceTouched = true
+            if (entry.activeField == "odo") draft.odometerTouched = true
+            entry.press(key)
+        }
+    )
+}
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(SurfaceColor2)
-                .border(1.5.dp, BorderStrongColor, RoundedCornerShape(12.dp))
-                .padding(horizontal = 14.dp, vertical = 14.dp)
-        ) {
-            BasicTextField(
-                value = place,
-                onValueChange = { place = it },
-                textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
-                cursorBrush = SolidColor(BrandColor),
-                decorationBox = { innerTextField ->
-                    if (place.isEmpty()) {
-                        Text(text = appStringResource(Res.string.fuel_pump_name), fontSize = 15.sp, color = TextTertiary)
-                    }
-                    innerTextField()
-                }
-            )
-        }
+@Composable
+private fun validationMessage(reason: FuelValidationReason?): String? {
+    val f = currentFmt
+    return when (reason) {
+        FuelValidationReason.ENTER_AMOUNT -> appStringResource(Res.string.fuel_enter_amount)
+        FuelValidationReason.ENTER_LITRES -> appStringResource(Res.string.fuel_enter_litres)
+        FuelValidationReason.ENTER_PRICE -> appStringResource(Res.string.fuel_enter_price)
+        FuelValidationReason.CONFIRM_PRICE -> appStringResource(Res.string.fuel_confirm_new_price)
+        FuelValidationReason.CONFIRM_ODOMETER -> appStringResource(Res.string.fuel_confirm_odometer)
+        FuelValidationReason.LITRES_TOO_HIGH -> appStringResource(Res.string.fuel_litres_too_high, f.n(MAX_FUEL_LITRES))
+        FuelValidationReason.INVALID_ODOMETER -> appStringResource(Res.string.fuel_invalid_odometer)
+        FuelValidationReason.ODOMETER_TOO_LOW -> appStringResource(Res.string.fuel_fix_odometer)
+        FuelValidationReason.TIMELINE_CONFLICT -> appStringResource(Res.string.fuel_timeline_conflict)
+        FuelValidationReason.INVALID_DATE -> appStringResource(Res.string.fuel_invalid_date)
+        FuelValidationReason.FUTURE_DATE -> appStringResource(Res.string.fuel_future_date)
+        FuelValidationReason.DATE_BEFORE_LAST_FILL -> appStringResource(Res.string.fuel_date_before_last)
+        FuelValidationReason.RECORD_MISSING -> appStringResource(Res.string.fuel_record_missing)
+        null -> null
     }
 }

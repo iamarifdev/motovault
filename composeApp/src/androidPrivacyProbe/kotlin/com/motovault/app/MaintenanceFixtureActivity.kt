@@ -32,9 +32,7 @@ class MaintenanceFixtureActivity : ComponentActivity() {
                     if (screen == "details") {
                         GaugeDetailSheet(state, state.rules.first { it.name == "Engine oil" }.id, onDismiss = {}, onOpen = { _, _ -> })
                     } else {
-                        OnboardingScreen(
-                            initialStep = 2, initialBrandId = "yamaha", initialModelId = modelId, initialModelCode = if (modelId == "yamaha-mt-15-v2") "MTN155-A" else "YZF155-A", onComplete = { _ -> }
-                        )
+                        OnboardingScreen(onComplete = { _ -> })
                     }
                     }
                 }

@@ -3,7 +3,7 @@ package com.motovault.app.storage.security
 import com.motovault.app.ui.vaultContext
 import java.io.File
 import java.io.FileOutputStream
-import com.motovault.app.ui.validateDocumentAssetId
+import com.motovault.app.domain.model.validateDocumentAssetId
 
 internal actual object ProtectedDocumentStorage {
     private val storageRoot get() = vaultContext.filesDir.canonicalFile

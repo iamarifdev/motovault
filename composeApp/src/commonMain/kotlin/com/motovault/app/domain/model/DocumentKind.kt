@@ -10,6 +10,15 @@ object DocumentKinds {
 
     val all = listOf(REGISTRATION, LICENCE, TAX, INSURANCE, FITNESS)
 
+    fun canonicalTitle(kind: String): String = when (kind) {
+        REGISTRATION -> "Registration smart card"
+        LICENCE -> "Driving licence"
+        TAX -> "Tax token"
+        INSURANCE -> "Insurance"
+        FITNESS -> "Fitness certificate"
+        else -> kind
+    }
+
     /** Resolves a stored kind or a legacy title without persisting a translated label. */
     fun fromStored(kind: String, title: String): String? {
         val normalized = kind.trim().lowercase()

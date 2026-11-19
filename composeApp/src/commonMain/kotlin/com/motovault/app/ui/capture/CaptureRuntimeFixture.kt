@@ -18,7 +18,7 @@ internal fun CaptureRuntimeFixture(factory: CaptureDraftFactory, photo: Odometer
     var state by remember { mutableStateOf(VaultState(ride = Ride("yamaha", "Synthetic", 2026, 1000.0))) }
     var sheet by remember { mutableStateOf<String?>(null) }
     val odometerCapture = rememberOdometerCaptureState()
-    LaunchedEffect(sheet) { if (sheet != "odometer") odometerCapture.close() }
+    LaunchedEffect(sheet) { odometerCapture.close() }
     var prefill by remember { mutableStateOf<CapturePrefill?>(null) }
     var dark by remember { mutableStateOf(false) }
     AppResourceEnvironment(state.language) {

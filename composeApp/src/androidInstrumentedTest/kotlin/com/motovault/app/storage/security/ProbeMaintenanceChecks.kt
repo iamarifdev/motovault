@@ -83,10 +83,15 @@ internal fun NativeAssetInstrumentation.checkMaintenanceUi() {
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("screen", "onboarding").putExtra("modelId", "yamaha-r15-v4")
         ) as com.motovault.app.MaintenanceFixtureActivity
         try {
-            waitForText("শেষ সার্ভিস মনে নেই")
+            waitForText("কোন বাইক চালান?")
+            clickText("Yamaha")
+            waitForText("Yamaha এর কোন মডেল?")
+            clickText("R15")
+            waitForText("R15 V4 বেছে নিন")
+            clickText("R15 V4 বেছে নিন")
+            waitForText("মিটারে এখন কত কিমি আছে?")
             shot("synthetic-p04-onboarding-unknown.png")
-            clickText("শেষ সার্ভিস মনে আছে")
-            waitForText("শেষ সার্ভিসের ওডোমিটার")
+            clickText("এই মাসে")
             shot("synthetic-p04-onboarding-known.png")
         } finally {
             runOnMainSync { onboarding.finish() }
