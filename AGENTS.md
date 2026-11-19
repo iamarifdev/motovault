@@ -136,7 +136,7 @@ Rules:
 - `design/app-ui-v4/` (built on `design/app-ui-v3/`) is the active visual and interaction reference. Read the
   [design contract](docs/roadmap/DESIGN-CONTRACT.md) before adding or modifying a UI flow.
 - Keep the existing native brand logos during brand selection, aligned with v4.
-- Reuse v4 typography, tokens, four-tab navigation (with long-press radial shortcuts), quick-add, sheets, keypads,
+- Reuse v4 typography, tokens, four-tab navigation (with the long-press shortcut pill), quick-add, sheets, keypads,
   date chips, brand wash, motion, haptics, reduced-motion and Undo patterns.
 - Extend the prototype for new states before porting their UI. Preserve the
   established visual system and keep demo data separate from owner records.

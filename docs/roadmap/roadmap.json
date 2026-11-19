@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-13T10:12:54+00:00",
+  "updated_at": "2026-11-19T09:56:26+00:00",
   "baseline": {
     "commit": "50eda3a",
     "branch": "main",
@@ -1146,8 +1146,8 @@
         "design/app-ui-v3/src/sheets/DocViewSheet.tsx"
       ],
       "existing_paths": [
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentWallet.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentImages.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/documents/DocumentWalletStack.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/InspectionBrightness.kt",
         "composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCapture.kt",
         "composeApp/src/iosMain/kotlin/com/motovault/app/ui/DocumentCapture.kt"
@@ -3656,8 +3656,8 @@
         "design/app-ui-v3/src/sheets/DocViewSheet.tsx"
       ],
       "existing_paths": [
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentWallet.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentImages.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/documents/DocumentWalletStack.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt"
       ],
@@ -4306,7 +4306,7 @@
       "existing_paths": [
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartParse.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/CaptureServiceParser.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt"
       ],
       "proposed_paths": [
@@ -5935,7 +5935,7 @@
       ],
       "existing_paths": [
         "composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt",
-        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/maintenance/ServiceSheet.kt",
         "composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt"
       ],
       "proposed_paths": [
@@ -8116,6 +8116,497 @@
         "Expanded release verifies the completed P03A architecture controls and phase-specific boundaries in addition to the existing migration, platform and release evidence.",
         "Record remaining exceptions with ownership and retirement work; release never implies optional cloud/rider enablement.",
         "Apply the established localization/SRP baseline: all new or changed user-facing text stays in resources with a reviewed modern-Bangla copy, persisted identity uses stable IDs, no new production file exceeds 400 lines, and the literal, copy, responsibility and architecture gates stay green."
+      ]
+    },
+    {
+      "id": "P17",
+      "title": "Literal v4 UI port",
+      "priority": "P1",
+      "group": "core",
+      "outcome": "composeApp matches the design/app-ui-v4 code screen by screen, with nothing extra and nothing missing.",
+      "rationale": "An earlier attempt ported v4 from summaries and drifted; this phase ports from the TSX and CSS code with per-screen checklists.",
+      "depends_on": [
+        "P08-02",
+        "P08-05",
+        "P16-01"
+      ],
+      "design": "Follow docs/roadmap/V4-PORT-PLAN.md. The spec is the code in design/app-ui-v4/src; owner decisions D1-D18 in that plan override literal v4 only where recorded.",
+      "prototype_paths": [
+        "design/app-ui-v4/src/App.tsx",
+        "design/app-ui-v4/src/styles/base.css",
+        "design/app-ui-v4/src/styles/app.css",
+        "design/app-ui-v4/src/screens/Home.tsx",
+        "design/app-ui-v4/src/screens/Onboarding.tsx",
+        "design/app-ui-v4/src/screens/Vault.tsx",
+        "design/app-ui-v4/src/screens/History.tsx",
+        "design/app-ui-v4/src/screens/Me.tsx"
+      ],
+      "existing_paths": [
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultSheetHost.kt",
+        "composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt",
+        "docs/roadmap/V4-PORT-PLAN.md"
+      ],
+      "proposed_paths": [],
+      "data": "Only new persisted field is optional Ride.cc. No stored ID changes. Budget, allowance, breakdown contacts, seasonal state and factory profile fields stay readable in backups even where their UI is removed.",
+      "exit_criteria": [
+        "Every phase checklist in V4-PORT-PLAN.md is ticked against the prototype with the same fixture data.",
+        "All gates for the change class pass on Android and iOS."
+      ],
+      "risks": "Drift from summaries instead of code; small phone widths below the prototype's 440 wide frame; removing shipped features changes what users see.",
+      "tasks": [
+        {
+          "id": "P17-01",
+          "title": "Baseline: park the Gemini attempt and salvage verified parts",
+          "size": 2,
+          "depends_on": [],
+          "acceptance": [
+            "Gemini's uncommitted v4 attempt is preserved on wip/gemini-v4-attempt and the port restarts from 3754157.",
+            "Only the salvage list in V4-PORT-PLAN.md section 3 is taken; bike images match design/app-ui-v4/public/bikes byte for byte and catalogue names and labels match catalog.ts.",
+            "DESIGN-CONTRACT.md and design-reference-v4.json describe v4 from its code, not from CHANGELOG-V4.md."
+          ],
+          "verification": [
+            "Portable gates, testDebugUnitTest and compileKotlinIosSimulatorArm64 pass on the baseline branch."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification"
+          ],
+          "status": "done",
+          "owner": "Md. Ariful Islam",
+          "started_at": "2026-11-17T11:15:41+00:00",
+          "completed_at": "2026-11-19T01:19:02+00:00",
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-17T11:15:41+00:00",
+              "text": "Parked Gemini attempt on wip/gemini-v4-attempt; salvaging per V4-PORT-PLAN.md section 3"
+            },
+            {
+              "at": "2026-11-17T11:18:04+00:00",
+              "text": "Salvaged catalogue (94 variants matching catalog.ts), 89 bike images synced byte-for-byte to v4, BRTA backgrounds, icons, SpokenNumberParser with nukta fix, v4 design contract and fingerprint. Portable gates, 358 unit tests, iOS compile and assembleDebug pass. Uncommitted."
+            },
+            {
+              "at": "2026-11-19T01:16:28+00:00",
+              "text": "Added fi_delete.svg and fi_lock-plain.svg via build-v3-icons.mjs and salvaged VoiceCaptureActions.anyAvailable."
+            },
+            {
+              "at": "2026-11-19T01:19:02+00:00",
+              "text": "Baseline verified: wip/gemini-v4-attempt parked at bdee299; 58 icons, 94 catalogue variants, 89 bike PNGs, BRTA BGs, SpokenNumberParser, VoiceCapture.anyAvailable, portable gates, testDebugUnitTest, and compileKotlinIosSimulatorArm64 pass."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P17-01-baseline.md",
+              "summary": "Baseline verified: wip/gemini-v4-attempt parked at bdee299; 58 icons, 94 catalogue variants, 89 bike PNGs, BRTA BGs, SpokenNumberParser, VoiceCapture.anyAvailable, portable gates, testDebugUnitTest, and compileKotlinIosSimulatorArm64 pass.",
+              "at": "2026-11-19T01:19:02+00:00",
+              "revision": "3754157"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P17-01-baseline.md",
+              "summary": "Baseline verified: wip/gemini-v4-attempt parked at bdee299; 58 icons, 94 catalogue variants, 89 bike PNGs, BRTA BGs, SpokenNumberParser, VoiceCapture.anyAvailable, portable gates, testDebugUnitTest, and compileKotlinIosSimulatorArm64 pass.",
+              "at": "2026-11-19T01:19:02+00:00",
+              "revision": "3754157"
+            }
+          ]
+        },
+        {
+          "id": "P17-02",
+          "title": "Foundation: tokens, brand wash, sheet, toast, keypad, entry controls and navigation",
+          "size": 8,
+          "depends_on": [
+            "P17-01"
+          ],
+          "acceptance": [
+            "Section 4 of V4-PORT-PLAN.md is implemented with the listed values and its checklist is ticked against the running prototype.",
+            "VaultSheetHost is split by area and MotoVault.kt, Sheet.kt and BottomNavigation.kt stay within the size rule.",
+            "Strings that said কাগজ say ডকুমেন্ট; no new inline literals."
+          ],
+          "verification": [
+            "Side-by-side screenshots of tabs, Quick Add, shortcut pill, a sheet and a toast in light, dark and both languages on Android and iOS."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "design",
+            "android_runtime",
+            "ios_runtime"
+          ],
+          "status": "in_review",
+          "owner": "Md. Ariful Islam",
+          "started_at": "2026-11-19T01:19:02+00:00",
+          "completed_at": null,
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-19T01:19:02+00:00",
+              "text": "Starting Phase 1 Foundation: tokens, radial wash, sheet drag/compact, toast host, entry controls, keypad, navigation shortcut pill, QuickAdd, PrivacyGate, sheet host split, and per-area strings."
+            },
+            {
+              "at": "2026-11-19T01:45:38+00:00",
+              "text": "Stage 1 foundation implemented and verified with all portable gates, Android/iOS unit tests and compilation, module cycles, and debug APK build; runtime checks pending."
+            },
+            {
+              "at": "2026-11-19T09:56:25+00:00",
+              "text": "Stage 1 Foundation + Stage 7 final cleanup verified across all 10 portable gates, compare_ui_literal_head, 77 unit suites (399 tests), iOS Simulator arm64 compile, Android debug/privacyProbe builds, and architecture cycles. Runtime Android/iOS walkthrough and visual comparison remain open."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Stage 1 Foundation + Stage 7 final cleanup verified across all 10 portable gates, compare_ui_literal_head, 77 unit suites (399 tests), iOS Simulator arm64 compile, Android debug/privacyProbe builds, and architecture cycles. Runtime Android/iOS walkthrough and visual comparison remain open.",
+              "at": "2026-11-19T09:56:25+00:00",
+              "revision": "3754157"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Stage 1 Foundation + Stage 7 final cleanup verified across all 10 portable gates, compare_ui_literal_head, 77 unit suites (399 tests), iOS Simulator arm64 compile, Android debug/privacyProbe builds, and architecture cycles. Runtime Android/iOS walkthrough and visual comparison remain open.",
+              "at": "2026-11-19T09:56:25+00:00",
+              "revision": "3754157"
+            }
+          ]
+        },
+        {
+          "id": "P17-03",
+          "title": "Onboarding and single-source bike catalogue",
+          "size": 5,
+          "depends_on": [
+            "P17-02"
+          ],
+          "acceptance": [
+            "Section 5 of V4-PORT-PLAN.md is implemented and its checklist is ticked.",
+            "BikeCatalogueFamilies is the single catalogue source; stored model ids are unchanged; optional Ride.cc has a backup compatibility fixture."
+          ],
+          "verification": [
+            "Unit tests for OnboardingDraft mapping; runtime walkthrough of all three steps, camera, voice and skip on Android and iOS."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "design",
+            "android_runtime",
+            "ios_runtime"
+          ],
+          "status": "planned",
+          "owner": "",
+          "started_at": "",
+          "completed_at": null,
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-19T09:38:47+00:00",
+              "text": "Starting Stage 6 (Phase 2 Onboarding, single-source BikeCatalogueFamilies, and optional Ride.cc C3 backup compatibility)."
+            },
+            {
+              "at": "2026-11-19T09:56:26+00:00",
+              "text": "Stage 6 (Phase 2 Onboarding + BikeCatalogueFamilies consolidation + Ride.cc C3) verified: OnboardingDraft OWNER_ESTIMATE & VaultChip fixes applied; 77 unit suites (incl. OnboardingDraftTest 3/3, BackupPayloadCompatibilityTest 9/9, BackupRideLogAdapterTest 3/3), iOS arm64 compile, Android debug/privacyProbe builds, and all portable gates pass. Android/iOS runtime remains open."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Stage 6 (Phase 2 Onboarding + BikeCatalogueFamilies consolidation + Ride.cc C3) verified: OnboardingDraft OWNER_ESTIMATE & VaultChip fixes applied; 77 unit suites (incl. OnboardingDraftTest 3/3, BackupPayloadCompatibilityTest 9/9, BackupRideLogAdapterTest 3/3), iOS arm64 compile, Android debug/privacyProbe builds, and all portable gates pass. Android/iOS runtime remains open.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Stage 6 (Phase 2 Onboarding + BikeCatalogueFamilies consolidation + Ride.cc C3) verified: OnboardingDraft OWNER_ESTIMATE & VaultChip fixes applied; 77 unit suites (incl. OnboardingDraftTest 3/3, BackupPayloadCompatibilityTest 9/9, BackupRideLogAdapterTest 3/3), iOS arm64 compile, Android debug/privacyProbe builds, and all portable gates pass. Android/iOS runtime remains open.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            }
+          ]
+        },
+        {
+          "id": "P17-04",
+          "title": "Garage showroom, jobs list and garage sheets",
+          "size": 8,
+          "depends_on": [
+            "P17-02"
+          ],
+          "acceptance": [
+            "Section 6 of V4-PORT-PLAN.md is implemented and its checklist is ticked.",
+            "GarageHomeModel is pure and unit-tested; gauge reset and last-done edit write no history log and support Undo."
+          ],
+          "verification": [
+            "Runtime checks with one and three bikes, all health states and the jobs filters on Android and iOS."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "design",
+            "android_runtime",
+            "ios_runtime"
+          ],
+          "status": "planned",
+          "owner": "",
+          "started_at": "",
+          "completed_at": null,
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-19T02:14:10+00:00",
+              "text": "Stage 2 (Phase 3 Garage UI, sheets, and GarageHomeModelTest) implemented and verified across all portable gates, unit tests, iOS compile, Android debug APK, and architecture cycle checks; runtime checks and human Bangla review remain open."
+            },
+            {
+              "at": "2026-11-19T09:56:26+00:00",
+              "text": "Final Stage 7 regression verification passed (all portable gates, GarageHomeModelTest 5/5, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Final Stage 7 regression verification passed (all portable gates, GarageHomeModelTest 5/5, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Final Stage 7 regression verification passed (all portable gates, GarageHomeModelTest 5/5, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            }
+          ]
+        },
+        {
+          "id": "P17-05",
+          "title": "Entry sheets: fuel, expense, service and capture",
+          "size": 8,
+          "depends_on": [
+            "P17-02"
+          ],
+          "acceptance": [
+            "Section 7 of V4-PORT-PLAN.md is implemented and its checklist is ticked.",
+            "Service edit keeps visit state, workshop, repair case and warranty, and saves visits with engine oil, custom lines and quotations.",
+            "Expense amount must be above zero."
+          ],
+          "verification": [
+            "Domain tests for service edit and expense rules; runtime fuel, expense and service flows on Android and iOS."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "design",
+            "android_runtime",
+            "ios_runtime"
+          ],
+          "status": "planned",
+          "owner": "",
+          "started_at": "",
+          "completed_at": null,
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-19T02:30:53+00:00",
+              "text": "Stage 3a (Phase 4a Fuel + Expense UI, SpokenFuelParser, ExpenseRules zero rejection, and unit tests) passed portable + workstation gates; 4b Service, 4c Capture, runtime checks and Bangla review remain open."
+            },
+            {
+              "at": "2026-11-19T02:46:32+00:00",
+              "text": "Stage 3b (Phase 4b Service domain updateServiceVisit + C3 tests + v4 ServiceSheet/bill/pickers/SmartInput; replaced removed SmartServiceDraft.kt in P07/P10 existing_paths with CaptureServiceParser.kt and ServiceSheet.kt) passed portable + workstation gates; 4c Capture, runtime checks and Bangla review remain open."
+            },
+            {
+              "at": "2026-11-19T08:52:59+00:00",
+              "text": "Stage 3c (Phase 4c Capture) implemented and verified: root-owned ephemeral LocalOdometerCapture cleanup across sheets/onboarding, shared dark OcrScanCard, PumpMeterOcrParser + FuelPumpCameraCard (price confirm preserved), ServiceBillOcrParser + ServiceBillCameraCard (ephemeral, no photo saved), v4 PasteSheet rewrite (D8 local-first mic + D16 fuel/service found cards only), deleted VoiceCaptureControls.kt, and fixed CaptureTextNumbers same-line currency whitespace & Bangla label word boundaries (fixing oil-filter price exclusion). All 10 portable gates, Gradle unit tests, iOS compile, Android debug APK, and architecture_cycles passed; runtime and human Bangla review remain open."
+            },
+            {
+              "at": "2026-11-19T09:56:26+00:00",
+              "text": "Final Stage 7 regression verification passed (all portable gates incl. --fuel=0 and fuel_policy_literals, Fuel/Service/OCR/Spoken unit suites, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Final Stage 7 regression verification passed (all portable gates incl. --fuel=0 and fuel_policy_literals, Fuel/Service/OCR/Spoken unit suites, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Final Stage 7 regression verification passed (all portable gates incl. --fuel=0 and fuel_policy_literals, Fuel/Service/OCR/Spoken unit suites, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            }
+          ]
+        },
+        {
+          "id": "P17-06",
+          "title": "Documents wallet, BRTA cards and document sheets",
+          "size": 5,
+          "depends_on": [
+            "P17-02"
+          ],
+          "acceptance": [
+            "Section 8 of V4-PORT-PLAN.md is implemented and its checklist is ticked.",
+            "Adding a document of an existing kind updates it and keeps pages, originals and renewal history; number and holder are optional."
+          ],
+          "verification": [
+            "Domain and compatibility tests for document upsert; runtime wallet, add, view and renewal flows on Android and iOS."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "design",
+            "android_runtime",
+            "ios_runtime"
+          ],
+          "status": "planned",
+          "owner": "",
+          "started_at": "",
+          "completed_at": null,
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-19T09:20:43+00:00",
+              "text": "Stage 4 (Phase 5 Documents) implemented and verified: DocumentWalletStack, BrtaCardArt, GenericDocArt, ExpiryChip, NextRenewalCard, DocAddSheet (3-step + upsertDocumentByKind), DocViewSheet (brightness + delete/Undo), RenewalSheet (collapsed checklist + fee/receipt), and removed obsolete DocumentWallet/DocumentFlow/UI duplicates. All 10 portable gates, Gradle testDebugUnitTest (incl. DocumentUpsertTest), compileKotlinIosSimulatorArm64, architectureModuleEdges, assembleDebug, and architecture_cycles passed; Android/iOS runtime and named human Bangla review remain open."
+            },
+            {
+              "at": "2026-11-19T09:56:26+00:00",
+              "text": "Final Stage 7 regression verification passed (all portable gates, DocumentUpsertTest 6/6, DocumentCaptureTest 15/15, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Final Stage 7 regression verification passed (all portable gates, DocumentUpsertTest 6/6, DocumentCaptureTest 15/15, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Final Stage 7 regression verification passed (all portable gates, DocumentUpsertTest 6/6, DocumentCaptureTest 15/15, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            }
+          ]
+        },
+        {
+          "id": "P17-07",
+          "title": "Records, profile, settings, privacy and backup sheets",
+          "size": 8,
+          "depends_on": [
+            "P17-02"
+          ],
+          "acceptance": [
+            "Section 9 of V4-PORT-PLAN.md is implemented and its checklist is ticked.",
+            "Budget and allowance data stay readable in backups with no UI."
+          ],
+          "verification": [
+            "Runtime cost card, timeline, swipe delete, profile groups and every settings section on Android and iOS."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "design",
+            "android_runtime",
+            "ios_runtime"
+          ],
+          "status": "planned",
+          "owner": "",
+          "started_at": "",
+          "completed_at": null,
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-19T09:21:08+00:00",
+              "text": "Starting Stage 5 (Phase 6: History, CostInsights, WorkLedger, Me, SettingsSheet, Privacy, Recovery, CloudBackup; P17-02 remains in_progress pending runtime checks so P17-07 stays claimed via notes)."
+            },
+            {
+              "at": "2026-11-19T09:38:47+00:00",
+              "text": "Stage 5 (Phase 6 History + Me) implemented and verified: CostInsightsCard, SwipeRevealRow, HistoryScreen (sticky months, kv details, fuel/service edit, swipe delete + Undo, JumpToTopPill), WorkLedgerCard/Sheet (D13), MeScreen 3-group layout + SettingsSheet sections (D12/D15/D17), PrivacySheet/RecoverySheet footers, single-card CloudBackupSheet, removed BudgetSheet/CostOverview/SettingsActionSections/SettingsAppearanceSections/SettingsProfileSection. All 10 portable gates, Gradle testDebugUnitTest (incl. HistoryFilterTest), compileKotlinIosSimulatorArm64, architectureModuleEdges, assembleDebug, and architecture_cycles passed; Android/iOS runtime and named human Bangla review remain open."
+            },
+            {
+              "at": "2026-11-19T09:56:26+00:00",
+              "text": "Final Stage 7 regression verification passed (all portable gates, HistoryFilterTest 3/3, WorkLedgerTest 3/3, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Final Stage 7 regression verification passed (all portable gates, HistoryFilterTest 3/3, WorkLedgerTest 3/3, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Final Stage 7 regression verification passed (all portable gates, HistoryFilterTest 3/3, WorkLedgerTest 3/3, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            }
+          ]
+        },
+        {
+          "id": "P17-08",
+          "title": "Cleanup, localization parity and v4 release evidence",
+          "size": 3,
+          "depends_on": [
+            "P17-03",
+            "P17-04",
+            "P17-05",
+            "P17-06",
+            "P17-07"
+          ],
+          "acceptance": [
+            "Every remove list in V4-PORT-PLAN.md is applied and the UI literal baseline is regenerated.",
+            "English and Bangla resources are in parity and a named reviewer signs off the Bangla copy."
+          ],
+          "verification": [
+            "Full portable and workstation sets, Android and iOS runtime with language switch, dark mode, text scale 1.3 and reduced motion."
+          ],
+          "required_evidence": [
+            "implementation",
+            "verification",
+            "design",
+            "android_runtime",
+            "ios_runtime",
+            "review"
+          ],
+          "status": "planned",
+          "owner": "",
+          "started_at": "",
+          "completed_at": null,
+          "blocker": "",
+          "notes": [
+            {
+              "at": "2026-11-19T09:56:26+00:00",
+              "text": "Stage 7 cleanup, ratchet tightening & final verification completed on working tree: removed unused inspection_* and garage_jobs_filter_desc strings + dead RenewalReminderControl, removed resolved MotoVault.kt entry from responsibility-baseline.json, ran compare_ui_literal_head (9->1), all 10 portable gates (63 Python tests OK), full Gradle workstation + privacyProbe builds (77 suites/399 tests pass), architecture_cycles, and read-only adb/simctl checks (none attached/booted). Open gates: Android/iOS runtime checks, side-by-side design parity screenshots, and named human Bangla copy review."
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "implementation",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Stage 7 cleanup, ratchet tightening & final verification completed on working tree: removed unused inspection_* and garage_jobs_filter_desc strings + dead RenewalReminderControl, removed resolved MotoVault.kt entry from responsibility-baseline.json, ran compare_ui_literal_head (9->1), all 10 portable gates (63 Python tests OK), full Gradle workstation + privacyProbe builds (77 suites/399 tests pass), architecture_cycles, and read-only adb/simctl checks (none attached/booted). Open gates: Android/iOS runtime checks, side-by-side design parity screenshots, and named human Bangla copy review.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            },
+            {
+              "kind": "verification",
+              "reference": "docs/roadmap/evidence/P17-v4-port-verification.md",
+              "summary": "Stage 7 cleanup, ratchet tightening & final verification completed on working tree: removed unused inspection_* and garage_jobs_filter_desc strings + dead RenewalReminderControl, removed resolved MotoVault.kt entry from responsibility-baseline.json, ran compare_ui_literal_head (9->1), all 10 portable gates (63 Python tests OK), full Gradle workstation + privacyProbe builds (77 suites/399 tests pass), architecture_cycles, and read-only adb/simctl checks (none attached/booted). Open gates: Android/iOS runtime checks, side-by-side design parity screenshots, and named human Bangla copy review.",
+              "at": "2026-11-19T09:56:26+00:00",
+              "revision": "3754157"
+            }
+          ]
+        }
+      ],
+      "architecture_application": [
+        "Keep durable writes in VaultState, VaultWriter and FuelWorkflow; no storage-to-UI imports.",
+        "Respect the 400-line file and 80-line function thresholds; split by responsibility as listed in the plan.",
+        "Declare all v4 copy in English and Bangla resources with no inline UI literals."
       ]
     }
   ],
@@ -11607,6 +12098,182 @@
       "to": "done",
       "note": "Android physical pass verified on Motorola Edge 50 Fusion; iOS physical deferred under WD-01",
       "revision": "22868e0"
+    },
+    {
+      "at": "2026-11-17T11:15:37+00:00",
+      "task": "P17-01",
+      "from": "planned",
+      "to": "planned",
+      "note": "Added P17 literal v4 port phase from docs/roadmap/V4-PORT-PLAN.md after the Gemini attempt was parked on wip/gemini-v4-attempt.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-17T11:15:41+00:00",
+      "task": "P17-01",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Parked Gemini attempt on wip/gemini-v4-attempt; salvaging per V4-PORT-PLAN.md section 3",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-17T11:18:04+00:00",
+      "task": "P17-01",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Salvaged catalogue (94 variants matching catalog.ts), 89 bike images synced byte-for-byte to v4, BRTA backgrounds, icons, SpokenNumberParser with nukta fix, v4 design contract and fingerprint. Portable gates, 358 unit tests, iOS compile and assembleDebug pass. Uncommitted.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T01:16:28+00:00",
+      "task": "P17-01",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Added fi_delete.svg and fi_lock-plain.svg via build-v3-icons.mjs and salvaged VoiceCaptureActions.anyAvailable.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T01:19:02+00:00",
+      "task": "P17-01",
+      "from": "in_progress",
+      "to": "done",
+      "note": "Baseline verified: wip/gemini-v4-attempt parked at bdee299; 58 icons, 94 catalogue variants, 89 bike PNGs, BRTA BGs, SpokenNumberParser, VoiceCapture.anyAvailable, portable gates, testDebugUnitTest, and compileKotlinIosSimulatorArm64 pass.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T01:19:02+00:00",
+      "task": "P17-02",
+      "from": "planned",
+      "to": "in_progress",
+      "note": "Starting Phase 1 Foundation: tokens, radial wash, sheet drag/compact, toast host, entry controls, keypad, navigation shortcut pill, QuickAdd, PrivacyGate, sheet host split, and per-area strings.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T01:45:38+00:00",
+      "task": "P17-02",
+      "from": "in_progress",
+      "to": "in_progress",
+      "note": "Stage 1 foundation implemented and verified with all portable gates, Android/iOS unit tests and compilation, module cycles, and debug APK build; runtime checks pending.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T02:14:10+00:00",
+      "task": "P17-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "Stage 2 (Phase 3 Garage UI, sheets, and GarageHomeModelTest) implemented and verified across all portable gates, unit tests, iOS compile, Android debug APK, and architecture cycle checks; runtime checks and human Bangla review remain open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T02:30:53+00:00",
+      "task": "P17-05",
+      "from": "planned",
+      "to": "planned",
+      "note": "Stage 3a (Phase 4a Fuel + Expense UI, SpokenFuelParser, ExpenseRules zero rejection, and unit tests) passed portable + workstation gates; 4b Service, 4c Capture, runtime checks and Bangla review remain open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T02:46:32+00:00",
+      "task": "P17-05",
+      "from": "planned",
+      "to": "planned",
+      "note": "Stage 3b (Phase 4b Service domain updateServiceVisit + C3 tests + v4 ServiceSheet/bill/pickers/SmartInput; replaced removed SmartServiceDraft.kt in P07/P10 existing_paths with CaptureServiceParser.kt and ServiceSheet.kt) passed portable + workstation gates; 4c Capture, runtime checks and Bangla review remain open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T08:52:59+00:00",
+      "task": "P17-05",
+      "from": "planned",
+      "to": "planned",
+      "note": "Stage 3c (Phase 4c Capture) implemented and verified: root-owned ephemeral LocalOdometerCapture cleanup across sheets/onboarding, shared dark OcrScanCard, PumpMeterOcrParser + FuelPumpCameraCard (price confirm preserved), ServiceBillOcrParser + ServiceBillCameraCard (ephemeral, no photo saved), v4 PasteSheet rewrite (D8 local-first mic + D16 fuel/service found cards only), deleted VoiceCaptureControls.kt, and fixed CaptureTextNumbers same-line currency whitespace & Bangla label word boundaries (fixing oil-filter price exclusion). All 10 portable gates, Gradle unit tests, iOS compile, Android debug APK, and architecture_cycles passed; runtime and human Bangla review remain open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T09:20:43+00:00",
+      "task": "P17-06",
+      "from": "planned",
+      "to": "planned",
+      "note": "Stage 4 (Phase 5 Documents) implemented and verified: DocumentWalletStack, BrtaCardArt, GenericDocArt, ExpiryChip, NextRenewalCard, DocAddSheet (3-step + upsertDocumentByKind), DocViewSheet (brightness + delete/Undo), RenewalSheet (collapsed checklist + fee/receipt), and removed obsolete DocumentWallet/DocumentFlow/UI duplicates. All 10 portable gates, Gradle testDebugUnitTest (incl. DocumentUpsertTest), compileKotlinIosSimulatorArm64, architectureModuleEdges, assembleDebug, and architecture_cycles passed; Android/iOS runtime and named human Bangla review remain open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T09:21:08+00:00",
+      "task": "P17-07",
+      "from": "planned",
+      "to": "planned",
+      "note": "Starting Stage 5 (Phase 6: History, CostInsights, WorkLedger, Me, SettingsSheet, Privacy, Recovery, CloudBackup; P17-02 remains in_progress pending runtime checks so P17-07 stays claimed via notes).",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T09:38:47+00:00",
+      "task": "P17-07",
+      "from": "planned",
+      "to": "planned",
+      "note": "Stage 5 (Phase 6 History + Me) implemented and verified: CostInsightsCard, SwipeRevealRow, HistoryScreen (sticky months, kv details, fuel/service edit, swipe delete + Undo, JumpToTopPill), WorkLedgerCard/Sheet (D13), MeScreen 3-group layout + SettingsSheet sections (D12/D15/D17), PrivacySheet/RecoverySheet footers, single-card CloudBackupSheet, removed BudgetSheet/CostOverview/SettingsActionSections/SettingsAppearanceSections/SettingsProfileSection. All 10 portable gates, Gradle testDebugUnitTest (incl. HistoryFilterTest), compileKotlinIosSimulatorArm64, architectureModuleEdges, assembleDebug, and architecture_cycles passed; Android/iOS runtime and named human Bangla review remain open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T09:38:47+00:00",
+      "task": "P17-03",
+      "from": "planned",
+      "to": "planned",
+      "note": "Starting Stage 6 (Phase 2 Onboarding, single-source BikeCatalogueFamilies, and optional Ride.cc C3 backup compatibility).",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T09:56:25+00:00",
+      "task": "P17-02",
+      "from": "in_progress",
+      "to": "in_review",
+      "note": "Stage 1 Foundation + Stage 7 final cleanup verified across all 10 portable gates, compare_ui_literal_head, 77 unit suites (399 tests), iOS Simulator arm64 compile, Android debug/privacyProbe builds, and architecture cycles. Runtime Android/iOS walkthrough and visual comparison remain open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T09:56:26+00:00",
+      "task": "P17-03",
+      "from": "planned",
+      "to": "planned",
+      "note": "Stage 6 (Phase 2 Onboarding + BikeCatalogueFamilies consolidation + Ride.cc C3) verified: OnboardingDraft OWNER_ESTIMATE & VaultChip fixes applied; 77 unit suites (incl. OnboardingDraftTest 3/3, BackupPayloadCompatibilityTest 9/9, BackupRideLogAdapterTest 3/3), iOS arm64 compile, Android debug/privacyProbe builds, and all portable gates pass. Android/iOS runtime remains open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T09:56:26+00:00",
+      "task": "P17-04",
+      "from": "planned",
+      "to": "planned",
+      "note": "Final Stage 7 regression verification passed (all portable gates, GarageHomeModelTest 5/5, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T09:56:26+00:00",
+      "task": "P17-05",
+      "from": "planned",
+      "to": "planned",
+      "note": "Final Stage 7 regression verification passed (all portable gates incl. --fuel=0 and fuel_policy_literals, Fuel/Service/OCR/Spoken unit suites, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T09:56:26+00:00",
+      "task": "P17-06",
+      "from": "planned",
+      "to": "planned",
+      "note": "Final Stage 7 regression verification passed (all portable gates, DocumentUpsertTest 6/6, DocumentCaptureTest 15/15, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T09:56:26+00:00",
+      "task": "P17-07",
+      "from": "planned",
+      "to": "planned",
+      "note": "Final Stage 7 regression verification passed (all portable gates, HistoryFilterTest 3/3, WorkLedgerTest 3/3, iOS arm64 compile, debug/privacyProbe APKs). Android/iOS runtime & design checks remain open.",
+      "revision": "3754157"
+    },
+    {
+      "at": "2026-11-19T09:56:26+00:00",
+      "task": "P17-08",
+      "from": "planned",
+      "to": "planned",
+      "note": "Stage 7 cleanup, ratchet tightening & final verification completed on working tree: removed unused inspection_* and garage_jobs_filter_desc strings + dead RenewalReminderControl, removed resolved MotoVault.kt entry from responsibility-baseline.json, ran compare_ui_literal_head (9->1), all 10 portable gates (63 Python tests OK), full Gradle workstation + privacyProbe builds (77 suites/399 tests pass), architecture_cycles, and read-only adb/simctl checks (none attached/booted). Open gates: Android/iOS runtime checks, side-by-side design parity screenshots, and named human Bangla copy review.",
+      "revision": "3754157"
     }
   ]
 }

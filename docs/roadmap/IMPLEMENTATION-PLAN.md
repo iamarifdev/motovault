@@ -2,7 +2,7 @@
 
 <!-- Generated from roadmap.json by tools/roadmap.py. -->
 
-This plan implements the crucial and additional Bangladesh ownership features while extending `design/app-ui-v3/`. It authorizes planning; it does not claim those features are implemented.
+This plan implements the crucial and additional Bangladesh ownership features while extending `design/app-ui-v4/` (built on `design/app-ui-v3/`). It authorizes planning; it does not claim those features are implemented.
 
 Read [the design contract](DESIGN-CONTRACT.md), [architecture contract](ARCHITECTURE-CONTRACT.md), [baseline findings](BASELINE.md), [progress](PROGRESS.md) and [tracking instructions](README.md) together.
 
@@ -304,7 +304,7 @@ Required completion evidence: implementation, verification, design.
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/screens/Me.tsx`, `design/app-ui-v3/src/screens/Vault.tsx`, `design/app-ui-v3/src/sheets/DocViewSheet.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentWallet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/InspectionBrightness.kt`, `composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCapture.kt`, `composeApp/src/iosMain/kotlin/com/motovault/app/ui/DocumentCapture.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentImages.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/documents/DocumentWalletStack.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/InspectionBrightness.kt`, `composeApp/src/androidMain/kotlin/com/motovault/app/ui/DocumentCapture.kt`, `composeApp/src/iosMain/kotlin/com/motovault/app/ui/DocumentCapture.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/privacy/VaultAccessPolicy.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/privacy/PrivacySheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/storage/security/SecureAssetStore.kt`.
 
 **Data and migration:** Version privacy preferences. Separate device-bound keys from portable backup secrets. Encrypt sensitive local assets only through a resumable, validated migration; document any plaintext database metadata remaining.
@@ -996,7 +996,7 @@ Required completion evidence: implementation, verification, design, review.
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/screens/Vault.tsx`, `design/app-ui-v3/src/sheets/DocAddSheet.tsx`, `design/app-ui-v3/src/sheets/DocViewSheet.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentFlow.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentWallet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentImages.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/documents/DocumentWalletStack.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/OwnershipForms.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/documents/RenewalChecklist.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/documents/RenewalSheet.kt`.
 
 **Data and migration:** Keep person-level licence documents separate from bike ownership scope. Append renewal events and receipts; preserve prior originals and expiry history instead of overwriting the only copy.
@@ -1241,7 +1241,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/sheets/OdometerSheet.tsx`, `design/app-ui-v3/src/sheets/PasteSheet.tsx`, `design/app-ui-v3/src/sheets/ServiceSheet.tsx`, `design/app-ui-v3/src/components/SmartInput.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartParse.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartParse.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/CaptureServiceParser.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/DocumentCapture.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/capture/QuickEntryDraft.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/OdometerCapture.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/capture/VoiceEntry.kt`.
 
 **Data and migration:** Persist only confirmed records. Draft source/confidence is bounded metadata; images/audio retention is explicit. Share targets must select the intended bike and cannot bypass a locked vault.
@@ -1642,7 +1642,7 @@ Required completion evidence: verification, design, android_runtime, ios_runtime
 **Implementation map:**
 
 - Prototype references: `design/app-ui-v3/src/sheets/ServiceSheet.tsx`, `design/app-ui-v3/src/screens/History.tsx`.
-- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/SmartServiceDraft.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/ServiceCatalogue.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/maintenance/ServiceSheet.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/domain/vault/VaultState.kt`.
 - Proposed sources: `composeApp/src/commonMain/kotlin/com/motovault/app/domain/repairs/RepairCase.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/repairs/RepairDetailsSheet.kt`.
 
 **Data and migration:** Add owner-managed contacts, quotations, repair cases and warranty dates linked to bike/service/part IDs. Distinguish quoted cost from actual paid expense.
@@ -2432,6 +2432,182 @@ Required completion evidence: plan, review.
 - Support instructions, source freshness ownership and measured release/pilot outcomes are assigned.
 
 **Risks and decisions:** Do not mark an optional service enabled merely to make the roadmap percentage increase. Treat a deferred feature as visible unshipped scope.
+
+<a id="p17"></a>
+
+## P17: Literal v4 UI port
+
+**Priority:** P1 | **Scope:** core | **Current status:** In progress
+
+**Outcome:** composeApp matches the design/app-ui-v4 code screen by screen, with nothing extra and nothing missing.
+
+**Why now:** An earlier attempt ported v4 from summaries and drifted; this phase ports from the TSX and CSS code with per-screen checklists.
+
+**Entry dependencies:** P08-02, P08-05, P16-01.
+
+**V3 placement and interaction:** Follow docs/roadmap/V4-PORT-PLAN.md. The spec is the code in design/app-ui-v4/src; owner decisions D1-D18 in that plan override literal v4 only where recorded.
+
+**Implementation map:**
+
+- Prototype references: `design/app-ui-v4/src/App.tsx`, `design/app-ui-v4/src/styles/base.css`, `design/app-ui-v4/src/styles/app.css`, `design/app-ui-v4/src/screens/Home.tsx`, `design/app-ui-v4/src/screens/Onboarding.tsx`, `design/app-ui-v4/src/screens/Vault.tsx`, `design/app-ui-v4/src/screens/History.tsx`, `design/app-ui-v4/src/screens/Me.tsx`.
+- Existing native sources: `composeApp/src/commonMain/kotlin/com/motovault/app/ui/MotoVault.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/VaultSheetHost.kt`, `composeApp/src/commonMain/kotlin/com/motovault/app/ui/components/Sheet.kt`, `docs/roadmap/V4-PORT-PLAN.md`.
+- Proposed sources: None.
+
+**Data and migration:** Only new persisted field is optional Ride.cc. No stored ID changes. Budget, allowance, breakdown contacts, seasonal state and factory profile fields stay readable in backups even where their UI is removed.
+
+**Architecture application:**
+
+- Keep durable writes in VaultState, VaultWriter and FuelWorkflow; no storage-to-UI imports.
+- Respect the 400-line file and 80-line function thresholds; split by responsibility as listed in the plan.
+- Declare all v4 copy in English and Bangla resources with no inline UI literals.
+
+**Tasks:**
+
+### P17-01: Baseline: park the Gemini attempt and salvage verified parts
+
+Status: **Done** | Size: **2** | Owner: Md. Ariful Islam.
+
+Additional task dependencies: None.
+
+Acceptance criteria:
+
+- Gemini's uncommitted v4 attempt is preserved on wip/gemini-v4-attempt and the port restarts from 3754157.
+- Only the salvage list in V4-PORT-PLAN.md section 3 is taken; bike images match design/app-ui-v4/public/bikes byte for byte and catalogue names and labels match catalog.ts.
+- DESIGN-CONTRACT.md and design-reference-v4.json describe v4 from its code, not from CHANGELOG-V4.md.
+
+Verification:
+
+- Portable gates, testDebugUnitTest and compileKotlinIosSimulatorArm64 pass on the baseline branch.
+
+Required completion evidence: implementation, verification.
+
+### P17-02: Foundation: tokens, brand wash, sheet, toast, keypad, entry controls and navigation
+
+Status: **In review** | Size: **8** | Owner: Md. Ariful Islam.
+
+Additional task dependencies: P17-01.
+
+Acceptance criteria:
+
+- Section 4 of V4-PORT-PLAN.md is implemented with the listed values and its checklist is ticked against the running prototype.
+- VaultSheetHost is split by area and MotoVault.kt, Sheet.kt and BottomNavigation.kt stay within the size rule.
+- Strings that said কাগজ say ডকুমেন্ট; no new inline literals.
+
+Verification:
+
+- Side-by-side screenshots of tabs, Quick Add, shortcut pill, a sheet and a toast in light, dark and both languages on Android and iOS.
+
+Required completion evidence: implementation, verification, design, android_runtime, ios_runtime.
+
+### P17-03: Onboarding and single-source bike catalogue
+
+Status: **Planned** | Size: **5** | Owner: unassigned.
+
+Additional task dependencies: P17-02.
+
+Acceptance criteria:
+
+- Section 5 of V4-PORT-PLAN.md is implemented and its checklist is ticked.
+- BikeCatalogueFamilies is the single catalogue source; stored model ids are unchanged; optional Ride.cc has a backup compatibility fixture.
+
+Verification:
+
+- Unit tests for OnboardingDraft mapping; runtime walkthrough of all three steps, camera, voice and skip on Android and iOS.
+
+Required completion evidence: implementation, verification, design, android_runtime, ios_runtime.
+
+### P17-04: Garage showroom, jobs list and garage sheets
+
+Status: **Planned** | Size: **8** | Owner: unassigned.
+
+Additional task dependencies: P17-02.
+
+Acceptance criteria:
+
+- Section 6 of V4-PORT-PLAN.md is implemented and its checklist is ticked.
+- GarageHomeModel is pure and unit-tested; gauge reset and last-done edit write no history log and support Undo.
+
+Verification:
+
+- Runtime checks with one and three bikes, all health states and the jobs filters on Android and iOS.
+
+Required completion evidence: implementation, verification, design, android_runtime, ios_runtime.
+
+### P17-05: Entry sheets: fuel, expense, service and capture
+
+Status: **Planned** | Size: **8** | Owner: unassigned.
+
+Additional task dependencies: P17-02.
+
+Acceptance criteria:
+
+- Section 7 of V4-PORT-PLAN.md is implemented and its checklist is ticked.
+- Service edit keeps visit state, workshop, repair case and warranty, and saves visits with engine oil, custom lines and quotations.
+- Expense amount must be above zero.
+
+Verification:
+
+- Domain tests for service edit and expense rules; runtime fuel, expense and service flows on Android and iOS.
+
+Required completion evidence: implementation, verification, design, android_runtime, ios_runtime.
+
+### P17-06: Documents wallet, BRTA cards and document sheets
+
+Status: **Planned** | Size: **5** | Owner: unassigned.
+
+Additional task dependencies: P17-02.
+
+Acceptance criteria:
+
+- Section 8 of V4-PORT-PLAN.md is implemented and its checklist is ticked.
+- Adding a document of an existing kind updates it and keeps pages, originals and renewal history; number and holder are optional.
+
+Verification:
+
+- Domain and compatibility tests for document upsert; runtime wallet, add, view and renewal flows on Android and iOS.
+
+Required completion evidence: implementation, verification, design, android_runtime, ios_runtime.
+
+### P17-07: Records, profile, settings, privacy and backup sheets
+
+Status: **Planned** | Size: **8** | Owner: unassigned.
+
+Additional task dependencies: P17-02.
+
+Acceptance criteria:
+
+- Section 9 of V4-PORT-PLAN.md is implemented and its checklist is ticked.
+- Budget and allowance data stay readable in backups with no UI.
+
+Verification:
+
+- Runtime cost card, timeline, swipe delete, profile groups and every settings section on Android and iOS.
+
+Required completion evidence: implementation, verification, design, android_runtime, ios_runtime.
+
+### P17-08: Cleanup, localization parity and v4 release evidence
+
+Status: **Planned** | Size: **3** | Owner: unassigned.
+
+Additional task dependencies: P17-03, P17-04, P17-05, P17-06, P17-07.
+
+Acceptance criteria:
+
+- Every remove list in V4-PORT-PLAN.md is applied and the UI literal baseline is regenerated.
+- English and Bangla resources are in parity and a named reviewer signs off the Bangla copy.
+
+Verification:
+
+- Full portable and workstation sets, Android and iOS runtime with language switch, dark mode, text scale 1.3 and reduced motion.
+
+Required completion evidence: implementation, verification, design, android_runtime, ios_runtime, review.
+
+**Phase exit gate:**
+
+- Every phase checklist in V4-PORT-PLAN.md is ticked against the prototype with the same fixture data.
+- All gates for the change class pass on Android and iOS.
+
+**Risks and decisions:** Drift from summaries instead of code; small phone widths below the prototype's 440 wide frame; removing shipped features changes what users see.
 
 ## Release evidence checklist
 

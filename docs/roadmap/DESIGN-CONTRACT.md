@@ -1,35 +1,32 @@
-# MotoVault v3 design contract
+# MotoVault v4 design contract
 
-Active reference: [app-ui-v3](../../design/app-ui-v3/README.md), as supplied by the
-owner and already applied in commit `50eda3a`. New features extend this design.
-The approved exception is the existing native bike-brand logos during brand
-selection. The source fingerprint is [design-reference.json](design-reference.json).
-It detects reference drift; matching hashes do not establish native visual parity.
+Active reference: [app-ui-v4](../../design/app-ui-v4/README.md) (commits `5118695`,
+`da622bf`, `3754157`), built on [app-ui-v3](../../design/app-ui-v3/README.md). The spec is
+the TSX and CSS code in `design/app-ui-v4/src/`. `CHANGELOG-V4.md` and the prototype's
+DevPanel text are summaries and disagree with the code in places; when they differ, the
+code wins. The port plan, per-screen checklists and open owner decisions are in
+[V4-PORT-PLAN.md](V4-PORT-PLAN.md). The approved exception is the existing native
+bike-brand logos during brand selection. The source fingerprint is
+[design-reference-v4.json](design-reference-v4.json) (v3 history: [design-reference.json](design-reference.json)). Matching hashes do not establish native visual parity.
 
 ## Navigation and placement
 
-Keep Home/গ্যারেজ, Vault/কাগজপত্র, History/ইতিহাস and Me/আমি with the central add
-action accessible from every tab. The urgent next task and quick actions stay
-above the bike image. Avoid adding a top-level tab for each new feature.
+Keep four tabs, গ্যারেজ, ডকুমেন্ট, রেকর্ড and প্রোফাইল, with the central add action on
+every tab. Tapping `+` opens Quick Add; holding it for 360ms opens a shortcut pill
+(তেল, সার্ভিস, মিটার রিডিং) over a scrim. Avoid adding a top-level tab for each new feature.
 
-| Planned feature | V3 entry point | Extension |
+| Area | v4 entry point (code) | Shape |
 | --- | --- | --- |
-| Reminders | Home NextUp, Vault expiry, Me switches | Correct settings, permissions, snooze and targeted deep links |
-| Privacy | Me and document detail | Privacy sheet, unlock boundary and selected-document inspection |
-| Local/cloud backup | Me | Backup status card, archive review/restore sheets and native file actions |
-| Bangladesh maintenance | Onboarding, gauge detail, service sheet | Source/manual, baseline certainty and specific care actions |
-| BRTA renewal | Vault document detail | Checklist, official verification, new expiry and receipt review |
-| Cost/budget insights | History summary/timeline | Period/category chips, cost details and expense sheet |
-| Photo/share/voice capture | Existing add menu and entry sheets | Native capture feeds the same reviewed draft |
-| Multiple bikes | Home bike header and Me | Selector sheet, add and archive using native brand logos |
-| Workshop/repair/warranty | Service sheet and expanded history | Optional details, recent workshop and linked repair timeline |
-| Handover/passport | History | Select, redact, preview and native share |
-| Widget | Me widget setup | Real native host widgets with reviewed deep links |
-| Seasonal/breakdown help | Home care card and Help sheet | Source-dated checklist, selected contacts and deliberate location share |
-| Rider earnings | Opt-in Me setting and History filter | Optional quick-entry and work summary, without changing default navigation |
+| Brand wash | `App.tsx`, `base.css`, `app.css` | Radial wash on all four tabs and sheets when a bike exists; never during onboarding or add-bike |
+| Garage | `Home.tsx`, `BikeShowroom.tsx` | Showroom (name, health pill, swipe carousel, odometer, stats strip), 4 quick actions, merged jobs list (wear and renewals), seasonal pill |
+| Onboarding | `Onboarding.tsx`, `catalog.ts` | Brand grid with live preview, model family rows with inline versions, custom bike card, odometer with camera and voice, 3 service-timing chips, skip |
+| Entry sheets | `FuelSheet.tsx`, `ServiceSheet.tsx`, `ExpenseSheet.tsx`, `OdometerSheet.tsx` | Header camera/voice actions, compact amount card, chip line, pickers that swap sheet content, odometer confirm before save |
+| Documents | `Vault.tsx`, `DocCard.tsx`, doc sheets | Overlapping wallet stack, BRTA card template for licence and registration, add flow type, photo, expiry |
+| Records | `History.tsx`, `CostInsights.tsx` | Cost card with chips and stacked bar, work-ledger card second, sticky months, kv details, swipe reveals delete, jump to top |
+| Profile | `Me.tsx`, `SettingsSheet.tsx` | Profile card plus three grouped lists opening focused settings sections, privacy, backup and cloud sheets with pinned footers |
 
-Before implementing a new visual flow, add its interactive states to v3 and
-record a prototype walkthrough alongside the task. Existing camera/share/voice/
+Before implementing a new visual flow, add its interactive states to `design/app-ui-v4`
+and record a prototype walkthrough alongside the task. Existing camera/share/voice/
 widget mocks are interaction references, not proof of native functionality.
 
 ## Tokens and assets
@@ -96,10 +93,10 @@ widget mocks are interaction references, not proof of native functionality.
 
 Reference `src/lib/motion.ts`, `components/Sheet.tsx`, `components/Toast.tsx`,
 `components/Gauge.tsx`, `components/TabBar.tsx` and the current native `ui/Motion.kt`.
-Page/expansion/sheet timings come from Sky; v3 adds gesture springs, gauge sweeps,
-count-ups and list transitions. The captured reference uses sheet spring
+Page/expansion/sheet timings come from Sky; v3 and v4 add gesture springs, wear-bar
+sweeps, the showroom carousel spring, the shortcut pill, count-ups and list transitions. The captured reference uses sheet spring
 420/40/0.9 (stiffness/damping/mass), press 600/32, list 500/38, marker 520/36,
-and a 0.6-second gauge sweep. These are reference parameters, not proof that a
+and a 0.6-second sweep. These are reference parameters, not proof that a
 different rendering engine feels identical with the same raw numbers.
 
 Reuse the established timing/gesture intent and judge native behavior with

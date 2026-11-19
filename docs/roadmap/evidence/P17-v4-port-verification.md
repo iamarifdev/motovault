@@ -1,0 +1,56 @@
+# P17-02..P17-08 Verification Report — MotoVault v4 Literal Port
+
+- Task and acceptance criteria:
+  - Scope: `P17-02` (Phase 1 Foundation), `P17-03` (Phase 2 Onboarding & Single-Source Catalogue + `Ride.cc` C3), `P17-04` (Phase 3 Home / Garage), `P17-05` (Phase 4/4a/4b/4c Entries & Capture), `P17-06` (Phase 5 Documents), `P17-07` (Phase 6 History & Me), `P17-08` (Phase 7 Cleanup, Remove Lists, Localization Parity & Evidence) implementing `docs/roadmap/V4-PORT-PLAN.md` with recommended defaults D1–D18.
+  - Acceptance status: Portable and workstation compilation/unit-test/architecture/localization-parity/ratchet gates passed on the uncommitted working tree. Android and iOS runtime verification, side-by-side prototype/native screenshots across light/dark/both languages/both digit styles/`1.3` text scale/reduced motion, and named human Bangla copy review (`P08-05` / `P17-08`) remain **OPEN** and unverified in this environment. No task from `P17-02..P17-08` is marked `done`.
+- Source commit and working-diff identity:
+  - Branch: `feat/v4-literal-port`
+  - Base `HEAD`: `37541576a2fc6870590159abe9a82ba1a2bf4f0a` (uncommitted working tree; not a clean `HEAD` build)
+  - Working-tree tracked diff SHA-256 (after Stage 7 code/resource edits, prior to roadmap tracker metadata updates): `6ccb67e621e884d38d36fe44f2dfa47aed7341173f50dac4c1b911e5d774a16d` (`git status --short`: 311 entries across modified and new files)
+- Toolchain, platform, OS and device:
+  - OS: macOS `27.2.1` (Build `26B131`)
+  - JDK: `openjdk version "17.0.20.1" 2026-08-18`
+  - Python: `Python 3.14.7`
+  - Gradle: `8.10.2` (offline build against local Sky Design System checkout)
+  - Read-only Android device check (`adb devices`): exited `0`, `List of devices attached` empty (no emulator or phone attached; none booted per `AGENTS.md`)
+  - Read-only iOS simulator check (`xcrun simctl list devices booted`): exited `0`, `-- iOS 27.0 --` empty (no booted iOS 27 simulator; none booted per `AGENTS.md`)
+- Commands, exit status and artifacts:
+  - Portable gates & comparison (sandboxed, after final code/resource edit):
+    - `python3 tools/check_agent_docs.py`: exit `0` (`agent docs consistent`)
+    - `python3 tools/ui_literal_gate.py`: exit `0` (`Direct UI literal baseline matches (1 existing occurrences).` — `components/Keypad.kt` decimal separator only; `OnboardingSteps.kt` entry removed)
+    - `python3 tools/ui_literal_gate.py --fuel`: exit `0` (`Direct UI literal baseline matches (0 existing occurrences).`)
+    - `python3 tools/compare_ui_literal_head.py`: exit `0` (`HEAD: 9; working tree: 1; added: 0; removed: 8`)
+    - `python3 tools/bangla_copy_lint.py`: exit `0` (`Bangla copy style baseline matches (15 regression phrases).`)
+    - `python3 tools/responsibility_gate.py`: exit `0` (`Responsibility baseline matches (2 files, 5 functions).` — `MotoVault.kt` function entry removed from baseline)
+    - `python3 tools/architecture_dependencies.py`: exit `0` (`Dependency import baseline matches (0 existing violations).`)
+    - `python3 tools/architecture_package_cycles.py`: exit `0` (`No shared domain/application package cycles (20 packages, 35 edges).`)
+    - `python3 tools/fuel_policy_literals.py`: exit `0` (`Fuel domain numeric policy check passed.`)
+    - `python3 -m unittest discover -s tools/tests -p 'test_*.py'`: exit `0` (`Ran 63 tests in 1.003s`, `OK`, includes `test_localization_resources.py` EN/BN key, placeholder, and plural parity checks)
+    - `python3 tools/roadmap.py check`: exit `0` (`Roadmap valid: 20 phases, 101 tasks; generated documents current.`)
+  - Workstation Gradle & probe builds (unsandboxed because Gradle daemon loopback TCP is blocked in sandbox; `--offline`, after final code/resource edit):
+    - `./gradlew :composeApp:testDebugUnitTest :composeApp:compileKotlinIosSimulatorArm64 architectureModuleEdges :composeApp:assembleDebug :composeApp:assemblePrivacyProbe :composeApp:assemblePrivacyProbeAndroidTest --offline`: exit `0` (`BUILD SUCCESSFUL in 1m 56s`, `148 actionable tasks: 43 executed, 105 up-to-date`)
+    - `python3 tools/architecture_cycles.py` (immediately after `architectureModuleEdges`): exit `0` (`No Gradle project dependency cycles (1 edges).`)
+- Observed behavior and assertions:
+  - `:composeApp:testDebugUnitTest` ran `77` suites, `399` tests, `0` failures, `0` errors, `0` skipped, including:
+    - Foundation & UI: `VaultPaletteTest` (`2/2`), `NumberEntryStateTest` (`4/4`)
+    - Phase 2 Onboarding: `OnboardingDraftTest` (`3/3` — `OWNER_ESTIMATE` and `UNKNOWN` baselines, null `modelId` for custom bikes, Bangla digits in CC, year clamping)
+    - Phase 3 Garage: `GarageHomeModelTest` (`5/5`)
+    - Phase 4 Entries & Capture: `FuelEntryRulesTest` (`6/6`), `FuelEntryValidationTest` (`3/3`), `ServiceVisitUpdateTest` (`2/2`), `ServiceSaveMapperTest` (`3/3`), `PumpMeterOcrParserTest` (`3/3`), `ServiceBillOcrParserTest` (`2/2`), `SpokenFuelParserTest` (`2/2`), `SpokenNumberParserTest` (`3/3`), `CaptureDraftParserTest` (`11/11`), `OdometerCaptureStateTest` (`3/3`), `ItemizedServiceTest` (`15/15`)
+    - Phase 5 Documents: `DocumentUpsertTest` (`6/6` — blank number/holder, `upsertDocumentByKind` preserves existing ID/pages/renewals/details), `DocumentCaptureTest` (`15/15`), `ServicePassportTest` (`12/12`)
+    - Phase 6 History & Me: `HistoryFilterTest` (`3/3`), `WorkLedgerTest` (`3/3`), `CloudBackupTest` (`2/2`)
+  - Both Android (`debug`, `privacyProbe`, `privacyProbeAndroidTest`) and iOS (`iosSimulatorArm64`) Kotlin/Compose targets compile cleanly against the consolidated `BikeCatalogueFamilies` catalogue, split `VaultSheetHost` route modules, and per-area EN/BN string resources.
+- Data/format compatibility and recovery checks:
+  - `BackupPayloadCompatibilityTest` (`9/9` passing) and `BackupRideLogAdapterTest` (`3/3` passing) verify optional `Ride.cc: Int? = null` round-tripping and legacy backup decoding with missing `cc` (`cc = null`).
+  - Persisted compatibility fields without v4 UI (`monthlyBudgetPoisha`, `maintenanceAllowancePoisha`, `breakdownContacts`, `checkedSeasonalItems`, `dismissedSeasonKeys`, `weatherCache`, `factoryProfileId`) remain intact in domain/storage/backup adapters; `WorkLedger.summary` excludes `maintenanceAllowancePoisha` per D13.
+  - `DocumentUpsertTest` verifies non-destructive same-kind document updates preserving originals and renewal history.
+- Accessibility, language and design scope:
+  - Source implementation covers Section 4–9 specs and recommended decisions D1–D18 across `composeApp/src/commonMain/`, with EN/BN resource key, placeholder, and plural parity verified by `test_localization_resources.py` and zero banned phrases reported by `bangla_copy_lint.py`.
+  - All remove lists in `V4-PORT-PLAN.md` have been applied (`DocumentWallet.kt`, `DocumentFlow.kt`, `GarageSections.kt`, `BudgetSheet.kt`, `CostOverview.kt`, `SettingsActionSections.kt`, `SettingsAppearanceSections.kt`, `SettingsProfileSection.kt`, `OnboardingSteps.kt`, `FuelConfidenceControls.kt`, `FuelDateControls.kt`, `FuelAmountHero.kt`, `ServiceWorkshopField.kt`, `SmartServiceDraft.kt`, dead `RenewalReminderControl`, and remove-list string keys including `inspection_*` and `garage_jobs_filter_desc`). `PassportExportUi.kt` (D15), `OwnershipForms.kt`, and `ReminderAccessPanel` (used in `SettingsSheet -> REMINDERS`) remain as planned.
+  - `ui_literal_gate.py` reduced from `9` occurrences at `HEAD` (`3754157`) to `1` occurrence (`components/Keypad.kt` decimal separator `.`); `ui_literal_gate.py --fuel` is `0`.
+  - No rendered UI pixel parity, dynamic type (`1.3`), dark mode, reduced motion, language switch, or haptic checks have been executed on a live runtime target yet.
+- Unverified checks, blockers and follow-up:
+  - **OPEN — Android runtime (`P17-02..P17-08` `android_runtime`):** No Android emulator or device connected (`adb devices` empty). Needs `./gradlew :composeApp:connectedPrivacyProbeAndroidTest --offline` (note `ProbeFuelChecks.kt` and `ProbeRenewalChecks.kt` pre-v4 text assertions may need v4 alignment during live test execution) plus visual walkthrough of every Phase 1–6 checklist item at 360–440dp in light/dark, EN/BN, both digit styles, text scale `1.3`, and reduced motion.
+  - **OPEN — iOS runtime (`P17-02..P17-08` `ios_runtime`):** No iOS 27 simulator booted (`xcrun simctl list devices booted` empty). Needs `iosSimulatorArm64Test` and XCTest + visual walkthrough on a verified running iOS 27 iPhone 18 Pro or Pro Max simulator across light/dark, EN/BN, both digit styles, text scale `1.3`, and reduced motion.
+  - **OPEN — Design parity sign-off (`P17-02..P17-08` `design`):** Side-by-side 440px prototype vs. native screenshot comparison for Phases 1–6 remains unexecuted without running Android/iOS targets.
+  - **OPEN — Named human Bangla copy review (`P08-05` / `P17-08` `review`):** Machine-checked EN/BN parity and lint pass; human native Bangla review sign-off against `docs/engineering/localization-style.md` is still required.
+  - **OPEN — VCS commit/PR:** Changes remain uncommitted on `feat/v4-literal-port` awaiting explicit owner authorization per `AGENTS.md`.
