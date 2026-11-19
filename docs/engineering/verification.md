@@ -7,7 +7,7 @@ For every slice, select checks according to the changed behavior:
 1. Inspect dependency direction, component responsibilities, named values, localized text, lifecycle ownership and diff scope.
 2. Exercise business invariants, validation, failure, cancellation, conflicts and Undo where affected.
 3. For persistence and backup changes, test existing serialized data, migrations, originals, asset references, partial failure and recovery. A Git revert is not a database rollback.
-4. For visible changes, check the v3 prototype and native output, both supported languages, semantics, scaling, keyboard and reduced motion as relevant.
+4. For visible changes, check the v4 prototype (`design/app-ui-v4/`) and native output, both supported languages, semantics, scaling, keyboard and reduced motion as relevant.
 5. Run Android and iOS builds/tests and runtime checks to the extent demanded by the task. Native platform functionality needs appropriate emulator/simulator and physical-device evidence; record those independently.
 6. Run `rtk run python3 tools/roadmap.py check` before handoff. Add sanitized reports in `docs/roadmap/evidence/` and attach the exact evidence types with the tracker.
 

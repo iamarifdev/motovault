@@ -47,7 +47,7 @@ architectural compliance.
   and preserve real data if it exists; synthetic fixtures do not imply a release.
 - A single reason to change, clear ownership and testable behavior determine
   extraction. Long files trigger review; splitting by size alone is insufficient.
-- Reuse existing v3 components and tokens. Keep product-independent Sky free of
+- Reuse existing v4 components and tokens (built on v3). Keep product-independent Sky free of
   MotoVault models, persistence, network, authentication and financial effects.
 
 ## Tracked cleanup gate (P04A)
@@ -113,7 +113,7 @@ specifically:
 
 - State the responsibility boundary, concrete files, behavior and data contracts,
   dependency changes, design impact and verification plan before editing.
-  Extend the v3 prototype first for new UI states. Research-only tasks do not
+  Extend the v4 prototype first for new UI states. Research-only tasks do not
   require code.
 - Respect tracker dependencies. Do not claim proposed modules or checks are
   present before inspecting them.

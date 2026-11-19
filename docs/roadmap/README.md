@@ -5,8 +5,9 @@ Start with [progress and next tasks](PROGRESS.md), then open the
 seven crucial features and the additional ownership, workshop, resale, widget,
 seasonal, rider and cloud-backup features discussed on 24 October 2026.
 
-The scope is Android and iOS. The design reference is
-[app-ui-v3](../../design/app-ui-v3/README.md), with the existing native brand logos
+The scope is Android and iOS. The active design reference is
+[app-ui-v4](../../design/app-ui-v4/README.md) (extending
+[app-ui-v3](../../design/app-ui-v3/README.md)), with the existing native brand logos
 preserved during brand selection. [Design rules and screen placement](DESIGN-CONTRACT.md)
 apply to every phase. [Baseline findings](BASELINE.md) distinguish existing code,
 demo concepts and future work.

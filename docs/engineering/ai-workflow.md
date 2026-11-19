@@ -50,7 +50,7 @@ commands for someone else to run.
   `python3 tools/roadmap.py show TASK-ID`. Do not open `roadmap.json` whole.
 - Locate the owners of presentation, state, application, domain, storage and
   native behavior. Check every caller of a contract you intend to change.
-- For a UI change, compare the v3 prototype and the current native screen.
+- For a UI change, compare the v4 prototype (`design/app-ui-v4/`) and the current native screen.
 - For copy changes, read the Bangla and English resource entries together.
 - If another owner holds the task, or the working tree has another contributor's
   uncommitted changes in the same files, stop and ask. Parallel work uses separate

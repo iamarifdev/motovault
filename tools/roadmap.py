@@ -211,7 +211,7 @@ def render_board(data: dict) -> str:
 
 def render_plan(data: dict) -> str:
     lines = ["# MotoVault phase-by-phase implementation plan", "", "<!-- Generated from roadmap.json by tools/roadmap.py. -->", "",
-             "This plan implements the crucial and additional Bangladesh ownership features while extending `design/app-ui-v3/`. It authorizes planning; it does not claim those features are implemented.", "",
+             "This plan implements the crucial and additional Bangladesh ownership features while extending `design/app-ui-v4/` (built on `design/app-ui-v3/`). It authorizes planning; it does not claim those features are implemented.", "",
              "Read [the design contract](DESIGN-CONTRACT.md), [architecture contract](ARCHITECTURE-CONTRACT.md), [baseline findings](BASELINE.md), [progress](PROGRESS.md) and [tracking instructions](README.md) together.", "",
              "## Priorities and delivery order", "",
              "- **P0:** foundation, trustworthy reminders, document privacy, recoverable local backup.",

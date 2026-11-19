@@ -99,8 +99,16 @@ class VaultStateTest {
     }
 
     @Test fun catalogueSearchAndBrandBoundariesMatchThePrototype() {
-        assertEquals(78, BikeCatalogue.models.size)
-        assertEquals(78, BikeCatalogue.models.map { it.id }.toSet().size)
+        assertEquals(94, BikeCatalogue.models.size)
+        assertEquals(94, BikeCatalogue.models.map { it.id }.toSet().size)
+        BikeCatalogueFamilies.all.forEach { family ->
+            assertNotNull(family.leadModel, "Missing lead model for ${family.id}")
+            family.variants.forEach { variant ->
+                val model = BikeCatalogue.find(variant.modelId)
+                assertNotNull(model, "Missing BikeCatalogue entry for ${variant.modelId}")
+                assertEquals(family.brandId, model.brandId, "Brand mismatch for ${variant.modelId}")
+            }
+        }
         assertTrue(BikeCatalogue.search("yamaha", "  r15m  ").any { it.name == "R15M" })
         assertTrue(BikeCatalogue.search("honda", "R15M").isEmpty())
         val wrong = BikeCatalogue.forBrand("yamaha").first()
