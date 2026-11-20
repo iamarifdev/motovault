@@ -52,7 +52,12 @@ class IntervalHonestyTest {
         assertEquals(BaselineCertainty.CONFIRMED, next.rules.single().baselineCertainty)
         assertEquals(1200.0, next.rules.single().lastServicedOdometerKm)
         assertEquals(now.toString(), next.ride!!.odometerConfirmedDate)
-        assertFails { next.saveQuickService(log.copy(id = "older", odometer = 1100.0), "chain") }
+        // v4: an older service is still recorded but never moves the newer confirmed baseline or mileage.
+        val withOlder = next.saveQuickService(log.copy(id = "older", odometer = 1100.0), "chain")
+        assertEquals(2, withOlder.logs.size)
+        assertEquals(emptyList(), withOlder.logs.first { it.id == "older" }.scheduleIds)
+        assertEquals(1200.0, withOlder.rules.single().lastServicedOdometerKm)
+        assertEquals(1200.0, withOlder.ride!!.odometer)
     }
 
     @Test fun estimatesNeverMutateTheConfirmedMileageAndMissingDateHasNoInventedStaleness() {

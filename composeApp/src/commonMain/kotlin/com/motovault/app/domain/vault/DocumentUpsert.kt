@@ -52,7 +52,11 @@ fun VaultState.upsertDocumentByKind(
             pdfPageCount = pdfPageCount,
             capturedAt = capturedAt,
             keepBlankIdentity = existingId == null,
-            resolvedVehicleId = if (isOwner) null else (existing.vehicleId ?: targetVehicleId)
+            resolvedVehicleId = when {
+                existing.stableKind() == null -> existing.vehicleId
+                isOwner -> null
+                else -> existing.vehicleId ?: targetVehicleId
+            }
         )
     } else {
         VaultDocument(
@@ -107,8 +111,10 @@ private fun mergeExistingDocument(
     val resolvedNumber = if (keepBlankIdentity) trimmedNumber.ifBlank { existing.number } else trimmedNumber
     val resolvedHolder = if (keepBlankIdentity) trimmedHolder.ifBlank { existing.holder } else trimmedHolder
     val replaceAssets = pages.isNotEmpty() || originalPdf != null
+    // A legacy document with no known kind keeps its stored kind and title; editing must not relabel it.
+    val legacy = existing.stableKind() == null
     return existing.copy(
-        title = canonicalTitle,
+        title = if (legacy) existing.title else canonicalTitle,
         number = resolvedNumber,
         holder = resolvedHolder,
         expiry = trimmedExpiry,
@@ -118,7 +124,7 @@ private fun mergeExistingDocument(
         capturedAt = if (replaceAssets) capturedAt.ifBlank { existing.capturedAt } else existing.capturedAt,
         detailsConfirmed = existing.detailsConfirmed || resolvedNumber.isNotBlank() || resolvedHolder.isNotBlank(),
         reminder = reminder,
-        kind = canonicalKind,
+        kind = if (legacy) existing.kind else canonicalKind,
         vehicleId = resolvedVehicleId
     )
 }

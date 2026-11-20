@@ -184,4 +184,5 @@
     <string name="renewal_step_registration_transfer_or_correction_detail">বদল, সংশোধন বা ডুপ্লিকেট লাগলে সার্কেল অফিসে যান।</string>
     <string name="renewal_step_registration_official_sources">BRTA-র নিয়ম</string>
     <string name="renewal_step_registration_official_sources_detail">প্রয়োজনীয় ডকুমেন্ট BRTA-র সাইটে দেখুন।</string>
+    <string name="renewal_expiry_after_today">নতুন মেয়াদ আজকের পরে হতে হবে।</string>
 </resources>

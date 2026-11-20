@@ -44,5 +44,6 @@ data class BackupLog(
     val documentId: String? = null, val renewalId: String? = null,
     val costPoisha: Long? = null, val expenseCategory: String? = null,
     val missedFuelFill: Boolean = false,
-    val vehicleId: String = "primary"
+    val vehicleId: String = "primary",
+    val quoteWarrantyMonths: Int = 0
 )

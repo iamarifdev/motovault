@@ -64,7 +64,9 @@ data class RideLog(
     val visitState: String = "paid",
     val workshopId: String? = null,
     val repairCaseId: String? = null,
-    val warrantyIds: List<String> = emptyList()
+    val warrantyIds: List<String> = emptyList(),
+    /** Warranty months chosen on a quotation; turned into real warranties when the visit is paid. */
+    val quoteWarrantyMonths: Int = 0
 ) {
     val isFuel: Boolean get() = kind == "fuel" || title == "Fuel fill-up"
     val isDocumentFee: Boolean get() = kind == "document_fee"

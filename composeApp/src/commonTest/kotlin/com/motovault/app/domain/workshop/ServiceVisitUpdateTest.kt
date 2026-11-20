@@ -185,4 +185,47 @@ class ServiceVisitUpdateTest {
         assertTrue(backupRestored.logs.isEmpty()) // Settings adapter round-trips contacts safely
         assertEquals(editedOlder.workshopContacts.size, backupRestored.workshopContacts.size)
     }
+
+    private fun quoteLog(id: String) = RideLog(
+        id = id, title = "Brake pads", detail = "Brake pads", date = earlierDay.toString(), odometer = 5000.0,
+        kind = "service", cost = 0.0,
+        serviceLines = listOf(ServiceLineItem(catalogueId = null, customName = "Brake pads", quantity = 1.0))
+    )
+
+    @Test
+    fun quoteKeepsWarrantyMonthsAndPayingCreatesTheWarranties() {
+        val quoted = baseState().recordWorkshopVisit(
+            log = quoteLog("q-1"), selectedRuleId = null, visitState = VisitRecordState.QUOTATION,
+            warrantyMonths = 6, saveQuickServiceFn = VaultState::saveQuickService
+        )
+        val savedQuote = quoted.logs.first { it.id == "q-1" }
+        assertEquals(6, savedQuote.quoteWarrantyMonths)
+        assertTrue(quoted.warranties.isEmpty())
+
+        val paid = quoted.transitionVisitState("q-1", VisitRecordState.PAID, VaultState::saveQuickService)
+        val paidLog = paid.logs.first { it.id == "q-1" }
+        assertEquals(0, paidLog.quoteWarrantyMonths)
+        assertEquals(1, paid.warranties.count { it.visitLogId == "q-1" })
+        assertEquals(paidLog.warrantyIds, paid.warranties.filter { it.visitLogId == "q-1" }.map { it.id })
+    }
+
+    @Test
+    fun editingQuoteKeepsMonthsAndEditingToPaidCreatesWarranties() {
+        val quoted = baseState().recordWorkshopVisit(
+            log = quoteLog("q-2"), selectedRuleId = null, visitState = VisitRecordState.QUOTATION,
+            warrantyMonths = 12, saveQuickServiceFn = VaultState::saveQuickService
+        )
+        val stillQuote = quoted.updateServiceVisit(
+            existingId = "q-2", updatedLog = quoteLog("q-2"), visitState = VisitRecordState.QUOTATION,
+            warrantyMonths = 12, saveQuickServiceFn = VaultState::saveQuickService, today = currentDay
+        )
+        assertEquals(12, stillQuote.logs.first { it.id == "q-2" }.quoteWarrantyMonths)
+
+        val paid = stillQuote.updateServiceVisit(
+            existingId = "q-2", updatedLog = quoteLog("q-2"), visitState = VisitRecordState.PAID,
+            warrantyMonths = 12, saveQuickServiceFn = VaultState::saveQuickService, today = currentDay
+        )
+        assertEquals(0, paid.logs.first { it.id == "q-2" }.quoteWarrantyMonths)
+        assertTrue(paid.warranties.any { it.visitLogId == "q-2" })
+    }
 }

@@ -53,7 +53,10 @@ object WorkLedger {
         val issues = mutableSetOf<WorkLedgerIssue>()
         collectShiftIssues(scopedShifts, shiftIds, issues)
 
-        val eligibleLogs = logs.filterNot { it.visitState.isNotBlank() && it.visitState != "paid" }
+        // v4 workLedger: only fuel and paid service count; expenses and document fees are not riding cost.
+        val eligibleLogs = logs
+            .filterNot { it.visitState.isNotBlank() && it.visitState != "paid" }
+            .filter { it.isFuel || (!it.isDocumentFee && it.kind != "expense") }
         val actualTotal = eligibleLogs.sumOf { CostLedger.amount(it) ?: 0L }
         val allocatedExpense = computeAllocatedExpense(eligibleLogs, scopedShifts, issues)
 

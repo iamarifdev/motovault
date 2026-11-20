@@ -35,7 +35,8 @@ internal fun RideLog.toBackupLog() = BackupLog(
     serviceLines.map { it.toBackupLine() }, serviceLabourPoisha, serviceMiscellaneousPoisha,
     serviceDiscountPoisha, serviceTotalPoisha, scheduleIds,
     location?.let { BackupLocation(it.latitude, it.longitude, it.accuracyMeters, it.capturedAtEpochMillis, it.source) },
-    locationLabel, receiptBase64, fuelType, fuelPrice, documentId, renewalId, costPoisha, expenseCategory, missedFuelFill, vehicleId
+    locationLabel, receiptBase64, fuelType, fuelPrice, documentId, renewalId, costPoisha, expenseCategory, missedFuelFill, vehicleId,
+    quoteWarrantyMonths = quoteWarrantyMonths
 )
 
 internal fun BackupLog.toRideLog() = RideLog(
@@ -43,5 +44,6 @@ internal fun BackupLog.toRideLog() = RideLog(
     serviceLines.map { it.toServiceLine() }, serviceLabourPoisha, serviceMiscellaneousPoisha,
     serviceDiscountPoisha, serviceTotalPoisha, scheduleIds,
     location?.let { GeoCapture(it.latitude, it.longitude, it.accuracyMeters, it.capturedAtEpochMillis, it.source) },
-    locationLabel, receiptBase64, fuelType, fuelPrice, documentId, renewalId, costPoisha, expenseCategory, missedFuelFill, vehicleId
+    locationLabel, receiptBase64, fuelType, fuelPrice, documentId, renewalId, costPoisha, expenseCategory, missedFuelFill, vehicleId,
+    quoteWarrantyMonths = quoteWarrantyMonths
 )

@@ -184,4 +184,5 @@
     <string name="renewal_step_registration_transfer_or_correction_detail">Visit a circle office for a transfer, correction or duplicate.</string>
     <string name="renewal_step_registration_official_sources">BRTA rules</string>
     <string name="renewal_step_registration_official_sources_detail">Check the required papers on BRTA\'s site.</string>
+    <string name="renewal_expiry_after_today">The new expiry must be after today.</string>
 </resources>

@@ -44,10 +44,8 @@ private class DocAddState(
     var photoBusy by mutableStateOf(false)
     var photoError by mutableStateOf<String?>(null)
     var committedAssets by mutableStateOf<Set<String>>(emptySet())
-    var expiry by mutableStateOf(
-        existing?.expiry?.takeIf { it.isNotBlank() }
-            ?: LocalDate.fromEpochDays(todayDate.toEpochDays() + 365).toString()
-    )
+    val defaultExpiry = LocalDate.fromEpochDays(todayDate.toEpochDays() + 365).toString()
+    var expiry by mutableStateOf(existing?.expiry?.takeIf { it.isNotBlank() } ?: defaultExpiry)
     var reminder by mutableStateOf(existing?.reminder ?: true)
     var number by mutableStateOf(existing?.number.orEmpty())
     var holder by mutableStateOf(existing?.holder.orEmpty())
@@ -60,7 +58,7 @@ fun DocAddSheet(
     state: VaultState,
     existingId: String? = null,
     onDismiss: () -> Unit,
-    onSave: (VaultState, String, () -> Unit) -> Unit
+    onSave: (VaultState, String, (Boolean) -> Unit) -> Unit
 ) {
     val f = currentFmt
     val haptic = currentHaptic
@@ -123,7 +121,7 @@ private fun DocAddStepBody(
     scope: CoroutineScope,
     onSuccessHaptic: () -> Unit,
     onErrorHaptic: () -> Unit,
-    onSave: (VaultState, String, () -> Unit) -> Unit
+    onSave: (VaultState, String, (Boolean) -> Unit) -> Unit
 ) {
     when (draft.step) {
         DocAddStep.TYPE -> DocTypeStep(
@@ -229,9 +227,12 @@ private fun acceptCapturedDocument(
             val processed = if (nextCaptured.recognizedText.isBlank()) recognizeDocument(nextCaptured) else nextCaptured
             draft.captured = processed
             val suggestions = DocumentTextReader.suggestions(kindInfo.title, processed.recognizedText)
-            suggestions["expiry"]?.let { if (draft.expiry.isBlank()) draft.expiry = it }
-            suggestions["number"]?.let { if (draft.number.isBlank()) draft.number = it }
-            suggestions["holder"]?.let { if (draft.holder.isBlank()) draft.holder = it }
+            suggestions["expiry"]?.let { if (draft.expiry.isBlank() || draft.expiry == draft.defaultExpiry) draft.expiry = it }
+            var filledDetails = false
+            suggestions["number"]?.let { if (draft.number.isBlank()) { draft.number = it; filledDetails = true } }
+            suggestions["holder"]?.let { if (draft.holder.isBlank()) { draft.holder = it; filledDetails = true } }
+            // Values read from the photo must be visible before they are saved.
+            if (filledDetails) draft.showOptional = true
         } catch (cancelled: CancellationException) {
             throw cancelled
         } catch (_: Exception) {
@@ -252,7 +253,7 @@ private fun submitDocAddSave(
     toastMessage: String,
     onSuccessHaptic: () -> Unit,
     onErrorHaptic: () -> Unit,
-    onSave: (VaultState, String, () -> Unit) -> Unit
+    onSave: (VaultState, String, (Boolean) -> Unit) -> Unit
 ) {
     draft.saveError = null
     val nextState = runCatching {
@@ -274,9 +275,16 @@ private fun submitDocAddSave(
         return
     }
     val stagedAssets = draft.captured?.assetIds().orEmpty()
-    onSuccessHaptic()
-    onSave(nextState, toastMessage) {
-        draft.committedAssets = stagedAssets
+    // The save owns the new pages while it runs, so closing the sheet mid-save cannot delete them.
+    draft.committedAssets = stagedAssets
+    onSave(nextState, toastMessage) { ok ->
+        if (ok) {
+            onSuccessHaptic()
+        } else {
+            draft.committedAssets = emptySet()
+            draft.saveError = saveFailedMessage
+            onErrorHaptic()
+        }
     }
 }
 

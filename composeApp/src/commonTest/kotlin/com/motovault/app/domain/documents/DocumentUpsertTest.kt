@@ -255,4 +255,24 @@ class DocumentUpsertTest {
         assertEquals(DocExpiryStatus.OK, documentExpiryInfo(okDoc, leadDays = 30).status)
         assertEquals(DocExpiryStatus.NONE, documentExpiryInfo(noneDoc, leadDays = 30).status)
     }
+
+    @Test
+    fun editingLegacyDocumentWithUnknownKindKeepsItsKindAndTitle() {
+        val legacy = VaultDocument(title = "Route permit", number = "RP-1", holder = "", expiry = "2027-01-01", kind = "")
+        assertNull(legacy.stableKind())
+        val state = baseState().saveDocument(legacy)
+
+        val edited = state.upsertDocumentByKind(
+            kind = DocumentKinds.REGISTRATION,
+            expiry = "2028-01-01",
+            reminder = true,
+            number = "RP-2",
+            existingId = legacy.id
+        ).documents.single()
+
+        assertEquals("Route permit", edited.title)
+        assertEquals("", edited.kind)
+        assertEquals("2028-01-01", edited.expiry)
+        assertEquals("RP-2", edited.number)
+    }
 }

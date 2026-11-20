@@ -92,7 +92,7 @@ private fun ServiceSheetHost(
     var pickerMode by remember { mutableStateOf(ServicePickerMode.NONE) }
     var moreOpen by remember {
         mutableStateOf(
-            existing != null && (visitState == VisitRecordState.QUOTATION ||
+            existing != null && (visitState.isOpenQuote ||
                 workshopPhone.isNotBlank() || caseTitle.isNotBlank() || warrantyMonths > 0)
         )
     }
@@ -213,7 +213,7 @@ private fun ServiceSheetHost(
             resets, visitState, workshop, moreOpen, workshopPhone, caseTitle, warrantyMonths, saveIssue,
             { keysOpen = false; pickerMode = ServicePickerMode.WORKSHOP }, { keysOpen = false; moreOpen = !moreOpen },
             { keysOpen = false },
-            { visitState = if (visitState == VisitRecordState.QUOTATION) VisitRecordState.PAID else VisitRecordState.QUOTATION },
+            { visitState = visitState.toggledQuote() },
             { workshopPhone = it }, { caseTitle = it }, { warrantyMonths = it }
         )
     }
@@ -347,7 +347,7 @@ private fun ServiceSaveFooter(
         appStringResource(Res.string.service_unknown_prices, f.d(totals.unknownPriceCount.toString()))
     } else ""
     val reasonText = serviceValidationText(reason)
-    val saveLabel = if (visitState == VisitRecordState.QUOTATION) appStringResource(Res.string.service_quote_save)
+    val saveLabel = if (visitState.isOpenQuote) appStringResource(Res.string.service_quote_save)
     else appStringResource(Res.string.service_save)
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
         Text(text = appStringResource(Res.string.service_total) + unknownNote, fontSize = 14.sp, color = TextSecondary)

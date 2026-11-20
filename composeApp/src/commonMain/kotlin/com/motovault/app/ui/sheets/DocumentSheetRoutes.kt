@@ -38,8 +38,10 @@ private fun DocAddRoute(ctx: SheetRouteContext) {
                             undoAction = { ctx.onUndo(targetRevision) }
                         )
                     )
-                    onDone()
+                    onDone(true)
                     ctx.onSheet(if (existingId != null) ActiveSheet("docView", existingId) else null)
+                } else {
+                    onDone(false)
                 }
             }
         }

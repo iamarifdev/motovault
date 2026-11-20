@@ -38,4 +38,14 @@ class BackupRideLogAdapterTest {
         assertEquals(log, archive.toRideLog())
         assertEquals(Json.parseToJsonElement(Json.encodeToString(log)), Json.parseToJsonElement(Json.encodeToString(archive)))
     }
+
+    @Test
+    fun quoteWarrantyMonthsRoundTripsAndOldBackupsDefaultToZero() {
+        val quote = RideLog("Brake pads", "", "2026-01-01", 9000.0, "q-1", "service", visitState = "quotation", quoteWarrantyMonths = 6)
+        val archive = quote.toBackupLog()
+        assertEquals(6, archive.quoteWarrantyMonths)
+        assertEquals(6, archive.toRideLog().quoteWarrantyMonths)
+        val frozenOldBackup = """{"title":"Brake pads","detail":"","date":"2026-01-01","odometer":9000.0,"id":"q-1","kind":"service"}"""
+        assertEquals(0, Json.decodeFromString<com.motovault.app.domain.backup.BackupLog>(frozenOldBackup).quoteWarrantyMonths)
+    }
 }

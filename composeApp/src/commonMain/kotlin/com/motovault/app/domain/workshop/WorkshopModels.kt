@@ -70,7 +70,8 @@ fun VaultState.recordWorkshopVisit(
     val afterWarranties = if (visitState == VisitRecordState.PAID && warrantyMonths > 0) {
         attachWarranties(afterCase.first, linkedLog, warrantyMonths, warrantyKm)
     } else {
-        afterCase.first to linkedLog
+        val quoteMonths = if (visitState != VisitRecordState.PAID) warrantyMonths.coerceAtLeast(0) else 0
+        afterCase.first to linkedLog.copy(quoteWarrantyMonths = quoteMonths)
     }
     val stateWithMeta = afterWarranties.first
     val finalLog = afterWarranties.second
@@ -141,8 +142,14 @@ fun VaultState.transitionVisitState(
     if (existing.visitState == nextState.code) return this
     if (nextState == VisitRecordState.PAID) {
         val withoutDraft = copy(logs = logs.filterNot { it.id == logId })
-        val paidLog = existing.copy(visitState = VisitRecordState.PAID.code)
-        return withoutDraft.saveQuickServiceFn(paidLog, existing.scheduleIds.firstOrNull() ?: existing.componentId)
+        val paidDraft = existing.copy(visitState = VisitRecordState.PAID.code, quoteWarrantyMonths = 0)
+        // Warranty months chosen on the quotation become real warranties once the work is paid.
+        val (withWarranties, paidLog) = if (existing.quoteWarrantyMonths > 0 && existing.warrantyIds.isEmpty()) {
+            attachWarranties(withoutDraft, paidDraft, existing.quoteWarrantyMonths, null)
+        } else {
+            withoutDraft to paidDraft
+        }
+        return withWarranties.saveQuickServiceFn(paidLog, existing.scheduleIds.firstOrNull() ?: existing.componentId)
     }
     val updated = logs.map { if (it.id == logId) it.copy(visitState = nextState.code) else it }
     return copy(logs = updated)

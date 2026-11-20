@@ -129,7 +129,7 @@ internal fun inferWarrantyMonths(existing: RideLog?, warranties: List<PartWarran
     val log = existing ?: return 0
     val warranty = warranties.firstOrNull { it.visitLogId == log.id }
         ?: log.warrantyIds.firstNotNullOfOrNull { wid -> warranties.firstOrNull { it.id == wid } }
-        ?: return 0
+        ?: return log.quoteWarrantyMonths.coerceAtLeast(0)
     val start = runCatching { LocalDate.parse(warranty.startDate) }.getOrNull() ?: return 0
     val expiry = runCatching { LocalDate.parse(warranty.expiryDate) }.getOrNull() ?: return 0
     val days = expiry.toEpochDays() - start.toEpochDays()
@@ -151,10 +151,17 @@ internal fun initialServiceDateKey(existing: RideLog?, today: LocalDate): EntryD
     return if (existing.date == yesterday) EntryDateKey.YESTERDAY else EntryDateKey.CUSTOM
 }
 
+/** Editing keeps the stored state; only the rider's quote toggle may change it. */
 internal fun initialServiceVisitState(existing: RideLog?): VisitRecordState =
-    if (existing?.visitState == VisitRecordState.QUOTATION.code ||
-        existing?.visitState == VisitRecordState.APPROVED.code
-    ) VisitRecordState.QUOTATION else VisitRecordState.PAID
+    VisitRecordState.entries.firstOrNull { it.code == existing?.visitState } ?: VisitRecordState.PAID
+
+/** The v4 quote chip is on for open quotes (quotation or approved). */
+internal val VisitRecordState.isOpenQuote: Boolean
+    get() = this == VisitRecordState.QUOTATION || this == VisitRecordState.APPROVED
+
+/** Toggling the quote chip: an open quote becomes paid; anything else becomes a quotation. */
+internal fun VisitRecordState.toggledQuote(): VisitRecordState =
+    if (isOpenQuote) VisitRecordState.PAID else VisitRecordState.QUOTATION
 
 internal fun initialServiceWorkshopPhone(state: VaultState, existing: RideLog?): String =
     existing?.workshopId?.let { id -> state.migratedWorkshopContacts().firstOrNull { it.id == id }?.phone }.orEmpty()

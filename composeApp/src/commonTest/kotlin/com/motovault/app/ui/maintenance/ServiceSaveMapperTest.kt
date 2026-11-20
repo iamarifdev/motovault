@@ -17,6 +17,9 @@ import com.motovault.app.ui.calculateServiceTotals
 import com.motovault.app.ui.create
 import com.motovault.app.ui.dueServiceKeys
 import com.motovault.app.ui.inferWarrantyMonths
+import com.motovault.app.ui.initialServiceVisitState
+import com.motovault.app.ui.isOpenQuote
+import com.motovault.app.ui.toggledQuote
 import com.motovault.app.ui.suggestedServiceKeys
 import com.motovault.app.ui.validateServiceDraft
 import kotlinx.datetime.DatePeriod
@@ -25,6 +28,7 @@ import kotlinx.datetime.minus
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class ServiceSaveMapperTest {
     private val currentDay = today()
@@ -137,5 +141,16 @@ class ServiceSaveMapperTest {
             0,
             inferWarrantyMonths(RideLog("S", "", currentDay.toString(), 5000.0), emptyList<PartWarranty>())
         )
+    }
+
+    @Test
+    fun editingKeepsCancelledAndApprovedVisitStates() {
+        fun logWith(state: String) = RideLog("Service", "", "2026-01-01", 1000.0, kind = "service", visitState = state)
+        assertEquals(VisitRecordState.CANCELLED, initialServiceVisitState(logWith(VisitRecordState.CANCELLED.code)))
+        assertEquals(VisitRecordState.APPROVED, initialServiceVisitState(logWith(VisitRecordState.APPROVED.code)))
+        assertEquals(VisitRecordState.PAID, initialServiceVisitState(null))
+        assertTrue(VisitRecordState.APPROVED.isOpenQuote)
+        assertEquals(VisitRecordState.PAID, VisitRecordState.APPROVED.toggledQuote())
+        assertEquals(VisitRecordState.QUOTATION, VisitRecordState.CANCELLED.toggledQuote())
     }
 }

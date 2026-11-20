@@ -58,7 +58,7 @@ internal fun ServiceMoreSection(
     } else {
         buildString {
             append(appStringResource(Res.string.service_more_title))
-            if (visitState == VisitRecordState.QUOTATION) append(appStringResource(Res.string.service_more_quote_tag))
+            if (visitState.isOpenQuote) append(appStringResource(Res.string.service_more_quote_tag))
             if (warrantyMonths > 0) append(appStringResource(Res.string.service_more_warranty_tag, f.d(warrantyMonths.toString())))
             append(appStringResource(Res.string.service_more_hint))
         }
@@ -84,10 +84,10 @@ internal fun ServiceMoreSection(
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             EntryChip(
                 text = appStringResource(Res.string.service_quote_chip),
-                active = visitState == VisitRecordState.QUOTATION,
+                active = visitState.isOpenQuote,
                 onClick = onToggleQuote
             )
-            if (visitState == VisitRecordState.QUOTATION) {
+            if (visitState.isOpenQuote) {
                 Text(
                     text = appStringResource(Res.string.service_quote_note),
                     fontSize = 13.sp,

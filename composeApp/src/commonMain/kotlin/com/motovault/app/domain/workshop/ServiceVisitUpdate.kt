@@ -55,7 +55,10 @@ fun VaultState.updateServiceVisit(
     val (afterWarranties, resolvedWarrantyIds) = updateVisitWarranties(
         afterCase, existing, baseLog, visitState, warrantyMonths, parsedDate, resolvedWorkshopId
     )
-    val finalLog = baseLog.copy(warrantyIds = resolvedWarrantyIds)
+    val finalLog = baseLog.copy(
+        warrantyIds = resolvedWarrantyIds,
+        quoteWarrantyMonths = if (visitState != VisitRecordState.PAID) warrantyMonths.coerceAtLeast(0) else 0
+    )
     val updatedPrices = mergeLastItemPrices(afterWarranties.lastItemPrices, finalLog)
     val wasPaid = existing.visitState.isBlank() || existing.visitState == VisitRecordState.PAID.code
 

@@ -42,6 +42,7 @@ import com.motovault.app.domain.vault.VaultState
 import kotlinx.datetime.LocalDate
 import motovault.composeapp.generated.resources.Res
 import motovault.composeapp.generated.resources.renewal_back
+import motovault.composeapp.generated.resources.renewal_expiry_after_today
 import motovault.composeapp.generated.resources.renewal_expiry_order
 import motovault.composeapp.generated.resources.renewal_expiry_required
 import motovault.composeapp.generated.resources.renewal_fee_hint
@@ -80,7 +81,8 @@ internal fun RenewalSheet(
     val haptic = currentHaptic
     val todayDate = today()
     val currentExpiry = runCatching { LocalDate.parse(doc.expiry) }.getOrNull()
-    val baseDate = currentExpiry ?: todayDate
+    // Renewing a long-expired document must still land after today (the domain requires it).
+    val baseDate = currentExpiry?.takeIf { it > todayDate } ?: todayDate
 
     var expiryText by rememberSaveable(doc.id) { mutableStateOf(LocalDate.fromEpochDays(baseDate.toEpochDays() + 365).toString()) }
     var feeText by rememberSaveable(doc.id) { mutableStateOf("") }
@@ -99,7 +101,7 @@ internal fun RenewalSheet(
         }
     }
 
-    val eval = evaluateRenewalInput(expiryText, feeText, currentExpiry)
+    val eval = evaluateRenewalInput(expiryText, feeText, currentExpiry, todayDate)
     val saveFailed = appStringResource(Res.string.renewal_save_failed)
     val buttonLabel = eval.expiryError ?: eval.feeError ?: appStringResource(Res.string.renewal_save)
 
@@ -113,7 +115,7 @@ internal fun RenewalSheet(
                 full = true,
                 enabled = !busy && eval.expiryError == null && eval.feeError == null,
                 onClick = {
-                    submitRenewal(state, doc, guide, eval, stagedReceipt, notes, todayDate, saveFailed, onSave) { nextBusy, nextError, saved ->
+                    submitRenewal(state, doc, guide, eval, stagedReceipt, notes, todayDate, saveFailed, onSave, { savedReceipt = it }) { nextBusy, nextError, saved ->
                         busy = nextBusy; error = nextError
                         if (saved != null) { savedReceipt = saved; haptic.perform(HapticKind.SUCCESS) }
                         else if (nextError != null) haptic.perform(HapticKind.ERROR)
@@ -176,11 +178,12 @@ private data class RenewalEvaluation(
 )
 
 @Composable
-private fun evaluateRenewalInput(expiryText: String, feeText: String, currentExpiry: LocalDate?): RenewalEvaluation {
+private fun evaluateRenewalInput(expiryText: String, feeText: String, currentExpiry: LocalDate?, todayDate: LocalDate): RenewalEvaluation {
     val expiryDate = runCatching { LocalDate.parse(NormalizedNumbers.ascii(expiryText.trim())) }.getOrNull()
     val expiryError = when {
         expiryText.isBlank() || expiryDate == null -> appStringResource(Res.string.renewal_expiry_required)
         currentExpiry != null && expiryDate <= currentExpiry -> appStringResource(Res.string.renewal_expiry_order)
+        expiryDate <= todayDate -> appStringResource(Res.string.renewal_expiry_after_today)
         else -> null
     }
     val trimmedFee = feeText.trim()
@@ -203,6 +206,7 @@ private fun submitRenewal(
     todayDate: LocalDate,
     saveFailed: String,
     onSave: (VaultState, (Boolean) -> Unit) -> Unit,
+    onReceiptCommitting: (String?) -> Unit,
     onStatus: (busy: Boolean, error: String?, savedReceipt: String?) -> Unit
 ) {
     val date = eval.expiryDate ?: return
@@ -221,8 +225,10 @@ private fun submitRenewal(
         onStatus(false, saveFailed, null)
         return
     }
+    // Treat the receipt as owned by the save while it runs, so closing the sheet cannot delete it.
+    onReceiptCommitting(stagedReceipt)
     onSave(next) { ok ->
-        if (ok) onStatus(false, null, stagedReceipt) else onStatus(false, saveFailed, null)
+        if (ok) onStatus(false, null, stagedReceipt) else { onReceiptCommitting(null); onStatus(false, saveFailed, null) }
     }
 }
 

@@ -18,21 +18,20 @@ internal fun VaultState.saveQuickService(log: RideLog, selectedRuleId: String?):
         candidates.firstOrNull { it.id == selectedRuleId } ?: candidates.singleOrNull()
     }.distinctBy { it.id }
     val confirmed = confirmedRules().associateBy { it.id }
-    linked.forEach { rule ->
-        if (confirmed[rule.id]?.baselineCertainty == BaselineCertainty.CONFIRMED) {
-            require(log.odometer >= rule.lastServicedOdometerKm && date.toEpochDays() >= rule.lastServicedEpochDays) {
-                "service_baseline_invalid"
-            }
-        }
+    // An older service is still saved (v4); it just does not move a newer confirmed reminder baseline.
+    val resettable = linked.filterNot { rule ->
+        confirmed[rule.id]?.baselineCertainty == BaselineCertainty.CONFIRMED &&
+            (log.odometer < rule.lastServicedOdometerKm || date.toEpochDays() < rule.lastServicedEpochDays)
     }
-    val ids = linked.map { it.id }.toSet()
+    val ids = resettable.map { it.id }.toSet()
     val nextRules = LogMaintenanceUseCase().recordService(rules, ids, log.odometer, date.toEpochDays().toLong()).updatedRules
     val lines = log.serviceLines.map { line ->
         val rule = line.catalogueId?.let { catId ->
-            linked.firstOrNull { BangladeshServiceCatalogue.scheduleNameMatchesItem(it.name, catId) }
+            resettable.firstOrNull { BangladeshServiceCatalogue.scheduleNameMatchesItem(it.name, catId) }
         }
         line.copy(scheduleId = rule?.id, resetsScheduleBaseline = rule != null)
     }
-    return copy(ride = ride.confirmedMileage(log.odometer, date), rules = nextRules,
+    val nextRide = if (log.odometer >= ride.odometer) ride.confirmedMileage(log.odometer, date) else ride
+    return copy(ride = nextRide, rules = nextRules,
         logs = listOf(log.copy(scheduleIds = ids.toList(), componentId = ids.firstOrNull(), serviceLines = lines)) + logs)
 }
