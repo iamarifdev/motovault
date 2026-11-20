@@ -195,6 +195,19 @@ Recommended now: N1, N2, N3. N4-N7 are smaller follow-ups.
 
 Also found: the backup format (`BackupLog`) does not carry `visitState`, `workshopId`, `repairCaseId` or `warrantyIds`, so a restore turns quotes into paid visits and drops workshop links. This existed before the port and needs its own backup-schema change.
 
+### P2 names and copy (2026-11-20)
+
+| Item | Status |
+| --- | --- |
+| Starter rules | Fixed: a bike with no factory profile gets the 5 v4 rules (Bangla names, catalogue ids, km only). |
+| Registration name | Fixed: `doc_registration` is "রেজিস্ট্রেশন স্মার্ট কার্ড". |
+| History tags | Fixed: open quote shows "কোটেশন", warranty shows "ওয়ারেন্টি N মাস" (end date only for warranties shorter than 6 months). Cancelled tag kept for older records. |
+| Copy sweep | Fixed 31 Bangla strings against v4 TSX: settings, privacy sheet, widget (also Android widget), `capture_voice_unavailable`, ছাড়, renewal checklist/offline/receipt copy. |
+| "চেহারা" | Owner decision (2026-11-21): keep "অ্যাপিয়ারেন্স". The copy lint rule wins over the v4 text here. |
+| "নোট" row | Kept: it shows text the rider saved; hiding it would hide their data. |
+| Scanning "বাতিল করুন" | Open: fuel and service scanning use the shared `action_cancel`; needs its own key in Kotlin. |
+| Onboarding voice notes | Open: v4 onboarding text differs from the odometer sheet, but both share keys; needs separate keys. |
+
 ## Suggested fix order
 
 1. P0 1-7 (one change set; carousel first).
