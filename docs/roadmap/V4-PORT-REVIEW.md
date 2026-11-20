@@ -179,6 +179,22 @@ Recommended now: N1, N2, N3. N4-N7 are smaller follow-ups.
 | P0-6 Sheet drag | Fixed: drag follows the finger at v4's 0.7 factor; close is decided by finger travel (110dp) or finger speed (650dp/s). |
 | P0-7 Toast swipe | Fixed: swipe measured outside the moving layer; closes at 80dp of finger travel. |
 
+### P1 data risks (2026-11-20)
+
+| # | Status |
+| --- | --- |
+| P1-8 OCR details | Fixed: when the photo fills number or holder, the optional section opens so the rider sees them before saving. A scanned expiry now replaces the untouched default. |
+| P1-9 Save race | Fixed: new document pages and the renewal receipt are marked as owned by the save before it starts, so closing the sheet mid-save cannot delete them. On failure they go back to staged. |
+| P1-10 Cancelled/approved visits | Fixed: editing keeps the stored state. The quote chip is on for quotation and approved; tapping it turns an open quote into paid, or anything else into a quotation. |
+| P1-11 Quote warranty months | Fixed (owner approved the new field): `RideLog.quoteWarrantyMonths` (default 0) is saved on quotations, kept on edit, shown when the quote is reopened, and turned into real warranties when the quote is marked paid (edit or transition). Backup carries it (`BackupLog.quoteWarrantyMonths`, default 0); a frozen old-backup JSON test confirms old files load with 0. |
+| P1-12 Long-expired renewal | Fixed: default and chips start from max(previous expiry, today); a date on or before today shows "নতুন মেয়াদ আজকের পরে হতে হবে।". |
+| P1-13 Silent doc save failure | Fixed: the add sheet shows the save error and an error haptic. |
+| P1-14 Legacy document kind | Fixed: editing a document with an unknown kind keeps its kind, title and bike scope. |
+| P1-15 Work-ledger cost | Fixed: only fuel and paid service count (v4); expenses and document fees no longer inflate the totals. |
+| P1-16 Old service backfill | Fixed: an older paid service is saved; it just does not move a newer confirmed reminder baseline or lower the bike's mileage. |
+
+Also found: the backup format (`BackupLog`) does not carry `visitState`, `workshopId`, `repairCaseId` or `warrantyIds`, so a restore turns quotes into paid visits and drops workshop links. This existed before the port and needs its own backup-schema change.
+
 ## Suggested fix order
 
 1. P0 1-7 (one change set; carousel first).
