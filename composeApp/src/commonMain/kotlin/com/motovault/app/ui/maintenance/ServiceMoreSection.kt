@@ -146,7 +146,8 @@ private fun ServiceMoreTextField(
             value = value,
             onValueChange = onValueChange,
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            keyboardOptions = if (keyboardType == KeyboardType.Phone) FieldKeyboards.phone else FieldKeyboards.sentence,
+            keyboardActions = rememberFieldKeyboardActions(),
             textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
             cursorBrush = SolidColor(BrandColor),
             modifier = Modifier

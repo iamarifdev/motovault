@@ -144,4 +144,17 @@
     <string name="entry_use_typed">Use &quot;%1$s&quot;</string>
     <string name="entry_recent_heading">Recent</string>
     <string name="entry_confirm_ok">Correct</string>
+    <string name="date_picker_title">Pick a date</string>
+    <string name="date_picker_confirm">OK</string>
+    <string name="date_picker_prev_month">Previous month</string>
+    <string name="date_picker_next_month">Next month</string>
+    <string name="date_picker_pick_year">Pick a year</string>
+    <string name="date_field_pick">Pick a date</string>
+    <string name="date_wd_sun">Sun</string>
+    <string name="date_wd_mon">Mon</string>
+    <string name="date_wd_tue">Tue</string>
+    <string name="date_wd_wed">Wed</string>
+    <string name="date_wd_thu">Thu</string>
+    <string name="date_wd_fri">Fri</string>
+    <string name="date_wd_sat">Sat</string>
 </resources>

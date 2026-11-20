@@ -1,5 +1,7 @@
 package com.motovault.app.ui.backup
 
+import com.motovault.app.ui.FieldKeyboards
+import com.motovault.app.ui.rememberFieldKeyboardActions
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
@@ -118,7 +120,8 @@ internal fun BackupPasswordSection(ui: BackupCreateState, createPasswordLabel: S
                                 textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
                                 cursorBrush = SolidColor(BrandColor),
                                 visualTransformation = if (ui.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                keyboardOptions = FieldKeyboards.password(last = false),
+                                keyboardActions = rememberFieldKeyboardActions(),
                                 modifier = Modifier.fillMaxWidth().semantics { contentDescription = createPasswordLabel }
                             )
                         }
@@ -140,7 +143,8 @@ internal fun BackupPasswordSection(ui: BackupCreateState, createPasswordLabel: S
                                 textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
                                 cursorBrush = SolidColor(BrandColor),
                                 visualTransformation = if (ui.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                keyboardOptions = FieldKeyboards.password(last = true),
+                                keyboardActions = rememberFieldKeyboardActions(),
                                 modifier = Modifier.fillMaxWidth().semantics { contentDescription = confirmPasswordLabel }
                             )
                         }

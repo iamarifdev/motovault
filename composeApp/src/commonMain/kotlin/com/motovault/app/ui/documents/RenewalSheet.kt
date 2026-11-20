@@ -263,14 +263,16 @@ private fun RenewalExpirySection(
     onExpiryChange: (String) -> Unit
 ) {
     val f = currentFmt
-    RenewalField(label = appStringResource(Res.string.renewal_new_expiry), error = expiryError) {
-        RenewalInput(
+    val label = appStringResource(Res.string.renewal_new_expiry)
+    RenewalField(label = label, error = expiryError) {
+        // v4 min is the previous expiry (or today); a renewal must end after both.
+        DateField(
             value = expiryText,
-            onChange = { if (it.length <= 10) onExpiryChange(it) },
-            placeholder = "",
-            numeric = true,
-            attention = true,
-            description = appStringResource(Res.string.renewal_new_expiry)
+            onValueChange = onExpiryChange,
+            description = label,
+            fallback = LocalDate.fromEpochDays(baseDate.toEpochDays() + 365),
+            min = LocalDate.fromEpochDays(baseDate.toEpochDays() + 1),
+            attention = true
         )
     }
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {

@@ -1,5 +1,7 @@
 package com.motovault.app.ui.backup
 
+import com.motovault.app.ui.FieldKeyboards
+import com.motovault.app.ui.rememberFieldKeyboardActions
 import com.motovault.app.application.VaultBackupOperations
 
 import androidx.compose.animation.AnimatedVisibility
@@ -152,7 +154,8 @@ internal fun BackupRestoreContent(
                                     textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
                                     cursorBrush = SolidColor(BrandColor),
                                     visualTransformation = if (ui.restorePasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                    keyboardOptions = FieldKeyboards.password(last = true),
+                                    keyboardActions = rememberFieldKeyboardActions(),
                                     modifier = Modifier.fillMaxWidth().semantics { contentDescription = restorePasswordLabel }
                                 )
                             }

@@ -192,6 +192,8 @@ private fun SmartInputEditorBox(
             onValueChange = onTextChange,
             textStyle = TextStyle(fontSize = 14.sp, lineHeight = 20.sp, color = TextPrimary),
             cursorBrush = SolidColor(BrandColor),
+            keyboardOptions = FieldKeyboards.multiline,
+            keyboardActions = rememberFieldKeyboardActions(),
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged { onFocusChange(it.isFocused) }

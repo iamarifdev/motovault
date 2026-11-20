@@ -92,7 +92,8 @@ internal fun CustomBikeCard(
             modifier = Modifier.fillMaxWidth().semantics { contentDescription = ccLabel },
             textStyle = SkyTheme.typography.body,
             shape = RoundedCornerShape(SkyTokens.Radii.field),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = FieldKeyboards.number,
+            keyboardActions = rememberFieldKeyboardActions(),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = SkyTheme.colors.fieldBorder,
                 focusedBorderColor = BrandColor,

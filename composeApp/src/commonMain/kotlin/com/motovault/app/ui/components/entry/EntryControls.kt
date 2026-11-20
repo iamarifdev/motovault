@@ -13,21 +13,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import kotlinx.datetime.LocalDate
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -232,7 +232,9 @@ fun RowScope.DateChips(
     onSelectKey: (EntryDateKey) -> Unit,
     onCustomDateChange: (String) -> Unit
 ) {
-    val shape = RoundedCornerShape(999.dp)
+    val f = currentFmt
+    val todayDate = today()
+    var pickerOpen by remember { mutableStateOf(false) }
     EntryChip(
         text = appStringResource(Res.string.date_today),
         active = dateKey == EntryDateKey.TODAY,
@@ -243,32 +245,23 @@ fun RowScope.DateChips(
         active = dateKey == EntryDateKey.YESTERDAY,
         onClick = { onSelectKey(EntryDateKey.YESTERDAY) }
     )
-    if (dateKey == EntryDateKey.CUSTOM) {
-        val dateLabel = appStringResource(Res.string.date_other)
-        Box(
-            modifier = Modifier
-                .heightIn(min = 38.dp)
-                .widthIn(min = 104.dp, max = 148.dp)
-                .clip(shape)
-                .background(BrandTintColor)
-                .border(1.5.dp, BrandColor, shape)
-                .padding(horizontal = 13.dp, vertical = 6.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            BasicTextField(
-                value = customDate,
-                onValueChange = { if (it.length <= 10) onCustomDateChange(it) },
-                singleLine = true,
-                textStyle = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary),
-                cursorBrush = SolidColor(BrandColor),
-                modifier = Modifier.semantics { contentDescription = dateLabel }
-            )
-        }
-    } else {
-        EntryChip(
-            text = appStringResource(Res.string.date_other),
-            active = false,
-            onClick = { onSelectKey(EntryDateKey.CUSTOM) }
+    // Review N1: "অন্য দিন" opens the calendar sheet; the chip then shows the picked date.
+    val picked = parseIsoDateOrNull(customDate).takeIf { dateKey == EntryDateKey.CUSTOM }
+    EntryChip(
+        text = picked?.let { f.date(it) } ?: appStringResource(Res.string.date_other),
+        active = picked != null,
+        onClick = { pickerOpen = true }
+    )
+    if (pickerOpen) {
+        DatePickerSheet(
+            initial = picked ?: LocalDate.fromEpochDays(todayDate.toEpochDays() - 2),
+            max = todayDate,
+            onDismiss = { pickerOpen = false },
+            onPick = { date ->
+                pickerOpen = false
+                onCustomDateChange(date.toString())
+                onSelectKey(EntryDateKey.CUSTOM)
+            }
         )
     }
 }

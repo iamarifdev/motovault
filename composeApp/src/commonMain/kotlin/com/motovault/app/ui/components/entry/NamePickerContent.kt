@@ -62,12 +62,15 @@ fun NamePickerContent(
             singleLine = true,
             textStyle = TextStyle(fontSize = 16.sp, color = TextPrimary),
             cursorBrush = SolidColor(BrandColor),
+            keyboardOptions = FieldKeyboards.name,
+            keyboardActions = rememberFieldKeyboardActions(),
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 52.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(SurfaceColor2)
                 .border(1.5.dp, if (focused) BrandColor else BorderStrongColor, RoundedCornerShape(12.dp))
+                .autoFocusOnOpen()
                 .onFocusChanged { focused = it.isFocused }
                 .padding(horizontal = 14.dp, vertical = 14.dp),
             decorationBox = { inner ->

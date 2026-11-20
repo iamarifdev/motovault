@@ -63,7 +63,8 @@ fun Field(label: String, value: String, onChange: (String) -> Unit, numeric: Boo
             singleLine = true,
             textStyle = SkyTheme.typography.body,
             shape = RoundedCornerShape(SkyTokens.Radii.field),
-            keyboardOptions = KeyboardOptions(keyboardType = if (numeric) KeyboardType.Decimal else KeyboardType.Text),
+            keyboardOptions = if (numeric) FieldKeyboards.decimal else FieldKeyboards.sentence,
+            keyboardActions = rememberFieldKeyboardActions(),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = SkyTheme.colors.fieldBorder,
                 focusedBorderColor = SkyTheme.colors.accent,

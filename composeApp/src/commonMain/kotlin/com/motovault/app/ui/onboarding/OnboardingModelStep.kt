@@ -143,6 +143,8 @@ private fun ModelSearchField(query: String, onQueryChange: (String) -> Unit) {
                 singleLine = true,
                 textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
                 cursorBrush = SolidColor(BrandColor),
+                keyboardOptions = FieldKeyboards.search,
+                keyboardActions = rememberFieldKeyboardActions(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .onFocusChanged { focused = it.isFocused }

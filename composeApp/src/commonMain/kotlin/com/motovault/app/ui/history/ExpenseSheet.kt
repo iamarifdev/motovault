@@ -182,6 +182,8 @@ private fun ExpenseNoteField(
             singleLine = true,
             textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
             cursorBrush = SolidColor(BrandColor),
+            keyboardOptions = FieldKeyboards.sentence,
+            keyboardActions = rememberFieldKeyboardActions(),
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged { onFocusChange(it.isFocused) }

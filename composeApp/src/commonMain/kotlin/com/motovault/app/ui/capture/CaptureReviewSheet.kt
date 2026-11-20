@@ -227,6 +227,8 @@ private fun PasteTextArea(text: String, onTextChange: (String) -> Unit) {
             onValueChange = onTextChange,
             textStyle = TextStyle(fontSize = 14.sp, lineHeight = 20.sp, color = TextPrimary),
             cursorBrush = SolidColor(BrandColor),
+            keyboardOptions = FieldKeyboards.multiline,
+            keyboardActions = rememberFieldKeyboardActions(),
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged { focused = it.isFocused }

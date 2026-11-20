@@ -171,6 +171,8 @@ private fun PartSearchField(
             singleLine = true,
             textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
             cursorBrush = SolidColor(BrandColor),
+            keyboardOptions = FieldKeyboards.search,
+            keyboardActions = rememberFieldKeyboardActions(),
             modifier = Modifier.weight(1f).onFocusChanged { onFocusChange(it.isFocused) },
             decorationBox = { inner ->
                 if (query.isEmpty()) Text(text = placeholder, fontSize = 15.sp, color = TextTertiary)

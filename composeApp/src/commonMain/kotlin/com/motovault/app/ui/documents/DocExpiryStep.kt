@@ -95,7 +95,12 @@ internal fun DocExpiryStep(
                 fontWeight = FontWeight.SemiBold
             )
         }
-        DocLabeledInput(appStringResource(Res.string.doc_add_expiry), expiry, "", attention = true, onExpiryChange)
+        val expiryLabel = appStringResource(Res.string.doc_add_expiry)
+        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(text = expiryLabel, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+            // v4: a new document cannot expire before today; an existing one may already be expired.
+            DateField(expiry, onExpiryChange, expiryLabel, fallback = today, min = if (isEdit) null else today, attention = true)
+        }
         DocExpiryPresets(expiry, today, onExpiryChange)
         DocReminderCard(parsedExpiry, leadDays, reminder, onReminderChange)
         DocOptionalDetailsSection(showOptional, number, holder, onToggleOptional, onNumberChange, onHolderChange)
@@ -214,6 +219,7 @@ private fun DocOptionalDetailsSection(
                 value = number,
                 placeholder = appStringResource(Res.string.doc_add_number_placeholder),
                 attention = false,
+                keyboard = FieldKeyboards.code,
                 onValueChange = { if (it.length <= MAX_DOC_TEXT_LENGTH) onNumberChange(it) }
             )
             DocLabeledInput(
@@ -221,6 +227,7 @@ private fun DocOptionalDetailsSection(
                 value = holder,
                 placeholder = appStringResource(Res.string.doc_add_holder_placeholder),
                 attention = false,
+                keyboard = FieldKeyboards.name,
                 onValueChange = { if (it.length <= MAX_DOC_TEXT_LENGTH) onHolderChange(it) }
             )
         }
@@ -233,6 +240,7 @@ private fun DocLabeledInput(
     value: String,
     placeholder: String,
     attention: Boolean,
+    keyboard: androidx.compose.foundation.text.KeyboardOptions,
     onValueChange: (String) -> Unit
 ) {
     val shape = RoundedCornerShape(12.dp)
@@ -252,6 +260,8 @@ private fun DocLabeledInput(
                 singleLine = true,
                 textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
                 cursorBrush = SolidColor(BrandColor),
+                keyboardOptions = keyboard,
+                keyboardActions = rememberFieldKeyboardActions(),
                 modifier = Modifier.fillMaxWidth().semantics { contentDescription = label },
                 decorationBox = { inner ->
                     if (value.isEmpty() && placeholder.isNotEmpty()) {

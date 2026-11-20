@@ -87,15 +87,16 @@ internal fun GaugeLastDoneEditor(
                 onValueChange = { if (it.length <= 9) kmText = it },
                 modifier = Modifier.weight(1f)
             )
-            EditorField(
-                label = appStringResource(Res.string.gauge_edit_date_label),
-                value = dateText,
-                placeholder = initialDate,
-                description = appStringResource(Res.string.gauge_edit_date_desc),
-                keyboardType = KeyboardType.Ascii,
-                onValueChange = { if (it.length <= 10) dateText = it },
-                modifier = Modifier.weight(1f)
-            )
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(text = appStringResource(Res.string.gauge_edit_date_label), fontSize = 12.sp, color = TextSecondary)
+                DateField(
+                    value = dateText,
+                    onValueChange = { dateText = it },
+                    description = appStringResource(Res.string.gauge_edit_date_desc),
+                    fallback = parseIsoDateOrNull(initialDate) ?: today,
+                    max = today
+                )
+            }
         }
         if (errorText != null && kmText.trim().isNotEmpty()) {
             Text(
@@ -163,9 +164,11 @@ private fun EditorField(
                 singleLine = true,
                 textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
                 cursorBrush = SolidColor(BrandColor),
-                keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+                keyboardOptions = FieldKeyboards.number,
+                keyboardActions = rememberFieldKeyboardActions(),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .autoFocusOnOpen()
                     .onFocusChanged { focused = it.isFocused }
                     .semantics { contentDescription = description }
             )

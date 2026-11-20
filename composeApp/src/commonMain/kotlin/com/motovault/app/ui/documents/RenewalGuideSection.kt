@@ -275,6 +275,8 @@ internal fun RenewalInput(
             singleLine = true,
             textStyle = TextStyle(fontSize = 15.sp, color = TextPrimary),
             cursorBrush = SolidColor(BrandColor),
+            keyboardOptions = if (numeric) FieldKeyboards.decimal else FieldKeyboards.sentence,
+            keyboardActions = rememberFieldKeyboardActions(),
             modifier = Modifier.fillMaxWidth().semantics { contentDescription = description },
             decorationBox = { inner ->
                 if (value.isEmpty() && placeholder.isNotEmpty()) {
