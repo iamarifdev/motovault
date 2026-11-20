@@ -208,6 +208,14 @@ Also found: the backup format (`BackupLog`) does not carry `visitState`, `worksh
 | Scanning "বাতিল করুন" | Open: fuel and service scanning use the shared `action_cancel`; needs its own key in Kotlin. |
 | Onboarding voice notes | Open: v4 onboarding text differs from the odometer sheet, but both share keys; needs separate keys. |
 
+### Native patterns N1-N3 (2026-11-21)
+
+| Item | Status |
+| --- | --- |
+| N1 date picker | Done: shared `DatePickerSheet` (month grid, Bangla months, weekdays and digits, greyed days outside the limits, tap the month to jump years, pinned "ঠিক আছে") and `DateField`. Used by the fuel, service and expense date chips ("অন্য দিন" opens it; the chip shows the picked date), document expiry (new: today or later), renewal (after the previous expiry or today) and the last-done editor (today or earlier). No more typed yyyy-mm-dd boxes. Checked on the iOS simulator (fuel). |
+| N2 keyboards | Done: `FieldKeyboards` sets the keyboard per field (phone pad for workshop phone, numbers for cc and km, letters and digits for document numbers, word capitals for names, search key for search boxes, Next/Done for backup passwords). "Done" closes the keyboard. The pump and workshop pickers and the last-done km field get focus when they open, like v4. |
+| N3 haptics | Already native: iOS uses the selection and notification feedback generators, Android uses `HapticFeedbackConstants` (tick, confirm, reject). The 4 v4 haptic kinds map one to one. No change. |
+
 ## Suggested fix order
 
 1. P0 1-7 (one change set; carousel first).
