@@ -8,10 +8,10 @@
     <string name="widget_status_overdue">%1$s · Due now</string>
     <string name="widget_status_soon">%1$s · Due soon</string>
     <string name="widget_status_ok">%1$s · Interval remaining</string>
-    <string name="widget_status_unknown">%1$s · Verify baseline</string>
+    <string name="widget_status_unknown">%1$s · Not confirmed</string>
     <string name="widget_stale_badge">Saved snapshot · Tap to refresh</string>
     <string name="widget_btn_fuel">⛽ Fuel</string>
-    <string name="widget_btn_km">📏 km</string>
+    <string name="widget_btn_km">📏 Odometer</string>
     <string name="widget_km_suffix">km</string>
     <string name="widget_item_chain">Chain</string>
     <string name="widget_item_oil">Engine oil</string>

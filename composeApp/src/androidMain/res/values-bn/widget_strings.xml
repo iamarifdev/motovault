@@ -6,12 +6,12 @@
     <string name="widget_locked_title">MotoVault লক করা আছে</string>
     <string name="widget_locked_body">বাইকের তথ্য দেখতে ট্যাপ করে আনলক করুন</string>
     <string name="widget_status_overdue">%1$s · এখনই প্রয়োজন</string>
-    <string name="widget_status_soon">%1$s · শীঘ্রই প্রয়োজন</string>
+    <string name="widget_status_soon">%1$s · সময় কাছাকাছি</string>
     <string name="widget_status_ok">%1$s · ব্যবধান বাকি</string>
-    <string name="widget_status_unknown">%1$s · আগের সার্ভিস যাচাই করুন</string>
+    <string name="widget_status_unknown">%1$s · তথ্য নিশ্চিত নয়</string>
     <string name="widget_stale_badge">সংরক্ষিত তথ্য · আপডেট করতে ট্যাপ করুন</string>
-    <string name="widget_btn_fuel">⛽ ফুয়েল</string>
-    <string name="widget_btn_km">📏 কিমি</string>
+    <string name="widget_btn_fuel">⛽ তেল</string>
+    <string name="widget_btn_km">📏 মিটার রিডিং</string>
     <string name="widget_km_suffix">কিমি</string>
     <string name="widget_item_chain">চেইন</string>
     <string name="widget_item_oil">ইঞ্জিন অয়েল</string>

@@ -11,7 +11,7 @@
     <string name="vault_doc_expired_days">%1$s আগে শেষ</string>
     <string name="vault_doc_days_left">%1$s বাকি</string>
     <string name="vault_doc_valid">মেয়াদ আছে</string>
-    <string name="doc_registration">রেজিস্ট্রেশন সার্টিফিকেট</string>
+    <string name="doc_registration">রেজিস্ট্রেশন স্মার্ট কার্ড</string>
     <string name="doc_smart_card">রেজিস্ট্রেশন স্মার্ট কার্ড</string>
     <string name="doc_tax_token">ট্যাক্স টোকেন</string>
     <string name="doc_fitness">ফিটনেস সার্টিফিকেট</string>
@@ -97,9 +97,9 @@
     <string name="renewal_previous_summary">আগের মেয়াদ: %1$s</string>
     <string name="renewal_no_expiry">মেয়াদ নেই</string>
     <string name="renewal_progress">%1$s/%2$s ধাপ হয়েছে</string>
-    <string name="renewal_checklist_toggle">নবায়নে কী কী ডকুমেন্ট লাগে দেখুন (%1$s/%2$s)</string>
+    <string name="renewal_checklist_toggle">নবায়নে কী কী কাগজ লাগে দেখুন (%1$s/%2$s)</string>
     <string name="renewal_source">সোর্স: BRTA · সর্বশেষ দেখা %1$s</string>
-    <string name="renewal_offline_note">লিংক না খুললেও ধাপ ও নবায়ন কাজ করবে।</string>
+    <string name="renewal_offline_note">লিংক না খুললেও ধাপ ও নবায়ন কাজ করবে। BRTA সাইট না খুললে brta.gov.bd-এ দেখুন।</string>
     <string name="renewal_link_failed">BRTA সাইট খোলা যায়নি। আবার চেষ্টা করুন বা brta.gov.bd-এ দেখুন।</string>
     <string name="renewal_fee_amount">যত টাকা দিয়েছেন</string>
     <string name="renewal_fee_optional">যত টাকা দিয়েছেন (ঐচ্ছিক)</string>
@@ -109,7 +109,7 @@
     <string name="renewal_late_fine">মেয়াদ শেষের ১৫ দিন পর হলে প্রতি বছরে ৫১৮ টাকা জরিমানা যোগ হতে পারে। BRTA-তে দেখে নিন।</string>
     <string name="renewal_receipt">পেমেন্ট রসিদ</string>
     <string name="renewal_receipt_optional">পেমেন্ট রসিদ (ঐচ্ছিক)</string>
-    <string name="renewal_receipt_hint">রসিদের ছবি সংরক্ষিত কপির সঙ্গে থাকবে।</string>
+    <string name="renewal_receipt_hint">চাইলে রসিদের ছবি সংযুক্ত রাখতে পারেন।</string>
     <string name="renewal_receipt_add">রসিদের ছবি যোগ করুন</string>
     <string name="renewal_receipt_remove">রসিদ সরান</string>
     <string name="renewal_receipt_view">রসিদ দেখুন</string>
@@ -167,7 +167,7 @@
     <string name="renewal_step_fitness_tax_token_copy">ট্যাক্স টোকেন কপি</string>
     <string name="renewal_step_fitness_tax_token_copy_detail">হালনাগাদ ট্যাক্স টোকেনের সত্যায়িত কপি নিন।</string>
     <string name="renewal_step_fitness_tin">TIN ও আয়কর</string>
-    <string name="renewal_step_fitness_tin_detail">TIN ডকুমেন্ট ও অগ্রিম আয়করের প্রমাণ নিন।</string>
+    <string name="renewal_step_fitness_tin_detail">TIN কাগজ ও অগ্রিম আয়করের প্রমাণ নিন।</string>
     <string name="renewal_step_fitness_vehicle_present">গাড়ি হাজির</string>
     <string name="renewal_step_fitness_vehicle_present_detail">সার্কেল অফিসে মোটরযান হাজির করুন।</string>
     <string name="renewal_step_fitness_fee_receipt">ফি জমার রসিদ</string>
@@ -183,6 +183,6 @@
     <string name="renewal_step_registration_transfer_or_correction">মালিকানা বদল বা সংশোধন</string>
     <string name="renewal_step_registration_transfer_or_correction_detail">বদল, সংশোধন বা ডুপ্লিকেট লাগলে সার্কেল অফিসে যান।</string>
     <string name="renewal_step_registration_official_sources">BRTA-র নিয়ম</string>
-    <string name="renewal_step_registration_official_sources_detail">প্রয়োজনীয় ডকুমেন্ট BRTA-র সাইটে দেখুন।</string>
+    <string name="renewal_step_registration_official_sources_detail">প্রয়োজনীয় কাগজপত্র BRTA-র সাইটে দেখুন।</string>
     <string name="renewal_expiry_after_today">নতুন মেয়াদ আজকের পরে হতে হবে।</string>
 </resources>

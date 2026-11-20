@@ -34,6 +34,8 @@
     <string name="history_line_with_qty">%1$s × %2$s</string>
     <string name="history_workshop_with_phone">%1$s · %2$s</string>
     <string name="history_tag_issue">Issue: %1$s</string>
+    <string name="history_tag_quote">Quote</string>
+    <string name="history_tag_warranty_months">Warranty %1$s months</string>
     <string name="history_price_unknown">Price unknown</string>
     <string name="history_labour">Service charge / labour</string>
     <string name="history_discount">Discount</string>

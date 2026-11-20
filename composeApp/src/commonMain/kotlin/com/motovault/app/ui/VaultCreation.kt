@@ -91,6 +91,22 @@ fun VaultState.Companion.seedData(today: LocalDate = today()): VaultState {
 
 
 
+private class StarterRule(
+    val catalogueId: String,
+    val name: String,
+    val km: Double,
+    val action: com.motovault.app.domain.maintenance.MaintenanceAction
+)
+
+/** The five rules v4 gives every new bike (design/app-ui-v4/src/data/seed.ts). */
+private val V4_STARTER_RULES = listOf(
+    StarterRule("engine_oil", "ইঞ্জিন অয়েল (মবিল)", 5000.0, com.motovault.app.domain.maintenance.MaintenanceAction.REPLACE),
+    StarterRule("chain_sprocket", "চেইন লুব ও টাইট", 500.0, com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE),
+    StarterRule("air_filter", "এয়ার ফিল্টার", 17000.0, com.motovault.app.domain.maintenance.MaintenanceAction.REPLACE),
+    StarterRule("spark_plug", "স্পার্ক প্লাগ", 17000.0, com.motovault.app.domain.maintenance.MaintenanceAction.REPLACE),
+    StarterRule("brake_pad", "ব্রেক পরীক্ষা", 5000.0, com.motovault.app.domain.maintenance.MaintenanceAction.INSPECT)
+)
+
 suspend fun VaultState.Companion.restore(): VaultState = loadVault()?.let { decode(it) } ?: seedData()
 
 fun VaultState.Companion.create(
@@ -111,23 +127,16 @@ fun VaultState.Companion.create(
         } else {
             com.motovault.app.domain.model.BaselineCertainty.CONFIRMED
         }
-        val examples = listOf(
-            Triple("Chain lubrication", 500.0, 30),
-            Triple("Engine oil", 3000.0, 180),
-            Triple("Air filter", 5000.0, 180)
-        )
-        return VaultState(ride = ride, rules = FactoryProfiles.find(ride.factoryProfileId)?.rules(baseline, baselineDate, certainty) ?: examples.map { (name, km, days) ->
-            ComponentRule(recordId(), "primary", name, "Owner-defined example. Confirm against your manual.", km, days,
+        return VaultState(ride = ride, rules = FactoryProfiles.find(ride.factoryProfileId)?.rules(baseline, baselineDate, certainty) ?: V4_STARTER_RULES.map { starter ->
+            ComponentRule(recordId(), "primary", starter.name, "Owner-defined example. Confirm against your manual.", starter.km, 0,
                 baseline ?: 0.0, if (baseline == null) 0L else baselineDate.toEpochDays().toLong(),
                 baselineCertainty = certainty,
-                action = when (name) {
-                    "Chain lubrication" -> com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE
-                    else -> com.motovault.app.domain.maintenance.MaintenanceAction.REPLACE
-                },
+                action = starter.action,
                 provenance = com.motovault.app.domain.maintenance.ScheduleProvenance(
                     source = com.motovault.app.domain.maintenance.ScheduleSource.OWNER,
                     label = "Owner-defined example"
-                )
+                ),
+                catalogueId = starter.catalogueId
             )
         })
     }

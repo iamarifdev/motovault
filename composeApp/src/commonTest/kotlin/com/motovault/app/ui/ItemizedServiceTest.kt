@@ -125,7 +125,7 @@ class ItemizedServiceTest {
     fun aServiceLineCannotResetAnUnrelatedSchedule() {
         val state = state()
         val chain = state.rules.first {
-            it.action == com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE && it.name.contains("chain", ignoreCase = true)
+            it.action == com.motovault.app.domain.maintenance.MaintenanceAction.LUBRICATE
         }
         assertFailsWith<IllegalArgumentException> {
             state.logServiceVisit(listOf(ServiceLineItem("engine_oil", scheduleId = chain.id, resetsScheduleBaseline = true, oil = EngineOilMetadata("mineral", purchaseBasis = "bottle"))))

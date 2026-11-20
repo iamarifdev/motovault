@@ -7,13 +7,21 @@ class VaultStateTest {
 
     @Test fun newGarageStartsMaintenanceAtCurrentDistanceAndDate() {
         val state = state()
-        assertEquals(3, state.rules.size)
+        assertEquals(5, state.rules.size)
         assertTrue(state.rules.all { it.lastServicedOdometerKm == 4280.0 && it.lastServicedEpochDays == today().toEpochDays().toLong() })
+    }
+
+    @Test fun bikeWithoutFactoryProfileGetsTheV4StarterRules() {
+        val rules = state().rules
+        assertEquals(listOf("engine_oil", "chain_sprocket", "air_filter", "spark_plug", "brake_pad"), rules.map { it.catalogueId })
+        assertEquals(listOf(5000.0, 500.0, 17000.0, 17000.0, 5000.0), rules.map { it.intervalKm })
+        assertEquals("চেইন লুব ও টাইট", rules[1].name)
+        assertTrue(rules.all { it.intervalDays == 0 })
     }
 
     @Test fun everyBrandGetsExplicitOwnerDefinedExampleSchedules() {
         val yamaha = state("yamaha")
-        assertEquals(listOf(500.0, 3000.0, 5000.0), yamaha.rules.map { it.intervalKm })
+        assertEquals(listOf(5000.0, 500.0, 17000.0, 17000.0, 5000.0), yamaha.rules.map { it.intervalKm })
         assertTrue(yamaha.rules.all { it.specification.contains("Owner-defined example") })
     }
 

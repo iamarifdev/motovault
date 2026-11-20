@@ -49,9 +49,9 @@
     <string name="privacy_bg_lock_desc">Locks immediately when minimized or sent to background.</string>
     <string name="privacy_lock_now">Lock Now</string>
     <string name="privacy_scope_title">What is protected</string>
-    <string name="privacy_scope_desc">Original files, cropped photos and saved documents are encrypted with AES-256.</string>
+    <string name="privacy_scope_desc">Original files, cropped photos, previews and recovered files are protected. Names, document numbers, dates and photos already inside records may stay outside this protection. Not all app data is encrypted.</string>
     <string name="privacy_key_lost_title">If security key is lost</string>
-    <string name="privacy_key_lost_desc">Encrypted files cannot be restored with screen lock if keys are cleared. Do not clear app data.</string>
+    <string name="privacy_key_lost_desc">The phone PIN cannot bring back a lost encryption key. Do not delete the app or clear its data. If a file will not open, get help adding it again from the original copy. Encrypted files from this phone will not open just by copying them to another phone.</string>
     <string name="privacy_export_auth_title">Open Original File</string>
     <string name="privacy_export_auth_reason">Verify with phone lock to view sensitive document</string>
     <string name="action_inspect">Inspect</string>
@@ -78,8 +78,8 @@
     <string name="privacy_handover_desc">Hand over your phone safely by showing only the selected document.</string>
     <string name="privacy_lock_enable_failed">Could not enable app lock</string>
     <string name="privacy_summary">%1$s documents. %2$s</string>
-    <string name="privacy_numbers_hidden">Numbers and photos are hidden.</string>
-    <string name="privacy_numbers_visible">Numbers and photos are visible in the vault.</string>
+    <string name="privacy_numbers_hidden">Numbers and photos stay hidden in the list.</string>
+    <string name="privacy_numbers_visible">No documents yet. Documents added later get the same protection.</string>
     <string name="privacy_turn_off_with_lock">Turn OFF app lock with phone lock</string>
     <string name="privacy_turn_off_title">Turn OFF MotoVault lock</string>
     <string name="privacy_turn_off_reason">Verify phone lock to turn off protection</string>
@@ -92,7 +92,7 @@
     <string name="privacy_turned_on">App lock turned on. Locks on exit or timeout.</string>
     <string name="privacy_enable_failed">Could not enable protection: %1$s. Existing records preserved.</string>
     <string name="privacy_asset_verification_failed">Asset verification failed</string>
-    <string name="privacy_export_note">Documents shared to other apps are outside this vault. Phone lock is required before exporting.</string>
+    <string name="privacy_export_note">An app you send a copy to may keep it. You must verify with the phone lock again before sending.</string>
     <string name="privacy_preview_badge">Selected document · Preview</string>
     <string name="privacy_secure_copy">%1$s selected secure copy</string>
     <string name="privacy_other_hidden">Other documents, edit and share options are hidden in this mode.</string>

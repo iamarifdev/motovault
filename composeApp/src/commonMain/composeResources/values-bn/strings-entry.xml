@@ -73,7 +73,7 @@
     <string name="service_schedule">সার্ভিস শিডিউল: %1$s</string>
     <string name="service_cost">পার্টস ও সার্ভিস খরচ</string>
     <string name="service_labor_cost">সার্ভিস চার্জ / মজুরি</string>
-    <string name="service_discount">ডিসকাউন্ট</string>
+    <string name="service_discount">ছাড়</string>
     <string name="service_parts_list">কী কী কাজ হয়েছে</string>
     <string name="service_parts_placeholder">যেমন: ইঞ্জিন অয়েল ৯০০ টাকা, ফিল্টার ৩০০ টাকা</string>
     <string name="service_general">জেনারেল সার্ভিস</string>
@@ -299,7 +299,7 @@
     <string name="capture_voice_listening">বাংলায় শুনছি। থামিয়ে লেখা মিলিয়ে নিন বা বাতিল করুন।</string>
     <string name="capture_voice_processing">কথার লেখা তৈরি হচ্ছে…</string>
     <string name="capture_voice_local_unavailable">এই ডিভাইসে অফলাইনে বাংলা নেই। লিখুন, পেস্ট করুন বা ফোনের ভয়েস সেবা বেছে নিন।</string>
-    <string name="capture_voice_unavailable">ফোনের ভয়েস সেবায় বাংলা ব্যবহার করা যাচ্ছে না। লিখুন বা পেস্ট করুন।</string>
+    <string name="capture_voice_unavailable">এই ফোনে মুখে বলার সুবিধা নেই। সংখ্যাটি টাইপ করুন।</string>
     <string name="capture_voice_denied">মাইক বা ভয়েসের অনুমতি নেই। সেটিংসে চালু করুন বা লিখুন।</string>
     <string name="capture_voice_failed">কথা বোঝা যায়নি। ভয়েস সেবা বা ইন্টারনেট দেখে আবার বলুন, অথবা লিখুন।</string>
     <string name="capture_voice_empty">কোনো কথা পাওয়া যায়নি। আবার বলুন বা লিখুন।</string>

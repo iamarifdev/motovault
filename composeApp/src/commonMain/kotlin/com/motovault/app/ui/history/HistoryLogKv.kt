@@ -41,9 +41,9 @@ import motovault.composeapp.generated.resources.history_price_unknown
 import motovault.composeapp.generated.resources.history_tag_issue
 import motovault.composeapp.generated.resources.history_tank_missed_suffix
 import motovault.composeapp.generated.resources.history_workshop_with_phone
-import motovault.composeapp.generated.resources.service_visit_approved
 import motovault.composeapp.generated.resources.service_visit_cancelled
-import motovault.composeapp.generated.resources.service_visit_quote
+import motovault.composeapp.generated.resources.history_tag_quote
+import motovault.composeapp.generated.resources.history_tag_warranty_months
 import motovault.composeapp.generated.resources.service_warranty_badge
 
 @Composable
@@ -136,19 +136,23 @@ private fun HistoryKvRow(label: String, value: String) {
 @Composable
 internal fun HistoryServiceBadges(state: VaultState, log: RideLog, f: Fmt) {
     val statusLabel = when (log.visitState) {
-        VisitRecordState.QUOTATION.code -> appStringResource(Res.string.service_visit_quote)
-        VisitRecordState.APPROVED.code -> appStringResource(Res.string.service_visit_approved)
+        // v4 tags an open quote as "কোটেশন"; cancelled stays visible for older records.
+        VisitRecordState.QUOTATION.code, VisitRecordState.APPROVED.code -> appStringResource(Res.string.history_tag_quote)
         VisitRecordState.CANCELLED.code -> appStringResource(Res.string.service_visit_cancelled)
         else -> null
     }
     val caseTitle = log.repairCaseId?.let { id -> state.repairCases.firstOrNull { it.id == id }?.title }
     val warranty = state.warranties.firstOrNull { it.visitLogId == log.id }
-    if (statusLabel == null && caseTitle == null && warranty == null) return
+    val warrantyMonths = inferWarrantyMonths(log, state.warranties)
+    if (statusLabel == null && caseTitle == null && warranty == null && warrantyMonths == 0) return
 
     FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
         statusLabel?.let { HistoryBadgeTag(it) }
         caseTitle?.let { HistoryBadgeTag(appStringResource(Res.string.history_tag_issue, it)) }
-        warranty?.let { w ->
+        if (warrantyMonths > 0) {
+            HistoryBadgeTag(appStringResource(Res.string.history_tag_warranty_months, f.d(warrantyMonths.toString())))
+        } else warranty?.let { w ->
+            // A warranty shorter than v4's 6-month choice has no month label, so show its end date.
             val formatted = runCatching { LocalDate.parse(w.expiryDate) }.getOrNull()?.let { f.date(it) } ?: w.expiryDate
             HistoryBadgeTag(appStringResource(Res.string.service_warranty_badge, formatted))
         }

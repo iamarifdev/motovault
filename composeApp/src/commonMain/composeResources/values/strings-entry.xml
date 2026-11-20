@@ -299,7 +299,7 @@
     <string name="capture_voice_listening">Listening in Bangla. Stop to review, or cancel.</string>
     <string name="capture_voice_processing">Preparing the transcript…</string>
     <string name="capture_voice_local_unavailable">On-device Bangla is unavailable. Type, paste, or choose the phone speech service.</string>
-    <string name="capture_voice_unavailable">Bangla voice is unavailable from the phone speech service. Type or paste instead.</string>
+    <string name="capture_voice_unavailable">Voice input is not available on this phone. Type the number.</string>
     <string name="capture_voice_denied">Microphone or speech permission is off. Enable it in Settings or type instead.</string>
     <string name="capture_voice_failed">Speech could not be processed. Check service or network access, try again, or type.</string>
     <string name="capture_voice_empty">No speech was found. Try again or type.</string>

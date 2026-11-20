@@ -228,13 +228,13 @@
     <string name="passport_redacted_notice">Redacted fields excluded from payload: %1$s</string>
     <string name="passport_unknown_baselines">%1$s schedule items have unconfirmed baselines.</string>
     <string name="passport_brta_checklist">BRTA ownership transfer checklist: carry smart card, tax token, NID, and sale receipt in person. Exporting does not transfer ownership.</string>
-    <string name="settings_widget_setup_hint">Long-press your home screen and add the MotoVault widget. Updates automatically whenever you save a record.</string>
+    <string name="settings_widget_setup_hint">Long-press your phone\'s home screen and add the MotoVault widget.</string>
     <string name="settings_widget_bike_label">Widget bike</string>
     <string name="settings_widget_privacy_locked">App Lock is active — widget hides bike details until unlocked</string>
     <string name="settings_widget_status_ok">%1$s · Interval remaining</string>
     <string name="settings_widget_status_soon">%1$s · Due soon</string>
     <string name="settings_widget_status_overdue">%1$s · Due now</string>
-    <string name="settings_widget_status_unknown">%1$s · Verify baseline</string>
+    <string name="settings_widget_status_unknown">%1$s · Not confirmed</string>
     <string name="settings_widget_status_none">No scheduled task</string>
     <string name="cloud_backup_section_action">Encrypted cloud backup status</string>
     <string name="cloud_backup_sheet_title">Cloud backup &amp; sync</string>

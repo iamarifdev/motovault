@@ -34,6 +34,8 @@
     <string name="history_line_with_qty">%1$s × %2$s</string>
     <string name="history_workshop_with_phone">%1$s · %2$s</string>
     <string name="history_tag_issue">সমস্যা: %1$s</string>
+    <string name="history_tag_quote">কোটেশন</string>
+    <string name="history_tag_warranty_months">ওয়ারেন্টি %1$s মাস</string>
     <string name="history_price_unknown">দাম জানা নেই</string>
     <string name="history_labour">সার্ভিস চার্জ</string>
     <string name="history_discount">ছাড়</string>

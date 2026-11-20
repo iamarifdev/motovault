@@ -11,7 +11,7 @@
     <string name="vault_doc_expired_days">Expired %1$s ago</string>
     <string name="vault_doc_days_left">%1$s left</string>
     <string name="vault_doc_valid">Valid</string>
-    <string name="doc_registration">Registration Certificate</string>
+    <string name="doc_registration">Registration Smart Card</string>
     <string name="doc_smart_card">Registration Smart Card</string>
     <string name="doc_tax_token">Tax Token</string>
     <string name="doc_fitness">Fitness Certificate</string>
@@ -99,7 +99,7 @@
     <string name="renewal_progress">%1$s of %2$s steps done</string>
     <string name="renewal_checklist_toggle">See required documents for renewal (%1$s/%2$s)</string>
     <string name="renewal_source">Source: BRTA · last checked %1$s</string>
-    <string name="renewal_offline_note">The steps and renewal still work if the link does not open.</string>
+    <string name="renewal_offline_note">The steps and renewal still work if the link does not open. If the BRTA site does not open, check brta.gov.bd.</string>
     <string name="renewal_link_failed">The BRTA site could not open. Try again or check brta.gov.bd.</string>
     <string name="renewal_fee_amount">Amount you paid</string>
     <string name="renewal_fee_optional">Amount paid (optional)</string>
@@ -109,7 +109,7 @@
     <string name="renewal_late_fine">A renewal after 15 days may add BDT 518 per year. Check BRTA before paying.</string>
     <string name="renewal_receipt">Payment receipt</string>
     <string name="renewal_receipt_optional">Payment receipt (optional)</string>
-    <string name="renewal_receipt_hint">The photo stays with the stored copy.</string>
+    <string name="renewal_receipt_hint">You can attach a photo of the receipt if you want.</string>
     <string name="renewal_receipt_add">Add receipt photo</string>
     <string name="renewal_receipt_remove">Remove receipt</string>
     <string name="renewal_receipt_view">View receipt</string>

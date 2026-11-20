@@ -62,7 +62,7 @@ class FactorySetupTest {
 
     @Test fun unknownManualModelsRemainOwnerDefined() {
         val state = VaultState.create(Ride("honda", "", 2025, 2500.0, modelName = "My motorcycle"))
-        assertEquals(3, state.rules.size)
+        assertEquals(5, state.rules.size)
         assertTrue(state.rules.all { "Owner-defined" in it.specification })
     }
 
